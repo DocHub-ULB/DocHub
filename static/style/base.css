@@ -11,6 +11,11 @@ h1 {
     margin: 17px 10px 9px 10px;
 }
 
+h1 a {
+    color: blue;
+    text-decoration: none;
+}
+
 h2 {
     font-weight: bold;
     font-size: 15px;

@@ -5,9 +5,10 @@
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from tree.models import Category
+from django.http import HttpResponse, HttpResponseRedirect
+from tree.models import Category, Course
 from json import dumps
 
 
@@ -26,3 +27,16 @@ def get_category(request, id):
                        "slug": cours.slug} for cours in category.contains.all()]}
 
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
+
+
+def join_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    user = request.user.get_profile()
+    user.follow.add(course)
+    return HttpResponseRedirect(reverse('course_show', args=[slug]))
+
+def leave_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    user = request.user.get_profile()
+    user.follow.remove(course)
+    return HttpResponseRedirect(reverse('course_show', args=[slug]))

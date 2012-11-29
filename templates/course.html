@@ -10,7 +10,17 @@
 {% endcomment %}
 
 {% block content %}
-<h1>Course {{ object.name }}</h1>
+<h1>{{ object.name }} 
+  {% if user.get_profile in object.followed.all %}
+  <small>
+    <a href="{% url course_leave object.slug %}">leave</a>
+  </small>
+  {% else %}
+  <small>
+    <a href="{% url course_join object.slug %}">join</a>
+  </small>
+  {% endif %}
+</h1>
 <p>{{ object.description }}</p>
 
 <h1>Documents</h1>

@@ -8,7 +8,7 @@
 from django.views.generic.list_detail import object_detail
 from django.conf.urls import patterns, url
 from documents.forms import UploadFileForm
-from tree.views import get_category
+from tree.views import get_category, join_course, leave_course
 from tree.models import Course
 
 
@@ -25,4 +25,12 @@ urlpatterns = patterns("",
          "queryset": Course.objects.all(),
          "extra_context": {"upload_form": UploadFileForm()}},
         name="course_show"),
+    
+    url(r"^join/(?P<slug>[^/]*)$", 
+        join_course,
+        name="course_join"),
+
+    url(r"^leave/(?P<slug>[^/]*)$", 
+        leave_course,
+        name="course_leave"),
 )
