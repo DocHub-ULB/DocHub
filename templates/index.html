@@ -1,0 +1,51 @@
+{% comment %}
+# Copyright 2012, hast. All rights reserved.
+
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+{% endcomment %}
+
+<html>
+  <head>
+    <title>P402</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <script src="/static/3party/jquery-1.7.min.js"></script>
+    <link href="/static/style/index.css" rel="stylesheet" type="text/css">
+    {% block header %}{% endblock %}
+  </head>
+
+  <body>
+    <div id="header">
+      <h1 id="title">P402<small>beta</small></h1>
+      <p id="slogan">Bring back real collaboration between students!</p>
+    </div>
+
+    <div id="content">
+      {% block content %}
+      <div id="infos">
+        <div id="left">
+          <p>P402 is a proposed application to help<br> <a href="http://www.ulb.ac.be">ULB</a>  students
+            <strong>share informations</strong> with their fellows.
+            It's stricly for students only. It's under heavy developement 
+            and managed by students.</p>
+
+          <p>Why not give it a try? You should <strong>
+            <a href="https://www.ulb.ac.be/intranet/p402">login</a></strong>.
+          </p>
+
+          <p>P402 is currently open for <strong>all students</strong><br>
+            but only some sections of sciences and poly-<br>tech is used now. 
+            Interested in making this <br>available for another faculty?
+            Write us<br> an email at 
+            <a href="p402@cerkinfo.be">p402@cerkinfo.be</a>.</p>
+        </div>
+        <div id="right">
+          <img src="/static/images/logo.png"/>
+        </div>
+      </div>
+      {% endblock %}
+    </div>
+  </body>
+</html>

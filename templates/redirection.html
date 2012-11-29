@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+{% comment %}
+# Copyright 2012, hast. All rights reserved.
+
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+{% endcomment %}
+
+{% block header %}
+  $(document).ready(function() {
+    var url = window.location.toString();
+    var dash = url.indexOf('#');
+    if (dash != -1 && dash != url.length - 1)
+      var next = url.substring(dash + 1);
+    else
+      var next = "desktop";
+    var host = url.substring(0, url.indexOf('zoid'));
+    window.location = '{{ url|safe }}' + encodeURIComponent(host + 'auth/' + next);
+  });
+{% endblock %}
+
+{% block content %}
+  <p><strong>Redirecting...</strong><br>
+    If you see this, it's probably because you don't have an active 
+    javascript virtual machine. Please turn it on.
+  </p>
+{% endblock %}

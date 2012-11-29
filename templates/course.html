@@ -1,0 +1,47 @@
+{% extends "home.html" %}
+
+{% comment %}
+# Copyright 2012, hast. All rights reserved.
+
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+{% endcomment %}
+
+{% block content %}
+<h1>Course {{ object.name }}</h1>
+<p>{{ object.description }}</p>
+
+<h1>Documents</h1>
+
+<table class="sortable">
+  <thead>
+    <tr>
+      <th>##</th>
+      <th style="min-width: 200px">Name</th>
+      <th>Poster</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  {% for doc in object.document_set.all %}
+    <tr>
+      <td>{{ doc.id }}</td>
+      <td>{{ doc.name }}</td>
+      <td>{{ doc.user.name }}</td>
+      </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>Upload</h2>
+<form action="{% url document_put object.slug %}" method="post"
+      enctype="multipart/form-data">
+  {% csrf_token %}
+  <table>
+    {{ upload_form.as_table }}
+  </table>
+  <input type="submit" value="Upload"/>
+</form>
+{% endblock %}

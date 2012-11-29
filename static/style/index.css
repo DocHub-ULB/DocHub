@@ -1,0 +1,82 @@
+/* Copyright 2012, hast. All rights reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ */
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: verdana, arial, sans-serif;
+    font-size: 13px;
+}
+
+#header {
+    background-color: #004090;
+    padding: 5px;
+    height: 40px;
+    background-image: url("/static/images/header_back1.png"), 
+                      url("/static/images/header_back2.png");
+    background-repeat: no-repeat, repeat-x;
+    cursor: pointer;
+}
+
+#header h1 {
+    color: white;
+    float: left;
+    font-family: verdana;
+    font-size: 26px;
+    font-weight: bold;
+    float: left;
+    padding: 5px 5px 0px 5px;
+    margin: 2px 5px 0px 5px;
+}
+
+#header h1 small {
+    font-family: verdana;
+    font-weight: normal;
+    font-size: 18px;
+    color: white;
+}
+
+#slogan {
+    color: white;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-right: 10px;
+}
+#infos {
+    width: 781px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+}
+          
+#left {
+    float: left;
+    margin: 0px;
+    width: 350px;
+    text-align: right;
+    font-size: 14px;
+    padding-top: 0px;
+}
+          
+#right {
+    float: left;
+    margin-left: 40px;
+    width: 300px;
+    padding: 0px;
+}
+
+#content {
+    padding: 20px;
+}
+
+a {
+    color: blue;
+    text-decoration: none;
+}

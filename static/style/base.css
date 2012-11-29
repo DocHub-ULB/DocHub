@@ -1,0 +1,117 @@
+/* Copyright 2012, hast. All rights reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ */
+
+h1 {
+    font-size: 18px;
+    margin: 17px 10px 9px 10px;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 15px;
+    margin: 14px 10px 5px 10px;
+}
+
+p {
+    margin: 9px 10px 7px 10px;
+}
+
+#content {
+    padding: 60px 20px 25px 20px;
+}
+
+#footer {
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: #eee;
+    border-top: 2px solid #ddd;
+    color: #555;
+    text-align: center;
+    padding: 4px 5px 4px 5px;
+}
+
+/* Forms */
+
+#content form {
+    margin: 10px 10px 20px 10px;
+}
+
+#content textarea {
+    height: 50px;
+    width: 300px;
+}
+
+#content form table th {
+    padding: 3px 8px 1px 8px;
+    vertical-align: middle;
+    text-align: right;
+}
+
+#content form table td {
+    padding: 3px 8px 1px 8px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+/* DATA TABLE */
+
+.sortable {
+    margin-left: 10px;
+}
+
+.sortable th {
+    border-bottom: 2px #003060 solid;
+    padding: 3px 22px 3px 10px;
+}
+
+.sortable {
+    display: block;
+}
+
+.sortable td {
+    padding: 3px 10px 3px 10px;
+    border-bottom: 1px #3070f0 solid;
+    border-right: 1px #3070f0 solid;
+}
+
+.sortable tr:last-child td {
+    border-bottom: none;
+}
+
+.sortable td:last-child {
+    border-right: none;
+}
+
+.dataTables_info {
+    font-size: 10px;
+    margin: 4px;
+}
+
+.sortable .dataTables_empty {
+    text-align: center;
+    padding: 10px;
+}
+
+.sortable .sorting_asc {
+    background-image: url('/static/sort_asc.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.sortable .sorting_desc {
+    background-image: url('/static/sort_desc.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.sortable .sorting {
+    background-image: url('/static/sort_both.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
