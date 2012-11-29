@@ -20,7 +20,6 @@ body {
     background-image: url("/static/images/header_back1.png"), 
                       url("/static/images/header_back2.png");
     background-repeat: no-repeat, repeat-x;
-    cursor: pointer;
 }
 
 #header h1 {
