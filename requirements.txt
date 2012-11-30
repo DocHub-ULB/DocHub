@@ -1,0 +1,4 @@
+Django==1.4
+south
+pyPdf
+django-template-fragments
