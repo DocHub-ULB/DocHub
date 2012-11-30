@@ -5,12 +5,20 @@
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
+from django.views.generic.list_detail import object_detail
 from django.conf.urls import patterns, url
 from documents.views import upload_file
+from documents.models import Document
 
 
 urlpatterns = patterns("",
     url(r"^put/(?P<slug>[^/]*)$", 
         upload_file,
         name="document_put"),
+
+    url(r"^v/(?P<object_id>[^/]*)$", 
+        object_detail,
+        {"template_name": "viewer.html",
+         "queryset": Document.objects.all()},
+        name="document_show"),
 )
