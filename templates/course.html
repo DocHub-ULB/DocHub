@@ -31,6 +31,7 @@
       <th>##</th>
       <th style="min-width: 200px">Name</th>
       <th>Poster</th>
+      <th>Size</th>
     </tr>
   </thead>
   
@@ -40,6 +41,7 @@
       <td>{{ doc.id }}</td>
       <td>{{ doc.name }}</td>
       <td>{{ doc.user.name }}</td>
+      <td>{{ doc.pages }}</td>
       </tr>
   {% endfor %}
   </tbody>
