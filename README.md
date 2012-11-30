@@ -7,9 +7,13 @@ Some old code is already live over there : http://cours.cerkinfo.be
 Dependencies
 ============
 
-You'll need everything that is in requirements.txt (don't worry, pip will do it for you)
+You'll need everything that is in requirements.txt (don't worry, pip will do it for you).
+
 You will also need to install poppler (the binary 'pdftotext') and GraphicsMagick (the binary 'gm') using your distribution packages.
 
+For exemple:
+
+    sudo apt-get install poppler-utils graphicsmagick
 
 Installation
 ============
