@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from getpass import getpass, getuser
 from optparse import make_option
-from tree.models import Category, Course, CourseInfo
+from graph.models import Category, Course, CourseInfo
 from telepathy.models import Thread, Message
 
 

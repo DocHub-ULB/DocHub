@@ -7,7 +7,7 @@
 
 from django.db import models
 from users.models import Profile
-from tree.models import Course
+from graph.models import Course
 
 
 class Document(models.Model):

@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from documents.models import Document, PendingDocument
 from documents.forms import UploadFileForm
-from tree.models import Course
+from graph.models import Course
 
 
 def upload_file(request, slug):

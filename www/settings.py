@@ -91,8 +91,8 @@ INSTALLED_APPS = (
     'fragments',
     'south',
     'documents',
+    'graph',
     'telepathy',
-    'tree',
     'users',
     'www',
 )

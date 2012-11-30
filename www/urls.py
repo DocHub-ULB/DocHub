@@ -9,7 +9,7 @@ from django.conf.urls import patterns, url, include
 from django.views.generic.simple import direct_to_template
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
-from tree.urls import json_urls as tree_json
+from graph.urls import json_urls as graph_json
 
 
 # decorator whom call function_in if user is authenticated, function_out if not
@@ -24,10 +24,10 @@ def user_logged(function_in, function_out):
 
 urlpatterns = patterns("",
     # All JSON urls
-    url(r"^json/tree/", include(tree_json)),
+    url(r"^json/tree/", include(graph_json)),
 
     # The apps entry points
-    url(r"^zoidberg/course/", include("tree.urls")),
+    url(r"^zoidberg/course/", include("graph.urls")),
     url(r"^zoidberg/document/", include("documents.urls")),
 
     # The product/client entry points

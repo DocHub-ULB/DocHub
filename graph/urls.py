@@ -8,8 +8,8 @@
 from django.views.generic.list_detail import object_detail
 from django.conf.urls import patterns, url
 from documents.forms import UploadFileForm
-from tree.views import get_category, join_course, leave_course
-from tree.models import Course
+from graph.views import get_category, join_course, leave_course
+from graph.models import Course
 
 
 json_urls = patterns("",
