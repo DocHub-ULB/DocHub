@@ -8,13 +8,11 @@ Dependencies
 ============
 
 You'll need everything that is in requirements.txt (don't worry, pip will do it for you)
-You will also need to install poppler (the binary 'pdftotext') and GraphicsMagic (the binary 'gm') using your distribution packages.
+You will also need to install poppler (the binary 'pdftotext') and GraphicsMagick (the binary 'gm') using your distribution packages.
 
 
 Installation
-=============================
-
-To install:
+============
 
     virtualenv --distribute --no-site-packages ve
     source ve/bin/activate
@@ -24,9 +22,8 @@ To install:
     ./manage.py migrate
     ./manage.py init
 
-You still need to install poppler/pdftotext and ImageMagick/convert using your distribution packages.
-
-To run:
+Run
+===
 
 	./manage.py processing_deamon & ./manage.py runserver
 
