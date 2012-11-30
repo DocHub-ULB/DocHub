@@ -54,7 +54,6 @@ class Command(BaseCommand):
                (width, ' -density 350', filename, num, name))
         height = int(subprocess.check_output(['gm', 'identify', '-format',
                                               '%h', name]).strip())
-        print str(height)
         return height
 
     def parse_file(self, document, upfile):
