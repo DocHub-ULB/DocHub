@@ -14,7 +14,6 @@ from documents.models import Page, PendingDocument as Task
 from django.db import close_connection
 from os import system, path, makedirs
 from multiprocessing import Process
-from pyPdf import PdfFileReader
 from urllib2 import urlopen
 import subprocess
 
@@ -74,8 +73,8 @@ class Command(BaseCommand):
         fd.close()
     
         # sauvegarde du nombre de page
-        pdf = PdfFileReader(file(filename, 'r'))
-        document.pages = pdf.numPages
+        document.pages = len(subprocess.check_output(['gm', 'identify', 
+                                                filename]).split('\n')) - 1
         document.save()
 
         # activate the search system
@@ -85,7 +84,7 @@ class Command(BaseCommand):
         # words.close()
     
         # iteration page a page, transform en png + get page size
-        for num in xrange(pdf.numPages):
+        for num in xrange(document.pages):
             self.convert_page(document, filename, num)
     
         logger.info('End of processing of document %d' % document.id)
