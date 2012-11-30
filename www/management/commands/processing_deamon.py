@@ -35,13 +35,16 @@ class Command(BaseCommand):
         # extract a normal size page and a thumbnail with graphicsmagick
         #mini
         h_120 = self.make_jepg(120, num, filename, "%s/%s/%04d_%04d_m.jpg" % 
-                               (UPLOAD_DIR, document.reference.slug, document.pk, num))
+                               (UPLOAD_DIR, document.reference.slug,
+                                document.pk, num))
         #normal
         h_600 = self.make_jepg(600, num, filename, "%s/%s/%04d_%04d_n.jpg" % 
-                               (UPLOAD_DIR, document.reference.slug, document.pk, num))
+                               (UPLOAD_DIR, document.reference.slug,
+                                document.pk, num))
         #big
         h_900 = self.make_jepg(900, num, filename, "%s/%s/%04d_%04d_b.jpg" % 
-                               (UPLOAD_DIR, document.reference.slug, document.pk, num))
+                               (UPLOAD_DIR, document.reference.slug,
+                                document.pk, num))
 
         close_connection()
         Page.objects.create(numero=num, height_120=h_120, height_600=h_600, 
@@ -58,7 +61,8 @@ class Command(BaseCommand):
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document %d (from %s) : %s' % 
                     (document.id, document.user.name, document.name))
-        filename = "%s/%s/%04d.pdf" % (UPLOAD_DIR, document.reference.slug, document.id)
+        filename = "%s/%s/%04d.pdf" % (UPLOAD_DIR, document.reference.slug, 
+                                       document.id)
     
         # check if course subdirectory exist
         if not path.exists(UPLOAD_DIR + '/' + document.reference.slug):
@@ -76,7 +80,8 @@ class Command(BaseCommand):
 
         # activate the search system
         # system("pdftotext " + filename)
-        # words = open("%s/%s/%04d.txt" % (UPLOAD_DIR, document.reference.slug, document.id), 'r')
+        # words = open("%s/%s/%04d.txt" % (UPLOAD_DIR, document.reference.slug, 
+        #                                  document.id), 'r')
         # words.close()
     
         # iteration page a page, transform en png + get page size
@@ -85,8 +90,8 @@ class Command(BaseCommand):
     
         logger.info('End of processing of document %d' % document.id)
     
-    def download_file(self, document, url):
-        logger.info('Starting download of document %d : %s' % (document.id, url))
+    def download_file(self, doc, url):
+        logger.info('Starting download of document %d : %s' % (doc.id, url))
         return urlopen(url)
     
     def process_file(self, pending_id):
@@ -107,7 +112,8 @@ class Command(BaseCommand):
     
         except Exception as e:
             logger.error('Process file error of document %d (from %s) : %s' % 
-                         (pending.document.id, pending.document.user.name, str(e)))
+                         (pending.document.id, pending.document.user.name, 
+                          str(e)))
             pending.document.delete()
 
     # drop here when the deamon is killed
@@ -120,8 +126,8 @@ class Command(BaseCommand):
                 pending.document.save()
                 pending.state = 'queued'
                 pending.save()
-            # fail quietly, not a good idea, but hey, we've got already been kill,
-            # so what the hell?
+        # fail quietly, not a good idea, but hey, we've got already been kill,
+        # so what the hell?
             except:
                 pass
         exit(0)
