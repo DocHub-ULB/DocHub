@@ -31,21 +31,21 @@ logger.setLevel(logging.INFO)
 class Command(BaseCommand):
     help = 'Start tha processing deamon'
 
-    def convert_page(self, doc, filename, num):
+    def convert_page(self, document, filename, num):
         # extract a normal size page and a thumbnail with graphicsmagick
         #mini
         h_120 = self.make_jepg(120, num, filename, "%s/%s/%04d_%04d_m.jpg" % 
-                               (UPLOAD_DIR, doc.referer.slug, doc.pk, num))
+                               (UPLOAD_DIR, document.reference.slug, document.pk, num))
         #normal
         h_600 = self.make_jepg(600, num, filename, "%s/%s/%04d_%04d_n.jpg" % 
-                               (UPLOAD_DIR, doc.referer.slug, doc.pk, num))
+                               (UPLOAD_DIR, document.reference.slug, document.pk, num))
         #big
         h_900 = self.make_jepg(900, num, filename, "%s/%s/%04d_%04d_b.jpg" % 
-                               (UPLOAD_DIR, doc.referer.slug, doc.pk, num))
+                               (UPLOAD_DIR, document.reference.slug, document.pk, num))
 
         close_connection()
-        Page.objects.create(num=num, height_120=h_120, height_600=h_600, 
-                            height_900=h_900, doc=doc)
+        Page.objects.create(numero=num, height_120=h_120, height_600=h_600, 
+                            height_900=h_900, document=document)
 
     def make_jepg(self, width, num, filename, name):
         system('gm convert -geometry %dx -quality 90 %s "%s[%d]" %s' %
@@ -55,14 +55,14 @@ class Command(BaseCommand):
         print str(height)
         return height
 
-    def parse_file(self, doc, upfile):
-        logger.info('Starting processing of doc %d (from %s) : %s' % 
-                    (doc.id, doc.uploader.name, doc.name))
-        filename = "%s/%s/%04d.pdf" % (UPLOAD_DIR, doc.referer.slug, doc.id)
+    def parse_file(self, document, upfile):
+        logger.info('Starting processing of document %d (from %s) : %s' % 
+                    (document.id, document.user.name, document.name))
+        filename = "%s/%s/%04d.pdf" % (UPLOAD_DIR, document.reference.slug, document.id)
     
         # check if course subdirectory exist
-        if not path.exists(UPLOAD_DIR + '/' + doc.referer.slug):
-            makedirs(UPLOAD_DIR + '/' + doc.referer.slug)
+        if not path.exists(UPLOAD_DIR + '/' + document.reference.slug):
+            makedirs(UPLOAD_DIR + '/' + document.reference.slug)
 
         # original file saving
         fd = open(filename, 'w')
@@ -71,22 +71,22 @@ class Command(BaseCommand):
     
         # sauvegarde du nombre de page
         pdf = PdfFileReader(file(filename, 'r'))
-        doc.pages = pdf.numPages
-        doc.save()
+        document.pages = pdf.numPages
+        document.save()
 
         # activate the search system
         # system("pdftotext " + filename)
-        # words = open("%s/%s/%04d.txt" % (UPLOAD_DIR, doc.referer.slug, doc.id), 'r')
+        # words = open("%s/%s/%04d.txt" % (UPLOAD_DIR, document.reference.slug, document.id), 'r')
         # words.close()
     
         # iteration page a page, transform en png + get page size
         for num in xrange(pdf.numPages):
-            self.convert_page(doc, filename, num)
+            self.convert_page(document, filename, num)
     
-        logger.info('End of processing of doc %d' % doc.id)
+        logger.info('End of processing of document %d' % document.id)
     
-    def download_file(self, doc, url):
-        logger.info('Starting download of doc %d : %s' % (doc.id, url))
+    def download_file(self, document, url):
+        logger.info('Starting download of document %d : %s' % (document.id, url))
         return urlopen(url)
     
     def process_file(self, pending_id):
@@ -95,20 +95,20 @@ class Command(BaseCommand):
         try:
             pending.state = 'download'
             pending.save()
-            raw = self.download_file(pending.doc, pending.url)
+            raw = self.download_file(pending.document, pending.url)
             pending.state = 'process'
             pending.save()
-            self.parse_file(pending.doc, raw)
+            self.parse_file(pending.document, raw)
             pending.state = 'done'
             pending.save()
     
             # may fail if download url, don't really care
-            system("rm /tmp/TMP402_%d.pdf" % pending.doc.id)
+            system("rm /tmp/TMP402_%d.pdf" % pending.document.id)
     
         except Exception as e:
-            logger.error('Process file error of doc %d (from %s) : %s' % 
-                         (pending.doc.id, pending.doc.uploader.name, str(e)))
-            pending.doc.delete()
+            logger.error('Process file error of document %d (from %s) : %s' % 
+                         (pending.document.id, pending.document.user.name, str(e)))
+            pending.document.delete()
 
     # drop here when the deamon is killed
     def terminate(self, a, b):
@@ -116,8 +116,8 @@ class Command(BaseCommand):
         for worker, pending in self.workers:
             try:
                 worker.terminate()
-                pending.doc.done = 0
-                pending.doc.save()
+                pending.document.done = 0
+                pending.document.save()
                 pending.state = 'queued'
                 pending.save()
             # fail quietly, not a good idea, but hey, we've got already been kill,
