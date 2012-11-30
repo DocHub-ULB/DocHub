@@ -44,3 +44,5 @@ class Command(BaseCommand):
         profile.name = first_name + " " + last_name
         profile.email = 'test@mouh.com'
         profile.save()
+        print "User id : " + str(profile.id)
+
