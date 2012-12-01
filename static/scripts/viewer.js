@@ -17,16 +17,17 @@ var viewer = function(doc) {
     var current_page = 0;
     var current_thumb = 0;
     var current_hilight = -1;
+    var zoom = 100;
+    var mode = 'n';
 
     var url = function(numero, width) {
-        var l = 'n';
         if (width < 300)
-            l = 'm';
-        else if (width > 750)
-            l = 'b';
+            m = 'm';
+        else
+            m = mode;
 
         return '/static/documents/' + doc.slug + '/' + doc.id.pad(4) + 
-               '_' + numero.pad(4) + '_' + l + '.jpg';
+               '_' + numero.pad(4) + '_' + m + '.jpg';
     };
 
     var set_height = function() {
@@ -70,8 +71,8 @@ var viewer = function(doc) {
         var end_page = Math.min(doc.len, current_page + 2);
 
         for (var i = start_page; i < end_page; ++i)
-            if ($('#page-' + i).attr('src') === "/static/images/white.png")
-                $('#page-' + i).attr('src', url(i, 600));
+            if ($('#page-' + i).attr('src') == '/static/images/white.png')
+                $('#page-' + i).attr('src', url(i, 600 * zoom / 100));
     };
 
     var load_thumbs = function() {
@@ -116,14 +117,76 @@ var viewer = function(doc) {
         scroll_to_page(thumb);
     };
 
+    var change_mode = function(m) {
+        mode = m;
+        $('.page').each(function(i, page) {
+            $(page).attr('src', '/static/images/white.png');
+        });
+        load_pages();
+    };
+
+    var zoom_draw = function(z) {
+        if (z != zoom) {
+            zoom = z;
+            $('#zoom').val(zoom + '%');
+
+            if (zoom >= 125 && mode == 'n')
+                change_mode('b');
+            else if (zoom < 125 && mode == 'b')
+                change_mode('n');
+
+            $('.page').each(function(i, page) {
+                $(page).height(doc.pages[i].height_600 * zoom / 100);
+                $(page).width(600 * zoom / 100);
+            });
+
+            $('#top-page').width(600 * zoom / 100);
+        }
+    };
+
+    var zoom_key = function(event) {
+        if (event.keyCode == 13) {
+            var raw = parseInt($('#zoom').val().replace('%', ''));
+            if (!isNaN(raw))
+                var z = Math.min(Math.max(25, raw), 500);
+            else
+                var z = 100;
+            zoom_draw(z);
+        }
+    };
+
+    var zoom_in = function() {
+        if (zoom < 100)
+            var z = zoom + 10;
+        else if (zoom < 475)
+            var z = zoom + 25;
+        else
+            var z = 500;
+        zoom_draw(z);
+    };
+    
+    var zoom_out = function() {
+        if (zoom <= 35)
+            var z = 25;
+        else if (zoom <= 100)
+            var z = zoom - 10;
+        else
+            var z = zoom - 25;
+        zoom_draw(z);
+    };
+
     $(document).ready(function() {
         set_height();
         $(window).resize(set_height);
         $(window).scroll(set_current_page);
         $('#thumbs').scroll(set_current_thumb);
         $('.thumb').click(click_thumb);
+        $('#zoom').keypress(zoom_key);
+        $('#zoom-in').click(zoom_in);
+        $('#zoom-out').click(zoom_out);
         load_pages();
         load_thumbs();
+        show_thumb_page(0);
     });
 
     return {
