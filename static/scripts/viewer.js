@@ -6,8 +6,13 @@
  * your option) any later version.
  */
 
-var viewer = function(document) {
-    
+var viewer = function(doc) {
+    var current_page = 0;
+
+    var url = function(numero) {
+        return '/static/documents/' + doc.slug + '/0001_000' + numero + '_n.jpg';
+    };
+
     var set_height = function() {
         if (navbar.is_down())
             $('#thumbs').height($(window).height() - 165 - navbar.get_height());
@@ -15,14 +20,28 @@ var viewer = function(document) {
             $('#thumbs').height($(window).height() - 145);
     };
 
+    var load = function() {
+        var start_page = Math.max(0, current_page - 2);
+        var end_page = Math.min(doc.len - 1, current_page + 2);
+        console.log("load from " + doc.len + " to " + end_page);
+        for (var i = start_page; i < end_page; ++i) {
+            console.log("load : " + url(i));
+            $('#page-' + i).attr('src', url(i));
+        }
+    };
+
+    console.log(doc);
+    console.log(doc.len);
     $(document).ready(function() {
         set_height();
+        load();
         $(window).resize(set_height);
     });
 
     return {
         refresh: function() {
             set_height();
+            load();
         }
     };
 };

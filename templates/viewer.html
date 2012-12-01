@@ -12,8 +12,10 @@
 {% block header %}
 <script src="/static/scripts/viewer.js"></script>
 <script language="JavaScript">
-var document = {
+var doc = {
     len: {{ object.pages }},
+    id: {{ object.id }},
+    slug: '{{ object.reference.slug }}',
     pages: [ {% for page in object.page_set.all %}
         {numero: {{ page.numero }},
          height_120: {{ page.height_120 }},
@@ -22,7 +24,7 @@ var document = {
     {% endfor %} ],
 };
 
-var viewer_instance = viewer(document);
+var viewer_instance = viewer(doc);
 </script>
 {% endblock %}
 
@@ -55,8 +57,8 @@ var viewer_instance = viewer(document);
   </div>
 
   {% for page in object.page_set.all %}
-  <img id="page-{{ page.numero }}" class="page" 
-    src="/static/documents/{{ object.reference.slug }}/{{ object.id|stringformat:"04d" }}_{{ page.numero|stringformat:"04d"}}_n.jpg"/>
+  <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
+    width="600" height="{{ page.height_600 }}"/>
   {% endfor %}
 </div>
 {% endblock %}
