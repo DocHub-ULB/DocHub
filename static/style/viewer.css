@@ -12,7 +12,7 @@
     overflow: auto;
     background-color: #eee;
     padding: 10px 28px 10px 20px;
-    margin: 36px 0px 0px 0px;
+    margin: 16px 0px -20px -20px;
     height: 300px;
 }
 
@@ -28,6 +28,7 @@
 }
 
 #viewer-header {
+    margin: -20px;
     position: fixed;
     background-color: #eee;
     padding: 4px 5px 2px 0px;
@@ -54,7 +55,7 @@
 }
 
 #pages {
-    margin-top: 30px;
+    margin-top: 20px;
     margin-left: 200px;
 }
 
@@ -75,3 +76,6 @@
     background-color: white;
 }
 
+.hilight {
+    border: 2px #bde solid;
+}

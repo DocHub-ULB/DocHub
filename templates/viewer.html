@@ -46,7 +46,8 @@ var viewer_instance = viewer(doc);
 
 <div id="thumbs">
 {% for page in object.page_set.all %}
-  <img class="thumb" src="/static/documents/{{ object.reference.slug }}/{{ object.id|stringformat:"04d" }}_{{ page.numero|stringformat:"04d"}}_m.jpg"/>
+  <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
+    src="/static/images/white.png" width="120" height="{{ page.height_120 }}"/>
   <p>{{ page.numero|add:1 }}</p>
 {% endfor %}
 </div>
