@@ -30,6 +30,11 @@ p {
     padding: 70px 20px 25px 20px;
 }
 
+#content a {
+    color: blue;
+    text-decoration: none;
+}
+
 #footer {
     bottom: 0px;
     left: 0px;
