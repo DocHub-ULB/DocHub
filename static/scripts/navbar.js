@@ -15,11 +15,11 @@ var navbar = function() {
         $('#navbar-bottom').slideToggle(100);
         if (visible) {
             $('#pullout').html('down');
-            $('#content').animate({'padding-top': 60}, 100);
+            $('#content').animate({'padding-top': 70}, 100);
             visible = false;
         } else {
             $('#pullout').html('up');
-            $('#content').animate({'padding-top': 60 + height}, 100);
+            $('#content').animate({'padding-top': 90 + height}, 100);
             visible = true;
         }
     };
@@ -27,9 +27,9 @@ var navbar = function() {
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
         if (visible)
-            $('#content').css('padding-top', 60 + height);
+            $('#content').css('padding-top', 90 + height);
         else
-            $('#content').css('padding-top', 60);
+            $('#content').css('padding-top', 70);
     };
 
     var load = function(node, cat_id) {
