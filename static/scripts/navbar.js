@@ -22,13 +22,18 @@ var navbar = function() {
             $('#content').animate({'padding-top': 90 + height}, 100);
             visible = true;
         }
+
+        if (typeof viewer_instance != undefined)
+            viewer_instance.refresh();
     };
 
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
-        if (visible)
+        if (visible) {
             $('#content').css('padding-top', 90 + height);
-        else
+            if (typeof viewer_instance != undefined)
+                viewer_instance.refresh();
+        } else
             $('#content').css('padding-top', 70);
     };
 
@@ -60,5 +65,13 @@ var navbar = function() {
         load($("#navbar-start"), 1);
     });
     
-    return {};
+    return {
+        is_down: function() {
+            return visible;
+        },
+
+        get_height: function() {
+            return height;
+        }
+    };
 }();

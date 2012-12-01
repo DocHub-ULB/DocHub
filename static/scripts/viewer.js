@@ -7,5 +7,22 @@
  */
 
 var viewer = function(document) {
-    return {};
+    
+    var set_height = function() {
+        if (navbar.is_down())
+            $('#thumbs').height($(window).height() - 165 - navbar.get_height());
+        else
+            $('#thumbs').height($(window).height() - 145);
+    };
+
+    $(document).ready(function() {
+        set_height();
+        $(window).resize(set_height);
+    });
+
+    return {
+        refresh: function() {
+            set_height();
+        }
+    };
 };
