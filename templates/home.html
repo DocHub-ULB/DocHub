@@ -46,23 +46,26 @@
 
     <div id="content">
       {% block content %}
-      <h1>'Sup guyz?</h1>
-      <p>Zion hear me! It is true what many of you have heard. The machines 
-        have gathered an army and as I speak that army is drawing nearer to 
-        our home. Believe me when I say we have a difficult time ahead of us 
-        but if we are to be prepared for it we must first shed our fear of 
-        it.<br>I stand hear before you now truly unafraid! Why?! Because I 
-        believe something you do not? No! I stand here without fear because 
-        I remember. I remember that I am hear not because of the path that 
-        lay before me.. but because of the path that lies behind me! I 
-        remember that for one hundred years we have fought these machines! 
-        I remember that for one-hundred years they have sent their armies 
-        to destroy us and after a century of war I remember that which 
-        matters most! We are still here! tonight let us send a message to 
-        that army! Let us shake this cave! Tonight let us tremble these 
-        walls of earth, steel and stone! Let us be heard from red core to 
-        black sky! Tonight let us make them remember this is Zion and we 
-        are not afraid!</p>
+      <h1>Followed courses</h1>
+      <table class="sortable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="min-width: 200px">Name</th>
+            <th>Last activity</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+        {% for course in user.get_profile.follow.all %}
+          <tr>
+            <td>{{ course.id }}</td>
+            <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
+            <td>NA</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
     {% endblock %}
     </div>
     
