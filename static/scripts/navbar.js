@@ -19,7 +19,7 @@ var navbar = function() {
             visible = false;
         } else {
             $('#pullout').html('up');
-            $('#content').animate({'padding-top': 90 + height}, 100);
+            $('#content').animate({'padding-top': 84 + height}, 100);
             visible = true;
         }
 
@@ -30,7 +30,7 @@ var navbar = function() {
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
         if (visible) {
-            $('#content').css('padding-top', 90 + height);
+            $('#content').css('padding-top', 84 + height);
             if (typeof viewer_instance != undefined)
                 viewer_instance.refresh();
         } else
