@@ -9,6 +9,54 @@
 # your option) any later version.
 {% endcomment %}
 
+{% block header %}
+<script src="/static/scripts/viewer.js"></script>
+<script language="JavaScript">
+var document = {
+    len: {{ object.pages }},
+    pages: [ {% for page in object.page_set.all %}
+        {numero: {{ page.numero }},
+         height_120: {{ page.height_120 }},
+         height_600: {{ page.height_600 }},
+         height_900: {{ page.height_900 }},},
+    {% endfor %} ],
+};
+
+var viewer_instance = viewer(document);
+</script>
+{% endblock %}
+
 {% block content %}
-<h1>{{ object.name }}</h1>
+
+<div id="viewer-header">
+  <a href="{% url course_show object.reference.slug %}">
+    <img id="backward" src="/static/images/back-icon.png"/>
+    <span>{{ object.reference.name }}</span>
+  </a>
+  <a href="">
+    <img id="download" src="/static/images/download-icon.png"/>
+    <span>download</span>
+  </a>
+  <img id="zoom-in" src="/static/images/magnifier_zoom_in.png"/>
+  <input id="zoom" value="100%"/>
+  <img id="zoom-out" src="/static/images/magnifier_zoom_out.png"/>
+</div>
+
+<div id="thumbs">
+{% for page in object.page_set.all %}
+  <img class="thumb" src="/static/documents/{{ object.reference.slug }}/{{ object.id|stringformat:"04d" }}_{{ page.numero|stringformat:"04d"}}_m.jpg"/>
+  <p>{{ page.numero|add:1 }}</p>
+{% endfor %}
+</div>
+
+<div id="pages">
+  <div id="top-page">
+    <h1>{{ object.name }}</h1>
+  </div>
+
+  {% for page in object.page_set.all %}
+  <img id="page-{{ page.numero }}" class="page" 
+    src="/static/documents/{{ object.reference.slug }}/{{ object.id|stringformat:"04d" }}_{{ page.numero|stringformat:"04d"}}_n.jpg"/>
+  {% endfor %}
+</div>
 {% endblock %}
