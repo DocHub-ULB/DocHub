@@ -54,13 +54,11 @@ var navbar = function() {
     var load_event = function(event) {
         var list = event.target.parentNode;
 
-        for (var i in state.loaded)
+        for (var i = 0; i < state.loaded.length; ++i)
             if (state.loaded[i].id == list.getAttribute("data-id"))
                 break;
 
-        // WTF JS POWER : typeof i === "string"
-        i = Number(i) + 1;
-        state.loaded.splice(i, state.loaded.length - i);
+        state.loaded.splice(i + 1, state.loaded.length - i - 1);
         $.cookies.set('navbar', state);
         load(event.target.getAttribute("data-id"));
     };
