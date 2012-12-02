@@ -9,12 +9,25 @@
 
 {% load fragments %}
 {% verbatim %}
-<ul class="navbar-list" data-id="{{ id }}"><li>{{ name }}</li>
-{{#each sub_categories }}
-  <li class="navbar-category" data-id="{{ id }}">{{ name }}</li>
-{{/each}}
-{{#each contains }}
-  <li><a href="/zoidberg/course/v/{{ slug }}">{{ name }}</a></li>
-{{/each}}
+<ul class="navbar-list" id="navbar-start">
+  <li><a href="/zoidberg/home">Home</a></li>
+  <li><a href="#">General Boards</a></li>
+  <li><a href="#">Wall</a></li>
+  <li><a href="#">Help</a></li>
+  <li><a href="#">Development</a></li>
+  <li>{{#if this.visible }}true{{else}}false{{/if}}</li>
 </ul>
+
+{{#each loaded}}
+  <ul class="navbar-list" data-id="{{ id }}"><li>{{ name }}</li>
+  {{#each sub_categories }}
+    <li class="navbar-category" data-id="{{ id }}">{{ name }}</li>
+  {{/each}}
+
+  {{#each contains }}
+    <li><a href="/zoidberg/course/v/{{ slug }}">{{ name }}</a></li>
+  {{/each}}
+  </ul>
+{{/each}}
+<br id="navbar-clearer">
 {% endverbatim %}

@@ -17,6 +17,7 @@
     <script src="/static/3party/jquery-1.7.min.js"></script>
     <script src="/static/3party/handlebars-1.0.0.beta.6.js"></script>
     <script src="/static/3party/datatable-1.9.js"></script>
+    <script src="/static/3party/jquery.cookies.2.2.0.js"></script>
     <script src="{% url fragments %}" type="text/javascript"></script>
     <script src="/static/scripts/navbar.js"></script>
     {% block header %}{% endblock %}
@@ -32,16 +33,7 @@
           <input type="text" id="search-query" placeholder="Search">
         </form>
       </div>
-      <div id="navbar-bottom">
-        <ul class="navbar-list" id="navbar-start">
-          <li><a href="{% url home %}">Home</a></li>
-          <li><a href="#">General Boards</a></li>
-          <li><a href="#">Wall</a></li>
-          <li><a href="#">Help</a></li>
-          <li><a href="#">Development</a></li>
-        </ul>
-        <br id="navbar-clearer">
-      </div>
+      <div id="navbar-bottom"></div>
     </div>
 
     <div id="content">

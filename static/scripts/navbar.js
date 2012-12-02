@@ -7,54 +7,83 @@
  */
 
 var navbar = function() {
-    var height = 130;
-    var visible = false;
-    var template = null;
+    var state, template = null, height = 130;
 
     var toggle = function() {
         $('#navbar-bottom').slideToggle(100);
-        if (visible) {
+        if (state.visible) {
             $('#pullout').html('down');
             $('#content').animate({'padding-top': 70}, 100);
-            visible = false;
+            state.visible = false;
+            $.cookies.set('navbar', state);
         } else {
             $('#pullout').html('up');
             $('#content').animate({'padding-top': 84 + height}, 100);
-            visible = true;
+            state.visible = true;
+            $.cookies.set('navbar', state);
         }
 
-        if (typeof viewer_instance != undefined)
+        if (typeof viewer_instance !== "undefined")
             viewer_instance.refresh();
     };
 
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
-        if (visible) {
+        if (state.visible) {
             $('#content').css('padding-top', 84 + height);
-            if (typeof viewer_instance != undefined)
+            if (typeof viewer_instance !== "undefined")
                 viewer_instance.refresh();
         } else
             $('#content').css('padding-top', 70);
     };
 
-    var load = function(node, cat_id) {
+    var draw = function() {
+        $('#navbar-bottom').html(template(state));
+        $('.navbar-category').click(load_event);
+        refresh_padding();
+    };
+
+    var load = function(cat_id) {
         $.getJSON("/json/tree/category/" + cat_id, function(data) {
-            $(node).after(template(data));
-            $('.navbar-list[data-id=' + cat_id + '] .navbar-category').click(load_event);
-            refresh_padding();
+            state.loaded.push(data);
+            $.cookies.set('navbar', state);
+            draw();
         });
     };
 
     var load_event = function(event) {
         var list = event.target.parentNode;
 
-        for (var elem = list.nextSibling; elem; elem = next) {
-            var next = elem.nextSibling;
-            if (elem.tagName == "UL")
-                $(elem).remove();
-        }
+        for (var i in state.loaded)
+            if (state.loaded[i].id == list.getAttribute("data-id"))
+                break;
 
-        load(list, event.target.getAttribute("data-id"));
+        // WTF JS POWER : typeof i === "string"
+        i = Number(i) + 1;
+        state.loaded.splice(i, state.loaded.length - i);
+        $.cookies.set('navbar', state);
+        load(event.target.getAttribute("data-id"));
+    };
+
+    var set_state = function() {
+        var source = $.cookies.get('navbar');
+        if (source == null) {
+            // initial state
+            state = {
+                loaded: [],
+                visible: false,
+            };
+            load(1);
+        } else {
+            // read from cookie
+            state = source;
+            draw();
+            if (state.visible == true) {
+                $('#navbar-bottom').css('display', 'block');
+                $('#pullout').html('up');
+                $('#content').css('padding-top', 84 + height);
+            }
+        }
     };
 
     $(document).ready(function() {
@@ -62,12 +91,12 @@ var navbar = function() {
         $('#navbar-search').click(function() {return false;});
         $(window).resize(refresh_padding);
         template = Handlebars.compile(fragments["navbar-list"]);
-        load($("#navbar-start"), 1);
+        set_state();
     });
-    
+
     return {
         is_down: function() {
-            return visible;
+            return state.visible;
         },
 
         get_height: function() {
