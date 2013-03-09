@@ -17,7 +17,9 @@ var doc = {
     id: {{ object.id }},
     slug: '{{ object.reference.slug }}',
     pages: [ {% for page in object.page_set.all %}
-        {numero: {{ page.numero }}, height_600: {{ page.height_600 }} },{% endfor %}
+        {numero: {{ page.numero }}, 
+         height_600: {{ page.height_600 }}, 
+         height_900: {{ page.height_900 }} },{% endfor %}
     ],
 };
 

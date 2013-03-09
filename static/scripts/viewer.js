@@ -136,8 +136,13 @@ var viewer = function(doc) {
                 change_mode('n');
 
             $('.page').each(function(i, page) {
-                $(page).height(doc.pages[i].height_600 * zoom / 100);
-                $(page).width(600 * zoom / 100);
+                if (zoom == 150) {
+                    $(page).height(doc.pages[i].height_900);
+                    $(page).width(900);
+                } else {
+                    $(page).height(doc.pages[i].height_600 * zoom / 100);
+                    $(page).width(600 * zoom / 100);
+                }
             });
 
             $('#top-page').width(600 * zoom / 100);
