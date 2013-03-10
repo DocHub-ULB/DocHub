@@ -11,6 +11,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from documents.forms import UploadFileForm
 from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
+from telepathy.models import Thread
 from json import dumps
 
 
@@ -33,6 +34,8 @@ def get_category(request, id):
 
 def show_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
+    course.thread_set = Thread.objects.filter(referer_content="course",
+                                              referer_id=course.id)
     return render(request, "course.html", 
                   {"object": course,
                    "upload_form": UploadFileForm(initial={"course": course}),
