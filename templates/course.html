@@ -66,4 +66,27 @@
   </table>
   <input type="submit" value="Post"/>
 </form>
+
+<table class="sortable">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th style="min-width: 200px">Subject</th>
+      <th>Poster</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  {% for thread in object.thread_set.all %}
+    <tr>
+      <td>{{ thread.id }}</td>
+      <td><a href="{% url thread_show thread.id %}">{{ thread.subject }}</a></td>
+      <td>{{ thread.user.name }}</td>
+      <td>{{ thread.created }}</td>
+      </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}
