@@ -29,6 +29,7 @@ urlpatterns = patterns("",
     # The apps entry points
     url(r"^zoidberg/course/", include("graph.urls")),
     url(r"^zoidberg/document/", include("documents.urls")),
+    url(r"^zoidberg/telepathy/", include("telepathy.urls")),
 
     # The product/client entry points
     url(r"^zoidberg/home$",
