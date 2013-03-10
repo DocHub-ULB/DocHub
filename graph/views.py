@@ -6,8 +6,10 @@
 # your option) any later version.
 
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
+from documents.forms import UploadFileForm
+from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from json import dumps
 
@@ -27,6 +29,16 @@ def get_category(request, id):
                        "slug": cours.slug} for cours in category.contains.all()]}
 
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
+
+
+def show_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    return render(request, "course.html", 
+                  {"object": course,
+                   "upload_form": UploadFileForm(initial={"course": course}),
+                   "newthread_form": NewThreadForm(initial={
+                        "referer_type": "course",
+                        "referer_id": course.id})})
 
 
 def join_course(request, slug):

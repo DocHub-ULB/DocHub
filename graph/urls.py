@@ -5,11 +5,8 @@
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
-from django.views.generic.list_detail import object_detail
 from django.conf.urls import patterns, url
-from documents.forms import UploadFileForm
-from graph.views import get_category, join_course, leave_course
-from graph.models import Course
+from graph.views import get_category, show_course, join_course, leave_course
 
 
 json_urls = patterns("",
@@ -19,11 +16,7 @@ json_urls = patterns("",
 
 urlpatterns = patterns("",
     url(r"^v/(?P<slug>[^/]*)$", 
-        object_detail,
-        {"slug_field": "slug",
-         "template_name": "course.html",
-         "queryset": Course.objects.all(),
-         "extra_context": {"upload_form": UploadFileForm()}},
+        show_course,
         name="course_show"),
     
     url(r"^join/(?P<slug>[^/]*)$", 
