@@ -48,7 +48,7 @@
 </table>
 
 <h2>Upload</h2>
-<form action="{% url document_put object.slug %}" method="post"
+<form action="{% url document_put %}" method="post"
       enctype="multipart/form-data">
   {% csrf_token %}
   <table>

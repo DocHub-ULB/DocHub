@@ -12,7 +12,7 @@ from documents.models import Document
 
 
 urlpatterns = patterns("",
-    url(r"^put/(?P<slug>[^/]*)$", 
+    url(r"^put/$", 
         upload_file,
         name="document_put"),
 

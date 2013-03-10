@@ -12,10 +12,9 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from documents.models import Document, PendingDocument
 from documents.forms import UploadFileForm
-from graph.models import Course
 
 
-def upload_file(request, slug):
+def upload_file(request):
     form = UploadFileForm(request.POST, request.FILES)
 
     if form.is_valid() and match(r'.*\.[pP][dD][fF]$',
@@ -23,7 +22,7 @@ def upload_file(request, slug):
         name = sub(r'\.[Pp][Dd][Ff]$', '', request.FILES['file'].name)
         name = escape(name.lower().replace(' ', '_'))
         description = escape(form.cleaned_data['description'])
-        course = get_object_or_404(Course, slug=slug)
+        course = form.cleaned_data['course']
         doc = Document.objects.create(user=request.user.get_profile(),
                                      reference=course, name=name, 
                                      description=description)
@@ -34,6 +33,5 @@ def upload_file(request, slug):
         tmp_doc.close()
         PendingDocument.objects.create(document=doc, state="queued",
                                        url='file://' + url)
-        return HttpResponseRedirect(reverse('course_show', args=[slug]))
+        return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponse('form invalid', 'text/html')
-

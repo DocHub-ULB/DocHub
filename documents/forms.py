@@ -6,8 +6,11 @@
 # your option) any later version.
 
 from django import forms
+from graph.models import Course
 
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
     description = forms.CharField(widget=forms.Textarea, required=False)
+    course = forms.ModelChoiceField(queryset=Course.objects.all(),
+                                    widget=forms.HiddenInput)
