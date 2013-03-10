@@ -11,4 +11,16 @@
 
 {% block content %}
 <h1>{{ object.subject }}</h1>
+
+{% for msg in object.message_set.all %}
+<div class="message">
+  <div class="message-left">
+    <strong>{{ message.user.name }}</strong><br>
+    {{ message.created }}
+  </div>
+  <div class="message-right">
+    {{ msg.text }}
+  </div>
+</div>
+{% endfor %}
 {% endblock %}
