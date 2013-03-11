@@ -27,6 +27,7 @@ urlpatterns = patterns("",
     url(r"^json/tree/", include(graph_json)),
 
     # The apps entry points
+    url(r"^zoidberg/calendar/", include("calendar.urls")),
     url(r"^zoidberg/course/", include("graph.urls")),
     url(r"^zoidberg/document/", include("documents.urls")),
     url(r"^zoidberg/telepathy/", include("telepathy.urls")),

@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'fragments',
     'south',
+    'calendar',
     'documents',
     'graph',
     'telepathy',
