@@ -24,6 +24,21 @@
 <p>{{ object.description }}</p>
 
 <h1>Documents</h1>
+<div id="upload" class="panel">
+  <h2>Upload</h2>
+  <form action="{% url document_put %}" method="post"
+        enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ upload_form.as_table }}
+    </table>
+    <input type="submit" value="Upload"/>
+  </form>
+</div>
+
+<div class="panel-button" data-target="upload">
+  Upload
+</div>
 
 <table class="sortable">
   <thead>
@@ -46,16 +61,6 @@
   {% endfor %}
   </tbody>
 </table>
-
-<h2>Upload</h2>
-<form action="{% url document_put %}" method="post"
-      enctype="multipart/form-data">
-  {% csrf_token %}
-  <table>
-    {{ upload_form.as_table }}
-  </table>
-  <input type="submit" value="Upload"/>
-</form>
 
 <h1>Discussions</h1>
 <h2>New Thread</h2>
