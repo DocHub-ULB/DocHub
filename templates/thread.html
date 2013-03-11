@@ -23,4 +23,14 @@
   </div>
 </div>
 {% endfor %}
+
+<h2>Reply</h2>
+<form action="{% url thread_reply %}" method="post">
+  {% csrf_token %}
+  <table>
+    {{ reply_form.as_table }}
+  </table>
+  <input type="submit" value="Reply"/>
+</form>
+
 {% endblock %}

@@ -6,13 +6,17 @@
 # your option) any later version.
 
 from django.conf.urls import patterns, url
-from telepathy.views import new_thread, show_thread
+from telepathy.views import new_thread, show_thread, reply_thread
 
 
 urlpatterns = patterns("",
-    url(r"^put/", 
+    url(r"^put/$", 
         new_thread,
         name="thread_put"),
+
+    url(r"^reply/$", 
+        reply_thread,
+        name="thread_reply"),
 
     url(r"^v/(?P<thread_id>[^/]*)/$", 
         show_thread,

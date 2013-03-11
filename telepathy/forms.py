@@ -6,6 +6,7 @@
 # your option) any later version.
 
 from django import forms
+from telepathy.models import Thread
 
 
 class NewThreadForm(forms.Form):
@@ -13,3 +14,8 @@ class NewThreadForm(forms.Form):
     referer_id = forms.DecimalField(widget=forms.HiddenInput)
     subject = forms.CharField()
     content = forms.CharField(widget=forms.Textarea)
+
+
+class ReplyForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea)
+    thread = forms.ModelChoiceField(Thread.objects, widget=forms.HiddenInput)
