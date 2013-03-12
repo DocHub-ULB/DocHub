@@ -5,6 +5,7 @@
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
+from json import loads
 from django.db import models
 from users.models import Profile
 
@@ -14,12 +15,20 @@ class Course(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
 
+    def last_info(self):
+        data = self.courseinfo_set.all()[0]
+        data.infos = loads(data.infos)
+        return data
+
 
 class CourseInfo(models.Model):
     user = models.ForeignKey(Profile)
     infos = models.TextField()
     date = models.DateTimeField(auto_now=True)
     course = models.ForeignKey(Course)
+
+    class Meta:
+        ordering = ['-date']
 
 
 class Category(models.Model):

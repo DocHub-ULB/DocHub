@@ -21,7 +21,11 @@
   </small>
   {% endif %}
 </h1>
-<p>{{ object.description }}</p>
+<p>
+  {% for line in object.last_info.infos %}
+  <strong>{{ line.name }}</strong> {{ line.value }}<br>
+  {% endfor %}
+</p>
 
 <h1>Documents</h1>
 <div id="upload" class="panel">
