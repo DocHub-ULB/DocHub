@@ -28,6 +28,10 @@
 </p>
 
 <h1>Documents</h1>
+<div class="panel-button" data-target="upload">
+  Upload
+</div>
+
 <div id="upload" class="panel">
   <h2>Upload</h2>
   <form action="{% url document_put %}" method="post"
@@ -38,10 +42,6 @@
     </table>
     <input type="submit" value="Upload"/>
   </form>
-</div>
-
-<div class="panel-button" data-target="upload">
-  Upload
 </div>
 
 <table class="sortable">
