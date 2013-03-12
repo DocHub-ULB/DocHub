@@ -10,92 +10,108 @@
 {% endcomment %}
 
 {% block content %}
-<h1>{{ object.name }} 
-  {% if user.get_profile in object.followed.all %}
-  <small>
+<div class="logic-block">
+  <h1>{{ object.name }}</h1>
+  <div class="panel-button border-bottom">
+    {% if user.get_profile in object.followed.all %}
     <a href="{% url course_leave object.slug %}">leave</a>
-  </small>
-  {% else %}
-  <small>
+    {% else %}
     <a href="{% url course_join object.slug %}">join</a>
-  </small>
-  {% endif %}
-</h1>
-<p>
+    {% endif %}
+  </div>
+  <div class="clear"></div>
+  <div class="logic-p">
   {% for line in object.last_info.infos %}
-  <strong>{{ line.name }}</strong> {{ line.value }}<br>
+    <strong>{{ line.name }}:</strong> {{ line.value }}<br>
   {% endfor %}
-</p>
-
-<h1>Documents</h1>
-<div class="panel-button" data-target="upload">
-  Upload
+  </div>
 </div>
 
-<div id="upload" class="panel">
-  <h2>Upload</h2>
-  <form action="{% url document_put %}" method="post"
-        enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-      {{ upload_form.as_table }}
-    </table>
-    <input type="submit" value="Upload"/>
-  </form>
-</div>
+<div class="clear"></div>
 
-<table class="sortable">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th style="min-width: 200px">Name</th>
-      <th>Poster</th>
-      <th>Size</th>
-    </tr>
-  </thead>
-  
-  <tbody>
-  {% for doc in object.document_set.all %}
-    <tr>
-      <td>{{ doc.id }}</td>
-      <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
-      <td>{{ doc.user.name }}</td>
-      <td>{{ doc.pages }}</td>
+<div class="logic-block">
+  <h1>Documents</h1>
+  <div class="panel-button border-bottom" data-target="upload" data-action="show">
+    upload
+  </div>
+  <div class="clear"></div>
+
+  <div id="upload" class="panel">
+    <form action="{% url document_put %}" method="post"
+          enctype="multipart/form-data">
+      {% csrf_token %}
+      <table>
+        {{ upload_form.as_table }}
+      </table>
+      <input type="submit" value="Upload"/>
+    </form>
+  </div>
+
+  <table class="sortable rounded">
+    <thead>
+      <tr>
+        <th class="rounded-left">#</th>
+        <th style="min-width: 200px">Name</th>
+        <th>Score</th>
+        <th>Poster</th>
+        <th class="rounded-right">Size</th>
       </tr>
-  {% endfor %}
-  </tbody>
-</table>
-
-<h1>Discussions</h1>
-<h2>New Thread</h2>
-<form action="{% url thread_put %}" method="post">
-  {% csrf_token %}
-  <table>
-    {{ newthread_form.as_table }}
+    </thead>
+  
+    <tbody>
+    {% for doc in object.document_set.all %}
+      <tr>
+        <td>{{ doc.id }}</td>
+        <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
+        <td>0</td>
+        <td>{{ doc.user.name }}</td>
+        <td>{{ doc.pages }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
   </table>
-  <input type="submit" value="Post"/>
-</form>
+</div>
 
-<table class="sortable">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th style="min-width: 200px">Subject</th>
-      <th>Poster</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  
-  <tbody>
-  {% for thread in object.thread_set.all %}
-    <tr>
-      <td>{{ thread.id }}</td>
-      <td><a href="{% url thread_show thread.id %}">{{ thread.subject }}</a></td>
-      <td>{{ thread.user.name }}</td>
-      <td>{{ thread.created }}</td>
+<div class="clear"></div>
+
+<div class="logic-block"></div>
+  <h1>Discussions</h1>
+  <div class="panel-button" data-target="post">
+    new post
+  </div>
+  <div class="clear"></div>
+
+  <div class="panel" id="post">
+    <form action="{% url thread_put %}" method="post">
+      {% csrf_token %}
+      <table>
+        {{ newthread_form.as_table }}
+      </table>
+      <input type="submit" value="Post"/>
+    </form>
+  </div>
+
+  <table class="sortable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th style="min-width: 200px">Subject</th>
+        <th>Poster</th>
+        <th>Date</th>
       </tr>
-  {% endfor %}
-  </tbody>
-</table>
+    </thead>
+  
+    <tbody>
+    {% for thread in object.thread_set.all %}
+      <tr>
+        <td>{{ thread.id }}</td>
+        <td><a href="{% url thread_show thread.id %}">{{ thread.subject }}</a></td>
+        <td>{{ thread.user.name }}</td>
+        <td>{{ thread.created }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 {% endblock %}

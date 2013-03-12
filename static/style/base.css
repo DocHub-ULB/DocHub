@@ -6,14 +6,21 @@
  * your option) any later version.
  */
 
-h1 {
-    font-size: 18px;
-    margin: 17px 10px 9px 10px;
+.logic-block {
+    float: left;
+    margin-bottom: 20px;
 }
 
-h1 a {
-    color: blue;
-    text-decoration: none;
+.clear {
+    clear: both;
+}
+
+h1 {
+    font-family: Helvetica;
+    font-size: 20px;
+    font-weight: lighter;
+    margin: 25px 20px 5px 20px;
+    float: left;
 }
 
 h2 {
@@ -22,8 +29,9 @@ h2 {
     margin: 14px 10px 5px 10px;
 }
 
-p {
+.logic-p {
     margin: 9px 10px 7px 10px;
+    font-size: 12px;
 }
 
 #content {
@@ -72,30 +80,59 @@ p {
 /* DATA TABLE */
 
 .sortable {
-    margin-left: 10px;
-}
-
-.sortable th {
-    border-bottom: 2px #003060 solid;
-    padding: 3px 22px 3px 10px;
-}
-
-.sortable {
-    display: block;
+    font-family: Verdana;
+    border-collapse: collapse;
 }
 
 .sortable td {
-    padding: 3px 10px 3px 10px;
-    border-bottom: 1px #3070f0 solid;
-    border-right: 1px #3070f0 solid;
+    border-top: #ddd 1px solid;
+    border-left: #ddd 1px solid;
+    padding: 9px 15px 7px 15px;
+    font-size: 12px;
+    background-color: #f1f1f1;
 }
 
-.sortable tr:last-child td {
-    border-bottom: none;
+.sortable td:first-child {
+    border-left: #eee 1px solid;
+    padding-left: 25px;
 }
 
 .sortable td:last-child {
-    border-right: none;
+    padding-right: 25px;
+}
+
+.sortable tr:nth-child(odd) td {
+    background-color: #fdfdfe;
+}
+
+.sortable tr:last-child td {
+    padding-bottom: 10px;
+}
+
+.sortable tr:nth-child(odd) td:last-child {
+    border-right: #eee 1px solid;
+}
+
+.sortable th {
+    border-left: #666 1px solid;
+    text-align: left;
+    padding: 14px 15px 7px 17px;
+    background-color: #333;
+    color: #fff;
+    font-size: 13px;
+}
+
+.sortable th:first-child {
+    border-left: none;
+    padding-left: 27px;
+}
+
+.rounded th:first-child {
+    border-top-left-radius: 12px;
+}
+
+.rounded th:last-child {
+    border-top-right-radius: 12px;
 }
 
 .dataTables_info {

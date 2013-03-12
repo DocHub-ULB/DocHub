@@ -9,7 +9,26 @@
 var panel_master = function() {
     $(document).ready(function() {
         $('.panel-button').click(function(e) {
-            $('#upload').slideDown();
+            var button = e.target;
+            var panel = $("#" + $(button).attr("data-target"));
+            var action = $(button).attr("data-action");
+            
+            if (panel != undefined) {
+                if (action == "show") {
+                    $(button).removeClass("border-bottom");
+                    $(button).attr("data-action", "mask");
+                    $(panel).slideDown(100);
+                    console.log($(panel).next().children("thead > tr > th"));
+                    $(panel).next().removeClass("rounded");
+                    $(panel).next().removeClass("rounded");
+                } else {
+                    $(button).addClass("border-bottom");
+                    $(button).attr("data-action", "show");
+                    $(panel).slideUp(100);
+                    $(panel).next().addClass("rounded");
+                    $(panel).next().addClass("rounded");
+                }
+            }
         });
     });
 

@@ -14,12 +14,9 @@ body {
 }
 
 #header {
-    background-color: #004090;
+    background-color: #001fa6;
     padding: 5px;
     height: 40px;
-    background-image: url("/static/images/header_back1.png"), 
-                      url("/static/images/header_back2.png");
-    background-repeat: no-repeat, repeat-x;
 }
 
 #header h1 {
