@@ -26,7 +26,6 @@ def get_category(request, id):
                              "id": sc.id} for sc in category.sub_categories.all()],
          "contains": [{"id": cours.id,
                        "name": cours.name,
-                       "description": cours.description,
                        "slug": cours.slug} for cours in category.contains.all()]}
 
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
