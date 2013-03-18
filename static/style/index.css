@@ -77,3 +77,7 @@ a {
     color: blue;
     text-decoration: none;
 }
+
+.w700 {
+    min-width: 700px;
+}

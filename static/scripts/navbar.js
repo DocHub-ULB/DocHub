@@ -12,13 +12,15 @@ var navbar = function() {
     var toggle = function() {
         $('#navbar-bottom').slideToggle(100);
         if (state.visible) {
-            $('#pullout').html('down');
             $('#content').animate({'padding-top': 70}, 100);
+            $('#pull').removeClass("courses-focus");
+            $('#pull').addClass("courses");
             state.visible = false;
             $.cookies.set('navbar', state);
         } else {
-            $('#pullout').html('up');
             $('#content').animate({'padding-top': 84 + height}, 100);
+            $('#pull').removeClass("courses");
+            $('#pull').addClass("courses-focus");
             state.visible = true;
             $.cookies.set('navbar', state);
         }
@@ -30,6 +32,8 @@ var navbar = function() {
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
         if (state.visible) {
+            $('#pull').removeClass("courses");
+            $('#pull').addClass("courses-focus");
             $('#content').css('padding-top', 84 + height);
             if (typeof viewer_instance !== "undefined")
                 viewer_instance.refresh();
@@ -46,6 +50,7 @@ var navbar = function() {
     var load = function(cat_id) {
         $.getJSON("/json/tree/category/" + cat_id, function(data) {
             state.loaded.push(data);
+            console.log(state);
             $.cookies.set('navbar', state);
             draw();
         });

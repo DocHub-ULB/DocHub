@@ -22,7 +22,7 @@
   <div class="clear"></div>
   <div class="logic-p">
   {% for line in object.last_info.infos %}
-    <strong>{{ line.name }}:</strong> {{ line.value }}<br>
+    <strong>{{ line.name }}:</strong> {{ line.value|truncatechars:50 }}<br>
   {% endfor %}
   </div>
 </div>
@@ -47,7 +47,7 @@
     </form>
   </div>
 
-  <table class="sortable rounded">
+  <table class="sortable rounded w700">
     <thead>
       <tr>
         <th class="rounded-left">#</th>
@@ -74,14 +74,14 @@
 
 <div class="clear"></div>
 
-<div class="logic-block"></div>
+<div class="logic-block">
   <h1>Discussions</h1>
-  <div class="panel-button" data-target="post">
+  <div class="panel-button border-bottom" data-target="post" data-action="show">
     new post
   </div>
   <div class="clear"></div>
 
-  <div class="panel" id="post">
+  <div id="post" class="panel">
     <form action="{% url thread_put %}" method="post">
       {% csrf_token %}
       <table>
@@ -91,7 +91,7 @@
     </form>
   </div>
 
-  <table class="sortable">
+  <table class="sortable rounded w700">
     <thead>
       <tr>
         <th>#</th>
@@ -114,4 +114,5 @@
   </table>
 </div>
 
+<div class="clear"></div>
 {% endblock %}

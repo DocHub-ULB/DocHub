@@ -29,8 +29,11 @@
     <div id="navbar-fix">
       <div id="navbar-top">
         <a id="brand" href="{% url home %}">P402<small>beta</small></a>
-        <span id="pullout">down</span>
-        <a id="logout" href="{% url logout %}">Logout</a>
+        <a class="link home" href="{% url home %}">Home</a>
+        <a id="pull" class="link courses" href="#">Courses</a>
+        <a class="link calendar" href="#">Calendar</a>
+        <a class="link wall" href="#">Wall</a>
+        <a id="logout" class="link" href="{% url logout %}">Logout</a>
         <form id="navbar-search">
           <input type="text" id="search-query" placeholder="Search">
         </form>
@@ -41,7 +44,8 @@
     <div id="content">
       {% block content %}
       <h1>Followed courses</h1>
-      <table class="sortable">
+      <div class="clear"></div>
+      <table class="sortable rounded">
         <thead>
           <tr>
             <th>#</th>
@@ -65,6 +69,7 @@
     
     <div id="footer">
       <p>P402 is upon US.<br>
+        Help - Dev - bugtrack - about..<br>
         Be aware of dragons</p>
     </div>
   </body>

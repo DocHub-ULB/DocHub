@@ -21,12 +21,8 @@
 }
 
 #navbar-top {
-    background-color: #004090;
-    padding: 3px 5px 7px 5px;
-    height: 40px;
-    background-image: url("/static/images/header_back1.png"), 
-                      url("/static/images/header_back2.png");
-    background-repeat: no-repeat, repeat-x;
+    background-color: #365d98;
+    height: 60px;
     cursor: pointer;
 }
 
@@ -35,8 +31,7 @@
     font-size: 26px;
     font-weight: bold;
     float: left;
-    padding: 5px 5px 0px 5px;
-    margin: 3px 5px 0px 5px;
+    margin: 15px 30px 0px 30px;
 }
 
 #brand small {
@@ -46,14 +41,47 @@
     color: white;
 }
 
-#pullout {
-    border: 1px solid #bbd;
-    border-radius: 2px;
+#navbar-top a.link {
     float: left;
-    padding: 4px 9px 4px 9px;
-    margin: 10px 9px 0px 9px;
-    background-color: #003090;
-    color: white;
+    height: 23px;
+    padding: 27px 25px 10px 40px;
+    font-size: 18px;
+    font-family: Helvetica;
+}
+
+#navbar-top a.home {
+    background-image: url("/static/images/home.png");
+    background-repeat: no-repeat;
+    background-position: 0px 3px;
+}
+
+#navbar-top a.courses {
+    background-image: url("/static/images/courseb.png");
+    background-repeat: no-repeat;
+    background-position: 0px 3px;
+    padding-left: 50px;
+    background-color: #365d98;
+}
+
+#navbar-top a.courses-focus {
+    background-image: url("/static/images/courseg.png");
+    background-repeat: no-repeat;
+    background-position: 0px 3px;
+    padding-left: 50px;
+    background-color: #333;
+}
+
+#navbar-top a.calendar {
+    background-image: url("/static/images/calendar.png");
+    background-repeat: no-repeat;
+    background-position: 0px 3px;
+}
+
+#navbar-top a.wall {
+    background-image: url("/static/images/wall.png");
+    background-repeat: no-repeat;
+    background-position: 0px 3px;
+    padding-left: 50px;
 }
 
 #navbar-search {
@@ -64,27 +92,20 @@
     max-width: 500px;
     min-width: 250px;
     border: none;
-    height: 26px;
-    margin-top: 11px;
+    height: 24px;
+    margin-top: 22px;
     border-radius: 2px;
     background: #fff url("/static/images/search-icon.png") left no-repeat;
     padding-left: 20px;
 }
 
-#logout {
-    border: 1px solid #bbd;
-    border-radius: 2px;
+#navbar-top #logout {
     float: right;
-    padding: 4px 9px 4px 9px;
-    margin: 10px 9px 0px 9px;
-    background-color: #003090;
-    color: white;
 }
 
 #navbar-bottom {
-    background-color: #003585;
-    border-top: 2px #003080 solid;
-    border-bottom: 2px #003080 solid;
+    background-color: #333; /*#003585;*/
+    border-bottom: 1px #666 solid;
     padding: 10px;
     font-size: 12px;
     display: none;
@@ -111,7 +132,6 @@
 }
 
 .navbar-category {
-    background-color: #004090;
     margin-bottom: 2px;
 }
 
