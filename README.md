@@ -29,7 +29,7 @@ Installation
 Run
 ===
 
-	./manage.py processing_deamon & ./manage.py runserver
+	./manage.py processing_daemon & ./manage.py runserver
 
 Then go http://localhost:8000/syslogin
 
