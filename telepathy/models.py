@@ -7,13 +7,11 @@
 
 from django.db import models
 from users.models import Profile
-from polydag.models import Taggable, Leaf
+from polydag.models import TaggableLeaf
 
-class Thread(Taggable, Leaf):
+class Thread(TaggableLeaf):
     user = models.ForeignKey(Profile)
     created = models.DateTimeField(auto_now_add=True, editable=False)
-    tags = models.CharField(max_length=100)
-    
     class Meta:
         ordering = ['-created']
 

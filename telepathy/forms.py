@@ -11,7 +11,7 @@ from telepathy.models import Thread
 
 class NewThreadForm(forms.Form):
     parentNode = forms.CharField(widget=forms.HiddenInput)
-    name = forms.CharField()
+    name = forms.CharField(widget=forms.TextInput)
     content = forms.CharField(widget=forms.Textarea)
 
 
