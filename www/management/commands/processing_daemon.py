@@ -46,8 +46,9 @@ class Command(BaseCommand):
                                 document.pk, num))
         
         close_connection()
-        Page.objects.create(numero=num, height_120=h_120, height_600=h_600, 
-                            height_900=h_900, document=document)
+        page = Page.objects.create(numero=num, height_120=h_120, 
+                                   height_600=h_600, height_900=h_900)
+        document.attach(page)
     
     
     def make_jepg(self, width, num, filename, name):

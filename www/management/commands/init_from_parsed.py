@@ -36,31 +36,35 @@ class Command(BaseCommand):
     )
     
     def createCourse(self, parentNode, slug):
-        ULBInfos = self.courseList[self.to_ulb(slug)]
-        name = slug.upper()
-        infos = []
-        for cat, content in ULBInfos.iteritems():
-            if content == "" or cat in self.drops:
-                continue
-            if cat == u"Construction de la note, pondération des différentes activités*":
-                cat = "Note"
-            if cat == u"Langue d'enseignement*":
-                cat = "Langue"
-            if cat == u"Intitulé du cours*":
-                cat = "Nom"
-                name = content
-            if cat[-1] == "*":
-                cat = cat[:-1]
-            infos.append({"name": cat, "value": content})
-        course = Course.objects.create(
-            name=name, slug=slug, 
-            description=json.dumps(ULBInfos)
-        )
+        try:
+            course = Course.objects.get(slug=slug)
+        except:
+            ULBInfos = self.courseList[self.to_ulb(slug)]
+            name = slug.upper()
+            infos = []
+            for cat, content in ULBInfos.iteritems():
+                if content == "" or cat in self.drops:
+                    continue
+                if cat == u"Construction de la note, pondération des différentes activités*":
+                    cat = "Note"
+                if cat == u"Langue d'enseignement*":
+                    cat = "Langue"
+                if cat == u"Intitulé du cours*":
+                    cat = "Nom"
+                    name = content
+                if cat[-1] == "*":
+                    cat = cat[:-1]
+                infos.append({"name": cat, "value": content})
+            course = Course.objects.create(
+                name=name, slug=slug, 
+                description=json.dumps(ULBInfos)
+            )
+            courseMeta = CourseInfo.objects.create(
+                course=course, infos=json.dumps(infos),
+                date=self.NOW, user=self.USER
+            )
         parentNode.attach(course)
-        courseMeta = CourseInfo.objects.create(
-            course=course, infos=json.dumps(infos),
-            date=self.NOW, user=self.USER
-        )
+        
     
     
     def walk(self, jsonTree, parentNode):

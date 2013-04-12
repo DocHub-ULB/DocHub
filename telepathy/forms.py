@@ -10,9 +10,8 @@ from telepathy.models import Thread
 
 
 class NewThreadForm(forms.Form):
-    referer_type = forms.CharField(widget=forms.HiddenInput)
-    referer_id = forms.DecimalField(widget=forms.HiddenInput)
-    subject = forms.CharField()
+    parentNode = forms.CharField(widget=forms.HiddenInput)
+    name = forms.CharField()
     content = forms.CharField(widget=forms.Textarea)
 
 

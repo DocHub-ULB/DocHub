@@ -37,14 +37,13 @@ def show_course(request, slug):
         course = get_object_or_404(Course, pk=slug)
     else:
         course = get_object_or_404(Course, slug=slug)
-    course.thread_set = Thread.objects.filter(referer_content="course",
-                                              referer_id=course.id)
+    course.thread_set = filter(lambda e: type(e)==Thread, course.childrens())
+    #Thread.objects.filter(referer_content="course", referer_id=course.id)
     return render(request, "course.html", 
                   {"object": course,
                    "upload_form": UploadFileForm(initial={"course": course}),
                    "newthread_form": NewThreadForm(initial={
-                        "referer_type": "course",
-                        "referer_id": course.id})})
+                        "parentNode": course.id})})
 
 
 def join_course(request, slug):

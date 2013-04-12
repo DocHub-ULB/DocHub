@@ -7,40 +7,24 @@
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.html import escape
 from telepathy.forms import NewThreadForm, ReplyForm
 from telepathy.models import Thread, Message
-from graph.models import Course
-from documents.models import Document, Page
-
-
-def get_multi_object(object_type, object_id):
-    if object_type == "course":
-        return get_object_or_404(Course, id=object_id)
-    elif object_type == "document":
-        return get_object_or_404(Document, id=object_id)
-    elif object_type == "page":
-        return get_object_or_404(Page, id=object_id)
-    else:
-        raise Exception("object_type not found")
-
+from polydag.models import Node
 
 def new_thread(request):
     form = NewThreadForm(request.POST)
 
     if form.is_valid():
-        subject = escape(form.cleaned_data['subject'])
+        name = escape(form.cleaned_data['name'])
         content = escape(form.cleaned_data['content'])
-        referer_type = escape(form.cleaned_data['referer_type'])
-        referer_id = escape(form.cleaned_data['referer_id'])
-        object = get_multi_object(referer_type, referer_id)
+        parentNode = get_object_or_404(Node, id=form.cleaned_data['parentNode'])
         thread = Thread.objects.create(user=request.user.get_profile(),
-                                       referer_content=referer_type,
-                                       referer_id=referer_id,
-                                       subject=subject)
+                                       name=name)
         message = Message.objects.create(user=request.user.get_profile(),
                                          thread=thread, text=content)
+        parentNode.attach(thread)
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
 

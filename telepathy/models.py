@@ -7,16 +7,13 @@
 
 from django.db import models
 from users.models import Profile
+from polydag.models import Taggable, Leaf
 
-
-class Thread(models.Model):
-    subject = models.TextField()
+class Thread(Taggable, Leaf):
     user = models.ForeignKey(Profile)
-    referer_id = models.PositiveIntegerField()
-    referer_content = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     tags = models.CharField(max_length=100)
-
+    
     class Meta:
         ordering = ['-created']
 
@@ -27,3 +24,4 @@ class Message(models.Model):
     text = models.TextField()
     previous = models.ForeignKey('self', null=True, default=None)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+

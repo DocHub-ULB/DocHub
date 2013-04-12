@@ -36,7 +36,7 @@ class Command(BaseCommand):
         for node in Node.objects.all():
             color = self.COLORS.get(node.classBasename(), self.COLORS['Node'])
             url = options['urlprefix'] + node.canonic_url
-            f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n'%(node.pk, str(node.name), color, url))
+            f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n'%(node.pk, node.name.encode('utf-8'), color, url))
             for child in node.childrens():
                 f.write('\t%d -> %d;\n'%(node.pk, child.id))
 

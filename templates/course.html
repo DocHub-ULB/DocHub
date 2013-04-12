@@ -102,10 +102,10 @@
     </thead>
   
     <tbody>
-    {% for thread in object.thread_set.all %}
+    {% for thread in object.thread_set %}
       <tr>
         <td>{{ thread.id }}</td>
-        <td><a href="{% url thread_show thread.id %}">{{ thread.subject }}</a></td>
+        <td><a href="{% url thread_show thread.id %}">{{ thread.name }}</a></td>
         <td>{{ thread.user.name }}</td>
         <td>{{ thread.created }}</td>
       </tr>

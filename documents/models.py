@@ -7,10 +7,10 @@
 
 from django.db import models
 from users.models import Profile
-from polydag.models import Node
+from polydag.models import Taggable
 
 
-class Document(Node):
+class Document(Taggable):
     description = models.TextField()
     user = models.ForeignKey(Profile)
 
@@ -23,8 +23,7 @@ class Document(Node):
     download = models.PositiveIntegerField(null=True, default=0)
 
 
-class Page(models.Model):
-    document = models.ForeignKey(Document)
+class Page(Taggable):
     numero = models.IntegerField()
     height_120 = models.IntegerField()
     height_600 = models.IntegerField()
