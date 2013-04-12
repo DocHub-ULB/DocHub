@@ -6,11 +6,11 @@
 # your option) any later version.
 
 from django.db import models
+from polydag.models import Node
 from graph.models import Course
 
 
-class Event(models.Model):
-    reference = models.ForeignKey(Course)
+class Event(Node):
     start = models.DateTimeField(auto_now=True)
     end = models.DateTimeField(auto_now=True)
     information = models.TextField()

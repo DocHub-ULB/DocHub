@@ -21,14 +21,14 @@ def get_category(request, id):
         "id": category.id,
          "name": category.name,
          "description": category.description,
-         "sub_categories": [{"name": sc.name,
-                             "description": sc.description,
-                             "id": sc.id} for sc in category.childrens()],
-         #"contains": [{"id": cours.id,
-         #              "name": cours.name,
-         #              "slug": cours.slug} for cours in category.ancestors()]
+         #"sub_categories": [{"name": sc.name,
+         #                    "description": sc.description,
+         #                    "id": sc.id} for sc in category.childrens()],
+         "contains": [{"id": cours.id,
+                       "name": cours.name,
+                       "slug": cours.slug} for cours in category.childrens()]
     }
-
+    
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
 
 
@@ -53,8 +53,10 @@ def join_course(request, slug):
     user.follow.add(course)
     return HttpResponseRedirect(reverse('course_show', args=[slug]))
 
+
 def leave_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
     user = request.user.get_profile()
     user.follow.remove(course)
     return HttpResponseRedirect(reverse('course_show', args=[slug]))
+

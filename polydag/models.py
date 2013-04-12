@@ -30,8 +30,11 @@ class Node(PolymorphicModel):
     
     
     def to_dict(self, with_children=False):
-        res = {'id':self.pk, 'name':str(self.name), 'type':self.classBasename()}
-        res['url'] = self.canonic_url
+        res = {
+            'id':self.pk, 'name':self.name.encode('utf-8'), 
+            'type':self.classBasename()
+        }
+        #res['url'] = self.canonic_url
         if with_children:
             res['children'] = []
             for child in self.childrens():

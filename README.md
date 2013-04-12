@@ -24,7 +24,7 @@ Installation
     chmod +x ./manage.py
     ./manage.py syncdb
     ./manage.py migrate
-    ./manage.py init
+    ./manage.py init_from_parsed
 
 Run
 ===

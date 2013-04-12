@@ -63,29 +63,29 @@ class Command(BaseCommand):
         CourseInfo.objects.create(user=profile,
                                   course=c1,
                                   infos = """[
-            {    name: "general", values: [
-                                        {name: 'Professeur', value:'B. Lecharlier'},
-                                        {name: 'Langue', value:'Francais'},
-                                        {name: 'Syllabus', value:'Informatique Ba1'},
-                                        {name: 'ECTS', value:'5'},
-                                    ],
-            },
+            {    "name": "general", "values": [
+                                        {"name": "Professeur", "value":"B. Lecharlier"},
+                                        {"name": "Langue", "value":"Francais"},
+                                        {"name": "Syllabus", "value":"Informatique Ba1"},
+                                        {"name": "ECTS", "value":"5"}
+                                    ]
+            }
         ]""")
 
         CourseInfo.objects.create(user = profile,
                                   course=c1,
                                   infos = """[
-            {    name: "general", values: [
-                                        {name: 'Professeur', value:'B. Lecharlier'},
-                                        {name: 'Langue', value:'Francais'},
-                                        {name: 'Syllabus', value:'Informatique Ba1'},
-                                        {name: 'ECTS', value:'5'},
-                                    ],
+            {    "name": "general", "values": [
+                                        {"name": "Professeur", "value":"B. Lecharlier"},
+                                        {"name": "Langue", "value":"Francais"},
+                                        {"name": "Syllabus", "value":"Informatique Ba1"},
+                                        {"name": "ECTS", "value":"5"}
+                                    ]
             },
-            {    name: "exam", values: [
-                                      {name: 'Difficultes', values:'Language noyaux'},
-                                     ],
-            },
+            {    "name": "exam", "values": [
+                                      {"name": "Difficultes", "values":"Language noyaux"}
+                                     ]
+            }
         ]""")
 
         facs = Category.objects.create(name='Faculty', description='Root node w/ category')

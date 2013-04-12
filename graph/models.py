@@ -14,11 +14,13 @@ from users.models import Profile
 class Course(Node):
     slug = models.SlugField()
     description = models.TextField(null=True)
-
+    
     def last_info(self):
-        data = self.courseinfo_set.all()[0]
+        dataset = self.courseinfo_set.all()
+        data = dataset[0] if len(dataset)>0 else CourseInfo(infos="[]")
         data.infos = loads(data.infos)
         return data
+    
 
 
 class CourseInfo(models.Model):
@@ -26,11 +28,13 @@ class CourseInfo(models.Model):
     infos = models.TextField()
     date = models.DateTimeField(auto_now=True)
     course = models.ForeignKey(Course)
-
+    
     class Meta:
         ordering = ['-date']
+    
 
 
 class Category(Node):
     description = models.TextField(null=True)
     slug = models.SlugField()
+

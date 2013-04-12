@@ -24,9 +24,8 @@ def upload_file(request):
         description = escape(form.cleaned_data['description'])
         course = form.cleaned_data['course']
         doc = Document.objects.create(user=request.user.get_profile(),
-                                     reference=course, name=name, 
-                                     description=description)
-
+                                      name=name, description=description)
+        course.attach(doc)
         url = '/tmp/TMP402_%d.pdf' % doc.id
         tmp_doc = open(url, 'w')
         tmp_doc.write(request.FILES['file'].read())

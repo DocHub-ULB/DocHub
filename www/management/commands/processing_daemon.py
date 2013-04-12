@@ -29,7 +29,7 @@ logger.setLevel(logging.INFO)
 
 class Command(BaseCommand):
     help = 'Start tha processing deamon'
-
+    
     def convert_page(self, document, filename, num):
         # extract a normal size page and a thumbnail with graphicsmagick
         #mini
@@ -44,53 +44,57 @@ class Command(BaseCommand):
         h_900 = self.make_jepg(900, num, filename, "%s/%s/%04d_%04d_b.jpg" % 
                                (UPLOAD_DIR, document.reference.slug,
                                 document.pk, num))
-
+        
         close_connection()
         Page.objects.create(numero=num, height_120=h_120, height_600=h_600, 
                             height_900=h_900, document=document)
-
+    
+    
     def make_jepg(self, width, num, filename, name):
         system('gm convert -geometry %dx -quality 90 %s "%s[%d]" %s' %
                (width, ' -density 350', filename, num, name))
         height = int(subprocess.check_output(['gm', 'identify', '-format',
                                               '%h', name]).strip())
         return height
-
+    
+    
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document %d (from %s) : %s' % 
                     (document.id, document.user.name, document.name))
         filename = "%s/%s/%04d.pdf" % (UPLOAD_DIR, document.reference.slug, 
                                        document.id)
-    
+        
         # check if course subdirectory exist
         if not path.exists(UPLOAD_DIR + '/' + document.reference.slug):
             makedirs(UPLOAD_DIR + '/' + document.reference.slug)
-
+        
         # original file saving
         fd = open(filename, 'w')
         fd.write(upfile.read())
         fd.close()
-    
+        
         # sauvegarde du nombre de page
         document.pages = len(subprocess.check_output(['gm', 'identify', 
                                                 filename]).split('\n')) - 1
         document.save()
-
+        
         # activate the search system
         # system("pdftotext " + filename)
         # words = open("%s/%s/%04d.txt" % (UPLOAD_DIR, document.reference.slug, 
         #                                  document.id), 'r')
         # words.close()
-    
+        
         # iteration page a page, transform en png + get page size
         for num in xrange(document.pages):
             self.convert_page(document, filename, num)
-    
+        
         logger.info('End of processing of document %d' % document.id)
+    
     
     def download_file(self, doc, url):
         logger.info('Starting download of document %d : %s' % (doc.id, url))
         return urlopen(url)
+    
     
     def process_file(self, pending_id):
         close_connection()
@@ -104,16 +108,17 @@ class Command(BaseCommand):
             self.parse_file(pending.document, raw)
             pending.state = 'done'
             pending.save()
-    
+            
             # may fail if download url, don't really care
             system("rm /tmp/TMP402_%d.pdf" % pending.document.id)
-    
+            
         except Exception as e:
             logger.error('Process file error of document %d (from %s) : %s' % 
                          (pending.document.id, pending.document.user.name, 
                           str(e)))
             pending.document.delete()
-
+    
+    
     # drop here when the deamon is killed
     def terminate(self, a, b):
         close_connection()
@@ -129,12 +134,11 @@ class Command(BaseCommand):
             except:
                 pass
         exit(0)
-
+    
+    
     def handle(self, *args, **options):
         self.workers = list()
-    
         signal(SIGTERM, self.terminate)
-    
         while True:
             sleep(10)
             close_connection()
@@ -150,3 +154,5 @@ class Command(BaseCommand):
                 process = Process(target=self.process_file, args=(pending.id,))
                 process.start()
                 self.workers.append((process, pending))
+    
+
