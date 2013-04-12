@@ -48,6 +48,9 @@ ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p
 # ULB authentificator, need 2 parameters : SID and UID
 ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid=%s&_uid=%s'
 
+# Activate the search system
+SEARCH_SYSTEM = False
+
 TIME_ZONE = 'Europe/Paris'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
