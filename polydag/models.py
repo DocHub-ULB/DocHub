@@ -148,6 +148,12 @@ class CannotHaveChildren(Exception):
 
 
 class RaiseOnAttach:
+    """Simple mixin that brings a Leaf behavior to a Node"""
+    def childrens(self):
+        """Since self cannot have children, bypass DB lookup !"""
+        return []
+    
+    
     def attach(self, *args, **kwargs):
         raise CannotHaveChildren(self)
     
