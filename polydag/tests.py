@@ -6,7 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from polydag.models import Node, Leaf, Taggable, TaggableLeaf, CannotHaveChildren
+from polydag.models import Node, Leaf, Taggable, TaggableLeaf, CannotHaveChildren, RaiseOnAttach
 
 class SimpleTest(TestCase):
     def mkNode(self, name, klass=Node):
@@ -32,9 +32,10 @@ class SimpleTest(TestCase):
     
     
     def testLeaves(self):
+        self.assertEqual(RaiseOnAttach.attach, Leaf.attach)
         leaf = self.mkNode("Leaf", Leaf)
         node = self.mkNode("Node")
-        self.assertRaises(CannotHaveChildren, leaf.attach, node, msg='Leaf cannot have child')
+        self.assertRaises(CannotHaveChildren, leaf.attach, node)
     
     
     def testReachablility(self):
@@ -70,7 +71,7 @@ class SimpleTest(TestCase):
         ### AdventureTime !
         self.assertIn(b, a.related(), 'Basic tag-based relation')
         self.assertNotIn(c, a.related(), 'Basic tag-based no-relation')
-        self.assertRaises(CannotHaveChildren, a.attach, child, msg='Leaf cannot have child')
+        self.assertRaises(CannotHaveChildren, a.attach, child)
     
     
     def testRelated(self):

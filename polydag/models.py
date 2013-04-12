@@ -147,10 +147,14 @@ class CannotHaveChildren(Exception):
     
 
 
-class Leaf(Node):
+class RaiseOnAttach:
     def attach(self, *args, **kwargs):
         raise CannotHaveChildren(self)
     
+
+
+class Leaf(RaiseOnAttach, Node):
+    pass
 
 
 class Taggable(Node):
@@ -186,4 +190,8 @@ class Taggable(Node):
         return res
     
     related = related_list
+
+
+class TaggableLeaf(RaiseOnAttach, Taggable):
+    pass
 
