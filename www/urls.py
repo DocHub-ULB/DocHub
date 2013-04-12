@@ -25,6 +25,7 @@ def user_logged(function_in, function_out):
 urlpatterns = patterns("",
     # All JSON urls
     url(r"^json/tree/", include(graph_json)),
+    url(r"^json/node/", include("polydag.urls")),
 
     # The apps entry points
     url(r"^zoidberg/calendar/", include("calendar.urls")),

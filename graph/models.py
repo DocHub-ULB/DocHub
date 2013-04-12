@@ -6,13 +6,13 @@
 # your option) any later version.
 
 from json import loads
+from polydag.models import Node
 from django.db import models
 from users.models import Profile
 
 
-class Course(models.Model):
+class Course(Node):
     slug = models.SlugField()
-    name = models.CharField(max_length=100)
     description = models.TextField(null=True)
 
     def last_info(self):
@@ -31,8 +31,6 @@ class CourseInfo(models.Model):
         ordering = ['-date']
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=100)
+class Category(Node):
     description = models.TextField(null=True)
-    sub_categories = models.ManyToManyField('self', symmetrical=False)
-    contains = models.ManyToManyField(Course)
+    slug = models.SlugField()

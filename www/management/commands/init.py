@@ -47,6 +47,8 @@ class Command(BaseCommand):
         profile.name = first_name + " " + last_name
         profile.email = 'test@mouh.com'
         profile.save()
+        
+        Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
 
         self.stdout.write('Adding base data ...\n')
         c1 = Course.objects.create(slug='info-f-666', name='Hell Informatique',
@@ -95,20 +97,21 @@ class Command(BaseCommand):
         ba1 = Category.objects.create(name='BA-INFO 1', description='Section INFO 1')
         ba2 = Category.objects.create(name='BA-INFO 2', description='Section INFO 2')
         ba3 = Category.objects.create(name='BA-INFO 3', description='Section INFO 3')
+        
+        Root.attach(facs)
+        facs.attach(sciences)
+        facs.attach(polytech)
+        sciences.attach(info)
+        sciences.attach(math)
+        sciences.attach(phys)
+        info.attach(ba1)
+        info.attach(ba2)
+        info.attach(ba3)
 
-        facs.sub_categories.add(sciences)
-        facs.sub_categories.add(polytech)
-        sciences.sub_categories.add(info)
-        sciences.sub_categories.add(math)
-        sciences.sub_categories.add(phys)
-        info.sub_categories.add(ba1)
-        info.sub_categories.add(ba2)
-        info.sub_categories.add(ba3)
-
-        info.contains.add(c1)
-        info.contains.add(c2)
-        ba1.contains.add(c3)
-        ba1.contains.add(c4)
+        info.attach(c1)
+        info.attach(c2)
+        ba1.attach(c3)
+        ba1.attach(c4)
 
         thread = Thread.objects.create(user=profile, referer_content='Course', referer_id=c1.id, subject="A JSON stringifier goes in the opposite direction, converting JavaScript data structures into JSON text. JSON does not support cyclic data structures, so be careful to not give cyclical structures to the JSON stringifier. http://www.json.org/js.html", tags='["info pratique"]')
         Message.objects.create(user=profile, thread=thread, text='Type "copyright", "credits" or "license" for more information.')

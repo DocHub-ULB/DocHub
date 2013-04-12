@@ -48,7 +48,7 @@ var navbar = function() {
     };
 
     var load = function(cat_id) {
-        $.getJSON("/json/tree/category/" + cat_id, function(data) {
+        $.getJSON("/json/node/" + cat_id, function(data) {
             state.loaded.push(data);
             console.log(state);
             $.cookies.set('navbar', state);
@@ -65,7 +65,11 @@ var navbar = function() {
 
         state.loaded.splice(i + 1, state.loaded.length - i - 1);
         $.cookies.set('navbar', state);
-        load(event.target.getAttribute("data-id"));
+        var nodeid = event.target.getAttribute("data-id");
+        if (event.target.getAttribute('data-type') == 'Course')
+          window.location = '/zoidberg/course/'+nodeid;
+        else
+          load(nodeid);
     };
 
     var set_state = function() {

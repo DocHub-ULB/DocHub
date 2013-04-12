@@ -13,7 +13,7 @@ from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from telepathy.models import Thread
 from json import dumps
-
+import re
 
 def get_category(request, id):
     category = get_object_or_404(Category, id=id)
@@ -23,16 +23,20 @@ def get_category(request, id):
          "description": category.description,
          "sub_categories": [{"name": sc.name,
                              "description": sc.description,
-                             "id": sc.id} for sc in category.sub_categories.all()],
-         "contains": [{"id": cours.id,
-                       "name": cours.name,
-                       "slug": cours.slug} for cours in category.contains.all()]}
+                             "id": sc.id} for sc in category.childrens()],
+         #"contains": [{"id": cours.id,
+         #              "name": cours.name,
+         #              "slug": cours.slug} for cours in category.ancestors()]
+    }
 
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
 
 
 def show_course(request, slug):
-    course = get_object_or_404(Course, slug=slug)
+    if re.search(r'^\d+$', slug):
+        course = get_object_or_404(Course, pk=slug)
+    else:
+        course = get_object_or_404(Course, slug=slug)
     course.thread_set = Thread.objects.filter(referer_content="course",
                                               referer_id=course.id)
     return render(request, "course.html", 

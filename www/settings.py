@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'telepathy',
     'users',
     'www',
+    'polydag'
 )
 
 SECRET_KEY = '+5pykO7KSA9YjY0--ZOIDBEEEIRG-iueKUyjTQfBhZn+'

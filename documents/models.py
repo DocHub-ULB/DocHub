@@ -7,14 +7,12 @@
 
 from django.db import models
 from users.models import Profile
-from graph.models import Course
+from polydag.models import Node
 
 
-class Document(models.Model):
-    name = models.TextField()
+class Document(Node):
     description = models.TextField()
     user = models.ForeignKey(Profile)
-    reference = models.ForeignKey(Course)
 
     size = models.PositiveIntegerField(null=True, default=0)
     words = models.PositiveIntegerField(null=True, default=0)
