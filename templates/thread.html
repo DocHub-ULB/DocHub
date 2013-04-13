@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load humanize %}
 
 {% comment %}
 # Copyright 2012, hast. All rights reserved.
@@ -16,7 +17,7 @@
 <div class="message">
   <div class="message-left">
     <strong>{{ message.user.name }}</strong><br>
-    {{ message.created }}
+    {{ message.created|naturaltime }}
   </div>
   <div class="message-right">
     {{ message.text }}
