@@ -59,7 +59,7 @@ class Command(BaseCommand):
 
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document {} (from {}) : {}'.format(
-                document.id, document.user.name, document.name))
+                document.id, document.user.name, document.name.encode('utf-8')))
         filename = "{}/{}/{:0>4}.pdf".format(UPLOAD_DIR, 'path_arbitraire',
                                        document.id)
 
@@ -141,20 +141,23 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.workers = list()
         signal(SIGTERM, self.terminate)
-        while True:
-            sleep(10)
-            close_connection()
-            self.workers = [ (w,p) for w, p in self.workers if w.is_alive() ]
-            # Avoid useless SQL queries
-            if len(self.workers) >= PARSING_WORKERS:
-                continue
+        try:
+            while True:
+                sleep(10)
+                close_connection()
+                self.workers = [ (w,p) for w, p in self.workers if w.is_alive() ]
+                # Avoid useless SQL queries
+                if len(self.workers) >= PARSING_WORKERS:
+                    continue
 
-            # Pool seem less flexible
-            pendings = list(Task.objects.filter(state='queued').order_by('id'))
-            while len(self.workers) < PARSING_WORKERS and len(pendings) > 0:
-                pending = pendings.pop(0)
-                process = Process(target=self.process_file, args=(pending.id,))
-                process.start()
-                self.workers.append((process, pending))
+                # Pool seem less flexible
+                pendings = list(Task.objects.filter(state='queued').order_by('id'))
+                while len(self.workers) < PARSING_WORKERS and len(pendings) > 0:
+                    pending = pendings.pop(0)
+                    process = Process(target=self.process_file, args=(pending.id,))
+                    process.start()
+                    self.workers.append((process, pending))
+        except KeyboardInterrupt:
+            self.terminate(None,None)
 
 
