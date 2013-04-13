@@ -26,12 +26,23 @@ class Document(OneParent, Taggable):
     def state(self):
         return self.pendingdocument_set.get().state
 
+    def move(self, *args, **kwargs):
+        # Must move a images and associated files
+        # thus NotImplementedError
+        raise NotImplementedError
+        super(Document,self).move(*args, **kwargs)
 
-class Page(Taggable):
+
+class Page(OneParent, Taggable) :
     numero = models.IntegerField()
     height_120 = models.IntegerField()
     height_600 = models.IntegerField()
     height_900 = models.IntegerField()
+
+    def move(self,newparent):
+        # You may not move a page from a document to another
+        raise NotImplementedError
+
 
 
 class PendingDocument(models.Model):

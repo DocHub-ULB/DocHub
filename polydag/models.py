@@ -196,6 +196,13 @@ class OneParent:
             self.detatch(oldparent)
         newparent.attach(self)
 
+    @property
+    def parent(self):
+        return self.ancestors()[0]
+
+
+
+
 class Taggable(Node):
     """An abstract taggable node. Taggable nodes have keywords."""
     keywords = models.ManyToManyField(Keyword)
