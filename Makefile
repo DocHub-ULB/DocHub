@@ -13,9 +13,10 @@ reset: clean init
 run : ${DATABASE}
 	./manage.py processing_daemon & echo "$$!" > ${PROCESSING_PIDFILE}
 	./manage.py runserver >> ${WEBSERVER_LOGFILE} 2>&1 & echo "$$!" > ${WEBSERVER_PIDFILE}
+	printf "\033[1mGo to http://localhost:8000/syslogin\033[0m\n"
 
 stop: ${PIDFILES}
-	for f in $^; do kill `ps x -o pid -o ppid | egrep $$(cat $$f) | tr -s ' ' | cut -d' ' -f 1`; done
+	for f in $^; do kill `ps x -o pid -o ppid | egrep $$(cat $$f) | tr -s ' ' | cut -d' ' -f 1` && rm $$f; done
 
 clean:
 	rm -f ${DATABASE} ${PIDFILES} ${LOGFILES}
