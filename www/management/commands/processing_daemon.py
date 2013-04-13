@@ -118,7 +118,8 @@ class Command(BaseCommand):
                           str(e)))
             pending.document.delete()
             # TODO : do not delete, enqueue and retry later (2-3 times ?)
-            # TODO : when we actualy delete, do this a bit more proprely
+            # when we actualy delete, do this a bit more proprely
+            # and maybe warn the user ?
 
 
     # drop here when the deamon is killed
