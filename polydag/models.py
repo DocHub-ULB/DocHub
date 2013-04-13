@@ -43,7 +43,9 @@ class Node(PolymorphicModel):
     
     
     def __repr__(self):
-        return '<{}={} "{}">'.format(self.classBasename(), self.pk, self.name)
+        return '<{}={} "{}">'.format(
+            self.classBasename(), self.pk, self.name.encode('utf-8')
+        )
     
     
     def childrens(self):
