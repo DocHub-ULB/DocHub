@@ -59,7 +59,7 @@
     </thead>
   
     <tbody>
-    {% for doc in object.document_set.all %}
+    {% for doc in object.document_set %}
       <tr>
         <td>{{ doc.id }}</td>
         <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
