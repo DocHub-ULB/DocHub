@@ -15,7 +15,7 @@
 var doc = {
     len: {{ object.pages }},
     id: {{ object.id }},
-    slug: '{{ parent.slug }}',
+    parentid: '{{ parent.id }}',
     pages: [ {% for page in object.page_set %}
         {numero: {{ page.numero }},
          height_600: {{ page.height_600 }},

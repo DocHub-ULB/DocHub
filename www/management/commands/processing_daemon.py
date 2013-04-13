@@ -33,7 +33,7 @@ class Command(BaseCommand):
     def convert_page(self, document, source, pagenum):
         '''extract page and make some thumbnails with graphicsmagick'''
         destination = "{}/{}/{:0>6}_{:0>6}_{{}}.jpg".format(
-            UPLOAD_DIR, 'path_arbitraire', document.id, pagenum)
+            UPLOAD_DIR, document.parent.id, document.id, pagenum)
 
         #mini thumbnail
         h_120 = self.make_jepg(120, pagenum, source, destination.format('m'))
@@ -60,12 +60,12 @@ class Command(BaseCommand):
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document {} (from {}) : {}'.format(
                 document.id, document.user.name, document.name.encode('utf-8')))
-        filename = "{}/{}/{:0>4}.pdf".format(UPLOAD_DIR, 'path_arbitraire',
+        filename = "{}/{}/{:0>4}.pdf".format(UPLOAD_DIR, document.parent.id,
                                        document.id)
 
         # check if course subdirectory exist
-        if not path.exists(UPLOAD_DIR + '/' + 'path_arbitraire'):
-            makedirs(UPLOAD_DIR + '/' + 'path_arbitraire')
+        if not path.exists(UPLOAD_DIR + '/' + str(document.parent.id)):
+            makedirs(UPLOAD_DIR + '/' + str(document.parent.id))
 
         # original file saving
         fd = open(filename, 'w')
@@ -117,6 +117,7 @@ class Command(BaseCommand):
                          (pending.document.id, pending.document.user.name,
                           str(e)))
             pending.document.delete()
+            raise
             # TODO : do not delete, enqueue and retry later (2-3 times ?)
             # when we actualy delete, do this a bit more proprely
             # and maybe warn the user ?

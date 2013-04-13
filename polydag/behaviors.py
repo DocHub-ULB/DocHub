@@ -37,12 +37,24 @@ class Leaf:
 
 
 class OneParent:
-    """Simple mixin that allows for a node to ony have 1 parent"""
+    @property
     def parent(self):
-        return self.ancestors()[0]
+        ancestors = self.ancestors()
+        if len(ancestors) > 0:
+            return ancestors[0]
+        else:
+            return None
     
     
     def pre_attach_hook(self):
         if len(self.ancestors()) > 0:
             raise CannotHaveManyParents(self)
+    
+    
+    def move(self,newparent):
+        '''Move a OneParentNode from his current parent to newparent'''
+        oldparent = self.parent
+        if oldparent:
+            self.detatch(oldparent)
+        newparent.attach(self)
     

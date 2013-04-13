@@ -72,10 +72,10 @@ class Node(PolymorphicModel):
             traversed.pop()
         return res
 
-    
+
     def pre_attach_hook(self):
         pass
-    
+
     def attach(self, child, acyclic_check=True):
         """
         Attach a new child to self and return True. If acyclic_check evaluates
@@ -142,7 +142,6 @@ class Node(PolymorphicModel):
 
     def distance(self, target):
         return len(self.path(target))
-
 
 
 class Taggable(Node):
