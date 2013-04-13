@@ -30,17 +30,25 @@ var viewer_instance = viewer(doc);
 {% block content %}
 
 <div id="viewer-header">
-  <a href="{% url course_show parent.id %}">
-    <img id="backward" src="/static/images/back-icon.png"/>
-    <span>{{ parent.name }}</span>
-  </a>
-  <a href="">
-    <img id="download" src="/static/images/download-icon.png"/>
-    <span>download</span>
-  </a>
-  <img id="zoom-in" src="/static/images/magnifier_zoom_in.png"/>
-  <input id="zoom" value="100%"/>
-  <img id="zoom-out" src="/static/images/magnifier_zoom_out.png"/>
+  <div class="viewer-header-container">
+    <a href="{% url course_show parent.id %}">
+      <img id="backward" src="/static/images/back-icon.png"/>
+      <span>{{ parent.name }}</span>
+    </a>
+    <a href="">
+      <img id="download" src="/static/images/download-icon.png"/>
+      <span>download</span>
+    </a>
+  </div>
+  <div class="viewer-header-container">
+    <span id="viewer-title">{{ object.name }}</span>
+  </div>
+  <div class="viewer-header-container">
+    <img id="zoom-in" src="/static/images/magnifier_zoom_in.png"/>
+    <input id="zoom" value="100%"/>
+    <img id="zoom-out" src="/static/images/magnifier_zoom_out.png"/>
+  </div>
+
 </div>
 
 <div id="thumbs">
@@ -52,9 +60,6 @@ var viewer_instance = viewer(doc);
 </div>
 
 <div id="pages">
-  <div id="top-page">
-    <h1>{{ object.name }}</h1>
-  </div>
   {% for page in object.page_set %}
   <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
     width="600" height="{{ page.height_600 }}"/>

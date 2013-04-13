@@ -12,7 +12,7 @@
     overflow: auto;
     background-color: #eee;
     padding: 10px 28px 10px 20px;
-    margin: 16px 0px -20px -20px;
+    margin: 20px 0px -20px -20px;
     height: 300px;
 }
 
@@ -32,8 +32,25 @@
     position: fixed;
     background-color: #eee;
     padding: 8px 5px 2px 0px;
-    /*width: 380px;*/
+    width: 100%;
     height: 30px;
+    text-align: justify;
+}
+
+.viewer-header-container {
+    display: inline-block;
+    padding: 0px 20px  0px 20px;
+}
+
+#viewer-title {
+    font-size: 1.5em;
+    line-height: 0.5em;
+}
+
+#viewer-header:after {
+  content: '';
+  width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
+  display: inline-block;
 }
 
 #viewer-header img {
@@ -55,16 +72,8 @@
 }
 
 #pages {
-    margin-top: 20px;
-    margin-left: 200px;
-}
-
-#top-page {
-    border: 1px #eee solid;
-    margin: 10px;
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 40px;
+    margin-left: 200px;;
 }
 
 .page {

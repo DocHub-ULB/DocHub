@@ -3,9 +3,12 @@ init: db.sql
 reset: clean init
 
 run : db.sql
-	# TODO: write processing_daemon pid to a file to stop it with ease
-	./manage.py processing_daemon &
+	./manage.py processing_daemon & echo $$! > daemon.pid
 	./manage.py runserver
+
+stop:
+	kill `cat daemon.pid`
+	rm daemon.pid
 
 clean:
 	rm -f db.sql
