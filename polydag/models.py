@@ -174,7 +174,13 @@ class Leaf(RaiseOnAttach, Node):
 
 
 class OneParentNode(Node):
-    pass
+
+    def move(self,newparent):
+        '''Move a OneParentNode from his current parent to newparent'''
+        oldparents  = self.ancestors()
+        if len(oldparents) > 0:
+            self.detatch(oldparents[0])
+        newparent.attach(self)
 
 class Taggable(Node):
     """An abstract taggable node. Taggable nodes have keywords."""
