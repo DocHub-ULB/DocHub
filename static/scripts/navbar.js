@@ -94,7 +94,7 @@ var navbar = function() {
     };
 
     $(document).ready(function() {
-        $('#navbar-top').click(toggle);
+        $('#pull').click(toggle);
         $('#navbar-search').click(function() {return false;});
         $(window).resize(refresh_padding);
         template = Handlebars.compile(fragments["navbar-list"]);
