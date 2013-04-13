@@ -10,7 +10,7 @@
 {% endcomment %}
 
 {% block content %}
-<h1>{{ object.subject }}</h1>
+<h1>{{ object.name }}</h1>
 
 {% for message in object.message_set.all %}
 <div class="message">
