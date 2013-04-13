@@ -31,8 +31,8 @@
     margin: -20px;
     position: fixed;
     background-color: #eee;
-    padding: 4px 5px 2px 0px;
-    width: 380px;
+    padding: 8px 5px 2px 0px;
+    /*width: 380px;*/
     height: 30px;
 }
 
