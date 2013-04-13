@@ -20,8 +20,10 @@ def new_thread(request):
         name = escape(form.cleaned_data['name'])
         content = escape(form.cleaned_data['content'])
         parentNode = get_object_or_404(Node, id=form.cleaned_data['parentNode'])
-        thread = Thread.objects.create(user=request.user.get_profile(),
-                                       name=name)
+        thread = Thread.objects.create(user=request.user.get_profile())
+        # TODO : set thread name at thread creation
+        thread.name = name
+        thread.save()
         message = Message.objects.create(user=request.user.get_profile(),
                                          thread=thread, text=content)
         parentNode.attach(thread)
