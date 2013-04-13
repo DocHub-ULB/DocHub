@@ -7,10 +7,10 @@
 
 from django.db import models
 from users.models import Profile
-from polydag.models import Taggable, OneParentNode
+from polydag.models import Taggable, OneParent
 
 
-class Document(Taggable, OneParentNode):
+class Document(OneParent, Taggable):
     description = models.TextField()
     user = models.ForeignKey(Profile)
 

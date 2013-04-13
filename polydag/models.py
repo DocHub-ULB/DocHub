@@ -73,14 +73,16 @@ class Node(PolymorphicModel):
         return res
 
 
+    def pre_attach_hook(self):
+        pass
+
     def attach(self, child, acyclic_check=True):
         """
         Attach a new child to self and return True. If acyclic_check evaluates
         to True, and a loop occurs with this new edge, don't add the new child
         and return False.
         """
-        if OneParentNode in type(child).__bases__ and len(child.ancestors()) > 0:
-            raise CannotHaveManyParents(child)
+        child.pre_attach_hook()
         res = True
         if acyclic_check and child.hasCycle([self]):
             res = False
@@ -163,9 +165,9 @@ class RaiseOnAttach:
         """Since self cannot have children, bypass DB lookup !"""
         return []
 
-
     def attach(self, *args, **kwargs):
         raise CannotHaveChildren(self)
+
 
 
 
@@ -173,13 +175,25 @@ class Leaf(RaiseOnAttach, Node):
     pass
 
 
-class OneParentNode(Node):
+class OneParent:
+    """Simple mixin that allows for a node to ony have 1 parent"""
+    @property
+    def parent(self):
+        ancestors = self.ancestors()
+        if len(ancestors) > 0:
+            return ancestors[0]
+        else:
+            return None
+
+    def pre_attach_hook(self):
+        if len(self.ancestors()) > 0:
+            raise CannotHaveManyParents(self)
 
     def move(self,newparent):
         '''Move a OneParentNode from his current parent to newparent'''
-        oldparents  = self.ancestors()
-        if len(oldparents) > 0:
-            self.detatch(oldparents[0])
+        oldparent = self.parent
+        if oldparent:
+            self.detatch(oldparent)
         newparent.attach(self)
 
 class Taggable(Node):
