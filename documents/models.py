@@ -22,6 +22,10 @@ class Document(Taggable):
     view = models.PositiveIntegerField(null=True, default=0)
     download = models.PositiveIntegerField(null=True, default=0)
 
+    @property
+    def state(self):
+        return self.pendingdocument_set.get().state
+
 
 class Page(Taggable):
     numero = models.IntegerField()

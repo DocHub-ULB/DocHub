@@ -62,10 +62,16 @@
     {% for doc in object.document_set %}
       <tr>
         <td>{{ doc.id }}</td>
-        <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
-        <td>0</td>
-        <td>{{ doc.user.name }}</td>
-        <td>{{ doc.pages }}</td>
+        {% if doc.state == 'done'  %}
+            <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
+            <td>0</td>
+            <td>{{ doc.user.name }}</td>
+            <td>{{ doc.pages }}</td>
+        {% else %}
+            <td>{{ doc.name }}</td>
+            <td colspan=3 >Document pending, please wait</td>
+        {% endif %}
+
         </tr>
     {% endfor %}
     </tbody>
