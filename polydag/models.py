@@ -72,15 +72,17 @@ class Node(PolymorphicModel):
             traversed.pop()
         return res
 
-
+    
+    def pre_attach_hook(self):
+        pass
+    
     def attach(self, child, acyclic_check=True):
         """
         Attach a new child to self and return True. If acyclic_check evaluates
         to True, and a loop occurs with this new edge, don't add the new child
         and return False.
         """
-        if OneParentNode in type(child).__bases__ and len(child.ancestors()) > 0:
-            raise CannotHaveManyParents(child)
+        child.pre_attach_hook()
         res = True
         if acyclic_check and child.hasCycle([self]):
             res = False
@@ -162,10 +164,10 @@ class RaiseOnAttach:
     def childrens(self):
         """Since self cannot have children, bypass DB lookup !"""
         return []
-
-
+    
     def attach(self, *args, **kwargs):
         raise CannotHaveChildren(self)
+    
 
 
 
@@ -173,8 +175,15 @@ class Leaf(RaiseOnAttach, Node):
     pass
 
 
-class OneParentNode(Node):
-    pass
+class OneParent:
+    """Simple mixin that allows for a node to ony have 1 parent"""
+    def parent(self):
+        return self.ancestors()[0]
+    
+    def pre_attach_hook(self):
+        if len(self.ancestors()) > 0:
+            raise CannotHaveManyParents(self)
+
 
 class Taggable(Node):
     """An abstract taggable node. Taggable nodes have keywords."""
