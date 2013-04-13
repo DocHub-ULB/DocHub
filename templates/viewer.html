@@ -55,7 +55,6 @@ var viewer_instance = viewer(doc);
   <div id="top-page">
     <h1>{{ object.name }}</h1>
   </div>
-
   {% for page in object.page_set %}
   <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
     width="600" height="{{ page.height_600 }}"/>

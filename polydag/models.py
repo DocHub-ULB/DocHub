@@ -43,7 +43,9 @@ class Node(PolymorphicModel):
     
     
     def __repr__(self):
-        return '<{}={} "{}">'.format(self.classBasename(), self.pk, self.name)
+        return '<{}={} "{}">'.format(
+            self.classBasename(), self.pk, self.name.encode('utf-8')
+        )
     
     
     def childrens(self):
@@ -147,10 +149,20 @@ class CannotHaveChildren(Exception):
     
 
 
-class Leaf(Node):
+class RaiseOnAttach:
+    """Simple mixin that brings a Leaf behavior to a Node"""
+    def childrens(self):
+        """Since self cannot have children, bypass DB lookup !"""
+        return []
+    
+    
     def attach(self, *args, **kwargs):
         raise CannotHaveChildren(self)
     
+
+
+class Leaf(RaiseOnAttach, Node):
+    pass
 
 
 class Taggable(Node):
@@ -186,4 +198,8 @@ class Taggable(Node):
         return res
     
     related = related_list
+
+
+class TaggableLeaf(RaiseOnAttach, Taggable):
+    pass
 

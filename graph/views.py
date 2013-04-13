@@ -38,10 +38,10 @@ def show_course(request, slug):
         course = get_object_or_404(Course, pk=slug)
     else:
         course = get_object_or_404(Course, slug=slug)
-    childrens = course.childrens()
-    # TODO : query optimistation ?
-    course.thread_set = filter(lambda e: type(e)==Thread, childrens)
-    course.document_set = filter(lambda e: type(e)==Document, childrens)
+    course.thread_set, course.document_set = [], []
+    for child in course.childrens():
+        if   type(child)==Thread: course.thread_set.append(child)
+        elif type(child)==Document: course.document_set.append(child)
     #Thread.objects.filter(referer_content="course", referer_id=course.id)
     return render(request, "course.html",
                   {"object": course,
