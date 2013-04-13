@@ -7,7 +7,8 @@
 
 from django.db import models
 from users.models import Profile
-from polydag.models import Taggable, OneParent
+from polydag.models import Taggable
+from polydag.behaviors import OneParent
 
 
 class Document(OneParent, Taggable):
@@ -27,7 +28,7 @@ class Document(OneParent, Taggable):
         return self.pendingdocument_set.get().state
 
 
-class Page(Taggable):
+class Page(OneParent, Taggable):
     numero = models.IntegerField()
     height_120 = models.IntegerField()
     height_600 = models.IntegerField()

@@ -7,9 +7,10 @@
 
 from django.db import models
 from users.models import Profile
-from polydag.models import TaggableLeaf
+from polydag.models import Taggable
+from polydag.behaviors import Leaf, OneParent
 
-class Thread(TaggableLeaf):
+class Thread(Leaf, OneParent, Taggable):
     user = models.ForeignKey(Profile)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:

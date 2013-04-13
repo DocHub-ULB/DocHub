@@ -145,46 +145,6 @@ class Node(PolymorphicModel):
 
 
 
-class CannotHaveChildren(Exception):
-    """Exception raised by graph nodes that doesn't accept children"""
-    def __init__(self, node):
-        msg = node.classBasename()+'#'+str(node.pk)+' can\'t have children'
-        Exception.__init__(self, msg)
-
-class CannotHaveManyParents(Exception):
-    """Exception raised by graph nodes that doesn't accept more than 1 parent"""
-    def __init__(self, node):
-        msg = node.classBasename()+'#'+str(node.pk)+' can\'t more than 1 parent'
-        Exception.__init__(self, msg)
-
-
-
-class RaiseOnAttach:
-    """Simple mixin that brings a Leaf behavior to a Node"""
-    def childrens(self):
-        """Since self cannot have children, bypass DB lookup !"""
-        return []
-    
-    def attach(self, *args, **kwargs):
-        raise CannotHaveChildren(self)
-    
-
-
-
-class Leaf(RaiseOnAttach, Node):
-    pass
-
-
-class OneParent:
-    """Simple mixin that allows for a node to ony have 1 parent"""
-    def parent(self):
-        return self.ancestors()[0]
-    
-    def pre_attach_hook(self):
-        if len(self.ancestors()) > 0:
-            raise CannotHaveManyParents(self)
-
-
 class Taggable(Node):
     """An abstract taggable node. Taggable nodes have keywords."""
     keywords = models.ManyToManyField(Keyword)
@@ -218,8 +178,3 @@ class Taggable(Node):
         return res
 
     related = related_list
-
-
-class TaggableLeaf(RaiseOnAttach, Taggable):
-    pass
-
