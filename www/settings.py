@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.markup',
+    'django_extensions',
     'fragments',
     'south',
     'calendar',
