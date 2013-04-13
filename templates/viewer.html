@@ -15,8 +15,8 @@
 var doc = {
     len: {{ object.pages }},
     id: {{ object.id }},
-    slug: '{{ object.reference.slug }}',
-    pages: [ {% for page in object.page_set.all %}
+    //slug: '{{ object.reference.slug }}',
+    pages: [ {% for page in pages %}
         {numero: {{ page.numero }}, 
          height_600: {{ page.height_600 }}, 
          height_900: {{ page.height_900 }} },{% endfor %}
@@ -44,7 +44,7 @@ var viewer_instance = viewer(doc);
 </div>
 
 <div id="thumbs">
-{% for page in object.page_set.all %}
+{% for page in pages %}
   <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
     src="/static/images/white.png" width="120" height="{{ page.height_120 }}"/>
   <p>{{ page.numero|add:1 }}</p>
@@ -55,8 +55,7 @@ var viewer_instance = viewer(doc);
   <div id="top-page">
     <h1>{{ object.name }}</h1>
   </div>
-
-  {% for page in object.page_set.all %}
+  {% for page in pages %}
   <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
     width="600" height="{{ page.height_600 }}"/>
   {% endfor %}
