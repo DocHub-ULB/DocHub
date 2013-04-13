@@ -12,6 +12,7 @@ from documents.forms import UploadFileForm
 from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from telepathy.models import Thread
+from documents.models import Document
 from json import dumps
 import re
 
@@ -28,7 +29,7 @@ def get_category(request, id):
                        "name": cours.name,
                        "slug": cours.slug} for cours in category.childrens()]
     }
-    
+
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
 
 
@@ -37,9 +38,12 @@ def show_course(request, slug):
         course = get_object_or_404(Course, pk=slug)
     else:
         course = get_object_or_404(Course, slug=slug)
-    course.thread_set = filter(lambda e: type(e)==Thread, course.childrens())
+    childrens = course.childrens()
+    # TODO : query optimistation ?
+    course.thread_set = filter(lambda e: type(e)==Thread, childrens)
+    course.document_set = filter(lambda e: type(e)==Document, childrens)
     #Thread.objects.filter(referer_content="course", referer_id=course.id)
-    return render(request, "course.html", 
+    return render(request, "course.html",
                   {"object": course,
                    "upload_form": UploadFileForm(initial={"course": course}),
                    "newthread_form": NewThreadForm(initial={
