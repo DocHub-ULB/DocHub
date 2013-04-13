@@ -1,5 +1,7 @@
 {% extends "home.html" %}
 {% load humanize %}
+{% load custommardown %}
+
 
 {% comment %}
 # Copyright 2012, hast. All rights reserved.
@@ -20,7 +22,7 @@
     {{ message.created|naturaltime }}
   </div>
   <div class="message-right">
-    {{ message.text }}
+    {{ message.text|markdown }}
   </div>
 </div>
 {% endfor %}
