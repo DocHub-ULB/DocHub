@@ -32,93 +32,16 @@
 
 <div class="logic-block">
   <h1>Documents</h1>
-  <div class="panel-button border-bottom" data-target="upload" data-action="show">
-    upload
-  </div>
-  <div class="clear"></div>
-
-  <div id="upload" class="panel">
-    <form action="{% url document_put %}" method="post"
-          enctype="multipart/form-data">
-      {% csrf_token %}
-      <table>
-        {{ upload_form.as_table }}
-      </table>
-      <input type="submit" value="Upload"/>
-    </form>
-  </div>
-
-  <table class="sortable rounded w700">
-    <thead>
-      <tr>
-        <th class="rounded-left">#</th>
-        <th style="min-width: 200px">Name</th>
-        <th>Score</th>
-        <th>Poster</th>
-        <th class="rounded-right">Size</th>
-      </tr>
-    </thead>
-
-    <tbody>
-    {% for doc in object.document_set %}
-      <tr>
-        <td>{{ doc.id }}</td>
-        {% if doc.state == 'done'  %}
-            <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
-            <td>0</td>
-            <td>{{ doc.user.name }}</td>
-            <td>{{ doc.pages }}</td>
-        {% else %}
-            <td>{{ doc.name }}</td>
-            <td colspan=3 >Document pending, please wait</td>
-        {% endif %}
-
-        </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  {% include "upload_doc.html" %}
+  {% include "document_list.html" %}
 </div>
 
 <div class="clear"></div>
 
 <div class="logic-block">
   <h1>Discussions</h1>
-  <div class="panel-button border-bottom" data-target="post" data-action="show">
-    new post
-  </div>
-  <div class="clear"></div>
-
-  <div id="post" class="panel">
-    <form action="{% url thread_put %}" method="post">
-      {% csrf_token %}
-      <table>
-        {{ newthread_form.as_table }}
-      </table>
-      <input type="submit" value="Post"/>
-    </form>
-  </div>
-
-  <table class="sortable rounded w700">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th style="min-width: 200px">Subject</th>
-        <th>Poster</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-
-    <tbody>
-    {% for thread in object.thread_set %}
-      <tr>
-        <td>{{ thread.id }}</td>
-        <td><a href="{% url thread_show thread.id %}">{{ thread.name }}</a></td>
-        <td>{{ thread.user.name }}</td>
-        <td>{{ thread.created|naturaltime }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  {% include "add_thread.html" %}
+  {% include "thread_list.html" %}
 </div>
 
 <div class="clear"></div>
