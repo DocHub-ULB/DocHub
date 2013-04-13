@@ -8,9 +8,9 @@
 from re import match, sub
 from django.utils.html import escape
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from documents.models import Document, PendingDocument
+from documents.models import Document, PendingDocument, Page
 from documents.forms import UploadFileForm
 
 
@@ -20,7 +20,8 @@ def upload_file(request):
     if form.is_valid() and match(r'.*\.[pP][dD][fF]$',
                                  request.FILES['file'].name):
         name = sub(r'\.[Pp][Dd][Ff]$', '', request.FILES['file'].name)
-        name = escape(name.lower().replace(' ', '_'))
+        #name = escape(name.lower().replace(' ', '_'))
+        name = escape(name.lower())
         description = escape(form.cleaned_data['description'])
         course = form.cleaned_data['course']
         doc = Document.objects.create(user=request.user.get_profile(),
@@ -34,3 +35,14 @@ def upload_file(request):
                                        url='file://' + url)
         return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponse('form invalid', 'text/html')
+
+def document_show(request,id):
+    document = get_object_or_404(Document, id=id)
+
+    childrens = document.childrens()
+    # TODO : query optimistation ?
+    document.page_set = filter(lambda e: type(e)==Page, childrens)
+
+    context = {"object": document,
+                "parent": document.ancestors()[0]}
+    return render(request, "viewer.html", context)

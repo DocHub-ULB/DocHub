@@ -7,18 +7,16 @@
 
 from django.views.generic.list_detail import object_detail
 from django.conf.urls import patterns, url
-from documents.views import upload_file
+from documents.views import upload_file, document_show
 from documents.models import Document
 
 
 urlpatterns = patterns("",
-    url(r"^put/$", 
+    url(r"^put/$",
         upload_file,
         name="document_put"),
 
-    url(r"^v/(?P<object_id>[^/]*)$", 
-        object_detail,
-        {"template_name": "viewer.html",
-         "queryset": Document.objects.all()},
+    url(r"^v/(?P<id>[^/]*)$",
+        document_show,
         name="document_show"),
 )
