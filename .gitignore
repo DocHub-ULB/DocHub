@@ -4,4 +4,5 @@ static/documents/*
 initial_data.json
 ve
 graph.*
-daemon.pid
+*.pid
+*.log
