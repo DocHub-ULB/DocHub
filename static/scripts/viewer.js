@@ -26,8 +26,11 @@ var viewer = function(doc) {
         else
             m = mode;
 
-        return '/static/documents/' + doc.slug + '/' + doc.id.pad(4) + 
-               '_' + numero.pad(4) + '_' + m + '.jpg';
+        /*return '/static/documents/' + doc.slug + '/' + doc.id.pad(4) + 
+         *       '_' + numero.pad(4) + '_' + m + '.jpg';
+         */
+        return '/static/documents/path_arbitraire/' + doc.id.pad(6) +
+               '_' + numero.pad(6) + '_' + m + '.jpg';
     };
 
     var set_height = function() {

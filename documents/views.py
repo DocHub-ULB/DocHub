@@ -8,15 +8,15 @@
 from re import match, sub
 from django.utils.html import escape
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from documents.models import Document, PendingDocument
+from documents.models import Document, PendingDocument, Page
 from documents.forms import UploadFileForm
 
 
 def upload_file(request):
     form = UploadFileForm(request.POST, request.FILES)
-
+    
     if form.is_valid() and match(r'.*\.[pP][dD][fF]$',
                                  request.FILES['file'].name):
         name = sub(r'\.[Pp][Dd][Ff]$', '', request.FILES['file'].name)
@@ -34,3 +34,10 @@ def upload_file(request):
                                        url='file://' + url)
         return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponse('form invalid', 'text/html')
+
+
+def show_document(request, doc_id):
+    document = get_object_or_404(Document, id=doc_id)
+    pages = filter(lambda e: type(e)==Page, document.childrens())
+    context = {"object": document, 'pages': pages}
+    return render(request, "viewer.html", context)
