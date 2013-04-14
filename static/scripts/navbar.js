@@ -13,14 +13,14 @@ var navbar = function() {
         $('#navbar-bottom').slideToggle(100);
         if (state.visible) {
             $('#content').animate({'padding-top': 70}, 100);
-            $('#pull').removeClass("courses-focus");
-            $('#pull').addClass("courses");
+            $('#pull').removeClass("focus");
+            //$('#pull').addClass("courses");
             state.visible = false;
             $.cookies.set('navbar', state);
         } else {
             $('#content').animate({'padding-top': 84 + height}, 100);
-            $('#pull').removeClass("courses");
-            $('#pull').addClass("courses-focus");
+            //$('#pull').removeClass("courses");
+            $('#pull').addClass("focus");
             state.visible = true;
             $.cookies.set('navbar', state);
         }
