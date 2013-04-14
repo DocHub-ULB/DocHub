@@ -7,6 +7,8 @@
 # your option) any later version.
 {% endcomment %}
 
+{%load humanize %}
+
 <html>
   <head>
     <title>P402</title>
@@ -59,7 +61,7 @@
           <tr>
             <td>{{ course.id }}</td>
             <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
-            <td>NA</td>
+            <td>{{ course.last_activity|naturaltime }}</td>
           </tr>
         {% endfor %}
         </tbody>
