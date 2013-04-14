@@ -15,25 +15,35 @@
 {% block content %}
 <h1>{{ object.name }}</h1>
 
+<table class="messages">
 {% for message in object.message_set.all %}
-<div class="message">
-  <div class="message-left">
+<tr class="message">
+  <td class="message-left">
+    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
     <strong>{{ message.user.name }}</strong><br>
-    {{ message.created|naturaltime }}
-  </div>
-  <div class="message-right">
-    {{ message.text|markdown }}
-  </div>
-</div>
-{% endfor %}
+    {{ message.created|naturaltime }}<br>
 
-<h2>Reply</h2>
-<form action="{% url thread_reply %}" method="post">
-  {% csrf_token %}
-  <table>
-    {{ reply_form.as_table }}
-  </table>
-  <input type="submit" value="Reply"/>
-</form>
+  </td>
+  <td class="message-right">
+    {{ message.text|markdown }}
+  </td>
+</tr>
+{% endfor %}
+<tr class="message">
+  <td class="message-left">
+    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
+    <strong>You</strong>
+  </td>
+  <td class="message-right">
+    <form class="message-form" action="{% url thread_reply %}" method="post">
+      {% csrf_token %}
+      {{ reply_form.as_p }}
+      <input class="panel-button" type="submit" value="Reply"/>
+    </form>
+  </td>
+</tr>
+</table>
+
+
 
 {% endblock %}
