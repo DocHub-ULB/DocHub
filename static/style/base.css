@@ -20,7 +20,7 @@ h1 {
     font-size: 20px;
     font-weight: lighter;
     margin: 25px 20px 5px 20px;
-    float: left;
+    /*float: left;*/
 }
 
 h2 {
@@ -161,4 +161,73 @@ h2 {
     background-image: url('/static/sort_both.png');
     background-repeat: no-repeat;
     background-position: right;
+}
+
+.messages {
+    border-spacing: 10px;
+    width: 60%
+}
+
+.message-left {
+    border-right: 1px solid #c1c2c7;
+    padding-right: 10px;
+    width: 20%;
+    min-width: 190px;
+
+}
+
+.message-right {
+    padding-left: 10px;
+}
+
+.message-right p{
+    padding-left: 1em;
+}
+
+.message-right h2,h3,h4,h5{
+    margin: 0px;
+    margin-bottom: 0.3em;
+    font-weight: bold;
+}
+
+.message-right p + h2{
+    margin-top: 1em;
+}
+
+
+.message-right ul,ol  {
+    list-style: disc;
+    margin-left: 1.5em;
+}
+
+.message-right ul {
+    list-style: disc;
+}
+
+.message-right ol {
+    list-style: decimal;
+}
+
+.message-right li {
+    margin-left: 1.5em;
+}
+
+.messages .small-profile {
+    float:left;
+    height: 3em;
+    margin-right: 15px;
+    border: 1px solid #c1c2c7;
+}
+
+#content .message-form {
+    margin: 0px;
+}
+
+#content .message-form textarea{
+    width: 100%;
+    font-family: Helvetica;
+    padding: 5px;
+    font-size: 1.2em;
+    height: 7em;
+    border: 1px solid #c1c2c7;
 }
