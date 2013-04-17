@@ -117,7 +117,6 @@ class Command(BaseCommand):
                          (pending.document.id, pending.document.user.name,
                           str(e)))
             pending.document.delete()
-            raise
             # TODO : do not delete, enqueue and retry later (2-3 times ?)
             # when we actualy delete, do this a bit more proprely
             # and maybe warn the user ?
