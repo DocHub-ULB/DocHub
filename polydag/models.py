@@ -106,6 +106,17 @@ class Node(PolymorphicModel):
                 res['children'].append(child.to_dict(False))
         return res
 
+    def is_reachable_from(self, ancestor, depth_first=True):
+        """Return True if self could be reached from ancestor"""
+        for parent in self.ancestors():
+            if parent == ancestor or (depth_first and parent.is_reachable_from(ancestor)):
+                return True
+        if not depth_first:
+            for parent in self.ancestors():
+                if parent.is_reachable_from(ancestor):
+                    return True
+        return False
+
 
 
 class Keyword(models.Model):
