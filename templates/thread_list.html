@@ -9,14 +9,24 @@
     </tr>
   </thead>
 
+
+
   <tbody>
-  {% for thread in object.thread_set %}
-    <tr>
-      <td>{{ thread.id }}</td>
-      <td><a href="{% url thread_show thread.id %}">{{ thread.name }}</a></td>
-      <td>{{ thread.user.name }}</td>
-      <td>{{ thread.created|naturaltime }}</td>
-    </tr>
-  {% endfor %}
+    {% if object.document_set %}
+        {% for thread in object.thread_set %}
+          <tr>
+            <td>{{ thread.id }}</td>
+            <td><a href="{% url thread_show thread.id %}">{{ thread.name }}</a></td>
+            <td>{{ thread.user.name }}</td>
+            <td>{{ thread.created|naturaltime }}</td>
+          </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan=4 >There is nothing over here :/ Post something :)</td>
+        </td>
+    {% endif %}
+
+
   </tbody>
 </table>
