@@ -32,8 +32,7 @@ var navbar = function() {
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
         if (state.visible) {
-            $('#pull').removeClass("courses");
-            $('#pull').addClass("courses-focus");
+            $('#pull').addClass("focus");
             $('#content').css('padding-top', 84 + height);
             if (typeof viewer_instance !== "undefined")
                 viewer_instance.refresh();
