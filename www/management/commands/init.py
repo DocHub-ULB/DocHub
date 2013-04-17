@@ -1,4 +1,5 @@
-# Copyright 2012, hast. All rights reserved.
+# -*- coding: utf-8 -*- 
+# Copyright 2013, Titou. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published by
@@ -11,18 +12,73 @@ from django.contrib.contenttypes.models import ContentType
 from getpass import getpass, getuser
 from optparse import make_option
 from graph.models import Category, Course, CourseInfo
-from telepathy.models import Thread, Message
-
+from datetime import datetime
+import json
 
 class Command(BaseCommand):
+    drops = [u"Niveau dans le cycle*", u"Lieu d’enseignement*", u"Cycle*",
+             u"Faculté gestionnaire*", u"Institution organisatrice*",
+             u"Langue d'évaluation*", u"Horaire*", u"Discipline*",
+             u"Contenu du cours*", u"Priorités de l'enseignant",
+             u"Autres pré-requis", u"Objectifs du cours et compétences visées*",
+             u"Syllabus*"]
+    NOW = datetime.now()
+    USER = None
+    
+    to_ulb = lambda self,n: n[0:4].upper() + "_" + n[5].upper() + n[7:]
+    
     help = 'Initialize p402 for developpment'
     option_list = BaseCommand.option_list + (
         make_option('--username', action='store', dest='username', default=None, help='default username'),
         make_option('--password', action='store', dest='password', default=None, help='default password'),
         make_option('--first-name', action='store', dest='first_name', default=None, help='default first name'),
         make_option('--last-name', action='store', dest='last_name', default=None, help='default last name'),
-        )
-
+    )
+    
+    def createCourse(self, parentNode, slug):
+        try:
+            course = Course.objects.get(slug=slug)
+        except:
+            ULBInfos = self.courseList[self.to_ulb(slug)]
+            name = slug.upper()
+            infos = []
+            for cat, content in ULBInfos.iteritems():
+                if content == "" or cat in self.drops:
+                    continue
+                if cat == u"Construction de la note, pondération des différentes activités*":
+                    cat = "Note"
+                if cat == u"Langue d'enseignement*":
+                    cat = "Langue"
+                if cat == u"Intitulé du cours*":
+                    cat = "Nom"
+                    name = content
+                if cat[-1] == "*":
+                    cat = cat[:-1]
+                infos.append({"name": cat, "value": content})
+            course = Course.objects.create(
+                name=name, slug=slug, 
+                description=json.dumps(ULBInfos)
+            )
+            courseMeta = CourseInfo.objects.create(
+                course=course, infos=json.dumps(infos),
+                date=self.NOW, user=self.USER
+            )
+        parentNode.attach(course)
+        
+    
+    
+    def walk(self, jsonTree, parentNode):
+        for key in jsonTree:
+            val = jsonTree[key]
+            if key.lower() == 'course':
+                for slug in val:
+                    self.createCourse(parentNode, slug)
+            else:
+                category = Category.objects.create(name=key, description="Magic !")
+                parentNode.attach(category)
+                self.walk(val, category)
+    
+    
     def handle(self, *args, **options):
         self.stdout.write('Creating user\n')
         user = User()
@@ -48,70 +104,11 @@ class Command(BaseCommand):
         profile.email = 'test@mouh.com'
         profile.save()
         
+        tree = json.load(open('parsing/tree.json'))
+        self.courseList = json.load(open('parsing/cours.json'))
+        self.USER = profile
         Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
+        self.walk(tree, Root)
+    
 
-        self.stdout.write('Adding base data ...\n')
-        c1 = Course.objects.create(slug='info-f-666', name='Hell Informatique',
-                                   description='Hell Computer Science course')
-        c2 = Course.objects.create(slug='info-f-777', name='Over Math',
-                                   description='New math course based on fuzzy axiomes')
-        c3 = Course.objects.create(slug='info-f-888', name='AlgoSimplex',
-                                   description='Les simplex dans tout leurs etats')
-        c4 = Course.objects.create(slug='info-f-999', name='Support Vector Machines',
-                                   description='Neural Networks are outdated, use SVM!')
 
-        CourseInfo.objects.create(user=profile,
-                                  course=c1,
-                                  infos = """[
-            {    "name": "general", "values": [
-                                        {"name": "Professeur", "value":"B. Lecharlier"},
-                                        {"name": "Langue", "value":"Francais"},
-                                        {"name": "Syllabus", "value":"Informatique Ba1"},
-                                        {"name": "ECTS", "value":"5"}
-                                    ]
-            }
-        ]""")
-
-        CourseInfo.objects.create(user = profile,
-                                  course=c1,
-                                  infos = """[
-            {    "name": "general", "values": [
-                                        {"name": "Professeur", "value":"B. Lecharlier"},
-                                        {"name": "Langue", "value":"Francais"},
-                                        {"name": "Syllabus", "value":"Informatique Ba1"},
-                                        {"name": "ECTS", "value":"5"}
-                                    ]
-            },
-            {    "name": "exam", "values": [
-                                      {"name": "Difficultes", "values":"Language noyaux"}
-                                     ]
-            }
-        ]""")
-
-        facs = Category.objects.create(name='Faculty', description='Root node w/ category')
-        sciences = Category.objects.create(name='Sciences', description='Fac de sciences')
-        polytech = Category.objects.create(name='Polytech', description='Polytech')
-        info = Category.objects.create(name='Computing', description='Section INFO')
-        math = Category.objects.create(name='Math', description='Section Math')
-        phys = Category.objects.create(name='Physique', description='Section Physique')
-        ba1 = Category.objects.create(name='BA-INFO 1', description='Section INFO 1')
-        ba2 = Category.objects.create(name='BA-INFO 2', description='Section INFO 2')
-        ba3 = Category.objects.create(name='BA-INFO 3', description='Section INFO 3')
-        
-        Root.attach(facs)
-        facs.attach(sciences)
-        facs.attach(polytech)
-        sciences.attach(info)
-        sciences.attach(math)
-        sciences.attach(phys)
-        info.attach(ba1)
-        info.attach(ba2)
-        info.attach(ba3)
-
-        info.attach(c1)
-        info.attach(c2)
-        ba1.attach(c3)
-        ba1.attach(c4)
-
-        thread = Thread.objects.create(user=profile, referer_content='Course', referer_id=c1.id, subject="A JSON stringifier goes in the opposite direction, converting JavaScript data structures into JSON text. JSON does not support cyclic data structures, so be careful to not give cyclical structures to the JSON stringifier. http://www.json.org/js.html", tags='["info pratique"]')
-        Message.objects.create(user=profile, thread=thread, text='Type "copyright", "credits" or "license" for more information.')
