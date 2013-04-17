@@ -52,7 +52,7 @@ class Node(PolymorphicModel):
         # TODO : raise exception if cyclic
         child.pre_attach_hook()
         if acyclic_check and child.hasCycle([self]):
-            return False
+            raise CycleError
 
         self._children.add(child)
         self.save()
@@ -160,3 +160,6 @@ class Taggable(Node):
         return res
 
     related = related_list
+
+class CycleError(StandardError):
+    pass
