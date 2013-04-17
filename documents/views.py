@@ -26,7 +26,7 @@ def upload_file(request):
         course = form.cleaned_data['course']
         doc = Document.objects.create(user=request.user.get_profile(),
                                       name=name, description=description)
-        course.attach(doc)
+        course.add_child(doc)
         url = '/tmp/TMP402_%d.pdf' % doc.id
         tmp_doc = open(url, 'w')
         tmp_doc.write(request.FILES['file'].read())
@@ -39,10 +39,10 @@ def upload_file(request):
 def document_show(request,id):
     document = get_object_or_404(Document, id=id)
 
-    childrens = document.childrens()
+    children = document.children()
     # TODO : query optimistation ?
-    document.page_set = filter(lambda e: type(e)==Page, childrens)
+    document.page_set = filter(lambda e: type(e)==Page, children)
 
     context = {"object": document,
-                "parent": document.ancestors()[0]}
+                "parent": document.parent}
     return render(request, "viewer.html", context)

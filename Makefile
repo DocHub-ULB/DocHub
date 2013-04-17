@@ -25,7 +25,7 @@ clean:
 ${DATABASE}:
 	./manage.py syncdb
 	./manage.py migrate
-	./manage.py init_from_parsed --username=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
+	./manage.py init --username=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
 ve:
 	python2.7 `which virtualenv` --distribute --no-site-package ve

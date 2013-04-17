@@ -37,7 +37,7 @@ class Command(BaseCommand):
             color = self.COLORS.get(node.classBasename(), self.COLORS['Node'])
             url = options['urlprefix'] + node.canonic_url
             f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n'%(node.pk, node.name.encode('utf-8'), color, url))
-            for child in node.childrens():
+            for child in node.children():
                 f.write('\t%d -> %d;\n'%(node.pk, child.id))
 
         #Color legend

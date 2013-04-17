@@ -13,7 +13,7 @@ class CannotHaveChildren(Exception):
     def __init__(self, node):
         msg = node.classBasename()+'#'+str(node.pk)+' can\'t have children'
         Exception.__init__(self, msg)
-    
+
 
 
 class CannotHaveManyParents(Exception):
@@ -21,40 +21,40 @@ class CannotHaveManyParents(Exception):
     def __init__(self, node):
         msg = node.classBasename()+'#'+str(node.pk)+' can\'t have more than 1 parent'
         Exception.__init__(self, msg)
-    
+
 
 
 class Leaf:
     """Simple mixin that brings a Leaf behavior to a Node"""
-    def childrens(self):
+    def children(self):
         """Since self cannot have children, bypass DB lookup !"""
         return []
-    
-    
-    def attach(self, *args, **kwargs):
+
+
+    def add_child(self, *args, **kwargs):
         raise CannotHaveChildren(self)
-    
+
 
 
 class OneParent:
     @property
     def parent(self):
-        ancestors = self.ancestors()
-        if len(ancestors) > 0:
-            return ancestors[0]
+        parents = self.parents()
+        if len(parents) > 0:
+            return parents[0]
         else:
             return None
-    
-    
+
+
     def pre_attach_hook(self):
-        if len(self.ancestors()) > 0:
+        if len(self.parents()) > 0:
             raise CannotHaveManyParents(self)
-    
-    
+
+
     def move(self,newparent):
-        '''Move a OneParentNode from his current parent to newparent'''
+        """Move a OneParentNode from his current parent to newparent"""
         oldparent = self.parent
         if oldparent:
-            self.detatch(oldparent)
-        newparent.attach(self)
-    
+            self.detatch_from(oldparent)
+        newparent.add_child(self)
+
