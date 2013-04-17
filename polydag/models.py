@@ -102,7 +102,7 @@ class Node(PolymorphicModel):
         #res['url'] = self.canonic_url
         if with_children:
             res['children'] = []
-            for child in self.childrens():
+            for child in self.children():
                 res['children'].append(child.to_dict(False))
         return res
 
