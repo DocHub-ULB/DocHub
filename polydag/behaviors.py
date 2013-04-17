@@ -31,7 +31,7 @@ class Leaf:
         return []
 
 
-    def attach(self, *args, **kwargs):
+    def add_child(self, *args, **kwargs):
         raise CannotHaveChildren(self)
 
 
@@ -56,5 +56,5 @@ class OneParent:
         oldparent = self.parent
         if oldparent:
             self.detatch_from(oldparent)
-        newparent.attach(self)
+        newparent.add_child(self)
 

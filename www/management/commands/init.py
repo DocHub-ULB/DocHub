@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 # Copyright 2013, Titou. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -24,9 +24,9 @@ class Command(BaseCommand):
              u"Syllabus*"]
     NOW = datetime.now()
     USER = None
-    
+
     to_ulb = lambda self,n: n[0:4].upper() + "_" + n[5].upper() + n[7:]
-    
+
     help = 'Initialize p402 for developpment'
     option_list = BaseCommand.option_list + (
         make_option('--username', action='store', dest='username', default=None, help='default username'),
@@ -34,7 +34,7 @@ class Command(BaseCommand):
         make_option('--first-name', action='store', dest='first_name', default=None, help='default first name'),
         make_option('--last-name', action='store', dest='last_name', default=None, help='default last name'),
     )
-    
+
     def createCourse(self, parentNode, slug):
         try:
             course = Course.objects.get(slug=slug)
@@ -56,17 +56,17 @@ class Command(BaseCommand):
                     cat = cat[:-1]
                 infos.append({"name": cat, "value": content})
             course = Course.objects.create(
-                name=name, slug=slug, 
+                name=name, slug=slug,
                 description=json.dumps(ULBInfos)
             )
             courseMeta = CourseInfo.objects.create(
                 course=course, infos=json.dumps(infos),
                 date=self.NOW, user=self.USER
             )
-        parentNode.attach(course)
-        
-    
-    
+        parentNode.add_child(course)
+
+
+
     def walk(self, jsonTree, parentNode):
         for key in jsonTree:
             val = jsonTree[key]
@@ -75,10 +75,10 @@ class Command(BaseCommand):
                     self.createCourse(parentNode, slug)
             else:
                 category = Category.objects.create(name=key, description="Magic !")
-                parentNode.attach(category)
+                parentNode.add_child(category)
                 self.walk(val, category)
-    
-    
+
+
     def handle(self, *args, **options):
         self.stdout.write('Creating user\n')
         user = User()
@@ -103,12 +103,12 @@ class Command(BaseCommand):
         profile.name = first_name + " " + last_name
         profile.email = 'test@mouh.com'
         profile.save()
-        
+
         tree = json.load(open('parsing/tree.json'))
         self.courseList = json.load(open('parsing/cours.json'))
         self.USER = profile
         Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
         self.walk(tree, Root)
-    
+
 
 

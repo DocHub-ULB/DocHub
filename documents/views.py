@@ -26,7 +26,7 @@ def upload_file(request):
         course = form.cleaned_data['course']
         doc = Document.objects.create(user=request.user.get_profile(),
                                       name=name, description=description)
-        course.attach(doc)
+        course.add_child(doc)
         url = '/tmp/TMP402_%d.pdf' % doc.id
         tmp_doc = open(url, 'w')
         tmp_doc.write(request.FILES['file'].read())

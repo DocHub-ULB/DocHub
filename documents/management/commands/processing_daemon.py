@@ -46,7 +46,7 @@ class Command(BaseCommand):
         page = Page.objects.create(numero=pagenum, height_120=h_120,
                                    height_600=h_600,
                                    height_900=h_900)
-        document.attach(page,acyclic_check=False)
+        document.add_child(page,acyclic_check=False)
 
 
     def make_jepg(self, width, pagenum, source, destination):
