@@ -42,6 +42,7 @@
 
 <div class="clear"></div>
 
+{% if object.document_set.all %}
 <div class="logic-block">
   <h1>Documents</h1>
   <div class="panel-button border-bottom" data-target="upload" data-action="show">
@@ -84,9 +85,24 @@
     </tbody>
   </table>
 </div>
-
 <div class="clear"></div>
+{% else %}
+<div>
+  <h1>Documents</h1>
+  <div class="clear"></div>
+  <p>No document!<br>Start uploading, gogogo!</p>
+  <form action="{% url document_put %}" method="post"
+        enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ upload_form.as_table }}
+    </table>
+    <input type="submit" value="Upload"/>
+  </form>
+</div>
+{% endif %}
 
+{% if object.thread_set.all %}
 <div class="logic-block">
   <h1>Discussions</h1>
   <div class="panel-button border-bottom" data-target="post" data-action="show">
@@ -126,6 +142,20 @@
     </tbody>
   </table>
 </div>
-
+{% else %}
+<div>
+  <h1>Discussions</h1>
+  <div class="clear"></div>
+  <p>No discutions!<br>Start talking, gogogo!</p>
+  <form action="{% url document_put %}" method="post"
+        enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ newthread_form.as_table }}
+    </table>
+    <input type="submit" value="Post"/>
+  </form>
+</div>
+{% endif %}
 <div class="clear"></div>
 {% endblock %}
