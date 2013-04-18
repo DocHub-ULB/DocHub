@@ -43,28 +43,28 @@
 
     <div id="content">
       {% block content %}
-      <h1>Followed courses</h1>
-      <div class="clear"></div>
-      <table class="sortable rounded">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th style="min-width: 200px">Name</th>
-            <th>Last activity</th>
-          </tr>
-        </thead>
+        <h1>Followed courses</h1>
+        <div class="clear"></div>
+        <table class="sortable rounded">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th style="min-width: 200px">Name</th>
+              <th>Last activity</th>
+            </tr>
+          </thead>
 
-        <tbody>
-        {% for course in user.get_profile.follow.all %}
-          <tr>
-            <td>{{ course.id }}</td>
-            <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
-            <td>NA</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-    {% endblock %}
+          <tbody>
+          {% for course in followed_courses %}
+            <tr>
+              <td>{{ course.id }}</td>
+              <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
+              <td>NA</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% endblock %}
     </div>
 
     <div id="footer">
