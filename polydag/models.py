@@ -32,8 +32,26 @@ class Node(PolymorphicModel):
         """
         tree = {}
         for node in self.children():
-            tree[node] = f.descendants_tree()
+            tree[node] = node.descendants_tree()
         return tree
+
+    def descendants_set(self):
+        """Returns a list of the node's  children by depth-first search"""
+        tree = self.descendants_tree()
+        return self.tree_to_set(tree)
+
+    def ancestors_set(self):
+        """Returns a list of the node's  children by depth-first search"""
+        tree = self.ancestors_tree()
+        return self.tree_to_set(tree)
+
+    def tree_to_set(self,tree):
+        track = set()
+        for node in tree:
+            if not tree[node] == {}:
+                track.update(self.tree_to_set(tree[node]))
+            track.add(node)
+        return track
 
     def ancestors_tree(self):
         """Returns an ancestors tree"""
