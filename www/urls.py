@@ -10,6 +10,7 @@ from django.views.generic.simple import direct_to_template
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from graph.urls import json_urls as graph_json
+from views import home
 
 
 # decorator whom call function_in if user is authenticated, function_out if not
@@ -25,6 +26,7 @@ def user_logged(function_in, function_out):
 urlpatterns = patterns("",
     # All JSON urls
     url(r"^json/tree/", include(graph_json)),
+    url(r"^json/node/", include("polydag.urls")),
 
     # The apps entry points
     url(r"^zoidberg/calendar/", include("calendar.urls")),
@@ -33,9 +35,7 @@ urlpatterns = patterns("",
     url(r"^zoidberg/telepathy/", include("telepathy.urls")),
 
     # The product/client entry points
-    url(r"^zoidberg/home$",
-        direct_to_template,
-        {"template": "home.html"},
+    url(r"^zoidberg/home$",home,
         name="home"),
 
     url(r"^$",

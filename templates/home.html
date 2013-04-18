@@ -7,6 +7,8 @@
 # your option) any later version.
 {% endcomment %}
 
+{%load humanize %}
+
 <html>
   <head>
     <title>P402</title>
@@ -28,11 +30,11 @@
   <body>
     <div id="navbar-fix">
       <div id="navbar-top">
-        <a id="brand" href="{% url home %}">P402<small>beta</small></a>
-        <a class="link home" href="{% url home %}">Home</a>
-        <a id="pull" class="link courses" href="#">Courses</a>
-        <a class="link calendar" href="#">Calendar</a>
-        <a class="link wall" href="#">Wall</a>
+        <a id="brand" href="{% url home %}">P402<small>Whiteboard</small></a>
+        <a class="link icon home" href="{% url home %}">Home</a>
+        <a id="pull" class="link icon courses" href="#">Courses</a>
+        <a class="link icon calendar" href="#">Calendar</a>
+        <a class="link icon wall" href="#"><span id="notification-counter">42</span> Wall </a>
         <a id="logout" class="link" href="{% url logout %}">Logout</a>
         <form id="navbar-search">
           <input type="text" id="search-query" placeholder="Search">
@@ -43,30 +45,31 @@
 
     <div id="content">
       {% block content %}
-      <h1>Followed courses</h1>
-      <div class="clear"></div>
-      <table class="sortable rounded">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th style="min-width: 200px">Name</th>
-            <th>Last activity</th>
-          </tr>
-        </thead>
-  
-        <tbody>
-        {% for course in user.get_profile.follow.all %}
-          <tr>
-            <td>{{ course.id }}</td>
-            <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
-            <td>NA</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-    {% endblock %}
+        <h1>Followed courses</h1>
+        <div class="clear"></div>
+        <table class="sortable rounded">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mnemonic</th>
+              <th style="min-width: 200px">Name</th>
+              <th>Last activity</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for course in followed_courses %}
+            <tr>
+              <td>{{ course.id }}</td>
+              <td>{{ course.slug|upper }}</td>
+              <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
+              <td>NA</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% endblock %}
     </div>
-    
+
     <div id="footer">
       <p>P402 is upon US.<br>
         Help - Dev - bugtrack - about..<br>

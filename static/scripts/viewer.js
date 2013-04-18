@@ -26,8 +26,10 @@ var viewer = function(doc) {
         else
             m = mode;
 
-        return '/static/documents/' + doc.slug + '/' + doc.id.pad(4) + 
-               '_' + numero.pad(4) + '_' + m + '.jpg';
+        return '/static/documents/'+doc.parentid+'/' + doc.id.pad(6) +
+              '_' + numero.pad(6) + '_' + m + '.jpg';
+        //return '/static/documents/' + doc.slug + '/' + doc.id.pad(4) +
+        //       '_' + numero.pad(4) + '_' + m + '.jpg';
     };
 
     var set_height = function() {
@@ -161,22 +163,28 @@ var viewer = function(doc) {
     };
 
     var zoom_in = function() {
+        /*
         if (zoom < 100)
             var z = zoom + 10;
         else if (zoom < 475)
             var z = zoom + 25;
         else
             var z = 500;
+        */
+        var z = zoom + zoom/9;
         zoom_draw(z);
     };
-    
+
     var zoom_out = function() {
+        /*
         if (zoom <= 35)
             var z = 25;
         else if (zoom <= 100)
             var z = zoom - 10;
         else
             var z = zoom - 25;
+        */
+        var z = zoom - zoom/10;
         zoom_draw(z);
     };
 

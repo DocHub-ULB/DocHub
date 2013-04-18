@@ -42,7 +42,7 @@ users = """[
 
 def add_course(slug):
     global course_pk, inital_data
-
+    
     name = slug.upper()
     course = ulb_courses[to_ulb(slug)]
     infos = []

@@ -11,12 +11,12 @@
 {% verbatim %}
 {{#each loaded}}
   <ul class="navbar-list" data-id="{{ id }}"><li>{{ name }}</li>
-  {{#each sub_categories }}
-    <li class="navbar-category" data-id="{{ id }}">{{ name }}</li>
+  {{#each children}}
+    <li class="navbar-category" data-type="{{ type }}" data-id="{{ id }}">{{ name }}</li>
   {{/each}}
 
   {{#each contains }}
-    <li><a href="/zoidberg/course/v/{{ slug }}">{{ name }}</a></li>
+    
   {{/each}}
   </ul>
 {{/each}}

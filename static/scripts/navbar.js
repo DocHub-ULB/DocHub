@@ -13,14 +13,14 @@ var navbar = function() {
         $('#navbar-bottom').slideToggle(100);
         if (state.visible) {
             $('#content').animate({'padding-top': 70}, 100);
-            $('#pull').removeClass("courses-focus");
-            $('#pull').addClass("courses");
+            $('#pull').removeClass("focus");
+            //$('#pull').addClass("courses");
             state.visible = false;
             $.cookies.set('navbar', state);
         } else {
             $('#content').animate({'padding-top': 84 + height}, 100);
-            $('#pull').removeClass("courses");
-            $('#pull').addClass("courses-focus");
+            //$('#pull').removeClass("courses");
+            $('#pull').addClass("focus");
             state.visible = true;
             $.cookies.set('navbar', state);
         }
@@ -32,8 +32,7 @@ var navbar = function() {
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
         if (state.visible) {
-            $('#pull').removeClass("courses");
-            $('#pull').addClass("courses-focus");
+            $('#pull').addClass("focus");
             $('#content').css('padding-top', 84 + height);
             if (typeof viewer_instance !== "undefined")
                 viewer_instance.refresh();
@@ -48,7 +47,7 @@ var navbar = function() {
     };
 
     var load = function(cat_id) {
-        $.getJSON("/json/tree/category/" + cat_id, function(data) {
+        $.getJSON("/json/node/" + cat_id, function(data) {
             state.loaded.push(data);
             console.log(state);
             $.cookies.set('navbar', state);
@@ -65,7 +64,11 @@ var navbar = function() {
 
         state.loaded.splice(i + 1, state.loaded.length - i - 1);
         $.cookies.set('navbar', state);
-        load(event.target.getAttribute("data-id"));
+        var nodeid = event.target.getAttribute("data-id");
+        if (event.target.getAttribute('data-type') == 'Course')
+          window.location = '/zoidberg/course/v/'+nodeid;
+        else
+          load(nodeid);
     };
 
     var set_state = function() {
@@ -95,7 +98,7 @@ var navbar = function() {
     }
 
     $(document).ready(function() {
-        $('#navbar-top').click(toggle);
+        $('#pull').click(toggle);
         $('#navbar-search').click(function() {return false;});
         $('#navbar-top a[id != pull]').click(go);
         $(window).resize(refresh_padding);

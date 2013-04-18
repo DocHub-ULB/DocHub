@@ -2,3 +2,7 @@
 db.sql
 static/documents/*
 initial_data.json
+ve
+graph.*
+*.pid
+*.log

@@ -48,6 +48,9 @@ ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p
 # ULB authentificator, need 2 parameters : SID and UID
 ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid=%s&_uid=%s'
 
+# Activate the search system
+SEARCH_SYSTEM = False
+
 TIME_ZONE = 'Europe/Paris'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
@@ -88,6 +91,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.markup',
+    'django.contrib.humanize',
+    'django_extensions',
     'fragments',
     'south',
     'calendar',
@@ -96,6 +101,7 @@ INSTALLED_APPS = (
     'telepathy',
     'users',
     'www',
+    'polydag'
 )
 
 SECRET_KEY = '+5pykO7KSA9YjY0--ZOIDBEEEIRG-iueKUyjTQfBhZn+'

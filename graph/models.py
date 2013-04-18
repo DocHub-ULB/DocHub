@@ -6,19 +6,34 @@
 # your option) any later version.
 
 from json import loads
+from polydag.models import Node
 from django.db import models
 from users.models import Profile
+from documents.models import Document
+from telepathy.models import Thread
 
-
-class Course(models.Model):
+class Course(Node):
     slug = models.SlugField()
-    name = models.CharField(max_length=100)
     description = models.TextField(null=True)
-
+    
+    @property
+    def last_activity(self):
+        res = None
+        for child in self.childrens().order_by('-id'):
+            if 'created' in child.__dict__:
+                res = child.created
+            elif 'date' in child.__dict__:
+                res = child.date
+            if res: break
+        return res
+    
+    
     def last_info(self):
-        data = self.courseinfo_set.all()[0]
+        dataset = self.courseinfo_set.all()
+        data = dataset[0] if len(dataset)>0 else CourseInfo(infos="[]")
         data.infos = loads(data.infos)
         return data
+    
 
 
 class CourseInfo(models.Model):
@@ -26,13 +41,13 @@ class CourseInfo(models.Model):
     infos = models.TextField()
     date = models.DateTimeField(auto_now=True)
     course = models.ForeignKey(Course)
-
+    
     class Meta:
         ordering = ['-date']
+    
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=100)
+class Category(Node):
     description = models.TextField(null=True)
-    sub_categories = models.ManyToManyField('self', symmetrical=False)
-    contains = models.ManyToManyField(Course)
+    slug = models.SlugField()
+
