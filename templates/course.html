@@ -12,13 +12,11 @@
 {% block content %}
 <div class="logic-block">
   <h1>{{ object.name }}</h1>
-  <div class="panel-button border-bottom">
-    {% if user.get_profile in object.followed.all %}
-    <a href="{% url course_leave object.slug %}">leave</a>
-    {% else %}
-    <a href="{% url course_join object.slug %}">join</a>
-    {% endif %}
-  </div>
+  {% if user.get_profile in object.followed.all %}
+  <a href="{% url course_leave object.slug %}" class="panel-button border-bottom">leave</a>
+  {% else %}
+  <a href="{% url course_join object.slug %}" class="panel-button border-bottom">join</a>
+  {% endif %}
   <div class="panel-button border-bottom" data-target="edit" data-action="show">
     edit
   </div>
