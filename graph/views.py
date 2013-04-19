@@ -13,6 +13,7 @@ from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
+from calendar.gehol import gehol_url
 from json import dumps
 import re
 
@@ -47,6 +48,7 @@ def show_course(request, slug):
     #Thread.objects.filter(referer_content="course", referer_id=course.id)
     return render(request, "course.html",
                   {"object": course,
+                   "gehol": gehol_url(course),
                    "upload_form": UploadFileForm(initial={"course": course}),
                    "newthread_form": NewThreadForm(initial={
                         "parentNode": course.id})})

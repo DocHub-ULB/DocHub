@@ -13,6 +13,7 @@
 {% block content %}
 <div class="logic-block">
   <h1>{{ object.slug|upper }}: {{ object.name }}</h1>
+  <a href="{{ gehol }}" target="_blank">Horaire</a>
   <div class="panel-button border-bottom">
     {% if user.get_profile in object.followed.all %}
     <a href="{% url course_leave object.slug %}">leave</a>
