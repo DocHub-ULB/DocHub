@@ -65,10 +65,11 @@ var navbar = function() {
         state.loaded.splice(i + 1, state.loaded.length - i - 1);
         $.cookies.set('navbar', state);
         var nodeid = event.target.getAttribute("data-id");
-        if (event.target.getAttribute('data-type') == 'Course')
-          window.location = '/zoidberg/course/v/'+nodeid;
-        else
-          load(nodeid);
+        if (event.target.getAttribute('data-type') == 'Course'){
+            toggle();
+            window.location = '/zoidberg/course/v/'+nodeid;
+        } else
+            load(nodeid);
     };
 
     var set_state = function() {
