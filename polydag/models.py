@@ -67,11 +67,9 @@ class Node(PolymorphicModel):
         to True, and a loop occurs with this new edge, don't add the new child
         and return False.
         """
-        # TODO : raise exception if cyclic
         child.pre_attach_hook()
         if acyclic_check and child.hasCycle([self]):
             raise CycleError
-
         self._children.add(child)
         self.save()
         return True
