@@ -8,8 +8,10 @@
 from django.shortcuts import render
 from graph.models import Category, Course
 from documents.models import Document
+from notify.models import Notification
 
 def home(request):
+    notifications = Notification.objects.filter(read=False,user=request.user)
     explicit_followed = request.user.get_profile().follow.all()
     followed = set()
     for node in explicit_followed:
@@ -20,5 +22,6 @@ def home(request):
     followed_courses.sort(key=lambda course:course.slug)
     
     return render(request, "home.html",
-                  {"followed_courses": list(followed_courses)})
+                  {"followed_courses": list(followed_courses),
+                   "notifcount": len(notifications)})
 
