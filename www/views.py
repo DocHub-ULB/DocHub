@@ -21,5 +21,5 @@ def home(request):
     followed_courses.sort(key=lambda course:course.slug)
 
     return render(request, "home.html",
-                  {"followed_courses": list(followed_courses))
+                  {"followed_courses": list(followed_courses)})
 
