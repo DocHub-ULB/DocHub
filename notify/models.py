@@ -13,6 +13,7 @@ class PreNotification(models.Model):
     node = models.ForeignKey(Node) # The node that initiated the notif
     text = models.CharField(max_length=160)
     delivered = models.BooleanField(default=False)
+    url = models.URLField()
 
 
 class Notification(models.Model):
@@ -20,7 +21,7 @@ class Notification(models.Model):
     node = models.ForeignKey(Node) # The effective node followed by user
     prenotif = models.ForeignKey(PreNotification)
     read = models.BooleanField(default=False)
-    
+
     @staticmethod
     def unread(user):
         """Return all unread notifications for user"""

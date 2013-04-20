@@ -11,6 +11,7 @@ from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from graph.urls import json_urls as graph_json
 from views import home
+from notify.views import notifications_read
 
 
 # decorator whom call function_in if user is authenticated, function_out if not
@@ -34,6 +35,9 @@ urlpatterns = patterns("",
     url(r"^zoidberg/course/", include("graph.urls")),
     url(r"^zoidberg/document/", include("documents.urls")),
     url(r"^zoidberg/telepathy/", include("telepathy.urls")),
+    url(r"^zoidberg/notifications/(?P<id>\d+)",
+        notifications_read,
+        name="notifications_read"),
 
     # The product/client entry points
     url(r"^zoidberg/home$",home,
