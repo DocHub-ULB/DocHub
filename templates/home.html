@@ -30,13 +30,15 @@
   <body>
     <div id="navbar-fix">
       <div id="navbar-top">
-        <a id="brand" href="{% url home %}">P402<small>Whiteboard</small></a>
+        <a id="brand" href="{% url home %}">
+
+          P402<small>Whiteboard</small>
+<span id="notification-counter">{{ notifcount }}</span>
+        </a>
         <a class="link icon home" href="{% url home %}">Home</a>
         <a id="pull" class="link icon courses" href="#">Courses</a>
         <a class="link icon calendar" href="#">Calendar</a>
-        <a class="link icon wall" href="#">
-          <span id="notification-counter">{{ notifcount }}</span> Wall
-        </a>
+        <a class="link icon wall" href="#">Wall</a>
         <a id="logout" class="link" href="{% url logout %}">Logout <small>({{user.name}})</small></a>
         <form id="navbar-search">
           <input type="text" id="search-query" placeholder="Search">

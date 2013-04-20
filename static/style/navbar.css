@@ -90,10 +90,10 @@
     position: relative;
 }
 
-#navbar-top a.wall #notification-counter {
+#notification-counter {
     position: absolute;
     top: 12px;
-    left: 3.7em;
+    left: 1.5em;
 
     background-color: #252629;
     color: #fff;

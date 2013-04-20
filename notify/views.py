@@ -9,9 +9,9 @@ def jsonise_notifications(notifs):
     return {
         "notifs": [
             {'id': n.pk,
-             'text': n.prenotif.text, 
+             'text': n.prenotif.text,
              'date': n.prenotif.created.isoformat(),
-             'emitter': n.prenotif.node.id, 
+             'emitter': n.prenotif.node.id,
              'followed_node': n.node.id
             } for n in notifs
         ]
@@ -19,15 +19,17 @@ def jsonise_notifications(notifs):
 
 
 def notifications_get(request):
-    notifs = Notification.unread(request.user)
+    notifs = list(Notification.unread(request.user))
+    if len(notifs) < 5:
+        notifs += list(Notification.objects.filter(user=request.user, read=True)[:(5-len(notifs))])
     return HttpResponse(dumps(jsonise_notifications(notifs)), mimetype='application/json')
 
 
-# POST /notifications/read/
-# postdata: notifs_id=[<id>,<id>]
-def notifications_read(request):
-    if request.method == 'POST':
-        notifs_id = loads(request.POST['notifs_id'])
-        notifs = get_list_or_404(Notification, id__in=notifs_id)
-        changed = notifs.update(read=True)
-        return HttpResponse(dumps({'changed': changed}), mimetype='application/json')
+def notifications_read(request,id):
+    notif = get_object_or_404(Notification, id=id)
+    notif.read=True
+    notif.save()
+    if notif.prenotif.url :
+        return HttpResponseRedirect(notif.prenotif.url)
+    else :
+        return HttpResponse('No url for this notification')
