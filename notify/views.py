@@ -9,9 +9,9 @@ def jsonise_notifications(notifs):
     return {
         "notifs": [
             {'id': n.pk,
-             'text': n.prenotif.text, 
+             'text': n.prenotif.text,
              'date': n.prenotif.created.isoformat(),
-             'emitter': n.prenotif.node.id, 
+             'emitter': n.prenotif.node.id,
              'followed_node': n.node.id
             } for n in notifs
         ]
@@ -19,7 +19,9 @@ def jsonise_notifications(notifs):
 
 
 def notifications_get(request):
-    notifs = Notification.unread(request.user)
+    notifs = list(Notification.unread(request.user))
+    if len(notifs) < 5:
+        notifs += list(Notification.objects.filter(user=request.user, read=True)[:(5-len(notifs))])
     return HttpResponse(dumps(jsonise_notifications(notifs)), mimetype='application/json')
 
 
