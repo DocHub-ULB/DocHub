@@ -11,17 +11,15 @@ from documents.models import Document
 from notify.models import Notification
 
 def home(request):
-    notifications = Notification.objects.filter(read=False,user=request.user)
     explicit_followed = request.user.get_profile().follow.all()
     followed = set()
     for node in explicit_followed:
         followed.add(node)
         followed.update(node.descendants_set())
-    
+
     followed_courses = filter(lambda n: n.classBasename() == 'Course',followed)
     followed_courses.sort(key=lambda course:course.slug)
-    
+
     return render(request, "home.html",
-                  {"followed_courses": list(followed_courses),
-                   "notifcount": len(notifications)})
+                  {"followed_courses": list(followed_courses)})
 
