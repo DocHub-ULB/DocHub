@@ -26,7 +26,7 @@ def new_thread(request):
                                          thread=thread, text=content)
         parentNode.add_child(thread)
         PreNotification.objects.create(
-            node=parentNode,
+            node=thread,
             text="Nouvelle discussion: "+name[:50]+"...",
             url=reverse('thread_show', args=[thread.id])
         )
