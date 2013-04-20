@@ -26,7 +26,9 @@ def new_thread(request):
                                          thread=thread, text=content)
         parentNode.add_child(thread)
         PreNotification.objects.create(
-            node=parentNode, text="Nouvelle discussion: "+name[:50]+"..."
+            node=parentNode,
+            text="Nouvelle discussion: "+name[:50]+"...",
+            url=reverse('thread_show', args=[thread.id])
         )
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
@@ -44,12 +46,15 @@ def reply_thread(request):
 
     if form.is_valid():
         content = escape(form.cleaned_data['content'])
+        # TODO : verify that the tread exists
         thread = form.cleaned_data['thread']
         poster = request.user.get_profile()
         message = Message.objects.create(user=poster,
                                          thread=thread, text=content)
         PreNotification.objects.create(
-            node=thread, text="Answer to {} by {}".format(thread.name[:50],poster.name)
+            node=thread,
+            text="Answer to {} by {}".format(thread.name[:50],poster.name),
+            url=reverse('thread_show', args=[thread.id])
         )
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
