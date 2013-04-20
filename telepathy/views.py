@@ -45,7 +45,11 @@ def reply_thread(request):
     if form.is_valid():
         content = escape(form.cleaned_data['content'])
         thread = form.cleaned_data['thread']
-        message = Message.objects.create(user=request.user.get_profile(),
+        poster = request.user.get_profile()
+        message = Message.objects.create(user=poster,
                                          thread=thread, text=content)
+        PreNotification.objects.create(
+            node=thread, text="Answer to {} by {}".format(thread.name[:50],poster.name)
+        )
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
