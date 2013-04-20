@@ -27,6 +27,7 @@ urlpatterns = patterns("",
     # All JSON urls
     url(r"^json/tree/", include(graph_json)),
     url(r"^json/node/", include("polydag.urls")),
+    url(r"^json/notifications/", include("notify.urls")),
 
     # The apps entry points
     url(r"^zoidberg/calendar/", include("calendar.urls")),

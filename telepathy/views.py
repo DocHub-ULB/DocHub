@@ -12,6 +12,7 @@ from django.utils.html import escape
 from telepathy.forms import NewThreadForm, ReplyForm
 from telepathy.models import Thread, Message
 from polydag.models import Node
+from notify.models import PreNotification
 
 def new_thread(request):
     form = NewThreadForm(request.POST)
@@ -24,6 +25,9 @@ def new_thread(request):
         message = Message.objects.create(user=request.user.get_profile(),
                                          thread=thread, text=content)
         parentNode.add_child(thread)
+        PreNotification.objects.create(
+            node=parentNode, text="Nouvelle discussion: "+name[:50]+"..."
+        )
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
 
