@@ -35,9 +35,9 @@
         <a id="pull" class="link icon courses" href="#">Courses</a>
         <a class="link icon calendar" href="#">Calendar</a>
         <a class="link icon wall" href="#">
-          <span id="notification-counter">{{ notifcount }}</span> Wall 
+          <span id="notification-counter">{{ notifcount }}</span> Wall
         </a>
-        <a id="logout" class="link" href="{% url logout %}">Logout</a>
+        <a id="logout" class="link" href="{% url logout %}">Logout <small>({{user.name}})</small></a>
         <form id="navbar-search">
           <input type="text" id="search-query" placeholder="Search">
         </form>
