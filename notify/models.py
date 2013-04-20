@@ -20,4 +20,9 @@ class Notification(models.Model):
     node = models.ForeignKey(Node) # The effective node followed by user
     prenotif = models.ForeignKey(PreNotification)
     read = models.BooleanField(default=False)
+    
+    @staticmethod
+    def unread(user):
+        """Return all unread notifications for user"""
+        return Notification.objects.filter(user=user, read=False)
 
