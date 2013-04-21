@@ -26,17 +26,24 @@
   </head>
 
   <body>
-    <div id="navbar-fix">
+    <div id="navbar">
       <div id="navbar-top">
-        <a id="brand" href="{% url home %}">P402<small>Whiteboard</small></a>
-        <a class="link icon home" href="{% url home %}">Home</a>
-        <a id="pull" class="link icon courses" href="#">Courses</a>
-        <a class="link icon calendar" href="#">Calendar</a>
-        <a class="link icon wall" href="#"><span id="notification-counter">42</span> Wall </a>
-        <a id="logout" class="link" href="{% url logout %}">Logout</a>
-        <form id="navbar-search">
-          <input type="text" id="search-query" placeholder="Search">
-        </form>
+        <div id="navbar-left">
+          <a class="icon notif" href="#"><span id="notifnum">{{ notifcount }}</span></a>
+          <a id="brand" href="{% url home %}">P402<small>Whiteboard</small></a>
+          <a class="icon home" href="{% url home %}">Home</a>
+          <a id="pull" class="icon courses" href="#">Courses</a>
+          <a class="icon calendar" href="#">Calendar</a>
+          <a class="icon wall" href="#">Wall</a>
+        </div>
+        <div id="navbar-center">
+          <form id="navbar-search">
+            <input type="text" id="search-query" placeholder="Search">
+          </form>
+        </div>
+        <div id="navbar-left">
+          <a id="logout" class="link" href="{% url logout %}">Logout <small style="color:white">({{user.name}})</small></a>
+        </div>
       </div>
       <div id="navbar-bottom"></div>
     </div>
