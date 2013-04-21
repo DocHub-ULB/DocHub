@@ -4,3 +4,4 @@ django-extensions   #Some useful tools
 django_polymorphic
 south
 django-template-fragments
+markdown

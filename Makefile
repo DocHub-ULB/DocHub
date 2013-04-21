@@ -16,7 +16,7 @@ run : ${DATABASE}
 	printf "\033[1mGo to http://localhost:8000/syslogin\033[0m\n"
 
 stop: ${PIDFILES}
-	for f in $^; do kill `ps x -o pid -o ppid | egrep $$(cat $$f) | tr -s ' ' | cut -d' ' -f 1` && rm $$f; done
+	for f in $^; do kill `ps x -o pid -o ppid | egrep $$(cat $$f) | sed -E 's/^[ ]*([0-9]+)[ ]+[0-9]+/\1/'` && rm $$f; done
 
 clean:
 	rm -f ${DATABASE} ${PIDFILES} ${LOGFILES}
@@ -25,7 +25,7 @@ clean:
 ${DATABASE}:
 	./manage.py syncdb
 	./manage.py migrate
-	./manage.py init_from_parsed --username=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
+	./manage.py init --username=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
 ve:
 	python2.7 `which virtualenv` --distribute --no-site-package ve

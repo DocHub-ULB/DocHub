@@ -32,8 +32,7 @@ var navbar = function() {
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
         if (state.visible) {
-            $('#pull').removeClass("courses");
-            $('#pull').addClass("courses-focus");
+            $('#pull').addClass("focus");
             $('#content').css('padding-top', 84 + height);
             if (typeof viewer_instance !== "undefined")
                 viewer_instance.refresh();
@@ -66,10 +65,11 @@ var navbar = function() {
         state.loaded.splice(i + 1, state.loaded.length - i - 1);
         $.cookies.set('navbar', state);
         var nodeid = event.target.getAttribute("data-id");
-        if (event.target.getAttribute('data-type') == 'Course')
-          window.location = '/zoidberg/course/v/'+nodeid;
-        else
-          load(nodeid);
+        if (event.target.getAttribute('data-type') == 'Course'){
+            toggle();
+            window.location = '/zoidberg/course/v/'+nodeid;
+        } else
+            load(nodeid);
     };
 
     var set_state = function() {

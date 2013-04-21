@@ -13,6 +13,7 @@ from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
+from calendar.gehol import gehol_url
 from json import dumps
 import re
 
@@ -24,10 +25,10 @@ def get_category(request, id):
          "description": category.description,
          #"sub_categories": [{"name": sc.name,
          #                    "description": sc.description,
-         #                    "id": sc.id} for sc in category.childrens()],
+         #                    "id": sc.id} for sc in category.children()],
          "contains": [{"id": cours.id,
                        "name": cours.name,
-                       "slug": cours.slug} for cours in category.childrens()]
+                       "slug": cours.slug} for cours in category.children()]
     }
 
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
@@ -39,7 +40,7 @@ def show_course(request, slug):
     else:
         course = get_object_or_404(Course, slug=slug)
     course.thread_set, course.document_set = [], []
-    for child in course.childrens():
+    for child in course.children():
         if   type(child)==Thread:
             course.thread_set.append(child)
         elif type(child)==Document:
@@ -47,6 +48,7 @@ def show_course(request, slug):
     #Thread.objects.filter(referer_content="course", referer_id=course.id)
     return render(request, "course.html",
                   {"object": course,
+                   "gehol": gehol_url(course),
                    "upload_form": UploadFileForm(initial={"course": course}),
                    "newthread_form": NewThreadForm(initial={
                         "parentNode": course.id})})
