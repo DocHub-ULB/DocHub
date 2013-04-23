@@ -64,6 +64,8 @@ class Command(BaseCommand):
                 date=self.NOW, user=self.USER
             )
         parentNode.add_child(course)
+        self.stdout.write('.')
+        self.stdout.flush()
 
 
 
@@ -76,6 +78,8 @@ class Command(BaseCommand):
             else:
                 category = Category.objects.create(name=key, description="Magic !")
                 parentNode.add_child(category)
+                self.stdout.write('#')
+                self.stdout.flush()
                 self.walk(val, category)
 
 
@@ -101,14 +105,29 @@ class Command(BaseCommand):
         user.save()
         profile = user.get_profile()
         profile.name = first_name + " " + last_name
-        profile.email = 'test@mouh.com'
+        profile.email = 'gaston@dupuis.be'
         profile.save()
+        
+        #Second user for tests
+        user2 = User()
+        user2.username="blabevue"
+        user2.first_name="Bertrand"
+        user2.last_name="Labévue"
+        user2.set_password(password)
+        user2.save()
+        profile2 = user2.get_profile()
+        profile2.name = user2.first_name + " " + user2.last_name
+        profile2.email = 'bertrand@labevue.be'
+        profile2.save()
+        self.stdout.write("Second user {} with password {} created\n".format(
+            user2.username, password
+        ))
 
         tree = json.load(open('parsing/tree.json'))
         self.courseList = json.load(open('parsing/cours.json'))
         self.USER = profile
         Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
         self.walk(tree, Root)
-
+        self.stdout.write("\n")
 
 

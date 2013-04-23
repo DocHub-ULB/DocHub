@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from documents.models import Document, PendingDocument, Page
 from documents.forms import UploadFileForm
+from notify.models import PreNotification
 
 
 def upload_file(request):
@@ -33,6 +34,12 @@ def upload_file(request):
         tmp_doc.close()
         PendingDocument.objects.create(document=doc, state="queued",
                                        url='file://' + url)
+        PreNotification(
+            node=doc, 
+            text="Nouveau document: "+name[:50],
+            url=reverse('document_show', args=[doc.id]),
+            user=request.user
+        )
         return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponse('form invalid', 'text/html')
 

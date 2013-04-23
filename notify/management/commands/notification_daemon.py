@@ -20,9 +20,12 @@ class Command(BaseCommand):
                     for node in nodeset:
                         #Deliver notifs to followers of ancestor nodes
                         for follower in node.followed.all():
-                            Notification.objects.create(
-                                prenotif=prenotif, user=follower.user, node=node
-                            )
+                            if follower!=prenotif.user:
+                                Notification.objects.create(
+                                    prenotif=prenotif, 
+                                    user=follower.user, 
+                                    node=node
+                                )
                     prenotif.delivered = True
                     prenotif.save()
     

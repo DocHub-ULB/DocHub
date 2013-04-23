@@ -14,6 +14,7 @@ class PreNotification(models.Model):
     text = models.CharField(max_length=160)
     delivered = models.BooleanField(default=False)
     url = models.URLField()
+    user = models.ForeignKey(User) #The user that created the notification
 
 
 class Notification(models.Model):
