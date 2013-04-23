@@ -12,7 +12,8 @@ def jsonise_notifications(notifs):
              'text': n.prenotif.text,
              'date': n.prenotif.created.isoformat(),
              'emitter': n.prenotif.node.id,
-             'followed_node': n.node.id
+             'followed_node': n.node.id,
+             'read': n.read
             } for n in notifs
         ]
     }
@@ -25,11 +26,11 @@ def notifications_get(request):
     return HttpResponse(dumps(jsonise_notifications(notifs)), mimetype='application/json')
 
 
-def notifications_read(request,id):
+def notification_read(request,id):
     notif = get_object_or_404(Notification, id=id)
     notif.read=True
     notif.save()
-    if notif.prenotif.url :
+    if notif.prenotif.url:
         return HttpResponseRedirect(notif.prenotif.url)
     else :
         return HttpResponse('No url for this notification')
