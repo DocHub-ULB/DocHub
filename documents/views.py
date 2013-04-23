@@ -37,7 +37,8 @@ def upload_file(request):
         PreNotification(
             node=doc, 
             text="Nouveau document: "+name[:50],
-            url=reverse('document_show', args=[doc.id])
+            url=reverse('document_show', args=[doc.id]),
+            user=request.user
         )
         return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponse('form invalid', 'text/html')

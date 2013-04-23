@@ -28,7 +28,8 @@ def new_thread(request):
         PreNotification.objects.create(
             node=thread,
             text="Nouvelle discussion: "+name[:50]+"...",
-            url=reverse('thread_show', args=[thread.id])
+            url=reverse('thread_show', args=[thread.id]),
+            user=request.user
         )
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
@@ -54,7 +55,8 @@ def reply_thread(request):
         PreNotification.objects.create(
             node=thread,
             text="Answer to {} by {}".format(thread.name[:50],poster.name),
-            url=reverse('thread_show', args=[thread.id])
+            url=reverse('thread_show', args=[thread.id]),
+            user=request.user
         )
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
