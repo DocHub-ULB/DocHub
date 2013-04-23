@@ -8,9 +8,13 @@
 from sys import exit
 from time import sleep
 from signal import signal, SIGTERM
+
 from django.core.management.base import BaseCommand
+from django.core.urlresolvers import reverse
+
 from www.settings import UPLOAD_DIR, UPLOAD_LOG, PARSING_WORKERS, SEARCH_SYSTEM
 from documents.models import Page, PendingDocument as Task
+from notify.models import PreNotification, Notification
 from django.db import close_connection
 from os import system, path, makedirs
 from multiprocessing import Process
@@ -29,25 +33,26 @@ logger.setLevel(logging.INFO)
 
 class Command(BaseCommand):
     help = 'Start tha processing deamon'
+    REQUIRED_BINARIES = ('pdftotext', 'gm')
 
     def convert_page(self, document, source, pagenum):
         '''extract page and make some thumbnails with graphicsmagick'''
         destination = "{}/{}/{:0>6}_{:0>6}_{{}}.jpg".format(
             UPLOAD_DIR, document.parent.id, document.id, pagenum)
-
+        
         #mini thumbnail
         h_120 = self.make_jepg(120, pagenum, source, destination.format('m'))
         #normal image
         h_600 = self.make_jepg(600, pagenum, source, destination.format('n'))
         #big image
         h_900 = self.make_jepg(900, pagenum, source, destination.format('b'))
-
+        
         close_connection()
         page = Page.objects.create(numero=pagenum, height_120=h_120,
                                    height_600=h_600,
                                    height_900=h_900)
         document.add_child(page,acyclic_check=False)
-
+    
 
     def make_jepg(self, width, pagenum, source, destination):
         system('gm convert -geometry %dx -quality 90 %s "%s[%d]" %s' %
@@ -55,7 +60,7 @@ class Command(BaseCommand):
         height = int(subprocess.check_output(['gm', 'identify', '-format',
                                               '%h', destination]).strip())
         return height
-
+    
 
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document {} (from {}) : {}'.format(
@@ -108,7 +113,19 @@ class Command(BaseCommand):
             self.parse_file(pending.document, raw)
             pending.state = 'done'
             pending.save()
-
+            
+            Notification.objects.create(
+                prenotif=PreNotification.objects.create(
+                    user=pending.document.user.user,
+                    node=pending.document, 
+                    delivered=True,
+                    text="Processing document finished !",
+                    url=reverse('document_show', args=[pending.document.id])
+                ),
+                user=pending.document.user.user,
+                node=pending.document
+            )
+            
             # may fail if download url, don't really care
             system("rm /tmp/TMP402_%d.pdf" % pending.document.id)
 
@@ -138,8 +155,17 @@ class Command(BaseCommand):
                 pass
         exit(0)
 
-
+    
+    def check_binaries(self):
+        """Check if host system has required binaries"""
+        for bin in self.REQUIRED_BINARIES:
+            if system("which "+bin+" > /dev/null") != 0:
+                self.stderr.write("!!! Missing binary "+bin+"\n")
+                exit(1)
+    
+    
     def handle(self, *args, **options):
+        self.check_binaries()
         self.workers = list()
         signal(SIGTERM, self.terminate)
         try:
