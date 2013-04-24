@@ -35,7 +35,7 @@
 
 }
 
-#navbar a,form {
+#navbar-top a,form {
     font-family: Helvetica;
     font-size: 1.5em;
     height: 3em;
@@ -133,6 +133,11 @@
     color: white;
     cursor: pointer;
     padding: 1px 6px 1px 8px;
+}
+
+.navbar-list a {
+    color: white;
+    text-decoration: none;
 }
 
 .navbar-list li:first-child {
