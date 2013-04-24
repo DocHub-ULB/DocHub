@@ -39,12 +39,15 @@ def show_course(request, slug):
         course = get_object_or_404(Course, pk=slug)
     else:
         course = get_object_or_404(Course, slug=slug)
-    course.thread_set, course.document_set = [], []
-    for child in course.children():
-        if   type(child)==Thread:
-            course.thread_set.append(child)
-        elif type(child)==Document:
-            course.document_set.append(child)
+    children = course.children()
+    course.thread_set = children.instance_of(Thread)
+    course.document_set = children.instance_of(Document)
+    #course.thread_set, course.document_set = [], []
+    #for child in course.children():
+    #    if   type(child)==Thread:
+    #        course.thread_set.append(child)
+    #    elif type(child)==Document:
+    #        course.document_set.append(child)
     #Thread.objects.filter(referer_content="course", referer_id=course.id)
     return render(request, "course.html",
                   {"object": course,
