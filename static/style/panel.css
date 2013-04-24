@@ -7,9 +7,7 @@
  */
 
 .panel {
-    border-left: #ddd 1px solid;
-    border-right:  #ddd 1px solid;
-    border-top: #ddd 1px solid;
+    border: #ddd 1px solid;
     background-color: white;
     margin-top: -11px;
     padding: 10px 20px 20px 10px;

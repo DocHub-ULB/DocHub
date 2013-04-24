@@ -12,7 +12,7 @@ class Node(PolymorphicModel):
     _children = models.ManyToManyField("self", symmetrical=False)
 
     def __repr__(self):
-        return '<Node. id : {} "{}">'.format(
+        return '<Node {} : {} "{}">'.format(
             self.classBasename(), self.pk, self.name.encode('utf-8')
         )
 

@@ -93,9 +93,15 @@ var navbar = function() {
         }
     };
 
+    var go = function(e) {
+        window.location = $(e.target).attr("href");
+        return false;
+    }
+
     $(document).ready(function() {
         $('#pull').click(toggle);
         $('#navbar-search').click(function() {return false;});
+        $('#navbar-top a[id != pull]').click(go);
         $(window).resize(refresh_padding);
         template = Handlebars.compile(fragments["navbar-list"]);
         set_state();
