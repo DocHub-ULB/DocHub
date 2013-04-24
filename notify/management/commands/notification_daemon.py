@@ -16,14 +16,17 @@ class Command(BaseCommand):
                 for prenotif in objects:
                     nodeset = prenotif.node.ancestors_set()
                     nodeset.add(prenotif.node)
+                    delivered = set()
                     #Walk in ancestors graph
                     for node in nodeset:
                         #Deliver notifs to followers of ancestor nodes
                         for follower in node.followed.all():
-                            if follower!=prenotif.user:
+                            user = follower.user
+                            if user!=prenotif.user and user not in delivered:
+                                delivered.add(user) #avoid duplicate notifs
                                 Notification.objects.create(
                                     prenotif=prenotif, 
-                                    user=follower.user, 
+                                    user=user, 
                                     node=node
                                 )
                     prenotif.delivered = True
