@@ -22,6 +22,16 @@
     {% endif %}
   </div>
   <div class="clear"></div>
+  <div id="edit" class="panel">
+    <form action="" method="post">
+      {% csrf_token %}
+      {% for line in object.last_info.infos %}
+      <input type="text" style="width: 100px" value="{{ line.name }}"/> :
+      <input type="text" style="width: 300px" value="{{ line.value }}"/><br>
+      {% endfor %}<br>
+      <input type="submit" value="Edit"/>
+    </form>
+  </div>
   <div class="logic-p">
   {% for line in object.last_info.infos %}
     <strong>{{ line.name }}:</strong> {{ line.value|truncatechars:50 }}<br>
@@ -44,6 +54,5 @@
   {% include "add_thread.html" %}
   {% include "thread_list.html" %}
 </div>
-
 <div class="clear"></div>
 {% endblock %}

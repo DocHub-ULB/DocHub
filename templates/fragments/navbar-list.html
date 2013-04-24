@@ -12,11 +12,15 @@
 {{#each loaded}}
   <ul class="navbar-list" data-id="{{ id }}"><li>{{ name }}</li>
   {{#each children}}
+  {{#if link}}
+    <li class="navbar-category" data-type="{{ type }}" data-id="{{ id }}"><a href="/zoidberg/course/v/{{ id }}">{{ name }}</a></li>
+  {{else}}
     <li class="navbar-category" data-type="{{ type }}" data-id="{{ id }}">{{ name }}</li>
+  {{/if}}
   {{/each}}
 
   {{#each contains }}
-    
+
   {{/each}}
   </ul>
 {{/each}}
