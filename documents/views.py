@@ -47,8 +47,7 @@ def document_show(request,id):
     document = get_object_or_404(Document, id=id)
 
     children = document.children()
-    # TODO : query optimistation ?
-    document.page_set = filter(lambda e: type(e)==Page, children)
+    document.page_set = children.instance_of(Page)
 
     context = {"object": document,
                 "parent": document.parent}
