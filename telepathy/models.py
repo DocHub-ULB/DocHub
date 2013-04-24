@@ -9,6 +9,8 @@ from django.db import models
 from users.models import Profile
 from polydag.models import Taggable
 from polydag.behaviors import Leaf, OneParent
+from django.db.models.signals import post_save
+import signals
 
 class Thread(Leaf, OneParent, Taggable):
     user = models.ForeignKey(Profile)
@@ -24,3 +26,5 @@ class Message(models.Model):
     previous = models.ForeignKey('self', null=True, default=None)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
+post_save.connect(signals.thread_save,sender=Thread)
+post_save.connect(signals.message_save,sender=Message)

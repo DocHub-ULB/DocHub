@@ -25,12 +25,6 @@ def new_thread(request):
         message = Message.objects.create(user=request.user.get_profile(),
                                          thread=thread, text=content)
         parentNode.add_child(thread)
-        PreNotification.objects.create(
-            node=thread,
-            text="Nouvelle discussion: "+name[:50]+"...",
-            url=reverse('thread_show', args=[thread.id]),
-            user=request.user
-        )
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
 
@@ -52,11 +46,6 @@ def reply_thread(request):
         poster = request.user.get_profile()
         message = Message.objects.create(user=poster,
                                          thread=thread, text=content)
-        PreNotification.objects.create(
-            node=thread,
-            text="Answer to {} by {}".format(thread.name[:50],poster.name),
-            url=reverse('thread_show', args=[thread.id]),
-            user=request.user
-        )
+
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
