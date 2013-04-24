@@ -23,12 +23,11 @@ def get_category(request, id):
         "id": category.id,
          "name": category.name,
          "description": category.description,
-         #"sub_categories": [{"name": sc.name,
-         #                    "description": sc.description,
-         #                    "id": sc.id} for sc in category.children()],
-         "contains": [{"id": cours.id,
-                       "name": cours.name,
-                       "slug": cours.slug} for cours in category.children()]
+         "contains": [
+            {"id": c.id,
+             "name": c.name,
+             "slug": c.slug
+            } for c in category.children().instance_of(Category, Course)]
     }
 
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
@@ -39,13 +38,9 @@ def show_course(request, slug):
         course = get_object_or_404(Course, pk=slug)
     else:
         course = get_object_or_404(Course, slug=slug)
-    course.thread_set, course.document_set = [], []
-    for child in course.children():
-        if   type(child)==Thread:
-            course.thread_set.append(child)
-        elif type(child)==Document:
-            course.document_set.append(child)
-    #Thread.objects.filter(referer_content="course", referer_id=course.id)
+    children = course.children()
+    course.thread_set = children.instance_of(Thread)
+    course.document_set = children.instance_of(Document)
     return render(request, "course.html",
                   {"object": course,
                    "gehol": gehol_url(course),
