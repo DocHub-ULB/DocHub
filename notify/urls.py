@@ -1,6 +1,6 @@
-from django.conf.urls import patterns
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
-    (r'^get.json$', 'notify.views.notifications_get'),
-    (r'^(?P<id>[^/]*)/read$', 'notify.views.notification_read')
+    url(r'^show$', 'notify.views.notifications_show', name="notif_show"),
+    url(r'^(?P<id>[^/]*)/read$', 'notify.views.notification_read', name="notif_read")
 )

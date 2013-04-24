@@ -27,14 +27,14 @@ urlpatterns = patterns("",
     # All JSON urls
     url(r"^json/tree/", include(graph_json)),
     url(r"^json/node/", include("polydag.urls")),
-    url(r"^json/notifications/", include("notify.urls")),
-
+    
     # The apps entry points
     url(r"^zoidberg/calendar/", include("calendar.urls")),
     url(r"^zoidberg/course/", include("graph.urls")),
     url(r"^zoidberg/document/", include("documents.urls")),
     url(r"^zoidberg/telepathy/", include("telepathy.urls")),
-
+    url(r"^zoidberg/notifications/", include("notify.urls")),
+    
     # The product/client entry points
     url(r"^zoidberg/home$",home,
         name="home"),

@@ -1,0 +1,23 @@
+{% extends "home.html" %}
+{% load humanize %}
+
+{% comment %}
+# Copyright 2012-2013, hast. All rights reserved.
+
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+{% endcomment %}
+
+{% block content %}
+<h1>Notifications</h1>
+<ul>
+  {% for notif in notifications %}
+  <li>
+    <a href="{% url notif_read notif.id %}">{{ notif.prenotif.text }}</a>
+    {{ notif.prenotif.created|naturaltime }}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
