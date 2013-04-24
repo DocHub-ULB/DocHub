@@ -42,6 +42,9 @@ var navbar = function() {
     var draw = function() {
         $('#navbar-bottom').html(template(state));
         $('.navbar-category').click(load_event);
+        $('.navbar-category a').click(function() {
+            toggle()
+        });
         refresh_padding();
     };
 
@@ -70,10 +73,9 @@ var navbar = function() {
         state.loaded.splice(i + 1, state.loaded.length - i - 1);
         $.cookies.set('navbar', state);
         var nodeid = event.target.getAttribute("data-id");
-        if (event.target.getAttribute('data-type') == 'Course'){
-            toggle();
-        } else
+        if (event.target.getAttribute('data-type') != 'Course'){
             load(nodeid);
+        }
     };
 
     var set_state = function() {

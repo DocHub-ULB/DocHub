@@ -6,47 +6,59 @@
  * your option) any later version.
  */
 
-#navbar-fix {
+#navbar {
     position: fixed;
     right: 0px;
     left: 0px;
     color: white;
     z-index: 10;
-    min-width: 590px;
 }
 
-#navbar-fix a {
-    color: white;
-    text-decoration: none;
-}
 
 #navbar-top {
+    position: fixed;
+    width: 100%;
+    text-align: justify;
     background-color: #365d98;
-    height: 60px;
-    cursor: pointer;
+    height: 3em;
+}
+
+#navbar-top:after {
+  content: '';
+  width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
+  display: inline-block;
+}
+
+#navbar-top #navbar-left,#navbar-center,#navbar-right {
+    display: inline-block;
+    height: 3em;
+
+}
+
+#navbar-top a,form {
+    font-family: Helvetica;
+    font-size: 1.5em;
+    height: 3em;
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    height: 100%;
+    margin-left: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0.5em;
+    vertical-align: middle;
 }
 
 #brand {
     font-family: verdana;
-    font-size: 26px;
     font-weight: bold;
-    float: left;
-    margin: 15px 30px 0px 30px;
 }
 
 #brand small {
     font-family: verdana;
     font-weight: normal;
-    font-size: 18px;
     color: white;
-}
-
-#navbar-top a.link {
-    float: left;
-    height: 23px;
-    padding: 27px 25px 10px 40px;
-    font-size: 18px;
-    font-family: Helvetica;
 }
 
 
@@ -56,78 +68,60 @@
 }
 
 
-#navbar-top a.focus {
-    background-color: #333;
-}
-
-#navbar-top a.icon:before {
+#navbar a.icon:before {
     font-family: "entypo";
-    font-size: 3em;
-    line-height: 0.33em;
-    vertical-align: -5px;
-    padding-right: 5px;
+    padding-right: .2em;
 }
 
+#navbar a.home:before { content: '\2302 ';}
+#navbar a.courses:before { content: '\1F4D6 ';}
+#navbar a.calendar:before { content: '\1F4C5 ';}
+#navbar a.wall:before { content: '\E005 ';}
+#navbar a.notif:before { content: '\1F4BF';}
 
-#navbar-top a.home:before {
-    content: '\2302 ';
-}
-
-#navbar-top a.courses:before {
-    content: '\1F4D6 ';
-}
-
-
-#navbar-top a.calendar:before {
-    content: '\1F4C5 ';
-}
-
-#navbar-top a.wall:before {
-    content: '\1F30E ';
-}
-
-#navbar-top a.wall{
-    position: relative;
+#navbar a.focus {
+    background-color: #333;
 }
 
 #notification-counter {
     position: absolute;
     top: 12px;
     left: 1.5em;
-
     background-color: #252629;
     color: #fff;
     border-radius: 3px;
-    padding: 1px 3px;
-    font: 15px Verdana;
+    position: relative;
+    top: -0.5em;
+    left: -0.5em;
 }
 
 #navbar-search {
-    float: right;
+    display: inline-block;
+
 }
 
 #search-query {
-    max-width: 500px;
-    min-width: 250px;
+    display: inline-block;
     border: none;
-    height: 24px;
-    margin-top: 22px;
     border-radius: 2px;
-    background: #fff url("/static/images/search-icon.png") left no-repeat;
     padding-left: 20px;
+    margin-top: -0.18em;
+    font-size: 0.8em;
+    background: #fff url("/static/images/search-icon.png") left no-repeat;
 }
 
-#navbar-top #logout {
-    float: right;
+#navbar #logout {
+    display: inline-block;
+
 }
 
 #navbar-bottom {
     background-color: #333; /*#003585;*/
     border-bottom: 1px #666 solid;
+    margin-top: 3em;
     padding: 10px;
     font-size: 10px;
     display: none;
-    min-width: 600px;
 }
 
 .navbar-list {
@@ -142,6 +136,11 @@
     color: white;
     cursor: pointer;
     padding: 1px 6px 1px 8px;
+}
+
+.navbar-list a {
+    color: white;
+    text-decoration: none;
 }
 
 .navbar-list li:first-child {
