@@ -9,10 +9,11 @@ def thread_save(**kwargs):
     #TODO: use truncate instead of str[:N]
     PreNotification.objects.create(
         node=thread,
-        text="Nouvelle discussion: "+thread.name[:50]+"...",
+        text="Nouvelle discussion: "+thread.name[:50].encode('utf-8')+"...",
         url=reverse('thread_show', args=[thread.id]),
         user=thread.user.user
     )
+
 
 def message_save(**kwargs):
     assert kwargs['sender'] == models.Message
@@ -20,11 +21,14 @@ def message_save(**kwargs):
     message = kwargs['instance']
     thread = message.thread
     poster = message.user
-
-    #TODO: use truncate instead of str[:N]
-    PreNotification.objects.create(
-        node=thread,
-        text="Answer to {} by {}".format(thread.name[:50],poster.name),
-        url=reverse('thread_show', args=[thread.id]),
-        user=message.user.user
-    )
+    
+    if message.previous:    
+        #TODO: use truncate instead of str[:N]
+        PreNotification.objects.create(
+            node=thread,
+            text="Answer to {} by {}".format(
+                thread.name[:50].encode('utf-8'), poster.name.encode('utf-8')
+            ),
+            url=reverse('thread_show', args=[thread.id]),
+            user=message.user.user
+        )
