@@ -31,7 +31,6 @@
     <div id="navbar">
       <div id="navbar-top">
         <div id="navbar-left">
-          <a class="icon notif" href="#"><span id="notifnum">{{ notifcount }}</span></a>
           <a id="brand" href="{% url home %}">P402<small>Whiteboard</small></a>
           <a class="icon home" href="{% url home %}">Home</a>
           <a id="pull" class="icon courses" href="#">Courses</a>
@@ -44,7 +43,7 @@
           </form>
         </div>
         <div id="navbar-left">
-          <a id="logout" class="link" href="{% url logout %}">Logout <small style="color:white">({{user.name}})</small></a>
+          <a id="logout" class="link" href="{% url logout %}">Logout</a>
         </div>
       </div>
       <div id="navbar-bottom"></div>
