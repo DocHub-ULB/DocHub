@@ -27,7 +27,7 @@
     <form action="" method="post">
       {% csrf_token %}
       {% for line in object.last_info.infos %}
-      <input type="text" style="width: 100px" value="{{ line.name }}"/> : 
+      <input type="text" style="width: 100px" value="{{ line.name }}"/> :
       <input type="text" style="width: 300px" value="{{ line.value }}"/><br>
       {% endfor %}<br>
       <input type="submit" value="Edit"/>
@@ -43,49 +43,17 @@
 
 <div class="clear"></div>
 
-{% if object.document_set.all %}
 <div class="logic-block">
   <h1>Documents</h1>
   {% include "upload_doc.html" %}
   {% include "document_list.html" %}
 </div>
 <div class="clear"></div>
-{% else %}
-<div>
-  <h1>Documents</h1>
-  <div class="clear"></div>
-  <p>No document!<br>Start uploading, gogogo!</p>
-  <form action="{% url document_put %}" method="post"
-        enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-      {{ upload_form.as_table }}
-    </table>
-    <input type="submit" value="Upload"/>
-  </form>
-</div>
-{% endif %}
 
-{% if object.thread_set.all %}
 <div class="logic-block">
   <h1>Discussions</h1>
   {% include "add_thread.html" %}
   {% include "thread_list.html" %}
 </div>
-{% else %}
-<div>
-  <h1>Discussions</h1>
-  <div class="clear"></div>
-  <p>No discutions!<br>Start talking, gogogo!</p>
-  <form action="{% url document_put %}" method="post"
-        enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-      {{ newthread_form.as_table }}
-    </table>
-    <input type="submit" value="Post"/>
-  </form>
-</div>
-{% endif %}
 <div class="clear"></div>
 {% endblock %}

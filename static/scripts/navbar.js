@@ -14,7 +14,6 @@ var navbar = function() {
         if (state.visible) {
             $('#content').animate({'padding-top': 70}, 100);
             $('#pull').removeClass("focus");
-            //$('#pull').addClass("courses");
             state.visible = false;
             $.cookies.set('navbar', state);
         } else {
@@ -48,6 +47,12 @@ var navbar = function() {
 
     var load = function(cat_id) {
         $.getJSON("/json/node/" + cat_id, function(data) {
+            data.children.forEach(function(child) {
+                if (child.type === 'Course') {
+                    child.link = true;
+                }
+                else { child.link = false; }
+            })
             state.loaded.push(data);
             console.log(state);
             $.cookies.set('navbar', state);
@@ -67,7 +72,6 @@ var navbar = function() {
         var nodeid = event.target.getAttribute("data-id");
         if (event.target.getAttribute('data-type') == 'Course'){
             toggle();
-            window.location = '/zoidberg/course/v/'+nodeid;
         } else
             load(nodeid);
     };
@@ -93,15 +97,9 @@ var navbar = function() {
         }
     };
 
-    var go = function(e) {
-        window.location = $(e.target).attr("href");
-        return false;
-    }
-
     $(document).ready(function() {
         $('#pull').click(toggle);
         $('#navbar-search').click(function() {return false;});
-        $('#navbar-top a[id != pull]').click(go);
         $(window).resize(refresh_padding);
         template = Handlebars.compile(fragments["navbar-list"]);
         set_state();
