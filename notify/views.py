@@ -1,7 +1,7 @@
 # Create your views here.
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from json import dumps, loads
 from notify.models import Notification
 
@@ -34,3 +34,10 @@ def notification_read(request,id):
         return HttpResponseRedirect(notif.prenotif.url)
     else :
         return HttpResponse('No url for this notification')
+
+
+def notifications_show(request):
+    notifs = list(Notification.unread(request.user))
+    context = {"notifications": notifs}
+    return render(request, "notifications.html", context)
+

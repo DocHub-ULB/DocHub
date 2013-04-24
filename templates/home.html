@@ -31,9 +31,10 @@
     <div id="navbar">
       <div id="navbar-top">
         <a id="brand" href="{% url home %}">
-
           P402<small>Whiteboard</small>
-<span id="notification-counter">{{ notifcount }}</span>
+        </a>
+        <a href="{% url notif_show %}">
+          <span id="notification-counter">{{ notifcount }}</span>
         </a>
         <a class="link icon home" href="{% url home %}">Home</a>
         <a id="pull" class="link icon courses" href="#">Courses</a>

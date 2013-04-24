@@ -25,6 +25,7 @@ def new_thread(request):
         message = Message.objects.create(user=request.user.get_profile(),
                                          thread=thread, text=content)
         parentNode.add_child(thread)
+
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
     return HttpResponse('form invalid', 'text/html')
 

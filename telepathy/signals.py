@@ -6,7 +6,7 @@ def thread_save(**kwargs):
     assert kwargs['sender'] == models.Thread
 
     thread = kwargs['instance']
-
+    #TODO: use truncate instead of str[:N]
     PreNotification.objects.create(
         node=thread,
         text="Nouvelle discussion: "+thread.name[:50]+"...",
@@ -21,7 +21,7 @@ def message_save(**kwargs):
     thread = message.thread
     poster = message.user
 
-
+    #TODO: use truncate instead of str[:N]
     PreNotification.objects.create(
         node=thread,
         text="Answer to {} by {}".format(thread.name[:50],poster.name),
