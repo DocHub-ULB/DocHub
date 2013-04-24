@@ -27,6 +27,7 @@ def new_thread(request):
         parentNode.add_child(thread)
         PreNotification.objects.create(
             node=thread,
+            #TODO: use truncate instead of str[:N]
             text="Nouvelle discussion: "+name[:50]+"...",
             url=reverse('thread_show', args=[thread.id]),
             user=request.user
@@ -54,7 +55,10 @@ def reply_thread(request):
                                          thread=thread, text=content)
         PreNotification.objects.create(
             node=thread,
-            text="Answer to {} by {}".format(thread.name[:50],poster.name),
+            text="Answer to {} by {}".format(
+                #TODO: use truncate instead of str[:N]
+                thread.name[:50].encode('utf-8'), poster.name.encode('utf-8')
+            ),
             url=reverse('thread_show', args=[thread.id]),
             user=request.user
         )
