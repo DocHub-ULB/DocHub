@@ -106,6 +106,7 @@ class Command(BaseCommand):
         profile = user.get_profile()
         profile.name = first_name + " " + last_name
         profile.email = 'gaston@dupuis.be'
+        profile.photo = '/static/images/gaston.gif'
         profile.save()
         
         #Second user for tests
@@ -118,6 +119,7 @@ class Command(BaseCommand):
         profile2 = user2.get_profile()
         profile2.name = user2.first_name + " " + user2.last_name
         profile2.email = 'bertrand@labevue.be'
+        profile2.photo = '/static/images/labevue.gif'
         profile2.save()
         self.stdout.write("Second user {} with password {} created\n".format(
             user2.username, password
