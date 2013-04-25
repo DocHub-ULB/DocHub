@@ -19,7 +19,7 @@
 {% for message in object.message_set.all %}
 <tr class="message">
   <td class="message-left">
-    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
+    <img class="small-profile" src="{{ message.user.get_photo }}">
     <strong>{{ message.user.name }}</strong><br>
     {{ message.created|naturaltime }}<br>
 
@@ -31,7 +31,7 @@
 {% endfor %}
 <tr class="message">
   <td class="message-left">
-    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
+    <img class="small-profile" src="{{ user.get_photo }}">
     <strong>You</strong>
   </td>
   <td class="message-right">

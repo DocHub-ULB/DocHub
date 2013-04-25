@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
+    DEFAULT_PHOTO = "http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg"
+    
     user = models.OneToOneField(User)
     name = models.CharField(max_length=127)
     email = models.CharField(max_length=255)
@@ -18,6 +20,11 @@ class Profile(models.Model):
     comment = models.TextField(null=True)
     photo = models.CharField(max_length=80, null=True)
     follow = models.ManyToManyField('polydag.Node', related_name='followed')
+    
+    @property
+    def get_photo(self):
+        return self.photo if self.photo else self.DEFAULT_PHOTO
+
 
 class Inscription(models.Model):
     user = models.ForeignKey(Profile)
