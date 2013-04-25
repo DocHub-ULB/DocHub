@@ -33,6 +33,14 @@ def get_category(request, id):
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
 
 
+def show_category(request, catid):
+    cat = get_object_or_404(Category, pk=catid)
+    children = cat.children()
+    cat.course_set = children.instance_of(Course)
+    cat.subcategory_set = children.instance_of(Category)
+    return render(request, "category.html", {'object':cat})
+
+
 def show_course(request, slug):
     if re.search(r'^\d+$', slug):
         course = get_object_or_404(Course, pk=slug)

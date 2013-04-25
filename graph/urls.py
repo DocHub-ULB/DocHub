@@ -6,7 +6,7 @@
 # your option) any later version.
 
 from django.conf.urls import patterns, url
-from graph.views import get_category, show_course, join_course, leave_course
+from graph.views import get_category, show_course, show_category
 
 
 json_urls = patterns("",
@@ -15,7 +15,10 @@ json_urls = patterns("",
 
 
 urlpatterns = patterns("",
-    url(r"^v/(?P<slug>[^/]*)$", 
+    url(r"^course/(?P<slug>[^/]*)$", 
         show_course,
         name="course_show"),
+    url(r"^cat/(?P<catid>\d+)$", 
+        show_category,
+        name="category_show"),
 )
