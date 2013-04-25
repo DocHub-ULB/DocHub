@@ -9,6 +9,8 @@ from django.db import models
 from users.models import Profile
 from polydag.models import Taggable
 from polydag.behaviors import OneParent
+from django.db.models.signals import post_save, pre_delete
+import signals
 
 
 class Document(OneParent, Taggable):
@@ -50,3 +52,8 @@ class PendingDocument(models.Model):
     state = models.CharField(max_length=30)
     url = models.CharField(max_length=255)
     done = models.PositiveIntegerField(default=0)
+
+
+post_save.connect(signals.document_save,sender=Document)
+post_save.connect(signals.pending_document_save,sender=PendingDocument)
+pre_delete.connect(signals.pending_document_delete,sender=PendingDocument)
