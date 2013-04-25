@@ -1,0 +1,49 @@
+{% extends "home.html" %}
+{% load humanize %}
+{% load custommardown %}
+
+
+{% comment %}
+# Copyright 2012, hast. All rights reserved.
+
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+{% endcomment %}
+
+{% block content %}
+<h1>{{ object.name }}</h1>
+
+<table class="messages">
+{% for message in object.message_set.all %}
+<tr class="message">
+  <td class="message-left">
+    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
+    <strong>{{ message.user.name }}</strong><br>
+    {{ message.created|naturaltime }}<br>
+
+  </td>
+  <td class="message-right">
+    {{ message.text|markdown }}
+  </td>
+</tr>
+{% endfor %}
+<tr class="message">
+  <td class="message-left">
+    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
+    <strong>You</strong>
+  </td>
+  <td class="message-right">
+    <form class="message-form" action="{% url thread_reply %}" method="post">
+      {% csrf_token %}
+      {{ reply_form.as_p }}
+      <input class="panel-button" type="submit" value="Reply"/>
+    </form>
+  </td>
+</tr>
+</table>
+
+
+
+{% endblock %}

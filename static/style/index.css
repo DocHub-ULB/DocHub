@@ -14,12 +14,9 @@ body {
 }
 
 #header {
-    background-color: #004090;
+    background-color: #001fa6;
     padding: 5px;
     height: 40px;
-    background-image: url("/static/images/header_back1.png"), 
-                      url("/static/images/header_back2.png");
-    background-repeat: no-repeat, repeat-x;
 }
 
 #header h1 {
@@ -48,6 +45,7 @@ body {
     margin-top: 15px;
     margin-right: 10px;
 }
+
 #infos {
     width: 781px;
     margin-right: auto;
@@ -78,4 +76,8 @@ body {
 a {
     color: blue;
     text-decoration: none;
+}
+
+.w700 {
+    min-width: 700px;
 }

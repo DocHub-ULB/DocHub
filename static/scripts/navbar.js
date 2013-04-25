@@ -7,58 +7,113 @@
  */
 
 var navbar = function() {
-    var height = 130;
-    var visible = false;
-    var template = null;
+    var state, template = null, height = 130;
 
     var toggle = function() {
         $('#navbar-bottom').slideToggle(100);
-        if (visible) {
-            $('#pullout').html('down');
-            $('#content').animate({'padding-top': 60}, 100);
-            visible = false;
+        if (state.visible) {
+            $('#content').animate({'padding-top': 70}, 100);
+            $('#pull').removeClass("focus");
+            state.visible = false;
+            $.cookies.set('navbar', state);
         } else {
-            $('#pullout').html('up');
-            $('#content').animate({'padding-top': 60 + height}, 100);
-            visible = true;
+            $('#content').animate({'padding-top': 84 + height}, 100);
+            //$('#pull').removeClass("courses");
+            $('#pull').addClass("focus");
+            state.visible = true;
+            $.cookies.set('navbar', state);
         }
+
+        if (typeof viewer_instance !== "undefined")
+            viewer_instance.refresh();
     };
 
     var refresh_padding = function() {
         height = $('#navbar-bottom').height() + 10;
-        if (visible)
-            $('#content').css('padding-top', 60 + height);
-        else
-            $('#content').css('padding-top', 60);
+        if (state.visible) {
+            $('#pull').addClass("focus");
+            $('#content').css('padding-top', 84 + height);
+            if (typeof viewer_instance !== "undefined")
+                viewer_instance.refresh();
+        } else
+            $('#content').css('padding-top', 70);
     };
 
-    var load = function(node, cat_id) {
-        $.getJSON("/json/tree/category/" + cat_id, function(data) {
-            $(node).after(template(data));
-            $('.navbar-list[data-id=' + cat_id + '] .navbar-category').click(load_event);
-            refresh_padding();
+    var draw = function() {
+        $('#navbar-bottom').html(template(state));
+        $('.navbar-category').click(load_event);
+        $('.navbar-category a').click(function() {
+            toggle()
+        });
+        refresh_padding();
+    };
+
+    var load = function(cat_id) {
+        $.getJSON("/json/node/" + cat_id, function(data) {
+            data.children.forEach(function(child) {
+                if (child.type === 'Course') {
+                    child.link = true;
+                }
+                else { child.link = false; }
+            })
+            state.loaded.push(data);
+            console.log(state);
+            $.cookies.set('navbar', state);
+            draw();
         });
     };
 
     var load_event = function(event) {
         var list = event.target.parentNode;
 
-        for (var elem = list.nextSibling; elem; elem = next) {
-            var next = elem.nextSibling;
-            if (elem.tagName == "UL")
-                $(elem).remove();
-        }
+        for (var i = 0; i < state.loaded.length; ++i)
+            if (state.loaded[i].id == list.getAttribute("data-id"))
+                break;
 
-        load(list, event.target.getAttribute("data-id"));
+        state.loaded.splice(i + 1, state.loaded.length - i - 1);
+        $.cookies.set('navbar', state);
+        var nodeid = event.target.getAttribute("data-id");
+        if (event.target.getAttribute('data-type') != 'Course'){
+            load(nodeid);
+        }
+    };
+
+    var set_state = function() {
+        var source = $.cookies.get('navbar');
+        if (source == null) {
+            // initial state
+            state = {
+                loaded: [],
+                visible: false,
+            };
+            load(1);
+        } else {
+            // read from cookie
+            state = source;
+            draw();
+            if (state.visible == true) {
+                $('#navbar-bottom').css('display', 'block');
+                $('#pullout').html('up');
+                $('#content').css('padding-top', 84 + height);
+            }
+        }
     };
 
     $(document).ready(function() {
-        $('#navbar-top').click(toggle);
+        $('#pull').click(toggle);
         $('#navbar-search').click(function() {return false;});
         $(window).resize(refresh_padding);
         template = Handlebars.compile(fragments["navbar-list"]);
-        load($("#navbar-start"), 1);
+        set_state();
     });
-    
-    return {};
+
+    return {
+        is_down: function() {
+            return state.visible;
+        },
+
+        get_height: function() {
+            return height;
+        }
+    };
 }();

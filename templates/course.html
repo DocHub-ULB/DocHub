@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load humanize %}
 
 {% comment %}
 # Copyright 2012, hast. All rights reserved.
@@ -10,38 +11,50 @@
 {% endcomment %}
 
 {% block content %}
-<h1>Course {{ object.name }}</h1>
-<p>{{ object.description }}</p>
-
-<h1>Documents</h1>
-
-<table class="sortable">
-  <thead>
-    <tr>
-      <th>##</th>
-      <th style="min-width: 200px">Name</th>
-      <th>Poster</th>
-    </tr>
-  </thead>
-  
-  <tbody>
-  {% for doc in object.document_set.all %}
-    <tr>
-      <td>{{ doc.id }}</td>
-      <td>{{ doc.name }}</td>
-      <td>{{ doc.user.name }}</td>
-      </tr>
+<div class="logic-block">
+  <h1>{{ object.slug|upper }}: {{ object.name }}</h1>
+  <a href="{{ gehol }}" target="_blank">Horaire</a>
+  {% if object in request.user.get_profile.follow.all %}
+  <a class="panel-button border-bottom" href="{% url node_leave object.id %}">
+    leave
+  </a>
+  {% else %}
+  <a class="panel-button border-bottom" href="{% url node_join object.id %}">
+    join
+  </a>
+  {% endif %}
+  <div class="clear"></div>
+  <div id="edit" class="panel">
+    <form action="" method="post">
+      {% csrf_token %}
+      {% for line in object.last_info.infos %}
+      <input type="text" style="width: 100px" value="{{ line.name }}"/> :
+      <input type="text" style="width: 300px" value="{{ line.value }}"/><br>
+      {% endfor %}<br>
+      <input type="submit" value="Edit"/>
+    </form>
+  </div>
+  <div class="logic-p">
+  {% for line in object.last_info.infos %}
+    <strong>{{ line.name }}:</strong> {{ line.value|truncatechars:50 }}<br>
   {% endfor %}
-  </tbody>
-</table>
+  </div>
+</div>
 
-<h2>Upload</h2>
-<form action="{% url document_put object.slug %}" method="post"
-      enctype="multipart/form-data">
-  {% csrf_token %}
-  <table>
-    {{ upload_form.as_table }}
-  </table>
-  <input type="submit" value="Upload"/>
-</form>
+<div class="clear"></div>
+
+<div class="logic-block">
+  <h1>Documents</h1>
+  {% include "upload_doc.html" %}
+  {% include "document_list.html" %}
+</div>
+
+<div class="clear"></div>
+
+<div class="logic-block">
+  <h1>Discussions</h1>
+  {% include "add_thread.html" %}
+  {% include "thread_list.html" %}
+</div>
+<div class="clear"></div>
 {% endblock %}

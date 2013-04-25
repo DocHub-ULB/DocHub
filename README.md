@@ -1,5 +1,5 @@
 Beta402
-====
+=======
 
 This django project is a website providing mean for students to exchange courses and tips.
 Some old code is already live over there : http://cours.cerkinfo.be
@@ -17,19 +17,21 @@ For exemple:
 
 Installation
 ============
+	
+		make ve
+		source ve/bin/activate
+		make install
 
-    virtualenv --distribute --no-site-packages ve
-    source ve/bin/activate
-    pip install -r requirements.txt
-    chmod +x ./manage.py
-    ./manage.py syncdb
-    ./manage.py migrate
-    ./manage.py init
+Run & Stop
+==========
 
-Run
-===
-
-	./manage.py processing_deamon & ./manage.py runserver
+		make [run]
+		make stop
+		
+Reset
+=====
+		
+		make clean
 
 Then go http://localhost:8000/syslogin
 
@@ -50,7 +52,7 @@ Send an email to p402 AT cerkinfo.be, come by #urlab on freenode or just fork th
 License
 =======
 
-Copyright 2011, hast. All rights reserved.
+Copyright 2011-2013, hast. All rights reserved.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -59,3 +61,4 @@ License, or (at your option) any later version.
 
 
 Woop woop https://www.youtube.com/watch?v=x2FetnIZjxg
+
