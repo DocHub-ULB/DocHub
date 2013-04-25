@@ -74,8 +74,10 @@
             <tr>
               <td>{{ course.id }}</td>
               <td>{{ course.slug|upper }}</td>
-              <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
-              <td>NA</td>
+              <td><a href="{% url course_show course.slug %}">
+                {{ course.name }}
+              </a></td>
+              <td>{{ course.last_activity|naturaltime }}</td>
             </tr>
           {% endfor %}
           </tbody>
@@ -88,9 +90,14 @@
     </div>
 
     <div id="footer">
-      <p>P402 is upon US.<br>
-        Help - Dev - bugtrack - about..<br>
-        Be aware of dragons</p>
+        P402 is upon US.<br>
+        <a href="#">Help</a> - 
+        <a target="_blank" href="https://github.com/UrLab/beta402">Dev</a> - 
+        <a target="_blank" href="https://github.com/UrLab/beta402/issues">
+          Bugtracker
+        </a> - 
+        <a href="#">About</a><br>
+        Be aware of dragons
     </div>
   </body>
 </html>
