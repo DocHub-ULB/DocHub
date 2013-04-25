@@ -13,13 +13,15 @@
 {% block content %}
 <div class="logic-block">
   <h1>{{ object.name }}</h1>
-  <div class="panel-button border-bottom">
-    {% if object in request.user.get_profile.follow.all %}
-    <a href="{% url node_leave object.id %}">leave</a>
-    {% else %}
-    <a href="{% url node_join object.id %}">join</a>
-    {% endif %}
-  </div>
+  {% if object in request.user.get_profile.follow.all %}
+  <a class="panel-button border-bottom" href="{% url node_leave object.id %}">
+    leave
+    </a>
+  {% else %}
+  <a class="panel-button border-bottom" href="{% url node_join object.id %}">
+    join
+  </a>
+  {% endif %}
   <p>{{ object.description }}</p>
 </div>
 <div class="clear"></div>
