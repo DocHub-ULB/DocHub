@@ -16,9 +16,9 @@
   <a href="{{ gehol }}" target="_blank">Horaire</a>
   <div class="panel-button border-bottom">
     {% if object in request.user.get_profile.follow.all %}
-    <a href="{% url course_leave object.slug %}">leave</a>
+    <a href="{% url node_leave object.id %}">leave</a>
     {% else %}
-    <a href="{% url course_join object.slug %}">join</a>
+    <a href="{% url node_join object.id %}">join</a>
     {% endif %}
   </div>
   <div class="clear"></div>
