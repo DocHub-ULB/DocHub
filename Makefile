@@ -7,11 +7,11 @@ WEBSERVER_LOGFILE = webserver.log
 PIDFILES = ${WEBSERVER_PIDFILE} ${PROCESSING_PIDFILE} ${NOTIFY_PIDFILE}
 LOGFILES = ${WEBSERVER_LOGFILE} /tmp/upload_log
 
-all:run
+all: start
 init: ${DATABASE}
 reset: clean init
 
-run : ${DATABASE}
+start : ${DATABASE}
 	./manage.py processing_daemon & echo "$$!" > ${PROCESSING_PIDFILE}
 	./manage.py notification_daemon & echo "$$!" > ${NOTIFY_PIDFILE}
 	./manage.py runserver >> ${WEBSERVER_LOGFILE} 2>&1 & echo "$$!" > ${WEBSERVER_PIDFILE}
