@@ -63,7 +63,6 @@
         <table class="sortable rounded">
           <thead>
             <tr>
-              <th>#</th>
               <th>Mnemonic</th>
               <th style="min-width: 200px">Name</th>
               <th>Last activity</th>
@@ -72,9 +71,8 @@
           <tbody>
           {% for course in followed_courses %}
             <tr>
-              <td>{{ course.id }}</td>
               <td>{{ course.slug|upper }}</td>
-              <td><a href="{% url course_show course.slug %}">
+              <td><a title="#{{ course.id }}" href="{% url course_show course.slug %}">
                 {{ course.name }}
               </a></td>
               <td>{{ course.last_activity|naturaltime }}</td>
