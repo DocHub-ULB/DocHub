@@ -120,6 +120,7 @@ class Command(BaseCommand):
             logger.error('Process file error of document %d (from %s) : %s' %
                          (pending.document.id, pending.document.user.name,
                           str(e)))
+            pending.document.e = e
             pending.document.delete()
             # TODO : do not delete, enqueue and retry later (2-3 times ?)
             # when we actualy delete, do this a bit more proprely
