@@ -24,7 +24,7 @@ class Notification(models.Model):
     read = models.BooleanField(default=False)
     
     @staticmethod
-    def direct(user, text, node, url):
+    def direct(user, text, node, url=None):
         """Directly deliver a single notification to a user"""
         Notification.objects.create(
             prenotif=PreNotification.objects.create(

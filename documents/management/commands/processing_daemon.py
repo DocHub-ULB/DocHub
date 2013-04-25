@@ -114,16 +114,11 @@ class Command(BaseCommand):
             pending.state = 'done'
             pending.save()
             
-            Notification.objects.create(
-                prenotif=PreNotification.objects.create(
-                    user=pending.document.user.user,
-                    node=pending.document, 
-                    delivered=True,
-                    text="Processing document finished !",
-                    url=reverse('document_show', args=[pending.document.id])
-                ),
-                user=pending.document.user.user,
-                node=pending.document
+            Notification.direct(
+                user=pending.document.user.user, 
+                text="Finished processing document "+pending.document.name,
+                node=pending.document,
+                url=reverse('document_show', args=[pending.document.id])
             )
             
             # may fail if download url, don't really care
@@ -133,16 +128,11 @@ class Command(BaseCommand):
             logger.error('Process file error of document %d (from %s) : %s' %
                          (pending.document.id, pending.document.user.name,
                           str(e)))
-            Notification.objects.create(
-                prenotif=PreNotification.objects.create(
-                    user=pending.document.user.user,
-                    node=pending.document, 
-                    delivered=True,
-                    text="Processing document finished !",
-                    url=reverse('document_show', args=[pending.document.id])
-                ),
-                user=pending.document.user.user,
-                node=pending.document
+            #TODO: use truncate instead of str[:N]
+            Notification.direct(
+                user=pending.document.user.user, 
+                text="Error when processing document: "+str(e)[:120],
+                node=pending.document.parent
             )
             pending.document.delete()
             # TODO : do not delete, enqueue and retry later (2-3 times ?)
