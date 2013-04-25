@@ -7,16 +7,14 @@
 
 from django.db import models
 from users.models import Profile
+from polydag.models import Taggable
+from polydag.behaviors import Leaf, OneParent
+from django.db.models.signals import post_save
+import signals
 
-
-class Thread(models.Model):
-    subject = models.TextField()
+class Thread(Leaf, OneParent, Taggable):
     user = models.ForeignKey(Profile)
-    referer_id = models.PositiveIntegerField()
-    referer_content = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, editable=False)
-    tags = models.CharField(max_length=100)
-
     class Meta:
         ordering = ['-created']
 
@@ -27,3 +25,6 @@ class Message(models.Model):
     text = models.TextField()
     previous = models.ForeignKey('self', null=True, default=None)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+
+post_save.connect(signals.thread_save,sender=Thread)
+post_save.connect(signals.message_save,sender=Message)

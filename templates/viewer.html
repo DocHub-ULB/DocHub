@@ -1,0 +1,68 @@
+{% extends "home.html" %}
+
+{% comment %}
+# Copyright 2012, hast. All rights reserved.
+
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+{% endcomment %}
+
+{% block header %}
+<script src="/static/scripts/viewer.js"></script>
+<script language="JavaScript">
+var doc = {
+    len: {{ object.pages }},
+    id: {{ object.id }},
+    parentid: '{{ parent.id }}',
+    pages: [ {% for page in object.page_set %}
+        {numero: {{ page.numero }},
+         height_600: {{ page.height_600 }},
+         height_900: {{ page.height_900 }} },{% endfor %}
+    ],
+};
+
+var viewer_instance = viewer(doc);
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div id="viewer-header">
+  <div class="viewer-header-container">
+    <a href="{% url course_show parent.id %}">
+      <img id="backward" src="/static/images/back-icon.png"/>
+      <span>{{ parent.name }}</span>
+    </a>
+    <a href="">
+      <img id="download" src="/static/images/download-icon.png"/>
+      <span>download</span>
+    </a>
+  </div>
+  <div class="viewer-header-container">
+    <span id="viewer-title">{{ object.name }}</span>
+  </div>
+  <div class="viewer-header-container">
+    <img id="zoom-in" src="/static/images/magnifier_zoom_in.png"/>
+    <input id="zoom" value="100%"/>
+    <img id="zoom-out" src="/static/images/magnifier_zoom_out.png"/>
+  </div>
+
+</div>
+
+<div id="thumbs">
+{% for page in object.page_set %}
+  <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
+    src="/static/images/white.png" width="120" height="{{ page.height_120 }}"/>
+  <p>{{ page.numero|add:1 }}</p>
+{% endfor %}
+</div>
+
+<div id="pages">
+  {% for page in object.page_set %}
+  <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
+    width="600" height="{{ page.height_600 }}"/>
+  {% endfor %}
+</div>
+{% endblock %}

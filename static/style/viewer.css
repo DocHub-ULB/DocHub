@@ -1,0 +1,90 @@
+/* Copyright 2012, hast. All rights reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ */
+
+#thumbs {
+    float: left;
+    position: fixed;
+    overflow: auto;
+    background-color: #eee;
+    padding: 10px 28px 10px 20px;
+    margin: 20px 0px -20px -20px;
+    height: 300px;
+}
+
+#thumbs p {
+    font-size: 10px;
+    text-align: center;
+}
+
+.thumb {
+    border: 1px #eee solid;
+    margin: 10px;
+    display: block;
+}
+
+#viewer-header {
+    margin: -20px;
+    position: fixed;
+    background-color: #eee;
+    padding: 8px 5px 2px 0px;
+    width: 100%;
+    height: 30px;
+    text-align: justify;
+}
+
+.viewer-header-container {
+    display: inline-block;
+    padding: 0px 20px  0px 20px;
+}
+
+#viewer-title {
+    font-size: 1.5em;
+    line-height: 0.5em;
+}
+
+#viewer-header:after {
+  content: '';
+  width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
+  display: inline-block;
+}
+
+#viewer-header img {
+    margin: 2px 5px 0px 5px;
+    cursor: pointer;
+}
+
+#viewer-header span {
+    vertical-align: 30%;
+    margin-right: 10px;
+}
+
+#zoom {
+    width: 50px;
+    border-radius: 0px;
+    border: 0px;
+    padding: 4px 5px 3px 5px;
+    vertical-align: 30%;
+}
+
+#pages {
+    margin-top: 40px;
+    margin-left: 200px;;
+}
+
+.page {
+    border: 1px #eee solid;
+    margin: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+}
+
+.hilight {
+    border: 2px #bde solid;
+}

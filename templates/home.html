@@ -7,65 +7,89 @@
 # your option) any later version.
 {% endcomment %}
 
+{%load humanize %}
+<!DOCTYPE html>
 <html>
   <head>
     <title>P402</title>
     <link href="/static/style/normalize.css" rel="stylesheet">
-    <link href="/static/style/navbar.css" rel="stylesheet">
     <link href="/static/style/base.css" rel="stylesheet">
+    <link href="/static/style/navbar.css" rel="stylesheet">
+    <link href="/static/style/viewer.css" rel="stylesheet">
+    <link href="/static/style/panel.css" rel="stylesheet">
     <script src="/static/3party/jquery-1.7.min.js"></script>
     <script src="/static/3party/handlebars-1.0.0.beta.6.js"></script>
     <script src="/static/3party/datatable-1.9.js"></script>
+    <script src="/static/3party/jquery.cookies.2.2.0.js"></script>
     <script src="{% url fragments %}" type="text/javascript"></script>
     <script src="/static/scripts/navbar.js"></script>
+    <script src="/static/scripts/panel.js"></script>
+    {% block header %}{% endblock %}
   </head>
 
   <body>
-    <div id="navbar-fix">
+    <div id="navbar">
       <div id="navbar-top">
-        <a id="brand" href="{% url home %}">P402<small>beta</small></a>
-        <span id="pullout">down</span>
-        <a id="logout" href="{% url logout %}">Logout</a>
-        <form id="navbar-search">
-          <input type="text" id="search-query" placeholder="Search">
-        </form>
+        <div id="navbar-left">
+          <a id="brand" href="{% url home %}">
+            P402<small>Whiteboard</small>
+          </a>
+          <a href="{% url notif_show %}">
+            <span id="notification-counter">{{ notifcount }}</span>
+          </a>
+          <a class="link icon home" href="{% url home %}">Home</a>
+          <a id="pull" class="link icon courses" href="#">Courses</a>
+          <a class="link icon calendar" href="#">Calendar</a>
+          <a class="link icon wall" href="#">Wall</a>
+        </div>
+        <div id="navbar-center">
+          <form id="navbar-search">
+            <input type="text" id="search-query" placeholder="Search">
+          </form>
+        </div>
+        <div id="navbar-right">
+          <a id="logout" class="link" href="{% url logout %}">Logout <small>({{user.name}})</small></a>
+        </div>
+
+
       </div>
-      <div id="navbar-bottom">
-        <ul class="navbar-list" id="navbar-start">
-          <li><a href="{% url home %}">Home</a></li>
-          <li><a href="#">General Boards</a></li>
-          <li><a href="#">Wall</a></li>
-          <li><a href="#">Help</a></li>
-          <li><a href="#">Development</a></li>
-        </ul>
-        <br id="navbar-clearer">
-      </div>
+      <div id="navbar-bottom"></div>
     </div>
 
     <div id="content">
       {% block content %}
-      <h1>'Sup guyz?</h1>
-      <p>Zion hear me! It is true what many of you have heard. The machines 
-        have gathered an army and as I speak that army is drawing nearer to 
-        our home. Believe me when I say we have a difficult time ahead of us 
-        but if we are to be prepared for it we must first shed our fear of 
-        it.<br>I stand hear before you now truly unafraid! Why?! Because I 
-        believe something you do not? No! I stand here without fear because 
-        I remember. I remember that I am hear not because of the path that 
-        lay before me.. but because of the path that lies behind me! I 
-        remember that for one hundred years we have fought these machines! 
-        I remember that for one-hundred years they have sent their armies 
-        to destroy us and after a century of war I remember that which 
-        matters most! We are still here! tonight let us send a message to 
-        that army! Let us shake this cave! Tonight let us tremble these 
-        walls of earth, steel and stone! Let us be heard from red core to 
-        black sky! Tonight let us make them remember this is Zion and we 
-        are not afraid!</p>
-    {% endblock %}
+        <h1>Followed courses</h1>
+        <div class="clear"></div>
+        <table class="sortable rounded">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mnemonic</th>
+              <th style="min-width: 200px">Name</th>
+              <th>Last activity</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for course in followed_courses %}
+            <tr>
+              <td>{{ course.id }}</td>
+              <td>{{ course.slug|upper }}</td>
+              <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
+              <td>NA</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      <p>
+        Haxors could use the <a href="/zoidberg/graph/cat/1">category page</a> 
+        to browse the app
+      </p>
+      {% endblock %}
     </div>
-    
+
     <div id="footer">
       <p>P402 is upon US.<br>
+        Help - Dev - bugtrack - about..<br>
         Be aware of dragons</p>
     </div>
   </body>

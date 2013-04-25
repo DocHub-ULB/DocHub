@@ -1,0 +1,35 @@
+<table class="sortable rounded w700">
+    <thead>
+      <tr>
+        <th class="rounded-left">#</th>
+        <th style="min-width: 200px">Name</th>
+        <th>Score</th>
+        <th>Poster</th>
+        <th class="rounded-right">Size</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    {% if object.document_set %}
+        {% for doc in object.document_set %}
+          <tr>
+            <td>{{ doc.id }}</td>
+            {% if doc.state == 'done'  %}
+                <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
+                <td>0</td>
+                <td>{{ doc.user.name }}</td>
+                <td>{{ doc.pages }}</td>
+            {% else %}
+                <td>{{ doc.name }}</td>
+                <td colspan=3 >Document pending, please wait</td>
+            {% endif %}
+
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan=5 >There is nothing over here :/<br>Just upload a new document by clicking the upload button</td>
+        </td>
+    {% endif %}
+    </tbody>
+</table>

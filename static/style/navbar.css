@@ -6,89 +6,122 @@
  * your option) any later version.
  */
 
-#navbar-fix {
+#navbar {
     position: fixed;
     right: 0px;
     left: 0px;
     color: white;
     z-index: 10;
-    min-width: 590px;
 }
 
-#navbar-fix a {
-    color: white;
-    text-decoration: none;
-}
 
 #navbar-top {
-    background-color: #004090;
-    padding: 3px 5px 7px 5px;
-    height: 40px;
-    background-image: url("/static/images/header_back1.png"), 
-                      url("/static/images/header_back2.png");
-    background-repeat: no-repeat, repeat-x;
-    cursor: pointer;
+    position: fixed;
+    width: 100%;
+    text-align: justify;
+    background-color: #365d98;
+    height: 3em;
+}
+
+#navbar-top:after {
+  content: '';
+  width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
+  display: inline-block;
+}
+
+#navbar-top #navbar-left,#navbar-center,#navbar-right {
+    display: inline-block;
+    height: 3em;
+
+}
+
+#navbar-top a,form {
+    font-family: Helvetica;
+    font-size: 1.5em;
+    height: 3em;
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    height: 100%;
+    margin-left: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0.5em;
+    vertical-align: middle;
 }
 
 #brand {
     font-family: verdana;
-    font-size: 26px;
     font-weight: bold;
-    float: left;
-    padding: 5px 5px 0px 5px;
-    margin: 3px 5px 0px 5px;
 }
 
 #brand small {
     font-family: verdana;
     font-weight: normal;
-    font-size: 18px;
     color: white;
 }
 
-#pullout {
-    border: 1px solid #bbd;
-    border-radius: 2px;
-    float: left;
-    padding: 4px 9px 4px 9px;
-    margin: 10px 9px 0px 9px;
-    background-color: #003090;
-    color: white;
+
+@font-face {
+    font-family: "entypo";
+    src: url('/static/3party/entypo.ttf');
+}
+
+
+#navbar a.icon:before {
+    font-family: "entypo";
+    padding-right: .2em;
+}
+
+#navbar a.home:before { content: '\2302 ';}
+#navbar a.courses:before { content: '\1F4D6 ';}
+#navbar a.calendar:before { content: '\1F4C5 ';}
+#navbar a.wall:before { content: '\E005 ';}
+#navbar a.notif:before { content: '\1F4BF';}
+
+#navbar a.focus {
+    background-color: #333;
+}
+
+#notification-counter {
+    position: absolute;
+    top: 12px;
+    left: 1.5em;
+    background-color: #252629;
+    color: #fff;
+    border-radius: 3px;
+    position: relative;
+    top: -0.5em;
+    left: -0.5em;
 }
 
 #navbar-search {
-    float: right;
+    display: inline-block;
+
 }
 
 #search-query {
-    max-width: 500px;
-    min-width: 250px;
+    display: inline-block;
     border: none;
-    height: 26px;
-    margin-top: 11px;
     border-radius: 2px;
-    background: #fff url("/static/images/search-icon.png") left no-repeat;
     padding-left: 20px;
+    margin-top: -0.18em;
+    font-size: 0.8em;
+    background: #fff url("/static/images/search-icon.png") left no-repeat;
 }
 
-#logout {
-    border: 1px solid #bbd;
-    border-radius: 2px;
-    float: right;
-    padding: 4px 9px 4px 9px;
-    margin: 10px 9px 0px 9px;
-    background-color: #003090;
-    color: white;
+#navbar #logout {
+    display: inline-block;
+
 }
 
 #navbar-bottom {
-    background-color: #003585;
-    border-top: 2px #003080 solid;
-    border-bottom: 2px #003080 solid;
+    background-color: #333; /*#003585;*/
+    border-bottom: 1px #666 solid;
+    margin-top: 3em;
     padding: 10px;
-    font-size: 12px;
+    font-size: 10px;
     display: none;
-    min-width: 600px;
 }
 
 .navbar-list {
@@ -105,13 +138,17 @@
     padding: 1px 6px 1px 8px;
 }
 
+.navbar-list a {
+    color: white;
+    text-decoration: none;
+}
+
 .navbar-list li:first-child {
     font-weight: bold;
     color: white;
 }
 
 .navbar-category {
-    background-color: #004090;
     margin-bottom: 2px;
 }
 

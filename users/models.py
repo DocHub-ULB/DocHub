@@ -17,7 +17,7 @@ class Profile(models.Model):
     welcome = models.BooleanField(default=True)
     comment = models.TextField(null=True)
     photo = models.CharField(max_length=80, null=True)
-
+    follow = models.ManyToManyField('polydag.Node', related_name='followed')
 
 class Inscription(models.Model):
     user = models.ForeignKey(Profile)
