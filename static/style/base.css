@@ -38,8 +38,13 @@ h2 {
     padding: 70px 20px 25px 20px;
 }
 
-#content a {
+a {
+    color: blue;
     text-decoration: none;
+}
+
+#content a:hover {
+    text-decoration: underline;
 }
 
 #footer {
