@@ -14,7 +14,6 @@ from django.core.urlresolvers import reverse
 
 from www.settings import UPLOAD_DIR, UPLOAD_LOG, PARSING_WORKERS, SEARCH_SYSTEM
 from documents.models import Page, PendingDocument as Task
-from notify.models import PreNotification, Notification
 from django.db import close_connection
 from os import system, path, makedirs
 from multiprocessing import Process
@@ -39,20 +38,20 @@ class Command(BaseCommand):
         '''extract page and make some thumbnails with graphicsmagick'''
         destination = "{}/{}/{:0>6}_{:0>6}_{{}}.jpg".format(
             UPLOAD_DIR, document.parent.id, document.id, pagenum)
-        
+
         #mini thumbnail
         h_120 = self.make_jepg(120, pagenum, source, destination.format('m'))
         #normal image
         h_600 = self.make_jepg(600, pagenum, source, destination.format('n'))
         #big image
         h_900 = self.make_jepg(900, pagenum, source, destination.format('b'))
-        
+
         close_connection()
         page = Page.objects.create(numero=pagenum, height_120=h_120,
                                    height_600=h_600,
                                    height_900=h_900)
         document.add_child(page,acyclic_check=False)
-    
+
 
     def make_jepg(self, width, pagenum, source, destination):
         system('gm convert -geometry %dx -quality 90 %s "%s[%d]" %s' %
@@ -60,7 +59,7 @@ class Command(BaseCommand):
         height = int(subprocess.check_output(['gm', 'identify', '-format',
                                               '%h', destination]).strip())
         return height
-    
+
 
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document {} (from {}) : {}'.format(
@@ -113,14 +112,7 @@ class Command(BaseCommand):
             self.parse_file(pending.document, raw)
             pending.state = 'done'
             pending.save()
-            
-            Notification.direct(
-                user=pending.document.user.user, 
-                text="Finished processing document "+pending.document.name,
-                node=pending.document,
-                url=reverse('document_show', args=[pending.document.id])
-            )
-            
+
             # may fail if download url, don't really care
             system("rm /tmp/TMP402_%d.pdf" % pending.document.id)
 
@@ -128,12 +120,6 @@ class Command(BaseCommand):
             logger.error('Process file error of document %d (from %s) : %s' %
                          (pending.document.id, pending.document.user.name,
                           str(e)))
-            #TODO: use truncate instead of str[:N]
-            Notification.direct(
-                user=pending.document.user.user, 
-                text="Error when processing document: "+str(e)[:120],
-                node=pending.document.parent
-            )
             pending.document.delete()
             # TODO : do not delete, enqueue and retry later (2-3 times ?)
             # when we actualy delete, do this a bit more proprely
@@ -156,15 +142,15 @@ class Command(BaseCommand):
                 pass
         exit(0)
 
-    
+
     def check_binaries(self):
         """Check if host system has required binaries"""
         for bin in self.REQUIRED_BINARIES:
             if system("which "+bin+" > /dev/null") != 0:
                 self.stderr.write("!!! Missing binary "+bin+"\n")
                 exit(1)
-    
-    
+
+
     def handle(self, *args, **options):
         self.check_binaries()
         self.workers = list()

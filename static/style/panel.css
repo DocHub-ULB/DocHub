@@ -27,6 +27,11 @@
     border-left: #ddd solid 1px;
     border-right: #ddd solid 1px;
     background-color: white;
+    color: #555;
+}
+
+a.panel-button.border-bottom  {
+    color: #555;
 }
 
 .border-bottom {
