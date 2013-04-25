@@ -5,7 +5,7 @@ WEBSERVER_PIDFILE = runserver.pid
 WEBSERVER_LOGFILE = webserver.log
 
 PIDFILES = ${WEBSERVER_PIDFILE} ${PROCESSING_PIDFILE} ${NOTIFY_PIDFILE}
-LOGFILES = ${WEBSERVER_LOGFILE} /tmp/upload_log
+LOGFILES = ${WEBSERVER_LOGFILE} /tmp/upload_log sql.log
 
 all: start
 init: ${DATABASE}
@@ -21,7 +21,10 @@ stop: ${PIDFILES}
 	for f in $^; do kill `ps x -o pid -o ppid | egrep $$(cat $$f) | sed -E 's/^[ ]*([0-9]+)[ ]+[0-9]+/\1/'` && rm $$f; done
 
 clean:
-	rm -f ${DATABASE} ${PIDFILES} ${LOGFILES}
+	rm -f ${PIDFILES} ${LOGFILES}
+
+cleandata: clean
+	rm -f ${DATABASE}
 	rm -rf ./static/documents/*
 
 ${DATABASE}:
