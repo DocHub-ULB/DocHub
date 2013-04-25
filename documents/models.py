@@ -56,4 +56,4 @@ class PendingDocument(models.Model):
 
 post_save.connect(signals.document_save,sender=Document)
 post_save.connect(signals.pending_document_save,sender=PendingDocument)
-pre_delete.connect(signals.pending_document_delete,sender=PendingDocument)
+pre_delete.connect(signals.document_delete,sender=Document)
