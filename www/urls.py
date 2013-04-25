@@ -34,6 +34,7 @@ urlpatterns = patterns("",
     url(r"^zoidberg/document/", include("documents.urls")),
     url(r"^zoidberg/telepathy/", include("telepathy.urls")),
     url(r"^zoidberg/notifications/", include("notify.urls")),
+    url(r"^zoidberg/users/", include("users.urls")),
     
     # The product/client entry points
     url(r"^zoidberg/home$",home,

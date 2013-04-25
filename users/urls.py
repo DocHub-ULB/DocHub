@@ -6,16 +6,14 @@
 # your option) any later version.
 
 from django.conf.urls import patterns, url
-from graph.views import get_category, show_course, join_course, leave_course
-
-
-json_urls = patterns("",
-    url(r"^category/(?P<id>[^/]*)$", get_category, name="get_category"),
-)
-
+from users.views import join_node, leave_node
 
 urlpatterns = patterns("",
-    url(r"^v/(?P<slug>[^/]*)$", 
-        show_course,
-        name="course_show"),
+    url(r"^join/(?P<nodeid>\d+)$", 
+        join_node,
+        name="node_join"),
+    
+    url(r"^leave/(?P<nodeid>\d+)$", 
+        leave_node,
+        name="node_leave"),
 )
