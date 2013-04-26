@@ -63,7 +63,7 @@ class Command(BaseCommand):
 
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document {} (from {}) : {}'.format(
-                document.id, document.user.name, document.name.encode('utf-8')))
+                document.id, document.user.name.encode('utf-8'), document.name.encode('utf-8')))
         filename = "{}/{}/{:0>4}.pdf".format(UPLOAD_DIR, document.parent.id,
                                        document.id)
 
