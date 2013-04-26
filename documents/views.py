@@ -34,12 +34,6 @@ def upload_file(request):
         tmp_doc.close()
         PendingDocument.objects.create(document=doc, state="queued",
                                        url='file://' + url)
-        PreNotification.objects.create(
-            node=doc, 
-            text="Nouveau document: "+name[:50],
-            url=reverse('document_show', args=[doc.id]),
-            user=request.user
-        )
         return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponse('form invalid', 'text/html')
 
