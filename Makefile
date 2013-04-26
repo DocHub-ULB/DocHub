@@ -9,7 +9,7 @@ LOGFILES = ${WEBSERVER_LOGFILE} /tmp/upload_log sql.log
 
 all: start
 init: ${DATABASE}
-reset: clean init
+reset: cleandata init
 
 start : ${DATABASE}
 	./manage.py processing_daemon & echo "$$!" > ${PROCESSING_PIDFILE}
