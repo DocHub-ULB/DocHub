@@ -75,6 +75,8 @@ class Command(BaseCommand):
         fd = open(filename, 'w')
         fd.write(upfile.read())
         fd.close()
+        document.staticfile = filename
+        document.save()
 
         # sauvegarde du nombre de page
         document.pages = len(subprocess.check_output(['gm', 'identify',
