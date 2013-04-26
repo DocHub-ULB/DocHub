@@ -6,15 +6,16 @@
 # your option) any later version.
 
 from django import forms
-from telepathy.models import Thread
+from telepathy.models import Thread, Message
 
 
 class NewThreadForm(forms.Form):
     parentNode = forms.CharField(widget=forms.HiddenInput)
-    name = forms.CharField(widget=forms.TextInput)
-    content = forms.CharField(widget=forms.Textarea)
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'title'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder':'content'}))
 
 
 class ReplyForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea)
+    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder':'content'}))
+    previous = forms.ModelChoiceField(Message.objects, widget=forms.HiddenInput)
     thread = forms.ModelChoiceField(Thread.objects, widget=forms.HiddenInput)
