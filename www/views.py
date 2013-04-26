@@ -5,10 +5,27 @@
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.core.urlresolvers import reverse
 from graph.models import Category, Course
+from telepathy.models import Thread
+from polydag.models import Node
 from documents.models import Document
-from notify.models import Notification
+
+Mapping = {
+    Course : 'course_show', 
+    Thread : 'thread_show', 
+    Document : 'document_show', 
+    Category : 'category_show'
+}
+def node_canonic(request, nodeid):
+    n = get_object_or_404(Node, pk=nodeid)
+    for klass in Mapping:
+        action = Mapping[klass]
+        if type(n) == klass:
+            return HttpResponseRedirect(reverse(action, args=[n.id]))
+
 
 def home(request):
     explicit_followed = request.user.get_profile().follow.all()
