@@ -34,7 +34,7 @@ def upload_file(request):
         tmp_doc.close()
         PendingDocument.objects.create(document=doc, state="queued",
                                        url='file://' + url)
-        PreNotification(
+        PreNotification.objects.create(
             node=doc, 
             text="Nouveau document: "+name[:50],
             url=reverse('document_show', args=[doc.id]),
@@ -42,6 +42,17 @@ def upload_file(request):
         )
         return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponse('form invalid', 'text/html')
+
+def document_download(request, id):
+    doc = get_object_or_404(Document, id=id)
+    with open(doc.staticfile) as fd:
+        body = fd.read()
+    response = HttpResponse(body, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="%s.pdf"'%(doc.name)
+    doc.download += 1
+    doc.save()
+    return response
+
 
 def document_show(request,id):
     document = get_object_or_404(Document, id=id)
@@ -51,4 +62,6 @@ def document_show(request,id):
 
     context = {"object": document,
                 "parent": document.parent}
+    document.view += 1
+    document.save()
     return render(request, "viewer.html", context)
