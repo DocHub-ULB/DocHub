@@ -20,9 +20,10 @@ def upload_file(request):
 
     if form.is_valid() and match(r'.*\.[pP][dD][fF]$',
                                  request.FILES['file'].name):
-        name = sub(r'\.[Pp][Dd][Ff]$', '', request.FILES['file'].name)
-        #name = escape(name.lower().replace(' ', '_'))
-        name = escape(name.lower())
+        if len(form.cleaned_data['name'])>0:
+            name = escape(form.cleaned_data['name'])
+        else:
+            name = escape(request.FILES['file'].name[:-4].lower())
         description = escape(form.cleaned_data['description'])
         course = form.cleaned_data['course']
         doc = Document.objects.create(user=request.user.get_profile(),
