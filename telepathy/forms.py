@@ -11,11 +11,17 @@ from telepathy.models import Thread, Message
 
 class NewThreadForm(forms.Form):
     parentNode = forms.CharField(widget=forms.HiddenInput)
-    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'title'}))
-    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder':'content'}))
+    name = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder':'Title'
+    }))
+    content = forms.CharField(widget=forms.Textarea(attrs={
+        'placeholder':'Your message...'
+    }))
 
 
 class ReplyForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder':'content'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={
+        'placeholder':'Your message...'
+    }))
     previous = forms.ModelChoiceField(Message.objects, widget=forms.HiddenInput)
     thread = forms.ModelChoiceField(Thread.objects, widget=forms.HiddenInput)
