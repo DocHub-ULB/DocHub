@@ -148,7 +148,7 @@
     text-decoration: none;
 }
 
-.navbar-list li:first-child {
+.navbar-cattitle {
     font-weight: bold;
     color: white;
 }
