@@ -1,6 +1,6 @@
 # Create your views here.
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from json import dumps, loads
 from notify.models import Notification
@@ -28,6 +28,8 @@ def notifications_get(request):
 
 def notification_read(request,id):
     notif = get_object_or_404(Notification, id=id)
+    if notif.user != request.user:
+        return HttpResponseForbidden("This notification doesn't belong to you !")
     notif.read=True
     notif.save()
     if notif.prenotif.url:
