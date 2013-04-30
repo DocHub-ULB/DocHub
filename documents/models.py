@@ -20,7 +20,7 @@ class Document(OneParent, Taggable):
     size = models.PositiveIntegerField(null=True, default=0)
     words = models.PositiveIntegerField(null=True, default=0)
     pages = models.PositiveIntegerField(null=True, default=0)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     view = models.PositiveIntegerField(null=True, default=0)
     download = models.PositiveIntegerField(null=True, default=0)
