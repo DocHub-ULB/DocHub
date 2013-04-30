@@ -7,7 +7,7 @@
 
 from django.views.generic.list_detail import object_detail
 from django.conf.urls import patterns, url
-from documents.views import upload_file, document_show
+from documents.views import upload_file, document_show, document_download
 from documents.models import Document
 
 
@@ -15,7 +15,11 @@ urlpatterns = patterns("",
     url(r"^put/$",
         upload_file,
         name="document_put"),
-
+    
+    url(r"^dl/(?P<id>[^/]*)$",
+        document_download,
+        name="document_download"),
+    
     url(r"^v/(?P<id>[^/]*)$",
         document_show,
         name="document_show"),

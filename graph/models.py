@@ -10,7 +10,7 @@ from polydag.models import Node
 from django.db import models
 from users.models import Profile
 from documents.models import Document
-from telepathy.models import Thread
+from telepathy.models import Message, Thread
 
 class Course(Node):
     slug = models.SlugField()
@@ -18,14 +18,16 @@ class Course(Node):
     
     @property
     def last_activity(self):
-        res = None
-        for child in self.childrens().order_by('-id'):
-            if 'created' in child.__dict__:
-                res = child.created
-            elif 'date' in child.__dict__:
-                res = child.date
-            if res: break
-        return res
+        last_act = []
+        last_docs = self.children().instance_of(Document).order_by('-Document___date')[:1]
+        if len(last_docs) == 1:
+            last_act.append(last_docs[0].date)
+        
+        threads = self.children().instance_of(Thread)
+        last_msgs = Message.objects.filter(thread__in=threads).order_by('-created')[:1]
+        if len(last_msgs) == 1:
+            last_act.append(last_msgs[0].created)
+        return max(last_act) if len(last_act)>0 else "NA"
     
     
     def last_info(self):
@@ -48,6 +50,6 @@ class CourseInfo(models.Model):
 
 
 class Category(Node):
-    description = models.TextField(null=True)
     slug = models.SlugField()
+    description = models.TextField(null=True)
 

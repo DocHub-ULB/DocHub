@@ -11,5 +11,10 @@ from graph.models import Course
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
-    description = forms.CharField(widget=forms.Textarea, required=False)
+    name = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'placeholder':'Rename...'
+    }))
+    description = forms.CharField(required=False, widget=forms.Textarea(attrs= {
+        'placeholder': 'Description...'
+    }))
     course = forms.ModelChoiceField(Course.objects, widget=forms.HiddenInput)

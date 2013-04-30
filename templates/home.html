@@ -32,7 +32,7 @@
       <div id="navbar-top">
         <div id="navbar-left">
           <a id="brand" href="{% url home %}">
-            P402<small>Whiteboard</small>
+            <small>Whiteboard</small>
           </a>
           <a href="{% url notif_show %}">
             <span id="notification-counter">{{ notifcount }}</span>
@@ -63,7 +63,6 @@
         <table class="sortable rounded">
           <thead>
             <tr>
-              <th>#</th>
               <th>Mnemonic</th>
               <th style="min-width: 200px">Name</th>
               <th>Last activity</th>
@@ -72,25 +71,27 @@
           <tbody>
           {% for course in followed_courses %}
             <tr>
-              <td>{{ course.id }}</td>
               <td>{{ course.slug|upper }}</td>
-              <td><a href="{% url course_show course.slug %}">{{ course.name }}</a></td>
-              <td>NA</td>
+              <td><a title="#{{ course.id }}" href="{% url course_show course.slug %}">
+                {{ course.name }}
+              </a></td>
+              <td>{{ course.last_activity|naturaltime }}</td>
             </tr>
           {% endfor %}
           </tbody>
         </table>
-      <p>
-        Haxors could use the <a href="/zoidberg/graph/cat/1">category page</a> 
-        to browse the app
-      </p>
       {% endblock %}
     </div>
 
     <div id="footer">
-      <p>P402 is upon US.<br>
-        Help - Dev - bugtrack - about..<br>
-        Be aware of dragons</p>
+        P402 is upon US.<br>
+        <a href="#">Help</a> - 
+        <a target="_blank" href="https://github.com/UrLab/beta402">Dev</a> - 
+        <a target="_blank" href="https://github.com/UrLab/beta402/issues">
+          Bugtracker
+        </a> - 
+        <a href="#">About</a><br>
+        Be aware of dragons
     </div>
   </body>
 </html>

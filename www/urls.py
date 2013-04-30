@@ -10,7 +10,7 @@ from django.views.generic.simple import direct_to_template
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from graph.urls import json_urls as graph_json
-from views import home
+from views import home, node_canonic
 
 
 # decorator whom call function_in if user is authenticated, function_out if not
@@ -39,7 +39,9 @@ urlpatterns = patterns("",
     # The product/client entry points
     url(r"^zoidberg/home$",home,
         name="home"),
-
+    
+    url(r"^zoidberg/node/(?P<nodeid>\d+)$", node_canonic, name="node_canonic"),
+    
     url(r"^$",
         user_logged(app_redirection, direct_to_template),
         {"template": "index.html"},

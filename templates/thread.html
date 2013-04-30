@@ -12,6 +12,15 @@
 # your option) any later version.
 {% endcomment %}
 
+{% block header %}
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+{% endblock %}
+
 {% block content %}
 <h1>{{ object.name }}</h1>
 
@@ -19,7 +28,7 @@
 {% for message in object.message_set.all %}
 <tr class="message">
   <td class="message-left">
-    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
+    <img class="small-profile" src="{{ message.user.get_photo }}">
     <strong>{{ message.user.name }}</strong><br>
     {{ message.created|naturaltime }}<br>
 
@@ -31,7 +40,7 @@
 {% endfor %}
 <tr class="message">
   <td class="message-left">
-    <img class="small-profile" src="http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg">
+    <img class="small-profile" src="{{ user.get_photo }}">
     <strong>You</strong>
   </td>
   <td class="message-right">

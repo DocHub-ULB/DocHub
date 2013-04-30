@@ -35,7 +35,7 @@ var viewer_instance = viewer(doc);
       <img id="backward" src="/static/images/back-icon.png"/>
       <span>{{ parent.name }}</span>
     </a>
-    <a href="">
+    <a href="{% url document_download object.id %}">
       <img id="download" src="/static/images/download-icon.png"/>
       <span>download</span>
     </a>

@@ -12,7 +12,7 @@
     overflow: auto;
     background-color: #eee;
     padding: 10px 28px 10px 20px;
-    margin: 20px 0px -20px -20px;
+    margin-left: -20px;
     height: 300px;
 }
 
@@ -28,18 +28,19 @@
 }
 
 #viewer-header {
-    margin: -20px;
+    margin-top: -3em;
+    margin-left: -20px;
     position: fixed;
     background-color: #eee;
     padding: 8px 5px 2px 0px;
     width: 100%;
-    height: 30px;
+    height: 3em;
     text-align: justify;
 }
 
 .viewer-header-container {
     display: inline-block;
-    padding: 0px 20px  0px 20px;
+    padding: 0em 3em  0em 3em;
 }
 
 #viewer-title {
