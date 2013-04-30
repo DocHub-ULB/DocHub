@@ -124,7 +124,7 @@ def throw_b64error(request, raw):
 
 def intranet_auth(request, next_url):
     sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
-    if len(next_url).strip() == 0:
+    if len(next_url.strip()) == 0:
         next_url = 'home'
     if sid and uid:
         try:
@@ -142,6 +142,6 @@ def intranet_auth(request, next_url):
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
-        return HttpResponseRedirect(reverse('application') + '#' + next_url)
+        return HttpResponseRedirect(reverse(next_url))
     else:
         return render(request, 'error.html', {'msg': 'url discarded'})
