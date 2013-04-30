@@ -5,7 +5,7 @@
         <th style="min-width: 200px">Name</th>
         <th>Score</th>
         <th>Poster</th>
-        <th class="rounded-right">Size</th>
+        <th class="rounded-right">Pages</th>
       </tr>
     </thead>
 
@@ -15,8 +15,10 @@
           <tr>
             <td>{{ doc.id }}</td>
             {% if doc.state == 'done'  %}
-                <td><a href="{% url document_show doc.id %}">{{ doc.name }}</a></td>
-                <td>0</td>
+                <td><a title="{{ doc.description }}" href="{% url document_show doc.id %}">
+                  {{ doc.name }}
+                </a></td>
+                <td>-</td>
                 <td>{{ doc.user.name }}</td>
                 <td>{{ doc.pages }}</td>
             {% else %}

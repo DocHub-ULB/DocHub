@@ -35,6 +35,16 @@
 
 }
 
+#navbar-top #brand {
+    font-family: verdana;
+    font-weight: bold;
+    background: url(/static/images/logo-header.png);
+    background-size: 2.5em;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 2.7em;
+}
+
 #navbar-top a,form {
     font-family: Helvetica;
     font-size: 1.5em;
@@ -48,11 +58,6 @@
     padding-right: 15px;
     padding-top: 0.5em;
     vertical-align: middle;
-}
-
-#brand {
-    font-family: verdana;
-    font-weight: bold;
 }
 
 #brand small {
@@ -143,7 +148,7 @@
     text-decoration: none;
 }
 
-.navbar-list li:first-child {
+.navbar-cattitle {
     font-weight: bold;
     color: white;
 }

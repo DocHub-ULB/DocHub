@@ -63,7 +63,7 @@ class Command(BaseCommand):
 
     def parse_file(self, document, upfile):
         logger.info('Starting processing of document {} (from {}) : {}'.format(
-                document.id, document.user.name, document.name.encode('utf-8')))
+                document.id, document.user.name.encode('utf-8'), document.name.encode('utf-8')))
         filename = "{}/{}/{:0>4}.pdf".format(UPLOAD_DIR, document.parent.id,
                                        document.id)
 
@@ -75,6 +75,8 @@ class Command(BaseCommand):
         fd = open(filename, 'w')
         fd.write(upfile.read())
         fd.close()
+        document.staticfile = filename
+        document.save()
 
         # sauvegarde du nombre de page
         document.pages = len(subprocess.check_output(['gm', 'identify',
