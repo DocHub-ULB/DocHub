@@ -1,5 +1,5 @@
 -i http://pypi.urlab.be/simple
-Django==1.4
+Django==1.4.2
 django-extensions   #Some useful tools
 django_polymorphic
 south

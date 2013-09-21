@@ -30,12 +30,10 @@ def document_delete(**kwargs):
     assert kwargs['sender'] == models.Document
 
     document = kwargs['instance']
-    #TODO: only fire notification if converts failed, not if it is a normal delete
-    #TODO: use truncate instead of str[:N]
-    Notification.direct(
-        user=document.user.user,
-        text="Error when processing document: "+str(document.e)[:120],
-        node=document.parent,
-        #TODO : send to /node/id
-        url=reverse('home'),
-    )
+    if document.e:
+        Notification.direct(
+            user=document.user.user,
+            text="Error when processing document: "+str(document.e),
+            node=document.parent,
+            url=reverse('node_canonic',args=[nodeid]),
+        )

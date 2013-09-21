@@ -34,7 +34,7 @@ def show_thread(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     last_msg = thread.message_set.order_by('-created')[0]
     context = {"object": thread,
-               "reply_form": ReplyForm(initial={"thread": thread, 
+               "reply_form": ReplyForm(initial={"thread": thread,
                                                 "previous": last_msg})}
     return render(request, "thread.html", context)
 
@@ -44,7 +44,6 @@ def reply_thread(request):
 
     if form.is_valid():
         content = escape(form.cleaned_data['content'])
-        # TODO : verify that the tread exists
         thread = form.cleaned_data['thread']
         previous = form.cleaned_data['previous']
         poster = request.user.get_profile()

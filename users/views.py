@@ -16,15 +16,11 @@ def join_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     profile = request.user.get_profile()
     profile.follow.add(node)
-    #TODO: Ensure referer validity
-    referer = request.META['HTTP_REFERER']
-    return HttpResponseRedirect(referer)
+    return HttpResponseRedirect(reverse('node_canonic',args=[nodeid]))
 
 
 def leave_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     profile = request.user.get_profile()
     profile.follow.remove(node)
-    #TODO: Ensure referer validity
-    referer = request.META['HTTP_REFERER']
-    return HttpResponseRedirect(referer)
+    return HttpResponseRedirect(reverse('node_canonic',args=[nodeid]))
