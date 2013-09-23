@@ -40,7 +40,7 @@ FORCE_SCRIPT_NAME = ''
 # Upload settings
 UPLOAD_LOG = '/tmp/upload_log'
 UPLOAD_DIR = '%s/static/documents' % PROJECT_PATH
-PARSING_WORKERS = 7
+PARSING_WORKERS = 2
 
 # Notifications pack size
 PACK_SIZE = 20

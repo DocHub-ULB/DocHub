@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 prenotif.delivered = True
                 prenotif.save()
 
-    def terminate(self,signal_code,b):
+    def terminate(self, signal_code, frame):
         if signal_code == None:
             signal_code = 'KeyboardInterrupt'
         log.notice('Caught signal #{}, exiting.'.format(signal_code))

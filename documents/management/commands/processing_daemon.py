@@ -23,8 +23,6 @@ import subprocess
 # TODO : rtfm django logging
 from logbook import Logger
 log = Logger('Processing')
-log.notice('Start deamon')
-
 
 class Command(BaseCommand):
     help = 'Start tha processing deamon'
@@ -32,6 +30,7 @@ class Command(BaseCommand):
 
     def convert_page(self, document, source, pagenum):
         '''extract page and make some thumbnails with graphicsmagick'''
+        log.debug('Converting page {} from doc id. {}'.format(pagenum,document.id))
         destination = "{}/{}/{:0>6}_{:0>6}_{{}}.jpg".format(
             UPLOAD_DIR, document.parent.id, document.id, pagenum)
 
@@ -71,6 +70,7 @@ class Command(BaseCommand):
 
         # original file saving
         fd = open(filename, 'w')
+        log.debug('Moving file to final destination.')
         fd.write(upfile.read())
         fd.close()
         document.staticfile = filename
@@ -128,7 +128,10 @@ class Command(BaseCommand):
 
 
     # drop here when the deamon is killed
-    def terminate(self, a, b):
+    def terminate(self, signal_code, frame):
+
+        # TODO : maybe log differently when it's a subprocess
+        # TODO : that is beeing killed rather than the father
         log.notice('Caught signal #{}, exiting.'.format(signal_code))
         close_connection()
         log.info('Connection closed, killing workers...')
@@ -142,6 +145,7 @@ class Command(BaseCommand):
         # fail quietly, not a good idea, but hey, we've got already been kill,
         # so what the hell?
             except:
+                # TODO : This is happening all the time. Find why
                 log.error('Caught random exception during shutdown')
         log.info('Shutdown.')
         exit(0)
@@ -157,26 +161,37 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        self.check_binaries()
-        self.workers = list()
+        log.notice('Start deamon')
+
         for sig in (signal.SIGABRT, signal.SIGILL, signal.SIGINT, signal.SIGSEGV, signal.SIGTERM):
             signal.signal(sig, self.terminate)
+
+        self.check_binaries()
+        self.workers = list()
+
         try:
             while True:
                 sleep(10)
                 close_connection()
+
                 self.workers = [ (w,p) for w, p in self.workers if w.is_alive() ]
-                # Avoid useless SQL queries
+
+                # If pool is already full, do not try to spawn more.
                 if len(self.workers) >= PARSING_WORKERS:
+                    log.debug('Pool is full with {} workers'.format(len(self.workers)))
                     continue
 
-                # Pool seem less flexible
+                # Get all pending docs
                 pendings = list(Task.objects.filter(state='queued').order_by('id'))
+
+                # Spawn worker for every pending doc (but limit pool size)
                 while len(self.workers) < PARSING_WORKERS and len(pendings) > 0:
+                    log.debug('Spawning worker')
                     pending = pendings.pop(0)
                     process = Process(target=self.process_file, args=(pending.id,))
                     process.start()
                     self.workers.append((process, pending))
+
         except KeyboardInterrupt:
             self.terminate(None,None)
 
