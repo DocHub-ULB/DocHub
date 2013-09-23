@@ -16,20 +16,23 @@ class PreNotification(models.Model):
     url = models.URLField()
     user = models.ForeignKey(User) #The user that created the notification
 
+    def __str__(self):
+        return  self.text
+
 
 class Notification(models.Model):
     user = models.ForeignKey(User)
     node = models.ForeignKey(Node) # The effective node followed by user
     prenotif = models.ForeignKey(PreNotification)
     read = models.BooleanField(default=False)
-    
+
     @staticmethod
     def direct(user, text, node, url=None):
         """Directly deliver a single notification to a user"""
         Notification.objects.create(
             prenotif=PreNotification.objects.create(
-                node=node, 
-                text=text, 
+                node=node,
+                text=text,
                 user=user,
                 url=url,
                 delivered=True
@@ -37,8 +40,8 @@ class Notification(models.Model):
             user=user,
             node=node
         )
-    
-    
+
+
     @staticmethod
     def unread(user):
         """Return all unread notifications for user"""

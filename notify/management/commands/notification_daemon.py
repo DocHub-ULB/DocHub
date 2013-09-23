@@ -28,7 +28,8 @@ class Command(BaseCommand):
         else:
             #Go ahead in pack
             for prenotif in objects:
-                log.debug('Processing a notification')
+                log.debug('Processing a notification : "{}"'.format(prenotif))
+                notif_counter = 0
                 nodeset = prenotif.node.ancestors_set()
                 nodeset.add(prenotif.node)
                 delivered = set()
@@ -38,6 +39,7 @@ class Command(BaseCommand):
                     for follower in node.followed.all():
                         user = follower.user
                         if user!=prenotif.user and user not in delivered:
+                            notif_counter += 1
                             delivered.add(user) #avoid duplicate notifs
                             Notification.objects.create(
                                 prenotif=prenotif,
@@ -45,6 +47,7 @@ class Command(BaseCommand):
                                 node=node
                             )
                 prenotif.delivered = True
+                log.debug('Notification delivered {} time(s)'.format(notif_counter))
                 prenotif.save()
 
     def terminate(self, signal_code, frame):
