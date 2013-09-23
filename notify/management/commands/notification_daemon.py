@@ -5,6 +5,10 @@ import signal
 import www.settings as settings
 from django.db import close_connection
 
+from logbook import Logger
+log = Logger('Notification')
+log.notice('Start deamon')
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -14,6 +18,7 @@ class Command(BaseCommand):
             while True:
                 self.process_pack(settings.PACK_SIZE)
         except KeyboardInterrupt:
+            print ""
             self.terminate(None,None)
 
     def process_pack(self, pack_size):
@@ -23,6 +28,7 @@ class Command(BaseCommand):
         else:
             #Go ahead in pack
             for prenotif in objects:
+                log.debug('Processing a notification')
                 nodeset = prenotif.node.ancestors_set()
                 nodeset.add(prenotif.node)
                 delivered = set()
@@ -41,7 +47,11 @@ class Command(BaseCommand):
                 prenotif.delivered = True
                 prenotif.save()
 
-    def terminate(self,a,b):
+    def terminate(self,signal_code,b):
+        if signal_code == None:
+            signal_code = 'KeyboardInterrupt'
+        log.notice('Caught signal #{}, exiting.'.format(signal_code))
         close_connection()
+        log.info('Shutdown.')
         exit(0)
 

@@ -5,3 +5,4 @@ django_polymorphic
 south
 django-template-fragments
 markdown
+logbook

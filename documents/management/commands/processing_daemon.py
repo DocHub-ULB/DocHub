@@ -21,13 +21,9 @@ from urllib2 import urlopen
 import subprocess
 
 # TODO : rtfm django logging
-import logging
-logger = logging.getLogger('das_logger')
-hdlr = logging.FileHandler(UPLOAD_LOG)
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr)
-logger.setLevel(logging.INFO)
+from logbook import Logger
+log = Logger('Processing')
+log.notice('Start deamon')
 
 
 class Command(BaseCommand):
@@ -62,14 +58,16 @@ class Command(BaseCommand):
 
 
     def parse_file(self, document, upfile):
-        logger.info('Starting processing of document {} (from {}) : {}'.format(
+        log.info('Starting processing of document {} (from {}) : {}'.format(
                 document.id, document.user.name.encode('utf-8'), document.name.encode('utf-8')))
         filename = "{}/{}/{:0>4}.pdf".format(UPLOAD_DIR, document.parent.id,
                                        document.id)
 
         # check if course subdirectory exist
-        if not path.exists(UPLOAD_DIR + '/' + str(document.parent.id)):
-            makedirs(UPLOAD_DIR + '/' + str(document.parent.id))
+        subdirectory_path = UPLOAD_DIR + '/' + str(document.parent.id)
+        if not path.exists(subdirectory_path):
+            log.debug('Creating course subdirectory '+subdirectory_path)
+            makedirs(subdirectory_path)
 
         # original file saving
         fd = open(filename, 'w')
@@ -94,11 +92,11 @@ class Command(BaseCommand):
         for pagenum in xrange(document.pages):
             self.convert_page(document, filename, pagenum)
 
-        logger.info('End of processing of document %d' % document.id)
+        log.info('End of processing of document %d' % document.id)
 
 
     def download_file(self, doc, url):
-        logger.info('Starting download of document %d : %s' % (doc.id, url))
+        log.info('Starting download of document %d : %s' % (doc.id, url))
         return urlopen(url)
 
 
@@ -119,7 +117,7 @@ class Command(BaseCommand):
             system("rm /tmp/TMP402_%d.pdf" % pending.document.id)
 
         except Exception as e:
-            logger.error('Process file error of document %d (from %s) : %s' %
+            log.error('Process file error of document %d (from %s) : %s' %
                          (pending.document.id, pending.document.user.name,
                           str(e)))
             pending.document.e = e
@@ -131,7 +129,9 @@ class Command(BaseCommand):
 
     # drop here when the deamon is killed
     def terminate(self, a, b):
+        log.notice('Caught signal #{}, exiting.'.format(signal_code))
         close_connection()
+        log.info('Connection closed, killing workers...')
         for worker, pending in self.workers:
             try:
                 worker.terminate()
@@ -142,7 +142,8 @@ class Command(BaseCommand):
         # fail quietly, not a good idea, but hey, we've got already been kill,
         # so what the hell?
             except:
-                pass
+                log.error('Caught random exception during shutdown')
+        log.info('Shutdown.')
         exit(0)
 
 
@@ -150,7 +151,8 @@ class Command(BaseCommand):
         """Check if host system has required binaries"""
         for bin in self.REQUIRED_BINARIES:
             if system("which "+bin+" > /dev/null") != 0:
-                self.stderr.write("!!! Missing binary "+bin+"\n")
+                log.critical("Missing binary "+bin+"\n")
+                log.critical("Must... quit!")
                 exit(1)
 
 
