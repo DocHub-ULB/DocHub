@@ -7,7 +7,7 @@
 
 from sys import exit
 from time import sleep
-from signal import signal, SIGTERM
+import signal
 
 from django.core.management.base import BaseCommand
 from django.core.urlresolvers import reverse
@@ -157,7 +157,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.check_binaries()
         self.workers = list()
-        signal(SIGTERM, self.terminate)
+        for sig in (signal.SIGABRT, signal.SIGILL, signal.SIGINT, signal.SIGSEGV, signal.SIGTERM):
+            signal.signal(sig, self.terminate)
         try:
             while True:
                 sleep(10)

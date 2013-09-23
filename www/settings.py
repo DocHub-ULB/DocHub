@@ -42,6 +42,9 @@ UPLOAD_LOG = '/tmp/upload_log'
 UPLOAD_DIR = '%s/static/documents' % PROJECT_PATH
 PARSING_WORKERS = 7
 
+# Notifications pack size
+PACK_SIZE = 20
+
 # ULB login, need to add the url to redirect at the end
 ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_prtm=redirect&_appl='
 
@@ -93,6 +96,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.humanize',
     'django_extensions',
+    'devserver',
     'fragments',
     'south',
     'calendar',
