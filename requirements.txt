@@ -6,3 +6,6 @@ south
 django-template-fragments
 markdown
 logbook
+Werkzeug
+django-devserver
+pygraphviz
