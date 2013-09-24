@@ -12,7 +12,9 @@ var nofications = function() {
         $.ajax({
             url: id + "/ajax_read",
             }).done(function() {
-                element.parent().remove()
+                li = element.parent().detach();
+                li.prependTo($('#read_notifs'));
+                li.children('button').remove()
         });
     };
 

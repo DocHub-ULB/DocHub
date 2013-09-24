@@ -25,4 +25,13 @@
   </li>
   {% endfor %}
 </ul>
+<h1>Read notifications</h1>
+<ul id="read_notifs">
+  {% for notif in read_notifications %}
+  <li>
+    <a href="{% url notif_read notif.id %}">{{ notif.prenotif.text }}</a>
+    {{ notif.prenotif.created|naturaltime }}
+  </li>
+  {% endfor %}
+</ul>
 {% endblock %}
