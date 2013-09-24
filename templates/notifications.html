@@ -10,11 +10,16 @@
 # your option) any later version.
 {% endcomment %}
 
+{% block header %}
+<script src="/static/scripts/notifications.js"></script>
+{% endblock %}
+
 {% block content %}
 <h1>Notifications</h1>
 <ul>
   {% for notif in notifications %}
   <li>
+    <button class="read_notif" notif_id="{{notif.id}}">x</button>
     <a href="{% url notif_read notif.id %}">{{ notif.prenotif.text }}</a>
     {{ notif.prenotif.created|naturaltime }}
   </li>

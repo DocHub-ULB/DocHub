@@ -26,15 +26,20 @@ def notifications_get(request):
         notifs += list(Notification.objects.filter(user=request.user, read=True)[:(5-len(notifs))])
     return HttpResponse(dumps(jsonise_notifications(notifs)), mimetype='application/json')
 
+def notification_ajax_read(request, id):
+    return notification_read(request, id, False)
 
-def notification_read(request,id):
+def notification_read(request, id, redirect=True):
     notif = get_object_or_404(Notification, id=id)
     if notif.user != request.user:
         return HttpResponseForbidden("This notification doesn't belong to you !")
     notif.read=True
     notif.save()
     if notif.prenotif.url:
-        return HttpResponseRedirect(notif.prenotif.url)
+        if redirect:
+            return HttpResponseRedirect(notif.prenotif.url)
+        else:
+            return HttpResponse('Notification setted as read.')
     else :
         return HttpResponse('No url for this notification')
 
