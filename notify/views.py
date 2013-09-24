@@ -1,4 +1,5 @@
-# Create your views here.
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render

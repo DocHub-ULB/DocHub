@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -10,15 +13,15 @@ from telepathy.views import new_thread, show_thread, reply_thread
 
 
 urlpatterns = patterns("",
-    url(r"^put/$", 
+    url(r"^put/$",
         new_thread,
         name="thread_put"),
 
-    url(r"^reply/$", 
+    url(r"^reply/$",
         reply_thread,
         name="thread_reply"),
 
-    url(r"^v/(?P<thread_id>[^/]*)/$", 
+    url(r"^v/(?P<thread_id>[^/]*)/$",
         show_thread,
         name="thread_show"),
 )

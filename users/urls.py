@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -9,11 +12,11 @@ from django.conf.urls import patterns, url
 from users.views import join_node, leave_node
 
 urlpatterns = patterns("",
-    url(r"^join/(?P<nodeid>\d+)$", 
+    url(r"^join/(?P<nodeid>\d+)$",
         join_node,
         name="node_join"),
-    
-    url(r"^leave/(?P<nodeid>\d+)$", 
+
+    url(r"^leave/(?P<nodeid>\d+)$",
         leave_node,
         name="node_leave"),
 )

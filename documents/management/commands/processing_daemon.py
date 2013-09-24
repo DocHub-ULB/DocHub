@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -58,7 +61,7 @@ class Command(BaseCommand):
 
     def parse_file(self, document, upfile):
         log.info('Starting processing of document {} (from {}) : {}'.format(
-                document.id, document.user.name.encode('utf-8'), document.name.encode('utf-8')))
+                document.id, document.user.name, document.name))
         filename = "{}/{}/{:0>4}.pdf".format(UPLOAD_DIR, document.parent.id,
                                        document.id)
 
