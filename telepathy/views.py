@@ -17,17 +17,18 @@ from notify.models import PreNotification
 def new_thread(request):
     form = NewThreadForm(request.POST)
 
-    if form.is_valid():
-        name = escape(form.cleaned_data['name'])
-        content = escape(form.cleaned_data['content'])
-        parentNode = get_object_or_404(Node, id=form.cleaned_data['parentNode'])
-        thread = Thread.objects.create(user=request.user.get_profile(), name=name)
-        message = Message.objects.create(user=request.user.get_profile(),
-                                         thread=thread, text=content)
-        parentNode.add_child(thread)
+    if not form.is_valid():
+        return HttpResponse('form invalid'+str(form.errors), 'text/html')
 
-        return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
-    return HttpResponse('form invalid', 'text/html')
+    name = escape(form.cleaned_data['name'])
+    content = escape(form.cleaned_data['content'])
+    parentNode = get_object_or_404(Node, id=form.cleaned_data['parentNode'])
+    thread = Thread.objects.create(user=request.user.get_profile(), name=name)
+    message = Message.objects.create(user=request.user.get_profile(),
+                                     thread=thread, text=content)
+    parentNode.add_child(thread)
+
+    return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
 
 
 def show_thread(request, thread_id):
