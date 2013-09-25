@@ -15,16 +15,21 @@
 {% endblock %}
 
 {% block content %}
-<h1>Notifications</h1>
-<ul>
-  {% for notif in notifications %}
-  <li>
-    <button class="read_notif" notif_id="{{notif.id}}">x</button>
-    <a href="{% url notif_read notif.id %}">{{ notif.prenotif.text }}</a>
-    {{ notif.prenotif.created|naturaltime }}
-  </li>
-  {% endfor %}
-</ul>
+{% if notifications|length > 0 %}
+  <h1>Notifications</h1>
+  {% if notifications|length > 1 %}
+    <a class="notif_read_all" href="{% url notif_read_all %}">Mark everything as read</button>
+  {% endif %}
+  <ul>
+    {% for notif in notifications %}
+    <li>
+      <button class="read_notif" notif_id="{{notif.id}}">x</button>
+      <a href="{% url notif_read notif.id %}">{{ notif.prenotif.text }}</a>
+      {{ notif.prenotif.created|naturaltime }}
+    </li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <h1>Read notifications</h1>
 <ul id="read_notifs">
   {% for notif in read_notifications %}
