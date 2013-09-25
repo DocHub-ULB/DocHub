@@ -7,14 +7,25 @@ from time import sleep
 import signal
 import www.settings as settings
 from django.db import close_connection
+from optparse import make_option
 
-from logbook import Logger
-log = Logger('Notification')
-log.notice('Start deamon')
+from logbook import Logger, FileHandler
 
 class Command(BaseCommand):
 
+    option_list = BaseCommand.option_list + (
+        make_option("-f", "--file", dest="filename",
+                  help="write report to FILE", metavar="FILE"),
+        )
+
     def handle(self, *args, **options):
+        if options['filename']:
+            log_handler = FileHandler(options['filename'])
+            log_handler.push_application()
+        self.log = Logger('Notification')
+
+        self.log.notice('Start deamon')
+
         for sig in (signal.SIGABRT, signal.SIGILL, signal.SIGINT, signal.SIGSEGV, signal.SIGTERM):
             signal.signal(sig, self.terminate)
         try:
@@ -31,7 +42,7 @@ class Command(BaseCommand):
         else:
             #Go ahead in pack
             for prenotif in objects:
-                log.debug('Processing a notification : "{}"'.format(prenotif))
+                self.log.debug('Processing a notification : "{}"'.format(prenotif))
                 notif_counter = 0
                 nodeset = prenotif.node.ancestors_set()
                 nodeset.add(prenotif.node)
@@ -50,14 +61,14 @@ class Command(BaseCommand):
                                 node=node
                             )
                 prenotif.delivered = True
-                log.debug('Notification delivered {} time(s)'.format(notif_counter))
+                self.log.debug('Notification delivered {} time(s)'.format(notif_counter))
                 prenotif.save()
 
     def terminate(self, signal_code, frame):
         if signal_code == None:
             signal_code = 'KeyboardInterrupt'
-        log.notice('Caught signal #{}, exiting.'.format(signal_code))
+        self.log.notice('Caught signal #{}, exiting.'.format(signal_code))
         close_connection()
-        log.info('Shutdown.')
+        self.log.info('Shutdown.')
         exit(0)
 
