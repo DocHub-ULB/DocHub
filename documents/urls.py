@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -15,11 +18,11 @@ urlpatterns = patterns("",
     url(r"^put/$",
         upload_file,
         name="document_put"),
-    
+
     url(r"^dl/(?P<id>[^/]*)$",
         document_download,
         name="document_download"),
-    
+
     url(r"^v/(?P<id>[^/]*)$",
         document_show,
         name="document_show"),

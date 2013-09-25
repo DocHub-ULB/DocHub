@@ -52,7 +52,7 @@ body {
     margin-left: auto;
     margin-top: 20px;
 }
-          
+
 #left {
     float: left;
     margin: 0px;
@@ -61,12 +61,27 @@ body {
     font-size: 14px;
     padding-top: 0px;
 }
-          
+
 #right {
     float: left;
     margin-left: 40px;
     width: 300px;
     padding: 0px;
+}
+
+#login_link {
+    border: 3px solid blue;
+    padding : 5px 10px 5px 10px;
+    margin: 2px;
+    display: inline-block;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#login_link:hover {
+    border: 4px solid blue;
+    margin: 1px;
 }
 
 #content {

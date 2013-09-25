@@ -17,7 +17,7 @@ For exemple:
 
 Installation
 ============
-	
+
 		make ve
 		source ve/bin/activate
 		make install
@@ -27,10 +27,10 @@ Run & Stop
 
 		make [run]
 		make stop
-		
+
 Reset
 =====
-		
+
 		make clean
 
 Then go http://localhost:8000/syslogin
@@ -41,7 +41,7 @@ Misc
 Add another user to the db
 --------------------------
 
-	./manage.py adduser
+	./manage.py useradd
 
 Contribute !
 ------------

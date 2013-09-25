@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
@@ -21,7 +24,7 @@ def pending_document_save(**kwargs):
 
         PreNotification.objects.create(
             node=pending.document,
-            text="Nouveau document: "+pending.document.name.encode('utf-8'),
+            text="Nouveau document: "+pending.document.name,
             url=reverse('document_show', args=[pending.document.id]),
             user=pending.document.user.user
         )

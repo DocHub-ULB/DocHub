@@ -14,6 +14,9 @@
   <p>Your username and password didn't match. Please try again.</p>
   {% endif %}
 
+  <strong>Warning</strong> : This page is meant to be used only by system administrators. <br>
+  Do <strong>not</strong> try to use your NetId here.<br>
+  If you are a normal student, please login <a href="/">with the big login button</a><br><br>
   <form method="post" action="{% url syslogin %}">
     {% csrf_token %}
     <table>

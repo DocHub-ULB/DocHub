@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -7,10 +10,15 @@
 
 from django import forms
 from graph.models import Course
+from django.core.exceptions import ValidationError
 
+def validate_pdf(file):
+    name = file.name
+    if not len(name) > 4 or not name[-4:].lower() == '.pdf':
+        raise ValidationError('Only .pdf files are supported for the moment')
 
 class UploadFileForm(forms.Form):
-    file = forms.FileField()
+    file = forms.FileField(validators=[validate_pdf])
     name = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'placeholder':'Rename...'
     }))
