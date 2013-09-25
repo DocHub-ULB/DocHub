@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from json import loads, dumps
 
@@ -42,7 +43,7 @@ users = """[
 
 def add_course(slug):
     global course_pk, inital_data
-    
+
     name = slug.upper()
     course = ulb_courses[to_ulb(slug)]
     infos = []
@@ -75,7 +76,7 @@ def add_course(slug):
                                     "user": 1}})
     return course_pk
 
-    
+
 def walk(mother_key, mother_node):
     global cat_pk, initial_data
 

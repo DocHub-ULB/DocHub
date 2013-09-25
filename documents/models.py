@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -25,11 +28,11 @@ class Document(OneParent, Taggable):
     view = models.PositiveIntegerField(null=True, default=0)
     download = models.PositiveIntegerField(null=True, default=0)
     staticfile = models.CharField(max_length=255, default='')
-    
+
     @property
     def state(self):
         return self.pendingdocument_set.get().state
-    
+
     def move(self, *args, **kwargs):
         # Must move a images and associated files
         # thus NotImplementedError

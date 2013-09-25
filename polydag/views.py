@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from polydag.models import Node
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse

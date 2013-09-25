@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -10,7 +13,7 @@ from calendar.views import calendar
 
 
 urlpatterns = patterns("",
-    url(r"^render/$", 
+    url(r"^render/$",
         calendar,
         name="calendar"),
 )

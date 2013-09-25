@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -11,7 +14,7 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     DEFAULT_PHOTO = "http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg"
-    
+
     user = models.OneToOneField(User)
     name = models.CharField(max_length=127)
     email = models.CharField(max_length=255)
@@ -20,7 +23,7 @@ class Profile(models.Model):
     comment = models.TextField(null=True)
     photo = models.CharField(max_length=80, null=True)
     follow = models.ManyToManyField('polydag.Node', related_name='followed')
-    
+
     @property
     def get_photo(self):
         return self.photo if self.photo else self.DEFAULT_PHOTO
