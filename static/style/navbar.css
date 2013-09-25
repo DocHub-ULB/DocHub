@@ -91,13 +91,14 @@
 #notification-counter {
     position: absolute;
     top: 12px;
-    left: 1.5em;
+    left: 0;
     background-color: #252629;
     color: #fff;
     border-radius: 3px;
     position: relative;
     top: -0.5em;
     left: -0.5em;
+    padding: 1px 3px 1px 3px;
 }
 
 #navbar-search {
