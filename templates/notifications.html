@@ -18,7 +18,7 @@
 {% if notifications|length > 0 %}
   <h1>Notifications</h1>
   {% if notifications|length > 1 %}
-    <a class="notif_read_all" href="{% url notif_read_all %}">Mark everything as read</button>
+    <a class="notif_read_all" href="{% url notif_read_all %}">Mark everything as read</a>
   {% endif %}
   <ul>
     {% for notif in notifications %}
