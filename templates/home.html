@@ -58,6 +58,7 @@
 
     <div id="content">
       {% block content %}
+      {% if followed_courses %}
         <h1>Followed courses</h1>
         <div class="clear"></div>
         <table class="sortable rounded">
@@ -80,6 +81,9 @@
           {% endfor %}
           </tbody>
         </table>
+      {% else %}
+        <p>You aren't following any course. Why don't subscibe to some by clicking on the "course" menu on the top bar ?</p>
+      {% endif %}
       {% endblock %}
     </div>
 
