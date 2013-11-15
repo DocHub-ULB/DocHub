@@ -44,7 +44,7 @@
     <strong>You</strong>
   </td>
   <td class="message-right">
-    <form class="message-form" action="{% url thread_reply %}" method="post">
+    <form class="message-form" action="{% url 'thread_reply' %}" method="post">
       {% csrf_token %}
       {{ reply_form.as_p }}
       <input class="panel-button" type="submit" value="Reply"/>

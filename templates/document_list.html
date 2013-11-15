@@ -15,7 +15,7 @@
           <tr>
             <td>{{ doc.id }}</td>
             {% if doc.state == 'done'  %}
-                <td><a title="{{ doc.description }}" href="{% url document_show doc.id %}">
+                <td><a title="{{ doc.description }}" href="{% url 'document_show' doc.id %}">
                   {{ doc.name }}
                 </a></td>
                 <td>-</td>

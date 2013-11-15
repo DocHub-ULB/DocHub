@@ -31,11 +31,11 @@ var viewer_instance = viewer(doc);
 
 <div id="viewer-header">
   <div class="viewer-header-container">
-    <a href="{% url course_show parent.id %}">
+    <a href="{% url 'course_show' parent.id %}">
       <img id="backward" src="/static/images/back-icon.png"/>
       <span>{{ parent.name }}</span>
     </a>
-    <a href="{% url document_download object.id %}">
+    <a href="{% url 'document_download' object.id %}">
       <img id="download" src="/static/images/download-icon.png"/>
       <span>download</span>
     </a>
