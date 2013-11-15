@@ -8,7 +8,6 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
-from django.views.generic.list_detail import object_detail
 from django.conf.urls import patterns, url
 from documents.views import upload_file, document_show, document_download
 from documents.models import Document

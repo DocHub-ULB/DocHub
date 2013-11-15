@@ -98,7 +98,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django_extensions',
-    'devserver',
+    #'devserver',
     'fragments',
     'south',
     'calendar',
