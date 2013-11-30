@@ -6,3 +6,4 @@ ve
 graph.*
 *.pid
 *.log
+www/secret_key.txt
