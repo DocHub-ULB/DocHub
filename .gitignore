@@ -7,3 +7,4 @@ graph.*
 *.pid
 *.log
 www/secret_key.txt
+www/config/local.py
