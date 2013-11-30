@@ -36,6 +36,7 @@ INSTALLED_APPS += (
     'django.contrib.humanize',
     'fragments',
     'south',
+    'djcelery',
 )
 
 # apps

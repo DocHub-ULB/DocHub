@@ -16,7 +16,7 @@ from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
-from calendar.gehol import gehol_url
+from calendars.gehol import gehol_url
 from json import dumps
 import re
 

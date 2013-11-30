@@ -8,12 +8,9 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
-from django.conf.urls import patterns, url
-from calendar.views import calendar
+from django.shortcuts import get_object_or_404, render
+from calendars.models import Event
 
 
-urlpatterns = patterns("",
-    url(r"^render/$",
-        calendar,
-        name="calendar"),
-)
+def calendar(request):
+    return render(request, "calendar.html")
