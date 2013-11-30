@@ -4,6 +4,8 @@ django_polymorphic
 django-template-fragments
 markdown
 logbook
+celery
+django-celery
 
 # Migrate
 south

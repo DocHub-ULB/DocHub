@@ -36,12 +36,13 @@ INSTALLED_APPS += (
     'django.contrib.humanize',
     'fragments',
     'south',
+    'djcelery',
 )
 
 # apps
 INSTALLED_APPS += (
 	'www',
-    'calendar',
+    'calendars',
     'documents',
     'graph',
     'telepathy',

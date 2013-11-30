@@ -31,7 +31,7 @@ urlpatterns = patterns("",
     url(r"^json/node/", include("polydag.urls")),
 
     # The apps entry points
-    url(r"^zoidberg/calendar/", include("calendar.urls")),
+    url(r"^zoidberg/calendar/", include("calendars.urls")),
     url(r"^zoidberg/graph/", include("graph.urls")),
     url(r"^zoidberg/document/", include("documents.urls")),
     url(r"^zoidberg/telepathy/", include("telepathy.urls")),
