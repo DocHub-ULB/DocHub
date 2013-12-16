@@ -1,19 +1,20 @@
 DATABASE = db.sqlite
-NOTIFY_PIDFILE = notification_daemon.pid
-PROCESSING_PIDFILE = processing_daemon.pid
-WEBSERVER_PIDFILE = runserver.pid
-WEBSERVER_LOGFILE = webserver.log
 
-PIDFILES = ${WEBSERVER_PIDFILE} ${PROCESSING_PIDFILE} ${NOTIFY_PIDFILE}
-LOGFILES = ${WEBSERVER_LOGFILE} /tmp/upload_log sql.log
+CELERY_PIDFILE = celery.pid
+WEBSERVER_PIDFILE = runserver.pid
+
+WEBSERVER_LOGFILE = webserver.log
+CELERY_LOGFILE = celery.log
+
+PIDFILES = ${WEBSERVER_PIDFILE} ${CELERY_PIDFILE}
+LOGFILES = ${WEBSERVER_LOGFILE} ${CELERY_LOGFILE} /tmp/upload_log sql.log
 
 all: start
 init: ${DATABASE}
 reset: cleandata init
 
 start : ${DATABASE}
-	./manage.py processing_daemon & echo "$$!" > ${PROCESSING_PIDFILE}
-	./manage.py notification_daemon & echo "$$!" > ${NOTIFY_PIDFILE}
+	celery -A www worker -l info  > ${CELERY_LOGFILE} 2>&1 & echo "$$!" > ${CELERY_PIDFILE}
 	./manage.py runserver >> ${WEBSERVER_LOGFILE} 2>&1 & echo "$$!" > ${WEBSERVER_PIDFILE}
 	printf "\033[1mGo to http://localhost:8000/syslogin\033[0m\n"
 
