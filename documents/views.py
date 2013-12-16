@@ -15,8 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from documents.models import Document, Page #,PendingDocument
 from documents.forms import UploadFileForm
 
-from celery import chain
-from documents.tasks import download, pdf_lenght, preview_pdf, finish_file
+from documents.tasks import process_pdf
 
 
 def upload_file(request):
@@ -47,8 +46,7 @@ def upload_file(request):
     tmp_doc.write(request.FILES['file'].read())
     tmp_doc.close()
     
-    c = chain(download.s(doc.id), pdf_lenght.s(), preview_pdf.s(), finish_file.s())
-    c.delay()
+    process_pdf.delay(doc.id)
 
     return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 

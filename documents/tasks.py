@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
-from celery import shared_task
+from celery import shared_task, chain
 from os import system, path, makedirs, rename
 join = path.join
 from shutil import rmtree, move
@@ -118,3 +118,5 @@ def finish_file(self, document_id):
     document.save()
 
     return document_id 
+
+process_pdf = chain(download.s(), pdf_lenght.s(), preview_pdf.s(), finish_file.s())
