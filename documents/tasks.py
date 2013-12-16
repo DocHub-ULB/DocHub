@@ -15,14 +15,11 @@ from documents.models import Document, Page
 
 def document_pdir(document):
     return join(settings.PROCESSING_DIR,"doc-{}".format(document.id))
-
-def get_document(id):
-    return Document.objects.get(pk=id)
     
 
 @shared_task(bind=True)
 def download(self, document_id):
-    document = get_document(document_id)
+    document = Document.objects.get(pk=document_id)
     tmp_path = document_pdir(document)
 
     # Delete some old tries if any
@@ -50,7 +47,7 @@ def download(self, document_id):
 
 @shared_task(bind=True)
 def pdf_lenght(self, document_id):
-    document = get_document(document_id)
+    document = Document.objects.get(document_id)
     filename = document.staticfile
 
     sub = subprocess.check_output(['gm', 'identify', filename])
@@ -63,7 +60,7 @@ def pdf_lenght(self, document_id):
 
 @shared_task(bind=True)
 def index_pdf(self, document_id):
-    document = get_document(document_id)
+    document = Document.objects.get(document_id)
     filename = document.staticfile
 
     system("pdftotext " + filename)
@@ -78,7 +75,7 @@ def index_pdf(self, document_id):
 
 @shared_task(bind=True)
 def preview_pdf(self, document_id):
-    document = get_document(document_id)
+    document = Document.objects.get(document_id)
     source = document.staticfile
 
     destination_dir = join(document_pdir(document), "images")
@@ -104,7 +101,7 @@ def preview_pdf(self, document_id):
 
 @shared_task(bind=True)
 def finish_file(self, document_id):
-    document = get_document(document_id)
+    document = Document.objects.get(document_id)
     tmp_path = document_pdir(document)
 
     destination = join(settings.UPLOAD_DIR, str(document.parent.id))
