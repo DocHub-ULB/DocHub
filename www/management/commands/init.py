@@ -64,7 +64,7 @@ class Command(BaseCommand):
                 date=self.NOW, user=self.USER
             )
         parentNode.add_child(course)
-        self.stdout.write('.')
+        self.stdout.write('.', ending='')
         self.stdout.flush()
 
 
@@ -78,7 +78,7 @@ class Command(BaseCommand):
             else:
                 category = Category.objects.create(name=key, description="Magic !")
                 parentNode.add_child(category)
-                self.stdout.write('#')
+                self.stdout.write('#', ending='')
                 self.stdout.flush()
                 self.walk(val, category)
 

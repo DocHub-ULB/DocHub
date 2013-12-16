@@ -1,4 +1,4 @@
-DATABASE = db.sql
+DATABASE = db.sqlite
 NOTIFY_PIDFILE = notification_daemon.pid
 PROCESSING_PIDFILE = processing_daemon.pid
 WEBSERVER_PIDFILE = runserver.pid
