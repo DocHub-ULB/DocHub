@@ -21,7 +21,7 @@ def get_document(id):
     
 
 @shared_task(bind=True)
-def download(self, document_id, url):
+def download(self, document_id):
     document = get_document(document_id)
     tmp_path = document_pdir(document)
 
@@ -33,7 +33,7 @@ def download(self, document_id, url):
     document.type = 'pdf'
     destination_name = join(tmp_path,"{}.{}".format(document_id,document.type))
 
-    with closing(urlopen(url)) as original:
+    with closing(urlopen(document.source)) as original:
         with open(destination_name, 'w') as destination:
             destination.write(original.read())
 
