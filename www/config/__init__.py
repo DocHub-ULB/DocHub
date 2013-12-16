@@ -12,5 +12,6 @@ try:
 	DEBUG
 	TEMPLATE_DEBUG
 	DATABASES['default']
+	CELERY_BROKER
 except NameError:
 	raise NameError('Required config values not found. Abort !')

@@ -31,6 +31,10 @@ ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid=%s&_uid=%s'
 # Activate the search system
 SEARCH_SYSTEM = False
 
+#CELERY_BACKEND = 'django://'
+CELERY_TASK_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
+
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
