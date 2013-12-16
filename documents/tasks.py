@@ -46,11 +46,10 @@ def download(self, document_id):
 
 
 @shared_task(bind=True)
-def pdf_lenght(self, document_id):
+def calculate_pdf_length(self, document_id):
     document = Document.objects.get(document_id)
-    filename = document.staticfile
 
-    sub = subprocess.check_output(['gm', 'identify', filename])
+    sub = subprocess.check_output(['gm', 'identify', document.staticfile])
     pages = len(sub.split('\n')) - 1
 
     document.pages = pages
@@ -61,11 +60,10 @@ def pdf_lenght(self, document_id):
 @shared_task(bind=True)
 def index_pdf(self, document_id):
     document = Document.objects.get(document_id)
-    filename = document.staticfile
 
     system("pdftotext " + filename)
     # change extension
-    words_file = '.'.join(filename.split('.')[:-1]) + ".txt"
+    words_file = '.'.join(document.staticfile.split('.')[:-1]) + ".txt"
 
     with open(words_file, 'r') as words:
         # Do a lot of cool things !
@@ -116,4 +114,4 @@ def finish_file(self, document_id):
 
     return document_id 
 
-process_pdf = chain(download.s(), pdf_lenght.s(), preview_pdf.s(), finish_file.s())
+process_pdf = chain(download.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
