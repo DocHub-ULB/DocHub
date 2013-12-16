@@ -38,3 +38,8 @@ ve:
 install: requirements.txt ve
 	pip install -r $< || printf "\033[1mYou must first source ve/bin/activate\033[0m\n"
 	chmod +x ./manage.py
+
+graph: graph.png
+
+graph.png:
+	./manage.py todot | dot -Tpng > graph.png
