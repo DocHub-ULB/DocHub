@@ -51,5 +51,6 @@ class Page(OneParent, Taggable):
         raise NotImplementedError
 
 
+# TODO : be sure that use *pre*_save is ok
 pre_save.connect(signals.document_save,sender=Document)
 pre_delete.connect(signals.document_delete,sender=Document)

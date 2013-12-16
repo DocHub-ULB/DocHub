@@ -4,7 +4,9 @@ from __future__ import unicode_literals
 from django.db import models
 from polydag.models import Node
 from users.models import User
+from django.db.models.signals import post_save
 
+import signals
 
 # 1. Event occurs in graph
 # 2. Pre notif created
@@ -50,3 +52,5 @@ class Notification(models.Model):
         """Return all unread notifications for user"""
         return Notification.objects.filter(user=user, read=False)
 
+
+post_save.connect(signals.pre_notif_save,sender=PreNotification) 
