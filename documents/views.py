@@ -12,9 +12,12 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from documents.models import Document, PendingDocument, Page
+from documents.models import Document, Page #,PendingDocument
 from documents.forms import UploadFileForm
 from notify.models import PreNotification
+
+from celery import chain
+from documents.tasks import download, pdf_lenght, preview_pdf, finish_file
 
 
 def upload_file(request):
@@ -31,14 +34,19 @@ def upload_file(request):
     description = escape(form.cleaned_data['description'])
     course = form.cleaned_data['course']
     doc = Document.objects.create(user=request.user.get_profile(),
-                                  name=name, description=description)
+                                  name=name, description=description, state="queued")
     course.add_child(doc)
     url = '/tmp/TMP402_%d.pdf' % doc.id
     tmp_doc = open(url, 'w')
     tmp_doc.write(request.FILES['file'].read())
     tmp_doc.close()
-    PendingDocument.objects.create(document=doc, state="queued",
-                                   url='file://' + url)
+    
+    url = 'file://' + url
+    c = chain(download.s(doc.id, url), pdf_lenght.s(), preview_pdf.s(), finish_file.s())
+    c.delay()
+
+    # PendingDocument.objects.create(document=doc, state="queued",
+    #                                url=url)
 
     return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 

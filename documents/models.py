@@ -28,10 +28,11 @@ class Document(OneParent, Taggable):
     view = models.PositiveIntegerField(null=True, default=0)
     download = models.PositiveIntegerField(null=True, default=0)
     staticfile = models.CharField(max_length=255, default='')
+    state = models.CharField(max_length=10, default='')
 
-    @property
-    def state(self):
-        return self.pendingdocument_set.get().state
+    # @property
+    # def state(self):
+    #     return self.pendingdocument_set.get().state
 
     def move(self, *args, **kwargs):
         # Must move a images and associated files
@@ -51,13 +52,13 @@ class Page(OneParent, Taggable):
 
 
 
-class PendingDocument(models.Model):
-    document = models.ForeignKey(Document)
-    state = models.CharField(max_length=30)
-    url = models.CharField(max_length=255)
-    done = models.PositiveIntegerField(default=0)
+# class PendingDocument(models.Model):
+#     document = models.ForeignKey(Document)
+#     state = models.CharField(max_length=30)
+#     url = models.CharField(max_length=255)
+#     done = models.PositiveIntegerField(default=0)
 
 
 post_save.connect(signals.document_save,sender=Document)
-post_save.connect(signals.pending_document_save,sender=PendingDocument)
+#post_save.connect(signals.pending_document_save,sender=PendingDocument)
 pre_delete.connect(signals.document_delete,sender=Document)

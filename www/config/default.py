@@ -15,6 +15,8 @@ LOGIN_URL = '/syslogin'
 FRAGMENTS_DIR = join(BASE_DIR, "templates/fragments")
 
 # Upload settings
+PROCESSING_DIR = '/tmp/processing'
+
 UPLOAD_LOG = '/tmp/upload_log'
 UPLOAD_DIR = '%s/static/documents' % BASE_DIR
 PARSING_WORKERS = 2
