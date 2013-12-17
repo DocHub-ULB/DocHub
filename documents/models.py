@@ -12,9 +12,6 @@ from django.db import models
 from users.models import Profile
 from polydag.models import Taggable
 from polydag.behaviors import OneParent
-from django.db.models.signals import pre_delete, pre_save
-import signals
-
 
 class Document(OneParent, Taggable):
     description = models.TextField()
@@ -49,8 +46,3 @@ class Page(OneParent, Taggable):
     def move(self,newparent):
         # You may not move a page from a document to another
         raise NotImplementedError
-
-
-# TODO : be sure that use *pre*_save is ok
-pre_save.connect(signals.document_save,sender=Document)
-pre_delete.connect(signals.document_delete,sender=Document)

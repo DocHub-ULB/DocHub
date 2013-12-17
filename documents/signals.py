@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
-
-def document_save(**kwargs):
+from tasks import process_pdf
+def pre_document_save(**kwargs):
     assert kwargs['sender'] == models.Document
 
     document = kwargs['instance']
@@ -33,7 +33,14 @@ def document_save(**kwargs):
 
         else: # State not changed
             pass # Do nothing
-            
+   
+def post_document_save (**kwargs):
+    assert kwargs['sender'] == models.Document
+    document = kwargs['instance']
+
+    if kwargs['created'] and document.state == 'pending':
+        process_pdf.delay(document.id)
+
 
 def document_delete(**kwargs):
     assert kwargs['sender'] == models.Document

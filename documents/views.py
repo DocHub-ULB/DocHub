@@ -12,10 +12,8 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from documents.models import Document, Page #,PendingDocument
+from documents.models import Document, Page
 from documents.forms import UploadFileForm
-
-from documents.tasks import process_pdf
 
 
 def upload_file(request):
@@ -34,7 +32,7 @@ def upload_file(request):
 
 
     doc = Document.objects.create(user=request.user.get_profile(),
-                                  name=name, description=description, state="queued")
+                                  name=name, description=description, state="pending")
     course.add_child(doc)
 
     tmp_file = '/tmp/TMP402_%d.pdf' % doc.id
@@ -45,8 +43,6 @@ def upload_file(request):
     tmp_doc = open(tmp_file, 'w')
     tmp_doc.write(request.FILES['file'].read())
     tmp_doc.close()
-    
-    process_pdf.delay(doc.id)
 
     return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
