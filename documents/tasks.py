@@ -13,6 +13,10 @@ import subprocess
 from www import settings 
 from documents.models import Document, Page
 
+class MissingBinary(EnvironmentError):
+    pass
+
+
 def document_pdir(document):
     return join(settings.PROCESSING_DIR,"doc-{}".format(document.id))
     
@@ -49,7 +53,14 @@ def download(self, document_id):
 def calculate_pdf_length(self, document_id):
     document = Document.objects.get(pk=document_id)
 
-    sub = subprocess.check_output(['gm', 'identify', document.staticfile])
+    try:
+        sub = subprocess.check_output(['gm', 'identify', document.staticfile])
+    except OSError:
+        raise MissingBinary("gm")
+    except subprocess.CalledProcessError:
+        print "'gm identify " + document.staticfile + "' has failed"
+        raise
+
     pages = len(sub.split('\n')) - 1
 
     document.pages = pages
@@ -61,10 +72,20 @@ def calculate_pdf_length(self, document_id):
 def index_pdf(self, document_id):
     document = Document.objects.get(pk=document_id)
 
+    try:
+        subprocess.check_output(['pdftotext', '-v'])
+    except OSError:
+        raise MissingBinary("pdftotext")
+    except:
+        print "Unknown error while testing pdftotext presence"
+        raise
+
+    # TODO : this could fail
     system("pdftotext " + filename)
     # change extension
     words_file = '.'.join(document.staticfile.split('.')[:-1]) + ".txt"
 
+    # TODO : this could fail
     with open(words_file, 'r') as words:
         # Do a lot of cool things !
         pass
@@ -73,6 +94,14 @@ def index_pdf(self, document_id):
 
 @shared_task(bind=True)
 def preview_pdf(self, document_id):
+    try:
+        subprocess.check_output(['gm', 'help'])
+    except OSError:
+        raise MissingBinary("gm")
+    except:
+        print "Unknown error while testing gm presence"
+        raise
+
     document = Document.objects.get(pk=document_id)
     source = document.staticfile
 
@@ -89,7 +118,16 @@ def preview_pdf(self, document_id):
 
             system('gm convert -geometry %dx -quality 90 %s "%s[%d]" %s' % args)
 
-            height = int(subprocess.check_output(['gm', 'identify', '-format', '%h', destination]).strip())
+            try:
+                output = subprocess.check_output(['gm', 'identify', '-format', '%h', destination])
+            except OSError:
+                raise MissingBinary("gm")
+            except subprocess.CalledProcessError:
+                # Command has failed
+                print "'gm identify -format %h " + destination + "' has failed"
+                raise
+
+            height = int(output.strip())
             heights["height_{}".format(width)] = height
 
         page = Page.objects.create(numero=pagenum, **heights)
