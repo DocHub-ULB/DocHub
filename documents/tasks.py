@@ -47,7 +47,7 @@ def download(self, document_id):
 
 @shared_task(bind=True)
 def calculate_pdf_length(self, document_id):
-    document = Document.objects.get(document_id)
+    document = Document.objects.get(pk=document_id)
 
     sub = subprocess.check_output(['gm', 'identify', document.staticfile])
     pages = len(sub.split('\n')) - 1
@@ -59,7 +59,7 @@ def calculate_pdf_length(self, document_id):
 
 @shared_task(bind=True)
 def index_pdf(self, document_id):
-    document = Document.objects.get(document_id)
+    document = Document.objects.get(pk=document_id)
 
     system("pdftotext " + filename)
     # change extension
@@ -73,7 +73,7 @@ def index_pdf(self, document_id):
 
 @shared_task(bind=True)
 def preview_pdf(self, document_id):
-    document = Document.objects.get(document_id)
+    document = Document.objects.get(pk=document_id)
     source = document.staticfile
 
     destination_dir = join(document_pdir(document), "images")
@@ -99,7 +99,7 @@ def preview_pdf(self, document_id):
 
 @shared_task(bind=True)
 def finish_file(self, document_id):
-    document = Document.objects.get(document_id)
+    document = Document.objects.get(pk=document_id)
     tmp_path = document_pdir(document)
 
     destination = join(settings.UPLOAD_DIR, str(document.parent.id))
