@@ -148,6 +148,7 @@ def finish_file(self, document_id):
     move(tmp_path, destination)
 
     document.state = 'done'
+    document.staticfile = join(destination, 'doc-{}'.format(document.id), '{}.pdf'.format(document.id))
     document.save()
 
     return document_id 
