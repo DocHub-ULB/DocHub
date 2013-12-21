@@ -13,6 +13,7 @@ import subprocess
 from www import settings
 from documents.models import Document, Page
 from .exceptions import DocumentProcessingError, MissingBinary, UploadError, DownloadError
+from .helpers import document_pdir, r, get_image_size
 
 
 @shared_task(bind=True)
@@ -116,9 +117,6 @@ def preview_pdf(self, document_id):
         subprocess.check_output(['gm', 'help'])
     except OSError:
         raise MissingBinary("gm")
-    except:
-        print "Unknown error while testing gm presence"
-        raise
 
     document = Document.objects.get(pk=document_id)
     source = document.staticfile
@@ -136,16 +134,7 @@ def preview_pdf(self, document_id):
 
             system('gm convert -geometry %dx -quality 90 %s "%s[%d]" %s' % args)
 
-            try:
-                output = subprocess.check_output(['gm', 'identify', '-format', '%h', destination])
-            except OSError:
-                raise MissingBinary("gm")
-            except subprocess.CalledProcessError:
-                # Command has failed
-                print "'gm identify -format %h " + destination + "' has failed"
-                raise
-
-            height = int(output.strip())
+            width, height = get_image_size(destination)
             heights["height_{}".format(width)] = height
 
         page = Page.objects.create(numero=pagenum, **heights)
@@ -173,12 +162,3 @@ def finish_file(self, document_id):
     return document_id
 
 process_pdf = chain(download.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
-
-
-# Helpers
-def document_pdir(document):
-    return join(settings.PROCESSING_DIR, "doc-{}".format(document.id))
-
-
-def r(self):
-    return 60 * (1 + self.request.retries * 2)
