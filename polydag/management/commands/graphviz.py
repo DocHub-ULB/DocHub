@@ -4,18 +4,22 @@ from __future__ import unicode_literals
 from polydag.models import Node
 from django.core.management.base import BaseCommand
 from optparse import make_option
+from django.db.models import Q
 
 # To bring new colors to the graph, simply:
 #   from graph.management.commands.graphviz import Command
 #   Command.COLORS['MyNewType'] = 'purple'
 # note: color list is available at http://www.graphviz.org/content/color-names
 
+
 class Command(BaseCommand):
     COLORS = {
-        'Node' : 'grey',
+        'Node': 'grey',
         'Leaf': 'lightblue',
         'Taggable': 'coral'
     }
+
+    EXCLUDE = []
 
     help = """
     Export the main graph to graphviz format
@@ -26,30 +30,35 @@ class Command(BaseCommand):
 
     option_list = BaseCommand.option_list + (
         make_option('-u', '--urlprefix',
-            action='store',
-            dest='urlprefix',
-            default="http://localhost:8000",
-            help='URL prefix for clickable nodes'
-        ),
+                    action='store',
+                    dest='urlprefix',
+                    default="http://localhost:8000",
+                    help='URL prefix for clickable nodes'
+                    ),
     )
 
     def handle(self, *args, **options):
         f = self.stdout
         f.write('digraph P402 {\n')
-        for node in Node.objects.all():
+        excludes_q = map(lambda x: Q(not_instance_of=x), self.EXCLUDE)
+        query = Node.objects.all()
+        if len(excludes_q) > 0:
+            query = query.filter(*excludes_q)
+        for node in query:
             color = self.COLORS.get(node.classBasename(), self.COLORS['Node'])
-            url = options['urlprefix']# + node.canonic_url
-            f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n'%(node.pk, node.name, color, url))
-            for child in node.children():
-                f.write('\t%d -> %d;\n'%(node.pk, child.id))
+            url = options['urlprefix']  # + node.canonic_url
+            f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n' % (node.pk, node.name, color, url))
+            for child in node.children(exclude=self.EXCLUDE):
+                f.write('\t%d -> %d;\n' % (node.pk, child.id))
 
         #Color legend
         f.write('edge [style=invis];\n')
         for className in self.COLORS:
-            f.write('\t"%s" [style=filled,fillcolor=%s,shape=box,margin="0,0",width=1,height=0.5,arrow=none]'%(className, self.COLORS[className]))
+            f.write('\t"%s" [style=filled,fillcolor=%s,shape=box,margin="0,0",width=1,height=0.5,arrow=none]' % (className, self.COLORS[className]))
         i = 0
         for className in self.COLORS:
-            if i>0: f.write(' -> ')
-            f.write('"'+className+'"')
+            if i > 0:
+                f.write(' -> ')
+            f.write('"' + className + '"')
             i += 1
         f.write('}\n')

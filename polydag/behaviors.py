@@ -11,53 +11,47 @@ from __future__ import unicode_literals
 # This module contains variants to include in polydag.models classes to add
 # some custom behaviors (no children, single parent, ...)
 
+
 class CannotHaveChildren(Exception):
     """Exception raised by graph nodes that doesn't accept children"""
     def __init__(self, node):
-        msg = node.classBasename()+'#'+str(node.pk)+' can\'t have children'
+        msg = node.classBasename() + '#' + str(node.pk) + ' can\'t have children'
         Exception.__init__(self, msg)
-
 
 
 class CannotHaveManyParents(Exception):
     """Exception raised by graph nodes that doesn't accept more than 1 parent"""
     def __init__(self, node):
-        msg = node.classBasename()+'#'+str(node.pk)+' can\'t have more than 1 parent'
+        msg = node.classBasename() + '#' + str(node.pk) + ' can\'t have more than 1 parent'
         Exception.__init__(self, msg)
-
 
 
 class Leaf:
     """Simple mixin that brings a Leaf behavior to a Node"""
-    def children(self):
+    def children(self, *args, **kwargs):
         """Since self cannot have children, bypass DB lookup !"""
         return []
-
 
     def add_child(self, *args, **kwargs):
         raise CannotHaveChildren(self)
 
 
-
 class OneParent:
     @property
-    def parent(self):
+    def parent(self, *args, **kwargs):
         parents = self.parents()
         if len(parents) > 0:
             return parents[0]
         else:
             return None
 
-
-    def pre_attach_hook(self):
+    def pre_attach_hook(self, *args, **kwargs):
         if len(self.parents()) > 0:
             raise CannotHaveManyParents(self)
 
-
-    def move(self,newparent):
+    def move(self, newparent, *args, **kwargs):
         """Move a OneParentNode from his current parent to newparent"""
         oldparent = self.parent
         if oldparent:
             self.detatch_from(oldparent)
         newparent.add_child(self)
-

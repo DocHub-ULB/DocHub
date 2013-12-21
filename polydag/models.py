@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 from polymorphic import PolymorphicModel
-from datetime import datetime
 import re
 
 
@@ -19,11 +18,20 @@ class Node(PolymorphicModel):
             self.classBasename(), self.pk, self.name
         )
 
-
-    def children(self):
+    def children(self, only=[], exclude=[]):
         """Return a list of all self's direct children"""
-        return self._children.all()
+        only_q = map(lambda x: models.Q(instance_of=x), only)
+        exclude_q = map(lambda x: models.Q(not_instance_of=x), exclude)
 
+        query = self._children
+        if len(only_q) > 0:
+            query = query.filter(*only_q)
+        elif len(exclude_q):
+            query = query.filter(*exclude_q)
+        else:
+            query = query.all()
+
+        return query
 
     def parents(self):
         """Return a list of all self's direct parents"""
@@ -48,7 +56,7 @@ class Node(PolymorphicModel):
         tree = self.ancestors_tree()
         return self.tree_to_set(tree)
 
-    def tree_to_set(self,tree):
+    def tree_to_set(self, tree):
         track = set()
         for node in tree:
             if not tree[node] == {}:
@@ -62,7 +70,6 @@ class Node(PolymorphicModel):
         for node in self.parents():
             tree[node] = node.ancestors_tree()
         return tree
-
 
     def add_child(self, child, acyclic_check=True):
         """
@@ -84,12 +91,12 @@ class Node(PolymorphicModel):
     def pre_attach_hook(self):
         pass
 
-    def remove_parent(self,parent):
+    def remove_parent(self, parent):
         """Detatch self from parent. Return none"""
         parent._children.remove(self)
         parent.save()
 
-    def remove_child(self,child):
+    def remove_child(self, child):
         """Remove child from self"""
         child.remove_parent(self)
 
@@ -109,14 +116,13 @@ class Node(PolymorphicModel):
 
     def classBasename(self):
         """Return the class name without modules prefix"""
-        klass = str(type(self)) # "<class 'foo.bar'>"
+        klass = str(type(self))  # "<class 'foo.bar'>"
         return re.sub(r'.*[\.\']([^\.]+)\'>$', r'\1', klass)
-
 
     def to_dict(self, with_children=False):
         res = {
-            'id':self.pk, 'name':self.name,
-            'type':self.classBasename()
+            'id': self.pk, 'name': self.name,
+            'type': self.classBasename()
         }
         #res['url'] = self.canonic_url
         if with_children:
@@ -135,7 +141,6 @@ class Node(PolymorphicModel):
                 if parent.is_reachable_from(ancestor):
                     return True
         return False
-
 
 
 class Keyword(models.Model):
@@ -157,12 +162,10 @@ class Taggable(Node):
         existing, created = Keyword.objects.get_or_create(name=name.lower())
         return existing if existing else created
 
-
     def add_keywords(self, *tags):
         """Add a keyword by directly passing its name"""
         for tag in tags:
             self.keywords.add(self.KW(tag))
-
 
     def related_list(self):
         """
@@ -179,6 +182,7 @@ class Taggable(Node):
         return res
 
     related = related_list
+
 
 class CycleError(StandardError):
     pass
