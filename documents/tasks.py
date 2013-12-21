@@ -2,24 +2,18 @@
 from __future__ import unicode_literals, absolute_import
 
 from celery import shared_task, chain
-from os import system, path, makedirs, rename
+from os import system, path, makedirs
 join = path.join
 from shutil import rmtree, move
-from urllib2 import urlopen
+from urllib2 import urlopen, URLError, HTTPError
 from contextlib import closing
 import subprocess
 
 
-from www import settings 
+from www import settings
 from documents.models import Document, Page
+from .exceptions import DocumentProcessingError, MissingBinary, UploadError, DownloadError
 
-class MissingBinary(EnvironmentError):
-    pass
-
-
-def document_pdir(document):
-    return join(settings.PROCESSING_DIR,"doc-{}".format(document.id))
-    
 
 @shared_task(bind=True)
 def download(self, document_id):
@@ -32,21 +26,38 @@ def download(self, document_id):
 
     makedirs(tmp_path)
     document.type = 'pdf'
-    destination_name = join(tmp_path,"{}.{}".format(document_id,document.type))
+    destination_name = join(tmp_path, "{}.{}".format(document_id, document.type))
 
-    with closing(urlopen(document.source)) as original:
-        with open(destination_name, 'w') as destination:
-            destination.write(original.read())
+    try:
+        with closing(urlopen(document.source)) as original:
+            try:
+                with open(destination_name, 'w') as destination:
+                    destination.write(original.read())
+            except Exception as e:
+                self.retry(countdown=r(), exc=e)
+
+    except URLError as e:  # error on our side
+        # TODO : warn operators
+        raise UploadError(document, exc=e)
+
+    except HTTPError as e:
+        if e.code // 100 == 4:  # Bad url
+            # TODO : warn operators and user
+            raise DownloadError(document, e)
+        else:
+            self.retry(countdown=r(), exc=e)
 
     document.staticfile = destination_name
     document.save()
 
-    try: # may fail if download url, don't really care
-        system("rm /tmp/TMP402_%d.pdf" % pending.document.id)
+    try:  # may fail if download url, don't really care
+        system("rm /tmp/TMP402_%d.pdf" % document.id)
     except:
         pass
 
-    return document_id 
+    return document_id
+
+download.max_retries = 5
 
 
 @shared_task(bind=True)
@@ -81,16 +92,17 @@ def index_pdf(self, document_id):
         raise
 
     # TODO : this could fail
-    system("pdftotext " + filename)
+    system("pdftotext " + document.staticfile)
     # change extension
     words_file = '.'.join(document.staticfile.split('.')[:-1]) + ".txt"
 
     # TODO : this could fail
     with open(words_file, 'r') as words:
-        # Do a lot of cool things !
+        words  # Do a lot of cool things !
         pass
 
-    return document_id 
+    return document_id
+
 
 @shared_task(bind=True)
 def preview_pdf(self, document_id):
@@ -133,7 +145,8 @@ def preview_pdf(self, document_id):
         page = Page.objects.create(numero=pagenum, **heights)
         document.add_child(page, acyclic_check=False)
 
-    return document_id 
+    return document_id
+
 
 @shared_task(bind=True)
 def finish_file(self, document_id):
@@ -151,6 +164,15 @@ def finish_file(self, document_id):
     document.staticfile = join(destination, 'doc-{}'.format(document.id), '{}.pdf'.format(document.id))
     document.save()
 
-    return document_id 
+    return document_id
 
 process_pdf = chain(download.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
+
+
+# Helpers
+def document_pdir(document):
+    return join(settings.PROCESSING_DIR, "doc-{}".format(document.id))
+
+
+def r(self):
+    return 60 * (1 + self.request.retries * 2)
