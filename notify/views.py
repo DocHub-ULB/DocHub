@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidde
 from django.shortcuts import get_object_or_404, render
 from json import dumps, loads
 from notify.models import Notification
+from django.core.urlresolvers import reverse
 
 def jsonise_notifications(notifs):
     return {
@@ -28,6 +29,10 @@ def notifications_get(request):
 
 def notification_ajax_read(request, id):
     return notification_read(request, id, False)
+
+def notification_read_all(request):
+    Notification.objects.filter(user=request.user, read=False).update(read=True)
+    return HttpResponseRedirect(reverse("notif_show"))
 
 def notification_read(request, id, redirect=True):
     notif = get_object_or_404(Notification, id=id)

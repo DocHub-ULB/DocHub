@@ -14,11 +14,11 @@
 <div class="logic-block">
   <h1>{{ object.name }}</h1>
   {% if object in request.user.get_profile.follow.all %}
-  <a class="panel-button border-bottom" href="{% url node_leave object.id %}">
+  <a class="panel-button border-bottom" href="{% url 'node_leave' object.id %}">
     leave
     </a>
   {% else %}
-  <a class="panel-button border-bottom" href="{% url node_join object.id %}">
+  <a class="panel-button border-bottom" href="{% url 'node_join' object.id %}">
     join
   </a>
   {% endif %}
@@ -31,7 +31,7 @@
   <ul>
     {% for cat in object.subcategory_set %}
     <li>
-      <a href="{% url category_show cat.id %}">{{ cat.name }}</a>
+      <a href="{% url 'category_show' cat.id %}">{{ cat.name }}</a>
     </li>
     {% endfor %}
   </ul>
@@ -39,7 +39,7 @@
   <ul>
     {% for course in object.course_set %}
     <li>
-      <a href="{% url course_show course.id %}">
+      <a href="{% url 'course_show' course.id %}">
         {{ course.slug|upper }}: {{ course.name }}
       </a>
     </li>

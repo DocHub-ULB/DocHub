@@ -4,7 +4,7 @@
 <div class="clear"></div>
 
 <div id="upload" class="panel">
-  <form action="{% url document_put %}" method="post"
+  <form action="{% url 'document_put' %}" method="post"
         enctype="multipart/form-data">
     {% csrf_token %}
     <table>

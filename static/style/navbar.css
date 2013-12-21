@@ -89,15 +89,17 @@
 }
 
 #notification-counter {
-    position: absolute;
-    top: 12px;
-    left: 1.5em;
+    position: relative;
     background-color: #252629;
     color: #fff;
     border-radius: 3px;
     position: relative;
     top: -0.5em;
-    left: -0.5em;
+    left: -3.5em;
+    padding: 2px 5px 2px 5px;
+    min-width: 1.7em;
+    text-align: center;
+    display: inline-block;
 }
 
 #navbar-search {

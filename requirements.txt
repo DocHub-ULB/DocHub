@@ -1,9 +1,11 @@
 -i http://pypi.urlab.be/simple
-Django==1.4.2
+Django==1.6
 django_polymorphic
 django-template-fragments
 markdown
 logbook
+celery
+django-celery
 
 # Migrate
 south

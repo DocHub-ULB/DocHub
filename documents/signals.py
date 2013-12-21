@@ -4,30 +4,43 @@ from __future__ import unicode_literals
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
-
-def document_save(**kwargs):
+from tasks import process_pdf
+def pre_document_save(**kwargs):
     assert kwargs['sender'] == models.Document
 
+    document = kwargs['instance']
+    try:
+        old_doc = models.Document.objects.get(pk=document.pk)
+    except models.Document.DoesNotExist:
+        # New Document
+        pass # Do nothing
+    else:
+        if not old_doc.state == document.state: # State changed
+            if document.state == 'done':
+                Notification.direct(
+                    user=document.user.user,
+                    text="Finished processing document " + document.name,
+                    node=document,
+                    url=reverse('document_show', args=[document.id])
+                )
 
-def pending_document_save(**kwargs):
-    assert kwargs['sender'] == models.PendingDocument
+                PreNotification.objects.create(
+                    node=document,
+                    text="Nouveau document: " + document.name,
+                    url=reverse('document_show', args=[document.id]),
+                    user=document.user.user
+                )
 
-    pending = kwargs['instance']
-    if pending.state == 'done':
-        # Send notification to the uploader
-        Notification.direct(
-            user=pending.document.user.user,
-            text="Finished processing document "+pending.document.name,
-            node=pending.document,
-            url=reverse('document_show', args=[pending.document.id])
-        )
+        else: # State not changed
+            pass # Do nothing
+   
+def post_document_save (**kwargs):
+    assert kwargs['sender'] == models.Document
+    document = kwargs['instance']
 
-        PreNotification.objects.create(
-            node=pending.document,
-            text="Nouveau document: "+pending.document.name,
-            url=reverse('document_show', args=[pending.document.id]),
-            user=pending.document.user.user
-        )
+    if kwargs['created'] and document.state == 'pending':
+        process_pdf.delay(document.id)
+
 
 def document_delete(**kwargs):
     assert kwargs['sender'] == models.Document

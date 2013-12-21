@@ -21,16 +21,18 @@ class Course(Node):
 
     @property
     def last_activity(self):
-        last_act = []
-        last_docs = self.children().instance_of(Document).order_by('-Document___date')[:1]
-        if len(last_docs) == 1:
-            last_act.append(last_docs[0].date)
+        # TODO : define activity
+        # last_act = []
+        # last_docs = self.children().instance_of(Document).order_by('-Document___date')[:1]
+        # if len(last_docs) == 1:
+        #     last_act.append(last_docs[0].date)
 
-        threads = self.children().instance_of(Thread)
-        last_msgs = Message.objects.filter(thread__in=threads).order_by('-created')[:1]
-        if len(last_msgs) == 1:
-            last_act.append(last_msgs[0].created)
-        return max(last_act) if len(last_act)>0 else "NA"
+        # threads = self.children().instance_of(Thread)
+        # last_msgs = Message.objects.filter(thread__in=threads).order_by('-created')[:1]
+        # if len(last_msgs) == 1:
+        #     last_act.append(last_msgs[0].created)
+        # return max(last_act) if len(last_act)>0 else "NA"
+        return "NA"
 
 
     def last_info(self):
