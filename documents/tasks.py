@@ -65,19 +65,25 @@ def calculate_pdf_length(self, document_id):
     document = Document.objects.get(pk=document_id)
 
     try:
-        sub = subprocess.check_output(['gm', 'identify', document.staticfile])
+        sub = subprocess.check_output(['pdfinfo', document.staticfile])
     except OSError:
-        raise MissingBinary("gm")
+        raise MissingBinary("pdfinfo")
     except subprocess.CalledProcessError:
-        print "'gm identify " + document.staticfile + "' has failed"
-        raise
+        raise DocumentProcessingError('"pdfinfo" has failed')
 
-    pages = len(sub.split('\n')) - 1
+    pages = -1
+    for line in sub.split('\n'):
+        if line.startswith('Pages'):
+            splitted = line.split(' ')
+            pages = int(splitted[-1])
+    if pages == -1:
+        raise DocumentProcessingError("Lenght computation failed")
 
     document.pages = pages
     document.save()
 
-    return document_id 
+    return document_id
+
 
 @shared_task(bind=True)
 def index_pdf(self, document_id):
