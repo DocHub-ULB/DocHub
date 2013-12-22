@@ -23,15 +23,14 @@ class Node(PolymorphicModel):
         only_q = map(lambda x: models.Q(instance_of=x), only)
         exclude_q = map(lambda x: models.Q(not_instance_of=x), exclude)
 
-        query = self._children
+        query = self._children.all()
         if len(only_q) > 0:
             query = query.filter(*only_q)
         elif len(exclude_q):
             query = query.filter(*exclude_q)
-        else:
-            query = query.all()
+
         if id_only:
-            query = query.only('id')
+            query = query.only('id').non_polymorphic()
 
         return query
 
