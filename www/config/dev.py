@@ -7,10 +7,10 @@ TEMPLATE_DEBUG = DEBUG
 
 INSTALLED_APPS += (
     'django_extensions',
-    'kombu.transport.django', # celery_broker
-# Remove devserver : recursion error with django 1.6
-# See https://code.djangoproject.com/ticket/21348
-#    'devserver',
+    'kombu.transport.django',  # celery_broker
+    # Remove devserver : recursion error with django 1.6
+    # See https://code.djangoproject.com/ticket/21348
+    #'devserver',
 )
 
 CELERY_BROKER = 'django://'

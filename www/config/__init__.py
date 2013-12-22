@@ -1,17 +1,17 @@
 from __future__ import unicode_literals, absolute_import
 
 try:
-	from .local import *
+    from .local import *
 except ImportError:
-	try:
-		from dev import *
-	except ImportError:
-		pass
+    try:
+        from dev import *
+    except ImportError:
+        pass
 
 try:
-	DEBUG
-	TEMPLATE_DEBUG
-	DATABASES['default']
-	CELERY_BROKER
+    DEBUG
+    TEMPLATE_DEBUG
+    DATABASES['default']
+    CELERY_BROKER
 except NameError:
-	raise NameError('Required config values not found. Abort !')
+    raise NameError('Required config values not found. Abort !')

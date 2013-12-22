@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 
 # Install some prod apps ? Logging ?
 INSTALLED_APPS += (
-	'gunicorn',
+    'gunicorn',
 )
 
 ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_appl=http%253A%252F%252Fcours.urlab.be%252Fauth%253F&_prtm=redirect'
