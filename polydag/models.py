@@ -13,7 +13,7 @@ class Node(PolymorphicModel):
     name = models.CharField(max_length=140)
     _children = models.ManyToManyField("self", symmetrical=False)
 
-    def __repr__(self):
+    def __unicode__(self):
         return '<Node {} : {} "{}">'.format(
             self.classBasename(), self.pk, self.name
         )
