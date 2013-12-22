@@ -1,6 +1,7 @@
 *pyc
 db.sql
 static/documents/*
+static/profile/*
 initial_data.json
 ve
 graph.*
