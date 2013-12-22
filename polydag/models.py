@@ -18,7 +18,7 @@ class Node(PolymorphicModel):
             self.classBasename(), self.pk, self.name
         )
 
-    def children(self, only=[], exclude=[]):
+    def children(self, only=[], exclude=[], id_only=False):
         """Return a list of all self's direct children"""
         only_q = map(lambda x: models.Q(instance_of=x), only)
         exclude_q = map(lambda x: models.Q(not_instance_of=x), exclude)
@@ -30,6 +30,8 @@ class Node(PolymorphicModel):
             query = query.filter(*exclude_q)
         else:
             query = query.all()
+        if id_only:
+            query = query.only('id')
 
         return query
 
@@ -37,18 +39,18 @@ class Node(PolymorphicModel):
         """Return a list of all self's direct parents"""
         return Node.objects.filter(_children=self)
 
-    def descendants_tree(self):
+    def descendants_tree(self, id_only=False):
         """
         Returns a tree of the node's  children by depth-first search
         """
         tree = {}
-        for node in self.children():
-            tree[node] = node.descendants_tree()
+        for node in self.children(id_only=id_only):
+            tree[node] = node.descendants_tree(id_only)
         return tree
 
-    def descendants_set(self):
+    def descendants_set(self, id_only=False):
         """Returns a list of the node's  children by depth-first search"""
-        tree = self.descendants_tree()
+        tree = self.descendants_tree(id_only)
         return self.tree_to_set(tree)
 
     def ancestors_set(self):

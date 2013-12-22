@@ -42,6 +42,16 @@ class User(AbstractBaseUser):
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
+    def directly_followed(self):
+        return self.follow.all()
+
+    def followed_nodes_id(self):
+        direct = self.follow.only('id')
+        direct_descendants = map(lambda x: x.descendants_set(True), direct)
+        indirect = reduce(lambda x, y: x | y, direct_descendants, set())
+        indirect_ids = map(lambda x: x.id, indirect)
+        return indirect_ids
+
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)

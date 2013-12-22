@@ -13,21 +13,23 @@ import signals
 # 3. Notif daemon match against followers and create notif
 # 4. User get notif and read it
 
+
 class PreNotification(models.Model):
     created = models.DateTimeField(auto_now=True)
-    node = models.ForeignKey(Node) # The node that initiated the notif
+    node = models.ForeignKey(Node)  # The node that initiated the notif
     text = models.CharField(max_length=160)
     delivered = models.BooleanField(default=False)
     url = models.URLField()
-    user = models.ForeignKey(User) #The user that created the notification
+    user = models.ForeignKey(User)  # The user that created the notification
+    personal = models.BooleanField(default=False)
 
     def __str__(self):
-        return  self.text
+        return self.text
 
 
 class Notification(models.Model):
     user = models.ForeignKey(User)
-    node = models.ForeignKey(Node) # The effective node followed by user
+    node = models.ForeignKey(Node)  # The effective node followed by user
     prenotif = models.ForeignKey(PreNotification)
     read = models.BooleanField(default=False)
 
@@ -40,12 +42,12 @@ class Notification(models.Model):
                 text=text,
                 user=user,
                 url=url,
-                delivered=True
+                delivered=True,
+                personal=True
             ),
             user=user,
             node=node
         )
-
 
     @staticmethod
     def unread(user):
@@ -53,4 +55,4 @@ class Notification(models.Model):
         return Notification.objects.filter(user=user, read=False)
 
 
-post_save.connect(signals.pre_notif_save,sender=PreNotification) 
+post_save.connect(signals.pre_notif_save, sender=PreNotification)

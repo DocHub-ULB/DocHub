@@ -58,35 +58,28 @@
 
     <div id="content">
       {% block content %}
+      <div id="bar" style="width: 150px; float: left; margin-right: 30px; margin-bottom: 30px;">
       {% if followed_courses %}
-        <h1>Followed courses</h1>
-        <div class="clear"></div>
-        <table class="sortable rounded">
-          <thead>
-            <tr>
-              <th>Mnemonic</th>
-              <th style="min-width: 200px">Name</th>
-              <th>Last activity</th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for course in followed_courses %}
-            <tr>
-              <td>{{ course.slug|upper }}</td>
-              <td><a title="#{{ course.id }}" href="{% url 'course_show' course.slug %}">
-                {{ course.name }}
-              </a></td>
-              <td>{{ course.last_activity|naturaltime }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
-        <p>You aren't following any course. Why don't subscibe to some by clicking on the "course" menu on the top bar ?</p>
+        Followed courses
+        {% for course in followed_courses %}
+          <p>{{ course.slug|upper }}
+            <a title="#{{ course.id }}" href="{% url 'course_show' course.slug %}">
+              {{ course.name }}
+            </a>
+          </p>
+        {% endfor %}
       {% endif %}
+      </div>
+      <div id="wall">
+        {% for elem in wall %}
+          <div>{{ elem.text }}</div>
+        {% endfor %}
+      </div>
       {% endblock %}
     </div>
 
+    
+    <div style="clear:both;"></div>
     <div id="footer">
         P402 is upon US.<br>
         <a href="#">Help</a> -

@@ -23,7 +23,7 @@ def pre_document_save(**kwargs):
                     user=document.user,
                     text="Finished processing document " + document.name,
                     node=document,
-                    url=reverse('document_show', args=[document.id])
+                    url=reverse('document_show', args=[document.id]),
                 )
 
                 PreNotification.objects.create(

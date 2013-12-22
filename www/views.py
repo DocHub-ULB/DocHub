@@ -15,6 +15,7 @@ from graph.models import Category, Course
 from telepathy.models import Thread
 from polydag.models import Node
 from documents.models import Document
+from notify.models import PreNotification
 import settings
 
 Mapping = {
@@ -43,5 +44,9 @@ def home(request):
     for cat in explicit_followed.instance_of(Category):
         followed |= cat.children().instance_of(Course)
 
+    wall = PreNotification.objects.filter(node__in=request.user.followed_nodes_id()).filter(personal=False).order_by('-created')
+
     return render(request, "home.html",
-                  {"followed_courses": followed.order_by('Course___slug')})
+                  {"followed_courses": followed.order_by('Course___slug'),
+                   "wall": wall
+                   })
