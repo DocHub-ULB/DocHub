@@ -9,28 +9,42 @@ from __future__ import unicode_literals
 # your option) any later version.
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, UserManager
+from www import settings
 
 
-class Profile(models.Model):
-    DEFAULT_PHOTO = "http://faculty.sites.uci.edu/ltemplate/files/2011/04/generic_profile.jpg"
+class User(AbstractBaseUser):
 
-    user = models.OneToOneField(User)
-    name = models.CharField(max_length=127)
-    email = models.CharField(max_length=255)
+    USERNAME_FIELD = 'netid'
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    DEFAULT_PHOTO = "/static/profile/default.jpg"
+    objects = UserManager()
+
+    netid = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    first_name = models.CharField(max_length=127, null=False, blank=False)
+    last_name = models.CharField(max_length=127, null=False, blank=False)
+    email = models.CharField(max_length=255, null=False, blank=False)
     registration = models.CharField(max_length=80)
+    photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
     comment = models.TextField(null=True)
-    photo = models.CharField(max_length=80, null=True)
     follow = models.ManyToManyField('polydag.Node', related_name='followed')
 
     @property
     def get_photo(self):
-        return self.photo if self.photo else self.DEFAULT_PHOTO
+        photo = self.DEFAULT_PHOTO
+        if self.photo != "":
+            photo = "/static/profile/{0.netid}.{0.photo}".format(self)
+
+        return photo
+
+    @property
+    def name(self):
+        return "{0.first_name} {0.last_name}".format(self)
 
 
 class Inscription(models.Model):
-    user = models.ForeignKey(Profile)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     section = models.CharField(max_length=80, null=True)
     year = models.PositiveIntegerField(null=True)
 

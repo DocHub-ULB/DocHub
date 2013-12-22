@@ -9,25 +9,27 @@ from __future__ import unicode_literals
 # your option) any later version.
 
 from django.db import models
-from users.models import Profile
 from polydag.models import Taggable
 from polydag.behaviors import Leaf, OneParent
 from django.db.models.signals import post_save
 import signals
+from www import settings
+
 
 class Thread(Leaf, OneParent, Taggable):
-    user = models.ForeignKey(Profile)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+
     class Meta:
         ordering = ['-created']
 
 
 class Message(models.Model):
-    user = models.ForeignKey(Profile)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     thread = models.ForeignKey(Thread)
     text = models.TextField()
     previous = models.ForeignKey('self', null=True, default=None)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
-post_save.connect(signals.thread_save,sender=Thread)
-post_save.connect(signals.message_save,sender=Message)
+post_save.connect(signals.thread_save, sender=Thread)
+post_save.connect(signals.message_save, sender=Message)

@@ -17,8 +17,8 @@ drops = [u"Niveau dans le cycle*", u"Lieu d’enseignement*", u"Cycle*",
 
 users = """[
     {"pk": 1,
-     "model": "auth.user",
-     "fields": {"username": "root",
+     "model": "users.User",
+     "fields": {"netid": "root",
                 "first_name": "Great",
                 "last_name": "Architect",
                 "is_active": true,
@@ -28,18 +28,15 @@ users = """[
                 "groups": [],
                 "user_permissions": [],
                 "password": "pbkdf2_sha256$10000$9SMbs1VSLOtC$XYLVkKG3JXbp+c1Hm81TICR2D/vCQfhmVmmDW/hUAEY=",
-                "email": "",
-                "date_joined": "2012-11-30T20:53:56.087"}},
-    {"pk": 1,
-     "model": "users.profile",
-     "fields": {"comment": null,
-                "name": "GreatArchitect",
-                "photo": null,
+                "date_joined": "2012-11-30T20:53:56.087",
+                "comment": null,
+                "photo": "",
                 "welcome": true,
                 "user": 1,
                 "registration": "0",
                 "follow": [],
                 "email": "p402@cerkinfo.be"}}]"""
+
 
 def add_course(slug):
     global course_pk, inital_data
@@ -72,8 +69,7 @@ def add_course(slug):
                          "model": "graph.courseinfo",
                          "fields": {"date": "2012-11-30T20:54:51.982",
                                     "course": course_pk,
-                                    "infos": dumps(infos),
-                                    "user": 1}})
+                                    "infos": dumps(infos)}})
     return course_pk
 
 

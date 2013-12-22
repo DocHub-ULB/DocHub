@@ -18,13 +18,12 @@ def propagate_notification(self, notification_id):
     for node in nodeset:
         #Deliver notifs to followers of ancestor nodes
         for follower in node.followed.all():
-            user = follower.user
-            if user != prenotif.user and user not in delivered:
+            if follower != prenotif.user and follower not in delivered:
                 notif_counter += 1
-                delivered.add(user)  # avoid duplicate notifs
+                delivered.add(follower)  # avoid duplicate notifs
                 notify.models.Notification.objects.create(
                     prenotif=prenotif,
-                    user=user,
+                    user=follower,
                     node=node
                 )
     prenotif.delivered = True

@@ -5,6 +5,8 @@ import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
 from tasks import process_pdf
+
+
 def pre_document_save(**kwargs):
     assert kwargs['sender'] == models.Document
 
@@ -13,12 +15,12 @@ def pre_document_save(**kwargs):
         old_doc = models.Document.objects.get(pk=document.pk)
     except models.Document.DoesNotExist:
         # New Document
-        pass # Do nothing
+        pass  # Do nothing
     else:
-        if not old_doc.state == document.state: # State changed
+        if not old_doc.state == document.state:  # State changed
             if document.state == 'done':
                 Notification.direct(
-                    user=document.user.user,
+                    user=document.user,
                     text="Finished processing document " + document.name,
                     node=document,
                     url=reverse('document_show', args=[document.id])
@@ -28,13 +30,14 @@ def pre_document_save(**kwargs):
                     node=document,
                     text="Nouveau document: " + document.name,
                     url=reverse('document_show', args=[document.id]),
-                    user=document.user.user
+                    user=document.user
                 )
 
-        else: # State not changed
-            pass # Do nothing
-   
-def post_document_save (**kwargs):
+        else:  # State not changed
+            pass  # Do nothing
+
+
+def post_document_save(**kwargs):
     assert kwargs['sender'] == models.Document
     document = kwargs['instance']
 
@@ -48,8 +51,8 @@ def document_delete(**kwargs):
     document = kwargs['instance']
     if document.e:
         Notification.direct(
-            user=document.user.user,
-            text="Error when processing document: "+str(document.e),
+            user=document.user,
+            text="Error when processing document: " + str(document.e),
             node=document.parent,
-            url=reverse('node_canonic',args=[nodeid]),
+            url=reverse('node_canonic', args=[document.parent.id]),
         )

@@ -7,13 +7,16 @@
 # your option) any later version.
 
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
+from users.models import User
 from getpass import getpass, getuser
 from optparse import make_option
 from graph.models import Category, Course, CourseInfo
 from datetime import datetime
 import json
+from shutil import copy
+from os.path import join
+from www import settings
+
 
 class Command(BaseCommand):
     drops = [u"Niveau dans le cycle*", u"Lieu d’enseignement*", u"Cycle*",
@@ -25,11 +28,11 @@ class Command(BaseCommand):
     NOW = datetime.now()
     USER = None
 
-    to_ulb = lambda self,n: n[0:4].upper() + "_" + n[5].upper() + n[7:]
+    to_ulb = lambda self, n: n[0:4].upper() + "_" + n[5].upper() + n[7:]
 
     help = 'Initialize p402 for developpment'
     option_list = BaseCommand.option_list + (
-        make_option('--username', action='store', dest='username', default=None, help='default username'),
+        make_option('--netid', action='store', dest='netid', default=None, help='default netid'),
         make_option('--password', action='store', dest='password', default=None, help='default password'),
         make_option('--first-name', action='store', dest='first_name', default=None, help='default first name'),
         make_option('--last-name', action='store', dest='last_name', default=None, help='default last name'),
@@ -59,15 +62,13 @@ class Command(BaseCommand):
                 name=name, slug=slug,
                 description=json.dumps(ULBInfos)
             )
-            courseMeta = CourseInfo.objects.create(
+            CourseInfo.objects.create(
                 course=course, infos=json.dumps(infos),
-                date=self.NOW, user=self.USER
+                date=self.NOW
             )
         parentNode.add_child(course)
         self.stdout.write('.', ending='')
         self.stdout.flush()
-
-
 
     def walk(self, jsonTree, parentNode):
         for key in jsonTree:
@@ -82,14 +83,13 @@ class Command(BaseCommand):
                 self.stdout.flush()
                 self.walk(val, category)
 
-
     def handle(self, *args, **options):
         self.stdout.write('Creating user\n')
         user = User()
-        username = raw_input("Username (default: %s): " % getuser()) if options["username"] is None else options["username"]
-        if not username:
-            username = getuser()
-        user.username = username
+        netid = raw_input("NetID (default: %s): " % getuser()) if options["netid"] is None else options["netid"]
+        if not netid:
+            netid = getuser()
+        user.netid = netid
         password = getpass("Password (default: 'test'): ") if options["password"] is None else options["password"]
         if not password:
             password = 'test'
@@ -102,34 +102,31 @@ class Command(BaseCommand):
         user.first_name = first_name
         user.last_name = last_name
         user.set_password(password)
+        user.email = 'gaston@dupuis.be'
+        user.photo = 'gif'
         user.save()
-        profile = user.get_profile()
-        profile.name = first_name + " " + last_name
-        profile.email = 'gaston@dupuis.be'
-        profile.photo = '/static/images/gaston.gif'
-        profile.save()
-        
+
+        IMG_S_DIR = join(settings.BASE_DIR, 'www', 'management', 'commands')
+        IMG_D_DIR = join(settings.BASE_DIR, 'static', 'profile')
+        copy(join(IMG_S_DIR, 'gaston.gif'), join(IMG_D_DIR, netid + '.gif'))
+
         #Second user for tests
         user2 = User()
-        user2.username="blabevue"
-        user2.first_name="Bertrand"
-        user2.last_name="Labévue"
+        user2.netid = "blabevue"
+        user2.first_name = "Bertrand"
+        user2.last_name = "Labévue"
         user2.set_password(password)
+        user2.email = 'bertrand@labevue.be'
+        user2.photo = 'gif'
         user2.save()
-        profile2 = user2.get_profile()
-        profile2.name = user2.first_name + " " + user2.last_name
-        profile2.email = 'bertrand@labevue.be'
-        profile2.photo = '/static/images/labevue.gif'
-        profile2.save()
+
+        copy(join(IMG_S_DIR, 'labevue.gif'), join(IMG_D_DIR, 'blabevue.gif'))
         self.stdout.write("Second user {} with password {} created\n".format(
-            user2.username, password
+            user2.netid, password
         ))
 
         tree = json.load(open('parsing/tree.json'))
         self.courseList = json.load(open('parsing/cours.json'))
-        self.USER = profile
         Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
         self.walk(tree, Root)
         self.stdout.write("\n")
-
-

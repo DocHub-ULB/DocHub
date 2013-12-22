@@ -27,11 +27,12 @@ clean:
 cleandata: clean
 	rm -f ${DATABASE}
 	rm -rf ./static/documents/*
+	rm -rf ./static/profile/*.*
 
 ${DATABASE}:
 	./manage.py syncdb
 	./manage.py migrate
-	./manage.py init --username=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
+	./manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
 ve:
 	python2.7 `which virtualenv` --distribute --no-site-package ve

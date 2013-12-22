@@ -11,7 +11,6 @@ from __future__ import unicode_literals
 from json import loads
 from polydag.models import Node
 from django.db import models
-from users.models import Profile
 
 
 class Course(Node):
@@ -42,7 +41,6 @@ class Course(Node):
 
 
 class CourseInfo(models.Model):
-    user = models.ForeignKey(Profile)
     infos = models.TextField()
     date = models.DateTimeField(auto_now=True)
     course = models.ForeignKey(Course)

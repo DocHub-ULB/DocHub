@@ -20,9 +20,9 @@ def upload_file(request):
     form = UploadFileForm(request.POST, request.FILES)
 
     if not form.is_valid():
-        return HttpResponse('form invalid'+str(form.errors), 'text/html')
+        return HttpResponse('form invalid' + str(form.errors), 'text/html')
 
-    if len(form.cleaned_data['name'])>0:
+    if len(form.cleaned_data['name']) > 0:
         name = escape(form.cleaned_data['name'])
     else:
         name = escape(request.FILES['file'].name[:-4].lower())
@@ -30,14 +30,13 @@ def upload_file(request):
     description = escape(form.cleaned_data['description'])
     course = form.cleaned_data['course']
 
-
-    doc = Document.objects.create(user=request.user.get_profile(),
+    doc = Document.objects.create(user=request.user,
                                   name=name, description=description, state="pending")
     course.add_child(doc)
 
     tmp_file = '/tmp/TMP402_%d.pdf' % doc.id
     source = 'file://' + tmp_file
-    doc.source = source 
+    doc.source = source
     doc.save()
 
     tmp_doc = open(tmp_file, 'w')
@@ -46,25 +45,26 @@ def upload_file(request):
 
     return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
+
 def document_download(request, id):
     doc = get_object_or_404(Document, id=id)
     with open(doc.staticfile) as fd:
         body = fd.read()
     response = HttpResponse(body, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="%s.pdf"'%(doc.name)
+    response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
     doc.downloads += 1
     doc.save()
     return response
 
 
-def document_show(request,id):
+def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 
     children = document.children()
     document.page_set = children.instance_of(Page)
 
     context = {"object": document,
-                "parent": document.parent}
+               "parent": document.parent}
     document.views += 1
     document.save()
     return render(request, "viewer.html", context)

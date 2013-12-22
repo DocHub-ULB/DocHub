@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django_defaults import *
 
 # User Profile Model
-AUTH_PROFILE_MODULE = 'users.Profile'
+AUTH_USER_MODEL = 'users.User'
 
 # Page to show after a syslogin
 LOGIN_REDIRECT_URL = '/zoidberg/home'
@@ -47,7 +47,7 @@ INSTALLED_APPS += (
 
 # apps
 INSTALLED_APPS += (
-	'www',
+    'www',
     'calendars',
     'documents',
     'graph',

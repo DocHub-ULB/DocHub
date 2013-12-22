@@ -13,17 +13,15 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 
 from polydag.models import Node
-from users.models import Profile
+
 
 def join_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
-    profile = request.user.get_profile()
-    profile.follow.add(node)
-    return HttpResponseRedirect(reverse('node_canonic',args=[nodeid]))
+    request.user.follow.add(node)
+    return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
 
 def leave_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
-    profile = request.user.get_profile()
-    profile.follow.remove(node)
-    return HttpResponseRedirect(reverse('node_canonic',args=[nodeid]))
+    request.user.follow.remove(node)
+    return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))

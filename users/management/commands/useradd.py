@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 # your option) any later version.
 
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+from users.models import User
 from getpass import getpass, getuser
 from optparse import make_option
 
@@ -17,19 +17,19 @@ from optparse import make_option
 class Command(BaseCommand):
     help = 'Initialize fognar for developpment'
     option_list = BaseCommand.option_list + (
-        make_option('--username', action='store', dest='username', default=None, help='default username'),
+        make_option('--netid', action='store', dest='netid', default=None, help='default netid'),
         make_option('--password', action='store', dest='password', default=None, help='default password'),
         make_option('--first-name', action='store', dest='first_name', default=None, help='default first name'),
         make_option('--last-name', action='store', dest='last_name', default=None, help='default last name'),
-        )
+    )
 
     def handle(self, *args, **options):
         self.stdout.write('Creating user\n')
         user = User()
-        username = raw_input("Username (default: %s): " % getuser()) if options["username"] is None else options["username"]
-        if not username:
-            username = getuser()
-        user.username = username
+        netid = raw_input("Username (default: %s): " % getuser()) if options["netid"] is None else options["netid"]
+        if not netid:
+            netid = getuser()
+        user.netid = netid
         password = getpass("Password (default: 'test'): ") if options["password"] is None else options["password"]
         if not password:
             password = 'test'
@@ -42,10 +42,6 @@ class Command(BaseCommand):
         user.first_name = first_name
         user.last_name = last_name
         user.set_password(password)
+        user.email = 'test@mouh.com'
         user.save()
-        profile = user.get_profile()
-        profile.name = first_name + " " + last_name
-        profile.email = 'test@mouh.com'
-        profile.save()
-        print "User id : " + str(profile.id)
-
+        print "User id : " + str(user.id)

@@ -11,11 +11,10 @@ from __future__ import unicode_literals
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.utils.html import escape
 from xml.dom.minidom import parseString
-from users.models import Inscription
+from users.models import Inscription, User
 from string import printable
 from random import choice
 from settings import ULB_AUTH, ULB_LOGIN
@@ -54,7 +53,7 @@ def uniq_post(function):
 
 
 def get_text(nodelist):
-    rc = [ node.data for node in nodelist if node.nodeType == node.TEXT_NODE ]
+    rc = [node.data for node in nodelist if node.nodeType == node.TEXT_NODE]
     return ''.join(rc)
 
 
@@ -69,7 +68,7 @@ def get_value(dom, name):
                 if child.nodeName == name:
                     real_node = child
                 if (child.nodeName == 'status' and
-                    get_text(child.childNodes) == 'registered'):
+                        get_text(child.childNodes) == 'registered'):
                     found = 1
         if found == 0:
             raise Exception("xml document not conform for " + name)
@@ -82,7 +81,7 @@ def parse_user(raw):
     dom = parseString(raw)
     return {
         'ip': get_value(dom, "ipAddress"),
-        'username': get_value(dom, "username"),
+        'netid': get_value(dom, "username"),
         'first_name': get_value(dom, "prenom").capitalize(),
         'last_name': get_value(dom, "nom").capitalize(),
         'email': get_value(dom, "email"),
@@ -95,24 +94,20 @@ def parse_user(raw):
 
 def create_user(values):
     try:
-        user = User.objects.get(username=values['username'])
+        user = User.objects.get(netid=values['netid'])
     except:
         rpwd = ''.join(choice(printable) for _ in xrange(100))
-        user = User.objects.create_user(values['username'], values['email'],
+        user = User.objects.create_user(values['netid'], values['email'],
                                         rpwd)
         user.last_name = values['last_name']
         user.first_name = values['first_name']
-        user.save()
 
-    profile = user.get_profile()
-    profile.name = values['first_name'] + " " + values['last_name']
-    profile.registration = values['registration']
-    profile.email = values['email']
-    profile.save()
+    user.registration = values['registration']
+    user.email = values['email']
+    user.save()
 
     try:
-        Inscription.objects.create(user=user, year=values['anac'],
-                            section=values['facid'] + ':' + values['anet'])
+        Inscription.objects.create(user=user, year=values['anac'], section=values['facid'] + ':' + values['anet'])
     except:
         pass
 
@@ -121,7 +116,7 @@ def create_user(values):
 
 def throw_b64error(request, raw):
     msg = b64encode(raw)
-    msg = [ msg[y * 78:(y+1)*78] for y in xrange((len(msg)/78) +1) ]
+    msg = [msg[y * 78:(y + 1) * 78] for y in xrange((len(msg) / 78) + 1)]
     return render(request, 'error.html', {'msg': "\n".join(msg)})
 
 

@@ -9,13 +9,15 @@ from __future__ import unicode_literals
 # your option) any later version.
 
 from django.db import models
-from users.models import Profile
 from polydag.models import Taggable
 from polydag.behaviors import OneParent
+from www import settings
+
 
 class Document(OneParent, Taggable):
+
     description = models.TextField()
-    user = models.ForeignKey(Profile)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     size = models.PositiveIntegerField(null=True, default=0)
     words = models.PositiveIntegerField(null=True, default=0)
@@ -29,12 +31,11 @@ class Document(OneParent, Taggable):
     source = models.CharField(max_length=2048, default='')
     state = models.CharField(max_length=10, default='pending')
 
-
     def move(self, *args, **kwargs):
         # Must move a images and associated files
         # thus NotImplementedError
         raise NotImplementedError
-        super(Document,self).move(*args, **kwargs)
+        super(Document, self).move(*args, **kwargs)
 
 
 class Page(OneParent, Taggable):
@@ -43,6 +44,6 @@ class Page(OneParent, Taggable):
     height_600 = models.IntegerField()
     height_900 = models.IntegerField()
 
-    def move(self,newparent):
+    def move(self, newparent):
         # You may not move a page from a document to another
         raise NotImplementedError

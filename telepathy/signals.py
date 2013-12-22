@@ -5,6 +5,7 @@ import models
 from notify.models import PreNotification
 from django.core.urlresolvers import reverse
 
+
 def thread_save(**kwargs):
     assert kwargs['sender'] == models.Thread
 
@@ -12,9 +13,9 @@ def thread_save(**kwargs):
         thread = kwargs['instance']
         PreNotification.objects.create(
             node=thread,
-            text="Nouvelle discussion: "+thread.name,
+            text="Nouvelle discussion: " + thread.name,
             url=reverse('thread_show', args=[thread.id]),
-            user=thread.user.user
+            user=thread.user
         )
 
 
@@ -33,5 +34,5 @@ def message_save(**kwargs):
                     thread.name, poster.name
                 ),
                 url=reverse('thread_show', args=[thread.id]),
-                user=message.user.user
+                user=message.user
             )

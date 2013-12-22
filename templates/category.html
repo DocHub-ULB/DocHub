@@ -13,7 +13,7 @@
 {% block content %}
 <div class="logic-block">
   <h1>{{ object.name }}</h1>
-  {% if object in request.user.get_profile.follow.all %}
+  {% if object in request.user.follow.all %}
   <a class="panel-button border-bottom" href="{% url 'node_leave' object.id %}">
     leave
     </a>
