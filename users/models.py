@@ -10,7 +10,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
+from graph.models import Course
 from www import settings
+from django.db.models import Q
 import re
 
 
@@ -47,11 +49,24 @@ class User(AbstractBaseUser):
         return self.follow.all()
 
     def followed_nodes_id(self):
-        direct = self.follow.only('id')
-        direct_descendants = map(lambda x: x.descendants_set(True), direct)
-        indirect = reduce(lambda x, y: x | y, direct_descendants, set())
-        indirect_ids = map(lambda x: x.id, indirect)
-        return indirect_ids
+        try:
+            self.followed_cache
+        except:
+            direct = self.follow.only('id').non_polymorphic()
+            direct_descendants = map(lambda x: x.descendants_set(True), direct)
+            indirect = reduce(lambda x, y: x | y, direct_descendants, set())
+            indirect_ids = map(lambda x: x.id, indirect)
+            self.followed_cache = indirect_ids
+        return self.followed_cache
+
+    def followed_courses(self):
+        ids = self.followed_nodes_id()
+        if len(ids) > 0:
+            qs = map(lambda x: Q(id=x), ids)
+            q = reduce(lambda x, y: x | y, qs)
+            return Course.objects.filter(q)
+        else:
+            return []
 
 
 class Inscription(models.Model):

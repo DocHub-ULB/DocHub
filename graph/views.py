@@ -42,7 +42,8 @@ def show_category(request, catid):
     children = cat.children()
     cat.course_set = children.instance_of(Course)
     cat.subcategory_set = children.instance_of(Category)
-    return render(request, "category.html", {'object': cat})
+    followed = cat in request.user.directly_followed()
+    return render(request, "category.html", {'object': cat, 'followed': followed})
 
 
 def show_course(request, slug):
@@ -53,10 +54,12 @@ def show_course(request, slug):
     children = course.children()
     course.thread_set = children.instance_of(Thread)
     course.document_set = children.instance_of(Document)
+    followed = course in request.user.directly_followed()
     return render(request, "course.html",
                   {"object": course,
                    "gehol": gehol_url(course),
                    "upload_form": UploadFileForm(initial={"course": course}),
+                   "followed": followed,
                    "newthread_form": NewThreadForm(initial={"parentNode": course.id})})
 
 

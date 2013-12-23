@@ -14,12 +14,12 @@
 <div class="logic-block">
   <h1>{{ object.slug|upper }}: {{ object.name }}</h1>
   <a href="{{ gehol }}" target="_blank">Horaire</a>
-  {% if object in request.user.follow.all %}
-  <a class="panel-button border-bottom" href="{% url 'node_leave' object.id %}">
+  {% if followed %}
+  <a class="panel-button border-bottom" href="{% url 'unfollow_node' object.id %}">
     leave
   </a>
   {% else %}
-  <a class="panel-button border-bottom" href="{% url 'node_join' object.id %}">
+  <a class="panel-button border-bottom" href="{% url 'follow_node' object.id %}">
     join
   </a>
   {% endif %}

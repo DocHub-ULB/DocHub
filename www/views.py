@@ -41,12 +41,8 @@ def index(request):
 
 
 def home(request):
-    explicit_followed = request.user.follow.all()
-    followed = explicit_followed.instance_of(Course)
-    for cat in explicit_followed.instance_of(Category):
-        followed |= cat.children().instance_of(Course)
-
-    wall = PreNotification.objects.filter(node__in=request.user.followed_nodes_id()).filter(personal=False).order_by('-created')
+    followed_ids = request.user.followed_nodes_id()
+    wall = PreNotification.objects.filter(node__in=followed_ids).filter(personal=False).order_by('-created')
 
     welcome = {}
     if request.user.welcome:
@@ -57,10 +53,7 @@ def home(request):
             welcome['inscription'] = inscription
             welcome['new_inscriptions'] = [inscription] + list(inscription.next)
 
-        pass
-
     return render(request, "home.html",
-                  {"followed_courses": followed.order_by('Course___slug'),
-                   "wall": wall,
+                  {"wall": wall,
                    "welcome": welcome,
                    })

@@ -55,23 +55,20 @@
     </div>
 
     <div id="content">
-      {% block sidebar %}
-        {% if followed_courses %}
-          <div id="bar" style="width: 150px; float: left; margin-right: 30px; margin-bottom: 30px;">
-            Followed courses
-            {% for course in followed_courses %}
-              <p>{{ course.slug|upper }}
-                <a title="#{{ course.id }}" href="{% url 'course_show' course.slug %}">
-                  {{ course.name }}
-                </a>
-              </p>
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endblock %}
-      
+      <div id="bar" style="width: 150px; float: left; margin-right: 30px; margin-bottom: 30px;">
+        Followed courses
+        {% for course in user.followed_courses %}
+          <p>
+            <a title="#{{ course.id }}" href="{% url 'node_canonic' course.id %}">
+              {{ course.name }}
+            </a>
+          </p>
+        {% endfor %}
+      </div>
+      <div style="margin: 10px; margin-left: 160px;">
       {% block content %}
       {% endblock %}
+      <div>
     </div>
 
     

@@ -15,13 +15,13 @@ from django.http import HttpResponseRedirect
 from polydag.models import Node
 
 
-def join_node(request, nodeid):
+def follow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     request.user.follow.add(node)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
 
-def leave_node(request, nodeid):
+def unfollow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     request.user.follow.remove(node)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))

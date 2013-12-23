@@ -9,14 +9,14 @@ from __future__ import unicode_literals
 # your option) any later version.
 
 from django.conf.urls import patterns, url
-from users.views import join_node, leave_node
+from users.views import follow_node, unfollow_node
 
 urlpatterns = patterns("",
     url(r"^join/(?P<nodeid>\d+)$",
-        join_node,
-        name="node_join"),
+        follow_node,
+        name="follow_node"),
 
     url(r"^leave/(?P<nodeid>\d+)$",
-        leave_node,
-        name="node_leave"),
+        unfollow_node,
+        name="unfollow_node"),
 )

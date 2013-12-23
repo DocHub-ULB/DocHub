@@ -1,7 +1,7 @@
 {% extends "skel.html" %}
 {% block content %}
   {% if user.welcome %}
-    <div id="welcome" style="margin: 10px; margin-left: 160px; margin-right: 100px; padding: 10px; border: 1px solid blue">
+    <div id="welcome" style="margin-bottom: 20px; margin-right: 100px; padding: 10px; border: 1px solid blue">
       You look new here !  <br>
       Maybe you would like to subscribe to some courses ?<br>
       {% if welcome.new_inscriptions %}
@@ -16,7 +16,7 @@
     </div>
   {% endif %}
 
-  <div id="wall" style="margin: 10px; margin-left: 160px;">
+  <div id="wall">
     {% for elem in wall %}
       <div>{{ elem.text }}</div>
     {% endfor %}
