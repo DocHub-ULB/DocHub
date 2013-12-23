@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from www import settings
+import re
 
 
 class User(AbstractBaseUser):
@@ -55,8 +56,31 @@ class User(AbstractBaseUser):
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    faculty = models.CharField(max_length=80, null=True)
     section = models.CharField(max_length=80, null=True)
     year = models.PositiveIntegerField(null=True)
 
     class Meta:
-        unique_together = ('user', 'section', 'year')
+        unique_together = ('user', 'section', 'faculty', 'year')
+
+    @property
+    def level(self):
+        place = re.search('\d', self.section)
+        if place:
+            return int(self.section[place.start()])
+        else:
+            return None
+
+    @property
+    def type(self):
+        place = re.search('\d', self.section)
+        if place:
+            return self.section[:place.start()]
+        else:
+            return self.section
+
+    @property
+    def next(self):
+        next_starts = "{}{}".format(self.type, self.level + 1)
+        # TODO : should use category slugs and not Inscriptions
+        return Inscription.objects.filter(section__startswith=next_starts)

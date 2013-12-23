@@ -107,7 +107,7 @@ def create_user(values):
     user.save()
 
     try:
-        Inscription.objects.create(user=user, year=values['anac'], section=values['facid'] + ':' + values['anet'])
+        Inscription.objects.create(user=user, year=values['anac'], faculty=values['facid'], section=values['anet'])
     except:
         pass
 

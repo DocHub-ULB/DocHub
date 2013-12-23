@@ -1,94 +1,25 @@
-{% comment %}
-# Copyright 2012, hast. All rights reserved.
-
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-{% endcomment %}
-
-{%load humanize %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>P402</title>
-    <link href="/static/style/normalize.css" rel="stylesheet">
-    <link href="/static/style/base.css" rel="stylesheet">
-    <link href="/static/style/navbar.css" rel="stylesheet">
-    <link href="/static/style/viewer.css" rel="stylesheet">
-    <link href="/static/style/panel.css" rel="stylesheet">
-    <script src="/static/3party/jquery-1.7.min.js"></script>
-    <script src="/static/3party/handlebars-1.0.0.beta.6.js"></script>
-    <script src="/static/3party/datatable-1.9.js"></script>
-    <script src="/static/3party/jquery.cookies.2.2.0.js"></script>
-    <script src="{% url 'fragments' %}" type="text/javascript"></script>
-    <script src="/static/scripts/navbar.js"></script>
-    <script src="/static/scripts/panel.js"></script>
-    {% block header %}{% endblock %}
-  </head>
-
-  <body>
-    <div id="navbar">
-      <div id="navbar-top">
-        <div id="navbar-left">
-          <a id="brand" href="{% url 'home' %}">
-            <small>Whiteboard</small>
-          </a>
-          <a href="{% url 'notif_show' %}">
-            <span id="notification-counter">{{ notifcount }}</span>
-          </a>
-          <a class="link icon home" href="{% url 'home' %}">Home</a>
-          <a id="pull" class="link icon courses" href="#">Courses</a>
-          <a class="link icon calendar" href="#">Calendar</a>
-          <a class="link icon wall" href="#">Wall</a>
-        </div>
-        <div id="navbar-center">
-          <form id="navbar-search">
-            <input type="text" id="search-query" placeholder="Search">
-          </form>
-        </div>
-        <div id="navbar-right">
-          <a id="logout" class="link" href="{% url 'logout' %}">Logout</a>
-        </div>
-
-
-      </div>
-      <div id="navbar-bottom"></div>
-    </div>
-
-    <div id="content">
-      {% block content %}
-      <div id="bar" style="width: 150px; float: left; margin-right: 30px; margin-bottom: 30px;">
-      {% if followed_courses %}
-        Followed courses
-        {% for course in followed_courses %}
-          <p>{{ course.slug|upper }}
-            <a title="#{{ course.id }}" href="{% url 'course_show' course.slug %}">
-              {{ course.name }}
-            </a>
-          </p>
+{% extends "skel.html" %}
+{% block content %}
+  {% if user.welcome %}
+    <div id="welcome" style="margin: 10px; margin-left: 160px; margin-right: 100px; padding: 10px; border: 1px solid blue">
+      You look new here !  <br>
+      Maybe you would like to subscribe to some courses ?<br>
+      {% if welcome.new_inscriptions %}
+        It looks like you were studying {{ welcome.inscription.section }} last year and we don't know where you are this year...<br>
+        Here are the sections where you could have gone : 
+        {% for new in welcome.new_inscriptions %}
+          {{ new.section }}
         {% endfor %}
+      {% elif welcome.inscription %}
+        Are you studying {{ welcome.inscription.section }} in the {{ welcome.inscription.faculty|capfirst }} faculty ?
       {% endif %}
-      </div>
-      <div id="wall">
-        {% for elem in wall %}
-          <div>{{ elem.text }}</div>
-        {% endfor %}
-      </div>
-      {% endblock %}
     </div>
+  {% endif %}
 
-    
-    <div style="clear:both;"></div>
-    <div id="footer">
-        P402 is upon US.<br>
-        <a href="#">Help</a> -
-        <a target="_blank" href="https://github.com/UrLab/beta402">Dev</a> -
-        <a target="_blank" href="https://github.com/UrLab/beta402/issues">
-          Bugtracker
-        </a> -
-        <a href="#">About</a><br>
-        Be aware of dragons
-    </div>
-  </body>
-</html>
+  <div id="wall">
+    {% for elem in wall %}
+      <div>{{ elem.text }}</div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

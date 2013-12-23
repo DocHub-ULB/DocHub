@@ -16,6 +16,8 @@ from telepathy.models import Thread
 from polydag.models import Node
 from documents.models import Document
 from notify.models import PreNotification
+from users.models import Inscription
+from .helpers import current_year
 import settings
 
 Mapping = {
@@ -46,7 +48,19 @@ def home(request):
 
     wall = PreNotification.objects.filter(node__in=request.user.followed_nodes_id()).filter(personal=False).order_by('-created')
 
+    welcome = {}
+    if request.user.welcome:
+        inscription = Inscription.objects.filter(user=request.user).order_by('-year').first()
+        if inscription and inscription.year == current_year():
+            welcome['inscription'] = inscription
+        elif inscription and inscription.year == current_year() - 1:
+            welcome['inscription'] = inscription
+            welcome['new_inscriptions'] = [inscription] + list(inscription.next)
+
+        pass
+
     return render(request, "home.html",
                   {"followed_courses": followed.order_by('Course___slug'),
-                   "wall": wall
+                   "wall": wall,
+                   "welcome": welcome,
                    })
