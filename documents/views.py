@@ -23,9 +23,9 @@ def upload_file(request):
         return HttpResponse('form invalid' + str(form.errors), 'text/html')
 
     if len(form.cleaned_data['name']) > 0:
-        name = escape(form.cleaned_data['name'])
+        name = form.cleaned_data['name']
     else:
-        name = escape(request.FILES['file'].name[:-4].lower())
+        name = request.FILES['file'].name[:-4].lower()
 
     description = escape(form.cleaned_data['description'])
     course = form.cleaned_data['course']
