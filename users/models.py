@@ -50,7 +50,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'netid'
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
     DEFAULT_PHOTO = "/static/profile/default.jpg"
-    objects = UserManager()
+    objects = CustomUserManager()
 
     netid = models.CharField(max_length=20, unique=True, null=False, blank=False)
     first_name = models.CharField(max_length=127, null=False, blank=False)
