@@ -1,4 +1,3 @@
--i http://pypi.urlab.be/simple
 Django==1.6
 django_polymorphic
 django-template-fragments

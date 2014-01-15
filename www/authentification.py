@@ -15,11 +15,10 @@ from django.contrib.auth import login
 from django.utils.html import escape
 from xml.dom.minidom import parseString
 from users.models import Inscription, User
-from string import printable
-from random import choice
 from settings import ULB_AUTH, ULB_LOGIN
 from urllib2 import urlopen
 from base64 import b64encode
+import traceback
 
 
 # redirect user to ulb intranet auth in respect of the url
@@ -96,9 +95,7 @@ def create_user(values):
     try:
         user = User.objects.get(netid=values['netid'])
     except:
-        rpwd = ''.join(choice(printable) for _ in xrange(100))
-        user = User.objects.create_user(values['netid'], values['email'],
-                                        rpwd)
+        user = User.objects.create_user(values['netid'], values['email'])
         user.last_name = values['last_name']
         user.first_name = values['first_name']
 
@@ -122,7 +119,7 @@ def throw_b64error(request, raw):
 
 def intranet_auth(request, next_url):
     sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
-    if len(next_url).strip() == 0:
+    if len(next_url.strip()) == 0:
         next_url = 'home'
     if sid and uid:
         try:
@@ -136,10 +133,11 @@ def intranet_auth(request, next_url):
             values = parse_user(infos)
             user = create_user(values)
         except Exception as e:
-            return throw_b64error(request, infos + " -> " + str(e))
+            t = traceback.format_exc()
+            return throw_b64error(request, "NetID infos : \n\n{} \n\n Error:\n{}\n\nTraceback: \n {}".format(infos, e, t))
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
-        return HttpResponseRedirect(reverse('application') + '#' + next_url)
+        return HttpResponseRedirect(reverse(next_url))
     else:
         return render(request, 'error.html', {'msg': 'url discarded'})
