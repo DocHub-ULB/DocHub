@@ -21,7 +21,7 @@
     <script src="/static/3party/handlebars-1.0.0.beta.6.js"></script>
     <script src="/static/3party/datatable-1.9.js"></script>
     <script src="/static/3party/jquery.cookies.2.2.0.js"></script>
-    <script src="{% url fragments %}" type="text/javascript"></script>
+    <script src="{% url 'fragments' %}" type="text/javascript"></script>
     <script src="/static/scripts/navbar.js"></script>
     <script src="/static/scripts/panel.js"></script>
     {% block header %}{% endblock %}
@@ -31,13 +31,13 @@
     <div id="navbar">
       <div id="navbar-top">
         <div id="navbar-left">
-          <a id="brand" href="{% url home %}">
+          <a id="brand" href="{% url 'home' %}">
             <small>Whiteboard</small>
           </a>
-          <a href="{% url notif_show %}">
+          <a href="{% url 'notif_show' %}">
             <span id="notification-counter">{{ notifcount }}</span>
           </a>
-          <a class="link icon home" href="{% url home %}">Home</a>
+          <a class="link icon home" href="{% url 'home' %}">Home</a>
           <a id="pull" class="link icon courses" href="#">Courses</a>
           <a class="link icon calendar" href="#">Calendar</a>
           <a class="link icon wall" href="#">Wall</a>
@@ -48,7 +48,7 @@
           </form>
         </div>
         <div id="navbar-right">
-          <a id="logout" class="link" href="{% url logout %}">Logout <small>({{user.name}})</small></a>
+          <a id="logout" class="link" href="{% url 'logout' %}">Logout</a>
         </div>
 
 
@@ -58,6 +58,7 @@
 
     <div id="content">
       {% block content %}
+      {% if followed_courses %}
         <h1>Followed courses</h1>
         <div class="clear"></div>
         <table class="sortable rounded">
@@ -72,7 +73,7 @@
           {% for course in followed_courses %}
             <tr>
               <td>{{ course.slug|upper }}</td>
-              <td><a title="#{{ course.id }}" href="{% url course_show course.slug %}">
+              <td><a title="#{{ course.id }}" href="{% url 'course_show' course.slug %}">
                 {{ course.name }}
               </a></td>
               <td>{{ course.last_activity|naturaltime }}</td>
@@ -80,16 +81,19 @@
           {% endfor %}
           </tbody>
         </table>
+      {% else %}
+        <p>You aren't following any course. Why don't subscibe to some by clicking on the "course" menu on the top bar ?</p>
+      {% endif %}
       {% endblock %}
     </div>
 
     <div id="footer">
         P402 is upon US.<br>
-        <a href="#">Help</a> - 
-        <a target="_blank" href="https://github.com/UrLab/beta402">Dev</a> - 
+        <a href="#">Help</a> -
+        <a target="_blank" href="https://github.com/UrLab/beta402">Dev</a> -
         <a target="_blank" href="https://github.com/UrLab/beta402/issues">
           Bugtracker
-        </a> - 
+        </a> -
         <a href="#">About</a><br>
         Be aware of dragons
     </div>

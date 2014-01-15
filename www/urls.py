@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -6,7 +9,6 @@
 # your option) any later version.
 
 from django.conf.urls import patterns, url, include
-from django.views.generic.simple import direct_to_template
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from graph.urls import json_urls as graph_json
@@ -29,7 +31,7 @@ urlpatterns = patterns("",
     url(r"^json/node/", include("polydag.urls")),
 
     # The apps entry points
-    url(r"^zoidberg/calendar/", include("calendar.urls")),
+    url(r"^zoidberg/calendar/", include("calendars.urls")),
     url(r"^zoidberg/graph/", include("graph.urls")),
     url(r"^zoidberg/document/", include("documents.urls")),
     url(r"^zoidberg/telepathy/", include("telepathy.urls")),

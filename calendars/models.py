@@ -8,15 +8,12 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
-from django.conf.urls import patterns, url
-from users.views import join_node, leave_node
+from django.db import models
+from polydag.models import Node
+from graph.models import Course
 
-urlpatterns = patterns("",
-    url(r"^join/(?P<nodeid>\d+)$",
-        join_node,
-        name="node_join"),
 
-    url(r"^leave/(?P<nodeid>\d+)$",
-        leave_node,
-        name="node_leave"),
-)
+class Event(Node):
+    start = models.DateTimeField(auto_now=True)
+    end = models.DateTimeField(auto_now=True)
+    information = models.TextField()

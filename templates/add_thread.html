@@ -3,7 +3,7 @@ new post
 </div>
 <div class="clear"></div>
 <div id="post" class="panel">
-<form action="{% url thread_put %}" method="post">
+<form action="{% url 'thread_put' %}" method="post">
   {% csrf_token %}
   <table>
     {{ newthread_form.as_table }}

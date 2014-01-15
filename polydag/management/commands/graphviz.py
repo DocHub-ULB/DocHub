@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from polydag.models import Node
 from django.core.management.base import BaseCommand
 from optparse import make_option
@@ -35,8 +38,8 @@ class Command(BaseCommand):
         f.write('digraph P402 {\n')
         for node in Node.objects.all():
             color = self.COLORS.get(node.classBasename(), self.COLORS['Node'])
-            url = options['urlprefix'] + node.canonic_url
-            f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n'%(node.pk, node.name.encode('utf-8'), color, url))
+            url = options['urlprefix']# + node.canonic_url
+            f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n'%(node.pk, node.name, color, url))
             for child in node.children():
                 f.write('\t%d -> %d;\n'%(node.pk, child.id))
 

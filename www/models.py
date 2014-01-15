@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -24,5 +27,5 @@ from django.contrib.auth import models as auth_app
 
 
 # when create the DB with these models, don't create a super user
-post_syncdb.disconnect(create_superuser, sender=auth_app, 
+post_syncdb.disconnect(create_superuser, sender=auth_app,
                 dispatch_uid="django.contrib.auth.management.create_superuser")

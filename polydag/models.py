@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # POLYmorphic Directed Acyclic Graph
 
 from django.db import models
@@ -13,7 +16,7 @@ class Node(PolymorphicModel):
 
     def __repr__(self):
         return '<Node {} : {} "{}">'.format(
-            self.classBasename(), self.pk, self.name.encode('utf-8')
+            self.classBasename(), self.pk, self.name
         )
 
 
@@ -112,7 +115,7 @@ class Node(PolymorphicModel):
 
     def to_dict(self, with_children=False):
         res = {
-            'id':self.pk, 'name':self.name.encode('utf-8'),
+            'id':self.pk, 'name':self.name,
             'type':self.classBasename()
         }
         #res['url'] = self.canonic_url

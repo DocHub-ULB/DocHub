@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 # Copyright 2012, hast. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -6,7 +9,7 @@
 # your option) any later version.
 
 from django.shortcuts import get_object_or_404, render
-from calendar.models import Event
+from calendars.models import Event
 
 
 def calendar(request):
