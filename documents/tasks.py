@@ -72,6 +72,8 @@ def calculate_pdf_length(self, document_id):
     except subprocess.CalledProcessError:
         raise DocumentProcessingError('"pdfinfo" has failed')
 
+    sub = sub.decode('ascii', 'ignore')
+
     pages = -1
     for line in sub.split('\n'):
         if line.startswith('Pages'):
