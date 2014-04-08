@@ -6,8 +6,9 @@ from __future__ import unicode_literals
 from django.db import models
 import re
 from database import grapheek
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from polymorphic import PolymorphicModel
+import itertools
 
 
 def to_django(nodes):
@@ -208,7 +209,16 @@ def node_save_callback(sender, created, instance, **kwargs):
     with grapheek() as g:
         g.add_node(id=instance.pk, label=instance.__basename__)
 
+
+def node_delete_callback(sender, instance, **kwargs):
+    if not isinstance(instance, Node):
+        return None
+    for edge in itertools.chain(instance.graph_node().inE(), instance.graph_node().outE()):
+        edge.remove()
+    instance.graph_node().remove()
+
 post_save.connect(node_save_callback)
+pre_delete.connect(node_delete_callback)
 
 
 class CycleError(StandardError):
