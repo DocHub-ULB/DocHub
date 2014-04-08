@@ -4,86 +4,103 @@ from __future__ import unicode_literals
 # POLYmorphic Directed Acyclic Graph
 
 from django.db import models
-from polymorphic import PolymorphicModel
 import re
+from database import grapheek
+from django.db.models.signals import post_save
+from polymorphic import PolymorphicModel
+
+
+def to_django(nodes):
+    ids = set()
+    for node in nodes:
+        d = node.data()
+        ids.add(d['id'])
+    return Node.objects.filter(id__in=list(ids))
 
 
 class Node(PolymorphicModel):
     """Base class for all P402 objects"""
     name = models.CharField(max_length=140)
-    _children = models.ManyToManyField("self", symmetrical=False)
 
-    def __unicode__(self):
-        return '<Node {} : {} "{}">'.format(
-            self.classBasename(), self.pk, self.name
-        )
+    @property
+    def __basename__(self):
+        """Return the class name without modules prefix"""
+        klass = str(type(self))  # "<class 'foo.bar'>"
+        return re.sub(r'.*[\.\']([^\.]+)\'>$', r'\1', klass)
 
-    def children(self, only=[], exclude=[], id_only=False):
-        """Return a list of all self's direct children"""
-        only_q = map(lambda x: models.Q(instance_of=x), only)
-        exclude_q = map(lambda x: models.Q(not_instance_of=x), exclude)
+    def graph_node(self):
+        with grapheek() as g:
+            node = g.V(id=self.pk)
+        node = list(node)
+        if len(node) != 1:
+            if self.pk is None:
+                raise UnsavedModel("'{}' was not saved in the db".format(self))
+            else:
+                raise GraphInconsistency(
+                    "Object of type {} and pk {} was not found in the graph, this is BAD !".format(
+                        self.__basename__, self.pk)
+                )
+        return node[0]
 
-        query = self._children.all()
-        if len(only_q) > 0:
-            query = query.filter(*only_q)
-        elif len(exclude_q):
-            query = query.filter(*exclude_q)
-
-        if id_only:
-            query = query.only('id').non_polymorphic()
-
-        return query
+    def children(self):
+        return self.graph_node().outV()
 
     def parents(self):
-        """Return a list of all self's direct parents"""
-        return Node.objects.filter(_children=self)
+        return self.graph_node().inV()
 
-    def descendants_tree(self, id_only=False):
-        """
-        Returns a tree of the node's  children by depth-first search
-        """
-        tree = {}
-        for node in self.children(id_only=id_only):
-            tree[node] = node.descendants_tree(id_only)
-        return tree
+    # def descendants(self):
+    #     l = []
 
-    def descendants_set(self, id_only=False):
-        """Returns a list of the node's  children by depth-first search"""
-        tree = self.descendants_tree(id_only)
-        return self.tree_to_set(tree)
+    #     def getchildren(start_node, l):
+    #         t = list(start_node.outV())
+    #         l += t
+    #         for node in t:
+    #             getchildren(node, l)
+    #     getchildren(self.graph_node(), l)
+    #     return l
 
-    def ancestors_set(self):
-        """Returns a list of the node's  children by depth-first search"""
-        tree = self.ancestors_tree()
-        return self.tree_to_set(tree)
+    # def ancestors(self):
+    #     l = []
 
-    def tree_to_set(self, tree):
-        track = set()
-        for node in tree:
-            if not tree[node] == {}:
-                track.update(self.tree_to_set(tree[node]))
-            track.add(node)
-        return track
+    #     def getparents(start_node, l):
+    #         t = list(start_node.inV())
+    #         l += t
+    #         for node in t:
+    #             getparents(node, l)
+    #     getparents(self.graph_node(), l)
+    #     return l
 
-    def ancestors_tree(self):
-        """Returns an ancestors tree"""
-        tree = {}
-        for node in self.parents():
-            tree[node] = node.ancestors_tree()
-        return tree
+    def descendants(self):
+        total = []
+        current_level = None
+        current_query = self.graph_node()
+        while current_level != []:
+            current_query = current_query.outV()
+            current_level = list(current_query)
+            total += current_level
+        return total
+
+    def ancestors(self):
+        total = []
+        current_level = None
+        current_query = self.graph_node()
+        while current_level != []:
+            current_query = current_query.inV()
+            current_level = list(current_query)
+            total += current_level
+        return total
 
     def add_child(self, child, acyclic_check=True):
         """
-        Attach a new child to self and return True. If acyclic_check evaluates
+        Attach a new child to self. If acyclic_check evaluates
         to True, and a loop occurs with this new edge, don't add the new child
-        and return False.
+        and raise CycleError.
         """
         child.pre_attach_hook()
         if acyclic_check and child.hasCycle([self]):
             raise CycleError
-        self._children.add(child)
-        self.save()
-        return True
+        with grapheek() as g:
+            g.add_edge(self.graph_node(), child.graph_node())
 
     def add_parent(self, parent):
         """Add a parent to self"""
@@ -92,14 +109,14 @@ class Node(PolymorphicModel):
     def pre_attach_hook(self):
         pass
 
-    def remove_parent(self, parent):
-        """Detatch self from parent. Return none"""
-        parent._children.remove(self)
-        parent.save()
-
     def remove_child(self, child):
-        """Remove child from self"""
-        child.remove_parent(self)
+        outEdges = self.graph_node().outE()
+        for edge in outEdges:
+            if edge.outV().data() == child.graph_node().data():
+                edge.remove()
+
+    def remove_parent(self, parent):
+        parent.remove_child(self)
 
     def hasCycle(self, traversed):
         """Recursively walk the graph to find any loop"""
@@ -115,20 +132,15 @@ class Node(PolymorphicModel):
             traversed.pop()
         return res
 
-    def classBasename(self):
-        """Return the class name without modules prefix"""
-        klass = str(type(self))  # "<class 'foo.bar'>"
-        return re.sub(r'.*[\.\']([^\.]+)\'>$', r'\1', klass)
-
     def to_dict(self, with_children=False):
         res = {
             'id': self.pk, 'name': self.name,
-            'type': self.classBasename()
+            'type': self.__basename__
         }
         #res['url'] = self.canonic_url
         if with_children:
             res['children'] = []
-            for child in self.children():
+            for child in to_django(self.children()):
                 res['children'].append(child.to_dict(False))
         return res
 
@@ -185,5 +197,22 @@ class Taggable(Node):
     related = related_list
 
 
+def node_save_callback(sender, created, instance, **kwargs):
+    if not isinstance(instance, Node) or not created:
+        return None
+    with grapheek() as g:
+        g.add_node(id=instance.pk, label=instance.__basename__)
+
+post_save.connect(node_save_callback)
+
+
 class CycleError(StandardError):
+    pass
+
+
+class GraphInconsistency(StandardError):
+    pass
+
+
+class UnsavedModel(StandardError):
     pass

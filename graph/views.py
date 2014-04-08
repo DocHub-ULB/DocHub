@@ -17,6 +17,7 @@ from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
 from calendars.gehol import gehol_url
+from polydag.models import to_django
 from json import dumps
 import re
 
@@ -39,7 +40,7 @@ def get_category(request, id):
 
 def show_category(request, catid):
     cat = get_object_or_404(Category, pk=catid)
-    children = cat.children()
+    children = to_django(cat.children())
     cat.course_set = children.instance_of(Course)
     cat.subcategory_set = children.instance_of(Category)
     followed = cat in request.user.directly_followed()
@@ -51,7 +52,7 @@ def show_course(request, slug):
         course = get_object_or_404(Course, pk=slug)
     else:
         course = get_object_or_404(Course, slug=slug)
-    children = course.children()
+    children = to_django(course.children())
     course.thread_set = children.instance_of(Thread)
     course.document_set = children.instance_of(Document)
     followed = course in request.user.directly_followed()

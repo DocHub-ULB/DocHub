@@ -15,6 +15,7 @@ from www import settings
 from django.db.models import Q
 import re
 from django.utils import timezone
+from polydag.models import to_django
 
 
 class CustomUserManager(UserManager):
@@ -72,25 +73,18 @@ class User(AbstractBaseUser):
     def directly_followed(self):
         return self.follow.all()
 
-    def followed_nodes_id(self):
-        try:
-            self.followed_cache
-        except:
-            direct = self.follow.only('id').non_polymorphic()
-            direct_descendants = map(lambda x: x.descendants_set(True), direct)
-            indirect = reduce(lambda x, y: x | y, direct_descendants, set())
-            indirect_ids = map(lambda x: x.id, indirect)
-            self.followed_cache = indirect_ids
-        return self.followed_cache
+    def followed_nodes(self):
+        nodes = []
+        for node in self.directly_followed():
+            nodes.append(node.graph_node())
+            nodes += node.descendants()
+        return nodes
 
     def followed_courses(self):
-        ids = self.followed_nodes_id()
-        if len(ids) > 0:
-            qs = map(lambda x: Q(id=x), ids)
-            q = reduce(lambda x, y: x | y, qs)
-            return Course.objects.filter(q)
-        else:
-            return []
+        return to_django(filter(lambda x: x.data()['label'] == "Course", self.followed_nodes()))
+
+    def followed_nodes_id(self):
+        return map(lambda x: x.data()['id'], self.followed_nodes())
 
 
 class Inscription(models.Model):

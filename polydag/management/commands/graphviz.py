@@ -45,7 +45,7 @@ class Command(BaseCommand):
         if len(excludes_q) > 0:
             query = query.filter(*excludes_q)
         for node in query:
-            color = self.COLORS.get(node.classBasename(), self.COLORS['Node'])
+            color = self.COLORS.get(node.__basename__, self.COLORS['Node'])
             url = options['urlprefix']  # + node.canonic_url
             f.write('\t%d [style=filled label="%s" fillcolor=%s URL="%s"]\n' % (node.pk, node.name, color, url))
             for child in node.children(exclude=self.EXCLUDE):

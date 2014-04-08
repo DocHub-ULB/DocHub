@@ -37,10 +37,10 @@ class SimpleTest(TestCase):
 
 
     def testClassBasename(self):
-        self.assertEqual('Node', Node().classBasename())
+        self.assertEqual('Node', Node().__basename__)
         class Carapils(Node):
             pass
-        self.assertEqual('Carapils', Carapils().classBasename())
+        self.assertEqual('Carapils', Carapils().__basename__)
 
 
     def testSets(self):
@@ -55,7 +55,7 @@ class SimpleTest(TestCase):
         father.add_child(son)
         son.add_child(grandson)
 
-        descendants = grandfather.descendants_set()
+        descendants = grandfather.descendants()
         self.assertNotIn(GRANDfather, descendants)
         self.assertNotIn(grandfather, descendants)
         self.assertIn(father, descendants)

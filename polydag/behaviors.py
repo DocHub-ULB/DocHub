@@ -15,14 +15,14 @@ from __future__ import unicode_literals
 class CannotHaveChildren(Exception):
     """Exception raised by graph nodes that doesn't accept children"""
     def __init__(self, node):
-        msg = node.classBasename() + '#' + str(node.pk) + ' can\'t have children'
+        msg = node.__basename__ + '#' + str(node.pk) + ' can\'t have children'
         Exception.__init__(self, msg)
 
 
 class CannotHaveManyParents(Exception):
     """Exception raised by graph nodes that doesn't accept more than 1 parent"""
     def __init__(self, node):
-        msg = node.classBasename() + '#' + str(node.pk) + ' can\'t have more than 1 parent'
+        msg = node.__basename__ + '#' + str(node.pk) + ' can\'t have more than 1 parent'
         Exception.__init__(self, msg)
 
 
