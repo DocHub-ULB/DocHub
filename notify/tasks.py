@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, absolute_import
 
 from celery import shared_task
+from polydag.models import to_django
 
 import notify.models
 
@@ -11,7 +12,7 @@ def propagate_notification(self, notification_id):
     prenotif = notify.models.PreNotification.objects.get(pk=notification_id)
 
     notif_counter = 0
-    nodeset = prenotif.node.ancestors_set()
+    nodeset = set(to_django(prenotif.node.ancestors()))
     nodeset.add(prenotif.node)
     delivered = set()
     #Walk in ancestors graph

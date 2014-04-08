@@ -32,7 +32,7 @@ class Node(PolymorphicModel):
         with grapheek() as g:
             node = g.V(id=self.pk)
         node = list(node)
-        if len(node) != 1:
+        if len(node) < 1:
             if self.pk is None:
                 raise UnsavedModel("'{}' was not saved in the db".format(self))
             else:
@@ -40,6 +40,11 @@ class Node(PolymorphicModel):
                     "Object of type {} and pk {} was not found in the graph, this is BAD !".format(
                         self.__basename__, self.pk)
                 )
+        elif len(node) > 1:
+            raise GraphInconsistency(
+                "Object of type '{}' and pk {} was found more than once ({} times) in the graph, this is BAD !".format(
+                    self.__basename__, self.pk, len(node))
+            )
         return node[0]
 
     def children(self):

@@ -40,13 +40,13 @@ class OneParent:
     @property
     def parent(self, *args, **kwargs):
         parents = self.parents()
-        if len(parents) > 0:
-            return parents[0]
+        if parents.count() > 0:
+            return list(parents.limit(1))[0]
         else:
             return None
 
     def pre_attach_hook(self, *args, **kwargs):
-        if len(self.parents()) > 0:
+        if self.parents().count() > 0:
             raise CannotHaveManyParents(self)
 
     def move(self, newparent, *args, **kwargs):
