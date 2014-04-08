@@ -43,16 +43,3 @@ def post_document_save(**kwargs):
 
     if kwargs['created'] and document.state == 'pending':
         process_pdf.delay(document.id)
-
-
-def document_delete(**kwargs):
-    assert kwargs['sender'] == models.Document
-
-    document = kwargs['instance']
-    if document.e:
-        Notification.direct(
-            user=document.user,
-            text="Error when processing document: " + str(document.e),
-            node=document.parent,
-            url=reverse('node_canonic', args=[document.parent.id]),
-        )
