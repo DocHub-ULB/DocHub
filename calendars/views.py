@@ -9,8 +9,11 @@ from __future__ import unicode_literals
 # your option) any later version.
 
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+
 from calendars.models import Event
 
 
+@login_required
 def calendar(request):
     return render(request, "calendar.html")

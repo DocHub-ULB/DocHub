@@ -12,11 +12,14 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.html import escape
+from django.contrib.auth.decorators import login_required
+
 from telepathy.forms import NewThreadForm, ReplyForm
 from telepathy.models import Thread, Message
 from polydag.models import Node
 
 
+@login_required
 def new_thread(request):
     form = NewThreadForm(request.POST)
 
@@ -33,6 +36,7 @@ def new_thread(request):
     return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
 
 
+@login_required
 def show_thread(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     last_msg = thread.message_set.order_by('-created')[0]
@@ -42,6 +46,7 @@ def show_thread(request, thread_id):
     return render(request, "thread.html", context)
 
 
+@login_required
 def reply_thread(request):
     form = ReplyForm(request.POST)
 

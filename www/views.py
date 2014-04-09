@@ -11,6 +11,8 @@ from __future__ import unicode_literals
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+
 from graph.models import Category, Course
 from telepathy.models import Thread
 from polydag.models import Node
@@ -18,6 +20,7 @@ from documents.models import Document
 from notify.models import PreNotification
 from users.models import Inscription
 from .helpers import current_year
+
 import settings
 
 Mapping = {
@@ -28,6 +31,7 @@ Mapping = {
 }
 
 
+@login_required
 def node_canonic(request, nodeid):
     n = get_object_or_404(Node, pk=nodeid)
     for klass in Mapping:
@@ -40,6 +44,7 @@ def index(request):
     return render(request, "index.html", {"login_url": settings.ULB_LOGIN})
 
 
+@login_required
 def home(request):
     followed_ids = request.user.followed_nodes_id()
     wall = PreNotification.objects.filter(node__in=followed_ids).filter(personal=False).order_by('-created')

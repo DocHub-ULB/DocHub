@@ -11,16 +11,19 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from polydag.models import Node
 
 
+@login_required
 def follow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     request.user.follow.add(node)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
 
+@login_required
 def unfollow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     request.user.follow.remove(node)

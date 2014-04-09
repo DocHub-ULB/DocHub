@@ -12,10 +12,13 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
 from documents.models import Document, Page
 from documents.forms import UploadFileForm
 
 
+@login_required
 def upload_file(request):
     form = UploadFileForm(request.POST, request.FILES)
 
@@ -46,6 +49,7 @@ def upload_file(request):
     return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
 
+@login_required
 def document_download(request, id):
     doc = get_object_or_404(Document, id=id)
     with open(doc.staticfile) as fd:
@@ -57,6 +61,7 @@ def document_download(request, id):
     return response
 
 
+@login_required
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 
