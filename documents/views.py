@@ -64,10 +64,24 @@ def upload_file(request):
 @login_required
 def document_download(request, id):
     doc = get_object_or_404(Document, id=id)
-    with open(doc.staticfile) as fd:
+    with open(doc.pdf) as fd:
         body = fd.read()
     response = HttpResponse(body, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
+    doc.downloads += 1
+    doc.save()
+    return response
+
+
+@login_required
+def document_download_original(request, id):
+    doc = get_object_or_404(Document, id=id)
+    with open(doc.staticfile) as fd:
+        body = fd.read()
+    response = HttpResponse(body, content_type='application/octet-stream')
+    response['Content-Description'] = 'File Transfer'
+    response['Content-Transfer-Encoding'] = 'binary'
+    response['Content-Disposition'] = 'attachment; filename="{}.{}"'.format(doc.name, doc.original_extension())
     doc.downloads += 1
     doc.save()
     return response
