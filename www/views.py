@@ -43,7 +43,7 @@ def node_canonic(request, nodeid):
 
 
 def index(request):
-    return render(request, "index.html", {"login_url": settings.ULB_LOGIN})
+    return render(request, "index.html", {"login_url": settings.ULB_LOGIN, "debug": settings.DEBUG})
 
 
 @login_required
