@@ -13,13 +13,9 @@
 {% block content %}
 <div class="logic-block">
   <h1>{{ object.name }}</h1>
-  {% if followed %}
-  <a class="panel-button border-bottom" href="{% url 'unfollow_node' object.id %}">
-    leave
-    </a>
-  {% else %}
+  {% if show_button %}
   <a class="panel-button border-bottom" href="{% url 'follow_node' object.id %}">
-    join
+    Follow all courses in this category
   </a>
   {% endif %}
   <p>{{ object.description }}</p>
@@ -27,24 +23,28 @@
 <div class="clear"></div>
 
 <div class="logic-block">
-  <h2>Subcategories</h2>
-  <ul>
-    {% for cat in object.subcategory_set %}
-    <li>
-      <a href="{% url 'category_show' cat.id %}">{{ cat.name }}</a>
-    </li>
-    {% endfor %}
-  </ul>
-  <h2>Courses</h2>
-  <ul>
-    {% for course in object.course_set %}
-    <li>
-      <a href="{% url 'course_show' course.id %}">
-        {{ course.slug|upper }}: {{ course.name }}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+  {% if object.subcategories %}
+    <h2>Subcategories</h2>
+    <ul>
+      {% for cat in object.subcategories %}
+      <li>
+        <a href="{% url 'category_show' cat.id %}">{{ cat.name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if object.courses %}
+    <h2>Courses</h2>
+    <ul>
+      {% for course in object.courses %}
+      <li>
+        <a href="{% url 'course_show' course.id %}">
+          {{ course.slug|upper }}: {{ course.name }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 </div>
 <div class="clear"></div>
 {% endblock %}

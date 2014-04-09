@@ -54,3 +54,9 @@ class CourseInfo(models.Model):
 class Category(Node):
     slug = models.SlugField()
     description = models.TextField(null=True)
+
+    def subcategories(self):
+        return self.children(only=[Category])
+
+    def courses(self):
+        return self.children(only=[Course])
