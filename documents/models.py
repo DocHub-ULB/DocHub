@@ -45,5 +45,4 @@ class Page(OneParent, Taggable):
     height_900 = models.IntegerField()
 
     def move(self, newparent):
-        # You may not move a page from a document to another
-        raise NotImplementedError
+        raise NotImplementedError("You may not move a page from a document to another")
