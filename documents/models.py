@@ -10,7 +10,10 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+import os
+
 from django.db import models
+
 from polydag.models import Taggable
 from polydag.behaviors import OneParent
 from www import settings
@@ -31,6 +34,7 @@ class Document(OneParent, Taggable):
 
     staticfile = models.CharField(max_length=2048, default='')
     source = models.CharField(max_length=2048, default='')
+    pdf = models.CharField(max_length=2048, default='')
     state = models.CharField(max_length=10, default='pending')
 
     def move(self, *args, **kwargs):
@@ -38,6 +42,9 @@ class Document(OneParent, Taggable):
         # thus NotImplementedError
         raise NotImplementedError
         super(Document, self).move(*args, **kwargs)
+
+    def original_extension(self):
+        return os.path.splitext(self.source)[1][1:]
 
 
 class Page(OneParent, Taggable):

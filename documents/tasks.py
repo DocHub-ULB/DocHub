@@ -51,6 +51,15 @@ def doctask(*args, **kwargs):
 
 
 @doctask
+def process_upload(self, document_id):
+    document = Document.objects.get(pk=document_id)
+    if document.original_extension() == 'pdf':
+        process_pdf.delay(document_id)
+    else:
+        process_office.delay(document_id)
+
+
+@doctask
 def download(self, document_id):
     document = Document.objects.get(pk=document_id)
     tmp_path = document_pdir(document)
@@ -60,8 +69,7 @@ def download(self, document_id):
         rmtree(tmp_path)
 
     makedirs(tmp_path)
-    document.type = 'pdf'
-    destination_name = join(tmp_path, "{}.{}".format(document_id, document.type))
+    destination_name = join(tmp_path, "{}.{}".format(document_id, document.original_extension()))
 
     try:
         with closing(urlopen(document.source)) as original:
@@ -83,6 +91,8 @@ def download(self, document_id):
             self.retry(countdown=r(), exc=e)
 
     document.staticfile = destination_name
+    if document.original_extension() == 'pdf':
+        document.pdf = destination_name
     document.save()
 
     try:
@@ -97,12 +107,33 @@ download.max_retries = 5
 
 
 @doctask
+def convert_office_to_pdf(self, document_id):
+    document = Document.objects.get(pk=document_id)
+    pdf_path = join(document_pdir(document), "{}.pdf".format(document_id))
+
+    try:
+        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', document.staticfile])
+    except OSError:
+        raise MissingBinary("unoconv")
+    except subprocess.CalledProcessError:
+        raise DocumentProcessingError('"unoconv" has failed')
+
+    with open(pdf_path, 'w') as pdf_file:
+        pdf_file.write(sub)
+
+    document.pdf = pdf_path
+    document.save()
+
+    return document_id
+
+
+@doctask
 def calculate_pdf_length(self, document_id):
 
     document = Document.objects.get(pk=document_id)
 
     try:
-        sub = subprocess.check_output(['pdfinfo', document.staticfile])
+        sub = subprocess.check_output(['pdfinfo', document.pdf])
     except OSError:
         raise MissingBinary("pdfinfo")
     except subprocess.CalledProcessError:
@@ -137,9 +168,9 @@ def index_pdf(self, document_id):
         raise
 
     # TODO : this could fail
-    system("pdftotext " + document.staticfile)
+    system("pdftotext " + document.pdf)
     # change extension
-    words_file = '.'.join(document.staticfile.split('.')[:-1]) + ".txt"
+    words_file = '.'.join(document.pdf.split('.')[:-1]) + ".txt"
 
     # TODO : this could fail
     with open(words_file, 'r') as words:
@@ -157,7 +188,7 @@ def preview_pdf(self, document_id):
         raise MissingBinary("gm")
 
     document = Document.objects.get(pk=document_id)
-    source = document.staticfile
+    source = document.pdf
 
     destination_dir = join(document_pdir(document), "images")
     if not path.exists(destination_dir):
@@ -194,9 +225,11 @@ def finish_file(self, document_id):
     move(tmp_path, destination)
 
     document.state = 'done'
-    document.staticfile = join(destination, 'doc-{}'.format(document.id), '{}.pdf'.format(document.id))
+    document.pdf = join(destination, 'doc-{}'.format(document.id), '{}.pdf'.format(document.id))
+    document.staticfile = join(destination, 'doc-{}'.format(document.id), '{}.{}'.format(document.id, document.original_extension()))
     document.save()
 
     return document_id
 
 process_pdf = chain(download.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
+process_office = chain(download.s(), convert_office_to_pdf.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())

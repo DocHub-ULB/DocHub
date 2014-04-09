@@ -33,7 +33,10 @@ def upload_file(request):
     if len(form.cleaned_data['name']) > 0:
         name = form.cleaned_data['name']
     else:
-        name = request.FILES['file'].name[:-4].lower()
+        name, _ = os.path.splitext(request.FILES['file'].name)
+        name = name.lower()
+
+    extension = os.path.splitext(request.FILES['file'].name)[1][1:].lower()
 
     description = escape(form.cleaned_data['description'])
     course = form.cleaned_data['course']
@@ -45,7 +48,7 @@ def upload_file(request):
     if not os.path.exists(settings.TMP_UPLOAD_DIR):
         os.makedirs(settings.TMP_UPLOAD_DIR)
 
-    tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}".format(doc.id))
+    tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}.{}".format(doc.id, extension))
     source = 'file://' + tmp_file
     doc.source = source
 
