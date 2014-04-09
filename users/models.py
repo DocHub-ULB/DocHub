@@ -75,24 +75,10 @@ class User(AbstractBaseUser):
         return self.follow.all()
 
     def followed_nodes_id(self):
-        try:
-            self.followed_cache
-        except:
-            direct = self.follow.only('id').non_polymorphic()
-            direct_descendants = map(lambda x: x.descendants_set(True), direct)
-            indirect = reduce(lambda x, y: x | y, direct_descendants, set())
-            indirect_ids = map(lambda x: x.id, indirect)
-            self.followed_cache = indirect_ids
-        return self.followed_cache
+        return self.follow.only('id').non_polymorphic()
 
     def followed_courses(self):
-        ids = self.followed_nodes_id()
-        if len(ids) > 0:
-            qs = map(lambda x: Q(id=x), ids)
-            q = reduce(lambda x, y: x | y, qs)
-            return Course.objects.filter(q)
-        else:
-            return []
+        return self.directly_followed().instance_of(Course)
 
 
 class Inscription(models.Model):

@@ -21,11 +21,13 @@ def propagate_notification(self, notification_id):
     prenotif = notify.models.PreNotification.objects.get(pk=notification_id)
 
     notif_counter = 0
-    nodeset = prenotif.node.ancestors_set()
-    nodeset.add(prenotif.node)
+    impacted_nodes = []
+    # TODO : if it's a new response notif don't add node's parent (which is the course of the topic)
+    impacted_nodes += list(prenotif.node.parents())
+    impacted_nodes.append(prenotif.node)
     delivered = set()
-    #Walk in ancestors graph
-    for node in nodeset:
+
+    for node in impacted_nodes:
         #Deliver notifs to followers of ancestor nodes
         for follower in node.followed.all():
             if follower != prenotif.user and follower not in delivered:
