@@ -20,6 +20,7 @@ from shutil import rmtree, move
 from urllib2 import urlopen, URLError, HTTPError
 from contextlib import closing
 import subprocess
+import hashlib
 
 from django.core.urlresolvers import reverse
 
@@ -30,7 +31,17 @@ from .exceptions import DocumentProcessingError, MissingBinary, UploadError, Dow
 from .helpers import document_pdir, r, get_image_size
 
 
+class SkipException(StandardError):
+    pass
+
+
+class ExisingChecksum(SkipException):
+    pass
+
+
 def on_failure(self, exc, task_id, args, kwargs, einfo):
+    if isinstance(exc, SkipException):
+        return None
     id = args[0]
     print("Document {} failed.".format(id))
     document = Document.objects.get(id=id)
@@ -104,6 +115,32 @@ def download(self, document_id):
     return document_id
 
 download.max_retries = 5
+
+
+@doctask
+def checksum(self, document_id):
+    document = Document.objects.get(pk=document_id)
+    with open(document.staticfile) as source:
+        contents = source.read()
+        hashed = hashlib.md5(contents).hexdigest()
+    query = Document.objects.filter(md5=hashed).exclude(md5='')
+    if query.count() != 0:
+        dup = query.first()
+        Notification.direct(
+            user=document.user,
+            text="Error when processing document: {}. It's a duplicate of {}".format(document.name, dup.name),
+            node=document.parent,
+            url=reverse('node_canonic', args=[dup.id]),
+        )
+        document.delete()
+        raise ExisingChecksum("Document {} has the same checksum as {}".format(document.id, dup.id))
+    else:
+        document.md5 = hashed
+        document.save()
+
+    return document_id
+
+checksum.throws = (ExisingChecksum,)
 
 
 @doctask
@@ -231,5 +268,5 @@ def finish_file(self, document_id):
 
     return document_id
 
-process_pdf = chain(download.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
-process_office = chain(download.s(), convert_office_to_pdf.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
+process_pdf = chain(download.s(), checksum.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
+process_office = chain(download.s(), checksum.s(), convert_office_to_pdf.s(), calculate_pdf_length.s(), preview_pdf.s(), finish_file.s())
