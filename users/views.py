@@ -14,9 +14,15 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.core.cache.utils import make_template_fragment_key
+from django.core.cache import cache
 
 from polydag.models import Node
 from graph.models import Category, Course
+
+
+def empty_user_followed_list_cache(user):
+    cache.delete(make_template_fragment_key('message-count', user.username))
 
 
 @login_required
@@ -29,6 +35,7 @@ def follow_node(request, nodeid):
         request.user.follow.add(node)
     else:
         raise NotImplementedError("Can not follow a node of type {}".format(node.classBasename()))
+    empty_user_followed_list_cache(request.user)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
 
@@ -38,4 +45,5 @@ def unfollow_node(request, nodeid):
     if not isinstance(node, Course):
         raise NotImplementedError("Can not unfollow a node of type {}".format(node.classBasename()))
     request.user.follow.remove(node)
+    empty_user_followed_list_cache(request.user)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))

@@ -8,6 +8,8 @@
 {% endcomment %}
 
 {%load humanize %}
+{% load cache %}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -57,13 +59,15 @@
     <div id="content">
       <div id="bar" style="width: 150px; float: left; margin-right: 30px; margin-bottom: 30px;">
         Followed courses
-        {% for course in user.followed_courses %}
-          <p>
-            <a title="#{{ course.id }}" href="{% url 'node_canonic' course.id %}">
-              {{ course.name }}
-            </a>
-          </p>
-        {% endfor %}
+        {% cache 120 user_followed_list user.username %}
+          {% for course in user.followed_courses %}
+            <p>
+              <a title="#{{ course.id }}" href="{% url 'node_canonic' course.id %}">
+                {{ course.name }}
+              </a>
+            </p>
+          {% endfor %}
+        {% endcache %}
       </div>
       <div style="margin: 10px; margin-left: 160px;">
       {% block content %}
@@ -71,7 +75,7 @@
       <div>
     </div>
 
-    
+
     <div style="clear:both;"></div>
     <div id="footer">
         P402 is upon US.<br>
