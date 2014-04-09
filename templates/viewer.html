@@ -37,8 +37,14 @@ var viewer_instance = viewer(doc);
     </a>
     <a href="{% url 'document_download' object.id %}">
       <img id="download" src="/static/images/download-icon.png"/>
-      <span>download</span>
+      <span>download (pdf)</span>
     </a>
+    {% if object.staticfile != object.pdf %}
+    <a href="{% url 'document_download_original' object.id %}">
+      <img id="download" src="/static/images/download-icon.png"/>
+      <span>download (original)</span>
+    </a>
+    {% endif %}
   </div>
   <div class="viewer-header-container">
     <span id="viewer-title">{{ object.name }}</span>
