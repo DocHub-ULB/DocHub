@@ -1,7 +1,10 @@
 Django==1.6
+grapheekdb
 django_polymorphic
+
 django-template-fragments
 markdown
+
 logbook
 celery
 django-celery

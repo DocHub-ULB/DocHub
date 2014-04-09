@@ -14,14 +14,14 @@ from __future__ import unicode_literals
 class CannotHaveChildren(Exception):
     """Exception raised by graph nodes that doesn't accept children"""
     def __init__(self, node):
-        msg = node.classBasename() + '#' + str(node.pk) + ' can\'t have children'
+        msg = node.__basename__ + '#' + str(node.pk) + ' can\'t have children'
         Exception.__init__(self, msg)
 
 
 class CannotHaveManyParents(Exception):
     """Exception raised by graph nodes that doesn't accept more than 1 parent"""
     def __init__(self, node):
-        msg = node.classBasename() + '#' + str(node.pk) + ' can\'t have more than 1 parent'
+        msg = node.__basename__ + '#' + str(node.pk) + ' can\'t have more than 1 parent'
         Exception.__init__(self, msg)
 
 
@@ -39,13 +39,13 @@ class OneParent:
     @property
     def parent(self, *args, **kwargs):
         parents = self.parents()
-        if len(parents) > 0:
-            return parents[0]
+        if parents.count() > 0:
+            return list(parents.limit(1))[0]
         else:
             return None
 
     def pre_attach_hook(self, *args, **kwargs):
-        if len(self.parents()) > 0:
+        if self.parents().count() > 0:
             raise CannotHaveManyParents(self)
 
     def move(self, newparent, *args, **kwargs):

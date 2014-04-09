@@ -20,6 +20,7 @@ from django.contrib.auth.decorators import login_required
 
 from documents.models import Document, Page
 from documents.forms import UploadFileForm
+from polydag.models import to_django
 from www import settings
 
 
@@ -74,7 +75,7 @@ def document_download(request, id):
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 
-    children = document.children()
+    children = to_django(document.children())
     document.page_set = children.instance_of(Page)
 
     context = {"object": document,

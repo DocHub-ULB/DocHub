@@ -43,7 +43,6 @@ users = """[
                 "welcome": true,
                 "user": 1,
                 "registration": "0",
-                "follow": [],
                 "email": "p402@cerkinfo.be"}}]"""
 
 
