@@ -33,7 +33,9 @@
 
           <p>Why not give it a try? You should <strong>
             <a href="{{login_url}}" id="login_link">login</a></strong><br>
+            {% if debug %}
             <small>Developpers could also <a href="/syslogin">syslogin</a></small>
+            {% endif %}
           </p>
 
           <p>P402 is currently open for <strong>all students</strong><br>

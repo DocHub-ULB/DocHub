@@ -1,22 +1,30 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2012, hast. All rights reserved.
+# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
+#
+# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+
+import os
 
 from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
 from documents.models import Document, Page
 from documents.forms import UploadFileForm
 from polydag.models import to_django
+from www import settings
 
 
+@login_required
 def upload_file(request):
     form = UploadFileForm(request.POST, request.FILES)
 
@@ -35,18 +43,23 @@ def upload_file(request):
                                   name=name, description=description, state="pending")
     course.add_child(doc)
 
-    tmp_file = '/tmp/TMP402_%d.pdf' % doc.id
+    if not os.path.exists(settings.TMP_UPLOAD_DIR):
+        os.makedirs(settings.TMP_UPLOAD_DIR)
+
+    tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}".format(doc.id))
     source = 'file://' + tmp_file
     doc.source = source
-    doc.save()
 
     tmp_doc = open(tmp_file, 'w')
     tmp_doc.write(request.FILES['file'].read())
     tmp_doc.close()
 
+    doc.save() # Save document after copy to avoid corrupted state if copy failed
+
     return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
 
+@login_required
 def document_download(request, id):
     doc = get_object_or_404(Document, id=id)
     with open(doc.staticfile) as fd:
@@ -58,6 +71,7 @@ def document_download(request, id):
     return response
 
 
+@login_required
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 

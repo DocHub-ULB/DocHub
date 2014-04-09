@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
@@ -43,16 +52,3 @@ def post_document_save(**kwargs):
 
     if kwargs['created'] and document.state == 'pending':
         process_pdf.delay(document.id)
-
-
-def document_delete(**kwargs):
-    assert kwargs['sender'] == models.Document
-
-    document = kwargs['instance']
-    if document.e:
-        Notification.direct(
-            user=document.user,
-            text="Error when processing document: " + str(document.e),
-            node=document.parent,
-            url=reverse('node_canonic', args=[document.parent.id]),
-        )

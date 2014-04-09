@@ -1,4 +1,14 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from config import *
 
@@ -14,5 +24,5 @@ from config import *
 # You can use production.py or dev.py as a template for local.py or just use
 # 	from {dev,production} import *
 # in local.py and then overwrite some values
-# 
+#
 # If local.py does not exist, configuration will be loaded from dev.py directly

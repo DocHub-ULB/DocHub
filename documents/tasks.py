@@ -1,22 +1,56 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, absolute_import
+from __future__ import unicode_literals
+
+# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+
+from __future__ import absolute_import
 
 from celery import shared_task, chain
 from os import system, path, makedirs
+import os
 join = path.join
 from shutil import rmtree, move
 from urllib2 import urlopen, URLError, HTTPError
 from contextlib import closing
 import subprocess
 
+from django.core.urlresolvers import reverse
 
 from www import settings
 from documents.models import Document, Page
+from notify.models import Notification
 from .exceptions import DocumentProcessingError, MissingBinary, UploadError, DownloadError
 from .helpers import document_pdir, r, get_image_size
 
 
-@shared_task(bind=True)
+def on_failure(self, exc, task_id, args, kwargs, einfo):
+    id = args[0]
+    print("Document {} failed.".format(id))
+    document = Document.objects.get(id=id)
+    # TODO
+    # document.failed = True
+    # document.save()
+    Notification.direct(
+        user=document.user,
+        text="Error when processing document: {}".format(document.name),
+        node=document.parent,
+        url=reverse('node_canonic', args=[document.parent.id]),
+    )
+    # TODO : alert admins
+
+
+def doctask(*args, **kwargs):
+    return shared_task(*args, bind=True, on_failure=on_failure, **kwargs)
+
+
+@doctask
 def download(self, document_id):
     document = Document.objects.get(pk=document_id)
     tmp_path = document_pdir(document)
@@ -51,9 +85,10 @@ def download(self, document_id):
     document.staticfile = destination_name
     document.save()
 
-    try:  # may fail if download url, don't really care
-        system("rm /tmp/TMP402_%d.pdf" % document.id)
-    except:
+    try:
+        if document.source.startswith("file://"):
+            os.unlink(document.source[7:])
+    except os.error:
         pass
 
     return document_id
@@ -61,8 +96,9 @@ def download(self, document_id):
 download.max_retries = 5
 
 
-@shared_task(bind=True)
+@doctask
 def calculate_pdf_length(self, document_id):
+
     document = Document.objects.get(pk=document_id)
 
     try:
@@ -71,6 +107,8 @@ def calculate_pdf_length(self, document_id):
         raise MissingBinary("pdfinfo")
     except subprocess.CalledProcessError:
         raise DocumentProcessingError('"pdfinfo" has failed')
+
+    sub = sub.decode('ascii', 'ignore')
 
     pages = -1
     for line in sub.split('\n'):
@@ -86,7 +124,7 @@ def calculate_pdf_length(self, document_id):
     return document_id
 
 
-@shared_task(bind=True)
+@doctask
 def index_pdf(self, document_id):
     document = Document.objects.get(pk=document_id)
 
@@ -111,7 +149,7 @@ def index_pdf(self, document_id):
     return document_id
 
 
-@shared_task(bind=True)
+@doctask
 def preview_pdf(self, document_id):
     try:
         subprocess.check_output(['gm', 'help'])
@@ -143,7 +181,7 @@ def preview_pdf(self, document_id):
     return document_id
 
 
-@shared_task(bind=True)
+@doctask
 def finish_file(self, document_id):
     document = Document.objects.get(pk=document_id)
     tmp_path = document_pdir(document)

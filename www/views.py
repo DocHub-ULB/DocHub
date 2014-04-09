@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2012, hast. All rights reserved.
+# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
+#
+# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+
 from graph.models import Category, Course
 from telepathy.models import Thread
 from polydag.models import Node
@@ -18,6 +22,7 @@ from documents.models import Document
 from notify.models import PreNotification
 from users.models import Inscription
 from .helpers import current_year
+
 import settings
 
 Mapping = {
@@ -28,6 +33,7 @@ Mapping = {
 }
 
 
+@login_required
 def node_canonic(request, nodeid):
     n = get_object_or_404(Node, pk=nodeid)
     for klass in Mapping:
@@ -37,9 +43,10 @@ def node_canonic(request, nodeid):
 
 
 def index(request):
-    return render(request, "index.html", {"login_url": settings.ULB_LOGIN})
+    return render(request, "index.html", {"login_url": settings.ULB_LOGIN, "debug": settings.DEBUG})
 
 
+@login_required
 def home(request):
     followed_ids = request.user.followed_nodes_id()
     wall = PreNotification.objects.filter(node__in=followed_ids).filter(personal=False).order_by('-created')
