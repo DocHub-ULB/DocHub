@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, absolute_import
+from __future__ import unicode_literals
+from __future__ import absolute_import
+
+# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from celery import shared_task
 
