@@ -8,6 +8,8 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 
+import os
+
 from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -16,6 +18,7 @@ from django.contrib.auth.decorators import login_required
 
 from documents.models import Document, Page
 from documents.forms import UploadFileForm
+from www import settings
 
 
 @login_required
@@ -37,14 +40,18 @@ def upload_file(request):
                                   name=name, description=description, state="pending")
     course.add_child(doc)
 
-    tmp_file = '/tmp/TMP402_%d.pdf' % doc.id
+    if not os.path.exists(settings.TMP_UPLOAD_DIR):
+        os.makedirs(settings.TMP_UPLOAD_DIR)
+
+    tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}".format(doc.id))
     source = 'file://' + tmp_file
     doc.source = source
-    doc.save()
 
     tmp_doc = open(tmp_file, 'w')
     tmp_doc.write(request.FILES['file'].read())
     tmp_doc.close()
+
+    doc.save() # Save document after copy to avoid corrupted state if copy failed
 
     return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 

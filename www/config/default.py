@@ -16,6 +16,7 @@ FRAGMENTS_DIR = join(BASE_DIR, "templates/fragments")
 
 # Upload settings
 PROCESSING_DIR = '/tmp/processing'
+TMP_UPLOAD_DIR = "/tmp/p402-upload/"
 
 UPLOAD_LOG = '/tmp/upload_log'
 UPLOAD_DIR = '%s/static/documents' % BASE_DIR

@@ -3,6 +3,7 @@ from __future__ import unicode_literals, absolute_import
 
 from celery import shared_task, chain
 from os import system, path, makedirs
+import os
 join = path.join
 from shutil import rmtree, move
 from urllib2 import urlopen, URLError, HTTPError
@@ -73,9 +74,10 @@ def download(self, document_id):
     document.staticfile = destination_name
     document.save()
 
-    try:  # may fail if download url, don't really care
-        system("rm /tmp/TMP402_%d.pdf" % document.id)
-    except:
+    try:
+        if document.source.startswith("file://"):
+            os.unlink(document.source[7:])
+    except os.error:
         pass
 
     return document_id
