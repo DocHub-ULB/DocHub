@@ -28,6 +28,8 @@ cleandata: clean
 	rm -f ${DATABASE}
 	rm -rf ./static/documents/*
 	rm -rf ./static/profile/*.*
+	rm -rf /tmp/p402-upload/*
+	rm -rf /tmp/processing/*
 
 ${DATABASE}:
 	./manage.py syncdb
