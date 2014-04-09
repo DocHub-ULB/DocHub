@@ -44,6 +44,11 @@ Add another user to the db
 
 	./manage.py useradd
 
+Speed up the conversion process (optional)
+-------------------------------
+
+We use `unoconv` to convert files to pdf. To speed up the process, just run somwhere in the background (screen, supervisord, background shell, whatever) `unoconv -l` which will start a conversion server and all tasks will be sent there so that we will not boot OpenOffice at every new conversion.
+
 Contribute !
 ------------
 
