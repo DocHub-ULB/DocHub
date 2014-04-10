@@ -1,0 +1,28 @@
+<div class="sticky">
+  <nav class="top-bar contain-to-grid viewer-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name"></li>
+      <li class="toggle-topbar menu-icon">
+        <a href="#">Viewer</a>
+      </li>
+    </ul>
+    <section class="top-bar-section">
+      <ul class="left">
+        <li>
+          <a href="{% url 'course_show' parent.id %}"><i class="fi-arrow-left"></i> {{ parent.name }}</a>
+        </li>
+        <li>
+          <a href="{% url 'document_download' object.id %}"><i class="fi-archive"></i> Download</a>
+        </li>
+      </ul>
+      <ul class="right">
+        <li>
+          <a id="zoom-in"><i class="fi-zoom-in"></i> Zoom</a>
+        </li>
+        <li>
+          <a id="zoom-out"><i class="fi-zoom-out"></i> De-zoom</a>
+        </li>
+      </ul>
+    </section>
+  </nav>
+</div>

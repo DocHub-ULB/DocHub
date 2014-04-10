@@ -22,10 +22,13 @@
   <div class="large-6 columns">
     <h3>Fichiers</h3>
     {% include "document_list.html" %}
+    <a href="{% url 'document_put' object.id %}">Uploader un nouveau document</a>
   </div>
   <div class="large-6 columns">
     <h3>Discussions</h3>
     {% include "thread_list.html" %}
+    <a href="{% url 'thread_put' object.id %}">Créer une nouvelle discussion</a>
+
   </div>
 </div>
 {% endblock %}

@@ -31,10 +31,7 @@ var viewer = function(doc) {
     };
 
     var set_height = function() {
-        if (navbar.is_down())
-            $('#thumbs').height($(window).height() - 120 - navbar.get_height());
-        else
-            $('#thumbs').height($(window).height() - 106);
+        // $('#thumbs').height($(window).height() - 106);
     };
 
     var set_current_hilight = function(thumb) {
@@ -58,17 +55,14 @@ var viewer = function(doc) {
     };
 
     var scroll_to_page = function(num) {
-        if (navbar.is_down())
-            var sep = 75 + navbar.get_height();
-        else
-            var sep = 60;
+        var sep = 60;
 
         $(document).scrollTop($('#page-' + num).offset().top - sep);
     }
 
     var load_pages = function() {
-        var start_page = Math.max(0, current_page - 2);
-        var end_page = Math.min(doc.len, current_page + 2);
+        var start_page = Math.max(0, current_page - 3);
+        var end_page = Math.min(doc.len, current_page + 3);
 
         for (var i = start_page; i < end_page; ++i)
             if ($('#page-' + i).attr('src') == '/static/images/white.png')
@@ -88,10 +82,7 @@ var viewer = function(doc) {
 
     var set_current_page = function() {
         var scroll = $(document).scrollTop();
-        if (navbar.is_down())
-            scroll -= 94 - navbar.get_height();
-        else
-            scroll -= 90;
+
         for (var i = 0; i < doc.len && scroll > 0; ++i)
             scroll -= ($('#page-' + i).height() + 12);
         if (current_page != Math.max(0, i - 1)) {

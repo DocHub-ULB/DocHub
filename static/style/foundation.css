@@ -11,6 +11,14 @@
     color: #666;
 }
 
+.black {
+    color: #111;
+}
+
+.black:hover {
+    color: #333;
+}
+
 .dark-grey:hover {
     color: #333;
 }
@@ -68,4 +76,59 @@
 .thread-separator {
     border-top: 5px solid #EEE;
     margin-bottom: 20px;
+}
+
+.viewer-bar {
+    background-color: #AAA;
+}
+
+.viewer-bar section li a{
+    background-color: #AAA !important;
+    color: #333 !important;
+}
+
+.viewer-bar section li a:hover{
+    background-color: #333 !important;
+    color: #FFF !important;
+}
+
+#thumbs {
+    position: fixed;
+    overflow: auto;
+    background-color: #eee;
+    padding: 15px 28px 10px 20px;
+    text-align: center;
+    height: 100%;
+}
+
+
+#thumbs p {
+    font-size: 10px;
+    text-align: center;
+}
+
+.thumb {
+    border: 1px #eee solid;
+}
+
+#thumbs-misere {
+    position: fixed;
+    top: -10px;
+    background-color: #eee;
+    height: 100px;
+    width: 228px;
+    z-index: -1;
+}
+
+.page {
+    border: 1px #eee solid;
+    margin: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+}
+
+.hilight {
+    border: 2px #bde solid;
 }

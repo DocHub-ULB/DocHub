@@ -9,7 +9,7 @@
 # your option) any later version.
 {% endcomment %}
 
-{% block header %}
+{% block script %}
 <script src="/static/scripts/viewer.js"></script>
 <script language="JavaScript">
 var doc = {
@@ -28,41 +28,30 @@ var viewer_instance = viewer(doc);
 {% endblock %}
 
 {% block full-page %}
-
-<div id="viewer-header">
-  <div class="viewer-header-container">
-    <a href="{% url 'course_show' parent.id %}">
-      <img id="backward" src="/static/images/back-icon.png"/>
-      <span>{{ parent.name }}</span>
-    </a>
-    <a href="{% url 'document_download' object.id %}">
-      <img id="download" src="/static/images/download-icon.png"/>
-      <span>download</span>
-    </a>
+{% include "viewer_bar.html" %}
+<div class="row">
+  <div id="thumbs-misere"></div>
+  <div id="thumbs" class="large-2 columns show-for-large-up">
+    {% for page in object.page_set %}
+      <div class="row">
+        <div class="large-12 columns">
+          <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
+            src="/static/images/white.png" width="120" height="{{ page.height_120 }}"/>
+          <p>{{ page.numero|add:1 }}</p>
+        </div>
+      </div>
+    {% endfor %}
   </div>
-  <div class="viewer-header-container">
-    <span id="viewer-title">{{ object.name }}</span>
+  <div id="pages" class="large-10 columns show-for-large-up">
+    {% for page in object.page_set %}
+      <div class="row">
+        <div class="large-12 columns">
+          <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
+          width="600" height="{{ page.height_600 }}"/>
+        </div>
+      </div>
+    {% endfor %}
   </div>
-  <div class="viewer-header-container">
-    <img id="zoom-in" src="/static/images/magnifier_zoom_in.png"/>
-    <input id="zoom" value="100%"/>
-    <img id="zoom-out" src="/static/images/magnifier_zoom_out.png"/>
-  </div>
 
-</div>
-
-<div id="thumbs">
-{% for page in object.page_set %}
-  <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
-    src="/static/images/white.png" width="120" height="{{ page.height_120 }}"/>
-  <p>{{ page.numero|add:1 }}</p>
-{% endfor %}
-</div>
-
-<div id="pages">
-  {% for page in object.page_set %}
-  <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
-    width="600" height="{{ page.height_600 }}"/>
-  {% endfor %}
 </div>
 {% endblock %}
