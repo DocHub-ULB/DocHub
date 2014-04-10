@@ -1,25 +1,69 @@
 {% extends "skel.html" %}
-{% block content %}
-  {% if user.welcome %}
-    <div id="welcome" style="margin-bottom: 20px; margin-right: 100px; padding: 10px; border: 1px solid blue">
-      You look new here !  <br>
-      Maybe you would like to subscribe to some courses ?<br>
-      {% if welcome.new_inscriptions %}
-        It looks like you were studying {{ welcome.inscription.section }} last year and we don't know where you are this year...<br>
-        Here are the sections where you could have gone : 
-        {% for new in welcome.new_inscriptions %}
-          {{ new.section }}
-        {% endfor %}
-      {% elif welcome.inscription %}
-        Are you studying {{ welcome.inscription.section }} in the {{ welcome.inscription.faculty|capfirst }} faculty ?
-      {% endif %}
-    </div>
-  {% endif %}
+{%load humanize %}
 
-  <div id="wall">
-    {% for elem in wall %}
-      <div>{{ elem.text }}</div>
-    {% endfor %}
+{% block content %}
+<div class="row">
+  <div class="large-12 columns">
+    <h1>Bienvenue sur DocHub</h1>
   </div>
+</div>
+{% if user.welcome %}
+  <div class="row">
+    <div class="large-10 columns">
+      <div class="panel">
+        <h3>You look new here !</h3>
+        <p>Maybe you would like to subscribe to some courses ?</p>
+        {% if welcome.new_inscriptions %}
+          <p>It looks like you were studying {{ welcome.inscription.section }} last year and we don't know where you are this year...</p>
+          <p>Here are the sections where you could have gone :
+          {% for new in welcome.new_inscriptions %}
+            {{ new.section }}
+          {% endfor %}</p>
+        {% elif welcome.inscription %}
+          <p>Are you studying {{ welcome.inscription.section }} in the {{ welcome.inscription.faculty|capfirst }} faculty ?</p>
+        {% endif %}
+        <div class="row">
+          <div class="twelve columns">
+            <h3>Vous pouvez aussi découvrir DocHub :</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-4 medium-4 columns">
+        <p><a href="#">Liste des cours</a><br />Lorem Ipsum</p>
+      </div>
+          <div class="large-4 medium-4 columns">
+            <p><a href="#">Aide</a><br />Lorem Ipsum</p>
+          </div>
+          <div class="large-4 medium-4 columns">
+            <p><a href="#">Page Facebook</a><br>Lorem IpsumSit dolor amet...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="row">
+  <div class="large-8 columns">
+<!--             {% for elem in wall %}
+      <div>{{ elem.text }}</div>
+    {% endfor %} -->
+    {% for elem in wall %}
+    <!-- Feed Entry -->
+    <div class="row">
+      <div class="small-3 large-2 columns ">
+        <img width="80" src="{{ elem.user.get_photo }}" />
+      </div>
+      <div class="small-9 large-10 columns">
+        <p><strong>{{ elem.text }}:</strong><br>Bacon ipsum dolor sit amet nulla ham qui sint exercitation eiusmod commodo, chuck duis velit.</p>
+        <ul class="inline-list">
+          <li><a href="{{ elem.url }}">{{ elem.created|naturaltime|capfirst }}</a></li>
+        </ul>
+      </div>
+    </div>
+    {% endfor %}
+    <!-- End Feed Entry -->
+  </div>
+</div>
 
 {% endblock %}
