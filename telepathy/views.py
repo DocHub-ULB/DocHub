@@ -22,20 +22,28 @@ from polydag.models import Node
 
 
 @login_required
-def new_thread(request):
-    form = NewThreadForm(request.POST)
+def new_thread(request, parent_id):
+    parentNode = get_object_or_404(Node, id=parent_id)
 
-    if not form.is_valid():
-        return HttpResponse('form invalid' + str(form.errors), 'text/html')
+    if request.method == 'POST':
+        form = NewThreadForm(request.POST)
 
-    name = escape(form.cleaned_data['name'])
-    content = escape(form.cleaned_data['content'])
-    parentNode = get_object_or_404(Node, id=form.cleaned_data['parentNode'])
-    thread = Thread.objects.create(user=request.user, name=name)
-    Message.objects.create(user=request.user, thread=thread, text=content)
-    parentNode.add_child(thread)
+        if form.is_valid():
+            name = escape(form.cleaned_data['name'])
+            content = escape(form.cleaned_data['content'])
 
-    return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
+            thread = Thread.objects.create(user=request.user, name=name)
+            Message.objects.create(user=request.user, thread=thread, text=content)
+            parentNode.add_child(thread)
+
+            return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
+    else:
+        form = NewThreadForm()
+
+    return render(request, 'new_thread.html', {
+        'form': form,
+        'parent': parentNode,
+    })
 
 
 @login_required

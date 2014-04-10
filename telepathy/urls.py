@@ -15,7 +15,7 @@ from telepathy.views import new_thread, show_thread, reply_thread
 
 
 urlpatterns = patterns("",
-    url(r"^put/$",
+    url(r"^put/(?P<parent_id>[^/]*)$",
         new_thread,
         name="thread_put"),
 
