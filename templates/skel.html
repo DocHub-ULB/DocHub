@@ -59,7 +59,7 @@
     <div id="content">
       <div id="bar" style="width: 150px; float: left; margin-right: 30px; margin-bottom: 30px;">
         Followed courses
-        {% cache 120 user_followed_list user.username %}
+        {% cache 120 user_followed_list user.netid %}
           {% for course in user.followed_courses %}
             <p>
               <a title="#{{ course.id }}" href="{% url 'node_canonic' course.id %}">

@@ -22,7 +22,7 @@ from graph.models import Category, Course
 
 
 def empty_user_followed_list_cache(user):
-    cache.delete(make_template_fragment_key('message-count', user.username))
+    cache.delete(make_template_fragment_key('user_followed_list', [user.netid]))
 
 
 @login_required
