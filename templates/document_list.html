@@ -1,37 +1,39 @@
 <table class="sortable rounded w700">
-    <thead>
+  <thead>
+    <tr>
+    <th style="min-width: 200px">Titre</th>
+    <th>Par</th>
+    <th class="rounded-right">Pages</th>
+    <th class="rounded-right">Date</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% if object.document_set %}
+    {% for doc in object.document_set %}
       <tr>
-        <th class="rounded-left">#</th>
-        <th style="min-width: 200px">Name</th>
-        <th>Score</th>
-        <th>Poster</th>
-        <th class="rounded-right">Pages</th>
-      </tr>
-    </thead>
-
-    <tbody>
-    {% if object.document_set %}
-        {% for doc in object.document_set %}
-          <tr>
-            <td>{{ doc.id }}</td>
-            {% if doc.state == 'done'  %}
-                <td><a title="{{ doc.description }}" href="{% url 'document_show' doc.id %}">
-                  {{ doc.name }}
-                </a></td>
-                <td>-</td>
-                <td>{{ doc.user.name }}</td>
-                <td>{{ doc.pages }}</td>
-            {% else %}
-                <td>{{ doc.name }}</td>
-                <td colspan=3 >Document pending, please wait</td>
-            {% endif %}
-
-            </tr>
-        {% endfor %}
-    {% else %}
-        <tr>
-            <td colspan=5 >There is nothing over here :/<br>Just upload a new document by clicking the upload button</td>
+      {% if doc.state == 'done'  %}
+        <td>
+          <a title="{{ doc.description }}" href="{% url 'document_show' doc.id %}">
+            {{ doc.name }}
+          </a>
         </td>
-    {% endif %}
-    </tbody>
+        <td>{{ doc.user.name }}</td>
+        <td>{{ doc.pages }}</td>
+        <td>{{ doc.date|date:"d/n/y" }}</td>
+      {% else %}
+        <td>{{ doc.name }}</td>
+        <td colspan=3 >Document pending, please wait</td>
+      {% endif %}
+
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="3">
+        Il n'y a pas documents ici...<br>Et si vous <a href="#">uploadiez quelque chose ?</a>
+      </td>
+    </td>
+  {% endif %}
+  </tbody>
 </table>

@@ -1,0 +1,25 @@
+{% extends "skel.html" %}
+{% load humanize %}
+
+{% comment %}
+# Copyright 2012, hast. All rights reserved.
+
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+{% endcomment %}
+
+{% block content %}
+
+
+<div class="row">
+  <div class="large-10 medium-9 columns">
+    {% block center-col %}{% endblock %}
+  </div>
+  <div class="large-2 medium-3 columns">
+    {% block right-col %}{% endblock %}
+  </div>
+</div>
+
+{% endblock %}

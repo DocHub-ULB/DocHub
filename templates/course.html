@@ -1,4 +1,4 @@
-{% extends "skel.html" %}
+{% extends "3col.html" %}
 {% load humanize %}
 
 {% comment %}
@@ -10,51 +10,51 @@
 # your option) any later version.
 {% endcomment %}
 
-{% block content %}
-<div class="logic-block">
-  <h1>{{ object.slug|upper }}: {{ object.name }}</h1>
-  <a href="{{ gehol }}" target="_blank">Horaire</a>
-  {% if followed %}
-  <a class="panel-button border-bottom" href="{% url 'unfollow_node' object.id %}">
-    leave
-  </a>
-  {% else %}
-  <a class="panel-button border-bottom" href="{% url 'follow_node' object.id %}">
-    join
-  </a>
-  {% endif %}
-  <div class="clear"></div>
-  <div id="edit" class="panel">
-    <form action="" method="post">
-      {% csrf_token %}
-      {% for line in object.last_info.infos %}
-      <input type="text" style="width: 100px" value="{{ line.name }}"/> :
-      <input type="text" style="width: 300px" value="{{ line.value }}"/><br>
-      {% endfor %}<br>
-      <input type="submit" value="Edit"/>
-    </form>
-  </div>
-  <div class="logic-p">
-  {% for line in object.last_info.infos %}
-    <strong>{{ line.name }}:</strong> {{ line.value|truncatechars:50 }}<br>
-  {% endfor %}
+{% block center-col %}
+<div class="row">
+
+
+
+
+
+  <div class="large-12 columns">
+    <h1 >{{ object.slug|upper }}{% if followed %} <i class="fi-check green"></i>{% endif %}</h1>
+    <h2>{{ object.name }}</h2>
   </div>
 </div>
 
-<div class="clear"></div>
-
-<div class="logic-block">
-  <h1>Documents</h1>
-  {% include "upload_doc.html" %}
-  {% include "document_list.html" %}
+<div class="row">
+  <div class="large-6 columns">
+    <h3>Fichiers</h3>
+    {% include "document_list.html" %}
+  </div>
+  <div class="large-6 columns">
+    <h3>Discussions</h3>
+    {% include "thread_list.html" %}
+  </div>
 </div>
-
-<div class="clear"></div>
-
-<div class="logic-block">
-  <h1>Discussions</h1>
-  {% include "add_thread.html" %}
-  {% include "thread_list.html" %}
-</div>
-<div class="clear"></div>
 {% endblock %}
+
+{% block right-col %}
+<div class="row">
+  <div class="large-12 columns">
+    <a href="{{ gehol }}" class="button expand" target="_blank">Horaire</a>
+    <a class="button expand secondary" href="#">Uploader un fichier</a>
+    <a class="button expand secondary" href="#">Poser une question</a>
+    {% if followed %}
+      <a class="button expand alert" href="{% url 'unfollow_node' object.id %}">
+        <i class="fi-x"></i> Se désabonner
+      </a>
+    {% else %}
+      <a class="button expand success" href="{% url 'follow_node' object.id %}">
+        <i class="fi-check"></i> S'abboner
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% comment %}
+  TODO : re-add course wiki
+{% endcomment %}
