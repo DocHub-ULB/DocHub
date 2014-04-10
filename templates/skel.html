@@ -1,91 +1,105 @@
-{% comment %}
-# Copyright 2012, hast. All rights reserved.
-
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-{% endcomment %}
-
 {%load humanize %}
 {% load cache %}
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html class="no-js" lang="en">
   <head>
-    <title>P402</title>
-    <link href="/static/style/normalize.css" rel="stylesheet">
-    <link href="/static/style/base.css" rel="stylesheet">
-    <link href="/static/style/navbar.css" rel="stylesheet">
-    <link href="/static/style/viewer.css" rel="stylesheet">
-    <link href="/static/style/panel.css" rel="stylesheet">
-    <script src="/static/3party/jquery-1.7.min.js"></script>
-    <script src="/static/3party/handlebars-1.0.0.beta.6.js"></script>
-    <script src="/static/3party/datatable-1.9.js"></script>
-    <script src="/static/3party/jquery.cookies.2.2.0.js"></script>
-    <script src="{% url 'fragments' %}" type="text/javascript"></script>
-    <script src="/static/scripts/navbar.js"></script>
-    <script src="/static/scripts/panel.js"></script>
-    {% block header %}{% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DocHub</title>
+    <link rel="stylesheet" href="/static/foundation/css/foundation.css" />
+    <link rel="stylesheet" href="/static/style/foundation.css" />
+    <script src="/static/foundation/js/vendor/modernizr.js"></script>
   </head>
-
   <body>
-    <div id="navbar">
-      <div id="navbar-top">
-        <div id="navbar-left">
-          <a id="brand" href="{% url 'home' %}">
-            <small>Whiteboard</small>
-          </a>
-          <a href="{% url 'notif_show' %}">
-            <span id="notification-counter">{{ notifcount }}</span>
-          </a>
-          <a class="link icon home" href="{% url 'home' %}">Home</a>
-          <a id="pull" class="link icon courses" href="#">Courses</a>
-        </div>
-        <div id="navbar-center">
-          <form id="navbar-search">
-            <input type="text" id="search-query" placeholder="Search">
-          </form>
-        </div>
-        <div id="navbar-right">
-          <a id="logout" class="link" href="{% url 'logout' %}">Logout</a>
-        </div>
+
+    <nav class="top-bar" data-topbar="">
+        <ul class="title-area">
+            <li class="name">
+                <h1><a href="/">DocHub</a></h1>
+            </li>
+
+            <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+        </ul>
+
+        <section class="top-bar-section">
+            <ul class="left">
+                <li>
+                  {% if notifcount %}
+                    <a href="#" class="button [secondary success alert]">{{ notifcount }}</a>
+                  {% else %}
+                    <a href="#" class="button [secondary success]">0</a>
+                  {% endif %}
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">Cours</a></li>
+                <li><a href="#">Calendrier</a></li>
+            </ul>
+            <ul class="right">
+
+                <li class="has-dropdown">
+                    <a href="#">Nikita Marchant</a>
+
+                    <ul class="dropdown">
+                        <li><a href="#">Profil</a></li>
+                        <li><a href="#">Notifications</a></li>
+                        <li><a href="#">Déconnexion</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </section>
+    </nav>
+    <div class="row full-width">
+      <div class="hide-for-small-only large-2 medium-3 columns sidebar">
 
 
-      </div>
-      <div id="navbar-bottom"></div>
-    </div>
-
-    <div id="content">
-      <div id="bar" style="width: 150px; float: left; margin-right: 30px; margin-bottom: 30px;">
-        Followed courses
-        {% cache 120 user_followed_list user.netid %}
+        <ul class="side-nav">
+          <li class="">Mes cours</li>
+          {% cache 120 user_followed_list user.netid %}
           {% for course in user.followed_courses %}
-            <p>
-              <a title="#{{ course.id }}" href="{% url 'node_canonic' course.id %}">
+            <li>
+              <a href="{% url 'node_canonic' course.id %}">
                 {{ course.name }}
               </a>
-            </p>
+            </li>
           {% endfor %}
-        {% endcache %}
+          {% endcache %}
+        </ul>
+
       </div>
-      <div style="margin: 10px; margin-left: 160px;">
-      {% block content %}
-      {% endblock %}
-      <div>
-    </div>
+      <div class="large-10 medium-9 columns">
+        <div class="row">
+          <div class="large-12 columns">
+            <h1>Bienvenue sur DocHub</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-8 columns">
+<!--             {% for elem in wall %}
+              <div>{{ elem.text }}</div>
+            {% endfor %} -->
+            {% for elem in wall %}
+            <!-- Feed Entry -->
+            <div class="row">
+              <div class="small-3 large-2 columns "><img src="http://placehold.it/80x80&text=[img]" /></div>
+              <div class="small-9 large-10 columns">
+                <p><strong>Some Person said:</strong> Bacon ipsum dolor sit amet nulla ham qui sint exercitation eiusmod commodo, chuck duis velit. Aute in reprehenderit, dolore aliqua non est magna in labore pig pork biltong.</p>
+                <ul class="inline-list">
+                  <li><a href="">Reply</a></li>
+                  <li><a href="">Share</a></li>
+                </ul>
+              </div>
+            </div>
+            {% endfor %}
+            <!-- End Feed Entry -->
+          </div>
+        </div>
+      </div>
 
-
-    <div style="clear:both;"></div>
-    <div id="footer">
-        P402 is upon US.<br>
-        <a href="#">Help</a> -
-        <a target="_blank" href="https://github.com/UrLab/beta402">Dev</a> -
-        <a target="_blank" href="https://github.com/UrLab/beta402/issues">
-          Bugtracker
-        </a> -
-        <a href="#">About</a><br>
-        Be aware of dragons
-    </div>
+    <script src="/static/foundation/js/vendor/jquery.js"></script>
+    <script src="/static/foundation/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
   </body>
 </html>

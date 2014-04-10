@@ -48,8 +48,11 @@ def index(request):
 
 @login_required
 def home(request):
-    followed_ids = request.user.followed_nodes_id()
-    wall = PreNotification.objects.filter(node__in=followed_ids).filter(personal=False).order_by('-created')
+    followed = request.user.directly_followed()
+    ids = map(lambda x: x.id, followed)
+    for node in followed:
+        ids += map(lambda x: x.id, node.children())
+    wall = PreNotification.objects.filter(node__in=ids).filter(personal=False).order_by('-created')
 
     welcome = {}
     if request.user.welcome:
