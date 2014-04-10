@@ -15,33 +15,40 @@
 {% endblock %}
 
 {% block content %}
-{% if notifications %}
-  <h1>Notifications</h1>
-  {% if notifications|length > 1 %}
-    <a class="notif_read_all" href="{% url 'notif_read_all' %}">Mark everything as read</a>
+<div class="row">
+  <div class="large-6 columns">
+    <h1>Notifications</h1>
+    {% if notifications|length > 1 %}
+      <p><a class="button success" href="{% url 'notif_read_all' %}">Tout marquer comme lu</a></p>
+    {% endif %}
+    {% if notifications %}
+      <ul>
+        {% for notif in notifications %}
+          <li>
+            <button class="button tiny" notif_id="{{notif.id}}">x</button>
+            <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
+            {{ notif.prenotif.created|naturaltime }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% elif not read_notifications %}
+      <p>Oh ! Vous n'avez encore jamas eu de notification, il faudrait peut-être s'abonner à un cours ?</p>
+    {% else %}
+      <p>Bien joué, vous avez déjà tout lu !</p>
+    {% endif %}
+  </div>
+  {% if read_notifications %}
+    <div class="large-6 columns">
+      <h1>Notifications lues</h1>
+        <ul id="read_notifs">
+          {% for notif in read_notifications %}
+            <li>
+              <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
+              {{ notif.prenotif.created|naturaltime }}
+            </li>
+          {% endfor %}
+    </div>
   {% endif %}
-  <ul>
-    {% for notif in notifications %}
-    <li>
-      <button class="read_notif" notif_id="{{notif.id}}">x</button>
-      <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
-      {{ notif.prenotif.created|naturaltime }}
-    </li>
-    {% endfor %}
-  </ul>
-{% endif %}
-{% if read_notifications %}
-  <h1>Read notifications</h1>
-  <ul id="read_notifs">
-    {% for notif in read_notifications %}
-    <li>
-      <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
-      {{ notif.prenotif.created|naturaltime }}
-    </li>
-    {% endfor %}
-  </ul>
-{% endif %}
-{% if not read_notifications and not notifications %}
-  <p>There is nothing here yet. Why don't you try to subscribe to some courses ?</p>
-{% endif %}
+</div>
+
 {% endblock %}
