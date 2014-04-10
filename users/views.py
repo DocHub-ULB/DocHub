@@ -28,13 +28,16 @@ def empty_user_followed_list_cache(user):
 @login_required
 def follow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
-    if isinstance(node, Category):
-        for child in node.children(only=[Course]):
-            request.user.follow.add(child)
-    elif isinstance(node, Course):
-        request.user.follow.add(node)
-    else:
-        raise NotImplementedError("Can not follow a node of type {}".format(node.classBasename()))
+    request.user.follow.add(node)
+    empty_user_followed_list_cache(request.user)
+    return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
+
+
+@login_required
+def follow_node_children(request, nodeid):
+    node = get_object_or_404(Node, pk=nodeid)
+    for child in node.children(only=[Course]):
+        request.user.follow.add(child)
     empty_user_followed_list_cache(request.user)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
@@ -42,8 +45,6 @@ def follow_node(request, nodeid):
 @login_required
 def unfollow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
-    if not isinstance(node, Course):
-        raise NotImplementedError("Can not unfollow a node of type {}".format(node.classBasename()))
     request.user.follow.remove(node)
     empty_user_followed_list_cache(request.user)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))

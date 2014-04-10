@@ -34,10 +34,11 @@ def get_category(request, id):
         "name": category.name,
         "description": category.description,
         "contains": [
-            {"id": c.id,
-             "name": c.name,
-             "slug": c.slug
-             } for c in category.children().instance_of(Category, Course)]
+            {
+                "id": c.id,
+                "name": c.name,
+                "slug": c.slug
+            } for c in category.children().instance_of(Category, Course)]
     }
 
     return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
@@ -46,11 +47,19 @@ def get_category(request, id):
 @login_required
 def show_category(request, catid):
     cat = get_object_or_404(Category, pk=catid)
-    children = set(cat.children(only=[Course]))
-    followed = set(request.user.directly_followed())
-    show_button = not children <= followed
 
-    return render(request, "category.html", {'object': cat, 'show_button': show_button})
+    children = set(cat.children(only=[Course]))
+    followed_nodes = set(request.user.directly_followed())
+
+    follow_children = not children <= followed_nodes
+
+    followed = cat in followed_nodes
+
+    return render(request, "category.html", {
+        'object': cat,
+        'follow_children': follow_children,
+        'followed': followed,
+    })
 
 
 @login_required
@@ -59,10 +68,13 @@ def show_course(request, slug):
         course = get_object_or_404(Course, pk=slug)
     else:
         course = get_object_or_404(Course, slug=slug)
+
     children = course.children()
     course.thread_set = children.instance_of(Thread)
     course.document_set = children.instance_of(Document)
+
     followed = course in request.user.directly_followed()
+
     return render(request, "course.html",
                   {"object": course,
                    "gehol": gehol_url(course),

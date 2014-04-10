@@ -11,12 +11,16 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from users.views import follow_node, unfollow_node
+from users.views import follow_node, unfollow_node, follow_node_children
 
 urlpatterns = patterns("",
     url(r"^join/(?P<nodeid>\d+)$",
         follow_node,
         name="follow_node"),
+
+    url(r"^join_children/(?P<nodeid>\d+)$",
+        follow_node_children,
+        name="follow_node_children"),
 
     url(r"^leave/(?P<nodeid>\d+)$",
         unfollow_node,

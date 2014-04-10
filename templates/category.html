@@ -13,8 +13,17 @@
 {% block content %}
 <div class="logic-block">
   <h1>{{ object.name }}</h1>
-  {% if show_button %}
+  {% if followed %}
+  <a class="panel-button border-bottom" href="{% url 'unfollow_node' object.id %}">
+    leave
+  </a>
+  {% else %}
   <a class="panel-button border-bottom" href="{% url 'follow_node' object.id %}">
+    join
+  </a>
+  {% endif %}
+  {% if follow_children %}
+  <a class="panel-button border-bottom" href="{% url 'follow_node_children' object.id %}">
     Follow all courses in this category
   </a>
   {% endif %}
