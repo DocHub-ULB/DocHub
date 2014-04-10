@@ -19,43 +19,56 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
 from documents.models import Document, Page
+from graph.models import Course
+from polydag.models import Node
 from documents.forms import UploadFileForm
 from www import settings
 
 
 @login_required
-def upload_file(request):
-    form = UploadFileForm(request.POST, request.FILES)
+def upload_file(request, parent_id):
+    parentNode = get_object_or_404(Node, id=parent_id)
+    if not isinstance(parentNode, Course):
+        raise NotImplementedError("Not a course")
 
-    if not form.is_valid():
-        return HttpResponse('form invalid' + str(form.errors), 'text/html')
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
 
-    if len(form.cleaned_data['name']) > 0:
-        name = form.cleaned_data['name']
+        if form.is_valid():
+            if len(form.cleaned_data['name']) > 0:
+                name = form.cleaned_data['name']
+            else:
+                name = request.FILES['file'].name[:-4].lower()
+
+            description = escape(form.cleaned_data['description'])
+            course = parentNode
+
+            doc = Document.objects.create(user=request.user,
+                                          name=name, description=description, state="pending")
+            course.add_child(doc)
+
+            if not os.path.exists(settings.TMP_UPLOAD_DIR):
+                os.makedirs(settings.TMP_UPLOAD_DIR)
+
+            tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}".format(doc.id))
+            source = 'file://' + tmp_file
+            doc.source = source
+
+            tmp_doc = open(tmp_file, 'w')
+            tmp_doc.write(request.FILES['file'].read())
+            tmp_doc.close()
+
+            doc.save() # Save document after copy to avoid corrupted state if copy failed
+
+            return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
+
     else:
-        name = request.FILES['file'].name[:-4].lower()
+        form = UploadFileForm()
 
-    description = escape(form.cleaned_data['description'])
-    course = form.cleaned_data['course']
-
-    doc = Document.objects.create(user=request.user,
-                                  name=name, description=description, state="pending")
-    course.add_child(doc)
-
-    if not os.path.exists(settings.TMP_UPLOAD_DIR):
-        os.makedirs(settings.TMP_UPLOAD_DIR)
-
-    tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}".format(doc.id))
-    source = 'file://' + tmp_file
-    doc.source = source
-
-    tmp_doc = open(tmp_file, 'w')
-    tmp_doc.write(request.FILES['file'].read())
-    tmp_doc.close()
-
-    doc.save() # Save document after copy to avoid corrupted state if copy failed
-
-    return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
+    return render(request, 'document_upload.html', {
+        'form': form,
+        'parent': parentNode,
+    })
 
 
 @login_required

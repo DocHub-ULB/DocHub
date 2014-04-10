@@ -9,21 +9,7 @@
         {{ form.non_field_errors }}
 
         {% for field in form %}
-        <div class="row">
-          <div class="large-12 columns">
-            <label {% if field.errors %} class="error" {% endif %}>
-              {{ field }}
-            </label>
-            {% if field.errors %}
-              <small class="error">
-                {% for error in field.errors %}
-                  {{error}}</br>
-                {% endfor %}
-              </small>
-            {% endif %}
-
-          </div>
-        </div>
+          {% include "simple_input.html" %}
         {% endfor %}
         <p class="right-align"><input type="submit" class="button success" value="Envoyer" /></p>
     </form>

@@ -39,7 +39,7 @@
 <div class="row">
   <div class="large-12 columns">
     <a href="{{ gehol }}" class="button expand" target="_blank">Horaire</a>
-    <a class="button expand secondary" href="#">Uploader un fichier</a>
+    <a class="button expand secondary" href="{% url 'document_put' object.id %}">Uploader un fichier</a>
     <a class="button expand secondary" href="{% url 'thread_put' object.id %}">Poser une question</a>
     {% if followed %}
       <a class="button expand alert" href="{% url 'unfollow_node' object.id %}">

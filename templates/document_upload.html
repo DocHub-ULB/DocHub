@@ -1,0 +1,36 @@
+{% extends "skel.html" %}
+{% block content %}
+<h1>Uploader un document</h1>
+<h3>Dans "{{parent.name}}"</h3>
+<div class="row">
+  <div class="large-7 columns">
+    <form action="{% url 'document_put' parent.id %}" method="post"
+            enctype="multipart/form-data" class="dropzone">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% with form.file as field %}
+            <div class="panel callout drop-panel">
+                <br>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{field}}
+                    </div>
+                    <div  class="small-6 columns">
+                    </div>
+                </div>
+            </div>
+            {{field.errors}}
+        {% endwith %}
+        {% with form.name as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+        {% with form.description as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+
+        <p class="right-align"><input type="submit" class="button success" value="Upload" /></p>
+    </form>
+  </div>
+</div>
+{% endblock %}

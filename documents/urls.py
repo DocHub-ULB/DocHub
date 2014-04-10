@@ -16,7 +16,7 @@ from documents.models import Document
 
 
 urlpatterns = patterns("",
-    url(r"^put/$",
+    url(r"^put/(?P<parent_id>[^/]*)$",
         upload_file,
         name="document_put"),
 

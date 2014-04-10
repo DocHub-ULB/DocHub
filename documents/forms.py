@@ -24,9 +24,8 @@ def validate_pdf(file):
 class UploadFileForm(forms.Form):
     file = forms.FileField(validators=[validate_pdf])
     name = forms.CharField(required=False, widget=forms.TextInput(attrs={
-        'placeholder': 'Rename...'
+        'placeholder': 'Title (optionnel)'
     }))
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={
-        'placeholder': 'Description...'
+        'placeholder': 'Description (optionnel)'
     }))
-    course = forms.ModelChoiceField(Course.objects, widget=forms.HiddenInput)
