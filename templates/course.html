@@ -12,11 +12,6 @@
 
 {% block center-col %}
 <div class="row">
-
-
-
-
-
   <div class="large-12 columns">
     <h1 >{{ object.slug|upper }}{% if followed %} <i class="fi-check green"></i>{% endif %}</h1>
     <h2>{{ object.name }}</h2>
@@ -47,7 +42,7 @@
       </a>
     {% else %}
       <a class="button expand success" href="{% url 'follow_node' object.id %}">
-        <i class="fi-check"></i> S'abboner
+        <i class="fi-check"></i> S'abonner
       </a>
     {% endif %}
   </div>

@@ -75,7 +75,7 @@ class User(AbstractBaseUser):
         return self.follow.all()
 
     def followed_nodes_id(self):
-        return self.follow.only('id').non_polymorphic()
+        return map(lambda x: x.id, self.follow.only('id').non_polymorphic())
 
     def followed_courses(self):
         return self.directly_followed().instance_of(Course)

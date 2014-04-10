@@ -51,7 +51,8 @@ def show_thread(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     last_msg = thread.message_set.order_by('-created')[0]
     context = {"object": thread,
-               "reply_form": ReplyForm(initial={"thread": thread,
+                "followed": thread.id in request.user.followed_nodes_id(),
+               "form": ReplyForm(initial={"thread": thread,
                                                 "previous": last_msg})}
     return render(request, "thread.html", context)
 

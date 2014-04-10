@@ -2,7 +2,6 @@
 {% load humanize %}
 {% load custommardown %}
 
-
 {% comment %}
 # Copyright 2012, hast. All rights reserved.
 
@@ -12,7 +11,7 @@
 # your option) any later version.
 {% endcomment %}
 
-{% block header %}
+{% block script %}
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
 </script>
@@ -22,37 +21,107 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ object.name }}</h1>
 
-<table class="messages">
-{% for message in object.message_set.all %}
-<tr class="message">
-  <td class="message-left">
-    <img class="small-profile" src="{{ message.user.get_photo }}">
-    <strong>{{ message.user.name }}</strong><br>
-    {{ message.created|naturaltime }}<br>
+<div class="row">
+  <div class="large-12 columns">
+    <h1>{{ object.name }}</h1>
+    <h3>"{{object.parent.name}}"</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="large-10 medium-12 columns">
+    <div class="row"><div class="medium-11 columns thread-separator"></div></div>
+    {% for message in object.message_set.all %}
+    <div class="row user-message">
+      <div class="large-1 show-for-large-up columns ">
+        <img width="50" src="{{ message.user.get_photo }}" />
+      </div>
+      <div class="large-10 medium-11 columns">
+        <div class="row user-message-header">
+          <div class="large-6 columns">
+            <strong>{{ message.user.name }}</strong> a commenté {{ message.created|naturaltime }}
+          </div>
+          <div class="large-6 columns text-right">
+            {% if message.user.netid  == object.user.netid %}
+              <span class="label radius secondary sh-space">Auteur</span>
+            {% endif %}
+            {% if message.user.netid  == user.netid %}
+              <span class="label radius secondary sh-space">Vous-même</span>
+            {% endif %}
+            {% if message.user.is_representative %}
+              <span class="label radius success sh-space">Délégué</span>
+            {% endif %}
+            {% if message.user.is_verified %}
+              <span class="label radius success sh-space">Académique</span>
+            {% endif %}
 
-  </td>
-  <td class="message-right">
-    {{ message.text|markdown }}
-  </td>
-</tr>
-{% endfor %}
-<tr class="message">
-  <td class="message-left">
-    <img class="small-profile" src="{{ user.get_photo }}">
-    <strong>You</strong>
-  </td>
-  <td class="message-right">
-    <form class="message-form" action="{% url 'thread_reply' %}" method="post">
-      {% csrf_token %}
-      {{ reply_form.as_p }}
-      <input class="panel-button" type="submit" value="Reply"/>
-    </form>
-  </td>
-</tr>
-</table>
+            <a href="#" class="sh-space"><i class="fi-pencil dark-grey"></i></a>
+            <a href="#" class="sh-space"><i class="fi-x dark-grey"></i></a>
+          </div>
+        </div>
+        <div class="row user-message-content">{{ message.text|markdown }}</div>
+      </div>
+      <div class="large-1 columns ">
+      </div>
+    </div>
+    {% endfor %}
+    <div class="row"><div class="medium-11 columns thread-separator"></div></div>
+    <div class="row user-message">
+      <div class="large-1 show-for-large-up columns ">
+        <img width="50" src="{{ user.get_photo }}" />
+      </div>
+      <div class="large-10 medium-11 columns">
+        <div class="row user-message-header">
+          <div class="large-6 columns">
+            <strong>Répondre</strong>
+          </div>
+          <div class="large-6 columns right-align">
+            <a href="#markdown-help" class="sh-space"><i class="fi-info dark-grey"></i></a>
+          </div>
+        </div>
+        <div class="row user-message-content">
+          <form class="message-form" action="{% url 'thread_reply' %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+              {% include "simple_input.html" %}
+            {% endfor %}
+            <div class="row">
+              <div class="small-6 columns">
+                En répondant à ce message, vous serez automatiquement abonné à cette discussion.<br>Vous pouvez <a href="#" target="blank_">changer ce comportement.</a>
+              </div>
+              <div class="small-6 columns">
+                <p class="right-align"><input type="submit" class="button success" value="Répondre" /></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="small-12 columns">
+                <h3 id="markdown-help">Besoin d'aide ?</h3>
+                <p>Les messages sur P402-DocHub supportent le <a href="#" target="blank_">Markdown</a>, n'hésitez pas à vous en servir pour mettre en forme vos messages. Jetez un oeil au <a href="#" target="blank_">guide Markdown</a> ou à l'<a href="#" target="blank_">aide-mémoire</a>.</p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="large-1 columns ">
+      </div>
+    </div>
+  </div>
+  <div class="large-2 medium-12 columns">
+    {% if followed %}
+      <a class="button expand alert" href="{% url 'unfollow_node' object.id %}">
+        <i class="fi-x"></i> Se désabonner
+      </a>
+      <small>Vous recevez pour l'instant des notifiactions pour cette discussion.</small>
+    {% else %}
+      <a class="button expand success" href="{% url 'follow_node' object.id %}">
+        <i class="fi-check"></i> S'abonner
+      </a>
+      <small>Pour reçevoir une notification à chaque nouvelle réponse ajoutée ici abonnez-vous.</small>
+    {% endif %}
+  </div>
+</div>
 
-
-
+{% endblock %}
+{% block right-col %}
+plop
 {% endblock %}
