@@ -52,7 +52,8 @@ def show_thread(request, thread_id):
     context = {
         "object": thread,
         "followed": thread.id in request.user.followed_nodes_id(),
-        "form": MessageForm()
+        "form": MessageForm(),
+        "is_moderator": request.user.is_moderator(thread)
     }
     return render(request, "thread.html", context)
 
@@ -74,6 +75,9 @@ def reply_thread(request, thread_id):
 def edit_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
     thread = message.thread
+
+    if request.user != message.user and not request.user.is_moderator(thread):
+        return HttpResponse('<h1>403</h1>', status=403)
 
     if request.method == 'POST':
         form = MessageForm(request.POST)

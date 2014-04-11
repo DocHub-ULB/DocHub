@@ -23,8 +23,10 @@
           <span class="label radius success sh-space">Académique</span>
         {% endif %}
         {% if not edit %}
-          <a href="{% url 'edit_message' message.id %}#message-edit" class="sh-space"><i class="fi-pencil dark-grey"></i></a>
-          <a href="#" class="sh-space"><i class="fi-x dark-grey"></i></a>
+          {% if is_moderator or user.netid == message.user.netid %}
+            <a href="{% url 'edit_message' message.id %}#message-edit" class="sh-space"><i class="fi-pencil dark-grey"></i></a>
+            <a href="#" class="sh-space"><i class="fi-x dark-grey"></i></a>
+          {% endif %}
         {% endif %}
       </div>
     </div>

@@ -80,6 +80,9 @@ class User(AbstractBaseUser):
     def followed_courses(self):
         return self.directly_followed().instance_of(Course)
 
+    def is_moderator(self, node):
+        return False
+
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
