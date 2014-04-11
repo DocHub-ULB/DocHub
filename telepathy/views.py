@@ -35,6 +35,8 @@ def new_thread(request, parent_id):
             thread = Thread.objects.create(user=request.user, name=name)
             message = Message.objects.create(user=request.user, thread=thread, text=content)
             parentNode.add_child(thread)
+            if request.user.auto_follow:
+                request.user.follow.add(thread)
 
             return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
     else:
@@ -66,6 +68,8 @@ def reply_thread(request, thread_id):
         content = form.cleaned_data['content']
         poster = request.user
         message = Message.objects.create(user=poster, thread=thread, text=content)
+        if request.user.auto_follow:
+            request.user.follow.add(thread)
 
         return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
     return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#response-form")
