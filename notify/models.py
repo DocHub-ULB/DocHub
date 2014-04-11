@@ -27,6 +27,8 @@ class PreNotification(models.Model):
     created = models.DateTimeField(auto_now=True)
     node = models.ForeignKey(Node)  # The node that initiated the notif
     text = models.CharField(max_length=160)
+    sender_type = models.CharField(max_length=160)
+    sender_info = models.CharField(max_length=160, default='')
     delivered = models.BooleanField(default=False)
     url = models.URLField()
     user = models.ForeignKey(User)  # The user that created the notification
@@ -36,17 +38,13 @@ class PreNotification(models.Model):
         return self.text
 
     def content(self):
-        try:
-            if isinstance(self.node, Thread):
-                if not "#" in self.url:
-                    return self.node.message_set.first().text
-                else:
-                    message_id = int(self.url[self.url.rfind("-") + 1:])
-                    return Message.objects.get(id=message_id).text
-        except (AttributeError, ValueError):
-            pass
-
-        return ""
+        if self.sender_type == "Thread":
+            return self.node.message_set.first().text
+        elif self.sender_type == "Message":
+            message_id = int(self.sender_info)
+            return Message.objects.get(id=message_id).text
+        else:
+            return ""
 
 
 class Notification(models.Model):

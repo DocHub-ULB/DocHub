@@ -39,7 +39,8 @@ def pre_document_save(**kwargs):
                     node=document,
                     text="Nouveau document: " + document.name,
                     url=reverse('document_show', args=[document.id]),
-                    user=document.user
+                    user=document.user,
+                    sender_type="Document",
                 )
 
         else:  # State not changed

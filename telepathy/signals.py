@@ -22,6 +22,7 @@ def thread_save(**kwargs):
         thread = kwargs['instance']
         PreNotification.objects.create(
             node=thread,
+            sender_type="Thread",
             text='Nouvelle discussion : "{}"'.format(thread.name),
             url=reverse('thread_show', args=[thread.id]),
             user=thread.user
@@ -38,6 +39,8 @@ def message_save(**kwargs):
         if not message.thread.message_set.first() == message:
             PreNotification.objects.create(
                 node=thread,
+                sender_type="Message",
+                sender_info=message.id,
                 text='Réponse à "{}"'.format(thread.name),
                 url=reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id),
                 user=message.user
