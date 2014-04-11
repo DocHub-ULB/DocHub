@@ -152,8 +152,8 @@ def convert_office_to_pdf(self, document_id):
         sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', document.staticfile])
     except OSError:
         raise MissingBinary("unoconv")
-    except subprocess.CalledProcessError:
-        raise DocumentProcessingError('"unoconv" has failed')
+    except subprocess.CalledProcessError as e:
+        raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
 
     with open(pdf_path, 'w') as pdf_file:
         pdf_file.write(sub)
@@ -173,8 +173,8 @@ def calculate_pdf_length(self, document_id):
         sub = subprocess.check_output(['pdfinfo', document.pdf])
     except OSError:
         raise MissingBinary("pdfinfo")
-    except subprocess.CalledProcessError:
-        raise DocumentProcessingError('"pdfinfo" has failed')
+    except subprocess.CalledProcessError as e:
+        raise DocumentProcessingError(document, e, '"pdfinfo" has failed')
 
     sub = sub.decode('ascii', 'ignore')
 
@@ -184,7 +184,7 @@ def calculate_pdf_length(self, document_id):
             splitted = line.split(' ')
             pages = int(splitted[-1])
     if pages == -1:
-        raise DocumentProcessingError("Lenght computation failed")
+        raise DocumentProcessingError(document, msg="Lenght computation failed")
 
     document.pages = pages
     document.save()
