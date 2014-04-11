@@ -22,6 +22,15 @@
         <li>
           <a id="zoom-out"><i class="fi-zoom-out"></i> De-zoom</a>
         </li>
+        {% if is_moderator or user.netid == object.user.netid %}
+          <li class="has-dropdown">
+            <a href="#">Editer</a>
+            <ul class="dropdown">
+              <li><a href="#">Modifier le titre</a></li>
+              <li><a href="#">Supprimer</a></li>
+            </ul>
+          </li>
+        {% endif %}
       </ul>
     </section>
   </nav>

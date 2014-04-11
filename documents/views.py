@@ -90,8 +90,11 @@ def document_show(request, id):
     children = document.children()
     document.page_set = children.instance_of(Page)
 
-    context = {"object": document,
-               "parent": document.parent}
+    context = {
+        "object": document,
+        "parent": document.parent,
+        "is_moderator": request.user.is_moderator(document.parent)
+    }
     document.views += 1
     document.save()
     return render(request, "viewer.html", context)
