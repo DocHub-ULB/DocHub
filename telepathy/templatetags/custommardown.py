@@ -27,5 +27,6 @@ def my_markdown(value):
 
     return mark_safe(markdown.markdown(force_unicode(value),
                                        extensions,
-                                       safe_mode=False,
-                                       enable_attributes=False))
+                                       safe_mode='escape',
+                                       enable_attributes=False,
+                                       output_format="html5"))

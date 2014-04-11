@@ -29,8 +29,8 @@ def new_thread(request, parent_id):
         form = NewThreadForm(request.POST)
 
         if form.is_valid():
-            name = escape(form.cleaned_data['name'])
-            content = escape(form.cleaned_data['content'])
+            name = form.cleaned_data['name']
+            content = form.cleaned_data['content']
 
             thread = Thread.objects.create(user=request.user, name=name)
             Message.objects.create(user=request.user, thread=thread, text=content)
@@ -62,7 +62,7 @@ def reply_thread(request):
     form = ReplyForm(request.POST)
 
     if form.is_valid():
-        content = escape(form.cleaned_data['content'])
+        content = form.cleaned_data['content']
         thread = form.cleaned_data['thread']
         previous = form.cleaned_data['previous']
         poster = request.user

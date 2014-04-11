@@ -97,7 +97,39 @@
 }
 
 
+code {
+    color: #333;
+    background-color: #eee;
+    padding: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-weight: normal;
 
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+}
+
+pre.codehilite code {
+    font-weight: normal;
+    background-color: white;
+    padding: 0px;
+    font-size: 1.1em;
+
+}
+
+pre.codehilite{
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    border: 1px solid #eee;
+
+    margin:5px;
+    margin-left: 20px;
+    padding: 10px;
+}
 
 
 

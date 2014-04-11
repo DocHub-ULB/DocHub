@@ -40,7 +40,7 @@ def upload_file(request, parent_id):
             else:
                 name = request.FILES['file'].name[:-4].lower()
 
-            description = escape(form.cleaned_data['description'])
+            description = form.cleaned_data['description']
             course = parentNode
 
             doc = Document.objects.create(user=request.user,
