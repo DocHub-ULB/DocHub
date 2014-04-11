@@ -35,6 +35,19 @@ class PreNotification(models.Model):
     def __str__(self):
         return self.text
 
+    def content(self):
+        try:
+            if isinstance(self.node, Thread):
+                if not "#" in self.url:
+                    return self.node.message_set.first().text
+                else:
+                    message_id = int(self.url[self.url.rfind("-") + 1:])
+                    return Message.objects.get(id=message_id).text
+        except (AttributeError, ValueError):
+            pass
+
+        return ""
+
 
 class Notification(models.Model):
     user = models.ForeignKey(User)
@@ -65,3 +78,5 @@ class Notification(models.Model):
 
 
 post_save.connect(signals.pre_notif_save, sender=PreNotification)
+
+from telepathy.models import Message, Thread

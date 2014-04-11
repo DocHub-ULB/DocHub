@@ -1,5 +1,6 @@
 {% extends "skel.html" %}
 {%load humanize %}
+{% load custommardown %}
 
 {% block content %}
 <div class="row">
@@ -45,24 +46,18 @@
 
 <div class="row">
   <div class="large-8 columns">
-<!--             {% for elem in wall %}
-      <div>{{ elem.text }}</div>
-    {% endfor %} -->
     {% for elem in wall %}
-    <!-- Feed Entry -->
-    <div class="row">
-      <div class="small-3 large-2 columns ">
-        <img width="80" src="{{ elem.user.get_photo }}" />
+      <div class="row">
+        <div class="small-3 large-2 columns ">
+          <img width="80" src="{{ elem.user.get_photo }}" />
+        </div>
+        <div class="small-9 large-10 columns">
+          <p><strong>{{ elem.text }}</strong> <a href="{{ elem.url }}">{{ elem.created|naturaltime }}</a> par {{elem.user.name}}<br>
+            {{elem.content|markdown}}
+          <br></p>
+        </div>
       </div>
-      <div class="small-9 large-10 columns">
-        <p><strong>{{ elem.text }}:</strong><br>Bacon ipsum dolor sit amet nulla ham qui sint exercitation eiusmod commodo, chuck duis velit.</p>
-        <ul class="inline-list">
-          <li><a href="{{ elem.url }}">{{ elem.created|naturaltime|capfirst }}</a></li>
-        </ul>
-      </div>
-    </div>
     {% endfor %}
-    <!-- End Feed Entry -->
   </div>
 </div>
 

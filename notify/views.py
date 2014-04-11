@@ -74,7 +74,7 @@ def notification_read(request, id, redirect=True):
 @login_required
 def notifications_show(request):
     notifs = list(Notification.unread(request.user).order_by('-id'))
-    read_notifs = list(Notification.objects.filter(user=request.user, read=True).order_by('-id')[:5])
+    read_notifs = list(Notification.objects.filter(user=request.user, read=True).order_by('-id')[:20])
 
     context = {"notifications": notifs, 'read_notifications': read_notifs}
     return render(request, "notifications.html", context)
