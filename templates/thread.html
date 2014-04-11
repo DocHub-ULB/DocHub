@@ -31,75 +31,23 @@
 <div class="row">
   <div class="large-10 medium-12 columns">
     <div class="row"><div class="medium-11 columns thread-separator"></div></div>
-    {% for message in object.message_set.all %}
-    <div class="row user-message">
-      <div class="large-1 show-for-large-up columns ">
-        <img width="50" src="{{ message.user.get_photo }}" />
-      </div>
-      <div class="large-10 medium-11 columns">
-        <div class="row user-message-header">
-          <div class="large-6 columns">
-            <strong>{{ message.user.name }}</strong> a commenté {{ message.created|naturaltime }}
-          </div>
-          <div class="large-6 columns text-right">
-            {% if message.user.netid  == object.user.netid %}
-              <span class="label radius secondary sh-space">Auteur</span>
-            {% endif %}
-            {% if message.user.netid  == user.netid %}
-              <span class="label radius secondary sh-space">Vous-même</span>
-            {% endif %}
-            {% if message.user.is_representative %}
-              <span class="label radius success sh-space">Délégué</span>
-            {% endif %}
-            {% if message.user.is_verified %}
-              <span class="label radius success sh-space">Académique</span>
-            {% endif %}
-
-            <a href="#" class="sh-space"><i class="fi-pencil dark-grey"></i></a>
-            <a href="#" class="sh-space"><i class="fi-x dark-grey"></i></a>
-          </div>
-        </div>
-        <div class="row user-message-content">{{ message.text|markdown }}</div>
-      </div>
-      <div class="large-1 columns ">
-      </div>
-    </div>
-    {% endfor %}
-    <div class="row"><div class="medium-11 columns thread-separator"></div></div>
-    <div class="row user-message">
-      <div class="large-1 show-for-large-up columns ">
-        <img width="50" src="{{ user.get_photo }}" />
-      </div>
-      <div class="large-10 medium-11 columns">
-        <div class="row user-message-header">
-          <div class="large-6 columns">
-            <strong>Répondre</strong>
-          </div>
-          <div class="large-6 columns right-align">
-            <a href="#markdown-help" class="sh-space"><i class="fi-info dark-grey"></i></a>
-          </div>
-        </div>
-        <div class="row user-message-content">
-          <form class="message-form" action="{% url 'thread_reply' %}" method="post">
-            {% csrf_token %}
-            {% for field in form %}
-              {% include "simple_input.html" %}
-            {% endfor %}
-            <div class="row">
-              <div class="small-6 columns">
-                En répondant à ce message, vous serez automatiquement abonné à cette discussion.<br>Vous pouvez <a href="#" target="blank_">changer ce comportement.</a>
-              </div>
-              <div class="small-6 columns">
-                <p class="right-align"><input type="submit" class="button success" value="Répondre" /></p>
-              </div>
-            </div>
-            {% include "markdown_small_help.html" %}
-          </form>
-        </div>
-      </div>
-      <div class="large-1 columns ">
-      </div>
-    </div>
+    {% if not edit %}
+      {% for message in object.message_set.all %}
+        {% include "message_template.html" %}
+      {% endfor %}
+      <div class="row"><div class="medium-11 columns thread-separator"></div></div>
+      {% include "message_form_template.html" %}
+    {% else%}
+      {% for message in object.message_set.all|slice:slice_top %}
+        {% include "message_template.html" %}
+      {% endfor %}
+      <div class="row" id="message-edit"><div class="medium-11 columns thread-separator"></div></div>
+      {% include "message_form_template.html" %}
+      <div class="row"><div class="medium-11 columns thread-separator"></div></div>
+      {% for message in object.message_set.all|slice:slice_bottom %}
+        {% include "message_template.html" %}
+      {% endfor %}
+    {% endif %}
   </div>
   <div class="large-2 medium-12 columns">
     {% if followed %}

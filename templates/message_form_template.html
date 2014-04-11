@@ -1,0 +1,45 @@
+<div class="row user-message">
+  <div class="large-1 show-for-large-up columns ">
+    {% if edit %}
+      <a href="{% url 'thread_show' object.id %}#message-{{ edited_message.id }}" class="button tiny alert">Annuler</a>
+    {% endif %}
+    <img width="50" src="{{ user.get_photo }}" />
+  </div>
+  <div class="large-10 medium-11 columns">
+    <div class="row user-message-header">
+      <div class="large-6 columns">
+        <strong>{% if edit %}Editer{% else %}Répondre{% endif %}</strong>
+      </div>
+      <div class="large-6 columns right-align">
+        <a href="#markdown-help" class="sh-space"><i class="fi-info dark-grey"></i></a>
+      </div>
+    </div>
+    <div class="row user-message-content">
+      {% if edit %}
+      <form id="response-form" class="message-form" action="" method="post">
+      {% else %}
+      <form id="response-form" class="message-form" action="{% url 'thread_reply' object.id %}" method="post">
+      {% endif %}
+        {% csrf_token %}
+        {% for field in form %}
+          {% include "simple_input.html" %}
+        {% endfor %}
+        <div class="row">
+          <div class="small-6 columns">
+            {% if not edit %}
+            En répondant à ce message, vous serez automatiquement abonné à cette discussion.<br>Vous pouvez <a href="#" target="blank_">changer ce comportement.</a>
+            {% endif %}
+          </div>
+          <div class="small-6 columns">
+            <p class="right-align">
+              <input type="submit" class="button success " value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
+            </p>
+          </div>
+        </div>
+        {% include "markdown_small_help.html" %}
+      </form>
+    </div>
+  </div>
+  <div class="large-1 columns ">
+  </div>
+</div>

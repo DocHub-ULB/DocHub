@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
 
-from telepathy.forms import NewThreadForm, ReplyForm
+from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
 from polydag.models import Node
 
@@ -33,10 +33,10 @@ def new_thread(request, parent_id):
             content = form.cleaned_data['content']
 
             thread = Thread.objects.create(user=request.user, name=name)
-            Message.objects.create(user=request.user, thread=thread, text=content)
+            message = Message.objects.create(user=request.user, thread=thread, text=content)
             parentNode.add_child(thread)
 
-            return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
+            return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
     else:
         form = NewThreadForm()
 
@@ -49,24 +49,50 @@ def new_thread(request, parent_id):
 @login_required
 def show_thread(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
-    last_msg = thread.message_set.order_by('-created')[0]
-    context = {"object": thread,
-                "followed": thread.id in request.user.followed_nodes_id(),
-               "form": ReplyForm(initial={"thread": thread,
-                                                "previous": last_msg})}
+    context = {
+        "object": thread,
+        "followed": thread.id in request.user.followed_nodes_id(),
+        "form": MessageForm()
+    }
     return render(request, "thread.html", context)
 
 
 @login_required
-def reply_thread(request):
-    form = ReplyForm(request.POST)
-
+def reply_thread(request, thread_id):
+    form = MessageForm(request.POST)
+    thread = get_object_or_404(Thread, id=thread_id)
     if form.is_valid():
         content = form.cleaned_data['content']
-        thread = form.cleaned_data['thread']
-        previous = form.cleaned_data['previous']
         poster = request.user
-        Message.objects.create(user=poster, previous=previous, thread=thread, text=content)
+        message = Message.objects.create(user=poster, thread=thread, text=content)
 
-        return HttpResponseRedirect(reverse('thread_show', args=[thread.id]))
-    return HttpResponse('form invalid', 'text/html')
+        return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
+    return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#response-form")
+
+
+@login_required
+def edit_message(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    thread = message.thread
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        if form.is_valid():
+            message.text = form.cleaned_data['content']
+            message.save()
+            return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
+    else:
+        form = MessageForm({'content': message.text})
+
+    index = list(thread.message_set.all()).index(message)
+    print index
+
+    return render(request, 'thread.html', {
+        'form': form,
+        'object': thread,
+        'edited_message': message,
+        'slice_top': "{}:{}".format("", index),
+        'slice_bottom': "{}:{}".format(index + 1, ""),
+        'edit': True
+    })

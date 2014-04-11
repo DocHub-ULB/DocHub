@@ -1,0 +1,35 @@
+{% load humanize %}
+{% load custommardown %}
+<div class="row user-message">
+  <div class="large-1 show-for-large-up columns ">
+    <img width="50" src="{{ message.user.get_photo }}" />
+  </div>
+  <div class="large-10 medium-11 columns" id="message-{{ message.id }}">
+    <div class="row user-message-header">
+      <div class="large-6 columns">
+        <strong>{{ message.user.name }}</strong> a commenté {{ message.created|naturaltime }}
+      </div>
+      <div class="large-6 columns text-right">
+        {% if message.user.netid  == object.user.netid %}
+          <span class="label radius secondary sh-space">Auteur</span>
+        {% endif %}
+        {% if message.user.netid  == user.netid %}
+          <span class="label radius secondary sh-space">Vous-même</span>
+        {% endif %}
+        {% if message.user.is_representative %}
+          <span class="label radius success sh-space">Délégué</span>
+        {% endif %}
+        {% if message.user.is_verified %}
+          <span class="label radius success sh-space">Académique</span>
+        {% endif %}
+        {% if not edit %}
+          <a href="{% url 'edit_message' message.id %}#message-edit" class="sh-space"><i class="fi-pencil dark-grey"></i></a>
+          <a href="#" class="sh-space"><i class="fi-x dark-grey"></i></a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row user-message-content">{{ message.text|markdown }}</div>
+  </div>
+  <div class="large-1 columns ">
+  </div>
+</div>

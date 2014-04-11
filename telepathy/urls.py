@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from telepathy.views import new_thread, show_thread, reply_thread
+from telepathy.views import new_thread, show_thread, reply_thread, edit_message
 
 
 urlpatterns = patterns("",
@@ -19,11 +19,15 @@ urlpatterns = patterns("",
         new_thread,
         name="thread_put"),
 
-    url(r"^reply/$",
+    url(r"^reply/(?P<thread_id>[^/]*)$",
         reply_thread,
         name="thread_reply"),
 
     url(r"^v/(?P<thread_id>[^/]*)/$",
         show_thread,
         name="thread_show"),
+
+    url(r"^edit/(?P<message_id>[^/]*)$",
+        edit_message,
+        name="edit_message"),
 )

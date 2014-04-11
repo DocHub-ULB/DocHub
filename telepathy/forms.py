@@ -23,9 +23,7 @@ class NewThreadForm(forms.Form):
     }))
 
 
-class ReplyForm(forms.Form):
+class MessageForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={
         'placeholder': 'Message'
     }))
-    previous = forms.ModelChoiceField(Message.objects, widget=forms.HiddenInput)
-    thread = forms.ModelChoiceField(Thread.objects, widget=forms.HiddenInput)
