@@ -13,7 +13,7 @@ from __future__ import unicode_literals
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
-from tasks import process_pdf
+from tasks import process_upload
 
 
 def pre_document_save(**kwargs):
@@ -52,4 +52,4 @@ def post_document_save(**kwargs):
     document = kwargs['instance']
 
     if kwargs['created'] and document.state == 'pending':
-        process_pdf.delay(document.id)
+        process_upload.delay(document.id)

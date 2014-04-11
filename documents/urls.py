@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from documents.views import upload_file, document_show, document_download
+from documents.views import upload_file, document_show, document_download, document_download_original
 from documents.models import Document
 
 
@@ -23,6 +23,10 @@ urlpatterns = patterns("",
     url(r"^dl/(?P<id>[^/]*)$",
         document_download,
         name="document_download"),
+
+    url(r"^dlo/(?P<id>[^/]*)$",
+        document_download_original,
+        name="document_download_original"),
 
     url(r"^v/(?P<id>[^/]*)$",
         document_show,

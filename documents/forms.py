@@ -16,9 +16,10 @@ from django.core.exceptions import ValidationError
 
 
 def validate_pdf(file):
-    name = file.name
-    if not len(name) > 4 or not name[-4:].lower() == '.pdf':
-        raise ValidationError('Only .pdf files are supported for the moment')
+    # name = file.name
+    # if not len(name) > 4 or not name[-4:].lower() == '.pdf':
+    #     raise ValidationError('Only .pdf files are supported for the moment')
+    pass
 
 
 class UploadFileForm(forms.Form):
