@@ -19,7 +19,7 @@
     {% else %}
       <tr>
         <td colspan="3">
-          Il n'y a pas de discussions ici...<br>Et si vous <a href="#">postiez quelque chose ?</a>
+          Il n'y a pas de discussions ici...<br>Et si vous <a href="{% url 'thread_put' object.id %}">postiez quelque chose ?</a>
         </td>
       </td>
     {% endif %}

@@ -56,6 +56,10 @@ def upload_file(request, parent_id):
             source = 'file://' + tmp_file
             doc.source = source
 
+            tmp_doc = open(tmp_file, 'w')
+            tmp_doc.write(request.FILES['file'].read())
+            tmp_doc.close()
+
             doc.save() # Save document after copy to avoid corrupted state if copy failed
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))

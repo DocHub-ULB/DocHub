@@ -23,7 +23,7 @@
         <td>{{ doc.date|date:"d/n/y" }}</td>
       {% else %}
         <td>{{ doc.name }}</td>
-        <td colspan=3 >Document en cous de conversion...</td>
+        <td colspan=3 >Document en cours de conversion...</td>
       {% endif %}
 
       </tr>
@@ -31,7 +31,7 @@
   {% else %}
     <tr>
       <td colspan="3">
-        Il n'y a pas documents ici...<br>Et si vous <a href="#">uploadiez quelque chose ?</a>
+        Il n'y a pas documents ici...<br>Et si vous <a href="{% url 'document_put' object.id %}">uploadiez quelque chose ?</a>
       </td>
     </td>
   {% endif %}
