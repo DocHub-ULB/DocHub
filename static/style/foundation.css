@@ -78,6 +78,35 @@
     margin-bottom: 20px;
 }
 
+
+.main-side-nav {
+
+    border-right: 2px solid #EEE;
+    border-bottom: 2px solid #EEE;
+    height: 100%;
+}
+
+.main-side-nav li{
+    padding-left: 15px !important;
+    margin: 0px;
+    padding: 0px;
+}
+
+.main-side-nav li:nth-child(even){
+    background-color: #EFEFEF;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 .viewer-bar {
     background-color: #AAA;
 }

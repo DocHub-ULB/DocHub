@@ -55,8 +55,8 @@
         <div class="hide-for-small-only large-2 medium-3 columns sidebar">
 
 
-          <ul class="side-nav">
-            <li class="">Mes cours</li>
+          <ul class="side-nav main-side-nav">
+            <li><a></a>Mes cours</li>
             {% cache 120 user_followed_list user.netid %}
             {% for course in user.followed_courses %}
               <li>

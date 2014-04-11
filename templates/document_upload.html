@@ -1,9 +1,9 @@
 {% extends "skel.html" %}
 {% block content %}
-<h1>Uploader un document</h1>
-<h3>Dans "{{parent.name}}"</h3>
 <div class="row">
   <div class="large-7 columns">
+    <h1>Uploader un document</h1>
+    <h3>Dans "{{parent.name}}"</h3>
     <form action="{% url 'document_put' parent.id %}" method="post"
             enctype="multipart/form-data" class="dropzone">
         {% csrf_token %}
