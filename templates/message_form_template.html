@@ -25,14 +25,17 @@
           {% include "simple_input.html" %}
         {% endfor %}
         <div class="row">
-          <div class="small-6 columns">
+          <div class="medium-6 columns hide-for-small-only">
             {% if not edit %}
             En répondant à ce message, vous serez automatiquement abonné à cette discussion.<br>Vous pouvez <a href="#" target="blank_">changer ce comportement.</a>
             {% endif %}
           </div>
-          <div class="small-6 columns">
-            <p class="right-align">
+          <div class="small-12 medium-6 columns">
+            <p class="hide-for-small-only right-align">
               <input type="submit" class="button success " value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
+            </p>
+            <p class="hide-for-medium-up">
+              <input type="submit" class="button success expand" value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
             </p>
           </div>
         </div>
