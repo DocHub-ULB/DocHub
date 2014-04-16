@@ -15,12 +15,19 @@ from default import *
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-# Install some prod apps ? Logging ?
+# Install some prod apps
+# eg : sentry, graphite, analytics, ...
 INSTALLED_APPS += (
     'gunicorn',
 )
 
-ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_appl=http%253A%252F%252Fcours.urlab.be%252Fauth%253F&_prtm=redirect'
+AUTH_URL = "http%253A%252F%252Fcours.urlab.be%252Fauth%253F"
+ULB_LOGIN = (
+    'https://www.ulb.ac.be/commons/intranet?' +
+    '_prt=ulb:facultes:sciences:p402&_ssl=on' +
+    '&_appl=' + AUTH_URL +
+    '&_prtm=redirect'
+)
 
 # CELERY_BROKER = 'amqp://guest@localhost//'
 

@@ -71,4 +71,4 @@ except IOError:
             SECRET_KEY = ''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
             f.write(SECRET_KEY)
     except IOError:
-        raise Exception('Cannot open file `%s` for writing.' % SECRET_FILE)
+        raise Exception('Cannot open file `%s` for writing the secret_key' % SECRET_FILE)
