@@ -25,5 +25,11 @@ try:
     TEMPLATE_DEBUG
     DATABASES['default']
     CELERY_BROKER
+    if not DEBUG:
+        EMAIL_HOST
+        SERVER_EMAIL
+        ADMINS
+        MANAGERS
+        ALLOWED_HOSTS
 except NameError:
     raise NameError('Required config values not found. Abort !')

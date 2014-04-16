@@ -12,6 +12,8 @@ from __future__ import unicode_literals
 
 from django_defaults import *
 
+EMAIL_SUBJECT_PREFIX = "[DocHub] "
+
 # User Profile Model
 AUTH_USER_MODEL = 'users.User'
 
