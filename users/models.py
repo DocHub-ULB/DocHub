@@ -39,7 +39,7 @@ class CustomUserManager(UserManager):
         return self._create_user(netid, email, password, **extra_fields)
 
     def create_superuser(self, netid, email, password, **extra_fields):
-        return self._create_user(netid, email, password, **extra_fields)
+        return self._create_user(netid, email, password, is_staff=True, **extra_fields)
 
 
 class User(AbstractBaseUser):
@@ -59,6 +59,9 @@ class User(AbstractBaseUser):
     comment = models.TextField(null=True, blank=True)
     follow = models.ManyToManyField('polydag.Node', related_name='followed')
 
+    is_staff = models.BooleanField(default=False)
+
+    # Standard fields
     @property
     def get_photo(self):
         photo = self.DEFAULT_PHOTO
@@ -73,6 +76,10 @@ class User(AbstractBaseUser):
 
     get_full_name = name
 
+    def get_short_name(self, *args, **kwargs):
+        return self.netid
+
+    # Follow
     def directly_followed(self):
         return self.follow.all()
 
@@ -82,27 +89,26 @@ class User(AbstractBaseUser):
     def followed_courses(self):
         return self.directly_followed().instance_of(Course)
 
-    def is_moderator(self, node):
-        return False
-
     @property
     def auto_follow(self):
-        # TODO use user prefs
-        return True
+        return True # TODO use user prefs
 
-    @property
-    def is_staff(self):
-        # TODO bad idea !!
-        return True
+    # Permissions
+
+    def is_moderator(self, node):
+        if self.is_staff:
+            return True
+
+        return False # TODO : do actual check
 
     def has_module_perms(self, *args, **kwargs):
-        return self.is_staff
+        return True # TODO : is this a good idea ?
 
-    def has_perm(self, *args, **kwargs):
-        return self.is_staff
+    def has_perm(self, perm_list, obj=None):
+        if not obj:
+            return False
 
-    def get_short_name(self, *args, **kwargs):
-        return self.netid
+        return obj.user == self or self.is_moderator(obj)
 
 
 class Inscription(models.Model):

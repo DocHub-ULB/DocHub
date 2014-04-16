@@ -108,6 +108,7 @@ class Command(BaseCommand):
         user.set_password(password)
         user.email = 'gaston@dupuis.be'
         user.photo = 'gif'
+        user.is_staff = True
         user.save()
 
         IMG_S_DIR = join(settings.BASE_DIR, 'www', 'management', 'commands')
