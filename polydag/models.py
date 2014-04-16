@@ -20,12 +20,15 @@ import re
 class Node(PolymorphicModel):
     """Base class for all P402 objects"""
     name = models.CharField(max_length=140)
-    _children = models.ManyToManyField("self", symmetrical=False)
+    _children = models.ManyToManyField("self", symmetrical=False, blank=True)
 
-    def __unicode__(self):
+    def __repr__(self):
         return '<Node {} : {} "{}">'.format(
             self.classBasename(), self.pk, self.name
         )
+
+    def __unicode__(self):
+        return "Node ({}) #{}: {}".format(self.classBasename(), self.id, self.name)
 
     def children(self, only=[], exclude=[], id_only=False):
         """Return a list of all self's direct children"""
@@ -160,10 +163,13 @@ class Keyword(models.Model):
     """
     name = models.CharField(max_length=50)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Taggable(Node):
     """An abstract taggable node. Taggable nodes have keywords."""
-    keywords = models.ManyToManyField(Keyword)
+    keywords = models.ManyToManyField(Keyword, blank=True)
 
     @staticmethod
     def KW(name):

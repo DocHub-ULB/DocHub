@@ -53,10 +53,10 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=127, null=False, blank=False)
     last_name = models.CharField(max_length=127, null=False, blank=False)
     email = models.CharField(max_length=255, null=False, blank=False)
-    registration = models.CharField(max_length=80)
+    registration = models.CharField(max_length=80, blank=True)
     photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
-    comment = models.TextField(null=True)
+    comment = models.TextField(null=True, blank=True)
     follow = models.ManyToManyField('polydag.Node', related_name='followed')
 
     @property
@@ -70,6 +70,8 @@ class User(AbstractBaseUser):
     @property
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
+
+    get_full_name = name
 
     def directly_followed(self):
         return self.follow.all()
@@ -87,6 +89,20 @@ class User(AbstractBaseUser):
     def auto_follow(self):
         # TODO use user prefs
         return True
+
+    @property
+    def is_staff(self):
+        # TODO bad idea !!
+        return True
+
+    def has_module_perms(self, *args, **kwargs):
+        return self.is_staff
+
+    def has_perm(self, *args, **kwargs):
+        return self.is_staff
+
+    def get_short_name(self, *args, **kwargs):
+        return self.netid
 
 
 class Inscription(models.Model):

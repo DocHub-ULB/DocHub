@@ -34,7 +34,7 @@ class PreNotification(models.Model):
     user = models.ForeignKey(User)  # The user that created the notification
     personal = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.text
 
     def content(self):
@@ -73,6 +73,9 @@ class Notification(models.Model):
     def unread(user):
         """Return all unread notifications for user"""
         return Notification.objects.filter(user=user, read=False)
+
+    def __unicode__(self):
+        return "Notification to {}".format(self.user)
 
 
 post_save.connect(signals.pre_notif_save, sender=PreNotification)

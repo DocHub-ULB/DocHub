@@ -21,7 +21,7 @@ from www import settings
 
 class Document(OneParent, Taggable):
 
-    description = models.TextField()
+    description = models.TextField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     size = models.PositiveIntegerField(null=True, default=0)
@@ -47,6 +47,9 @@ class Document(OneParent, Taggable):
 
     def original_extension(self):
         return os.path.splitext(self.source)[1][1:]
+
+    def __unicode__(self):
+        return "#{}: {}".format(self.id, self.name)
 
 
 class Page(OneParent, Taggable):

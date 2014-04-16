@@ -22,6 +22,9 @@ class Thread(Leaf, OneParent, Taggable):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
+    def __unicode__(self):
+        return "#{}: {}".format(self.id, self.name)
+
     class Meta:
         ordering = ['-created']
 
@@ -30,8 +33,13 @@ class Message(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     thread = models.ForeignKey(Thread)
     text = models.TextField()
-    previous = models.ForeignKey('self', null=True, default=None)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __unicode__(self):
+        t = self.text
+        if len(t) > 60:
+            t = t[:57] + "..."
+        return "#{}: {}".format(self.id, t)
 
 post_save.connect(signals.thread_save, sender=Thread)
 post_save.connect(signals.message_save, sender=Message)

@@ -13,6 +13,9 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, url, include
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
+from django.contrib import admin
+admin.autodiscover()
+
 from graph.urls import json_urls as graph_json
 from views import home, node_canonic, index
 
@@ -41,7 +44,7 @@ urlpatterns = patterns("",
     url(r"^zoidberg/users/", include("users.urls")),
 
     # The product/client entry points
-    url(r"^zoidberg/home$",home,
+    url(r"^zoidberg/home$", home,
         name="home"),
 
     url(r"^zoidberg/node/(?P<nodeid>\d+)$", node_canonic, name="node_canonic"),
@@ -65,4 +68,6 @@ urlpatterns = patterns("",
 
     # fragments
     url(r"^", include("fragments.urls")),
+
+    url(r'^admin/', include(admin.site.urls)),
 )

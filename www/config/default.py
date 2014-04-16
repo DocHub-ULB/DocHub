@@ -51,6 +51,7 @@ CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
+    'django.contrib.admin',
     'fragments',
     'south',
     'djcelery',
@@ -68,7 +69,7 @@ INSTALLED_APPS += (
     'notify',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
+TEMPLATE_CONTEXT_PROCESSORS += (
     'users.processors.user',
     'notify.processors.notify',
 )

@@ -19,6 +19,9 @@ class Course(Node):
     slug = models.SlugField()
     description = models.TextField(null=True)
 
+    class Meta:
+        ordering = ['slug']
+
     @property
     def last_activity(self):
         # TODO : define activity
@@ -41,6 +44,9 @@ class Course(Node):
         data.infos = loads(data.infos)
         return data
 
+    def __unicode__(self):
+        return "{}: {}".format(self.slug.upper(), self.name)
+
 
 class CourseInfo(models.Model):
     infos = models.TextField()
@@ -55,8 +61,15 @@ class Category(Node):
     slug = models.SlugField()
     description = models.TextField(null=True)
 
+    class Meta:
+        verbose_name_plural = "categories"
+        ordering = ['id']
+
     def subcategories(self):
         return self.children(only=[Category])
 
     def courses(self):
         return self.children(only=[Course])
+
+    def __unicode__(self):
+        return "#{}: {}".format(self.id, self.name)
