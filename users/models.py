@@ -10,13 +10,14 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+import re
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.utils import timezone
+
 from graph.models import Course
 from www import settings
-from django.db.models import Q
-import re
-from django.utils import timezone
 
 
 class CustomUserManager(UserManager):
@@ -60,6 +61,9 @@ class User(AbstractBaseUser):
     follow = models.ManyToManyField('polydag.Node', related_name='followed')
 
     is_staff = models.BooleanField(default=False)
+    is_academic = models.BooleanField(default=False)
+    is_representative = models.BooleanField(default=False)
+    moderated_nodes = models.ManyToManyField('polydag.Node')
 
     # Standard fields
     @property
@@ -99,12 +103,21 @@ class User(AbstractBaseUser):
         if self.is_staff:
             return True
 
-        return False # TODO : do actual check
+        moderated_nodes = set(self.moderated_nodes.all())
+        if len(moderated_nodes) == 0:
+            return False
+        if node in moderated_nodes:
+            return True
+        ancestors = node.ancestors_set()
+        return not ancestors.isdisjoint(moderated_nodes)
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
 
     def has_perm(self, perm_list, obj=None):
+        if self.is_staff:
+            return True
+
         if not obj:
             return False
 
