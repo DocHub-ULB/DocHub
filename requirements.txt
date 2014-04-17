@@ -5,6 +5,7 @@ markdown
 logbook
 celery
 django-celery
+django-suit
 
 # Migrate
 south
@@ -13,3 +14,4 @@ south
 django-extensions
 Werkzeug
 django-devserver
+ipython

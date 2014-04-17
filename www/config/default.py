@@ -53,6 +53,7 @@ CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
+    'suit', # Must be before admin
     'django.contrib.admin',
     'fragments',
     'south',
@@ -72,6 +73,15 @@ INSTALLED_APPS += (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
+    'django.core.context_processors.request',
     'users.processors.user',
     'notify.processors.notify',
 )
+
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'Admin - DocHub',
+    'MENU_EXCLUDE': (
+        'auth',
+        'djcelery',
+    ),
+}
