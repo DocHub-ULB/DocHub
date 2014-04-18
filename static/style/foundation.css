@@ -131,6 +131,23 @@ pre.codehilite{
     padding: 10px;
 }
 
+.feed-element-limited {
+    max-height: 25em;
+    overflow: hidden;
+}
+
+.feed-element img {
+    border: 1px solid #eee;
+}
+
+.feed-date{
+    margin-bottom: 5px;
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 0px;
+    border-top: 1px solid #eee;
+    font-size: 0.8em;
+}
 
 
 

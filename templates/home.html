@@ -51,10 +51,17 @@
         <div class="small-3 large-2 columns ">
           <img width="80" src="{{ elem.user.get_photo }}" />
         </div>
-        <div class="small-9 large-10 columns">
-          <p><strong>{{ elem.text }}</strong> <a href="{{ elem.url }}">{{ elem.created|naturaltime }}</a> par {{elem.user.name}}<br>
-            {{elem.content|markdown}}
-          <br></p>
+        <div class="small-9 large-10 columns feed-element">
+          <div class="user-message-header"><strong>{{ elem.text }}</strong></div>
+          <div class="user-message-content">
+            <div class="feed-element-limited ">
+              {{elem.content|markdown}}
+            </div>
+            <div class="feed-date">
+              <a href="{{ elem.url }}">{{ elem.created|naturaltime|capfirst }}</a> par {{elem.user.name}}
+            </div>
+          </div>
+          <br>
         </div>
       </div>
     {% endfor %}

@@ -43,6 +43,10 @@ class PreNotification(models.Model):
         elif self.sender_type == "Message":
             message_id = int(self.sender_info)
             return Message.objects.get(id=message_id).text
+        elif self.sender_type == "Document":
+            doc = self.node
+            url = "/media/documents/{}/doc-{}/images/000000_n.jpg".format(doc.parent.id, doc.id)
+            return "![{}]({})".format(doc.name, url)
         else:
             return ""
 
@@ -81,3 +85,4 @@ class Notification(models.Model):
 post_save.connect(signals.pre_notif_save, sender=PreNotification)
 
 from telepathy.models import Message, Thread
+from documents.models import Document
