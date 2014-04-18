@@ -32,7 +32,7 @@ def extract(content, souptag, current):
     return current
 
 
-def prettify_sciences(tree):
+def prettify_sciencesBA(tree):
     for key, section in tree.iteritems():
         for ykey, year in section.iteritems():
             year['course'] = year.pop('Cours obligatoires')
@@ -58,56 +58,71 @@ def prettify_sciences(tree):
                 year['Options']["Physique"] = year.pop(u'Math\xe9matique et physique', [])
                 year['Options']["Economie"] = year.pop(u'Math\xe9matique et \xe9conomie', [])
 
-catalogs = os.listdir('./catalogs/')
-catalogs = filter(lambda x: "-" in x, catalogs)
 
-newcats = []
-for cat in catalogs:
-    splitted = cat.split("_")
-    good_name = "-".join(splitted[2:])
-    newcats.append((good_name, cat))
+def filter_years(years, use):
+    used = []
+    for year in years:
+        for key in use.keys():
+            if year[0].startswith(key):
+                used.append(year)
+                break
+    return sorted(used)
 
-use = {
-    "BA-BIOL": "Biologie",
-    "BA-CHIM": "Chimie",
-    "BA-IRBI": "Bioingénieur",
-    "BA-GOEG": "Géographie",
-    "BA-GEOL": "Géologie",
-    "BA-INFO": "Informatique",
-    "BA-MATH": "Mathématique",
-    "BA-PHYS": "Physique"
-}
 
-used = []
-for cat in newcats:
-    for key in use.keys():
-        if cat[0].startswith(key):
-            used.append(cat)
-            break
-used = sorted(used)
+def get_years():
+    years = os.listdir('./catalogs/')
+    years = filter(lambda x: "-" in x, years)
 
-tree = {}
+    cleaned_years = []
+    for year in years:
+        splitted = year.split("_")
+        good_name = "-".join(splitted[2:])
+        cleaned_years.append((good_name, year))
 
-for name, path in used:
-    soup = bs.BeautifulSoup(open("./catalogs/" + path, "r").read())
-    table = gettype(soup("form")[0], 'table')[1]
-    year_content = {}
+    return cleaned_years
 
-    orphelins = []
-    extract(year_content, table, orphelins)
 
-    for key, val in year_content.iteritems():
-        newval = []
-        for course in val:
-            newval.append(course.text[:9])
-        year_content[key] = newval
+def science_treeBA(years):
+    science_use = {
+        "BA-BIOL": "Biologie",
+        "BA-CHIM": "Chimie",
+        "BA-IRBI": "Bioingénieur",
+        "BA-GOEG": "Géographie",
+        "BA-GEOL": "Géologie",
+        "BA-INFO": "Informatique",
+        "BA-MATH": "Mathématique",
+        "BA-PHYS": "Physique"
+    }
 
-    section = use[name[:7]]
-    year = "BA" + name[-1]
-    if not tree.get(section, False):
-        tree[section] = {}
-    tree[section][year] = year_content
+    science_years = filter_years(years, science_use)
 
-prettify_sciences(tree)
+    science = {}
 
-print tree
+    for name, path in science_years:
+        soup = bs.BeautifulSoup(open("./catalogs/" + path, "r").read())
+        table = gettype(soup("form")[0], 'table')[1]
+        year_content = {}
+
+        orphelins = []
+        extract(year_content, table, orphelins)
+
+        for key, val in year_content.iteritems():
+            newval = []
+            for course in val:
+                newval.append(course.text[:9])
+            year_content[key] = newval
+
+        section = science_use[name[:7]]
+        year = "BA" + name[-1]
+        if not science.get(section, False):
+            science[section] = {}
+        science[section][year] = year_content
+
+    prettify_sciencesBA(science)
+
+    return science
+
+###################
+
+years = get_years()
+#print science_treeBA(years)
