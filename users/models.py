@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 import re
+from os.path import join
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
@@ -70,7 +71,7 @@ class User(AbstractBaseUser):
     def get_photo(self):
         photo = self.DEFAULT_PHOTO
         if self.photo != "":
-            photo = "/static/profile/{0.netid}.{0.photo}".format(self)
+            photo = join(settings.MEDIA_URL, "profile/{0.netid}.{0.photo}".format(self))
 
         return photo
 

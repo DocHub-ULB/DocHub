@@ -67,6 +67,10 @@ IGNORABLE_404_URLS = (
 
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = ''
+MEDIA_ROOT = join(BASE_DIR, "media")
 
 # SECRET_KEY configuration
 SECRET_FILE = normpath(join(BASE_DIR, 'www', 'secret_key.txt'))

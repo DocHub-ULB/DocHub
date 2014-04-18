@@ -1,7 +1,5 @@
 *pyc
 db.sql
-static/documents/*
-static/profile/*
 initial_data.json
 ve
 graph.*
@@ -9,3 +7,7 @@ graph.*
 *.log
 www/secret_key.txt
 www/config/local.py
+media/documents/*/
+media/profile/*.png
+media/profile/*.jpg
+media/profile/*.gif

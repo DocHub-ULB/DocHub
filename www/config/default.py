@@ -31,11 +31,8 @@ PROCESSING_DIR = '/tmp/processing'
 TMP_UPLOAD_DIR = "/tmp/p402-upload/"
 
 UPLOAD_LOG = '/tmp/upload_log'
-UPLOAD_DIR = '%s/static/documents' % BASE_DIR
-PARSING_WORKERS = 2
+UPLOAD_DIR = join(MEDIA_ROOT, 'documents')
 
-# Notifications pack size
-PACK_SIZE = 20
 
 # ULB login, need to add the url to redirect at the end
 ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_prtm=redirect&_appl='

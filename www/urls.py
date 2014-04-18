@@ -18,6 +18,7 @@ admin.autodiscover()
 
 from graph.urls import json_urls as graph_json
 from views import home, node_canonic, index
+import settings
 
 
 # decorator whom call function_in if user is authenticated, function_out if not
@@ -71,3 +72,7 @@ urlpatterns = patterns("",
 
     url(r'^admin/', include(admin.site.urls)),
 )
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
