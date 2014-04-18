@@ -26,7 +26,7 @@ var viewer = function(doc) {
         else
             m = mode;
 
-        return '/static/documents/'+doc.parentid+'/doc-' + doc.id +
+        return '/media/documents/'+doc.parentid+'/doc-' + doc.id +
               '/images/' + numero.pad(6) + '_' + m + '.jpg';
     };
 

@@ -10,12 +10,15 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+from os.path import join
+
 from django.db import models
 from polydag.models import Node
 from users.models import User
 from django.db.models.signals import post_save
 
 import signals
+from www import settings
 
 # 1. Event occurs in graph
 # 2. Pre notif created
@@ -45,7 +48,7 @@ class PreNotification(models.Model):
             return Message.objects.get(id=message_id).text
         elif self.sender_type == "Document":
             doc = self.node
-            url = "/media/documents/{}/doc-{}/images/000000_n.jpg".format(doc.parent.id, doc.id)
+            url = join(settings.MEDIA_URL, "documents", "{}/doc-{}/images/000000_n.jpg".format(doc.parent.id, doc.id))
             return "![{}]({})".format(doc.name, url)
         else:
             return ""
