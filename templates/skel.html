@@ -28,22 +28,23 @@
             <ul class="left">
               <li>
                 {% if notifcount %}
-                  <a href="{% url 'notif_show' %}" class="button alert">{{ notifcount }}</a>
+                  <a href="{% url 'notif_show' %}" class="button alert">
                 {% else %}
-                  <a href="{% url 'notif_show' %}" class="button">0</a>
+                  <a href="{% url 'notif_show' %}" class="button">
                 {% endif %}
+                <i class="fi-megaphone"></i> {{ notifcount }}</a>
               </li>
               <li class="divider"></li>
               <li><a href="#">Cours</a></li>
-              <li><a href="#">Calendrier</a></li>
+              <!-- <li><a href="#">Calendrier</a></li> -->
             </ul>
             <ul class="right">
               <li class="has-dropdown">
-                  <a href="#">{{user.name}}</a>
+                  <a href="#"><i class="fi-torso"></i> {{user.name}}</a>
                   <ul class="dropdown">
                       <li><a href="#">Profil</a></li>
                       <li><a href="{% url 'notif_show' %}">Notifications</a></li>
-                      <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+                      <li><a href="{% url 'logout' %}"><i class="fi-power"></i> Déconnexion</a></li>
                   </ul>
               </li>
             </ul>

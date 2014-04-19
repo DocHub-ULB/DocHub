@@ -12,17 +12,28 @@
   <div class="row">
     <div class="large-10 columns">
       <div class="panel">
-        <h3>Vous semblez nouveau !</h3>
-        <p>Peut-être voudriez-vous vous abonner à des cours ?</p>
-        {% if welcome.new_inscriptions %}
-          <p>On dirait que vous étudiez {{ welcome.inscription.section }} l'année passée mais nous ne savons pas ou vous êtes partis cette année...</p>
-          <p>Voici quelques sections au vous auriez pu aller :
-          {% for new in welcome.new_inscriptions %}
-            {{ new.section }}
-          {% endfor %}</p>
-        {% elif welcome.inscription %}
-          <p>Etudiez-vous {{ welcome.inscription.section }} dans la facutlé {{ welcome.inscription.faculty|capfirst }} ?</p>
-        {% endif %}
+        <div class="row">
+          <div class="small-11 columns">
+            <h3>Vous semblez nouveau !</h3>
+          </div>
+          <div class="small-1 columns text-right">
+            <a href="#"><i class="fi-x"></i></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            <p>Peut-être voudriez-vous vous abonner à des cours ?</p>
+            {% if welcome.new_inscriptions %}
+              <p>On dirait que vous étudiez {{ welcome.inscription.section }} l'année passée mais nous ne savons pas ou vous êtes partis cette année...</p>
+              <p>Voici quelques sections au vous auriez pu aller :
+              {% for new in welcome.new_inscriptions %}
+                {{ new.section }}
+              {% endfor %}</p>
+            {% elif welcome.inscription %}
+              <p>Etudiez-vous {{ welcome.inscription.section }} dans la facutlé {{ welcome.inscription.faculty|capfirst }} ?</p>
+            {% endif %}
+          </div>
+        </div>
         <div class="row">
           <div class="twelve columns">
             <h3>Vous pouvez aussi découvrir DocHub :</h3>
@@ -52,7 +63,7 @@
           <img width="80" src="{{ elem.user.get_photo }}" />
         </div>
         <div class="small-9 large-10 columns feed-element">
-          <div class="user-message-header"><strong>{{ elem.text }}</strong></div>
+          <div class="user-message-header"><strong><i class="fi-plus"></i> {{ elem.text }}</strong></div>
           <div class="user-message-content">
             <div class="feed-element-limited ">
               {{elem.content|markdown}}
