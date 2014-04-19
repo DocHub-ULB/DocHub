@@ -30,7 +30,7 @@ var viewer_instance = viewer(doc);
 {% block full-page %}
 {% include "viewer_bar.html" %}
 <div class="row">
-  <div id="thumbs-misere"></div>
+  <div id="thumbs-misere show-for-large-up"></div>
   <div id="thumbs" class="large-2 columns show-for-large-up">
     {% for page in object.page_set %}
       <div class="row">
@@ -42,7 +42,7 @@ var viewer_instance = viewer(doc);
       </div>
     {% endfor %}
   </div>
-  <div id="pages" class="large-10 columns show-for-large-up">
+  <div id="pages" class="large-10 medium-12 columns">
     {% for page in object.page_set %}
       <div class="row">
         <div class="large-12 columns">
