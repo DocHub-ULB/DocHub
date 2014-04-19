@@ -194,8 +194,15 @@ pre.codehilite{
     top: -10px;
     background-color: #eee;
     height: 100px;
-    width: 228px;
+    width: 16.6667%;
     z-index: -1;
+    display: none;
+}
+
+@media only screen and (min-width: 40.063em) {
+    #thumbs-misere {
+        display: inherit !important;
+    }
 }
 
 .page {
