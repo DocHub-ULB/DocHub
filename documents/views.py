@@ -49,6 +49,9 @@ def upload_file(request, parent_id):
                                           name=name, description=description, state="pending")
             course.add_child(doc)
 
+            doc.add_keywords(*form.cleaned_data['tags'])
+            doc.add_keywords(form.cleaned_data['year'])
+
             if not os.path.exists(settings.TMP_UPLOAD_DIR):
                 os.makedirs(settings.TMP_UPLOAD_DIR)
 

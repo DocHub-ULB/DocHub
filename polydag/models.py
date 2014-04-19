@@ -175,6 +175,8 @@ class Taggable(Node):
     def KW(name):
         """Simply create or get a keyword"""
         #Keywords are always lowercased
+        if isinstance(name, Keyword):
+            return name
         existing, created = Keyword.objects.get_or_create(name=name.lower())
         return existing if existing else created
 

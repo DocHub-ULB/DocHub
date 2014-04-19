@@ -10,9 +10,12 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+from datetime import datetime
+
 from django import forms
 from graph.models import Course
 from django.core.exceptions import ValidationError
+from polydag.models import Keyword
 
 
 def validate_pdf(file):
@@ -22,11 +25,44 @@ def validate_pdf(file):
     pass
 
 
+def year_choices():
+    choices = []
+    year = datetime.now().year
+    if datetime.now().month >= 9 and datetime.now().day > 10:
+        year -= 1
+    for i in range(5):
+        year -= 1
+        s = "{}-{}".format(year, year + 1)
+        choices.append((s, s))
+    s = "Archives"
+    choices.append((s, s))
+
+    return choices
+
+
+def tag_choices():
+    return map(lambda x: (x.pk, x.name), Keyword.objects.exclude(name__in=map(lambda x: x[0], year_choices())))
+
+
 class UploadFileForm(forms.Form):
     file = forms.FileField(validators=[validate_pdf])
     name = forms.CharField(required=False, widget=forms.TextInput(attrs={
-        'placeholder': 'Title (optionnel)'
+        'placeholder': 'Titre (optionnel)'
     }))
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={
         'placeholder': 'Description (optionnel)'
     }))
+
+    year = forms.ChoiceField(choices=year_choices())
+
+    tags = forms.ModelMultipleChoiceField(
+        required=False,
+        queryset=Keyword.objects.exclude(name__startswith="20"),
+        widget=forms.SelectMultiple(
+            attrs={
+                'class': 'chosen-select',
+                'data-placeholder': 'Tags (optionnel)',
+                'style': "width: 100%; margin-bottom: 15px;"
+            }
+        )
+    )
