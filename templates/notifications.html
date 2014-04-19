@@ -25,6 +25,7 @@
       <ul>
         {% for notif in notifications %}
           <li>
+            <i class="fi-{{ notif.prenotif.icon }}"></i>
             <button class="button tiny" notif_id="{{notif.id}}">x</button>
             <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
             {{ notif.prenotif.created|naturaltime }}

@@ -25,7 +25,8 @@ def thread_save(**kwargs):
             sender_type="Thread",
             text='Nouvelle discussion : "{}"'.format(thread.name),
             url=reverse('thread_show', args=[thread.id]),
-            user=thread.user
+            user=thread.user,
+            icon="torsos",
         )
 
 
@@ -43,5 +44,6 @@ def message_save(**kwargs):
                 sender_info=message.id,
                 text='Réponse à "{}"'.format(thread.name),
                 url=reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id),
-                user=message.user
+                user=message.user,
+                icon="plus",
             )

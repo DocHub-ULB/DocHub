@@ -33,6 +33,7 @@ def pre_document_save(**kwargs):
                     text='Conversion de "{}" terminée'.format(document.name),
                     node=document,
                     url=reverse('document_show', args=[document.id]),
+                    icon="check"
                 )
 
                 PreNotification.objects.create(
@@ -41,6 +42,7 @@ def pre_document_save(**kwargs):
                     url=reverse('document_show', args=[document.id]),
                     user=document.user,
                     sender_type="Document",
+                    icon="page-add"
                 )
 
         else:  # State not changed

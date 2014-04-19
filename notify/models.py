@@ -36,6 +36,7 @@ class PreNotification(models.Model):
     url = models.URLField()
     user = models.ForeignKey(User)  # The user that created the notification
     personal = models.BooleanField(default=False)
+    icon = models.CharField(max_length=50, default="megaphone")
 
     def __unicode__(self):
         return self.text
@@ -61,7 +62,7 @@ class Notification(models.Model):
     read = models.BooleanField(default=False)
 
     @staticmethod
-    def direct(user, text, node, url=None):
+    def direct(user, text, node, icon="list", url=None):
         """Directly deliver a single notification to a user"""
         Notification.objects.create(
             prenotif=PreNotification.objects.create(
@@ -70,7 +71,8 @@ class Notification(models.Model):
                 user=user,
                 url=url,
                 delivered=True,
-                personal=True
+                personal=True,
+                icon=icon,
             ),
             user=user,
             node=node

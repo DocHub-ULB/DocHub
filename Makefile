@@ -30,6 +30,7 @@ cleandata: clean
 	rm -rf ./media/profile/*.*
 	rm -rf /tmp/p402-upload/*
 	rm -rf /tmp/processing/*
+	rm -rf graph.png
 
 ${DATABASE}:
 	./manage.py syncdb

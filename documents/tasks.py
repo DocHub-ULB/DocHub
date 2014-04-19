@@ -53,6 +53,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
         text="Une erreur c'est produite pendant la conversion de : {}".format(document.name),
         node=document.parent,
         url=reverse('node_canonic', args=[document.parent.id]),
+        icon="x",
     )
     # TODO : alert admins
 
@@ -131,6 +132,7 @@ def checksum(self, document_id):
             text='Votre document "{}" a été refusé car c\'est une copie conforme de {}'.format(document.name, dup.name),
             node=document.parent,
             url=reverse('node_canonic', args=[dup.id]),
+            icon="x",
         )
         document.delete()
         raise ExisingChecksum("Document {} has the same checksum as {}".format(document.id, dup.id))
