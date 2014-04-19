@@ -44,8 +44,7 @@ def tag_choices():
     return map(lambda x: (x.pk, x.name), Keyword.objects.exclude(name__in=map(lambda x: x[0], year_choices())))
 
 
-class UploadFileForm(forms.Form):
-    file = forms.FileField(validators=[validate_pdf])
+class FileForm(forms.Form):
     name = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'placeholder': 'Titre (optionnel)'
     }))
@@ -66,3 +65,10 @@ class UploadFileForm(forms.Form):
             }
         )
     )
+
+
+class UploadFileForm(FileForm):
+    file = forms.FileField(validators=[validate_pdf])
+
+# TODO
+# class UrlFileForm(FileForm):

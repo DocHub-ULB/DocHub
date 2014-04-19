@@ -210,3 +210,17 @@ pre.codehilite{
 .hilight {
     border: 2px #bde solid;
 }
+
+.viewer-title {
+    background-color: #aaa;
+    padding: 0px 15px;
+    line-height: 45px;
+    font-size: 0.8125rem;
+    font-weight: normal;
+    color: #333;
+
+}
+
+.viewer-title.divider {
+    border-color: #999 !important;
+}

@@ -170,6 +170,7 @@ class Keyword(models.Model):
 class Taggable(Node):
     """An abstract taggable node. Taggable nodes have keywords."""
     keywords = models.ManyToManyField(Keyword, blank=True)
+    year = models.CharField(max_length=9)
 
     @staticmethod
     def KW(name):

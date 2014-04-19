@@ -21,7 +21,7 @@ from django.contrib.auth.decorators import login_required
 from documents.models import Document, Page
 from graph.models import Course
 from polydag.models import Node
-from documents.forms import UploadFileForm
+from documents.forms import UploadFileForm, FileForm
 from www import settings
 
 
@@ -50,7 +50,7 @@ def upload_file(request, parent_id):
             course.add_child(doc)
 
             doc.add_keywords(*form.cleaned_data['tags'])
-            doc.add_keywords(form.cleaned_data['year'])
+            doc.year = form.cleaned_data['year']
 
             if not os.path.exists(settings.TMP_UPLOAD_DIR):
                 os.makedirs(settings.TMP_UPLOAD_DIR)
@@ -73,6 +73,40 @@ def upload_file(request, parent_id):
     return render(request, 'document_upload.html', {
         'form': form,
         'parent': parentNode,
+    })
+
+
+# permissions
+@login_required
+def document_edit(request, document_id):
+    doc = get_object_or_404(Document, id=document_id)
+
+    if request.method == 'POST':
+        form = FileForm(request.POST)
+
+        if form.is_valid():
+            doc.name = form.cleaned_data['name']
+            doc.description = form.cleaned_data['description']
+
+            doc.keywords.clear()
+            doc.add_keywords(*form.cleaned_data['tags'])
+
+            doc.year = form.cleaned_data['year']
+            doc.save()
+
+            return HttpResponseRedirect(reverse('document_show', args=[doc.id]))
+
+    else:
+        form = FileForm({
+            'name': doc.name,
+            'description': doc.description,
+            'year': doc.year,
+            'tags': doc.keywords.all()
+        })
+
+    return render(request, 'document_edit.html', {
+        'form': form,
+        'doc': doc,
     })
 
 

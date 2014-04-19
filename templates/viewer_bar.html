@@ -12,15 +12,21 @@
           <a href="{% url 'course_show' parent.id %}"><i class="fi-arrow-left"></i> {{ parent.name }}</a>
         </li>
         <li>
-          <a href="{% url 'document_download' object.id %}"><i class="fi-archive"></i> Download</a>
+          <a href="{% url 'document_download' object.id %}"><i class="fi-archive"></i> Télécharger</a>
         </li>
         {% if object.staticfile != object.pdf %}
           <li>
             <a href="{% url 'document_download_original' object.id %}">
-              <i class="fi-archive"></i> Download (original)
+              <i class="fi-archive"></i> Télécharger (original)
             </a>
           </li>
         {% endif %}
+        <li>
+        </li>
+        <li class="divider viewer-title"></li>
+        <li class="viewer-title">
+          <i class="fi-book"></i> {{ object.name }}
+        </li>
       </ul>
       <ul class="right">
         <li>
@@ -31,9 +37,9 @@
         </li>
         {% if is_moderator or user.netid == object.user.netid %}
           <li class="has-dropdown">
-            <a href="#">Editer</a>
+            <a href="#"><i class="fi-widget"></i></a>
             <ul class="dropdown">
-              <li><a href="#">Modifier le titre</a></li>
+              <li><a href="{% url 'document_edit' object.id %}">Editer</a></li>
               <li><a href="#">Supprimer</a></li>
             </ul>
           </li>

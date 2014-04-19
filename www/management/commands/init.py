@@ -112,7 +112,7 @@ class Command(BaseCommand):
         user.save()
 
         IMG_S_DIR = join(settings.BASE_DIR, 'www', 'management', 'commands')
-        IMG_D_DIR = join(settings.BASE_DIR, 'static', 'profile')
+        IMG_D_DIR = join(settings.BASE_DIR, 'media', 'profile')
         copy(join(IMG_S_DIR, 'gaston.gif'), join(IMG_D_DIR, netid + '.gif'))
 
         #Second user for tests

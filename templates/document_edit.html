@@ -1,0 +1,37 @@
+{% extends "skel.html" %}
+{% block content %}
+<div class="row">
+  <div class="large-7 columns">
+    <h1>Modifier un document</h1>
+    <h3>{{doc.name}}</h3>
+    <form action="{% url 'document_edit' doc.id %}" method="post"
+            enctype="multipart/form-data" class="dropzone">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% with form.name as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+        {% with form.year as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+        {% with form.tags as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+        {% with form.description as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+
+        <p class="right-align"><input type="submit" class="button success" value="Upload" /></p>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<link href="/static/3party/select/select2.css" rel="stylesheet"/>
+<script src="/static/3party/select/select2.js"></script>
+<script src="/static/3party/select/select2_locale_fr.js"></script>
+<script>
+ $(document).ready(function() { $(".chosen-select").select2(); });
+</script>
+{% endblock %}
