@@ -76,10 +76,12 @@ def upload_file(request, parent_id):
     })
 
 
-# permissions
 @login_required
 def document_edit(request, document_id):
     doc = get_object_or_404(Document, id=document_id)
+
+    if request.user != doc.user and not request.user.is_moderator(doc.parent):
+        return HttpResponse('<h1>403</h1>', status=403)
 
     if request.method == 'POST':
         form = FileForm(request.POST)
