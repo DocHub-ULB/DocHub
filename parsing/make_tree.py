@@ -122,6 +122,46 @@ def science_treeBA(years):
 
     return science
 
+def science_treeMA(years):
+    science_use = {
+        "BA-BIOL": "Biologie",
+        "BA-CHIM": "Chimie",
+        "BA-IRBI": "Bioingénieur",
+        "BA-GOEG": "Géographie",
+        "BA-GEOL": "Géologie",
+        "BA-INFO": "Informatique",
+        "BA-MATH": "Mathématique",
+        "BA-PHYS": "Physique"
+    }
+
+    science_years = filter_years(years, science_use)
+
+    science = {}
+
+    for name, path in science_years:
+        soup = bs.BeautifulSoup(open("./catalogs/" + path, "r").read())
+        table = gettype(soup("form")[0], 'table')[1]
+        year_content = {}
+
+        orphelins = []
+        extract(year_content, table, orphelins)
+
+        for key, val in year_content.iteritems():
+            newval = []
+            for course in val:
+                newval.append(course.text[:9])
+            year_content[key] = newval
+
+        section = science_use[name[:7]]
+        year = "BA" + name[-1]
+        if not science.get(section, False):
+            science[section] = {}
+        science[section][year] = year_content
+
+    prettify_sciencesBA(science)
+
+    return science
+
 ###################
 
 years = get_years()

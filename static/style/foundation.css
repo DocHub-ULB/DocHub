@@ -150,6 +150,38 @@ pre.codehilite{
 }
 
 
+.course-row {
+    /*border: 1px solid black;*/
+    margin-bottom: 10px !important;
+
+}
+
+.course-row i.big{
+    font-size: 2.5em;
+    float: left;
+    color: #222;
+    width: 1.6em;
+    height: 1.6em;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 0.8em;
+    -moz-border-radius: 0.8em;
+    border-radius: 0.8em;
+    text-align: center;
+    line-height:1.6em;
+    margin-right: 10px;
+}
+
+.course-row a i.big:hover {
+    color: #444;
+    background-color: #fff;
+}
+
+.course-row-content {
+    min-height: 4em;
+    margin-left: 4em;
+    padding-left: 10px;
+}
 
 
 

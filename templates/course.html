@@ -1,5 +1,6 @@
 {% extends "3col.html" %}
 {% load humanize %}
+{% load custommardown %}
 
 {% comment %}
 # Copyright 2012, hast. All rights reserved.
@@ -19,16 +20,54 @@
 </div>
 
 <div class="row">
-  <div class="large-6 columns">
-    <h3>Fichiers</h3>
-    {% include "document_list.html" %}
-    <a href="{% url 'document_put' object.id %}">Uploader un nouveau document</a>
+  <div class="row">
+    <div class="large-4 columns">
+      <input type="text" placeholder="Recherche...">
+    </div>
+    <div class="large-4 columns">
+      <input type="text" placeholder="Tags">
+    </div>
+    <div class="large-4 columns">
+      <select type="text" placeholder="Tags">
+        <option value="value2" selected>Toutes les années</option>
+      </select>
+    </div>
   </div>
-  <div class="large-6 columns">
-    <h3>Discussions</h3>
-    {% include "thread_list.html" %}
-    <a href="{% url 'thread_put' object.id %}">Créer une nouvelle discussion</a>
-
+  <div class="large-9 medium-12 columns">
+    {% for node in children_nodes %}
+      {% ifchanged node.year %}
+        <h3>{{ node.year }}</h3>
+      {% endifchanged %}
+      <div class="row course-row">
+        {% if node.classBasename == 'Thread' %}
+          <a href="{% url 'thread_show' node.id %}"><i class="fi-comment big"></i></a>
+        {% elif node.classBasename == 'Document' %}
+          <i class="fi-{% if node.state == 'pending' %}loop{% else %}page-copy{% endif%} big"></i>
+        {% endif %}
+        <div class="course-row-content">
+          <h5><a
+            {% if node.classBasename == 'Thread' %}
+              href="{% url 'thread_show' node.id %}"
+            {% elif node.classBasename == 'Document' %}
+              href="{% url 'document_show' node.id %}"
+            {% endif %}
+          >{{ node.name }}</a> par {{ node.user.name }}</h5>
+          {% if node.classBasename == 'Thread' %}
+            {{ node.message_set.first.text|markdown|striptags|truncatechars:200 }}<br>
+            le {{ node.created|date:"d F" }}
+          {% elif node.classBasename == 'Document' %}
+            {% if node.description %}{{ node.description|truncatechars:200 }}<br>{% endif %}
+            {{ node.pages }} page{{ node.pages|pluralize }} -
+            le {{ node.date|date:"d F" }}
+          {% endif %}
+          {% for kw in node.keywords.all%}
+            <span class="secondary radius label">
+              {{kw}}
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}

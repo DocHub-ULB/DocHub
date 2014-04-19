@@ -70,17 +70,16 @@ def show_course(request, slug):
         course = get_object_or_404(Course, slug=slug)
 
     children = course.children()
-    course.thread_set = children.instance_of(Thread)
-    course.document_set = children.instance_of(Document)
+    children_nodes = children.instance_of(Thread, Document).order_by('taggable__year')
 
     followed = course in request.user.directly_followed()
 
-    return render(request, "course.html",
-                  {"object": course,
-                   "gehol": gehol_url(course),
-                   "upload_form": UploadFileForm(initial={"course": course}),
-                   "followed": followed,
-                   "newthread_form": NewThreadForm(initial={"parentNode": course.id})})
+    return render(request, "course.html", {
+        "object": course,
+        "gehol": gehol_url(course),
+        "followed": followed,
+        'children_nodes': children_nodes,
+    })
 
 
 @login_required
