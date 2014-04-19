@@ -12,16 +12,16 @@
   <div class="row">
     <div class="large-10 columns">
       <div class="panel">
-        <h3>You look new here !</h3>
-        <p>Maybe you would like to subscribe to some courses ?</p>
+        <h3>Vous semblez nouveau !</h3>
+        <p>Peut-être voudriez-vous vous abonner à des cours ?</p>
         {% if welcome.new_inscriptions %}
-          <p>It looks like you were studying {{ welcome.inscription.section }} last year and we don't know where you are this year...</p>
-          <p>Here are the sections where you could have gone :
+          <p>On dirait que vous étudiez {{ welcome.inscription.section }} l'année passée mais nous ne savons pas ou vous êtes partis cette année...</p>
+          <p>Voici quelques sections au vous auriez pu aller :
           {% for new in welcome.new_inscriptions %}
             {{ new.section }}
           {% endfor %}</p>
         {% elif welcome.inscription %}
-          <p>Are you studying {{ welcome.inscription.section }} in the {{ welcome.inscription.faculty|capfirst }} faculty ?</p>
+          <p>Etudiez-vous {{ welcome.inscription.section }} dans la facutlé {{ welcome.inscription.faculty|capfirst }} ?</p>
         {% endif %}
         <div class="row">
           <div class="twelve columns">

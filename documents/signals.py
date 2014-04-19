@@ -30,14 +30,14 @@ def pre_document_save(**kwargs):
             if document.state == 'done':
                 Notification.direct(
                     user=document.user,
-                    text="Finished processing document " + document.name,
+                    text='Conversion de "{}" terminée'.format(document.name),
                     node=document,
                     url=reverse('document_show', args=[document.id]),
                 )
 
                 PreNotification.objects.create(
                     node=document,
-                    text="Nouveau document: " + document.name,
+                    text="Nouveau document : " + document.name,
                     url=reverse('document_show', args=[document.id]),
                     user=document.user,
                     sender_type="Document",

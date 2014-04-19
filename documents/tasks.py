@@ -50,7 +50,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     # document.save()
     Notification.direct(
         user=document.user,
-        text="Error when processing document: {}".format(document.name),
+        text="Une erreur c'est produite pendant la conversion de : {}".format(document.name),
         node=document.parent,
         url=reverse('node_canonic', args=[document.parent.id]),
     )
@@ -128,7 +128,7 @@ def checksum(self, document_id):
         dup = query.first()
         Notification.direct(
             user=document.user,
-            text="Error when processing document: {}. It's a duplicate of {}".format(document.name, dup.name),
+            text='Votre document "{}" a été refusé car c\'est une copie conforme de {}'.format(document.name, dup.name),
             node=document.parent,
             url=reverse('node_canonic', args=[dup.id]),
         )
