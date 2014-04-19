@@ -26,8 +26,8 @@ clean:
 
 cleandata: clean
 	rm -f ${DATABASE}
-	rm -rf ./static/documents/*
-	rm -rf ./static/profile/*.*
+	rm -rf ./media/documents/*
+	rm -rf ./media/profile/*.*
 	rm -rf /tmp/p402-upload/*
 	rm -rf /tmp/processing/*
 
