@@ -156,25 +156,72 @@ pre.codehilite{
 
 }
 
-.course-row i.big{
-    font-size: 2.5em;
+i.round-icon{
     float: left;
     color: #222;
-    width: 1.6em;
-    height: 1.6em;
     background-color: #eee;
     border: 1px solid #ddd;
+    text-align: center;
+    clear: both;
+    margin-right: 10px;
+    text-align: center;
+
+    width: 1.6em;
+    height: 1.6em;
+    line-height:1.6em;
+
     -webkit-border-radius: 0.8em;
     -moz-border-radius: 0.8em;
     border-radius: 0.8em;
-    text-align: center;
-    line-height:1.6em;
-    margin-right: 10px;
 }
 
-.course-row a i.big:hover {
+i.round-icon:hover {
     color: #444;
     background-color: #fff;
+}
+
+i.round-icon.big{
+    font-size: 2.5em;
+}
+
+i.round-icon.medium{
+    font-size: 1.5em;
+}
+
+
+.notification-list {
+    margin: 0;
+    padding: 0;
+    display:block;
+}
+
+.notification-list li{
+    display:block;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    min-height: 2.8em;
+}
+
+.notification-list li .notif-text {
+    margin-left: 3em;
+    margin-bottom: 10px;
+}
+
+.notification-list li .notif-text .notif-date{
+    font-size: 0.8em;
+}
+
+#read_notifs li i.round-icon{
+    color: #aaa;
+}
+
+#read_notifs li a{
+    color: #2b6275;
+}
+
+#read_notifs li a:hover{
+    color: #0095c7;
 }
 
 .course-row-content {
@@ -203,6 +250,22 @@ pre.codehilite{
     position: relative;
     top: -0.30em;
 }
+
+.user-photo{
+}
+
+ .user-photo-small {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+ }
+
+ .user-photo-big {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+ }
+
 
 /*
 ======================

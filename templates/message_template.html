@@ -2,7 +2,7 @@
 {% load custommardown %}
 <div class="row user-message">
   <div class="large-1 show-for-large-up columns ">
-    <img width="50" src="{{ message.user.get_photo }}" />
+    <img width="50" src="{{ message.user.get_photo }}" class="user-photo user-photo-small" />
   </div>
   <div class="large-10 medium-11 columns" id="message-{{ message.id }}">
     <div class="row user-message-header">

@@ -51,12 +51,12 @@
   </div>
   <div class="large-2 medium-12 columns">
     {% if followed %}
-      <a class="button expand alert" href="{% url 'unfollow_node' object.id %}">
+      <a class="button expand alert radius" href="{% url 'unfollow_node' object.id %}">
         <i class="fi-x"></i> Se désabonner
       </a>
       <small>Vous recevez pour l'instant des notifiactions pour cette discussion.</small>
     {% else %}
-      <a class="button expand success" href="{% url 'follow_node' object.id %}">
+      <a class="button expand success radius" href="{% url 'follow_node' object.id %}">
         <i class="fi-check"></i> S'abonner
       </a>
       <small>Pour reçevoir une notification à chaque nouvelle réponse ajoutée ici abonnez-vous.</small>

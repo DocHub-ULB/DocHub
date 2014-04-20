@@ -3,7 +3,7 @@
     {% if edit %}
       <a href="{% url 'thread_show' object.id %}#message-{{ edited_message.id }}" class="button tiny alert">Annuler</a>
     {% endif %}
-    <img width="50" src="{{ user.get_photo }}" />
+    <img width="50" src="{{ user.get_photo }}" class="user-photo user-photo-small"/>
   </div>
   <div class="large-10 medium-11 columns">
     <div class="row user-message-header">
@@ -32,10 +32,10 @@
           </div>
           <div class="small-12 medium-6 columns">
             <p class="hide-for-small-only right-align">
-              <input type="submit" class="button success " value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
+              <input type="submit" class="button success radius" value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
             </p>
             <p class="hide-for-medium-up">
-              <input type="submit" class="button success expand" value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
+              <input type="submit" class="button success expand radius" value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
             </p>
           </div>
         </div>

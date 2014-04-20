@@ -16,19 +16,19 @@
 
 {% block content %}
 <div class="row">
-  <div class="large-6 columns">
+  <div class="medium-6 columns">
     <h1>Notifications</h1>
     {% if notifications|length > 1 %}
-      <p><a class="button success" href="{% url 'notif_read_all' %}">Tout marquer comme lu</a></p>
+      <p><a class="button success radius" href="{% url 'notif_read_all' %}">Tout marquer comme lu</a></p>
     {% endif %}
     {% if notifications %}
-      <ul>
+      <ul class="notification-list">
         {% for notif in notifications %}
           <li>
-            <i class="fi-{{ notif.prenotif.icon }}"></i>
-            <button class="button tiny" notif_id="{{notif.id}}">x</button>
-            <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
-            {{ notif.prenotif.created|naturaltime }}
+            <i class="fi-{{ notif.prenotif.icon }} round-icon medium"></i>
+            <!-- <button class="button tiny" notif_id="{{notif.id}}">x</button> -->
+            <div class="notif-text"> <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
+            <div class="notif-date">{{ notif.prenotif.created|naturaltime|capfirst }}</div></div>
           </li>
         {% endfor %}
       </ul>
@@ -39,14 +39,16 @@
     {% endif %}
   </div>
   {% if read_notifications %}
-    <div class="large-6 columns">
+    <div class="medium-6 columns">
       <h1>Notifications lues</h1>
-        <ul id="read_notifs">
+        <ul id="read_notifs" class="notification-list">
           {% for notif in read_notifications %}
             <li>
-              <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
-              {{ notif.prenotif.created|naturaltime }}
-            </li>
+            <i class="fi-{{ notif.prenotif.icon }} round-icon medium"></i>
+            <!-- <button class="button tiny" notif_id="{{notif.id}}">x</button> -->
+            <div class="notif-text"> <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
+            <div class="notif-date">{{ notif.prenotif.created|naturaltime|capfirst }}</div></div>
+          </li>
           {% endfor %}
     </div>
   {% endif %}
