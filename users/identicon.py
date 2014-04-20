@@ -19,10 +19,10 @@ Return a PIL Image class instance which have generated identicon image.
 """
 # g
 # PIL Modules
-import Image
-import ImageDraw
-import ImagePath
-import ImageColor
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImagePath
+from PIL import ImageColor
 
 
 __all__ = ['render_identicon', 'IdenticonRendererBase']
@@ -87,7 +87,7 @@ class Matrix2D(list):
         return kls.translate(-pivot[0], -pivot[1]) * matR *
             kls.translate(*pivot)
     """
-    
+
     @classmethod
     def rotateSquare(kls, theta, pivot=None):
         theta = theta % 4
@@ -103,7 +103,7 @@ class Matrix2D(list):
 
 class IdenticonRendererBase(object):
     PATH_SET = []
-    
+
     def __init__(self, code):
         """
         @param code code for icon
@@ -111,25 +111,25 @@ class IdenticonRendererBase(object):
         if not isinstance(code, int):
             code = int(code)
         self.code = code
-    
+
     def render(self, size):
         """
         render identicon to PIL.Image
-        
+
         @param size identicon patchsize. (image size is 3 * [size])
         @return PIL.Image
         """
-        
+
         # decode the code
         middle, corner, side, foreColor, backColor = self.decode(self.code)
 
-        # make image        
+        # make image
         image = Image.new("RGB", (size * 3, size * 3))
         draw = ImageDraw.Draw(image)
-        
+
         # fill background
         draw.rectangle((0, 0, image.size[0], image.size[1]), fill=0)
-        
+
         kwds = {
             'draw': draw,
             'size': size,
@@ -143,15 +143,15 @@ class IdenticonRendererBase(object):
         for i in xrange(4):
             pos = [(1, 0), (2, 1), (1, 2), (0, 1)][i]
             self.drawPatch(pos, side[2] + 1 + i, side[1], **kwds)
-        
+
         # corner patch
         kwds['type'] = corner[0]
         for i in xrange(4):
             pos = [(0, 0), (2, 0), (2, 2), (0, 2)][i]
             self.drawPatch(pos, corner[2] + 1 + i, corner[1], **kwds)
-        
+
         return image
-                
+
     def drawPatch(self, pos, turn, invert, type, draw, size, foreColor,
             backColor):
         """
@@ -165,11 +165,11 @@ class IdenticonRendererBase(object):
         patch = ImagePath.Path(path)
         if invert:
             foreColor, backColor = backColor, foreColor
-        
+
         mat = Matrix2D.rotateSquare(turn, pivot=(0.5, 0.5)) *\
               Matrix2D.translate(*pos) *\
               Matrix2D.scale(size, size)
-        
+
         patch.transform(mat.for_PIL())
         draw.rectangle((pos[0] * size, pos[1] * size, (pos[0] + 1) * size,
             (pos[1] + 1) * size), fill=backColor)
@@ -185,7 +185,7 @@ class DonRenderer(IdenticonRendererBase):
     Don Park's implementation of identicon
     see : http://www.docuverse.com/blog/donpark/2007/01/19/identicon-updated-and-source-released
     """
-    
+
     PATH_SET = [
         [(0, 0), (4, 0), (4, 4), (0, 4)],   # 0
         [(0, 0), (4, 0), (0, 4)],
@@ -195,7 +195,7 @@ class DonRenderer(IdenticonRendererBase):
         [(0, 0), (4, 2), (4, 4), (2, 4)],
         [(2, 0), (4, 4), (2, 4), (3, 2), (1, 2), (2, 4), (0, 4)],
         [(0, 0), (4, 2), (2, 4)],
-        [(1, 1), (3, 1), (3, 3), (1, 3)],   # 8   
+        [(1, 1), (3, 1), (3, 3), (1, 3)],   # 8
         [(2, 0), (4, 0), (0, 4), (0, 2), (2, 2)],
         [(0, 0), (2, 0), (2, 2), (0, 2)],
         [(0, 2), (4, 2), (2, 4)],
@@ -204,15 +204,15 @@ class DonRenderer(IdenticonRendererBase):
         [(0, 0), (2, 0), (0, 2)],
         []]                                 # 15
     MIDDLE_PATCH_SET = [0, 4, 8, 15]
-    
+
     # modify path set
     for idx in xrange(len(PATH_SET)):
         if PATH_SET[idx]:
             p = map(lambda vec: (vec[0] / 4.0, vec[1] / 4.0), PATH_SET[idx])
             PATH_SET[idx] = p + p[:1]
-    
+
     def decode(self, code):
-        # decode the code        
+        # decode the code
         middleType  = self.MIDDLE_PATCH_SET[code & 0x03]
         middleInvert= (code >> 2) & 0x01
         cornerType  = (code >> 3) & 0x0F
@@ -224,9 +224,9 @@ class DonRenderer(IdenticonRendererBase):
         blue        = (code >> 16) & 0x1F
         green       = (code >> 21) & 0x1F
         red         = (code >> 27) & 0x1F
-        
+
         foreColor = (red << 3, green << 3, blue << 3)
-        
+
         return (middleType, middleInvert, 0),\
                (cornerType, cornerInvert, cornerTurn),\
                (sideType, sideInvert, sideTurn),\
@@ -241,11 +241,11 @@ def render_identicon(code, size, renderer=None):
 
 if __name__ == '__main__':
     import sys
-    
+
     if len(sys.argv) < 2:
         print 'usage: python identicon.py [CODE]....'
         raise SystemExit
-    
+
     for code in sys.argv[1:]:
         if code.startswith('0x') or code.startswith('0X'):
             code = int(code[2:], 16)
@@ -253,6 +253,6 @@ if __name__ == '__main__':
             code = int(code[1:], 8)
         else:
             code = int(code)
-        
+
         icon = render_identicon(code, 24)
         icon.save('%08x.png' % code, 'PNG')
