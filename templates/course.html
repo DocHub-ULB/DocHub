@@ -22,13 +22,13 @@
 <div class="row">
   <div class="row">
     <div class="large-3 medium-6 columns">
-      <input type="text" placeholder="Recherche..." name="document-search">
+      <input type="text" placeholder="Recherche" name="document-search">
     </div>
     <div class="large-3 medium-6 columns">
       <select multiple
       class="chosen-select"
       data-placeholder="Tags"
-      style="width: 100%; margin-bottom: 15px;"
+      style="width: 100%; margin-bottom: 15px; height: 100%"
       name="document-tags">
         {% for tag in tags %}
         <option value="{{tag.name}}">{{tag.name}}</option>
@@ -37,17 +37,19 @@
     </div>
     <div class="large-3 medium-6 columns">
       <select type="text" name="node-year">
-        <option value="2013-2014">2013-2014</option>
-        <option value="2012-2013">2012-2013</option>
-        <option value="Archives">Archives</option>
         <option value="tout" selected>Toutes les années</option>
+        {% for node in children_nodes %}
+          {% ifchanged node.year %}
+            <option value="{{node.year}}">{{node.year}}</option>
+          {% endifchanged %}
+        {% endfor %}
       </select>
     </div>
     <div class="large-3 medium-6 columns">
       <select type="text" name="node-type">
+        <option value="tout" selected>Tout</option>
         <option value="Document">Documents</option>
         <option value="Thread">Discussions</option>
-        <option value="tout" selected>Tout</option>
       </select>
     </div>
   </div>
@@ -82,6 +84,8 @@
           {% if node.classBasename == 'Thread' %}
             <p>{{ node.message_set.first.text|markdown|striptags|truncatechars:200 }}</p>
             <div class="course-content-last-line">
+            <i class="fi-align-justify"></i>
+            {{ node.message_set.count}} message{{ node.message_set.count|pluralize }}
             <i class="fi-clock"></i> Le {{ node.created|date:"d F" }}
           {% elif node.classBasename == 'Document' %}
             <p>{% if node.description %}{{ node.description|truncatechars:200 }}</p>{% endif %}
@@ -106,15 +110,16 @@
 {% block right-col %}
 <div class="row">
   <div class="large-12 columns">
+    <br>
     <!-- <a href="{{ gehol }}" class="button expand" target="_blank">Horaire</a> -->
-    <a class="button expand" href="{% url 'document_put' object.id %}">Uploader un fichier</a>
-    <a class="button expand" href="{% url 'thread_put' object.id %}">Poser une question</a>
+    <a class="button expand radius" href="{% url 'document_put' object.id %}">Uploader un fichier</a>
+    <a class="button expand radius" href="{% url 'thread_put' object.id %}">Poser une question</a>
     {% if followed %}
-      <a class="button expand alert" href="{% url 'unfollow_node' object.id %}">
+      <a class="button expand alert radius" href="{% url 'unfollow_node' object.id %}">
         <i class="fi-x"></i> Se désabonner
       </a>
     {% else %}
-      <a class="button expand success" href="{% url 'follow_node' object.id %}">
+      <a class="button expand success radius" href="{% url 'follow_node' object.id %}">
         <i class="fi-check"></i> S'abonner
       </a>
     {% endif %}
