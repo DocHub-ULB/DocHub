@@ -1,0 +1,36 @@
+{% extends "skel.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="medium-12 columns">
+    <h1>Préférences</h1>
+  </div>
+</div>
+
+<form action="" method="post"
+  enctype="multipart/form-data" class="dropzone">
+  {% csrf_token %}
+  <div class="row">
+    {{ form.non_field_errors }}
+  </div>
+  <div class="row">
+    <div class="medium-6 columns">
+      Photo de profil<br>
+      <img src="{{user.get_photo}}">
+      {% with form.profile_pic as field %}
+        {% include "simple_input.html" %}
+      {% endwith %}
+    </div>
+    <div class="medium-6 columns">
+      plop
+    </div>
+  </div>
+  <div class="row">
+    <div class="medium-12 columns">
+      <input type="submit" class="button success radius" value="Enregister" />
+    </div>
+  </div>
+</form>
+</div>
+
+{% endblock %}

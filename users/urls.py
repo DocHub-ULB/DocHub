@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from users.views import follow_node, unfollow_node, follow_node_children
+from users.views import follow_node, unfollow_node, follow_node_children, user_settings
 
 urlpatterns = patterns("",
     url(r"^join/(?P<nodeid>\d+)$",
@@ -25,4 +25,8 @@ urlpatterns = patterns("",
     url(r"^leave/(?P<nodeid>\d+)$",
         unfollow_node,
         name="unfollow_node"),
+
+    url(r"^settings/$",
+        user_settings,
+        name="settings"),
 )
