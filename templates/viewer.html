@@ -16,7 +16,7 @@ var doc = {
     len: {{ object.pages }},
     id: {{ object.id }},
     parentid: '{{ parent.id }}',
-    pages: [ {% for page in object.page_set %}
+    pages: [ {% for page in page_set %}
         {numero: {{ page.numero }},
          height_600: {{ page.height_600 }},
          height_900: {{ page.height_900 }} },{% endfor %}
@@ -32,7 +32,7 @@ var viewer_instance = viewer(doc);
 <div class="row">
   <div id="thumbs-misere"></div>
   <div id="thumbs" class="medium-2 columns show-for-medium-up">
-    {% for page in object.page_set %}
+    {% for page in page_set %}
       <div class="row">
         <div class="large-12 columns">
           <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
@@ -43,7 +43,7 @@ var viewer_instance = viewer(doc);
     {% endfor %}
   </div>
   <div id="pages" class="medium-10 small-12 columns">
-    {% for page in object.page_set %}
+    {% for page in page_set %}
       <div class="row">
         <div class="large-12 columns">
           <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"

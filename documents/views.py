@@ -17,6 +17,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
 
 from documents.models import Document, Page
 from graph.models import Course
@@ -148,8 +149,9 @@ def document_show(request, id):
     context = {
         "object": document,
         "parent": document.parent,
-        "is_moderator": request.user.is_moderator(document.parent)
+        "is_moderator": request.user.is_moderator(document.parent),
+        "page_set": list(document.page_set.all()),
     }
-    document.views += 1
-    document.save()
+    document.views = F('views') + 1
+    document.save(update_fields=['views'])
     return render(request, "viewer.html", context)

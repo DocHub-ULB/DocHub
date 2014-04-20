@@ -52,7 +52,7 @@ def home(request):
     ids = map(lambda x: x.id, followed)
     for node in followed:
         ids += map(lambda x: x.id, node.children())
-    wall = PreNotification.objects.filter(node__in=ids).filter(personal=False).order_by('-created')
+    wall = PreNotification.objects.filter(node__in=ids).filter(personal=False).order_by('-created').select_related('user')[:20]
 
     welcome = {}
     if request.user.welcome:
