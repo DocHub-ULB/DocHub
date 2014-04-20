@@ -10,17 +10,20 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+from xml.dom.minidom import parseString
+from urllib2 import urlopen
+from base64 import b64encode
+import traceback
+
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login
 from django.utils.html import escape
-from xml.dom.minidom import parseString
+from django.core.exceptions import ObjectDoesNotExist
+
 from users.models import Inscription, User
 from settings import ULB_AUTH, ULB_LOGIN
-from urllib2 import urlopen
-from base64 import b64encode
-import traceback
 
 
 # redirect user to ulb intranet auth in respect of the url
@@ -96,7 +99,7 @@ def parse_user(raw):
 def create_user(values):
     try:
         user = User.objects.get(netid=values['netid'])
-    except:
+    except ObjectDoesNotExist:
         user = User.objects.create_user(values['netid'], values['email'])
         user.last_name = values['last_name']
         user.first_name = values['first_name']

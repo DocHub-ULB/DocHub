@@ -27,11 +27,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write('Creating user\n')
-        user = User()
+
         netid = raw_input("Username (default: %s): " % getuser()) if options["netid"] is None else options["netid"]
         if not netid:
             netid = getuser()
-        user.netid = netid
         password = getpass("Password (default: 'test'): ") if options["password"] is None else options["password"]
         if not password:
             password = 'test'
@@ -41,9 +40,10 @@ class Command(BaseCommand):
         last_name = raw_input("Lastname (default: Smith): ") if options["last_name"] is None else options["last_name"]
         if not last_name:
             last_name = "Smith"
+        email = 'test@mouh.com'
+
+        user = User.objects.create_user(netid=netid, email=email, password=password)
         user.first_name = first_name
         user.last_name = last_name
-        user.set_password(password)
-        user.email = 'test@mouh.com'
         user.save()
         print "User id : " + str(user.id)

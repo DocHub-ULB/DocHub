@@ -20,6 +20,8 @@ from django.utils import timezone
 from graph.models import Course
 from www import settings
 
+import identicon
+
 
 class CustomUserManager(UserManager):
 
@@ -32,7 +34,11 @@ class CustomUserManager(UserManager):
             raise ValueError('The given netid must be set')
         email = self.normalize_email(email)
         user = self.model(netid=netid, email=email, last_login=now, **extra_fields)
-
+        if settings.IDENTICON:
+            IDENTICON_SIZE = 120
+            profile_path = join(settings.MEDIA_ROOT, "profile", "{}.png".format(netid))
+            identicon.render_identicon(int(netid, 36), IDENTICON_SIZE / 3).save(profile_path)
+            user.photo = 'png'
         user.set_password(password)
         user.save(using=self._db)
         return user

@@ -1,3 +1,6 @@
+--allow-external pil
+--allow-unverified pil
+
 Django==1.6
 django_polymorphic
 django-template-fragments
@@ -15,3 +18,6 @@ django-extensions
 Werkzeug
 django-devserver
 ipython
+
+# identicons
+pil

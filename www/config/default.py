@@ -47,6 +47,9 @@ SEARCH_SYSTEM = False
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
 
+# Activate identicons
+IDENTICON = True
+
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
