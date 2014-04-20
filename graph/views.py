@@ -12,11 +12,13 @@ from __future__ import unicode_literals
 
 from json import dumps
 import re
+import itertools
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 from documents.forms import UploadFileForm
 from telepathy.forms import NewThreadForm
@@ -71,8 +73,16 @@ def show_course(request, slug):
     else:
         course = get_object_or_404(Course, slug=slug)
 
-    children = course.children()
-    children_nodes = children.instance_of(Thread, Document).order_by('-taggable__year')
+    children = course.children().non_polymorphic()
+    docs = filter(lambda x: x.get_real_instance_class() == Document, children)
+    docs = map(lambda x: x.id, docs)
+    docs = Document.objects.filter(id__in=docs).select_related('user').prefetch_related('keywords')
+
+    threads = filter(lambda x: x.get_real_instance_class() == Thread, children)
+    threads = map(lambda x: x.id, threads)
+    threads = Thread.objects.filter(id__in=threads).annotate(Count('message')).select_related('user').prefetch_related('keywords')
+
+    children_nodes = itertools.chain(docs, threads)
 
     get_date = lambda x: getattr(x, "date", False) or getattr(x, "created", False)
     sorted_children_nodes = []
