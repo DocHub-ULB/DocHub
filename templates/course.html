@@ -21,50 +21,81 @@
 
 <div class="row">
   <div class="row">
-    <div class="large-4 columns">
-      <input type="text" placeholder="Recherche...">
+    <div class="large-3 medium-6 columns">
+      <input type="text" placeholder="Recherche..." name="document-search">
     </div>
-    <div class="large-4 columns">
-      <input type="text" placeholder="Tags">
+    <div class="large-3 medium-6 columns">
+      <select multiple
+      class="chosen-select"
+      data-placeholder="Tags"
+      style="width: 100%; margin-bottom: 15px;"
+      name="document-tags">
+        {% for tag in tags %}
+        <option value="{{tag.name}}">{{tag.name}}</option>
+        {% endfor%}
+      </select>
     </div>
-    <div class="large-4 columns">
-      <select type="text" placeholder="Tags">
-        <option value="value2" selected>Toutes les années</option>
+    <div class="large-3 medium-6 columns">
+      <select type="text" name="node-year">
+        <option value="2013-2014">2013-2014</option>
+        <option value="2012-2013">2012-2013</option>
+        <option value="Archives">Archives</option>
+        <option value="tout" selected>Toutes les années</option>
+      </select>
+    </div>
+    <div class="large-3 medium-6 columns">
+      <select type="text" name="node-type">
+        <option value="Document">Documents</option>
+        <option value="Thread">Discussions</option>
+        <option value="tout" selected>Tout</option>
       </select>
     </div>
   </div>
-  <div class="large-9 medium-12 columns">
+  <div class="large-12 medium-12 columns">
     {% for node in children_nodes %}
       {% ifchanged node.year %}
         <h3>{{ node.year }}</h3>
       {% endifchanged %}
-      <div class="row course-row">
+      <div class="row course-row"
+        node-type="{{node.classBasename}}"
+        node-keywords="{% for kw in node.keywords.all%}{{kw}} {% endfor %}"
+        node-year="{{ node.year }}"
+      >
         {% if node.classBasename == 'Thread' %}
-          <a href="{% url 'thread_show' node.id %}"><i class="fi-comment big"></i></a>
+          <a href="{% url 'thread_show' node.id %}">
+            <i class="fi-comment big"></i>
+          </a>
         {% elif node.classBasename == 'Document' %}
-          <i class="fi-{% if node.state == 'pending' %}loop{% else %}page-copy{% endif%} big"></i>
+          <a href="{% url 'document_show' node.id %}">
+            <i class="fi-{% if node.state == 'pending' %}loop{% else %}page-copy{% endif%} big"></i>
+          </a>
         {% endif %}
         <div class="course-row-content">
-          <h5><a
+          <h5>
             {% if node.classBasename == 'Thread' %}
-              href="{% url 'thread_show' node.id %}"
+              <a href="{% url 'thread_show' node.id %}">
             {% elif node.classBasename == 'Document' %}
-              href="{% url 'document_show' node.id %}"
+              <a href="{% url 'document_show' node.id %}">
             {% endif %}
-          >{{ node.name }}</a> par {{ node.user.name }}</h5>
+            {{ node.name }}</a> par {{ node.user.name }}
+          </h5>
           {% if node.classBasename == 'Thread' %}
-            {{ node.message_set.first.text|markdown|striptags|truncatechars:200 }}<br>
-            le {{ node.created|date:"d F" }}
+            <p>{{ node.message_set.first.text|markdown|striptags|truncatechars:200 }}</p>
+            <div class="course-content-last-line">
+            <i class="fi-clock"></i> Le {{ node.created|date:"d F" }}
           {% elif node.classBasename == 'Document' %}
-            {% if node.description %}{{ node.description|truncatechars:200 }}<br>{% endif %}
-            {{ node.pages }} page{{ node.pages|pluralize }} -
-            le {{ node.date|date:"d F" }}
+            <p>{% if node.description %}{{ node.description|truncatechars:200 }}</p>{% endif %}
+            <div class="course-content-last-line">
+            <i class="fi-page-filled"></i>  {{ node.pages }} page{{ node.pages|pluralize }}
+            <i class="fi-clock"></i> Le {{ node.date|date:"d F" }}
           {% endif %}
+          {% if node.keywords.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
           {% for kw in node.keywords.all%}
-            <span class="secondary radius label">
+            <span class="radius label {% if node.classBasename == 'Thread' %}secondary{% endif %}">
               {{kw}}
             </span>
           {% endfor %}
+        </div>
         </div>
       </div>
     {% endfor %}
@@ -95,3 +126,12 @@
 {% comment %}
   TODO : re-add course wiki
 {% endcomment %}
+
+{% block script %}
+<link href="/static/3party/select/select2.css" rel="stylesheet"/>
+<script src="/static/3party/select/select2.js"></script>
+<script src="/static/3party/select/select2_locale_fr.js"></script>
+<script>
+{% include "course-search.js" %}
+</script>
+{% endblock %}

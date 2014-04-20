@@ -24,6 +24,7 @@ from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
 from calendars.gehol import gehol_url
+from polydag.models import Keyword
 
 
 @login_required
@@ -73,11 +74,13 @@ def show_course(request, slug):
     children_nodes = children.instance_of(Thread, Document).order_by('taggable__year')
 
     followed = course in request.user.directly_followed()
+    tags = Keyword.objects.all()
 
     return render(request, "course.html", {
         "object": course,
         "gehol": gehol_url(course),
         "followed": followed,
+        "tags": tags,
         'children_nodes': children_nodes,
     })
 
