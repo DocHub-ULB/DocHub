@@ -85,7 +85,7 @@
             <p>{{ node.message_set.first.text|markdown|striptags|truncatechars:200 }}</p>
             <div class="course-content-last-line">
             <i class="fi-align-justify"></i>
-            {{ node.message__count.count}} message{{ node.message__count|pluralize }}
+            {{ node.message__count }} message{{ node.message__count|pluralize }}
             <i class="fi-clock"></i> Posté le {{ node.created|date:"d F Y" }}
           {% elif node.classBasename == 'Document' %}
             <p>{% if node.description %}{{ node.description|truncatechars:200 }}</p>{% endif %}
