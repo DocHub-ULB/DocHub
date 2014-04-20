@@ -19,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
 from polydag.models import Node
+from www.helpers import current_year
 
 
 @login_required
@@ -32,7 +33,9 @@ def new_thread(request, parent_id):
             name = form.cleaned_data['name']
             content = form.cleaned_data['content']
 
-            thread = Thread.objects.create(user=request.user, name=name)
+            year = "{}-{}".format(current_year(), current_year() + 1)
+
+            thread = Thread.objects.create(user=request.user, name=name, year=year)
             message = Message.objects.create(user=request.user, thread=thread, text=content)
             parentNode.add_child(thread)
             if request.user.auto_follow:

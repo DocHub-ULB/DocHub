@@ -16,6 +16,7 @@ from django import forms
 from graph.models import Course
 from django.core.exceptions import ValidationError
 from polydag.models import Keyword
+from www.helpers import year_choices
 
 
 def validate_pdf(file):
@@ -23,21 +24,6 @@ def validate_pdf(file):
     # if not len(name) > 4 or not name[-4:].lower() == '.pdf':
     #     raise ValidationError('Only .pdf files are supported for the moment')
     pass
-
-
-def year_choices():
-    choices = []
-    year = datetime.now().year
-    if datetime.now().month >= 9 and datetime.now().day > 10:
-        year -= 1
-    for i in range(5):
-        year -= 1
-        s = "{}-{}".format(year, year + 1)
-        choices.append((s, s))
-    s = "Archives"
-    choices.append((s, s))
-
-    return choices
 
 
 def tag_choices():

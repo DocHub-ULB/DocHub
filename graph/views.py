@@ -25,6 +25,7 @@ from telepathy.models import Thread
 from documents.models import Document
 from calendars.gehol import gehol_url
 from polydag.models import Keyword
+from www.helpers import year_choices
 
 
 @login_required
@@ -71,7 +72,26 @@ def show_course(request, slug):
         course = get_object_or_404(Course, slug=slug)
 
     children = course.children()
-    children_nodes = children.instance_of(Thread, Document).order_by('taggable__year')
+    children_nodes = children.instance_of(Thread, Document).order_by('-taggable__year')
+
+    get_date = lambda x: getattr(x, "date", False) or getattr(x, "created", False)
+    sorted_children_nodes = []
+    year_dict = {}
+    for node in children_nodes:
+        l = year_dict.get(node.year, [])
+        l.append(node)
+        year_dict[node.year] = l
+
+    for year, _ in year_choices():
+        elements = year_dict.pop(year, [])
+        elements = reversed(sorted(elements, key=get_date))
+        sorted_children_nodes += elements
+
+    for unknown_year in year_dict.keys():
+        nodes = year_dict.pop(unknown_year)
+        for node in nodes:
+            node.year = "Archives"
+        sorted_children_nodes += nodes
 
     followed = course in request.user.directly_followed()
     tags = Keyword.objects.all()
@@ -81,7 +101,7 @@ def show_course(request, slug):
         "gehol": gehol_url(course),
         "followed": followed,
         "tags": tags,
-        'children_nodes': children_nodes,
+        'children_nodes': sorted_children_nodes,
     })
 
 

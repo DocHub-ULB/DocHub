@@ -56,7 +56,7 @@
   <div class="large-12 medium-12 columns">
     {% for node in children_nodes %}
       {% ifchanged node.year %}
-        <h3>{{ node.year }}</h3>
+        <h3>{% if node.year != "Archives" %}Année académique {% endif %}{{ node.year }}</h3>
       {% endifchanged %}
       <div class="row course-row"
         node-type="{{node.classBasename}}"
@@ -86,12 +86,12 @@
             <div class="course-content-last-line">
             <i class="fi-align-justify"></i>
             {{ node.message_set.count}} message{{ node.message_set.count|pluralize }}
-            <i class="fi-clock"></i> Le {{ node.created|date:"d F" }}
+            <i class="fi-clock"></i> Posté le {{ node.created|date:"d F Y" }}
           {% elif node.classBasename == 'Document' %}
             <p>{% if node.description %}{{ node.description|truncatechars:200 }}</p>{% endif %}
             <div class="course-content-last-line">
             <i class="fi-page-filled"></i>  {{ node.pages }} page{{ node.pages|pluralize }}
-            <i class="fi-clock"></i> Le {{ node.date|date:"d F" }}
+            <i class="fi-clock"></i> Uploadé le {{ node.date|date:"d F Y" }}
           {% endif %}
           {% if node.keywords.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
           {% for kw in node.keywords.all%}
