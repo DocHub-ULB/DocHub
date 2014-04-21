@@ -19,6 +19,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.cache.utils import make_template_fragment_key
 from django.core.cache import cache
+from django.contrib import messages
 
 from polydag.models import Node
 from graph.models import Category, Course
@@ -67,6 +68,7 @@ def user_settings(request):
             im.save(os.path.join(settings.MEDIA_ROOT, "profile/{}.png".format(request.user.netid)))
             request.user.photo = "png"
             request.user.save()
+            messages.success(request, 'Votre profil a été mis à jour.')
             return render(request, "settings.html", {'form': SettingsForm()})
 
     else:
