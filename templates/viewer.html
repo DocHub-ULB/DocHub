@@ -26,7 +26,7 @@ var doc = {
 var viewer_instance = viewer(doc);
 </script>
 {% endblock %}
-
+{% block title %}{{ object.name }}{% endblock %}
 {% block full-page %}
 {% include "viewer_bar.html" %}
 <div class="row">

@@ -252,18 +252,17 @@ i.round-icon.medium{
 }
 
 .user-photo{
+     -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 }
 
  .user-photo-small {
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    width: 50px;
  }
 
  .user-photo-big {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+     width: 80px;
  }
 
 

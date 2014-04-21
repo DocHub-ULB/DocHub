@@ -1,5 +1,5 @@
 {% extends "skel.html" %}
-
+{% block title %}Profil{% endblock %}
 {% block content %}
 <div class="row">
   <div class="medium-12 columns">
@@ -16,7 +16,7 @@
   <div class="row">
     <div class="medium-6 columns">
       Photo de profil<br>
-      <img src="{{user.get_photo}}">
+      <img src="{{user.get_photo}}" class="user-photo">
       {% with form.profile_pic as field %}
         {% include "simple_input.html" %}
       {% endwith %}
