@@ -25,7 +25,7 @@
             <p>Peut-être voudriez-vous vous abonner à des cours ?</p>
             {% if welcome.new_inscriptions %}
               <p>On dirait que vous étudiez {{ welcome.inscription.section }} l'année passée mais nous ne savons pas ou vous êtes partis cette année...</p>
-              <p>Voici quelques sections au vous auriez pu aller :
+              <p>Voici quelques sections où vous auriez pu aller :
               {% for new in welcome.new_inscriptions %}
                 {{ new.section }}
               {% endfor %}</p>
