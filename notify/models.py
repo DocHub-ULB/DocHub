@@ -28,14 +28,14 @@ from www import settings
 
 class PreNotification(models.Model):
     created = models.DateTimeField(auto_now=True)
-    node = models.ForeignKey(Node)  # The node that initiated the notif
+    node = models.ForeignKey(Node, db_index=True)  # The node that initiated the notif
     text = models.CharField(max_length=160)
     sender_type = models.CharField(max_length=160)
     sender_info = models.CharField(max_length=160, default='')
-    delivered = models.BooleanField(default=False)
+    delivered = models.BooleanField(default=False, db_index=True)
     url = models.URLField()
     user = models.ForeignKey(User)  # The user that created the notification
-    personal = models.BooleanField(default=False)
+    personal = models.BooleanField(default=False, db_index=True)
     icon = models.CharField(max_length=50, default="megaphone")
 
     def __unicode__(self):
@@ -56,10 +56,10 @@ class PreNotification(models.Model):
 
 
 class Notification(models.Model):
-    user = models.ForeignKey(User)
-    node = models.ForeignKey(Node)  # The effective node followed by user
-    prenotif = models.ForeignKey(PreNotification)
-    read = models.BooleanField(default=False)
+    user = models.ForeignKey(User, db_index=True)
+    node = models.ForeignKey(Node, db_index=True)  # The effective node followed by user
+    prenotif = models.ForeignKey(PreNotification, db_index=True)
+    read = models.BooleanField(default=False, db_index=True)
 
     @staticmethod
     def direct(user, text, node, icon="list", url=None):

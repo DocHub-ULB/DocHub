@@ -37,7 +37,7 @@ class Document(OneParent, Taggable):
     pdf = models.CharField(max_length=2048, default='')
 
     state = models.CharField(max_length=10, default='pending')
-    md5 = models.CharField(max_length=32, default='')
+    md5 = models.CharField(max_length=32, unique=True, default='')
 
     def move(self, *args, **kwargs):
         # Must move a images and associated files

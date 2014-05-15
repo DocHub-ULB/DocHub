@@ -60,17 +60,17 @@ class User(AbstractBaseUser):
     netid = models.CharField(max_length=20, unique=True, null=False, blank=False)
     first_name = models.CharField(max_length=127, null=False, blank=False)
     last_name = models.CharField(max_length=127, null=False, blank=False)
-    email = models.CharField(max_length=255, null=False, blank=False)
+    email = models.CharField(max_length=255, null=False, blank=False, unique=True)
     registration = models.CharField(max_length=80, blank=True)
     photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
     comment = models.TextField(null=True, blank=True)
-    follow = models.ManyToManyField('polydag.Node', related_name='followed')
+    follow = models.ManyToManyField('polydag.Node', related_name='followed', db_index=True)
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
-    moderated_nodes = models.ManyToManyField('polydag.Node')
+    moderated_nodes = models.ManyToManyField('polydag.Node', db_index=True)
 
     # Standard fields
     @property
@@ -132,7 +132,7 @@ class User(AbstractBaseUser):
 
 
 class Inscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True)
     faculty = models.CharField(max_length=80, null=True)
     section = models.CharField(max_length=80, null=True)
     year = models.PositiveIntegerField(null=True)

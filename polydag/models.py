@@ -19,8 +19,8 @@ import re
 
 class Node(PolymorphicModel):
     """Base class for all P402 objects"""
-    name = models.CharField(max_length=140)
-    _children = models.ManyToManyField("self", symmetrical=False, blank=True)
+    name = models.CharField(max_length=140, db_index=True)
+    _children = models.ManyToManyField("self", symmetrical=False, blank=True, db_index=True)
 
     def __repr__(self):
         return '<Node {} : {} "{}">'.format(
@@ -161,7 +161,7 @@ class Keyword(models.Model):
     Keywords are a comfortable way to group object that are far from each other
     in the site's graph, but semantically close.
     """
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -169,8 +169,8 @@ class Keyword(models.Model):
 
 class Taggable(Node):
     """An abstract taggable node. Taggable nodes have keywords."""
-    keywords = models.ManyToManyField(Keyword, blank=True)
-    year = models.CharField(max_length=9)
+    keywords = models.ManyToManyField(Keyword, blank=True, db_index=True)
+    year = models.CharField(max_length=9, db_index=True)
 
     @staticmethod
     def KW(name):

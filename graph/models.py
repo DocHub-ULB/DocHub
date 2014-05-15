@@ -16,7 +16,7 @@ from django.db import models
 
 
 class Course(Node):
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     description = models.TextField(null=True)
 
     class Meta:
@@ -51,7 +51,7 @@ class Course(Node):
 class CourseInfo(models.Model):
     infos = models.TextField()
     date = models.DateTimeField(auto_now=True)
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, unique=True)
 
     class Meta:
         ordering = ['-date']

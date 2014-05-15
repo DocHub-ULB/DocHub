@@ -20,7 +20,7 @@ from www import settings
 
 class Thread(Leaf, OneParent, Taggable):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    created = models.DateTimeField(auto_now_add=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     def __unicode__(self):
         return "#{}: {}".format(self.id, self.name)
@@ -31,9 +31,9 @@ class Thread(Leaf, OneParent, Taggable):
 
 class Message(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    thread = models.ForeignKey(Thread)
+    thread = models.ForeignKey(Thread, db_index=True)
     text = models.TextField()
-    created = models.DateTimeField(auto_now_add=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     def __unicode__(self):
         t = self.text
