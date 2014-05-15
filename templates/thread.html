@@ -33,19 +33,19 @@
   <div class="large-10 medium-12 columns">
     <div class="row"><div class="medium-11 columns thread-separator"></div></div>
     {% if not edit %}
-      {% for message in object.message_set.all %}
+      {% for message in messages %}
         {% include "message_template.html" %}
       {% endfor %}
       <div class="row"><div class="medium-11 columns thread-separator"></div></div>
       {% include "message_form_template.html" %}
     {% else%}
-      {% for message in object.message_set.all|slice:slice_top %}
+      {% for message in messages|slice:slice_top %}
         {% include "message_template.html" %}
       {% endfor %}
       <div class="row" id="message-edit"><div class="medium-11 columns thread-separator"></div></div>
       {% include "message_form_template.html" %}
       <div class="row"><div class="medium-11 columns thread-separator"></div></div>
-      {% for message in object.message_set.all|slice:slice_bottom %}
+      {% for message in messages|slice:slice_bottom %}
         {% include "message_template.html" %}
       {% endfor %}
     {% endif %}
