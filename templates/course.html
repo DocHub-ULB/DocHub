@@ -102,7 +102,13 @@
         </div>
         </div>
       </div>
-    {% endwith %}{% endfor %}
+    {% endwith %}
+    {% empty %}
+      <h3>Il n'y a encore rien dans ce cours ...</h3>
+      <p>Personne n'est encore passé ici on dirait.<br>
+        Vous pourriez poser une question ou encore uploader un document. </p>
+    {% endfor %}
+
   </div>
 </div>
 {% endblock %}
