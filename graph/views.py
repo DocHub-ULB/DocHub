@@ -81,7 +81,6 @@ def show_course(request, slug):
     threads = filter(lambda x: x.get_real_instance_class() == Thread, children)
     threads = map(lambda x: x.id, threads)
     threads = Thread.objects.filter(id__in=threads).annotate(Count('message')).select_related('user').prefetch_related('keywords')
-
     children_nodes = itertools.chain(docs, threads)
 
     get_date = lambda x: getattr(x, "date", False) or getattr(x, "created", False)
