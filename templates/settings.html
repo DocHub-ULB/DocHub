@@ -18,30 +18,37 @@
     </div>
   {% endif %}
 </div>
-<form action="" method="post"
-  enctype="multipart/form-data" class="dropzone">
-  {% csrf_token %}
-  <div class="row">
-    {{ form.non_field_errors }}
-  </div>
-  <div class="row">
-    <div class="medium-6 columns">
+<div class="row">
+  <div class="medium-6 columns">
+    <h2><i class="fi-torso"></i> Profil</h2>
+    <p>
+      Votre profil est accessible à tous les utilisateurs de DocHub.<br>
+      <small>DocHub n'est accessible qu'avec un NetID donc uniquement pour l'ULB</small>
+    </p>
+    {% csrf_token %}
+    <form action="" method="post" enctype="multipart/form-data" class="dropzone">
+      {{ form.non_field_errors }}
       Photo de profil<br>
       <img src="{{user.get_photo}}" class="user-photo">
       {% with form.profile_pic as field %}
         {% include "simple_input.html" %}
       {% endwith %}
-    </div>
-    <div class="medium-6 columns">
-      plop
-    </div>
+      <input type="submit" class="button success radius small" value="Changer ma photo" />
+    </form>
+    <p>
+      <small>Votre nom ou prénom est incorrect ? Envoyez nous un <a href="mailto:p402@cerkinfo.be">mail</a>, on corrige ça tout de suite !</small>
+    </p>
   </div>
-  <div class="row">
-    <div class="medium-12 columns">
-      <input type="submit" class="button success radius" value="Enregister" />
-    </div>
+  <div class="medium-6 columns">
+    <h2><i class="fi-widget"></i> Préférences</h2>
+    <p>
+      Changez ces options pour rendre DocHub plus à votre gout.
+    </p>
+    <p>
+      <small>Bientôt ...</small>
+    </p>
   </div>
-</form>
 </div>
+
 
 {% endblock %}

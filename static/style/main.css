@@ -3,41 +3,17 @@
     max-width: 100%;
 }
 
-.green {
-    color: green;
-}
+.green { color: green; }
 
-.dark-grey {
-    color: #666;
-}
+.dark-grey { color: #666; }
+.dark-grey:hover { color: #333; }
 
-.black {
-    color: #111;
-}
+.black { color: #111; }
+.black:hover { color: #333; }
 
-.black:hover {
-    color: #333;
-}
 
-.dark-grey:hover {
-    color: #333;
-}
-
-.sh-space {
-    padding-left: 7px;
-}
-
-.right-align {
-    text-align: right;
-}
-
-.center-align {
-    text-align: center;
-}
-
-.user-message {
-    margin-bottom: 20px !important;
-}
+.sh-space { padding-left: 7px; }
+.user-message { margin-bottom: 20px !important; }
 
 .user-message-header {
     border: 1px solid #EEE;
@@ -291,86 +267,4 @@ i.round-icon.medium{
 
 .back-icon:hover {
     color: #666;
-}
-
-/*
-======================
-VIEWER
-======================
-*/
-
-.viewer-bar {
-    background-color: #AAA;
-}
-
-.viewer-bar section li a{
-    background-color: #AAA !important;
-    color: #333 !important;
-}
-
-.viewer-bar section li a:hover{
-    background-color: #333 !important;
-    color: #FFF !important;
-}
-
-#thumbs {
-    position: fixed;
-    overflow: auto;
-    background-color: #eee;
-    padding: 15px 28px 10px 20px;
-    text-align: center;
-    height: 100%;
-}
-
-
-#thumbs p {
-    font-size: 10px;
-    text-align: center;
-}
-
-.thumb {
-    border: 1px #eee solid;
-}
-
-#thumbs-misere {
-    position: fixed;
-    top: -10px;
-    background-color: #eee;
-    height: 100px;
-    width: 16.6667%;
-    z-index: -1;
-    display: none;
-}
-
-@media only screen and (min-width: 40.063em) {
-    #thumbs-misere {
-        display: inherit !important;
-    }
-}
-
-.page {
-    border: 1px #eee solid;
-    margin: 10px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: white;
-}
-
-.hilight {
-    border: 2px #bde solid;
-}
-
-.viewer-title {
-    background-color: #aaa;
-    padding: 0px 15px;
-    line-height: 45px;
-    font-size: 0.8125rem;
-    font-weight: normal;
-    color: #333;
-
-}
-
-.viewer-title.divider {
-    border-color: #999 !important;
 }
