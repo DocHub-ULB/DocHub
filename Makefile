@@ -9,6 +9,7 @@ CELERY_LOGFILE = celery.log
 PIDFILES = ${WEBSERVER_PIDFILE} ${CELERY_PIDFILE}
 LOGFILES = ${WEBSERVER_LOGFILE} ${CELERY_LOGFILE} /tmp/upload_log sql.log
 
+
 all: start
 init: ${DATABASE}
 reset: cleandata init
@@ -48,3 +49,28 @@ graph: graph.png
 
 graph.png:
 	./manage.py todot | dot -Tpng > graph.png
+
+shower: foundation foundation-icons
+
+foundation: static/3party/foundation
+
+static/3party/foundation:
+	wget http://foundation.zurb.com/cdn/releases/foundation-5.2.2.zip -O /tmp/foundation.zip
+	rm -rf /tmp/foundation
+	mkdir /tmp/foundation && true
+	unzip /tmp/foundation.zip -d /tmp/foundation
+	rm /tmp/foundation/index.html /tmp/foundation/humans.txt /tmp/foundation/robots.txt
+	mv  /tmp/foundation static/3party/
+
+foundation-icons: static/3party/foundation-icons
+
+ICONEXT=css eot svg ttf woff
+ICONFILES=$(addprefix /tmp/foundation-icons/foundation-icons/foundation-icons., ${ICONEXT})
+
+static/3party/foundation-icons:
+	wget http://zurb.com/playground/uploads/upload/upload/288/foundation-icons.zip -O /tmp/foundation-icons.zip
+	rm -rf /tmp/foundation-icons
+	mkdir /tmp/foundation-icons && true
+	unzip /tmp/foundation-icons.zip -d /tmp/foundation-icons > /dev/null
+	@mkdir static/3party/foundation-icons && true
+	mv ${ICONFILES} static/3party/foundation-icons

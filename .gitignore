@@ -11,3 +11,6 @@ media/documents/*/
 media/profile/*.png
 media/profile/*.jpg
 media/profile/*.gif
+
+static/3party/foundation-icons/
+static/3party/foundation/
