@@ -80,22 +80,41 @@
 
 
 .main-side-nav {
-
-    border-right: 2px solid #EEE;
-    border-bottom: 2px solid #EEE;
+    margin-top: .5em;
+    /*border: 2px solid #EEE;*/
     height: 100%;
 }
 
 .main-side-nav li{
-    padding-left: 15px !important;
+    padding-left: 5px !important;
     margin: 0px;
     padding: 0px;
 }
 
 .main-side-nav li:nth-child(even){
-    background-color: #EFEFEF;
+    /*background-color: #EFEFEF;*/
 }
 
+.main-side-nav .nav-link {
+    padding-left: 12px !important;
+    padding-right: 5px !important;
+}
+
+.main-side-nav .nav-link:hover {
+    background-color: #F2F2F2;
+}
+
+.main-side-nav .nav-link a {
+    color: #222 !important;
+}
+
+.main-side-nav .nav-link a:hover {
+    color: #555 !important;
+}
+
+.main-side-nav .nav-link a i{
+    color: #007095;
+}
 
 code {
     color: #333;

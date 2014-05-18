@@ -55,15 +55,13 @@
     <div class="row full-width collapse">
       {% block full-page %}
         <div class="hide-for-small-only large-2 medium-3 columns sidebar">
-
-
           <ul class="side-nav main-side-nav">
-            <li><a></a>Mes cours</li>
+            <li><a href="#" class="button radius">Mes cours</a></li>
             {% cache 120 user_followed_list user.netid %}
             {% for course in user.followed_courses %}
-              <li>
+              <li class="nav-link">
                 <a href="{% url 'node_canonic' course.id %}">
-                  {{ course.name }}
+                  <i class="fi-folder"></i> {{ course.name }}
                 </a>
               </li>
             {% endfor %}
