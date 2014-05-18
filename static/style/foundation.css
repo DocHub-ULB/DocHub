@@ -285,6 +285,14 @@ i.round-icon.medium{
  }
 
 
+.back-icon {
+    color: #AAA;
+}
+
+.back-icon:hover {
+    color: #666;
+}
+
 /*
 ======================
 VIEWER
