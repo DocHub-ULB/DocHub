@@ -52,6 +52,9 @@ graph.png:
 
 shower: foundation foundation-icons
 
+shower-clean:
+	rm -rf static/3party/foundation static/3party/foundation-icons static/3party/select
+
 foundation: static/3party/foundation
 
 static/3party/foundation:
@@ -74,3 +77,16 @@ static/3party/foundation-icons:
 	unzip /tmp/foundation-icons.zip -d /tmp/foundation-icons > /dev/null
 	@mkdir static/3party/foundation-icons && true
 	mv ${ICONFILES} static/3party/foundation-icons
+
+select: static/3party/select
+
+SELECT=select2-spinner.gif select2.css select2.js select2.png select2_locale_fr.js select2x2.png
+SELECTFILES=$(addprefix /tmp/select/select2-3.4.8/, ${SELECT})
+
+static/3party/select:
+	wget https://github.com/ivaynberg/select2/archive/3.4.8.zip -O /tmp/select.zip
+	rm -rf /tmp/select
+	mkdir /tmp/select && true
+	unzip /tmp/select.zip -d /tmp/select > /dev/null
+	@mkdir static/3party/select && true
+	mv ${SELECTFILES} static/3party/select
