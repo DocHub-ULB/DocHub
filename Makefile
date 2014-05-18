@@ -11,7 +11,7 @@ LOGFILES = ${WEBSERVER_LOGFILE} ${CELERY_LOGFILE} /tmp/upload_log sql.log
 
 
 all: start
-init: ${DATABASE}
+init: ${DATABASE} shower
 reset: cleandata init
 
 start : ${DATABASE}
@@ -41,16 +41,17 @@ ${DATABASE}:
 ve:
 	python2.7 `which virtualenv` --distribute --no-site-package ve
 
-install: requirements.txt ve
+install: requirements.txt ve shower
 	pip install -r $< || printf "\033[1mYou must first source ve/bin/activate\033[0m\n"
 	chmod +x ./manage.py
+
 
 graph: graph.png
 
 graph.png:
 	./manage.py todot | dot -Tpng > graph.png
 
-shower: foundation foundation-icons
+shower: foundation foundation-icons select
 
 shower-clean:
 	rm -rf static/3party/foundation static/3party/foundation-icons static/3party/select
