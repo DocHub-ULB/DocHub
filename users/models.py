@@ -100,6 +100,10 @@ class User(AbstractBaseUser):
     def followed_courses(self):
         return self.directly_followed().instance_of(Course)
 
+    def follows(self, course):
+        courses = self.follow.instance_of(Course).only('id').non_polymorphic()
+        return course.id in map(lambda x: x.id, courses)
+
     @property
     def auto_follow(self):
         return True # TODO use user prefs

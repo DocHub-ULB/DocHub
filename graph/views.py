@@ -19,6 +19,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.core.cache import cache
 
 from documents.forms import UploadFileForm
 from telepathy.forms import NewThreadForm
@@ -102,8 +103,15 @@ def show_course(request, slug):
             node.year = "Archives"
         sorted_children_nodes += nodes
 
-    followed = course in request.user.directly_followed()
-    tags = Keyword.objects.all()
+    followed = request.user.follows(course)
+
+    tags = cache.get('all_tags')
+    if tags is None:
+        tags = list(map(lambda x: x.name, Keyword.objects.all()))
+        cache.set('all_tags', ",".join(tags), 300)
+    else:
+        tags = tags.split(",")
+
 
     return render(request, "course.html", {
         "object": course,
