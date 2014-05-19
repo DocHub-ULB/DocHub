@@ -37,18 +37,18 @@ urlpatterns = patterns("",
     url(r"^json/node/", include("polydag.urls")),
 
     # The apps entry points
-    url(r"^zoidberg/calendar/", include("calendars.urls")),
-    url(r"^zoidberg/graph/", include("graph.urls")),
-    url(r"^zoidberg/document/", include("documents.urls")),
-    url(r"^zoidberg/telepathy/", include("telepathy.urls")),
-    url(r"^zoidberg/notifications/", include("notify.urls")),
-    url(r"^zoidberg/users/", include("users.urls")),
+    url(r"^calendar/", include("calendars.urls")),
+    url(r"^graph/", include("graph.urls")),
+    url(r"^document/", include("documents.urls")),
+    url(r"^telepathy/", include("telepathy.urls")),
+    url(r"^notifications/", include("notify.urls")),
+    url(r"^users/", include("users.urls")),
 
     # The product/client entry points
-    url(r"^zoidberg/home$", home,
+    url(r"^home$", home,
         name="home"),
 
-    url(r"^zoidberg/node/(?P<nodeid>\d+)$", node_canonic, name="node_canonic"),
+    url(r"^node/(?P<nodeid>\d+)$", node_canonic, name="node_canonic"),
 
     url(r"^$",
         user_logged(app_redirection, index),
