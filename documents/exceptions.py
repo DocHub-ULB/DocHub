@@ -18,7 +18,7 @@ class MissingBinary(EnvironmentError):
 class DocumentProcessingError(Exception):
 
     def __init__(self, document, exc=None, message=None):
-        super(UploadError, self).__init__()
+        super(Exception, self).__init__()
         self.document = document
         self.exc = exc
         self.message = message
