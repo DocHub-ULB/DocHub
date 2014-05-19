@@ -38,7 +38,7 @@ urlpatterns = patterns("",
 
     # The apps entry points
     url(r"^calendar/", include("calendars.urls")),
-    url(r"^graph/", include("graph.urls")),
+    url(r"^ulb/", include("graph.urls")),
     url(r"^document/", include("documents.urls")),
     url(r"^telepathy/", include("telepathy.urls")),
     url(r"^notifications/", include("notify.urls")),

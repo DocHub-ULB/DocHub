@@ -61,7 +61,7 @@
             {% cache 120 user_followed_list user.netid %}
             {% for course in user.followed_courses %}
               <li class="nav-link">
-                <a href="{% url 'node_canonic' course.id %}">
+                <a href="{% url 'course_show' course.slug %}">
                   <i class="fi-folder"></i> {{ course.name }}
                 </a>
               </li>

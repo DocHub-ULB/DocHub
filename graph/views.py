@@ -71,6 +71,7 @@ def show_category(request, catid):
 def show_course(request, slug):
     if re.search(r'^\d+$', slug):
         course = get_object_or_404(Course, pk=slug)
+        return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     else:
         course = get_object_or_404(Course, slug=slug)
 
