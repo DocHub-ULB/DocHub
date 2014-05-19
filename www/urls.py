@@ -44,14 +44,10 @@ urlpatterns = patterns("",
     url(r"^notifications/", include("notify.urls")),
     url(r"^users/", include("users.urls")),
 
-    # The product/client entry points
-    url(r"^home$", home,
-        name="home"),
-
     url(r"^node/(?P<nodeid>\d+)$", node_canonic, name="node_canonic"),
 
     url(r"^$",
-        user_logged(app_redirection, index),
+        user_logged(home, index),
         name="index"),
 
     url(r"^syslogin$",

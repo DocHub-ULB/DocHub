@@ -18,7 +18,7 @@ EMAIL_SUBJECT_PREFIX = "[DocHub] "
 AUTH_USER_MODEL = 'users.User'
 
 # Page to show after a syslogin
-LOGIN_REDIRECT_URL = '/zoidberg/home'
+LOGIN_REDIRECT_URL = 'index'
 
 # url to internal login
 LOGIN_URL = '/syslogin'
