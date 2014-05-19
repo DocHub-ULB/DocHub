@@ -58,6 +58,7 @@ INSTALLED_APPS += (
     'fragments',
     'south',
     'djcelery',
+    'compressor',
 )
 
 # apps
@@ -85,3 +86,13 @@ SUIT_CONFIG = {
         'djcelery',
     ),
 }
+
+COMPRESS_ROOT = join(BASE_DIR, "static")
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_OFFLINE = True

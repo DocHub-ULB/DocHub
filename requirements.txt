@@ -6,6 +6,7 @@ celery
 django-celery
 django-suit
 Pillow
+django_compressor
 
 # Migrate
 south
