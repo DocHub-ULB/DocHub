@@ -3,12 +3,12 @@
 {% load custommardown %}
 
 {% block content %}
-<div class="row">
-  <div class="large-12 columns">
-    <h1>Bienvenue sur DocHub</h1>
-  </div>
-</div>
 {% if user.welcome %}
+  <div class="row">
+    <div class="large-12 columns">
+      <h1>Bienvenue sur DocHub</h1>
+    </div>
+  </div>
   <div class="row">
     <div class="large-10 columns">
       <div class="panel">
@@ -17,7 +17,7 @@
             <h3>Vous semblez nouveau !</h3>
           </div>
           <div class="small-1 columns text-right">
-            <a href="#"><i class="fi-x"></i></a>
+            <a href="{% url "hide_new_panel" %}"><i class="fi-x"></i></a>
           </div>
         </div>
         <div class="row">
@@ -51,6 +51,12 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+{% else %}
+  <div class="row">
+    <div class="large-12 columns">
+      <h1>DocHub</h1>
     </div>
   </div>
 {% endif %}

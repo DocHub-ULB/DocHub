@@ -77,3 +77,11 @@ def user_settings(request):
     return render(request, 'settings.html', {
         'form': form,
     })
+
+
+@login_required
+def panel_hide(request):
+    request.user.welcome = False
+    request.user.save()
+
+    return HttpResponseRedirect(reverse('index'))
