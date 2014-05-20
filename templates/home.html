@@ -22,7 +22,10 @@
         </div>
         <div class="row">
           <div class="large-12 columns">
-            <p>Peut-être voudriez-vous vous abonner à des cours ?</p>
+            <p>Peut-être voudriez-vous vous abonner à des cours ?<br>
+              Pour ça, le plus simple est d'aller voir la liste des cours, choisir votre faculté, puis votre année (et peut-être votre option) puis vous abonner à la totalité des cours en cliquant sur "m'abonner".</p>
+            <p>Vous pouvez aussi vous balader dans la liste des cours et vous abonner aux cours qui vous plaisent, un par un.</p>
+            {% comment %}
             {% if welcome.new_inscriptions %}
               <p>On dirait que vous étudiez {{ welcome.inscription.section }} l'année passée mais nous ne savons pas ou vous êtes partis cette année...</p>
               <p>Voici quelques sections où vous auriez pu aller :
@@ -32,6 +35,7 @@
             {% elif welcome.inscription %}
               <p>Etudiez-vous {{ welcome.inscription.section }} dans la facutlé {{ welcome.inscription.faculty|capfirst }} ?</p>
             {% endif %}
+            {% endcomment %}
           </div>
         </div>
         <div class="row">
@@ -41,13 +45,21 @@
         </div>
         <div class="row">
           <div class="large-4 medium-4 columns">
-        <p><a href="#">Liste des cours</a><br />Lorem Ipsum</p>
-      </div>
-          <div class="large-4 medium-4 columns">
-            <p><a href="#">Aide</a><br />Lorem Ipsum</p>
+            <p><a href="#">Liste des cours</a><br />
+            Pour l'instant, DocHub est disponnible pour les départements d'info et de physique uniquement.</p>
           </div>
           <div class="large-4 medium-4 columns">
-            <p><a href="#">Page Facebook</a><br>Lorem IpsumSit dolor amet...</p>
+            <p><a href="{% url 'help' %}">Aide</a><br />
+            Vous êtes perdus, quelque chose ne marche pas ? Vous avez une remarque ? C'est par <a href="{% url 'help' %}">ici</a> !</p>
+          </div>
+          <div class="large-4 medium-4 columns">
+            <p><a href="https://www.facebook.com/Proj402">Page Facebook</a><br>
+            Vous voulez êtres tenus au courant des dernières nouvelles ? Likez nous sur Facebook !</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+            <p>Vous pouvez aussi <a href="{% url 'settings' %}">modifier votre profil</a>, vérifier vos <a href="{% url 'notif_show' %}">notifications</a> ou tout simplement attendre des actualités qui apparaitront ici en dessous après que vous vous soyez abonné à des cours.</p>
           </div>
         </div>
       </div>

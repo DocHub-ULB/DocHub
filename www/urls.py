@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url, include
+from django.views.generic import TemplateView
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
@@ -67,6 +68,9 @@ urlpatterns = patterns("",
     url(r"^", include("fragments.urls")),
 
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^help/markdown$', TemplateView.as_view(template_name='markdown.html'), name="markdown_help"),
+    url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 )
 
 if settings.DEBUG:
