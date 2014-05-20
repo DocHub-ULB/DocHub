@@ -23,7 +23,7 @@
     <div class="large-6 medium-12 columns">
       <h2>Cours
         {% if follow_children %}
-          <a class="button radius success" href="{% url 'follow_node_children' object.id %}">
+          <a class="button radius success right" href="{% url 'follow_node_children' object.id %}">
             Suivre tous les cours de cette catégorie
           </a>
         {% endif %}
@@ -31,10 +31,12 @@
       <ul class="small-block-grid-1 medium-block-grid-2">
         {% for course in object.courses %}
         <li>
-           <i class="fi-folder round-icon medium"></i>
-          <h4><a href="{% url 'course_show' course.id %}">
-            {{ course.slug }}
-          </a></h4>
+          <h4>
+            <a href="{% url 'course_show' course.id %}">
+              <i class="fi-folder round-icon small"></i>
+              {{ course.slug }}
+            </a>
+          </h4>
            {{ course.name }}
         </li>
         {% endfor %}
@@ -48,8 +50,12 @@
       <ul class="small-block-grid-1 medium-block-grid-2">
         {% for cat in object.subcategories %}
         <li>
-          <i class="fi-annotate round-icon medium"></i>
-          <h4><a href="{% url 'category_show' cat.id %}">{{ cat.name }}</a></h4>
+          <h4>
+            <a href="{% url 'category_show' cat.id %}">
+              <i class="fi-annotate round-icon small"></i>
+              {{ cat.name }}
+            </a>
+          </h4>
         </li>
         {% endfor %}
       </ul>

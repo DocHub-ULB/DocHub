@@ -9,10 +9,12 @@
     <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
       {% for course in followed_courses %}
         <li>
-          <i class="fi-folder round-icon medium"></i>
-          <h4><a href="{% url 'course_show' course.slug %}">
-            {{ course.slug }}
-          </a></h4>
+          <h4>
+            <a href="{% url 'course_show' course.slug %}">
+              <i class="fi-folder round-icon small"></i>
+              {{ course.slug }}
+            </a>
+        </h4>
           {{ course.name }}
           {% with course.children as children %}
             {% if children|length > 0 %}
@@ -29,10 +31,12 @@
     <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
     {% for fac in faculties %}
         <li>
-          <i class="fi-annotate round-icon medium"></i>
-          <h4><a href="{% url 'category_show' fac.id %}">
-            {{ fac.name }}
-          </a></h4>
+          <h4>
+            <a href="{% url 'category_show' fac.id %}">
+              <i class="fi-annotate round-icon small"></i>
+              {{ fac.name }}
+            </a>
+          </h4>
         </li>
       {% endfor %}
       </ul>
