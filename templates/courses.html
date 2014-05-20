@@ -1,0 +1,41 @@
+{% extends "skel.html" %}
+
+{% block title %}Liste des cours{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="medium-12 columns">
+    <h1>Vos cours</h1>
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+      {% for course in followed_courses %}
+        <li>
+          <i class="fi-folder round-icon medium"></i>
+          <h4><a href="{% url 'course_show' course.slug %}">
+            {{ course.slug }}
+          </a></h4>
+          {{ course.name }}
+          {% with course.children as children %}
+            {% if children|length > 0 %}
+              ({{ children|length }} élément{{children|pluralize}})
+            {% endif%}
+          {% endwith %}
+        </li>
+      {% empty %}
+        <p>On dirait que vous ne suivez aucun cours pour l'instant. Vous pourriez parcourir la catalogue de DocHub pour vous abonner à ce qui vous intéresse.</p>
+      {% endfor %}
+    </ul>
+
+    <h1>Catalogue</h1>
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+    {% for fac in faculties %}
+        <li>
+          <i class="fi-annotate round-icon medium"></i>
+          <h4><a href="{% url 'category_show' fac.id %}">
+            {{ fac.name }}
+          </a></h4>
+        </li>
+      {% endfor %}
+      </ul>
+  </div>
+</div>
+{% endblock %}
