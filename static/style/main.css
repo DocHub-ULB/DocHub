@@ -15,6 +15,15 @@
 .sh-space { padding-left: 7px; }
 .user-message { margin-bottom: 20px !important; }
 
+a.light {
+    color: grey;
+}
+
+
+a.light:hover {
+    text-decoration: underline;
+}
+
 .user-message-header {
     border: 1px solid #EEE;
     padding: 5px;

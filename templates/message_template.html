@@ -7,7 +7,10 @@
   <div class="large-10 medium-11 columns" id="message-{{ message.id }}">
     <div class="row user-message-header">
       <div class="large-6 columns">
-        <strong>{{ message.user.name }}</strong> a commenté {{ message.created|naturaltime }}
+        <strong>{{ message.user.name }}</strong>
+        <a href="message-{{ message.id }}" class="light">
+           a commenté {{ message.created|naturaltime }}
+        </a>
       </div>
       <div class="large-6 columns text-right">
         {% if message.user.netid  == object.user.netid %}

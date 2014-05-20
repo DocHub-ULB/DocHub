@@ -15,7 +15,7 @@
         <strong>{% if edit %}Editer{% else %}Répondre{% endif %}</strong>
       </div>
       <div class="large-6 columns text-right">
-        <a href="#markdown-help" class="sh-space"><i class="fi-info dark-grey"></i></a>
+        <a href="#" data-reveal-id="makrdown-down" class="sh-space"><i class="fi-info dark-grey"></i></a>
       </div>
     </div>
     <div class="row user-message-content">
@@ -44,6 +44,12 @@
           </div>
         </div>
         {% include "markdown_small_help.html" %}
+        <div id="makrdown-down" class="reveal-modal" data-reveal>
+          {% include "markdown_small_help.html" %}
+        </div>
+        <div id="makrdown-cheat" class="reveal-modal" data-reveal>
+          {% include "markdown_cheatsheet.html" %}
+        </div>
       </form>
     </div>
   </div>

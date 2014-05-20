@@ -18,7 +18,9 @@
 <div class="row">
   <div class="large-12 columns">
     <h1>{{ object.name }}</h1>
-    <h3><a href="{% url "node_canonic" object.parent.id %}"><i class="fi-arrow-left back-icon"></i></a> {{object.parent.name}}</h3>
+    <h3><a href="{% url "node_canonic" object.parent.id %}" class="light">
+      <i class="fi-arrow-left back-icon"></i>  {{object.parent.name}}
+    </a></h3>
   </div>
 </div>
 <div class="row">
