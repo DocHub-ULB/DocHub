@@ -31,5 +31,5 @@ try:
         ADMINS
         MANAGERS
         ALLOWED_HOSTS
-except NameError:
-    raise NameError('Required config values not found. Abort !')
+except NameError as e:
+    raise NameError('Required config values not found: %s. Abort !' % e)
