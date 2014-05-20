@@ -25,8 +25,9 @@
       Votre profil est accessible à tous les utilisateurs de DocHub.<br>
       <small>DocHub n'est accessible qu'avec un NetID donc uniquement pour l'ULB</small>
     </p>
-    {% csrf_token %}
+
     <form action="" method="post" enctype="multipart/form-data" class="dropzone">
+      {% csrf_token %}
       {{ form.non_field_errors }}
       Photo de profil<br>
       <img src="{{user.get_photo}}" class="user-photo">
