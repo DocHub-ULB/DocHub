@@ -118,6 +118,7 @@ def show_course(request, slug):
         "object": course,
         "gehol": gehol_url(course),
         "followed": followed,
+        "followers": course.followed.count(),
         "tags": tags,
         'children_nodes': sorted_children_nodes,
     })
