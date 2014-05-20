@@ -48,11 +48,17 @@
   </div>
 </div>
 {% endblock %}
+
+
 {% block script %}
-<link href="/static/3party/select/select2.css" rel="stylesheet"/>
-<script src="/static/3party/select/select2.js"></script>
-<script src="/static/3party/select/select2_locale_fr.js"></script>
-<script>
- $(document).ready(function() { $(".chosen-select").select2(); });
-</script>
+  {% compress css %}
+    <link href="/static/3party/select/select2.css" rel="stylesheet"/>
+  {% endcompress %}
+  {% compress js %}
+    <script src="/static/3party/select/select2.js"></script>
+    <script src="/static/3party/select/select2_locale_fr.js"></script>
+  {% endcompress %}
+  <script>
+    $(document).ready(function() { $(".chosen-select").select2(); });
+  </script>
 {% endblock %}

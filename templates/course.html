@@ -141,10 +141,16 @@
 {% endcomment %}
 
 {% block script %}
-<link href="/static/3party/select/select2.css" rel="stylesheet"/>
-<script src="/static/3party/select/select2.js"></script>
-<script src="/static/3party/select/select2_locale_fr.js"></script>
-<script>
-{% include "course-search.js" %}
-</script>
+  {% compress css %}
+    <link href="/static/3party/select/select2.css" rel="stylesheet"/>
+  {% endcompress %}
+  {% compress js %}
+    <script src="/static/3party/select/select2.js"></script>
+    <script src="/static/3party/select/select2_locale_fr.js"></script>
+  {% endcompress %}
+  {% compress js %}
+  <script>
+    {% include "course-search.js" %}
+  </script>
+  {% endcompress %}
 {% endblock %}
