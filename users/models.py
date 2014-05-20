@@ -65,12 +65,12 @@ class User(AbstractBaseUser):
     photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
     comment = models.TextField(null=True, blank=True)
-    follow = models.ManyToManyField('polydag.Node', related_name='followed', db_index=True)
+    follow = models.ManyToManyField('polydag.Node', related_name='followed', db_index=True, blank=True)
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
-    moderated_nodes = models.ManyToManyField('polydag.Node', db_index=True)
+    moderated_nodes = models.ManyToManyField('polydag.Node', db_index=True, blank=True)
 
     # Standard fields
     @property

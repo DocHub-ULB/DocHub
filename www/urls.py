@@ -73,6 +73,12 @@ urlpatterns = patterns("",
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 )
 
+handler400 = 'www.error.error400'
+handler403 = 'www.error.error403'
+handler404 = 'www.error.error404'
+handler500 = 'www.error.error500'
+
+
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
