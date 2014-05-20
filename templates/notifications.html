@@ -17,7 +17,7 @@
 <div class="row">
   <div class="medium-6 columns">
     <h1>Notifications</h1>
-    {% if notifications|length > 1 %}
+    {% if notifications|length > 0 %}
       <p><a class="button success radius" href="{% url 'notif_read_all' %}">Tout marquer comme lu</a></p>
     {% endif %}
     {% if notifications %}
