@@ -125,7 +125,7 @@ def throw_b64error(request, raw):
 def intranet_auth(request, next_url):
     sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
     if len(next_url.strip()) == 0:
-        next_url = ''
+        next_url = 'index'
     if sid and uid:
         try:
             print ULB_AUTH % (sid, uid)
