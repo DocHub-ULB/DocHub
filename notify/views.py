@@ -76,7 +76,7 @@ def notifications_show(request):
     unread_len = Notification.unread(request.user).count()
     s = unread_len + 20
     notifs = list(
-        Notification.objects.filter(user=request.user).order_by('-id').select_related('prenotif')[:s]
+        Notification.objects.filter(user=request.user).order_by('read','-id').select_related('prenotif')[:s]
     )
     read_notifs = notifs[unread_len:]
     notifs = notifs[:unread_len]
