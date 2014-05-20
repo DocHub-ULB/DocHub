@@ -15,6 +15,7 @@ from users.models import User
 from getpass import getpass, getuser
 from optparse import make_option
 from graph.models import Category, Course, CourseInfo
+from polydag.models import Keyword
 from datetime import datetime
 import json
 from shutil import copy
@@ -41,6 +42,24 @@ class Command(BaseCommand):
         make_option('--first-name', action='store', dest='first_name', default=None, help='default first name'),
         make_option('--last-name', action='store', dest='last_name', default=None, help='default last name'),
     )
+
+    def add_keywords(self):
+        Keyword.objects.create(name="Labo")
+        Keyword.objects.create(name="TP")
+        Keyword.objects.create(name="Examen")
+        Keyword.objects.create(name="Résumé")
+        Keyword.objects.create(name="Formulaire")
+        Keyword.objects.create(name="Référence")
+        Keyword.objects.create(name="Projet")
+        Keyword.objects.create(name="Consignes")
+
+        Keyword.objects.create(name="Slides")
+        Keyword.objects.create(name="Syllabus")
+
+        Keyword.objects.create(name="Officiel")
+        Keyword.objects.create(name="Corrigé")
+        Keyword.objects.create(name="Points")
+
 
     def createCourse(self, parentNode, slug):
         try:
@@ -135,3 +154,5 @@ class Command(BaseCommand):
         Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
         self.walk(tree, Root)
         self.stdout.write("\n")
+
+        self.add_keywords()
