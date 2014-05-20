@@ -138,3 +138,11 @@ def leave_course(request, slug):
     user = request.user
     user.follow.remove(course)
     return HttpResponseRedirect(reverse('course_show', args=[slug]))
+
+
+@login_required
+def show_courses(request):
+    return render(request, "courses.html", {
+        "followed_courses": request.user.followed_courses(),
+        "faculties": Category.objects.first().children()
+    })

@@ -170,7 +170,7 @@ i.round-icon{
     border-radius: 0.8em;
 }
 
-i.round-icon:hover {
+a i.round-icon:hover {
     color: #444;
     background-color: #fff;
 }

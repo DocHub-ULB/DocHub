@@ -12,49 +12,49 @@
 
 {% block title %}{{ object.name }}{% endblock %}
 {% block content %}
-<div class="logic-block">
-  <h1>{{ object.name }}</h1>
-  {% if followed %}
-  <a class="panel-button border-bottom" href="{% url 'unfollow_node' object.id %}">
-    leave
-  </a>
-  {% else %}
-  <a class="panel-button border-bottom" href="{% url 'follow_node' object.id %}">
-    join
-  </a>
-  {% endif %}
-  {% if follow_children %}
-  <a class="panel-button border-bottom" href="{% url 'follow_node_children' object.id %}">
-    Follow all courses in this category
-  </a>
-  {% endif %}
-  <p>{{ object.description }}</p>
+<div class="row">
+  <div class="medium-12 columns">
+    <h1>{{ object.name }}</h1>
+  </div>
 </div>
-<div class="clear"></div>
 
-<div class="logic-block">
-  {% if object.subcategories %}
-    <h2>Subcategories</h2>
-    <ul>
-      {% for cat in object.subcategories %}
-      <li>
-        <a href="{% url 'category_show' cat.id %}">{{ cat.name }}</a>
-      </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+<div class="row">
   {% if object.courses %}
-    <h2>Courses</h2>
-    <ul>
-      {% for course in object.courses %}
-      <li>
-        <a href="{% url 'course_show' course.id %}">
-          {{ course.slug|upper }}: {{ course.name }}
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="large-6 medium-12 columns">
+      <h2>Cours
+        {% if follow_children %}
+          <a class="button radius success" href="{% url 'follow_node_children' object.id %}">
+            Suivre tous les cours de cette catégorie
+          </a>
+        {% endif %}
+      </h2>
+      <ul class="small-block-grid-1 medium-block-grid-2">
+        {% for course in object.courses %}
+        <li>
+           <i class="fi-folder round-icon medium"></i>
+          <h4><a href="{% url 'course_show' course.id %}">
+            {{ course.slug }}
+          </a></h4>
+           {{ course.name }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   {% endif %}
+
+  {% if object.subcategories %}
+    <div class="large-6 medium-12 columns">
+      <h2>Catégories</h2>
+      <ul class="small-block-grid-1 medium-block-grid-2">
+        {% for cat in object.subcategories %}
+        <li>
+          <i class="fi-annotate round-icon medium"></i>
+          <h4><a href="{% url 'category_show' cat.id %}">{{ cat.name }}</a></h4>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
 </div>
-<div class="clear"></div>
 {% endblock %}

@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from graph.views import get_category, show_course, show_category
+from graph.views import get_category, show_course, show_category, show_courses
 
 
 json_urls = patterns("",
@@ -26,4 +26,8 @@ urlpatterns = patterns("",
     url(r"^cat/(?P<catid>\d+)$",
         show_category,
         name="category_show"),
+
+    url(r"^courses/$",
+        show_courses,
+        name="show_courses"),
 )

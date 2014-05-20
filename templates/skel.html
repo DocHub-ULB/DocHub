@@ -43,7 +43,7 @@
                 <i class="fi-megaphone"></i> {{ notifcount }}</a>
               </li>
               <li class="divider"></li>
-              <li><a href="#">Cours</a></li>
+              <li><a href="{% url 'show_courses' %}">Cours</a></li>
               <!-- <li><a href="#">Calendrier</a></li> -->
             </ul>
             <ul class="right">
@@ -64,7 +64,7 @@
       {% block full-page %}
         <div class="hide-for-small-only large-2 medium-3 columns sidebar">
           <ul class="side-nav main-side-nav">
-            <li><a href="#" class="button radius">Mes cours</a></li>
+            <li><a href="{% url 'show_courses' %}" class="button radius">Mes cours</a></li>
             {% cache 120 user_followed_list user.netid %}
             {% for course in user.followed_courses %}
               <li class="nav-link">
