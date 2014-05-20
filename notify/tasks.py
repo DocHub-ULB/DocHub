@@ -29,6 +29,9 @@ def propagate_notification(self, notification_id):
 
     for node in impacted_nodes:
         #Deliver notifs to followers of ancestor nodes
+        if prenotif.sender_type == "Message" and not node.classBasename() == "Thread":
+            # Do not propagate new messages on a thread if followed node is not a thread
+            continue
         for follower in node.followed.all():
             if follower != prenotif.user and follower not in delivered:
                 notif_counter += 1
