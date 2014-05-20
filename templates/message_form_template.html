@@ -3,7 +3,11 @@
     {% if edit %}
       <a href="{% url 'thread_show' object.id %}#message-{{ edited_message.id }}" class="button tiny alert">Annuler</a>
     {% endif %}
-    <img width="50" src="{{ user.get_photo }}" class="user-photo user-photo-small"/>
+    {% if edit %}
+      <img width="50" src="{{ edited_message.user.get_photo }}" class="user-photo user-photo-small"/>
+    {% else %}
+      <img width="50" src="{{ user.get_photo }}" class="user-photo user-photo-small"/>
+    {% endif %}
   </div>
   <div class="large-10 medium-11 columns">
     <div class="row user-message-header">
