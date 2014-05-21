@@ -107,8 +107,8 @@
       </div>
     {% endwith %}
     {% empty %}
-      <h3>Il n'y a encore rien dans ce cours ...</h3>
-      <p>Personne n'est encore passé ici on dirait.<br>
+      <h3>Il n’y a encore rien dans ce cours…</h3>
+      <p>Personne n’est encore passé ici on dirait.<br>
         Vous pourriez poser une question ou encore uploader un document. </p>
     {% endfor %}
 
@@ -129,11 +129,11 @@
       </a>
     {% else %}
       <a class="button expand success radius" href="{% url 'follow_node' object.id %}">
-        <i class="fi-check"></i> S'abonner
+        <i class="fi-check"></i> S’abonner
       </a>
     {% endif %}
     {% if followers > 1 %}
-      <small>{{followers}} personnes sont abonnées à ce cours</small>
+      <small>{{followers}} personnes sont abonnées à ce cours.</small>
     {% endif %}
   </div>
 </div>

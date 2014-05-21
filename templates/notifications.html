@@ -32,9 +32,9 @@
         {% endfor %}
       </ul>
     {% elif not read_notifications %}
-      <p>Oh ! Vous n'avez encore jamais eu de notification, il faudrait peut-être s'abonner à un cours ?</p>
+      <p>Oh ! Vous n’avez pas encore reçu de notification, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
     {% else %}
-      <p>Bien joué, vous avez déjà tout lu !</p>
+      <p>Bien joué, vous avez déjà tout lu !</p>
     {% endif %}
   </div>
   {% if read_notifications %}
