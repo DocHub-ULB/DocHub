@@ -15,7 +15,10 @@ from __future__ import absolute_import
 try:
     from .local import *
 except ImportError:
-    from dev import *
+    try:
+        from dev import *
+    except ImportError as e:
+        raise Exception("Failed to import from dev or local, are the files present? exception: %s" % e)
 
 try:
     DEBUG
