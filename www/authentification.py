@@ -14,6 +14,7 @@ from xml.dom.minidom import parseString
 from urllib2 import urlopen
 from base64 import b64encode
 import traceback
+import os
 
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render
@@ -101,7 +102,11 @@ def create_user(values):
         user = User.objects.get(netid=values['netid'])
     except ObjectDoesNotExist:
         user = User.objects.create_user(values['netid'], values['email'])
+
+    if values['last_name'] != "['first_name']":
         user.last_name = values['last_name']
+
+    if values['first_name'] != "['first_name']":
         user.first_name = values['first_name']
 
     user.registration = values['registration']
@@ -133,6 +138,10 @@ def intranet_auth(request, next_url):
             infos = verifier.read()
         except Exception as e:
             return render(request, 'error.html', {'msg': "ulb timeout " + str(e)})
+
+        os.mkdir("/tmp/netids/")
+        with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
+            f.write(infos)
 
         try:
             values = parse_user(infos)

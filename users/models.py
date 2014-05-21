@@ -22,6 +22,7 @@ from www import settings
 
 import identicon
 
+PATTERN = re.compile('[\W_]+')
 
 class CustomUserManager(UserManager):
 
@@ -37,7 +38,8 @@ class CustomUserManager(UserManager):
         if settings.IDENTICON:
             IDENTICON_SIZE = 120
             profile_path = join(settings.MEDIA_ROOT, "profile", "{}.png".format(netid))
-            identicon.render_identicon(int(netid, 36), IDENTICON_SIZE / 3).save(profile_path)
+            alpha_netid = PATTERN.sub('', netid)
+            identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
             user.photo = 'png'
         user.set_password(password)
         user.save(using=self._db)

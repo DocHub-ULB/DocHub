@@ -48,7 +48,7 @@
         "Physique": {"course": ["elec-h-304", "elec-h-307", "math-h-301",
                                 "math-h-304", "phys-h-300", "phys-h-301",
                                 "phys-h-302", "phys-h-303", "phys-h-403"]},
-        "Biomed": {"course": ["bime-h-301", "biol-j-101", "chim-h-312", "elec-h-305", 
+        "Biomed": {"course": ["bime-h-301", "biol-j-101", "chim-h-312", "elec-h-305",
                               "elec-h-307", "elec-h-313", "info-h-301", "medi-h-301"]}},
     "MA1": {},
     "MA2": {}},

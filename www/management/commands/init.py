@@ -149,10 +149,10 @@ class Command(BaseCommand):
             user2.netid, password
         ))
 
-        tree = json.load(open('parsing/tree.json'))
-        self.courseList = json.load(open('parsing/cours.json'))
-        Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
-        self.walk(tree, Root)
-        self.stdout.write("\n")
+        # tree = json.load(open('parsing/tree.json'))
+        # self.courseList = json.load(open('parsing/cours.json'))
+        # Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
+        # self.walk(tree, Root)
+        # self.stdout.write("\n")
 
         self.add_keywords()
