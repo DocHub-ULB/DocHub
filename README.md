@@ -18,6 +18,7 @@ For exemple:
 Installation
 ============
 
+		sudo apt-get install python-dev
 		make ve
 		source ve/bin/activate
 		make install
