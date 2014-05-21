@@ -15,10 +15,7 @@ from __future__ import absolute_import
 try:
     from .local import *
 except ImportError:
-    try:
-        from dev import *
-    except ImportError:
-        pass
+    from dev import *
 
 try:
     DEBUG
