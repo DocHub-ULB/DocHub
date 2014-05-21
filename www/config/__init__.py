@@ -16,7 +16,7 @@ try:
     from .local import *
 except ImportError:
     try:
-        from dev import *
+        from .dev import *
     except ImportError as e:
         raise Exception("Failed to import from dev or local, are the files present? exception: %s" % e)
 
