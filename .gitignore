@@ -1,5 +1,6 @@
 *pyc
 db.sql
+db.sqlite
 initial_data.json
 ve
 graph.*
