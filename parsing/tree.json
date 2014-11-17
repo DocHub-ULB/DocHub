@@ -7,16 +7,18 @@
                        "lang-f-201", "math-f-213", "math-h-204"],
             "Options": {"course": ["biol-f-102", "biol-f-105", "geog-f-106",
                                    "geol-f-101", "geol-f-103", "hist-f-101",
-                                   "math-f-110", "phil-f-101", "phys-f-105"]}},
+                                   "phil-f-101", "phys-f-105"]}},
     "BA3": {"course": ["elec-h-307", "info-f-302", "info-f-303", "info-f-305",
                        "info-f-307", "info-f-308", "info-f-310", "info-h-303",
                        "lang-f-301", "math-f-307"],
             "Options": {"course": ["biol-f-208", "chim-f-202", "econ-s-102",
-                                   "elec-h-301", "elec-h-305", "gest-s-101",
+                                   "elec-h-201", "elec-h-305", "gest-s-101",
                                    "info-f-309"]}},
     "MA1": {
         "Commun": {"course": ["info-f-403", "info-f-404", "info-f-405", "info-f-408",
                               "info-h-300", "memo-f-403", "proj-h-402"]}
     },
     "MA2": {
-    }}}
+    }
+}
+}
