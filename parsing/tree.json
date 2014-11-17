@@ -13,12 +13,6 @@
                        "lang-f-301", "math-f-307"],
             "Options": {"course": ["biol-f-208", "chim-f-202", "econ-s-102",
                                    "elec-h-201", "elec-h-305", "gest-s-101",
-                                   "info-f-309"]}},
-    "MA1": {
-        "Commun": {"course": ["info-f-403", "info-f-404", "info-f-405", "info-f-408",
-                              "info-h-300", "memo-f-403", "proj-h-402"]}
-    },
-    "MA2": {
+                                   "info-f-309"]}}
     }
-}
 }
