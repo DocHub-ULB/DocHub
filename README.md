@@ -12,8 +12,12 @@ You'll need everything that is in requirements.txt (don't worry, pip will do it 
 You will also need to install poppler (the binary 'pdftotext'), GraphicsMagick (the binary 'gm') and LibreOffice/OpenOffice + unoconv (you need the binary 'unoconv') using your distribution packages.
 
 For exemple:
-
+	
+	# Debian/Ubuntu
     sudo apt-get install poppler-utils graphicsmagick unoconv
+
+    # Fedora
+    sudo apt-get install poppler-utils GraphicsMagick unoconv
 
 Installation
 ============
