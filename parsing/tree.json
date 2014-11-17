@@ -1,18 +1,67 @@
-{"Info": {
-    "BA1": {"course": ["info-f-101", "info-f-102", "info-f-103", "info-f-105",
-                       "info-f-106", "math-f-112", "phys-f-103"]
-            },
-    "BA2": {"course": ["econ-s-101", "info-f-201", "info-f-202", "info-f-203",
-                       "info-f-204", "info-f-205", "info-f-208", "info-f-209",
-                       "lang-f-201", "math-f-213", "math-h-204"],
-            "Options": {"course": ["biol-f-102", "biol-f-105", "geog-f-106",
-                                   "geol-f-101", "geol-f-103", "hist-f-101",
-                                   "phil-f-101", "phys-f-105"]}},
-    "BA3": {"course": ["elec-h-307", "info-f-302", "info-f-303", "info-f-305",
-                       "info-f-307", "info-f-308", "info-f-310", "info-h-303",
-                       "lang-f-301", "math-f-307"],
-            "Options": {"course": ["biol-f-208", "chim-f-202", "econ-s-102",
-                                   "elec-h-201", "elec-h-305", "gest-s-101",
-                                   "info-f-309"]}}
+{
+    "Info": {
+        "BA1": {
+            "course": [
+                "info-f-101",
+                "info-f-102",
+                "info-f-103",
+                "info-f-105",
+                "info-f-106",
+                "math-f-112",
+                "phys-f-103"
+            ]
+        },
+        "BA2": {
+            "course": [
+                "econ-s-101",
+                "info-f-201",
+                "info-f-202",
+                "info-f-203",
+                "info-f-204",
+                "info-f-205",
+                "info-f-208",
+                "info-f-209",
+                "lang-f-201",
+                "math-f-213",
+                "math-h-204"
+            ],
+            "Options": {
+                "course": [
+                    "biol-f-102",
+                    "biol-f-105",
+                    "geog-f-106",
+                    "geol-f-101",
+                    "geol-f-103",
+                    "hist-f-101",
+                    "phil-f-101",
+                    "phys-f-105"
+                ]
+            }
+        },
+        "BA3": {
+            "course": [
+                "elec-h-307",
+                "info-f-302",
+                "info-f-303",
+                "info-f-305",
+                "info-f-307",
+                "info-f-308",
+                "info-f-310",
+                "info-h-303",
+                "lang-f-301",
+                "math-f-307"
+            ],
+            "Options": {
+                "course": [
+                    "biol-f-208",
+                    "chim-f-202",
+                    "econ-s-102",
+                    "elec-h-201",
+                    "elec-h-305",
+                    "gest-s-101",
+                    "info-f-309"
+                ]
+            }
+        }
     }
 }
