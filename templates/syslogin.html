@@ -10,26 +10,45 @@
 {% endcomment %}
 
 {% block content %}
-  {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
 
-  <strong>Warning</strong> : This page is meant to be used only by system administrators. <br>
-  Do <strong>not</strong> try to use your NetId here.<br>
-  If you are a normal student, please login <a href="/">with the big login button</a><br><br>
-  <form method="post" action="{% url 'syslogin' %}">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
+
+  <div class="small-12 columns small-centered">  
+    <div data-alert class="alert-box alert">
+      <strong>Attention</strong> : Cette page ne devrait être utilisée que par les administrateurs. <br>
+      Ne rentrez <strong>pas</strong> votre netid ici.<br><br>
+      Si vous êtes un étudiant, connectez vous avec <a href="/">le gros bouton</a>
+    </div>
+  </div>
+
+  <div class="columns small-centered">
+    <form method="post" action="{% url 'syslogin' %}">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <td colspan="2">
+            {% if form.errors %}
+              <div data-alert class="alert-box alert">
+                Nom d'utilisateur et/ou mot de passe incorrect. Veuillez ré-essayer.
+              </div>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td>Nom d'utilisateur</td>
+          <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+          <td>{{ form.password.label_tag }}</td>
+          <td>{{ form.password }}</td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input type="submit" value="Connexion" class="button expand">
+          </td>
+        </tr>
+      </table>
+      
+      <input type="hidden" name="next" value="{{ next }}">
+    </form>
+  </div>
 {% endblock %}
