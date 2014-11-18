@@ -24,11 +24,11 @@ def current_year():
 def year_choices():
     choices = []
     year = datetime.now().year
-    if datetime.now().month >= 9 and datetime.now().day > 10:
+    if not (datetime.now().month >= 9 and datetime.now().day > 10):
         year -= 1
-    for i in range(5):
-        year -= 1
+    for i in range(5): 
         s = "{}-{}".format(year, year + 1)
+        year -= 1
         choices.append((s, s))
     s = "Archives"
     choices.append((s, s))
