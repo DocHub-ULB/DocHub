@@ -18,7 +18,7 @@ from urlparse import parse_qs
 from BeautifulSoup import BeautifulSoup
 
 #result = requests.get('http://banssbfr.ulb.ac.be/PROD_frFR/bzscrse.p_prog_catalog', data={"lang": "FRENCH", "term_in": "201213", "attrib_in": "ALL", "submit_btn": "Soumettre"})
-result = requests.get("http://banssbfr.ulb.ac.be/PROD_frFR/bzscrse.p_prog_catalog?lang=FRENCH&term_in=201213&college_in=&level_in=&attrib_in=ALL")
+result = requests.get("http://banssbfr.ulb.ac.be/PROD_frFR/bzscrse.p_prog_catalog?lang=FRENCH&term_in=201415&college_in=&level_in=&attrib_in=ALL")
 
 soup = BeautifulSoup(result.content)
 
