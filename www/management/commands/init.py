@@ -75,7 +75,7 @@ class Command(BaseCommand):
                     cat = "Note"
                 if cat == u"Langue d'enseignement*":
                     cat = "Langue"
-                if cat == u"Intitulé du cours*":
+                if cat == u"Nom":
                     cat = "Nom"
                     name = content
                 if cat[-1] == "*":

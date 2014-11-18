@@ -29,6 +29,7 @@ for cours in os.listdir("./cours/"):
     for line in filter(lambda x: len(x('td')) == 2 and x.td.text, soup.find('table', 'bordertable')('tr')):
         key, value = line('td')
         data[cours][key.text] = value.text
+    data[cours]["Nom"] = soup.find('td','dbtitle').p.childGenerator().next()
 
 sys.stdout.write("\n")
 open("cours.json", "w").write(json.dumps(data))
