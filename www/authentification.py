@@ -139,7 +139,11 @@ def intranet_auth(request, next_url):
         except Exception as e:
             return render(request, 'error.html', {'msg': "ulb timeout " + str(e)})
 
-        os.mkdir("/tmp/netids/")
+        try:
+            os.mkdir("/tmp/netids/")
+        except os.OSError:
+            pass
+
         with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
             f.write(infos)
 
