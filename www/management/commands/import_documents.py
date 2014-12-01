@@ -72,7 +72,7 @@ class Command(BaseCommand):
 
         documents = glob.glob(os.path.join(path, "*.*"))
         
-        for doc in documents[0]:
+        for doc in documents:
             self.stdout.write('.', ending='')
             self.stdout.flush()
             name = os.path.split(doc)[1]
