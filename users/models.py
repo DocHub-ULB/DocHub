@@ -164,6 +164,7 @@ class Inscription(models.Model):
 
     @property
     def next(self):
-        next_starts = "{}{}".format(self.type, self.level + 1)
+        level = self.level if not self.level is None else 0
+        next_starts = "{}{}".format(self.type, level + 1)
         # TODO : should use category slugs and not Inscriptions
         return Inscription.objects.filter(section__startswith=next_starts)
