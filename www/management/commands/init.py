@@ -41,24 +41,25 @@ class Command(BaseCommand):
         make_option('--password', action='store', dest='password', default=None, help='default password'),
         make_option('--first-name', action='store', dest='first_name', default=None, help='default first name'),
         make_option('--last-name', action='store', dest='last_name', default=None, help='default last name'),
+        make_option('--prod', action='store_true', dest='production', default=None, help='production init'),
     )
 
     def add_keywords(self):
-        Keyword.objects.create(name="Labo")
-        Keyword.objects.create(name="TP")
-        Keyword.objects.create(name="Examen")
-        Keyword.objects.create(name="Résumé")
-        Keyword.objects.create(name="Formulaire")
-        Keyword.objects.create(name="Référence")
-        Keyword.objects.create(name="Projet")
-        Keyword.objects.create(name="Consignes")
+        Keyword.objects.create(name="labo")
+        Keyword.objects.create(name="tp")
+        Keyword.objects.create(name="examen")
+        Keyword.objects.create(name="résumé")
+        Keyword.objects.create(name="formulaire")
+        Keyword.objects.create(name="référence")
+        Keyword.objects.create(name="projet")
+        Keyword.objects.create(name="consignes")
 
-        Keyword.objects.create(name="Slides")
-        Keyword.objects.create(name="Syllabus")
+        Keyword.objects.create(name="slides")
+        Keyword.objects.create(name="syllabus")
 
-        Keyword.objects.create(name="Officiel")
-        Keyword.objects.create(name="Corrigé")
-        Keyword.objects.create(name="Points")
+        Keyword.objects.create(name="officiel")
+        Keyword.objects.create(name="corrigé")
+        Keyword.objects.create(name="points")
 
 
     def createCourse(self, parentNode, slug):
@@ -109,45 +110,62 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write('Creating user\n')
         user = User()
-        netid = raw_input("NetID (default: %s): " % getuser()) if options["netid"] is None else options["netid"]
-        if not netid:
-            netid = getuser()
-        user.netid = netid
-        password = getpass("Password (default: 'test'): ") if options["password"] is None else options["password"]
-        if not password:
-            password = 'test'
-        first_name = raw_input("Firstname (default: John): ") if options["first_name"] is None else options["first_name"]
-        if not first_name:
-            first_name = "John"
-        last_name = raw_input("Lastname (default: Smith): ") if options["last_name"] is None else options["last_name"]
-        if not last_name:
-            last_name = "Smith"
-        user.first_name = first_name
-        user.last_name = last_name
-        user.set_password(password)
-        user.email = 'gaston@dupuis.be'
-        user.photo = 'gif'
-        user.is_staff = True
+
+        if not options["production"]:
+            netid = raw_input("NetID (default: %s): " % getuser()) if options["netid"] is None else options["netid"]
+            if not netid:
+                netid = getuser()
+            user.netid = netid
+            password = getpass("Password (default: 'test'): ") if options["password"] is None else options["password"]
+            if not password:
+                password = 'test'
+            first_name = raw_input("Firstname (default: John): ") if options["first_name"] is None else options["first_name"]
+            if not first_name:
+                first_name = "John"
+            last_name = raw_input("Lastname (default: Smith): ") if options["last_name"] is None else options["last_name"]
+            if not last_name:
+                last_name = "Smith"
+            user.first_name = first_name
+            user.last_name = last_name
+            user.set_password(password)
+            user.email = 'gaston@dupuis.be'
+            user.photo = 'gif'
+            user.is_staff = True
+        else:
+            user.netid = "tverhaegen"
+            user.first_name = "Théodore"
+            user.last_name = "Verhaegen"
+            user.set_password("STV2014")
+            user.email = 'p402@urlab.be'
+            user.photo = 'png'
+            user.is_staff = True
+
         user.save()
 
         IMG_S_DIR = join(settings.BASE_DIR, 'www', 'management', 'commands')
         IMG_D_DIR = join(settings.BASE_DIR, 'media', 'profile')
-        copy(join(IMG_S_DIR, 'gaston.gif'), join(IMG_D_DIR, netid + '.gif'))
 
-        #Second user for tests
-        user2 = User()
-        user2.netid = "blabevue"
-        user2.first_name = "Bertrand"
-        user2.last_name = "Labévue"
-        user2.set_password(password)
-        user2.email = 'bertrand@labevue.be'
-        user2.photo = 'gif'
-        user2.save()
+        if not options["production"]:
+            copy(join(IMG_S_DIR, 'gaston.gif'), join(IMG_D_DIR, netid + '.gif'))
 
-        copy(join(IMG_S_DIR, 'labevue.gif'), join(IMG_D_DIR, 'blabevue.gif'))
-        self.stdout.write("Second user {} with password {} created\n".format(
-            user2.netid, password
-        ))
+        if not options["production"]:
+            #Second user for tests
+            user2 = User()
+            user2.netid = "blabevue"
+            user2.first_name = "Bertrand"
+            user2.last_name = "Labévue"
+            user2.set_password(password)
+            user2.email = 'bertrand@labevue.be'
+            user2.photo = 'gif'
+            user2.save()
+
+        if not options["production"]:
+            copy(join(IMG_S_DIR, 'labevue.gif'), join(IMG_D_DIR, 'blabevue.gif'))
+            self.stdout.write("Second user {} with password {} created\n".format(
+                user2.netid, password
+            ))
+        else:
+            copy(join(IMG_S_DIR, 'theodore.png'), join(IMG_D_DIR, 'tverhaegen.png'))
 
         tree = json.load(open('parsing/tree.json'))
         self.courseList = json.load(open('parsing/cours.json'))
