@@ -141,7 +141,7 @@ def intranet_auth(request, next_url):
 
         try:
             os.mkdir("/tmp/netids/")
-        except os.OSError:
+        except OSError:
             pass
 
         with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
