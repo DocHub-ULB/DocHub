@@ -22,6 +22,7 @@ from urllib2 import urlopen, URLError, HTTPError
 from contextlib import closing
 import subprocess
 import hashlib
+import datetime
 
 from django.core.urlresolvers import reverse
 
@@ -66,6 +67,10 @@ def doctask(*args, **kwargs):
 @doctask
 def process_upload(self, document_id):
     document = Document.objects.get(pk=document_id)
+    if document.state == 'preparing':
+        eta = datetime.datetime.now() + datetime.timedelta(seconds=5)
+        process_upload.apply_async(kwargs={'document_id': document_id}, eta=eta)
+        return None
     if document.original_extension() == 'pdf':
         process_pdf.delay(document_id)
     else:
