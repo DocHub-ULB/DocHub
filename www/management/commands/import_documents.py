@@ -89,7 +89,7 @@ class Command(BaseCommand):
             name, extension = os.path.splitext(name)
             extension = extension[1:]
 
-            dbdoc = Document.objects.create(user=user, name=name, state="pending")
+            dbdoc = Document.objects.create(user=user, name=name, state="preparing")
             course.add_child(dbdoc)
             if not len(tags) == 0:
                 dbdoc.add_keywords(*tags)
@@ -100,6 +100,7 @@ class Command(BaseCommand):
             tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}.{}".format(dbdoc.id, extension))
             source = 'file://' + tmp_file
             dbdoc.source = source
+            dbdoc.state = 'pending'
 
             shutil.copy(doc, tmp_file)
 

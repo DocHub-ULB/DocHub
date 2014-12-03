@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 from celery import shared_task, chain
 from os import system, path, makedirs

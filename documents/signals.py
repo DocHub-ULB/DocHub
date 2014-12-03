@@ -53,5 +53,5 @@ def post_document_save(**kwargs):
     assert kwargs['sender'] == models.Document
     document = kwargs['instance']
 
-    if kwargs['created'] and document.state == 'pending':
+    if kwargs['created'] and document.state in ('pending', 'preparing'):
         process_upload.delay(document.id)

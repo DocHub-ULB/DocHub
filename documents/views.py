@@ -47,7 +47,7 @@ def upload_file(request, parent_id):
             course = parentNode
 
             doc = Document.objects.create(user=request.user,
-                                          name=name, description=description, state="pending")
+                                          name=name, description=description, state="preparing")
             course.add_child(doc)
 
             doc.add_keywords(*form.cleaned_data['tags'])
@@ -59,6 +59,7 @@ def upload_file(request, parent_id):
             tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}.{}".format(doc.id, extension))
             source = 'file://' + tmp_file
             doc.source = source
+            doc.state = 'pending'
 
             tmp_doc = open(tmp_file, 'w')
             tmp_doc.write(request.FILES['file'].read())

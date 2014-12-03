@@ -46,7 +46,7 @@ class Document(OneParent, Taggable):
         super(Document, self).move(*args, **kwargs)
 
     def original_extension(self):
-        return os.path.splitext(self.source)[1][1:]
+        return os.path.splitext(self.source)[1][1:].lower()
 
     def __unicode__(self):
         return "#{}: {}".format(self.id, self.name)
