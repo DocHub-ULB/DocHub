@@ -16,7 +16,7 @@ from optparse import make_option
 from users.models import User
 from graph.models import Course
 from documents.models import Document
-from www import settings
+from documents.cycle import add_document_to_queue
 
 import os
 import glob
@@ -89,19 +89,21 @@ class Command(BaseCommand):
             name, extension = os.path.splitext(name)
             extension = extension[1:]
 
-            dbdoc = Document.objects.create(user=user, name=name, state="preparing")
+            dbdoc = Document.objects.create(user=user, name=name, state="PREPARING")
             course.add_child(dbdoc)
             if not len(tags) == 0:
                 dbdoc.add_keywords(*tags)
 
-            if not os.path.exists(settings.TMP_UPLOAD_DIR):
-                os.makedirs(settings.TMP_UPLOAD_DIR)
+            if os.path.exists(dbdoc._default_folder()):
+                raise Exception("Directory already used (doc {}): '{}'".format(dbdoc.id, dbdoc._default_folder()))
 
-            tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}.{}".format(dbdoc.id, extension))
-            source = 'file://' + tmp_file
-            dbdoc.source = source
-            dbdoc.state = 'pending'
+            os.makedirs(dbdoc._default_folder())
+            shutil.copy(doc, dbdoc._default_original_path(extension))
 
-            shutil.copy(doc, tmp_file)
+            dbdoc.original = dbdoc._default_original_path(extension)
+            dbdoc.state = 'READY_TO_QUEUE'
+            dbdoc.save()
+
+            add_document_to_queue(dbdoc)
 
             dbdoc.save()
