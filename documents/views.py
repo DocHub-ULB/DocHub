@@ -11,8 +11,9 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 import os
+import uuid
+import shutil
 
-from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -24,6 +25,8 @@ from graph.models import Course
 from polydag.models import Node
 from documents.forms import UploadFileForm, FileForm
 from www import settings
+
+from cycle import add_document_to_queue
 
 
 @login_required
@@ -46,26 +49,31 @@ def upload_file(request, parent_id):
             description = form.cleaned_data['description']
             course = parentNode
 
+            if not os.path.exists(settings.TMP_UPLOAD_DIR):
+                os.makedirs(settings.TMP_UPLOAD_DIR)
+
+            tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, str(uuid.uuid4()))
+            with open(tmp_file, "w") as f:
+                f.write(request.FILES['file'].read())
+
             doc = Document.objects.create(user=request.user,
-                                          name=name, description=description, state="preparing")
+                                          name=name, description=description, state="PREPARING")
             course.add_child(doc)
 
             doc.add_keywords(*form.cleaned_data['tags'])
             doc.year = form.cleaned_data['year']
 
-            if not os.path.exists(settings.TMP_UPLOAD_DIR):
-                os.makedirs(settings.TMP_UPLOAD_DIR)
+            if os.path.exists(doc._default_folder()):
+                raise Exception("Directory already used (doc {}): '{}'".format(doc.id, doc._default_folder()))
 
-            tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, "{}.{}".format(doc.id, extension))
-            source = 'file://' + tmp_file
-            doc.source = source
-            doc.state = 'pending'
+            os.makedirs(doc._default_folder())
+            shutil.move(tmp_file, doc._default_original_path(extension))
 
-            tmp_doc = open(tmp_file, 'w')
-            tmp_doc.write(request.FILES['file'].read())
-            tmp_doc.close()
+            doc.original = doc._default_original_path(extension)
+            doc.state = 'READY_TO_QUEUE'
+            doc.save()
 
-            doc.save() # Save document after copy to avoid corrupted state if copy failed
+            add_document_to_queue(doc)
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 

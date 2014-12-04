@@ -13,7 +13,7 @@ from __future__ import unicode_literals
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
-from tasks import process_upload
+#from tasks import process_upload
 
 
 def pre_document_save(**kwargs):
@@ -27,7 +27,7 @@ def pre_document_save(**kwargs):
         pass  # Do nothing
     else:
         if not old_doc.state == document.state:  # State changed
-            if document.state == 'done':
+            if document.state == 'DONE':
                 Notification.direct(
                     user=document.user,
                     text='Conversion de "{}" terminée'.format(document.name),
@@ -49,9 +49,9 @@ def pre_document_save(**kwargs):
             pass  # Do nothing
 
 
-def post_document_save(**kwargs):
-    assert kwargs['sender'] == models.Document
-    document = kwargs['instance']
+# def post_document_save(**kwargs):
+#     assert kwargs['sender'] == models.Document
+#     document = kwargs['instance']
 
-    if kwargs['created'] and document.state in ('pending', 'preparing'):
-        process_upload.delay(document.id)
+#     if kwargs['created'] and document.state in ('pending', 'preparing'):
+#         process_upload.delay(document.id)

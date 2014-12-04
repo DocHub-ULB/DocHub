@@ -19,10 +19,9 @@ class DocumentAdmin(admin.ModelAdmin):
         'size',
         'md5',
         'pdf',
-        'source',
+        'original',
         'pages',
         'words',
-        'staticfile',
     )
 
 admin.site.register(Document, DocumentAdmin)

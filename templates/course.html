@@ -71,18 +71,28 @@
             <i class="fi-comment round-icon big"></i>
           </a>
         {% elif node.classBasename == 'Document' %}
-          <a href="{% url 'document_show' node.id %}">
-            <i class="fi-{% if node.state == 'pending' %}loop{% else %}page-copy{% endif%} round-icon big"></i>
-          </a>
+          {% if node.state == 'done' %}
+            <a href="{% url 'document_show' node.id %}">
+              <i class="fi-page-copy round-icon big"></i>
+            </a>
+          {% else %}
+              {% if node.state == "failed" %}
+                <i class="fi-page-copy round-icon big"></i>
+              {% else %}
+                <i class="fi-loop round-icon big"></i>
+              {% endif %}
+          {% endif %}
         {% endif %}
         <div class="course-row-content">
           <h5>
             {% if node.classBasename == 'Thread' %}
               <a href="{% url 'thread_show' node.id %}">
-            {% elif node.classBasename == 'Document' %}
+            {% elif node.classBasename == 'Document' and node.state == "done" %}
               <a href="{% url 'document_show' node.id %}">
             {% endif %}
-            {{ node.name }}</a> par {{ node.user.name }}
+            {{ node.name }}
+            {% if node.classBasename == 'Document' and node.state == "done" or node.classBasename == 'Thread' %}</a>{% endif %} 
+            par {{ node.user.name }}
           </h5>
           {% if node.classBasename == 'Thread' %}
             <p>{{ node.message_set.first.text|markdown|striptags|truncatechars:200 }}</p>
@@ -104,8 +114,8 @@
           {% endfor %}
         </div>
         </div>
-      </div>
-    {% endwith %}
+        </div>
+      {% endwith %}
     {% empty %}
       <h3>Il n’y a encore rien dans ce cours…</h3>
       <p>Personne n’est encore passé ici on dirait.<br>

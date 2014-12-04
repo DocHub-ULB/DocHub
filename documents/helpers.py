@@ -12,12 +12,6 @@ from __future__ import unicode_literals
 
 import struct
 import imghdr
-from os.path import join
-from www import settings
-
-
-def document_pdir(document):
-    return join(settings.PROCESSING_DIR, "doc-{}".format(document.id))
 
 
 def r(self):

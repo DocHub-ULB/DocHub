@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 import os
+import shutil
 
 from django.db import models
 
@@ -32,11 +33,10 @@ class Document(OneParent, Taggable):
     views = models.PositiveIntegerField(null=True, default=0)
     downloads = models.PositiveIntegerField(null=True, default=0)
 
-    staticfile = models.CharField(max_length=2048, default='')
-    source = models.CharField(max_length=2048, default='')
+    original = models.CharField(max_length=2048, default='')
     pdf = models.CharField(max_length=2048, default='')
 
-    state = models.CharField(max_length=10, default='preparing')
+    state = models.CharField(max_length=10, default='PREPARING')
     md5 = models.CharField(max_length=32, default='')
 
     def move(self, *args, **kwargs):
@@ -46,10 +46,31 @@ class Document(OneParent, Taggable):
         super(Document, self).move(*args, **kwargs)
 
     def original_extension(self):
-        return os.path.splitext(self.source)[1][1:].lower()
+        return os.path.splitext(self.original)[1][1:].lower()
 
     def __unicode__(self):
         return "#{}: {}".format(self.id, self.name)
+
+    def delete(self, *args, **kwargs):
+        try:
+            try:
+                if self.original != "":
+                    shutil.rmtree(os.path.dirname(self.original))
+            except OSError:
+                pass
+            try:
+                if self.pdf != "":
+                    shutil.rmtree(os.path.dirname(self.pdf))
+            except OSError:
+                pass
+        finally:
+            super(Document, self).delete(*args, **kwargs)
+
+    def _default_folder(self):
+        return os.path.join(settings.UPLOAD_DIR, str(self.parent.id), "doc-{}".format(self.id))
+
+    def _default_original_path(self, extension):
+        return os.path.join(self._default_folder(), "original.{}".format(extension))
 
 
 class Page(OneParent, Taggable):

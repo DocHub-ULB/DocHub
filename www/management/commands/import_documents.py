@@ -22,6 +22,7 @@ import os
 import glob
 import shutil
 
+
 class Command(BaseCommand):
 
     help = 'Import document in a course'
@@ -38,13 +39,12 @@ class Command(BaseCommand):
         'sli': 'slides',
         'res': 'résumé',
         'exa': 'examen',
-        'tp':  'tp',
+        'tp': 'tp',
         'syl': 'syllabus',
         'cor': 'corrigé',
         'for': 'formulaire',
     }
 
- 
     def handle(self, *args, **options):
         netid = options["username"]
         self.stdout.write('Looking for user "{}"'.format(netid))
@@ -71,12 +71,12 @@ class Command(BaseCommand):
             return None
 
         documents = glob.glob(os.path.join(path, "*.*"))
-        
+
         for doc in documents:
             self.stdout.write('.', ending='')
             self.stdout.flush()
             name = os.path.split(doc)[1]
-            spli = name.split(":",1)
+            spli = name.split(":", 1)
             if len(spli) == 1:
                 name = spli[0]
                 tags = []
@@ -105,8 +105,3 @@ class Command(BaseCommand):
             shutil.copy(doc, tmp_file)
 
             dbdoc.save()
-
-
-
-
-

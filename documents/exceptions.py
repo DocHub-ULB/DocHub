@@ -41,4 +41,4 @@ class UploadError(DocumentProcessingError):
 class DownloadError(DocumentProcessingError):
 
     def __repr__(self):
-        return "UploadError('Downloading doc {0.id} from {0.source} failed')".format(self.document)
+        return "UploadError('Downloading doc {0.id} from {0.original} failed')".format(self.document)

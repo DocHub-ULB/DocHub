@@ -10,9 +10,15 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from django.db.models.signals import pre_delete, pre_save, post_save
-import signals
-from models import Document
-# TODO : be sure that use *pre*_save is ok
-pre_save.connect(signals.pre_document_save, sender=Document)
-#post_save.connect(signals.post_document_save, sender=Document)
+from tasks import process_document
+
+
+def add_document_to_queue(document):
+    document.state = "IN_QUEUE"
+    document.save()
+    try:
+        process_document.delay(document.id)
+    except Exception as e:
+        document.state = "READY_TO_QUEUE"
+        document.save()
+        raise e
