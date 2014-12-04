@@ -21,7 +21,7 @@
         <li>
           <a href="{% url 'document_download' object.id %}"><i class="fi-archive"></i> Télécharger</a>
         </li>
-        {% if object.staticfile != object.pdf %}
+        {% if object.original != object.pdf %}
           <li>
             <a href="{% url 'document_download_original' object.id %}">
               <i class="fi-archive"></i> Original

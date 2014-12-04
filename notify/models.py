@@ -49,7 +49,7 @@ class PreNotification(models.Model):
             return Message.objects.get(id=message_id).text
         elif self.sender_type == "Document":
             doc = self.node
-            url = join(settings.UPLOAD_DIR, "{}/doc-{}/images/000000_n.jpg".format(doc.parent.id, doc.id))
+            url = join(settings.MEDIA_URL, "documents/{}/doc-{}/images/000000_n.jpg".format(doc.parent.id, doc.id))
             return "![{}]({})".format(doc.name, url)
         else:
             return ""

@@ -137,7 +137,7 @@ def document_download(request, id):
 @login_required
 def document_download_original(request, id):
     doc = get_object_or_404(Document, id=id)
-    with open(doc.staticfile) as fd:
+    with open(doc.original) as fd:
         body = fd.read()
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
