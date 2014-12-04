@@ -44,12 +44,13 @@ class ExisingChecksum(SkipException):
 def on_failure(self, exc, task_id, args, kwargs, einfo):
     if isinstance(exc, SkipException):
         return None
-    id = args[0]
-    print("Document {} failed.".format(id))
-    document = Document.objects.get(id=id)
-    # TODO
-    # document.failed = True
-    # document.save()
+    did = args[0]
+    print("Document {} failed.".format(did))
+
+    document = Document.objects.get(id=did)
+    document.state = "failed"
+    document.save()
+
     Notification.direct(
         user=document.user,
         text="Une erreur c'est produite pendant la conversion de : {}".format(document.name),
@@ -71,6 +72,12 @@ def process_upload(self, document_id):
         eta = datetime.datetime.now() + datetime.timedelta(seconds=5)
         process_upload.apply_async(kwargs={'document_id': document_id}, eta=eta)
         return None
+    elif document.state == 'processing':
+        return None
+
+    document.state = "processing"
+    document.save()
+
     if document.original_extension() == 'pdf':
         process_pdf.delay(document_id)
     else:

@@ -21,7 +21,7 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = 'index'
 
 # url to internal login
-LOGIN_URL = '/syslogin'
+LOGIN_URL = '/'
 
 # handlebars fragments for javascript templating
 FRAGMENTS_DIR = join(BASE_DIR, "templates/fragments")
