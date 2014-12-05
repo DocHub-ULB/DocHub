@@ -36,7 +36,7 @@ class Document(OneParent, Taggable):
     original = models.CharField(max_length=2048, default='')
     pdf = models.CharField(max_length=2048, default='')
 
-    state = models.CharField(max_length=10, default='PREPARING')
+    state = models.CharField(max_length=20, default='PREPARING')
     md5 = models.CharField(max_length=32, default='')
 
     def move(self, *args, **kwargs):
