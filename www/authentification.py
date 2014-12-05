@@ -130,7 +130,7 @@ def throw_b64error(request, raw):
 def intranet_auth(request, next_url):
     sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
     if len(next_url.strip()) == 0:
-        next_url = 'index'
+        next_url = request.GET.get("next", reverse("index")).strip()
     if sid and uid:
         try:
             print ULB_AUTH % (sid, uid)
@@ -156,6 +156,6 @@ def intranet_auth(request, next_url):
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
-        return HttpResponseRedirect(reverse(next_url))
+        return HttpResponseRedirect(next_url)
     else:
         return render(request, 'error.html', {'msg': 'url discarded'})
