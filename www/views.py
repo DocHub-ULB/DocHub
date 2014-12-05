@@ -10,6 +10,8 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+import urllib
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -43,7 +45,15 @@ def node_canonic(request, nodeid):
 
 
 def index(request):
-    return render(request, "index.html", {"login_url": settings.ULB_LOGIN, "debug": settings.DEBUG})
+    next_url = request.GET.get("next", False)
+    if next_url:
+        next_url = urllib.quote_plus("next=" + next_url.strip() + "&")
+        next_url = urllib.quote_plus(next_url)
+
+        ulb_url = settings.ULB_LOGIN + next_url
+    else:
+        ulb_url = settings.ULB_LOGIN
+    return render(request, "index.html", {"login_url": ulb_url, "debug": settings.DEBUG})
 
 
 @login_required
