@@ -18,5 +18,5 @@ def pre_notif_save(**kwargs):
     assert kwargs['sender'] == models.PreNotification
     pre_notif = kwargs['instance']
 
-    if kwargs['created']:
+    if kwargs['created'] and not pre_notif.delivered:
         propagate_notification.delay(pre_notif.id)
