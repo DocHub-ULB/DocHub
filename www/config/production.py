@@ -25,8 +25,8 @@ AUTH_URL = "http%253A%252F%252Fcours.urlab.be%252Fauth%253F"
 ULB_LOGIN = (
     'https://www.ulb.ac.be/commons/intranet?' +
     '_prt=ulb:facultes:sciences:p402&_ssl=on' +
-    '&_appl=' + AUTH_URL +
-    '&_prtm=redirect'
+    '&_prtm=redirect' +
+    '&_appl=' + AUTH_URL
 )
 
 # CELERY_BROKER = 'amqp://guest@localhost//'
