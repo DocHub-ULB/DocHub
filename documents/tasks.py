@@ -44,7 +44,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     print("Document {} failed.".format(did))
 
     document = Document.objects.get(id=did)
-    document.state = "failed"
+    document.state = "ERROR"
     document.save()
 
     Notification.direct(
