@@ -83,7 +83,7 @@
           <img width="80" src="{{ elem.user.get_photo }}" class="user-photo user-photo-big"/>
         </div>
         <div class="small-9 large-10 columns feed-element">
-          <div class="user-message-header"><strong><i class="fi-{{ elem.icon }}"></i> {{ elem.text }}</strong></div>
+            <div class="user-message-header"><strong><i class="fi-{{ elem.icon }}"></i> <a href="{{ elem.url }}">{{ elem.text }}</a></strong></div>
           <div class="user-message-content">
             <div class="feed-element-limited ">
               {{elem.content|markdown}}

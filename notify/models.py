@@ -50,7 +50,7 @@ class PreNotification(models.Model):
         elif self.sender_type == "Document":
             doc = self.node
             url = join(settings.MEDIA_URL, "documents/{}/doc-{}/images/000000_n.jpg".format(doc.parent.id, doc.id))
-            return "![{}]({})".format(doc.name, url)
+            return "[![{}]({})]({})".format(doc.name, url, self.url)
         else:
             return ""
 
