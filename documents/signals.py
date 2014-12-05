@@ -38,7 +38,7 @@ def pre_document_save(**kwargs):
 
                 PreNotification.objects.create(
                     node=document,
-                    text="Nouveau document : " + document.name,
+                    text="Nouveau document : {} dans {}".format(document.name, document.parent.slug),
                     url=reverse('document_show', args=[document.id]),
                     user=document.user,
                     sender_type="Document",
