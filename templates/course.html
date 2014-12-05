@@ -92,7 +92,7 @@
             {% endif %}
             {{ node.name }}
             {% if node.classBasename == 'Document' and node.state == "DONE" or node.classBasename == 'Thread' %}</a>{% endif %} 
-            par {{ node.user.name }}
+            <small>par {{ node.user.name }}</small>
           </h5>
           {% if node.classBasename == 'Thread' %}
             <p>{{ node.message_set.first.text|markdown|striptags|truncatechars:200 }}</p>
