@@ -58,6 +58,16 @@
             <small>Developpers could also <a href="/syslogin">syslogin</a></small>
             {% endif %}
           </p>
+          <p>
+          DocHub, c'est actuellement plus de {{documents}} documents contenant plus de {{pages}} pages
+          {% if users >= 20%}
+            ajoutées par plus de {{users}} utilisateurs
+          {%endif%}
+          .<br>
+          {% if threads >= 20 %}
+            Sur DocHub, vous pouvez poser des questions et les autres étudiants peuvent y répondre. Il y a déjà eu plus de {{threads}} questions posées.
+          {% endif %}
+          </p>
         </div>
       {% endblock %}
     </div>

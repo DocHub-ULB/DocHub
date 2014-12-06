@@ -20,9 +20,9 @@ from django.contrib.auth.decorators import login_required
 from graph.models import Category, Course
 from telepathy.models import Thread
 from polydag.models import Node
-from documents.models import Document
+from documents.models import Document, Page
 from notify.models import PreNotification
-from users.models import Inscription
+from users.models import Inscription, User
 from .helpers import current_year
 
 import settings
@@ -53,7 +53,20 @@ def index(request):
         ulb_url = settings.ULB_LOGIN + next_url
     else:
         ulb_url = settings.ULB_LOGIN
-    return render(request, "index.html", {"login_url": ulb_url, "debug": settings.DEBUG})
+
+    def floor(num):
+        return int((num // 10) * 10)
+
+    context = {
+        "login_url": ulb_url,
+        "debug": settings.DEBUG,
+        "documents": floor(Document.objects.count()),
+        "pages": floor(Page.objects.count()),
+        "users": floor(User.objects.count()),
+        "threads": floor(Thread.objects.count()),
+    }
+
+    return render(request, "index.html", context)
 
 
 @login_required
