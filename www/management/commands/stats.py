@@ -36,6 +36,9 @@ class Command(BaseCommand):
         Print(" - {} READY_TO_QUEUE\n".format(Document.objects.filter(state="READY_TO_QUEUE").count()))
         Print(" - {} ERROR\n".format(Document.objects.filter(state="ERROR").count()))
         Print(" - {} DONE\n".format(Document.objects.filter(state="DONE").count()))
+        Print("{} aggrgated views\n".format(sum(map(lambda x: x.views, Document.objects.all()))))
+        Print("{} aggrgated downloads\n".format(sum(map(lambda x: x.downloads, Document.objects.all()))))
+
         Print("\n")
 
         Print("Thread summary :\n")
