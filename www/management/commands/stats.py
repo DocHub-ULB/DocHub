@@ -15,6 +15,7 @@ from django.core.management.base import BaseCommand
 from users.models import User
 from telepathy.models import Thread, Message
 from documents.models import Document, Page
+from notify.models import PreNotification, Notification
 
 
 class Command(BaseCommand):
@@ -48,4 +49,20 @@ class Command(BaseCommand):
         Print("Thread summary :\n")
         Print("{} threads\n".format(Thread.objects.count()))
         Print("{} messages\n".format(Message.objects.count()))
+        Print("\n")
+
+        Print("Events summary :\n")
+        Print("{} events\n".format(PreNotification.objects.count()))
+        Print("{} fired notifications\n".format(Notification.objects.count()))
+        ratio = round(float(Notification.objects.count()) / PreNotification.objects.count(), 2)
+        Print("{} ratio fired/event\n".format(ratio))
+        Print("\n")
+
+        Print("Following summary :\n")
+        course_followed_by_user = map(lambda x: len(x.followed_courses()), User.objects.all())
+        course_folowed = sum(course_followed_by_user) / float(len(course_followed_by_user))
+        node_folowed_by_user = map(lambda x: len(x.followed_nodes_id()), User.objects.all())
+        node_folowed = sum(node_folowed_by_user) / float(len(node_folowed_by_user))
+        Print("{} mean followed courses ({} max)\n".format(course_folowed, max(course_followed_by_user)))
+        Print("{} mean followed (other)\n".format(node_folowed - course_folowed))
         Print("\n")
