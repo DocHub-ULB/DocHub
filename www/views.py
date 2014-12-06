@@ -54,14 +54,15 @@ def index(request):
     else:
         ulb_url = settings.ULB_LOGIN
 
-    def floor(num):
-        return int((num // 10) * 10)
+    def floor(num, r=1):
+        r = 10 ** r
+        return int((num // r) * r)
 
     context = {
         "login_url": ulb_url,
         "debug": settings.DEBUG,
         "documents": floor(Document.objects.count()),
-        "pages": floor(Page.objects.count()),
+        "pages": floor(Page.objects.count(), 2),
         "users": floor(User.objects.count()),
         "threads": floor(Thread.objects.count()),
     }
