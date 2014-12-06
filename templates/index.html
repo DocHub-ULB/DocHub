@@ -49,7 +49,7 @@
           <h1>DocHub</h1>
           <p>
             Bienvenue sur DocHub − P402, le site de partage de documents et d’entraide étudiante à l’ULB.<br>
-            DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes et bien plus encore.
+            DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore.
           </p>
           <p class="text-center">
             Vous n'avez pas besoin de créer un compte, il suffit d'employer votre netid.<br><br>
@@ -59,13 +59,14 @@
             {% endif %}
           </p>
           <p>
+          <i class="fi-page-copy"></i>
           DocHub, c'est actuellement plus de {{documents}} documents contenant plus de {{pages}} pages
           {% if users >= 20%}
             ajoutées par plus de {{users}} utilisateurs
           {%endif%}
           .<br>
-          {% if threads >= 20 %}
-            Sur DocHub, vous pouvez poser des questions et les autres étudiants peuvent y répondre. Il y a déjà eu plus de {{threads}} questions posées.
+          {% if threads >= -1 %}
+           <i class="fi-comment"></i> Sur DocHub, vous pouvez poser des questions et les autres étudiants peuvent y répondre. Il y a déjà eu plus de {{threads}} questions posées.
           {% endif %}
           </p>
         </div>
