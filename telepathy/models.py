@@ -13,8 +13,6 @@ from __future__ import unicode_literals
 from django.db import models
 from polydag.models import Taggable
 from polydag.behaviors import Leaf, OneParent
-from django.db.models.signals import post_save
-import signals
 from www import settings
 
 
@@ -40,6 +38,3 @@ class Message(models.Model):
         if len(t) > 60:
             t = t[:57] + "..."
         return "#{}: {}".format(self.id, t)
-
-post_save.connect(signals.thread_save, sender=Thread)
-post_save.connect(signals.message_save, sender=Message)
