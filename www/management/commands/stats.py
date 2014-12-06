@@ -14,7 +14,7 @@ from django.core.management.base import BaseCommand
 
 from users.models import User
 from telepathy.models import Thread, Message
-from documents.models import Document
+from documents.models import Document, Page
 
 
 class Command(BaseCommand):
@@ -36,9 +36,10 @@ class Command(BaseCommand):
         Print(" - {} READY_TO_QUEUE\n".format(Document.objects.filter(state="READY_TO_QUEUE").count()))
         Print(" - {} ERROR\n".format(Document.objects.filter(state="ERROR").count()))
         Print(" - {} DONE\n".format(Document.objects.filter(state="DONE").count()))
-        Print("{} aggrgated views\n".format(sum(map(lambda x: x.views, Document.objects.all()))))
-        Print("{} aggrgated downloads\n".format(sum(map(lambda x: x.downloads, Document.objects.all()))))
-
+        Print("{} views\n".format(sum(map(lambda x: x.views, Document.objects.all()))))
+        Print("{} downloads\n".format(sum(map(lambda x: x.downloads, Document.objects.all()))))
+        Print("{} pages\n".format(Page.objects.count()))
+        Print("{} future pages\n".format(sum(map(lambda x: x.pages, Document.objects.all())) - Page.objects.count()))
         Print("\n")
 
         Print("Thread summary :\n")
