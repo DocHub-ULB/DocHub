@@ -39,7 +39,10 @@ class Command(BaseCommand):
         Print("{} views\n".format(sum(map(lambda x: x.views, Document.objects.all()))))
         Print("{} downloads\n".format(sum(map(lambda x: x.downloads, Document.objects.all()))))
         Print("{} pages\n".format(Page.objects.count()))
-        Print("{} future pages\n".format(sum(map(lambda x: x.pages, Document.objects.all())) - Page.objects.count()))
+        Print("{} future pages ({} doc not counted)\n".format(
+            sum(map(lambda x: x.pages, Document.objects.all())) - Page.objects.count(),
+            Document.objects.filter(pages=0).count()
+        ))
         Print("\n")
 
         Print("Thread summary :\n")
