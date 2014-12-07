@@ -43,12 +43,8 @@
           <a id="zoom-out"><i class="fi-zoom-out"></i> De-zoom</a>
         </li>
         {% if is_moderator or user.netid == object.user.netid %}
-          <li class="has-dropdown">
-            <a href="#"><i class="fi-widget"></i></a>
-            <ul class="dropdown">
-              <li><a href="{% url 'document_edit' object.id %}">Editer</a></li>
-              <!-- <li><a href="#">Supprimer</a></li> -->
-            </ul>
+          <li>
+            <a href="{% url 'document_edit' object.id %}"><i class="fi-widget"></i> Editer</a>
           </li>
         {% endif %}
       </ul>
