@@ -63,6 +63,6 @@ class Command(BaseCommand):
         course_folowed = sum(course_followed_by_user) / float(len(course_followed_by_user))
         node_folowed_by_user = map(lambda x: len(x.followed_nodes_id()), User.objects.all())
         node_folowed = sum(node_folowed_by_user) / float(len(node_folowed_by_user))
-        Print("{} mean followed courses ({} max)\n".format(course_folowed, max(course_followed_by_user)))
+        Print("{} mean followed courses ({} max)\n".format(round(course_folowed, 2), max(course_followed_by_user)))
         Print("{} mean followed (other)\n".format(node_folowed - course_folowed))
         Print("\n")
