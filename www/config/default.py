@@ -46,6 +46,7 @@ SEARCH_SYSTEM = False
 #CELERY_BACKEND = 'django://'
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
+CELERYD_PREFETCH_MULTIPLIER = 1  # Do not prefetch more than 1 task
 
 # Activate identicons
 IDENTICON = True
@@ -53,7 +54,7 @@ IDENTICON = True
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
-    'suit', # Must be before admin
+    'suit',  # Must be before admin
     'django.contrib.admin',
     'fragments',
     'south',
