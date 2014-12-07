@@ -1,4 +1,7 @@
-<pre class="codehilite"># Un grand titre
+{% load custommardown %}
+
+{% markdown_demo %}
+# Un grand titre
 ## Un titre un peu plus petit
 ##### Un très petit titre
 
@@ -9,7 +12,7 @@ Texte avec de l'*italique* et des **mots en gras**
 
 [Texte du lien](http://site-web.com)
 
-![](http://example.com/image-a-afficher.jpg)
+![Python, c'est génial !](http://imgs.xkcd.com/comics/python.png)
 
 Liste à puce :
 
@@ -21,4 +24,15 @@ Liste numérotée :
 
 1. élément 1
 2. élément 2
-3. élément 3</pre>
+3. élément 3
+
+Maths :
+$F(\theta) = \int_{-\infty}^{+\infty} f(x)e^{i\theta x} \mathrm dx$
+
+$
+n! = \begin{cases}
+1 & n \leq 1 \\
+n\times(n-1)! & n \gt 1
+\end{cases}
+$
+{% end_markdown_demo %}

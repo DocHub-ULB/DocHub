@@ -25,8 +25,38 @@ register = template.Library()
 def my_markdown(value):
     extensions = ["nl2br", "extra", "codehilite", "headerid(level=2)", "sane_lists"]
 
-    return mark_safe(markdown.markdown(force_unicode(value),
+    return mark_safe(markdown.markdown(force_unicode(value).replace("\\\\", "\\\\\\\\"),
                                        extensions,
                                        safe_mode='escape',
                                        enable_attributes=False,
                                        output_format="html5"))
+
+class MarkdownDemoNode(template.Node):
+    def __init__(self, nodelist):
+      self.nodelist = nodelist
+
+    def render(self, context):
+      input_text = '\n'.join(
+        sum(
+          map(
+            lambda x: map(
+              lambda y: y.strip(), x.render(context).split('\n')
+            ), self.nodelist), []))
+      uid = "d" + hex(abs(hash(input_text)))[2:]
+      rendered = my_markdown(input_text)
+      input_text = input_text.replace('>', '&gt;').replace('<', '&lt;')
+      return """
+        <dl class="tabs" data-tab>
+          <dd class="active"><a href="#%smd">Markdown</a></dd>
+          <dd><a href="#%srender">Aperçu</a></dd>
+        </dl>
+        <div class="tabs-content">
+          <div class="content active" id="%smd"><pre class="codehilite">%s</pre></div>
+          <div class="content" id="%srender">%s</div>
+        </div>"""%(uid, uid, uid, input_text, uid, rendered)
+
+@register.tag(name='markdown_demo')
+def do_comment(parser, token):
+    nodelist = parser.parse(('end_markdown_demo',))
+    parser.delete_first_token()
+    return MarkdownDemoNode(nodelist)
