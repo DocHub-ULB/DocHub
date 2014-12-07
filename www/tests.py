@@ -5,7 +5,6 @@ import mock
 
 def mock_datetime(y, m, d, H, M, S):
     res = mock.MagicMock()
-    res.datetime = datetime
     res.today = mock.Mock(return_value=datetime(y, m, d))
     res.now = mock.Mock(return_value=datetime(y, m, d, H, M, S))
     return res
