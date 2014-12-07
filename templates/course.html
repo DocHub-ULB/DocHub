@@ -16,9 +16,13 @@
 
 {% block center-col %}
 <div class="row">
-  <div class="large-12 columns">
+  <div class="large-10 columns">
     <h1 >{{ object.slug|upper }}{% if followed %} <i class="fi-check green"></i>{% endif %}</h1>
     <h2>{{ object.name }}</h2>
+  </div>
+  <div class="large-2 columns">
+    <br/>
+    <a href="{{ gehol }}" class="button expand radius" target="_blank">Horaire sur GeHol</a>
   </div>
 </div>
 
@@ -130,7 +134,6 @@
 <div class="row">
   <div class="large-12 columns">
     <br>
-    <!-- <a href="{{ gehol }}" class="button expand" target="_blank">Horaire</a> -->
     <a class="button expand radius" href="{% url 'document_put' object.id %}">Uploader un fichier</a>
     <a class="button expand radius" href="{% url 'thread_put' object.id %}">Poser une question</a>
     {% if followed %}
