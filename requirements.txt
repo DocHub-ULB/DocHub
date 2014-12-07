@@ -16,3 +16,6 @@ django-extensions
 Werkzeug
 django-devserver
 ipython
+
+# Test
+mock
