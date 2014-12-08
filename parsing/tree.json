@@ -62,6 +62,207 @@
                     "info-f-309"
                 ]
             }
+        },
+        "MA1": {
+            "course": [
+                "elec-h-473",
+                "info-f-403",
+                "info-f-404",
+                "info-f-405",
+                "info-f-408",
+                "info-f-421",
+                "memo-f-403"
+            ],
+            "Software and Critical Systems Design": {
+                "course": [
+                    "info-f-410", 
+                    "info-f-412", 
+                    "info-f-514", 
+                    "info-y-080"
+                ],
+                "Options" : {
+                    "course": [
+                        "elec-h-540",
+                        "info-f-402",
+                        "info-y-081",
+                        "info-y-082",
+                        "info-y-083",
+                        "info-y-084",
+                        "info-y-085",
+                        "info-y-086",
+                        "info-y-099",
+                        "info-y-100",
+                        "proj-h-402"
+                    ]
+                }
+            },
+            "Optimization and Algorithms" : {
+                "course" : [
+                    "info-f-413",
+                    "info-f-424",
+                    "info-f-521",
+                    "info-f-524"
+                ],
+                "Options": {
+                    "course": [
+                        "info-f-421",
+                        "info-h-413",
+                        "info-h-514",
+                        "math-h-405",
+                        "math-h-406"
+                    ]
+                }
+            },
+            "Computational Intelligence" : {
+                "course" : [
+                    "info-f-409",
+                    "info-f-422",
+                    "info-h-410",
+                    "info-h-413"
+                ],
+                "Options": {
+                    "course": [
+                        "info-f-439",
+                        "info-h-414",
+                        "info-y-004",
+                        "info-y-087"
+                    ]
+                }
+            },
+            "Web and Information Systems" : {
+                "course" : [
+                    "info-h-415",
+                    "info-h-419",
+                    "info-h-509",
+                    "info-y-088"
+                ],
+                "Options": {
+                    "course": [
+                        "gest-s-483",
+                        "info-f-422",
+                        "info-h-417",
+                        "info-h-420",
+                        "info-h-504",
+                        "info-y-089",
+                        "info-y-090",
+                        "info-y-091"
+                    ]
+                }
+            },
+            "Multimedia" : {
+                "course" : [
+                    "info-h-500",
+                    "info-h-502",
+                    "info-y-094"
+                ],
+                "Options": {
+                    "course": [
+                        "elec-h-474",
+                        "info-f-420",
+                        "info-h-503",
+                        "info-y-095",
+                        "info-y-102"
+                    ]
+                }
+            },
+            "Options": {
+                "course": [
+                    "elec-h-473",
+                    "elec-h-474",
+                    "elec-h-540",
+                    "gest-s-483",
+                    "info-f-402",
+                    "info-f-409",
+                    "info-f-410",
+                    "info-f-412",
+                    "info-f-420",
+                    "info-f-422",
+                    "info-f-439",
+                    "info-f-514",
+                    "info-h-410",
+                    "info-h-413",
+                    "info-h-414",
+                    "info-h-415",
+                    "info-h-417",
+                    "info-h-419",
+                    "info-h-500",
+                    "info-h-502",
+                    "info-h-503",
+                    "info-h-504",
+                    "info-h-505",
+                    "info-h-509",
+                    "info-h-511",
+                    "info-y-080",
+                    "info-y-081",
+                    "info-y-082",
+                    "info-y-083",
+                    "info-y-084",
+                    "info-y-085",
+                    "info-y-086",
+                    "info-y-087",
+                    "info-y-088",
+                    "info-y-089",
+                    "info-y-090",
+                    "info-y-091",
+                    "info-y-095",
+                    "info-y-099",
+                    "info-y-100",
+                    "info-y-102"
+                ]
+            }
+        },
+        "MA2": {
+            "course": [
+                "gest-s-307",
+                "info-f-501",
+                "memo-f-508"
+            ],
+            "Software and Critical Systems Design": {
+                "course": ["info-f-502"]
+            },
+            "Optimization and Algorithms" : {
+                "course" : ["info-f-420", "info-f-504"],
+                "Nantes" : {
+                    "course": [
+                        "info-y-515",
+                        "info-y-516",
+                        "info-y-517",
+                        "info-y-518",
+                        "info-y-519",
+                        "info-y-520",
+                        "info-y-521",
+                        "info-y-522",
+                        "info-y-523",
+                        "info-y-524",
+                        "info-y-525",
+                        "info-y-526",
+                        "info-y-527"
+                    ]
+                }
+            },
+            "Computational Intelligence" : {
+                "course" : ["info-h-512", "math-h-405"]
+            },
+            "Web and Information Systems" : {
+                "course" : ["info-y-106"]
+            },
+            "Multimedia" : {
+                "course" : ["info-h-501", "info-y-093", "info-y-098"]
+            },
+            "Options": {
+                "course": [
+                    "tran-f-501",
+                    "info-f-420",
+                    "info-f-504",
+                    "info-h-501",
+                    "info-h-512",
+                    "info-y-093",
+                    "info-y-098",
+                    "info-y-106",
+                    "math-h-405",
+                    "info-f-502"
+                ]
+            }
         }
     }
 }
