@@ -12,25 +12,16 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 
-
 def current_year():
     now = datetime.today()
-    if datetime(now.year, 1, 1) < now < datetime(now.year, 9, 14):
+    if now.month < 9 and now.day < 15:
         return now.year - 1
     else:
         return now.year
 
 
-def year_choices():
-    choices = []
-    year = datetime.now().year
-    if not (datetime.now().month >= 9 and datetime.now().day > 10):
-        year -= 1
-    for i in range(5): 
-        s = "{}-{}".format(year, year + 1)
-        year -= 1
-        choices.append((s, s))
-    s = "Archives"
-    choices.append((s, s))
-
+def year_choices(backlog=5):
+    year = current_year()
+    choices = [("%d-%d"%(year-i, year-i+1),)*2 for i in range(backlog)]
+    choices.append(("Archives",)*2)
     return choices
