@@ -179,6 +179,12 @@ i.round-icon{
     border-radius: 0.8em;
 }
 
+i.round-icon.active {
+    background-color: #333;
+    color: #ffe;
+    border-color: #444;
+}
+
 a i.round-icon:hover {
     color: #444;
     background-color: #fff;
