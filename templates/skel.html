@@ -12,11 +12,13 @@
       <link rel="stylesheet" href="/static/3party/css/foundation.css" />
       <link rel="stylesheet" href="/static/3party/foundation-icons/foundation-icons.css" />
       <link rel="stylesheet" href="/static/style/main.css" />
+      <link rel="stylesheet" href="/static/style/syntax-highlight.css" />
     {% endcompress %}
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
     {% compress js %}
       <script src="/static/3party/js/vendor/modernizr.js"></script>
+      <script src="/static/3party/js/vendor/jquery.js"></script>
     {% endcompress %}
 
     {% block header %}
@@ -40,7 +42,8 @@
                 {% else %}
                   <a href="{% url 'notif_show' %}" class="button">
                 {% endif %}
-                <i class="fi-megaphone"></i> {{ notifcount }}</a>
+                <i class="fi-megaphone"></i> 
+                <span id="notif-count-display">{{ notifcount }}</span></a>
               </li>
               <li class="divider"></li>
               <li><a href="{% url 'show_courses' %}">Cours</a></li>
@@ -101,7 +104,6 @@
       <br><br>
     </footer>
     {% compress js %}
-      <script src="/static/3party/js/vendor/jquery.js"></script>
       <script src="/static/3party/js/foundation.min.js"></script>
       <script>
         $(document).foundation();

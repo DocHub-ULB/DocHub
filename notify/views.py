@@ -66,7 +66,7 @@ def notification_read(request, id, redirect=True):
         if redirect:
             return HttpResponseRedirect(notif.prenotif.url)
         else:
-            return HttpResponse('Notification setted as read.')
+            return HttpResponse('Notification marked as read.')
     else:
         return HttpResponse('No url for this notification')
 

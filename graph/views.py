@@ -113,7 +113,6 @@ def show_course(request, slug):
     else:
         tags = tags.split(",")
 
-
     return render(request, "course.html", {
         "object": course,
         "gehol": gehol_url(course),
