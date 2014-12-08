@@ -42,6 +42,7 @@ class Command(BaseCommand):
         'tp': 'tp',
         'syl': 'syllabus',
         'cor': 'corrigé',
+        'corr': 'corrigé',
         'for': 'formulaire',
     }
 
