@@ -78,7 +78,6 @@ var after_headless_read = function(notif_container){
 var headless_read = function(ev){
   var clicked = $(ev.delegateTarget);
   var notif_id = clicked.attr("data-id");
-  console.log("CLICK " + notif_id + " !");
 
   $.get("/notifications/"+notif_id+"/ajax_read", function(){
     /* Disable click handler (this notification has already been read) */
