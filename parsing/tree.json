@@ -1,5 +1,5 @@
 {
-    "Info": {
+    "Informatique": {
         "BA1": {
             "course": [
                 "info-f-101",
@@ -75,9 +75,9 @@
             ],
             "Software and Critical Systems Design": {
                 "course": [
-                    "info-f-410", 
-                    "info-f-412", 
-                    "info-f-514", 
+                    "info-f-410",
+                    "info-f-412",
+                    "info-f-514",
                     "info-y-080"
                 ],
                 "Options" : {
