@@ -41,7 +41,8 @@
                 {% else %}
                   <a href="{% url 'notif_show' %}" class="button">
                 {% endif %}
-                <i class="fi-megaphone"></i> {{ notifcount }}</a>
+                <i class="fi-megaphone"></i> 
+                <span id="notif-count-display">{{ notifcount }}</span></a>
               </li>
               <li class="divider"></li>
               <li><a href="{% url 'show_courses' %}">Cours</a></li>
