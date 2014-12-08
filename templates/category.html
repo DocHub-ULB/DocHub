@@ -34,11 +34,11 @@
           <h4>
             <a href="{% url 'course_show' course.id %}">
               {% if course in user.followed_courses %}
-                <i class="fi-folder round-icon active"></i>
+                <i class="fi-folder round-icon active"></i> {{ course.slug }} <small>(abonné)</small>
               {% else %}
-                <i class="fi-folder round-icon"></i>
+                <i class="fi-folder round-icon"></i> {{ course.slug }}
               {% endif %}
-              {{ course.slug }}
+
             </a>
           </h4>
            {{ course.name }}
