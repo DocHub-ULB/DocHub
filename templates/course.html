@@ -106,6 +106,9 @@
             <i class="fi-clock"></i> Posté le {{ node.created|date:"d F Y" }}
           {% elif node.classBasename == 'Document' %}
             <p>{% if node.description %}{{ node.description|truncatechars:200 }}</p>{% endif %}
+            {% if is_moderator or user.netid == node.user.netid %}
+              <a href="{% url 'document_edit' node.id %}"><i class="fi-widget"></i> Editer</a>
+            {% endif %}
             <div class="course-content-last-line">
             <i class="fi-page-filled"></i>  {{ node.pages }} page{{ node.pages|pluralize }}
             <i class="fi-clock"></i> Uploadé le {{ node.date|date:"d F Y" }}

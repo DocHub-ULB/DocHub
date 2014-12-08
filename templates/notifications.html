@@ -21,13 +21,17 @@
       <p><a class="button success radius" href="{% url 'notif_read_all' %}">Tout marquer comme lu</a></p>
     {% endif %}
     {% if notifications %}
-      <ul class="notification-list">
+      <ul id="unread_notifs" class="notification-list">
         {% for notif in notifications %}
-          <li>
-            <i class="fi-{{ notif.prenotif.icon }} round-icon medium"></i>
+          <li class="notification-container">
+            <a title="Marquer comme lu" class="notif-headless-read" data-id="{{ notif.id }}" href="#">
+              <i class="fi-{{ notif.prenotif.icon }} round-icon medium"></i>
+            </a>
             <!-- <button class="button tiny" notif_id="{{notif.id}}">x</button> -->
-            <div class="notif-text"> <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
-            <div class="notif-date">{{ notif.prenotif.created|naturaltime|capfirst }}</div></div>
+            <div class="notif-text">
+              <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
+              <div class="notif-date">{{ notif.prenotif.created|naturaltime|capfirst }}</div>
+            </div>
           </li>
         {% endfor %}
       </ul>
@@ -52,5 +56,40 @@
     </div>
   {% endif %}
 </div>
+
+<script type="text/javascript">
+/* Called after a succesful AJAX "mark as read" */
+var after_headless_read = function(notif_container){
+  /* 1. Move notification from unread to read list */
+  notif_container.remove();
+  $('#read_notifs').prepend(notif_container);
+
+  /* 2. Update notification counter */
+  var notif_count = $('#unread_notifs>*').length;
+  $('#notif-count-display').text(notif_count);
+
+  /* 3. If notif count dropped to zero, reload page 
+        (do not recode django template in jQuery DOM manipulations #LOL) */
+  if ((0+notif_count) == 0)
+    window.location.reload();
+}
+
+/* Headless read: call the "notification read" ajax endpoint */
+var headless_read = function(ev){
+  var clicked = $(ev.delegateTarget);
+  var notif_id = clicked.attr("data-id");
+
+  $.get("/notifications/"+notif_id+"/ajax_read", function(){
+    /* Disable click handler (this notification has already been read) */
+    clicked.off("click");
+    after_headless_read(clicked.parent());
+  });
+}
+
+$(document).ready(function(){
+  /* Attach headless_read to all unread notifications */
+  $('.notif-headless-read').click(headless_read);
+});
+</script>
 
 {% endblock %}
