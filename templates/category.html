@@ -33,7 +33,11 @@
         <li>
           <h4>
             <a href="{% url 'course_show' course.id %}">
-              <i class="fi-folder round-icon small"></i>
+              {% if course in user.followed_courses %}
+                <i class="fi-folder round-icon active"></i>
+              {% else %}
+                <i class="fi-folder round-icon"></i>
+              {% endif %}
               {{ course.slug }}
             </a>
           </h4>
