@@ -17,6 +17,7 @@
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
     {% compress js %}
       <script src="/static/3party/js/vendor/modernizr.js"></script>
+      <script src="/static/3party/js/vendor/jquery.js"></script>
     {% endcompress %}
 
     {% block header %}
@@ -101,7 +102,6 @@
       <br><br>
     </footer>
     {% compress js %}
-      <script src="/static/3party/js/vendor/jquery.js"></script>
       <script src="/static/3party/js/foundation.min.js"></script>
       <script>
         $(document).foundation();

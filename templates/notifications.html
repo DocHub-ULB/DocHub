@@ -23,11 +23,15 @@
     {% if notifications %}
       <ul class="notification-list">
         {% for notif in notifications %}
-          <li>
-            <i class="fi-{{ notif.prenotif.icon }} round-icon medium"></i>
+          <li class="notification-container">
+            <a title="Marquer comme lu" class="notif-headless-read" data-id="{{ notif.id }}" href="#">
+              <i class="fi-{{ notif.prenotif.icon }} round-icon medium"></i>
+            </a>
             <!-- <button class="button tiny" notif_id="{{notif.id}}">x</button> -->
-            <div class="notif-text"> <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
-            <div class="notif-date">{{ notif.prenotif.created|naturaltime|capfirst }}</div></div>
+            <div class="notif-text">
+              <a href="{% url 'notif_read' notif.id %}">{{ notif.prenotif.text }}</a>
+              <div class="notif-date">{{ notif.prenotif.created|naturaltime|capfirst }}</div>
+            </div>
           </li>
         {% endfor %}
       </ul>
@@ -52,5 +56,19 @@
     </div>
   {% endif %}
 </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.notif-headless-read').click(function(ev){
+    var clicked = $(ev.delegateTarget);
+    var notif_id = clicked.attr("data-id");
+    $.get("/notifications/"+notif_id+"/ajax_read", function(){
+      var notif_container = clicked.parent();
+      notif_container.remove();
+      $('#read_notifs').prepend(notif_container);
+    });
+  });
+});
+</script>
 
 {% endblock %}
