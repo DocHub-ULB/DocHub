@@ -95,7 +95,7 @@
               <a href="{% url 'document_show' node.id %}">
             {% endif %}
             {{ node.name }}
-            {% if node.classBasename == 'Document' and node.state == "DONE" or node.classBasename == 'Thread' %}</a>{% endif %} 
+            {% if node.classBasename == 'Document' and node.state == "DONE" or node.classBasename == 'Thread' %}</a>{% endif %}
             <small>par {{ node.user.name }}</small>
           </h5>
           {% if node.classBasename == 'Thread' %}
@@ -126,7 +126,7 @@
     {% empty %}
       <h3>Il n’y a encore rien dans ce cours…</h3>
       <p>Personne n’est encore passé ici on dirait.<br>
-        Vous pourriez poser une question ou encore uploader un document. </p>
+        Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
     {% endfor %}
 
   </div>

@@ -198,6 +198,13 @@ i.round-icon.medium{
     font-size: 1.5em;
 }
 
+.tooltip-box {
+    font-size: 0.9em;
+}
+
+.tooltip-box small{
+    font-size: 0.8em;
+}
 
 .notification-list {
     margin: 0;

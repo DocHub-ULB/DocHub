@@ -42,7 +42,7 @@
                 {% else %}
                   <a href="{% url 'notif_show' %}" class="button">
                 {% endif %}
-                <i class="fi-megaphone"></i> 
+                <i class="fi-megaphone"></i>
                 <span id="notif-count-display">{{ notifcount }}</span></a>
               </li>
               <li class="divider"></li>
@@ -72,15 +72,19 @@
       {% block full-page %}
         <div class="hide-for-small-only large-2 medium-3 columns sidebar">
           <ul class="side-nav main-side-nav">
-            <li><a href="{% url 'show_courses' %}" class="button radius">Mes cours</a></li>
             {% cache 120 user_followed_list user.netid %}
-            {% for course in user.followed_courses %}
-              <li class="nav-link">
-                <a href="{% url 'course_show' course.slug %}">
-                  <i class="fi-folder"></i> {{ course.name }}
-                </a>
-              </li>
-            {% endfor %}
+              {% if user.followed_courses|length == 0 %}
+                <li><a href="{% url 'show_courses' %}" class="button radius">S'abonner à des cours</a></li>
+              {% else %}
+                <li><a href="{% url 'show_courses' %}" class="button radius">Mes cours</a></li>
+              {% endif %}
+              {% for course in user.followed_courses %}
+                <li class="nav-link">
+                  <a href="{% url 'course_show' course.slug %}">
+                    <i class="fi-folder"></i> {{ course.name }}
+                  </a>
+                </li>
+              {% endfor %}
             {% endcache %}
           </ul>
 
@@ -93,7 +97,7 @@
     </div>
     <footer class="text-center">
       <br>
-      <a href="mailto:p402@cerkinfo.be">Contact us</a> - 
+      <a href="mailto:p402@cerkinfo.be">Contact us</a> -
       Made with love at
       <a href="http://urlab.be">
       <img src="/static/images/urlab.png" style="height: 1em;">
