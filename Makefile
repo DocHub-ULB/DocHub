@@ -39,7 +39,7 @@ ${DATABASE}:
 	./manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
 ve:
-	python2.7 `which virtualenv` --distribute --no-site-package ve
+	python2.7 `which virtualenv2` --distribute --no-site-package ve
 
 install: requirements.txt ve shower
 	pip install -r $< || printf "\033[1mYou must first source ve/bin/activate\033[0m\n"
