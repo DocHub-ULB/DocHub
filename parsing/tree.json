@@ -317,6 +317,18 @@
                     "proj-h-305"
                 ]
             },
+            "Électromécanique" : {
+                "course" : [
+                    "elec-h-307",
+                    "elec-h-308",
+                    "elec-h-312",
+                    "elec-h-313",
+                    "math-h-304",
+                    "meca-h-303",
+                    "meca-h-305",
+                    "tran-h-303"
+                ]
+            },
             "Électronique et télécommunications" : {
                 "course" : [
                     "elec-h-304",
@@ -412,6 +424,113 @@
                         "tran-h-303"
                     ]
                 }
+            },
+            "Master of science in civil engineering" : {
+                "course" : [
+                    "arch-y-400",
+                    "arch-y-405",
+                    "cnst-h-401",
+                    "cnst-h-406",
+                    "cnst-h-418",
+                    "cnst-h-420",
+                    "cnst-h-421",
+                    "cnst-y-400",
+                    "cnst-y-402",
+                    "proj-h-406",
+                    "proj-h-407"
+                ]
+            },
+            "Master of science in electrical engineering" : {
+                "course" : [
+                    "elec-h-401",
+                    "elec-h-409",
+                    "elec-h-415",
+                    "elec-h-417",
+                    "elec-h-473",
+                    "elec-y-400",
+                    "elec-y-412",
+                    "elec-y-413",
+                    "elec-y-418",
+                    "elec-y-430",
+                    "elec-y-503",
+                    "math-h-407"
+                ],
+                "Options" : {
+                    "course" : [
+                        "elec-y-404",
+                        "proj-h-415"
+                    ]
+                }
+            },
+            "Master en ingénieur civil électromécanicien, à finalité Gestion et technologies" : {
+                "course" : [
+                    "econ-s-202",
+                    "gest-d-447",
+                    "gest-s-202",
+                    "gest-s-303",
+                    "gest-s-488",
+                    "elec-h-417",
+                    "math-h-407",
+                    "meca-h-409",
+                    "proj-h-405",
+                    "gest-h-501",
+                    "info-f-310",
+                    "info-h-504"
+                ]
+            },
+            "Master of science in electro-mechanical engineering" : {
+                "course" : [
+                    "elec-h-406",
+                    "math-h-407",
+                    "meca-h-402",
+                    "meca-h-409",
+                    "meca-y-401",
+                    "proj-h-405"
+                ],
+                "Aeronautics" : {
+                    "course" : [
+                        "cnst-h-421",
+                        "meca-h-406",
+                        "meca-h-411",
+                        "meca-h-407",
+                        "meca-y-003",
+                        "meca-y-402",
+                        "meca-y-405"
+                    ]
+                },
+                "Mechanical construction" : {
+                    "course" : [
+                        "cnst-h-421",
+                        "meca-h-411",
+                        "elec-h-410",
+                        "meca-h-401",
+                        "meca-h-410",
+                        "meca-y-403"
+                    ]
+                },
+                "Energy" : {
+                    "course" : [
+                        "elec-h-529",
+                        "meca-y-404",
+                        "elec-h-413",
+                        "elec-h-419",
+                        "elec-y-401",
+                        "meca-h-414",
+                        "meca-h-415"
+                    ]
+                },
+                "Vehicle and transport" : {
+                    "course" : [
+                        "cnst-h-421",
+                        "elec-h-529",
+                        "elec-y-502",
+                        "meca-h-406",
+                        "meca-h-411",
+                        "elec-h-527",
+                        "elec-y-510",
+                        "meca-y-406"
+                    ]
+                }
             }
         },
         "MA2" : {
@@ -494,6 +613,241 @@
                             "phys-y-501"
                         ]
                     }
+                }
+            },
+            "Master of science in civil engineering" : {
+                "course" : [
+                    "memo-h-501",
+                    "stag-h-501"
+                ],
+                "Options" : {
+                    "course" : [
+                        "arch-h-402",
+                        "chim-h-518",
+                        "cnst-h-502",
+                        "cnst-h-503",
+                        "cnst-h-524",
+                        "cnst-h-530",
+                        "cnst-y-401",
+                        "cnst-y-504",
+                        "cnst-y-505",
+                        "cnst-y-507",
+                        "cnst-y-508",
+                        "cnst-y-509",
+                        "cnst-y-510",
+                        "cnst-y-511",
+                        "cnst-y-512",
+                        "cnst-y-515",
+                        "cnst-y-517",
+                        "cnst-y-519",
+                        "droi-y-500",
+                        "gest-y-501",
+                        "gest-y-502",
+                        "gest-y-507",
+                        "meca-h-502",
+                        "proj-h-502"
+                    ]
+                },
+                "Structures" : {
+                    "course" : [
+                        "cnst-h-409",
+                        "cnst-h-505",
+                        "cnst-h-526",
+                        "cnst-h-528"
+                    ]
+                },
+                "Construction and geomaterials" : {
+                    "course" : [
+                        "cnst-h-515",
+                        "cnst-h-517",
+                        "cnst-h-529",
+                        "cnst-y-500"
+                    ]
+                },
+                "Water resources" : {
+                    "course" : [
+                        "cnst-y-501",
+                        "cnst-y-502",
+                        "cnst-y-503"
+                    ]
+                }
+            },
+            "Master en ingénieur civil électromécanicien, à finalité Gestion et technologies" : {
+                "course" : [
+                    "memo-h-512",
+                    "stag-h-501"
+                ],
+                "Chimie, Matériaux et Environnement" : {
+                    "course" : [
+                        "chim-h-302",
+                        "chim-h-314",
+                        "chim-h-315",
+                        "chim-h-518",
+                        "chim-h-528",
+                        "envi-h-500"
+                    ]
+                },
+                "Energy" : {
+                    "course" : [
+                        "elec-h-406",
+                        "elec-h-413",
+                        "gest-h-506",
+                        "meca-h-415"
+                    ]
+                },
+                "Processus industriels" : {
+                    "course" : [
+                        "elec-h-313",
+                        "math-h-503",
+                        "meca-h-402",
+                        "meca-h-514",
+                        "phys-h-514"
+                    ]
+                },
+                "Telecommunications" : {
+                    "course" : [
+                        "elec-h-401",
+                        "elec-h-415",
+                        "elec-h-540"
+                    ]
+                },
+                "Électronique" : {
+                    "course" : [
+                        "elec-h-402",
+                        "elec-h-409",
+                        "elec-h-410",
+                        "elec-h-473"
+                    ]
+                },
+                "Mécatronique" : {
+                    "course" : [
+                        "elec-h-410",
+                        "elec-h-516",
+                        "math-h-509",
+                        "meca-y-403"
+                    ]
+                },
+                "Advanced operations management and logistics" : {
+                    "course" : [
+                        "gest-h-502",
+                        "info-s-409",
+                        "math-h-405"
+                    ]
+                },
+                "Consulting" : {
+                    "course" : [
+                        "gest-s-406",
+                        "gest-s-440",
+                        "stat-s-401"
+                    ]
+                },
+                "Entrepreneurship and innovation" : {
+                    "course" : [
+                        "gest-s-406",
+                        "gest-s-421",
+                        "gest-s-423",
+                        "gest-s-484"
+                    ]
+                },
+                "Green Management" : {
+                    "course" : [
+                        "envi-f-448",
+                        "gest-s-471",
+                        "gest-s-516"
+                    ]
+                },
+                "Business Intelligence" : {
+                    "course" : [
+                        "gest-s-492",
+                        "info-h-420",
+                        "info-s-409",
+                        "stat-s-401"
+                    ]
+                }
+            },
+            "Master of science in electro-mechanical engineering" : {
+                "course" : [
+                    "memo-h-502",
+                    "stag-h-501",
+                    "stag-h-502"
+                ],
+                "Aeronautics" : {
+                    "course" : [
+                        "meca-y-407",
+                        "meca-h-507",
+                        "meca-h-508",
+                        "meca-y-408"
+                    ]
+                },
+                "Mechanical construction" : {
+                    "course" : [
+                        "meca-h-406",
+                        "phys-h-514",
+                        "meca-h-524",
+                        "meca-h-525",
+                        "meca-y-506"
+                    ]
+                },
+                "Energy" : {
+                    "course" : [
+                        "phys-h-514",
+                        "elec-h-508",
+                        "gest-h-506",
+                        "meca-h-530"
+                    ]
+                },
+                "Vehicle and transport" : {
+                    "course" : [
+                        "elec-y-405",
+                        "elec-y-501",
+                        "elec-y-504",
+                        "meca-y-404"
+                    ]
+                },
+                "Options" : {
+                    "course" : [
+                        "arch-y-501",
+                        "cnst-h-528",
+                        "droi-y-500",
+                        "elec-h-313",
+                        "elec-h-409",
+                        "elec-h-412",
+                        "elec-h-473",
+                        "elec-h-474",
+                        "elec-h-510",
+                        "elec-h-512",
+                        "elec-h-514",
+                        "elec-h-516",
+                        "elec-y-503",
+                        "elec-y-505",
+                        "elec-y-506",
+                        "elec-y-507",
+                        "elec-y-508",
+                        "elec-y-509",
+                        "gest-h-509",
+                        "gest-y-500",
+                        "gest-y-501",
+                        "gest-y-502",
+                        "gest-y-503",
+                        "math-h-503",
+                        "meca-h-500",
+                        "meca-h-501",
+                        "meca-h-502",
+                        "meca-h-514",
+                        "meca-h-522",
+                        "meca-h-523",
+                        "meca-h-526",
+                        "meca-y-014",
+                        "meca-y-500",
+                        "meca-y-502",
+                        "meca-y-503",
+                        "meca-y-504",
+                        "meca-y-505",
+                        "phys-h-408",
+                        "phys-h-512",
+                        "phys-h-513",
+                        "phys-h-523"
+                    ]
                 }
             }
         }
