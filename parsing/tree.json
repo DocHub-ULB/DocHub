@@ -531,6 +531,157 @@
                         "meca-y-406"
                     ]
                 }
+            },
+            "Master of science in chemical and materials engineering" : {
+                "course" : [
+                    "chim-h-401",
+                    "chim-h-406",
+                    "chim-h-407",
+                    "chim-h-412",
+                    "chim-h-419",
+                    "chim-y-400",
+                    "chim-y-401",
+                    "chim-y-402",
+                    "proj-h-404",
+                    "proj-h-413",
+                    "proj-h-417",
+                    "proj-h-418"
+                ],
+                "Process technology" : {
+                    "course" : [
+                        "chim-h-402",
+                        "chim-h-405",
+                        "chim-y-404"
+                    ]
+                },
+                "Materials science" : {
+                    "course" : [
+                        "chim-h-415",
+                        "chim-h-416",
+                        "chim-h-417",
+                        "chim-h-421"
+                    ]
+                }
+            },
+            "Master en ingénieur civil en informatique, à finalité spécialisée" : {
+                "course" : [
+                    "elec-h-473",
+                    "info-f-307",
+                    "info-f-403",
+                    "info-f-405",
+                    "info-f-408",
+                    "info-h-421",
+                    "proj-h-402"
+                ],
+                "Software and Critical Systems Design" : {
+                    "course" : [
+                        "info-f-404",
+                        "info-f-410",
+                        "info-f-412",
+                        "info-f-514",
+                        "info-y-080"
+                    ]
+                },
+                "Optimization and Algorithms" : {
+                    "course" : [
+                        "info-f-413",
+                        "info-f-424",
+                        "info-f-521",
+                        "info-f-524"
+                    ]
+                },
+                "Computational Intelligence" : {
+                    "course" : [
+                        "info-f-409",
+                        "info-f-422",
+                        "info-h-410",
+                        "info-h-413"
+                    ]
+                },
+                "Web and Information Systems" : {
+                    "course" : [
+                        "info-h-415",
+                        "info-h-419",
+                        "info-h-509",
+                        "info-y-088"
+                    ]
+                },
+                "Multimedia" : {
+                    "course" : [
+                        "info-h-500",
+                        "info-h-502",
+                        "info-y-094"
+                    ]
+                },
+                "Options" : {
+                    "course" : [
+                        "elec-h-474",
+                        "elec-h-540",
+                        "gest-s-483",
+                        "info-f-402",
+                        "info-f-404",
+                        "info-f-409",
+                        "info-f-410",
+                        "info-f-412",
+                        "info-f-413",
+                        "info-f-420",
+                        "info-f-421",
+                        "info-f-422",
+                        "info-f-424",
+                        "info-f-439",
+                        "info-f-514",
+                        "info-f-521",
+                        "info-f-524",
+                        "info-h-410",
+                        "info-h-413",
+                        "info-h-414",
+                        "info-h-415",
+                        "info-h-417",
+                        "info-h-419",
+                        "info-h-420",
+                        "info-h-503",
+                        "info-h-504",
+                        "info-h-509",
+                        "info-h-514",
+                        "info-y-004",
+                        "info-y-080",
+                        "info-y-081",
+                        "info-y-082",
+                        "info-y-083",
+                        "info-y-084",
+                        "info-y-085",
+                        "info-y-086",
+                        "info-y-087",
+                        "info-y-088",
+                        "info-y-089",
+                        "info-y-090",
+                        "info-y-091",
+                        "info-y-095",
+                        "info-y-099",
+                        "info-y-100",
+                        "info-y-102",
+                        "math-h-405",
+                        "math-h-406"
+                    ]
+                }
+            },
+            "Master en ingénieur civil physicien" : {
+                "course" : [
+                    "elec-h-402",
+                    "meca-h-402",
+                    "phys-h-400",
+                    "phys-h-410",
+                    "proj-h-403",
+                    "phys-h-401",
+                    "phys-h-402",
+                    "phys-h-404",
+                    "phys-h-405",
+                    "phys-h-406",
+                    "phys-h-407",
+                    "phys-h-408",
+                    "math-h-401",
+                    "math-h-402"
+                ]
             }
         },
         "MA2" : {
@@ -847,6 +998,157 @@
                         "phys-h-512",
                         "phys-h-513",
                         "phys-h-523"
+                    ]
+                }
+            },
+            "Master of science in chemical and materials engineering" : {
+                "course" : [
+                    "memo-h-509",
+                    "phys-h-524"
+                ],
+                "Process technology" : {
+                    "course" : [
+                        "chim-h-514",
+                        "chim-h-530",
+                        "chim-h-531",
+                        "chim-h-518",
+                        "chim-y-085",
+                        "stag-h-501"
+                    ]
+                },
+                "Materials" : {
+                    "course" : [
+                        "chim-h-511",
+                        "chim-h-532",
+                        "chim-y-082",
+                        "chim-h-507",
+                        "chim-h-534",
+                        "stag-h-501"
+                    ]
+                },
+                "Options" : {
+                    "course" : [
+                        "chim-h-415",
+                        "chim-h-507",
+                        "chim-h-518",
+                        "chim-h-520",
+                        "chim-h-522",
+                        "chim-h-528",
+                        "chim-h-533",
+                        "chim-h-534",
+                        "chim-y-080",
+                        "chim-y-085",
+                        "chim-y-404",
+                        "chim-y-504",
+                        "chim-y-511",
+                        "info-h-505",
+                        "meca-y-404",
+                        "phys-h-508",
+                        "stag-h-502",
+                        "Gest-h-501",
+                        "gest-s-421",
+                        "gest-s-423",
+                        "gest-s-484",
+                        "gest-s-488",
+                        "gest-y-500",
+                        "gest-y-501",
+                        "gest-y-502",
+                        "gest-y-503",
+                        "info-h-504",
+                        "info-h-505",
+                        "lang-h-500"
+                    ]
+                }
+            },
+            " Master en ingénieur civil en informatique, à finalité spécialisée" : {
+                "course" : [
+                    "gest-s-307",
+                    "info-f-501",
+                    "memo-h-504",
+                    "stag-h-500"
+                ],
+                "Software and Critical Systems Design" : {
+                    "course" : [
+                        "info-f-502"
+                    ]
+                },
+                "Optimization and Algorithms" : {
+                    "course" : [
+                        "info-f-420",
+                        "info-f-504"
+                    ]
+                },
+                "Computational Intelligence" : {
+                    "course" : [
+                        "info-h-512",
+                        "math-h-405"
+                    ]
+                },
+                "Web and Information Systems" : {
+                    "course" : [
+                        "info-y-106"
+                    ]
+                },
+                "Multimedia" : {
+                    "course" : [
+                        "info-h-501",
+                        "info-y-093",
+                        "info-y-098"
+                    ]
+                },
+                "Options" : {
+                    "course" : [
+                        "info-f-420",
+                        "info-f-502",
+                        "info-f-504",
+                        "info-h-501",
+                        "info-h-512",
+                        "info-y-093",
+                        "info-y-098",
+                        "info-y-106",
+                        "math-h-405"
+                    ]
+                }
+            },
+            "Master en ingénieur civil physicien, à finalité Physique appliquée" : {
+                "course" : [
+                    "memo-h-506",
+                    "stag-h-500"
+                ],
+                "Options" : {
+                    "course" : [
+                        "phys-f-407",
+                        "phys-h-502",
+                        "phys-h-504",
+                        "phys-h-505",
+                        "phys-h-507",
+                        "phys-h-508",
+                        "elec-h-507",
+                        "info-h-514",
+                        "phys-h-510",
+                        "phys-y-016",
+                        "phys-y-502",
+                        "elec-h-508",
+                        "gest-h-506",
+                        "math-h-507",
+                        "phys-h-512",
+                        "phys-h-513",
+                        "phys-h-514",
+                        "phys-h-523",
+                        "math-f-502",
+                        "math-h-507",
+                        "phys-h-409",
+                        "phys-h-500",
+                        "phys-h-501",
+                        "phys-h-515",
+                        "phys-h-516",
+                        "phys-h-518",
+                        "phys-h-519",
+                        "phys-h-520",
+                        "elec-h-313",
+                        "math-h-405",
+                        "math-h-406",
+                        "math-h-503"
                     ]
                 }
             }
