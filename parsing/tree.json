@@ -264,5 +264,238 @@
                 ]
             }
         }
+    },
+    "Polytechnique" : {
+        "BA1" : {
+            "course" : [
+                "chim-h-100",
+                "info-h-100",
+                "math-h-100",
+                "math-h-101",
+                "meca-h-100",
+                "phys-h-100",
+                "tran-h-100",
+                "tran-h-101"
+            ]
+        },
+        "BA2" : {
+            "course" : [
+                "chim-h-200",
+                "cnst-h-202",
+                "elec-h-200",
+                "gest-h-200",
+                "info-h-200",
+                "lang-h-200",
+                "math-h-200",
+                "math-h-201",
+                "math-h-202",
+                "math-h-204",
+                "meca-h-200",
+                "meca-h-201",
+                "phys-h-200",
+                "tran-h-201"
+            ]
+        },
+        "BA3" : {
+            "course" : [
+                "chim-h-300",
+                "cnst-h-300",
+                "elec-h-300",
+                "elec-h-301",
+                "elec-h-302",
+                "lang-h-300",
+                "meca-h-300",
+                "meca-h-301"
+            ],
+            "Construction" : {
+                "course" : [
+                    "cnst-h-302",
+                    "cnst-h-303",
+                    "cnst-h-306",
+                    "cnst-h-307",
+                    "cnst-h-311",
+                    "proj-h-305"
+                ]
+            },
+            "Électronique et télécommunications" : {
+                "course" : [
+                    "elec-h-304",
+                    "elec-h-305",
+                    "elec-h-307",
+                    "elec-h-309",
+                    "elec-h-311",
+                    "elec-h-313",
+                    "elec-h-402",
+                    "math-h-304"
+                ]
+            },
+            "Informatique" : {
+                "course" : [
+                    "elec-h-305",
+                    "elec-h-307",
+                    "elec-h-417",
+                    "info-f-201",
+                    "info-f-310",
+                    "info-h-303",
+                    "info-h-304"
+                ]
+            },
+            "Chimie et science des matériaux" : {
+                "course" : [
+                    "chim-h-301",
+                    "chim-h-302",
+                    "chim-h-303",
+                    "chim-h-304",
+                    "chim-h-313",
+                    "chim-h-314",
+                    "chim-h-315",
+                    "math-h-304"
+                ]
+            },
+            "Physique" : {
+                "course" : [
+                    "elec-h-304",
+                    "elec-h-307",
+                    "math-h-301",
+                    "math-h-304",
+                    "phys-h-300",
+                    "phys-h-301",
+                    "phys-h-302",
+                    "phys-h-303",
+                    "phys-h-403"
+                ]
+            },
+            "Biomédical" : {
+                "course" : [
+                    "bime-h-301",
+                    "biol-j-101",
+                    "chim-h-312",
+                    "elec-h-307",
+                    "elec-h-313",
+                    "info-h-304",
+                    "math-h-304",
+                    "medi-h-301"
+                ]
+            }
+        },
+        "MA1" : {
+            "Master en ingénieur civil biomédical" : {
+                "course" : [
+                    "cnst-h-421",
+                    "elec-h-400",
+                    "elec-h-402",
+                    "elec-h-410",
+                    "elec-h-474",
+                    "info-h-500",
+                    "stat-h-400",
+                    "bime-h-400",
+                    "bime-h-401",
+                    "bime-h-402",
+                    "bime-h-404",
+                    "info-h-400",
+                    "medi-g-304",
+                    "morf-g-207",
+                    "morf-g-2071"
+                ],
+                "Options" : {
+                    "course" : [
+                        "proj-h-416",
+                        "proj-h-417",
+                        "proj-h-418",
+                        "bing-h-500",
+                        "chim-h-533",
+                        "info-f-438",
+                        "meca-h-409",
+                        "medi-h-401",
+                        "medi-h-503",
+                        "phys-h-409",
+                        "tran-h-303"
+                    ]
+                }
+            }
+        },
+        "MA2" : {
+            "Master en ingénieur civil biomédical" : {
+                "course" : [
+                    "memo-h-500",
+                    "proj-h-500"
+                ],
+                "Biomécanique et instrumentation" : {
+                    "course" : [
+                        "elec-h-409",
+                        "math-h-509",
+                        "meca-h-500"
+                    ],
+                    "Options" : {
+                        "course" : [
+                            "meca-h-501",
+                            "medi-h-503",
+                            "medi-h-504",
+                            "bime-h-500",
+                            "elec-h-304",
+                            "elec-h-503",
+                            "medi-h-505",
+                            "stag-h-500",
+                            "elec-h-417",
+                            "elec-h-516",
+                            "envi-l-401",
+                            "gest-s-423",
+                            "math-h-503",
+                            "meca-h-411"
+                        ]
+                    }
+                },
+                "Informatique et imagerie biomédicales" : {
+                    "course" : [
+                        "bime-h-500",
+                        "info-h-501",
+                        "math-h-500"
+                    ],
+                    "Options" : {
+                        "course" : [
+                            "biol-f-423",
+                            "info-h-502",
+                            "info-h-503",
+                            "info-h-509",
+                            "math-h-405",
+                            "medi-h-505",
+                            "stag-h-500",
+                            "chim-f-420",
+                            "chim-f-505",
+                            "elec-h-417",
+                            "envi-l-401",
+                            "gest-s-423",
+                            "info-f-438",
+                            "phys-f-512"
+                        ]
+                    }
+                },
+                "Radiophysique médicale" : {
+                    "course" : [
+                        "bime-h-500",
+                        "info-h-501",
+                        "math-h-500"
+                    ],
+                    "Options" : {
+                        "course" : [
+                            "medi-h-502",
+                            "phys-h-407",
+                            "phys-h-501",
+                            "phys-h-516",
+                            "phys-h-518",
+                            "phys-h-519",
+                            "phys-h-520",
+                            "stag-h-500",
+                            "envi-l-401",
+                            "gest-s-423",
+                            "math-f-502",
+                            "math-h-507",
+                            "phys-y-500",
+                            "phys-y-501"
+                        ]
+                    }
+                }
+            }
+        }
     }
 }
