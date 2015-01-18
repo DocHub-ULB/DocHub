@@ -2,17 +2,24 @@
 {% load humanize %}
 
 <div class="row">
-  <div class="small-3 large-2 columns ">
-    <img width="80" src="{{ elem.user.get_photo }}" class="user-photo user-photo-big"/>
-  </div>
-  <div class="small-9 large-10 columns feed-element">
-      <div class="user-message-header"><strong><i class="fi-{{ elem.icon }}"></i> <a href="{{ elem.url }}">{{ elem.text }}</a></strong></div>
-    <div class="user-message-content">
-      <div class="feed-element-limited ">
-        {{elem.content|markdown}}
+  <div class="small-12 columns feed-element">
+    <div class="user-message-header row">
+      <div class="small-10 columns feed-element">
+        <strong>
+          <i class="fi-{{ elem.icon }}"></i>
+          <a href="{{ elem.url }}">{{ elem.text }}</a>
+        </strong><br>
+        <small>
+          <a href="{{ elem.url }}">{{ elem.created|naturaltime|capfirst }}</a> par {{elem.user.name}}
+        </small>
       </div>
-      <div class="feed-date">
-        <a href="{{ elem.url }}">{{ elem.created|naturaltime|capfirst }}</a> par {{elem.user.name}}
+      <div class="small-2 columns feed-element text-right">
+        <img width="80" src="{{ elem.user.get_photo }}" class="user-photo user-photo-feed">
+      </div>
+    </div>
+    <div class="user-message-content row">
+      <div class="small-12 columns feed-element-limited ">
+        {{elem.content|markdown}}
       </div>
     </div>
     <br>
