@@ -32,6 +32,7 @@ cleandata: clean
 	rm -rf /tmp/p402-upload/*
 	rm -rf /tmp/processing/*
 	rm -rf graph.png
+	rm -rf www/secret_key.txt
 
 ${DATABASE}:
 	./manage.py syncdb
