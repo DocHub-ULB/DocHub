@@ -1,4 +1,4 @@
-Django==1.6
+Django==1.7
 django_polymorphic
 django-template-fragments
 markdown
@@ -9,13 +9,9 @@ Pillow
 django_compressor
 pygments
 
-# Migrate
-south
 
 # Dev
 django-extensions
-Werkzeug
-django-devserver
 ipython
 
 # Test

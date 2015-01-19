@@ -34,7 +34,6 @@ cleandata: clean
 	rm -rf graph.png
 
 ${DATABASE}:
-	./manage.py syncdb
 	./manage.py migrate
 	./manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
