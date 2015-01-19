@@ -25,9 +25,18 @@ INSTALLED_APPS += (
 
 CELERY_BROKER = 'django://'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': join(BASE_DIR, 'db.sqlite'),
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(BASE_DIR, 'db.sqlite'),
+        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mydatabase',
+        'USER': 'nikita'
     }
 }

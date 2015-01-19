@@ -22,12 +22,12 @@ var viewer = function(doc) {
 
     var url = function(numero, width) {
         if (width < 300)
-            m = 'm';
+            return doc.pages[numero].url_120
         else
-            m = mode;
-
-        return '/media/documents/'+doc.parentid+'/doc-' + doc.id +
-              '/images/' + numero.pad(6) + '_' + m + '.jpg';
+            if(mode = 'b')
+                return doc.pages[numero].url_900
+            else
+                return doc.pages[numero].url_600
     };
 
     var set_height = function() {
@@ -114,6 +114,7 @@ var viewer = function(doc) {
             $(page).attr('src', '/static/images/white.png');
         });
         load_pages();
+        console.log("mode change")
     };
 
     var zoom_draw = function(z) {

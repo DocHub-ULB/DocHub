@@ -14,19 +14,20 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 from celery import shared_task, chain
-from os import system, path, makedirs
+from os import path
 import subprocess
 import hashlib
-import glob
-import os
+import uuid
 join = path.join
+import tempfile
+from wand.image import Image
 
 from django.core.urlresolvers import reverse
+from django.core.files.base import ContentFile
 
 from documents.models import Document, Page
 from notify.models import Notification
 from .exceptions import DocumentProcessingError, MissingBinary
-from .helpers import get_image_size
 
 
 class SkipException(StandardError):
@@ -72,9 +73,9 @@ def process_document(self, document_id):
         raise DocumentProcessingError(document_id, "Wrong state : {}".format(document.state))
     elif document.state in ("DONE", "ERROR"):
         raise NotImplementedError(document_id, document.state)
-        # Later : clean destination + celery.send_task()
+        # TODO : clean destination + celery.send_task()
 
-    if document.original_extension() == 'pdf':
+    if document.file_type in ('.pdf', 'application/pdf'):
         document.pdf = document.original
         document.save()
         process_pdf.delay(document_id)
@@ -86,10 +87,8 @@ def process_document(self, document_id):
 def sanity_check(self, document_id):
     document = Document.objects.get(pk=document_id)
 
-    if not os.path.exists(document.original) and document.original != "":
+    if not document.original:
         raise DocumentProcessingError(document_id, "Missing original")
-    if not len(set(glob.glob(os.path.join(os.path.dirname(document.original), "*")))) == 1:
-        raise DocumentProcessingError(document_id, "Directory unclean")
 
     return document_id
 
@@ -97,9 +96,10 @@ def sanity_check(self, document_id):
 @doctask
 def checksum(self, document_id):
     document = Document.objects.get(pk=document_id)
-    with open(document.original) as source:
-        contents = source.read()
-        hashed = hashlib.md5(contents).hexdigest()
+
+    contents = document.original.read()
+
+    hashed = hashlib.md5(contents).hexdigest()
     query = Document.objects.filter(md5=hashed).exclude(md5='')
     if query.count() != 0:
         dup = query.first()
@@ -125,51 +125,60 @@ checksum.throws = (ExisingChecksum,)
 @doctask
 def convert_office_to_pdf(self, document_id):
     document = Document.objects.get(pk=document_id)
-    pdf_path = join(os.path.dirname(document.original), "converted.pdf")
+
+    tmp = tempfile.NamedTemporaryFile()
+    tmp.write(document.original.read())
+    tmp.flush()
 
     try:
-        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', document.original])
+        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmp.name])
     except OSError:
         raise MissingBinary("unoconv")
     except subprocess.CalledProcessError as e:
         raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
 
-    with open(pdf_path, 'w') as pdf_file:
-        pdf_file.write(sub)
+    document.pdf.save(str(uuid.uuid4()), ContentFile(sub))
 
-    document.pdf = pdf_path
-    document.save()
+    tmp.close()
 
     return document_id
 
 
-@doctask
-def calculate_pdf_length(self, document_id):
+# @doctask
+# def compute_pdf_length(self, document_id):
 
-    document = Document.objects.get(pk=document_id)
+#     document = Document.objects.get(pk=document_id)
 
-    try:
-        # TODO : catch stdout
-        sub = subprocess.check_output(['pdfinfo', document.pdf])
-    except OSError:
-        raise MissingBinary("pdfinfo")
-    except subprocess.CalledProcessError as e:
-        raise DocumentProcessingError(document, e, '"pdfinfo" has failed')
+#     try:
+#         sub = subprocess.Popen(
+#             ['pdfinfo', "-"],
+#             stdin=subprocess.PIPE,
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.PIPE
+#         )
+#     except OSError:
+#         raise MissingBinary("pdfinfo")
 
-    sub = sub.decode('ascii', 'ignore')
+#     content = document.pdf.read()
+#     out, err = sub.communicate(content)
 
-    pages = -1
-    for line in sub.split('\n'):
-        if line.startswith('Pages'):
-            splitted = line.split(' ')
-            pages = int(splitted[-1])
-    if pages == -1:
-        raise DocumentProcessingError(document, msg="Lenght computation failed")
+#     if out == "" or sub.returncode != 0:
+#         raise DocumentProcessingError(document, message='"pdfinfo" has failed : {}'.format(err))
 
-    document.pages = pages
-    document.save()
+#     out = out.decode('ascii', 'ignore')
 
-    return document_id
+#     pages = -1
+#     for line in out.split('\n'):
+#         if line.startswith('Pages'):
+#             splitted = line.split(' ')
+#             pages = int(splitted[-1])
+#     if pages == -1:
+#         raise DocumentProcessingError(document, msg="Lenght computation failed")
+
+#     document.pages = pages
+#     document.save()
+
+#     return document_id
 
 
 # @doctask
@@ -199,34 +208,30 @@ def calculate_pdf_length(self, document_id):
 
 @doctask
 def preview_pdf(self, document_id):
-    try:
-        subprocess.check_output(['gm', 'help'])
-    except OSError:
-        raise MissingBinary("gm")
 
     document = Document.objects.get(pk=document_id)
-    pdf = document.pdf
 
-    destination_dir = join(os.path.dirname(document.original), "images")
-    if path.exists(destination_dir):
-        raise DocumentProcessingError(document_id, "Images directory unclean")
+    pdf = Image(file=document.pdf)
 
-    makedirs(destination_dir)
+    document.pages = len(pdf.sequence)
+    document.save()
 
-    for pagenum in range(document.pages):
-        heights = {}
+    jpg_obj = pdf.convert('jpg')
 
-        for width, size_name in [(120, 'm'), (600, 'n'), (900, 'b')]:
-            destination = join(destination_dir, "{:0>6}_{}.jpg".format(pagenum, size_name))
-            args = (width, ' -density 350', pdf, pagenum, destination)
+    for i in range(document.pages):
 
-            system('gm convert -geometry %dx -quality 90 %s "%s[%d]" %s' % args)
-
-            width, height = get_image_size(destination)
-            heights["height_{}".format(width)] = height
-
-        page = Page.objects.create(numero=pagenum, **heights)
+        page = Page.objects.create(numero=i)
         document.add_child(page, acyclic_check=False)
+
+        for width in 120, 600, 900:
+            with jpg_obj.sequence[i].clone() as cloned:
+                cloned.transform(resize=str(width))
+                result = cloned.make_blob()
+                destination = page.__getattribute__('bitmap_' + str(width))
+                destination.save(str(uuid.uuid4()), ContentFile(result))
+
+    jpg_obj.close()
+    pdf.close()
 
     return document_id
 
@@ -242,7 +247,7 @@ def finish_file(self, document_id):
 process_pdf = chain(
     sanity_check.s(),
     checksum.s(),
-    calculate_pdf_length.s(),
+    # compute_pdf_length.s(),
     preview_pdf.s(),
     finish_file.s()
 )
@@ -251,7 +256,7 @@ process_office = chain(
     sanity_check.s(),
     checksum.s(),
     convert_office_to_pdf.s(),
-    calculate_pdf_length.s(),
+    # compute_pdf_length.s(),
     preview_pdf.s(),
     finish_file.s()
 )

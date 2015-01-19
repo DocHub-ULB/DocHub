@@ -20,11 +20,18 @@ var doc = {
     len: {{ object.pages }},
     id: {{ object.id }},
     parentid: '{{ parent.id }}',
-    pages: [ {% for page in page_set %}
-        {numero: {{ page.numero }},
-         height_600: {{ page.height_600 }},
-         height_900: {{ page.height_900 }} },{% endfor %}
-    ],
+    pages: {
+    {% for page in page_set %}
+      {{ page.numero }} : {
+        numero: {{ page.numero }},
+        height_600: {{ page.bitmap_600.height }},
+        height_900: {{ page.bitmap_900.height }},
+        url_120: '{{ page.bitmap_120.url }}',
+        url_600: '{{ page.bitmap_600.url }}',
+        url_900: '{{ page.bitmap_900.url }}',
+      },
+    {% endfor %}
+    },
 };
 
 var viewer_instance = viewer(doc);
@@ -40,7 +47,7 @@ var viewer_instance = viewer(doc);
       <div class="row">
         <div class="large-12 columns">
           <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
-            src="/static/images/white.png" width="120" height="{{ page.height_120 }}"/>
+            src="/static/images/white.png" width="120" height="{{ page.bitmap_120.height }}"/>
           <p>{{ page.numero|add:1 }}</p>
         </div>
       </div>
@@ -51,7 +58,7 @@ var viewer_instance = viewer(doc);
       <div class="row">
         <div class="large-12 columns">
           <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
-          width="600" height="{{ page.height_600 }}"/>
+          width="600" height="{{ page.bitmap_600.height }}"/>
         </div>
       </div>
     {% endfor %}

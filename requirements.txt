@@ -6,6 +6,7 @@ celery
 django-celery
 django-suit
 Pillow
+wand
 django_compressor
 pygments
 
