@@ -22,9 +22,9 @@ INSTALLED_APPS += (
 
 CELERY_BROKER = 'django://'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': join(BASE_DIR, 'db.sqlite'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': join(BASE_DIR, 'db.sqlite'),
+    }
+}

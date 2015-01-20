@@ -9,6 +9,7 @@ Pillow
 wand
 django_compressor
 pygments
+django-boto
 
 # Migrate
 south
