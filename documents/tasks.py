@@ -165,6 +165,7 @@ def preview_pdf(self, document_id):
             with jpg_obj.sequence[i].clone() as cloned:
                 cloned.transform(resize=str(width))
                 result = cloned.make_blob()
+                cloned.close()
                 destination = page.__getattribute__('bitmap_' + str(width))
                 destination.save(str(uuid.uuid4()), ContentFile(result))
 
