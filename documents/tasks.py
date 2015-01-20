@@ -144,68 +144,6 @@ def convert_office_to_pdf(self, document_id):
     return document_id
 
 
-# @doctask
-# def compute_pdf_length(self, document_id):
-
-#     document = Document.objects.get(pk=document_id)
-
-#     try:
-#         sub = subprocess.Popen(
-#             ['pdfinfo', "-"],
-#             stdin=subprocess.PIPE,
-#             stdout=subprocess.PIPE,
-#             stderr=subprocess.PIPE
-#         )
-#     except OSError:
-#         raise MissingBinary("pdfinfo")
-
-#     content = document.pdf.read()
-#     out, err = sub.communicate(content)
-
-#     if out == "" or sub.returncode != 0:
-#         raise DocumentProcessingError(document, message='"pdfinfo" has failed : {}'.format(err))
-
-#     out = out.decode('ascii', 'ignore')
-
-#     pages = -1
-#     for line in out.split('\n'):
-#         if line.startswith('Pages'):
-#             splitted = line.split(' ')
-#             pages = int(splitted[-1])
-#     if pages == -1:
-#         raise DocumentProcessingError(document, msg="Lenght computation failed")
-
-#     document.pages = pages
-#     document.save()
-
-#     return document_id
-
-
-# @doctask
-# def index_pdf(self, document_id):
-#     document = Document.objects.get(pk=document_id)
-
-#     try:
-#         subprocess.check_output(['pdftotext', '-v'])
-#     except OSError:
-#         raise MissingBinary("pdftotext")
-#     except:
-#         print "Unknown error while testing pdftotext presence"
-#         raise
-
-#     # TODO : this could fail
-#     system("pdftotext " + document.pdf)
-#     # change extension
-#     words_file = '.'.join(document.pdf.split('.')[:-1]) + ".txt"
-
-#     # TODO : this could fail
-#     with open(words_file, 'r') as words:
-#         words  # Do a lot of cool things !
-#         pass
-
-#     return document_id
-
-
 @doctask
 def preview_pdf(self, document_id):
 
@@ -247,7 +185,6 @@ def finish_file(self, document_id):
 process_pdf = chain(
     sanity_check.s(),
     checksum.s(),
-    # compute_pdf_length.s(),
     preview_pdf.s(),
     finish_file.s()
 )
@@ -256,7 +193,6 @@ process_office = chain(
     sanity_check.s(),
     checksum.s(),
     convert_office_to_pdf.s(),
-    # compute_pdf_length.s(),
     preview_pdf.s(),
     finish_file.s()
 )
