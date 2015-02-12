@@ -12,33 +12,30 @@ You'll need everything that is in requirements.txt (don't worry, pip will do it 
 You will also need to install poppler (the binary 'pdftotext'), GraphicsMagick (the binary 'gm') and LibreOffice/OpenOffice + unoconv (you need the binary 'unoconv') using your distribution packages.
 
 For exemple:
-	
+
 	# Debian/Ubuntu
-    sudo apt-get install poppler-utils graphicsmagick unoconv
+    sudo apt-get install poppler-utils graphicsmagick unoconv python-dev
 
     # Fedora
-    sudo apt-get install poppler-utils GraphicsMagick unoconv
+    sudo apt-get install poppler-utils GraphicsMagick unoconv python-devel
 
 Installation
 ============
 
-		sudo apt-get install python-dev
-		make ve
-		source ve/bin/activate
-		make install
+        # Install dependencies then
+		make install database
 
-Run & Stop
+Run
 ==========
 
-		make [run]
-		make stop
+		honcho start
 
-Then go http://localhost:8000/syslogin
+Then go http://localhost:8000/
 
 Reset
 =====
 
-		make clean
+		make cleandata database
 
 
 Misc
@@ -49,10 +46,6 @@ Add another user to the db
 
 	./manage.py useradd
 
-Speed up the conversion process (optional)
--------------------------------
-
-We use `unoconv` to convert files to pdf. To speed up the process, just run somwhere in the background (screen, supervisord, background shell, whatever) `unoconv -l` which will start a conversion server and all tasks will be sent there so that we will not boot OpenOffice at every new conversion.
 
 Contribute !
 ------------

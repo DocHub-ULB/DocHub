@@ -5,13 +5,13 @@ install: packages shower
 ve:
 	python2.7 `(which virtualenv || which virtualenv2) | tail -1` --distribute --no-site-package ve
 
-packages: requirements.txt ve
-	pip install -r $< || printf "\033[1mYou must first source ve/bin/activate\033[0m\n"
+packages: ve
+	ve/bin/pip install -r requirements.txt
 	chmod +x ./manage.py
 
 
 cleandata: clean
-	rm -f ${DATABASE}
+	rm -f db.sqlite
 	rm -rf ./media/documents/*
 	rm -rf ./media/profile/*.*
 	rm -rf /tmp/p402-upload/*
@@ -21,8 +21,8 @@ cleandata: clean
 
 
 database:
-	./manage.py migrate
-	./manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
+	ve/bin/python manage.py migrate
+	ve/bin/python manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
 shower: foundation foundation-icons select
 
