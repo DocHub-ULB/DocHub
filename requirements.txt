@@ -17,6 +17,7 @@ django-extensions
 Werkzeug
 django-devserver
 ipython
+honcho
 
 # Test
 mock
