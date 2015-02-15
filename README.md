@@ -25,7 +25,7 @@ For exemple on Debian/Ubuntu
 
 Or on Fedora
 
-    sudo apt-get install poppler-utils GraphicsMagick unoconv python-devel
+    sudo yum install poppler-utils GraphicsMagick unoconv python-devel
 
 ### Installation
 
