@@ -10,6 +10,10 @@
             enctype="multipart/form-data" class="dropzone">
         {% csrf_token %}
         {{ form.non_field_errors }}
+        <div class="alert-box info radius">
+          <i class="fi-info"></i>
+          Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png, doc(x), ppt(x), odt, et bien plus encore.
+        </div>
 
         {% with form.file as field %}
             {% if field.errors %}

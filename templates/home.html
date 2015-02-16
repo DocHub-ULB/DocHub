@@ -1,6 +1,4 @@
 {% extends "skel.html" %}
-{% load humanize %}
-{% load custommardown %}
 
 {% block content %}
 {% if user.welcome %}
@@ -25,7 +23,7 @@
             <p>Bienvenue sur DocHub − P402, le site de partage de documents et d’entraide étudiante à l’ULB.<br>
               DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes et bien plus encore.</p>
             <p>Vous souhaitez vous abonner à des cours ?<br>
-              Pour ça, le plus simple est d’aller voir la <a href="{% url 'show_courses' %}">liste des cours</a>, choisir votre faculté, puis votre année (et peut-être votre option) puis vous abonner à la totalité des cours en cliquant sur "Suivre tous les cours de cette catégorie".</p>
+              Pour ça, le plus simple est d’aller voir la <a href="{% url 'show_courses' %}">liste des cours</a>, choisir votre faculté, puis votre année (et peut-être votre option) puis vous abonner à la totalité des cours en cliquant sur "S'abonner à tous les cours de cette catégorie".</p>
             <p>Vous pouvez aussi vous balader dans la liste des cours et vous abonner aux cours qui vous plaisent, un par un.</p>
             {% comment %}
             {% if welcome.new_inscriptions %}
@@ -69,7 +67,7 @@
   </div>
 {% else %}
   <div class="row">
-    <div class="large-12 columns">
+    <div class="small-12 columns">
       <h1>DocHub</h1>
       <h2>Flux d'actualités</h2>
     </div>
@@ -77,28 +75,16 @@
 {% endif %}
 
 <div class="row">
-  <div class="large-8 columns">
+  <div class="small-12 columns">
     {% for elem in wall %}
-      <div class="row">
-        <div class="small-3 large-2 columns ">
-          <img width="80" src="{{ elem.user.get_photo }}" class="user-photo user-photo-big"/>
-        </div>
-        <div class="small-9 large-10 columns feed-element">
-            <div class="user-message-header"><strong><i class="fi-{{ elem.icon }}"></i> <a href="{{ elem.url }}">{{ elem.text }}</a></strong></div>
-          <div class="user-message-content">
-            <div class="feed-element-limited ">
-              {{elem.content|markdown}}
-            </div>
-            <div class="feed-date">
-              <a href="{{ elem.url }}">{{ elem.created|naturaltime|capfirst }}</a> par {{elem.user.name}}
-            </div>
-          </div>
-          <br>
-        </div>
-      </div>
+      {% include "feed_entry.html" %}
     {% empty %}
-      <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
-      <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
+      {% if user.followed_courses|length > 0 %}
+        <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>
+      {% else %}
+        <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
+        <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
+      {% endif %}
     {% endfor %}
   </div>
 </div>

@@ -54,7 +54,7 @@ def new_thread(request, parent_id):
 @login_required
 def show_thread(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
-    messages = Message.objects.filter(thread__id=thread_id).select_related('user').all()
+    messages = Message.objects.filter(thread__id=thread_id).select_related('user').order_by('created').all()
     context = {
         "object": thread,
         "messages": messages,

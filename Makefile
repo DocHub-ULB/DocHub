@@ -1,60 +1,30 @@
-DATABASE = db.sqlite
+init: database
 
-CELERY_PIDFILE = celery.pid
-WEBSERVER_PIDFILE = runserver.pid
+install: packages shower
 
-WEBSERVER_LOGFILE = webserver.log
-CELERY_LOGFILE = celery.log
+ve:
+	python2.7 `(which virtualenv || which virtualenv2) | tail -1` --distribute --no-site-package ve
 
-PIDFILES = ${WEBSERVER_PIDFILE} ${CELERY_PIDFILE}
-LOGFILES = ${WEBSERVER_LOGFILE} ${CELERY_LOGFILE} /tmp/upload_log sql.log
+packages: ve
+	ve/bin/pip install -r requirements.txt
+	chmod +x ./manage.py
 
-
-all: start
-init: ${DATABASE} shower
-reset: cleandata init
-
-start : ${DATABASE}
-	celery -A www worker -l info  > ${CELERY_LOGFILE} 2>&1 & echo "$$!" > ${CELERY_PIDFILE}
-	./manage.py runserver >> ${WEBSERVER_LOGFILE} 2>&1 & echo "$$!" > ${WEBSERVER_PIDFILE}
-	printf "\033[1mGo to http://localhost:8000/syslogin\033[0m\n"
-
-stop: ${PIDFILES}
-	for f in $^; do kill `ps x -o pid -o ppid | egrep $$(cat $$f) | sed -E 's/^[ ]*([0-9]+)[ ]+[0-9]+/\1/'` && rm $$f; done
-
-clean:
-	rm -f ${PIDFILES} ${LOGFILES}
 
 cleandata: clean
-	rm -f ${DATABASE}
+	rm -f db.sqlite
 	rm -rf ./media/documents/*
 	rm -rf ./media/profile/*.*
 	rm -rf /tmp/p402-upload/*
 	rm -rf /tmp/processing/*
 	rm -rf graph.png
-
-${DATABASE}:
-	./manage.py syncdb
-	./manage.py migrate
-	./manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
-
-ve:
-	python2.7 `which virtualenv` --distribute --no-site-package ve
-
-install: requirements.txt ve shower
-	pip install -r $< || printf "\033[1mYou must first source ve/bin/activate\033[0m\n"
-	chmod +x ./manage.py
+	rm -rf www/secret_key.txt
 
 
-graph: graph.png
-
-graph.png:
-	./manage.py todot | dot -Tpng > graph.png
+database:
+	ve/bin/python manage.py migrate
+	ve/bin/python manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
 shower: foundation foundation-icons select
-
-shower-clean:
-	rm -rf static/3party/foundation static/3party/foundation-icons static/3party/select
 
 foundation: static/3party/foundation
 
@@ -91,3 +61,6 @@ static/3party/select:
 	unzip /tmp/select.zip -d /tmp/select > /dev/null
 	@mkdir static/3party/select && true
 	mv ${SELECTFILES} static/3party/select
+
+shower-clean:
+	rm -rf static/3party/foundation static/3party/foundation-icons static/3party/select

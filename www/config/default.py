@@ -43,7 +43,7 @@ ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid=%s&_uid=%s'
 # Activate the search system
 SEARCH_SYSTEM = False
 
-#CELERY_BACKEND = 'django://'
+# CELERY_BACKEND = 'django://'
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
 CELERYD_PREFETCH_MULTIPLIER = 1  # Do not prefetch more than 1 task
@@ -57,7 +57,6 @@ INSTALLED_APPS += (
     'suit',  # Must be before admin
     'django.contrib.admin',
     'fragments',
-    'south',
     'djcelery',
     'compressor',
 )

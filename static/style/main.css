@@ -144,15 +144,6 @@ pre.codehilite{
     border: 1px solid #eee;
 }
 
-.feed-date{
-    margin-bottom: 5px;
-    padding: 10px;
-    padding-top: 5px;
-    padding-bottom: 0px;
-    border-top: 1px solid #eee;
-    font-size: 0.8em;
-}
-
 
 .course-row {
     /*border: 1px solid black;*/
@@ -198,6 +189,13 @@ i.round-icon.medium{
     font-size: 1.5em;
 }
 
+.tooltip-box {
+    font-size: 0.9em;
+}
+
+.tooltip-box small{
+    font-size: 0.8em;
+}
 
 .notification-list {
     margin: 0;
@@ -269,6 +267,10 @@ i.round-icon.medium{
 
  .user-photo-small {
     width: 50px;
+ }
+
+ .user-photo-feed {
+    width: 2em;
  }
 
  .user-photo-big {

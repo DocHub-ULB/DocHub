@@ -14,9 +14,6 @@
       <div class="large-6 columns">
         <strong>{% if edit %}Editer{% else %}Répondre{% endif %}</strong>
       </div>
-      <div class="large-6 columns text-right">
-        <a href="#" data-reveal-id="makrdown-down" class="sh-space"><i class="fi-info dark-grey"></i></a>
-      </div>
     </div>
     <div class="row user-message-content">
       {% if edit %}
@@ -29,7 +26,9 @@
           {% include "simple_input.html" %}
         {% endfor %}
         <div class="row">
+            {% include "markdown_small_help.html" %}
           <div class="medium-6 columns hide-for-small-only">
+
             {% if not edit %}
             En répondant à ce message, vous serez automatiquement abonné à cette discussion.<br><!-- Vous pouvez <a href="#" target="blank_">changer ce comportement.</a> -->
             {% endif %}
@@ -42,10 +41,6 @@
               <input type="submit" class="button success expand radius" value="{% if edit %}Editer{% else %}Répondre{% endif %}" />
             </p>
           </div>
-        </div>
-        {% include "markdown_small_help.html" %}
-        <div id="makrdown-down" class="reveal-modal" data-reveal>
-          {% include "markdown_small_help.html" %}
         </div>
         <div id="makrdown-cheat" class="reveal-modal" data-reveal>
           {% include "markdown_cheatsheet.html" %}

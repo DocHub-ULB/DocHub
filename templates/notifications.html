@@ -36,7 +36,15 @@
         {% endfor %}
       </ul>
     {% elif not read_notifications %}
-      <p>Oh ! Vous n’avez pas encore reçu de notification, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
+      <div class="alert-box radius secondary">
+        <i class="fi-info"></i> Vous recevrez une notification à chaque fois que quelqu'un ajoute un document ou pose une question dans un cours auquel vous êtes abonné.
+      </div>
+      {% if user.followed_courses|length > 0 %}
+        <p>Vous êtes bien abonné à des cours, mais depuis que vous vous êtes abonné, personne n'a envoyé de document ni posé de question... Attendez un peu, ça arrivera&nbsp;!</p>
+      {% else %}
+        <p>Oh ! Vous n’avez pas encore reçu de notification, il faudrait peut-être
+        <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
+      {% endif %}
     {% else %}
       <p>Bien joué, vous avez déjà tout lu !</p>
     {% endif %}
@@ -68,7 +76,7 @@ var after_headless_read = function(notif_container){
   var notif_count = $('#unread_notifs>*').length;
   $('#notif-count-display').text(notif_count);
 
-  /* 3. If notif count dropped to zero, reload page 
+  /* 3. If notif count dropped to zero, reload page
         (do not recode django template in jQuery DOM manipulations #LOL) */
   if ((0+notif_count) == 0)
     window.location.reload();
