@@ -19,6 +19,7 @@ from polydag.models import Keyword
 from datetime import datetime
 import json
 from shutil import copy
+import os
 from os.path import join
 from www import settings
 
@@ -60,7 +61,6 @@ class Command(BaseCommand):
         Keyword.objects.create(name="officiel")
         Keyword.objects.create(name="corrigé")
         Keyword.objects.create(name="points")
-
 
     def createCourse(self, parentNode, slug):
         try:
@@ -145,11 +145,14 @@ class Command(BaseCommand):
         IMG_S_DIR = join(settings.BASE_DIR, 'www', 'management', 'commands')
         IMG_D_DIR = join(settings.BASE_DIR, 'media', 'profile')
 
+        if not os.path.exists(IMG_D_DIR):
+            os.makedirs(IMG_D_DIR)
+
         if not options["production"]:
             copy(join(IMG_S_DIR, 'gaston.gif'), join(IMG_D_DIR, netid + '.gif'))
 
         if not options["production"]:
-            #Second user for tests
+            # Second user for tests
             user2 = User()
             user2.netid = "blabevue"
             user2.first_name = "Bertrand"
