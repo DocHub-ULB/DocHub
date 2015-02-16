@@ -1,13 +1,17 @@
 language: python
-cache:
-  - pip
+cache:"pip"
+sudo: false
+
 python:
   - "2.7"
+
 install:
-  - "pip install --upgrade pip"
   - "pip install -r requirements.txt"
+
 script:
   - ./manage.py test
   - python manage.py migrate
   - python manage.py init --netid=travis --password=test --first-name=Gaston --last-name=Lagaffe
   - make shower
+
+
