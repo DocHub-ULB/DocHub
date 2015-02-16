@@ -1,6 +1,10 @@
 sudo:
   - false
-cache: "pip"
+
+cache:
+  pip: true
+  directories:
+    - /home/travis/virtualenv/
 
 language: python
 python:
