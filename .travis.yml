@@ -1,6 +1,3 @@
-cache:"pip"
-sudo: false
-
 language: python
 python:
   - "2.7"
@@ -14,4 +11,8 @@ script:
   - python manage.py init --netid=travis --password=test --first-name=Gaston --last-name=Lagaffe
   - make shower
 
+cache: "pip"
+
+sudo:
+  - false
 
