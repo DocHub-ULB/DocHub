@@ -7,9 +7,9 @@ There is a [live instance of DocHub](http://cours.urlab.be) hosted by UrLab.
 
 ## Screenshots
 
-![](https://github.com/urlab/beta402/blob/django1.7/.meta/screen-1.png)
-![](https://github.com/urlab/beta402/blob/django1.7/.meta/screen-2.png)
-![](https://github.com/urlab/beta402/blob/django1.7/.meta/screen-3.png)
+![](https://github.com/urlab/beta402/blob/master/.meta/screen-1.png)
+![](https://github.com/urlab/beta402/blob/master/.meta/screen-2.png)
+![](https://github.com/urlab/beta402/blob/master/.meta/screen-3.png)
 
 ## Tech
 
