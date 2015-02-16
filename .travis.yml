@@ -4,5 +4,5 @@ python:
 install: "pip install -r requirements.txt"
 script:
   - ./manage.py test
-  - make database
+  - python manage.py migrate && python manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
   - make shower
