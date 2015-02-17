@@ -149,7 +149,7 @@ def preview_pdf(self, document_id):
 
     document = Document.objects.get(pk=document_id)
 
-    pdf = Image(file=document.pdf)
+    pdf = Image(file=document.pdf, resolution=300)
 
     document.pages = len(pdf.sequence)
     document.save()
@@ -162,6 +162,7 @@ def preview_pdf(self, document_id):
         document.add_child(page, acyclic_check=False)
 
         jpg_page = jpg_document.sequence[i]
+        jpg_page.alpha_channel = False
         jpg_page.background = Color('#ffffff')
 
         for width in 120, 600, 900:
