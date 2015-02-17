@@ -23,5 +23,6 @@ class DocumentAdmin(admin.ModelAdmin):
         'pages',
         'words',
     )
+    exclude = ('childrens',)
 
 admin.site.register(Document, DocumentAdmin)

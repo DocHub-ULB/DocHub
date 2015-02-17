@@ -8,10 +8,7 @@ graph.*
 *.log
 www/secret_key.txt
 www/config/local.py
-media/documents/*/
-media/profile/*.png
-media/profile/*.jpg
-media/profile/*.gif
+media/
 
 static/3party/foundation-icons/
 static/3party/foundation/

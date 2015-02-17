@@ -54,7 +54,7 @@ def new_thread(request, parent_id):
 @login_required
 def show_thread(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
-    messages = Message.objects.filter(thread__id=thread_id).select_related('user').all()
+    messages = Message.objects.filter(thread__id=thread_id).select_related('user').order_by('created').all()
     context = {
         "object": thread,
         "messages": messages,
@@ -101,11 +101,9 @@ def edit_message(request, message_id):
     index = list(thread.message_set.all()).index(message)
     print index
 
-    return render(request, 'thread.html', {
+    return render(request, 'edit_message.html', {
         'form': form,
         'object': thread,
         'edited_message': message,
-        'slice_top': "{}:{}".format("", index),
-        'slice_bottom': "{}:{}".format(index + 1, ""),
-        'edit': True
+        'edit': True,
     })

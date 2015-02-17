@@ -42,9 +42,6 @@ class Document(OneParent, Taggable):
         # thus NotImplementedError
         raise NotImplementedError
 
-    def original_extension(self):
-        return self.file_type
-
     def __unicode__(self):
         return "#{}: {}".format(self.id, self.name)
 

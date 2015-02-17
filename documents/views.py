@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 
 import os
 import uuid
-import shutil
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -24,7 +23,6 @@ from documents.models import Document, Page
 from graph.models import Course
 from polydag.models import Node
 from documents.forms import UploadFileForm, FileForm
-from www import settings
 
 from cycle import add_document_to_queue
 
@@ -136,7 +134,7 @@ def document_download_original(request, id):
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
     response['Content-Transfer-Encoding'] = 'binary'
-    response['Content-Disposition'] = 'attachment; filename="{}.{}"'.format(doc.name, doc.original_extension())
+    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(doc.name, doc.file_type)
     doc.downloads += 1
     doc.save()
     return response

@@ -1,7 +1,21 @@
+sudo:
+  - false
+
+cache:
+  pip: true
+  directories:
+    - /home/travis/virtualenv/
+
 language: python
 python:
   - "2.7"
-install: "pip install -r requirements.txt"
-script: 
+
+install:
+  - "pip install --upgrade pip"
+  - "pip install -r requirements.txt"
+
+script:
   - ./manage.py test
-  - make init
+  - python manage.py migrate
+  - python manage.py init --netid=travis --password=test --first-name=Gaston --last-name=Lagaffe
+  - make shower

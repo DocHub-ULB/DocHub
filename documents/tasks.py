@@ -162,12 +162,12 @@ def preview_pdf(self, document_id):
         document.add_child(page, acyclic_check=False)
 
         for width in 120, 600, 900:
-            with jpg_obj.sequence[i].clone() as cloned:
-                cloned.transform(resize=str(width))
-                result = cloned.make_blob()
-                cloned.close()
-                destination = page.__getattribute__('bitmap_' + str(width))
-                destination.save(str(uuid.uuid4()), ContentFile(result))
+            cloned = jpg_obj.sequence[i].clone()
+            cloned.transform(resize=str(width))
+            result = cloned.make_blob()
+            cloned.close()
+            destination = page.__getattribute__('bitmap_' + str(width))
+            destination.save(str(uuid.uuid4()), ContentFile(result))
 
     jpg_obj.close()
     pdf.close()

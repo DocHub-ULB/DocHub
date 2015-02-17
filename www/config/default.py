@@ -54,7 +54,6 @@ INSTALLED_APPS += (
     'suit',  # Must be before admin
     'django.contrib.admin',
     'fragments',
-    'south',
     'djcelery',
     'compressor',
 )
