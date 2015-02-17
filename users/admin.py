@@ -15,7 +15,7 @@ from .models import User
 
 
 class UserAdmin(admin.ModelAdmin):
-    exclude = ('password', 'last_login')
+    exclude = ('password', 'last_login', 'follow', 'moderated_nodes')
     readonly_fields = ('netid', )
 
 admin.site.register(User, UserAdmin)

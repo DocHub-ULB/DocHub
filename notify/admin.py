@@ -13,5 +13,18 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from .models import PreNotification, Notification
 
-admin.site.register(PreNotification)
-admin.site.register(Notification)
+
+class NotificationAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        'user',
+        'node',
+        'prenotif'
+    )
+
+class PreNotificationAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        'node',
+    )
+
+admin.site.register(PreNotification, PreNotificationAdmin)
+admin.site.register(Notification, NotificationAdmin)
