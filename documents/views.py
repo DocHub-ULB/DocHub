@@ -19,7 +19,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 
-from documents.models import Document, Page
+from documents.models import Document
 from graph.models import Course
 from polydag.models import Node
 from documents.forms import UploadFileForm, FileForm
@@ -141,9 +141,6 @@ def document_download_original(request, id):
 @login_required
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
-
-    children = document.children()
-    document.page_set = children.instance_of(Page)
 
     context = {
         "object": document,

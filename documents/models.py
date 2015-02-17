@@ -45,6 +45,11 @@ class Document(OneParent, Taggable):
     def __unicode__(self):
         return "#{}: {}".format(self.id, self.name)
 
+    @property
+    def page_set(self):
+        children = self.children()
+        return children.instance_of(Page)
+
 
 class Page(OneParent, Taggable):
     numero = models.IntegerField()

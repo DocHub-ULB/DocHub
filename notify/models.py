@@ -10,15 +10,12 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from os.path import join
-
 from django.db import models
 from polydag.models import Node
 from users.models import User
 from django.db.models.signals import post_save
 
 import signals
-from www import settings
 
 # 1. Event occurs in graph
 # 2. Pre notif created
@@ -49,7 +46,7 @@ class PreNotification(models.Model):
             return Message.objects.get(id=message_id).text
         elif self.sender_type == "Document":
             doc = self.node
-            url = join(settings.MEDIA_URL, "documents/{}/doc-{}/images/000000_n.jpg".format(doc.parent.id, doc.id))
+            url = doc.page_set.first().bitmap_600.url
             return "[![{}]({})]({})".format(doc.name, url, self.url)
         else:
             return ""
@@ -89,5 +86,4 @@ class Notification(models.Model):
 
 post_save.connect(signals.pre_notif_save, sender=PreNotification)
 
-from telepathy.models import Message, Thread
-from documents.models import Document
+from telepathy.models import Message
