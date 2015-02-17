@@ -101,11 +101,9 @@ def edit_message(request, message_id):
     index = list(thread.message_set.all()).index(message)
     print index
 
-    return render(request, 'thread.html', {
+    return render(request, 'edit_message.html', {
         'form': form,
         'object': thread,
         'edited_message': message,
-        'slice_top': "{}:{}".format("", index),
-        'slice_bottom': "{}:{}".format(index + 1, ""),
-        'edit': True
+        'edit': True,
     })

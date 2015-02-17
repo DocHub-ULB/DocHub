@@ -25,24 +25,13 @@
 </div>
 <div class="row">
   <div class="large-10 medium-12 columns">
-    {% if not edit %}
-      {% for message in messages %}
-        {% include "message_template.html" %}
-      {% endfor %}
-      <div class="row"><div class="medium-11 columns thread-separator"></div></div>
-      {% include "message_form_template.html" %}
-    {% else%}
-      {% for message in messages|slice:slice_top %}
-        {% include "message_template.html" %}
-      {% endfor %}
-      <div class="row" id="message-edit"><div class="medium-11 columns thread-separator"></div></div>
-      {% include "message_form_template.html" %}
-      <div class="row"><div class="medium-11 columns thread-separator"></div></div>
-      {% for message in messages|slice:slice_bottom %}
-        {% include "message_template.html" %}
-      {% endfor %}
-    {% endif %}
+    {% for message in messages %}
+      {% include "message_template.html" %}
+    {% endfor %}
+    <div class="row"><div class="medium-11 columns thread-separator"></div></div>
+    {% include "message_form_template.html" %}
   </div>
+
   <div class="large-2 medium-12 columns">
     {% if followed %}
       <a class="button expand alert radius" href="{% url 'unfollow_node' object.id %}">
