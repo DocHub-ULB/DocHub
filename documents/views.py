@@ -117,8 +117,7 @@ def document_edit(request, document_id):
 @login_required
 def document_download(request, id):
     doc = get_object_or_404(Document, id=id)
-    with open(doc.pdf) as fd:
-        body = fd.read()
+    body = doc.pdf.read()
     response = HttpResponse(body, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
     doc.downloads += 1
@@ -129,8 +128,7 @@ def document_download(request, id):
 @login_required
 def document_download_original(request, id):
     doc = get_object_or_404(Document, id=id)
-    with open(doc.original) as fd:
-        body = fd.read()
+    body = doc.original.read()
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
     response['Content-Transfer-Encoding'] = 'binary'
