@@ -25,7 +25,7 @@ class CannotHaveManyParents(Exception):
         Exception.__init__(self, msg)
 
 
-class Leaf:
+class Leaf(object):
     """Simple mixin that brings a Leaf behavior to a Node"""
     def children(self, *args, **kwargs):
         """Since self cannot have children, bypass DB lookup !"""
@@ -35,7 +35,7 @@ class Leaf:
         raise CannotHaveChildren(self)
 
 
-class OneParent:
+class OneParent(object):
     @property
     def parent(self, *args, **kwargs):
         parents = self.parents()
