@@ -54,7 +54,7 @@ def upload_file(request, parent_id):
                 state="PREPARING",
                 file_type=extension
             )
-            doc.original.save(str(uuid.uuid4()), request.FILES['file'])
+            doc.original.save(str(uuid.uuid4()) + extension, request.FILES['file'])
             doc.save()
 
             course.add_child(doc)

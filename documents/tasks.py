@@ -137,7 +137,7 @@ def convert_office_to_pdf(self, document_id):
     except subprocess.CalledProcessError as e:
         raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
 
-    document.pdf.save(str(uuid.uuid4()), ContentFile(sub))
+    document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
     tmp.close()
 
@@ -172,7 +172,7 @@ def preview_pdf(self, document_id):
             result = cloned.make_blob()
             cloned.close()
             destination = page.__getattribute__('bitmap_' + str(width))
-            destination.save(str(uuid.uuid4()), ContentFile(result))
+            destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(result))
 
     jpg_document.close()
 
