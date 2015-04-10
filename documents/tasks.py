@@ -20,7 +20,7 @@ import hashlib
 import uuid
 join = path.join
 import tempfile
-from wand.image import Image, Color
+from pyPdf import PdfFileReader
 
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
@@ -145,36 +145,35 @@ def convert_office_to_pdf(self, document_id):
 
 
 @doctask
-def preview_pdf(self, document_id):
-
+def mesure_pdf_length(self, document_id):
     document = Document.objects.get(pk=document_id)
-
-    pdf = Image(file=document.pdf, resolution=300)
-
-    document.pages = len(pdf.sequence)
+    reader = PdfFileReader(document.pdf)
+    document.pages = reader.getNumPages()
     document.save()
 
-    jpg_document = pdf.convert('jpg')
-    pdf.close()
+    return document_id
+
+
+@doctask
+def preview_pdf(self, document_id):
+    document = Document.objects.get(pk=document_id)
 
     for i in range(document.pages):
         page = Page.objects.create(numero=i)
         document.add_child(page, acyclic_check=False)
 
-        jpg_page = jpg_document.sequence[i]
-        jpg_page.alpha_channel = False
-        jpg_page.background = Color('#ffffff')
-
         for width in 120, 600, 900:
-            cloned = Image(jpg_page)
-            cloned.compression_quality = 90
-            cloned.transform(resize=str(width))
-            result = cloned.make_blob()
-            cloned.close()
+            args = [
+                "gm", "convert",
+                "-geometry", "{}x".format(width),
+                "-quality", "90",
+                "-density", "300",
+                "pdf:{}[{}]".format(document.pdf.path, i),
+                "jpg:-"
+            ]
+            converter = subprocess.Popen(args, stdout=subprocess.PIPE)
             destination = page.__getattribute__('bitmap_' + str(width))
-            destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(result))
-
-    jpg_document.close()
+            destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(converter.stdout.read()))
 
     return document_id
 
@@ -190,6 +189,7 @@ def finish_file(self, document_id):
 process_pdf = chain(
     sanity_check.s(),
     checksum.s(),
+    mesure_pdf_length.s(),
     preview_pdf.s(),
     finish_file.s()
 )
@@ -198,6 +198,7 @@ process_office = chain(
     sanity_check.s(),
     checksum.s(),
     convert_office_to_pdf.s(),
+    mesure_pdf_length.s(),
     preview_pdf.s(),
     finish_file.s()
 )
