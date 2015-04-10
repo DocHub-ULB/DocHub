@@ -65,6 +65,8 @@ def user_settings(request):
         if form.is_valid():
             im = Image.open(request.FILES['profile_pic'])
             im = ImageOps.fit(im, (120, 120), Image.ANTIALIAS)
+            if not os.path.exists(os.path.join(settings.MEDIA_ROOT, "profile")):
+                os.makedirs(os.path.join(settings.MEDIA_ROOT, "profile"))
             im.save(os.path.join(settings.MEDIA_ROOT, "profile/{}.png".format(request.user.netid)))
             request.user.photo = "png"
             request.user.save()
