@@ -156,6 +156,11 @@ def mesure_pdf_length(self, document_id):
 
 @doctask
 def preview_pdf(self, document_id):
+    try:
+        subprocess.check_output(['gm', 'help'])
+    except OSError:
+        raise MissingBinary("gm")
+
     document = Document.objects.get(pk=document_id)
 
     for i in range(document.pages):
