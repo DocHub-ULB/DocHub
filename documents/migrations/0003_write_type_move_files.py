@@ -32,7 +32,14 @@ def move_documents(apps, schema_editor):
 
         if doc.file_type != ".pdf":
             new_pdf = os.path.join("pdf_document", str(uuid.uuid4()) + ".pdf")
-            os.rename(doc.old_pdf_path, os.path.join(settings.MEDIA_ROOT, new_pdf))
+            try:
+                os.rename(doc.old_pdf_path, os.path.join(settings.MEDIA_ROOT, new_pdf))
+            except OSError as e:
+                print "Document {} failed : renaming {} to {}. Skipping.".format(
+                    doc.id,
+                    doc.old_pdf_path,
+                    os.path.join(settings.MEDIA_ROOT, new_pdf)
+                )
             doc.pdf.name = new_pdf
         else:
             doc.pdf = doc.original
