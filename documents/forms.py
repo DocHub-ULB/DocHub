@@ -10,20 +10,16 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from datetime import datetime
-
 from django import forms
-from graph.models import Course
 from django.core.exceptions import ValidationError
 from polydag.models import Keyword
 from www.helpers import year_choices
 
 
-def validate_pdf(file):
-    # name = file.name
-    # if not len(name) > 4 or not name[-4:].lower() == '.pdf':
-    #     raise ValidationError('Only .pdf files are supported for the moment')
-    pass
+def validate_uploaded_file(file):
+    name = file.name
+    if name.endswith((".zip", ".tar", ".gz", ".rar")):
+        raise ValidationError('Les fichiers compressés ne sont pas supportés pour le moment.')
 
 
 def tag_choices():
@@ -54,7 +50,7 @@ class FileForm(forms.Form):
 
 
 class UploadFileForm(FileForm):
-    file = forms.FileField(validators=[validate_pdf])
+    file = forms.FileField(validators=[validate_uploaded_file])
 
 # TODO
 # class UrlFileForm(FileForm):

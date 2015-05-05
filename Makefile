@@ -10,15 +10,17 @@ packages: ve
 	chmod +x ./manage.py
 
 
-cleandata: clean
+cleandata:
 	rm -f db.sqlite
-	rm -rf ./media/documents/*
-	rm -rf ./media/profile/*.*
-	rm -rf /tmp/p402-upload/*
-	rm -rf /tmp/processing/*
 	rm -rf graph.png
 	rm -rf www/secret_key.txt
-
+	rm -rf media/documents/
+	rm -rf media/original_document/
+	rm -rf media/page_120/
+	rm -rf media/page_600/
+	rm -rf media/page_900/
+	rm -rf media/pdf_document/
+	rm -rf media/profile/
 
 database:
 	ve/bin/python manage.py migrate

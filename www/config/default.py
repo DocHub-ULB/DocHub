@@ -26,12 +26,9 @@ LOGIN_URL = '/'
 # handlebars fragments for javascript templating
 FRAGMENTS_DIR = join(BASE_DIR, "templates/fragments")
 
-# Upload settings
-PROCESSING_DIR = '/tmp/processing'
-TMP_UPLOAD_DIR = "/tmp/p402-upload/"
-
-UPLOAD_LOG = '/tmp/upload_log'
 UPLOAD_DIR = join(MEDIA_ROOT, 'documents')
+
+DOCUMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
 # ULB login, need to add the url to redirect at the end
@@ -43,7 +40,7 @@ ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid=%s&_uid=%s'
 # Activate the search system
 SEARCH_SYSTEM = False
 
-# CELERY_BACKEND = 'django://'
+
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
 CELERYD_PREFETCH_MULTIPLIER = 1  # Do not prefetch more than 1 task

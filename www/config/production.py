@@ -36,8 +36,13 @@ ULB_LOGIN = (
 #         'ENGINE':'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'mydatabase',
 #         'USER': 'mydatabaseuser',
-#         'PASSWORD': 'mypassword',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
 #     }
 # }
+
+
+# AWS_ACCESS_KEY_ID = "sfdsqdgsg"
+# AWS_SECRET_ACCESS_KEY = "fsdfqsfs"
+# BOTO_S3_BUCKET = "dochub-production"
+# BOTO_S3_HOST = "filehost.example.com"
+
+# DOCUMENT_STORAGE = 'django_boto.s3.storage.S3Storage'

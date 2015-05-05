@@ -21,16 +21,16 @@ You will also need to install poppler (the binary 'pdftotext'), GraphicsMagick (
 
 For exemple on Debian/Ubuntu
 
-    sudo apt-get install poppler-utils graphicsmagick unoconv python-dev
+    sudo apt-get install poppler-utils graphicsmagick unoconv python-dev libjpeg8-dev
 
 Or on Fedora
 
-    sudo yum install poppler-utils GraphicsMagick unoconv python-devel
+    sudo yum install poppler-utils GraphicsMagick unoconv python-devel libjpeg-devel
 
 ### Installation
 
     # Install dependencies then
-	make install database
+    make install database
 
 ### Run
 
@@ -48,7 +48,7 @@ Then go http://localhost:8000/
 
 Add another user to the db
 
-	./manage.py useradd
+    ./manage.py useradd
 
 
 ## Contribute !

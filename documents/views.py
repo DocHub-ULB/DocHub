@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 
 import os
 import uuid
-import shutil
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -20,11 +19,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 
-from documents.models import Document, Page
+from documents.models import Document
 from graph.models import Course
 from polydag.models import Node
 from documents.forms import UploadFileForm, FileForm
-from www import settings
 
 from cycle import add_document_to_queue
 
@@ -45,31 +43,25 @@ def upload_file(request, parent_id):
                 name, _ = os.path.splitext(request.FILES['file'].name)
                 name = name.lower()
 
-            extension = os.path.splitext(request.FILES['file'].name)[1][1:].lower()
+            extension = os.path.splitext(request.FILES['file'].name)[1].lower()
             description = form.cleaned_data['description']
             course = parentNode
 
-            if not os.path.exists(settings.TMP_UPLOAD_DIR):
-                os.makedirs(settings.TMP_UPLOAD_DIR)
+            doc = Document.objects.create(
+                user=request.user,
+                name=name,
+                description=description,
+                state="PREPARING",
+                file_type=extension
+            )
+            doc.original.save(str(uuid.uuid4()) + extension, request.FILES['file'])
+            doc.save()
 
-            tmp_file = os.path.join(settings.TMP_UPLOAD_DIR, str(uuid.uuid4()))
-            with open(tmp_file, "w") as f:
-                f.write(request.FILES['file'].read())
-
-            doc = Document.objects.create(user=request.user,
-                                          name=name, description=description, state="PREPARING")
             course.add_child(doc)
 
             doc.add_keywords(*form.cleaned_data['tags'])
             doc.year = form.cleaned_data['year']
 
-            if os.path.exists(doc._default_folder()):
-                raise Exception("Directory already used (doc {}): '{}'".format(doc.id, doc._default_folder()))
-
-            os.makedirs(doc._default_folder())
-            shutil.move(tmp_file, doc._default_original_path(extension))
-
-            doc.original = doc._default_original_path(extension)
             doc.state = 'READY_TO_QUEUE'
             doc.save()
 
@@ -125,8 +117,7 @@ def document_edit(request, document_id):
 @login_required
 def document_download(request, id):
     doc = get_object_or_404(Document, id=id)
-    with open(doc.pdf) as fd:
-        body = fd.read()
+    body = doc.pdf.read()
     response = HttpResponse(body, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
     doc.downloads += 1
@@ -137,12 +128,11 @@ def document_download(request, id):
 @login_required
 def document_download_original(request, id):
     doc = get_object_or_404(Document, id=id)
-    with open(doc.original) as fd:
-        body = fd.read()
+    body = doc.original.read()
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
     response['Content-Transfer-Encoding'] = 'binary'
-    response['Content-Disposition'] = 'attachment; filename="{}.{}"'.format(doc.name, doc.original_extension())
+    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(doc.name, doc.file_type)
     doc.downloads += 1
     doc.save()
     return response
@@ -151,9 +141,6 @@ def document_download_original(request, id):
 @login_required
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
-
-    children = document.children()
-    document.page_set = children.instance_of(Page)
 
     context = {
         "object": document,

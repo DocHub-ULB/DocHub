@@ -10,45 +10,22 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-import struct
-import imghdr
+import importlib
+from www.settings import DOCUMENT_STORAGE
 
 
 def r(self):
     return 60 * (1 + self.request.retries * 2)
 
 
-def get_image_size(filename):
-    '''Determine the image type of fhandle and return its size.'''
+def get_document_storage():
+    module_name = '.'.join(DOCUMENT_STORAGE.split('.')[:-1])
+    module = importlib.import_module(module_name)
 
-    fhandle = open(filename, 'rb')
-    head = fhandle.read(24)
-    if len(head) != 24:
-        raise ValueError('{} is less than 24 bytes, cannot be a valid image.'.format(filename))
-    if imghdr.what(filename) == 'png':
-        check = struct.unpack(str('>i'), head[4:8])[0]
-        if check != 0x0d0a1a0a:
-            raise ValueError('{} is not a valid png file.'.format(filename))
-        width, height = struct.unpack(str('>ii'), head[16:24])
-    elif imghdr.what(filename) == 'gif':
-        width, height = struct.unpack(str('<HH'), head[6:10])
-    elif imghdr.what(filename) == 'jpeg':
-        try:
-            fhandle.seek(0)  # Read 0xff next
-            size = 2
-            ftype = 0
-            while not 0xc0 <= ftype <= 0xcf:
-                fhandle.seek(size, 1)
-                byte = fhandle.read(1)
-                while ord(byte) == 0xff:
-                    byte = fhandle.read(1)
-                ftype = ord(byte)
-                size = struct.unpack(str('>H'), fhandle.read(2))[0] - 2
-            # We are at a SOFn block
-            fhandle.seek(1, 1)  # Skip `precision' byte.
-            height, width = struct.unpack(str('>HH'), fhandle.read(4))
-        except:
-            raise ValueError('{} is not a valid jpeg file.'.format(filename))
-    else:
-        raise ValueError('{} must be a jpeg, gif or png image.'.format(filename))
-    return width, height
+    name = DOCUMENT_STORAGE.split('.')[-1]
+    try:
+        storage = module.__getattribute__(name)
+    except AttributeError:
+        raise ImportError("{} does not exist in module {}".format(name, module_name))
+
+    return storage()

@@ -13,7 +13,6 @@ from __future__ import unicode_literals
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
-#from tasks import process_upload
 
 
 def pre_document_save(**kwargs):
@@ -23,8 +22,8 @@ def pre_document_save(**kwargs):
     try:
         old_doc = models.Document.objects.get(pk=document.pk)
     except models.Document.DoesNotExist:
-        # New Document
-        pass  # Do nothing
+        # New Document => do nothing
+        pass
     else:
         if not old_doc.state == document.state:  # State changed
             if document.state == 'DONE':
@@ -45,13 +44,5 @@ def pre_document_save(**kwargs):
                     icon="page-copy"
                 )
 
-        else:  # State not changed
-            pass  # Do nothing
-
-
-# def post_document_save(**kwargs):
-#     assert kwargs['sender'] == models.Document
-#     document = kwargs['instance']
-
-#     if kwargs['created'] and document.state in ('pending', 'preparing'):
-#         process_upload.delay(document.id)
+        else:  # State not changed => do nothing
+            pass

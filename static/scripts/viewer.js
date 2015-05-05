@@ -18,21 +18,20 @@ var viewer = function(doc) {
     var current_thumb = 0;
     var current_hilight = -1;
     var zoom = 100;
-    var mode = 'n';
+    var mode = 600;
 
-    var url = function(numero, width) {
-        if (width < 300)
-            m = 'm';
+    var thumb_url = function(numero){
+        return doc.pages[numero].url_120 + "#120"
+    }
+
+    var url = function(numero, mode) {
+        if (mode == 600)
+            return doc.pages[numero].url_600 + "#600"
         else
-            m = mode;
-
-        return '/media/documents/'+doc.parentid+'/doc-' + doc.id +
-              '/images/' + numero.pad(6) + '_' + m + '.jpg';
+            return doc.pages[numero].url_900 + "#900"
     };
 
-    var set_height = function() {
-        // $('#thumbs').height($(window).height() - 106);
-    };
+    var set_height = function() {};
 
     var set_current_hilight = function(thumb) {
         if (current_hilight != thumb) {
@@ -66,7 +65,7 @@ var viewer = function(doc) {
 
         for (var i = start_page; i < end_page; ++i)
             if ($('#page-' + i).attr('src') == '/static/images/white.png')
-                $('#page-' + i).attr('src', url(i, 600 * zoom / 100));
+                $('#page-' + i).attr('src', url(i, mode));
     };
 
     var load_thumbs = function() {
@@ -77,7 +76,7 @@ var viewer = function(doc) {
 
         for (var i = Math.floor(start_page); i < end_page; ++i)
             if ($('#thumb-' + i).attr('src') === "/static/images/white.png")
-                $('#thumb-' + i).attr('src', url(i, 120));
+                $('#thumb-' + i).attr('src', thumb_url(i));
     };
 
     var set_current_page = function() {
@@ -114,17 +113,19 @@ var viewer = function(doc) {
             $(page).attr('src', '/static/images/white.png');
         });
         load_pages();
+        console.log("mode change")
     };
 
     var zoom_draw = function(z) {
+        console.log(z);
         if (z != zoom) {
             zoom = z;
             $('#zoom').val(zoom + '%');
 
-            if (zoom >= 125 && mode == 'n')
-                change_mode('b');
-            else if (zoom < 125 && mode == 'b')
-                change_mode('n');
+            if (zoom >= 125 && mode == 600)
+                change_mode(900);
+            else if (zoom < 125 && mode == 900)
+                change_mode(600);
 
             $('.page').each(function(i, page) {
                 if (zoom == 150) {
@@ -152,29 +153,17 @@ var viewer = function(doc) {
     };
 
     var zoom_in = function() {
-        /*
-        if (zoom < 100)
-            var z = zoom + 10;
-        else if (zoom < 475)
-            var z = zoom + 25;
-        else
-            var z = 500;
-        */
-        var z = zoom + zoom/9;
-        zoom_draw(z);
+        if(zoom < 300){
+            var z = zoom + zoom/9;
+            zoom_draw(z);
+        }
     };
 
     var zoom_out = function() {
-        /*
-        if (zoom <= 35)
-            var z = 25;
-        else if (zoom <= 100)
-            var z = zoom - 10;
-        else
-            var z = zoom - 25;
-        */
-        var z = zoom - zoom/10;
-        zoom_draw(z);
+        if(zoom > 37){
+            var z = zoom - zoom/10;
+            zoom_draw(z);
+        }
     };
 
     $(document).ready(function() {
