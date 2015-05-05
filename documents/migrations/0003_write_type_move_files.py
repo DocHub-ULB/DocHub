@@ -100,14 +100,14 @@ def del_dirs(apps, schema_editor):
     old_path = os.path.join(settings.MEDIA_ROOT, "documents")
     left = sum([len(files) for r, d, files in os.walk(old_path)])
     if left != 0:
-        raise Exception("{} is not empty ({} files left)".format(old_path, left))
-
-    for dir, _, _ in reversed(list(os.walk(old_path))):
-        try:
-            os.removedirs(dir)
-        except OSError as e:
-            if e.errno != 2:
-                raise e
+        print "{} is not empty ({} files left). Skipping.".format(old_path, left)
+    else:
+        for dir, _, _ in reversed(list(os.walk(old_path))):
+            try:
+                os.removedirs(dir)
+            except OSError as e:
+                if e.errno != 2:
+                    raise e
 
 
 class Migration(migrations.Migration):
