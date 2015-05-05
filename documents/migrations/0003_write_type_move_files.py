@@ -27,7 +27,14 @@ def move_documents(apps, schema_editor):
     Document = apps.get_model("documents", "Document")
     for doc in Document.objects.all():
         new_original = os.path.join("original_document", str(uuid.uuid4()) + doc.file_type)
-        os.rename(doc.old_original_path, os.path.join(settings.MEDIA_ROOT, new_original))
+        try:
+            os.rename(doc.old_original_path, os.path.join(settings.MEDIA_ROOT, new_original))
+        except OSError as e:
+            print "Document {} failed (l33) : renaming {} to {}. Skipping.".format(
+                doc.id,
+                doc.old_original_path,
+                os.path.join(settings.MEDIA_ROOT, new_original)
+            )
         doc.original.name = new_original
 
         if doc.file_type != ".pdf":
@@ -35,7 +42,7 @@ def move_documents(apps, schema_editor):
             try:
                 os.rename(doc.old_pdf_path, os.path.join(settings.MEDIA_ROOT, new_pdf))
             except OSError as e:
-                print "Document {} failed : renaming {} to {}. Skipping.".format(
+                print "Document {} failed (l45) : renaming {} to {}. Skipping.".format(
                     doc.id,
                     doc.old_pdf_path,
                     os.path.join(settings.MEDIA_ROOT, new_pdf)
@@ -72,9 +79,13 @@ def move_pages(apps, schema_editor):
             new_600 = os.path.join("page_600", str(uuid.uuid4()) + ".jpg")
             new_120 = os.path.join("page_120", str(uuid.uuid4()) + ".jpg")
 
-            os.rename(dir + "{:0>6}_{}.jpg".format(page.numero, 'b'), os.path.join(settings.MEDIA_ROOT, new_900))
-            os.rename(dir + "{:0>6}_{}.jpg".format(page.numero, 'n'), os.path.join(settings.MEDIA_ROOT, new_600))
-            os.rename(dir + "{:0>6}_{}.jpg".format(page.numero, 'm'), os.path.join(settings.MEDIA_ROOT, new_120))
+            try:
+                os.rename(dir + "{:0>6}_{}.jpg".format(page.numero, 'b'), os.path.join(settings.MEDIA_ROOT, new_900))
+                os.rename(dir + "{:0>6}_{}.jpg".format(page.numero, 'n'), os.path.join(settings.MEDIA_ROOT, new_600))
+                os.rename(dir + "{:0>6}_{}.jpg".format(page.numero, 'm'), os.path.join(settings.MEDIA_ROOT, new_120))
+            except OSError as e:
+                print e
+                print "Page {} (doc {}) failed at img move".format(page.id, doc.id)
 
             page.bitmap_900.name = new_900
             page.bitmap_600.name = new_600
