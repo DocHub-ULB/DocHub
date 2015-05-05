@@ -10,7 +10,7 @@ wand
 django_compressor
 pygments
 django-boto
-
+pyPdf
 
 # Dev
 django-extensions
