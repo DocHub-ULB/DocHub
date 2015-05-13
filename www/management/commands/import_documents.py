@@ -45,6 +45,7 @@ class Command(BaseCommand):
         'cor': 'corrigé',
         'corr': 'corrigé',
         'for': 'formulaire',
+        'sol': 'corrigé',
     }
 
     def handle(self, *args, **options):
