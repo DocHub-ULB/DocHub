@@ -86,7 +86,10 @@ class Command(BaseCommand):
             else:
                 tags, name = spli
                 tags = tags.split(',')
-                tags = map(lambda x: self.tags[x.lower()], tags)
+                try:
+                    tags = map(lambda x: self.tags[x.lower()], tags)
+                except KeyError:
+                    tags = []
 
             name = name.replace("_", " ")
             name, extension = os.path.splitext(name)
