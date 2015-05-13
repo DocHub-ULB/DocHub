@@ -22,7 +22,6 @@ from documents.cycle import add_document_to_queue
 
 import os
 import glob
-import shutil
 
 
 class Command(BaseCommand):
@@ -90,10 +89,6 @@ class Command(BaseCommand):
 
             name = name.replace("_", " ")
             name, extension = os.path.splitext(name)
-
-            print name
-            print extension
-            print tags
 
             dbdoc = Document.objects.create(
                 user=user,
