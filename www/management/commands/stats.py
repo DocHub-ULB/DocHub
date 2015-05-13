@@ -72,4 +72,6 @@ class Command(BaseCommand):
         unread = Notification.objects.filter(read=False).count()
         Print("Read : {}, unread: {}".format(read, unread))
         user_count = User.objects.count()
-        Print("Read (per user) : {}, unread (per user): {}".format(read / float(user_count), unread / float(user_count)))
+        read_u = round(read / float(user_count), 1)
+        unread_u = round(unread / float(user_count), 1)
+        Print("Read (per user) : {}, unread (per user): {}".format(read_u, unread_u))
