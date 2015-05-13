@@ -11,7 +11,9 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.core.management.base import BaseCommand
+from django.core.files import File
 from optparse import make_option
+import uuid
 
 from users.models import User
 from graph.models import Course
@@ -88,20 +90,24 @@ class Command(BaseCommand):
 
             name = name.replace("_", " ")
             name, extension = os.path.splitext(name)
-            extension = extension[1:]
 
-            dbdoc = Document.objects.create(user=user, name=name, state="PREPARING")
+            print name
+            print extension
+            print tags
+
+            dbdoc = Document.objects.create(
+                user=user,
+                name=name,
+                state="PREPARING",
+                file_type=extension
+            )
+
             course.add_child(dbdoc)
             if not len(tags) == 0:
                 dbdoc.add_keywords(*tags)
 
-            if os.path.exists(dbdoc._default_folder()):
-                raise Exception("Directory already used (doc {}): '{}'".format(dbdoc.id, dbdoc._default_folder()))
+            dbdoc.original.save(str(uuid.uuid4()) + extension, File(open(doc)))
 
-            os.makedirs(dbdoc._default_folder())
-            shutil.copy(doc, dbdoc._default_original_path(extension))
-
-            dbdoc.original = dbdoc._default_original_path(extension)
             dbdoc.state = 'READY_TO_QUEUE'
             dbdoc.save()
 
