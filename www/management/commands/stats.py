@@ -66,3 +66,10 @@ class Command(BaseCommand):
         Print("{} mean followed courses ({} max)\n".format(round(course_folowed, 2), max(course_followed_by_user)))
         Print("{} mean followed (other)\n".format(node_folowed - course_folowed))
         Print("\n")
+
+        Print("Notifications summary:\n")
+        read = Notification.objects.filter(read=True).count()
+        unread = Notification.objects.filter(read=False).count()
+        Print("Read : {}, unread: {}".format(read, unread))
+        user_count = User.objects.count()
+        Print("Read (per user) : {}, unread (per user): {}".format(read / float(user_count), unread / float(user_count)))
