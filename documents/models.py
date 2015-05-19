@@ -64,3 +64,10 @@ class Page(OneParent, Taggable):
 
     def move(self, newparent):
         raise NotImplementedError("You may not move a page from a document to another")
+
+
+class DocumentError(models.Model):
+    document = models.ForeignKey(Document)
+    task_id = models.CharField(max_length=255)
+    exception = models.CharField(max_length=1000)
+    traceback = models.TextField()

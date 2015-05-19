@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.contrib import admin
-from .models import Document
+from .models import Document, DocumentError
 
 
 class DocumentAdmin(admin.ModelAdmin):
@@ -26,3 +26,9 @@ class DocumentAdmin(admin.ModelAdmin):
     exclude = ('childrens',)
 
 admin.site.register(Document, DocumentAdmin)
+
+
+class DocumentErrorAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(DocumentError, DocumentErrorAdmin)
