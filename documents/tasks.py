@@ -25,7 +25,7 @@ from pyPdf import PdfFileReader
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
 
-from documents.models import Document, Page
+from documents.models import Document, Page, DocumentError
 from notify.models import Notification
 from .exceptions import DocumentProcessingError, MissingBinary
 
@@ -41,13 +41,15 @@ class ExisingChecksum(SkipException):
 def on_failure(self, exc, task_id, args, kwargs, einfo):
     if isinstance(exc, SkipException):
         return None
-    did = args[0]
-    print("Document {} failed.".format(did))
 
-    document = Document.objects.get(id=did)
+    doc_id = args[0]
+    print("Document {} failed.".format(doc_id))
+
+    document = Document.objects.get(id=doc_id)
     document.state = "ERROR"
     document.save()
 
+    # Notify the uploader
     Notification.direct(
         user=document.user,
         text="Une erreur c'est produite pendant la conversion de : {}".format(document.name),
@@ -55,7 +57,14 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
         url=reverse('node_canonic', args=[document.parent.id]),
         icon="x",
     )
-    # TODO : alert admins
+
+    # Warn the admins
+    DocumentError.objects.create(
+        document=document,
+        task_id=task_id,
+        exception=exc,
+        traceback=einfo.traceback,
+    )
 
 
 def doctask(*args, **kwargs):
