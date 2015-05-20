@@ -78,7 +78,11 @@ def show_course(request, slug):
     children = course.children().non_polymorphic()
     docs = filter(lambda x: x.get_real_instance_class() == Document, children)
     docs = map(lambda x: x.id, docs)
-    docs = Document.objects.filter(id__in=docs).select_related('user').prefetch_related('keywords')
+
+    docs = Document.objects.filter(id__in=docs)
+    docs = docs.select_related('user')
+    docs = docs.prefetch_related('keywords')
+    docs = docs.exclude(state="ERROR")
 
     threads = filter(lambda x: x.get_real_instance_class() == Thread, children)
     threads = map(lambda x: x.id, threads)
