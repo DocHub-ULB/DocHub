@@ -50,6 +50,19 @@ class Document(OneParent, Taggable):
         children = self.children()
         return children.instance_of(Page)
 
+    def reprocess(self):
+        if self.state != "ERROR":
+            raise Exception("Document is not in error state it is " + self.state)
+
+        for page in self.page_set.all():
+            page.delete()
+
+        self.state = 'READY_TO_QUEUE'
+        self.md5 = ""
+        self.save()
+        add_document_to_queue(self)
+        self.save()
+
 
 class Page(OneParent, Taggable):
     numero = models.IntegerField()
@@ -71,3 +84,5 @@ class DocumentError(models.Model):
     task_id = models.CharField(max_length=255)
     exception = models.CharField(max_length=1000)
     traceback = models.TextField()
+
+from documents.cycle import add_document_to_queue
