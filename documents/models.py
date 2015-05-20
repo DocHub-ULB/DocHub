@@ -85,4 +85,7 @@ class DocumentError(models.Model):
     exception = models.CharField(max_length=1000)
     traceback = models.TextField()
 
+    def __unicode__(self):
+        return self.exception
+
 from documents.cycle import add_document_to_queue
