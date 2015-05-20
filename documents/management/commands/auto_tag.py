@@ -15,8 +15,7 @@ from documents.models import Document
 
 
 def clean_str(string):
-    return string.lower()
-    # .decode('utf-8', 'replace').replace("é", "e").replace("è", "e").replace("ê", "e")
+    return string.lower().replace(u"é", "e").replace(u"è", "e").replace(u"ê", "e")
 
 
 def is_exam(doc):
@@ -37,7 +36,7 @@ def is_tp(doc):
 
 def is_res(doc):
     clean = clean_str(doc.name)
-    return "resum" in clean
+    return "resum" in clean or "r?sum" in clean or "rsum" in clean
 
 
 def is_slide(doc):
