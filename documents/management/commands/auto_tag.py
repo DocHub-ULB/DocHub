@@ -31,7 +31,7 @@ def is_corr(doc):
 
 def is_tp(doc):
     clean = clean_str(doc.name)
-    return "tp" in clean in "seance" in clean
+    return "tp" in clean or "seance" in clean
 
 
 def is_res(doc):
