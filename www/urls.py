@@ -18,7 +18,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from graph.urls import json_urls as graph_json
-from views import home, node_canonic, index
+from views import home, node_canonic, index, p402
 import settings
 
 
@@ -50,6 +50,8 @@ urlpatterns = patterns("",
     url(r"^$",
         user_logged(home, index),
         name="index"),
+
+    url(r"^p402/$", p402, name="p402"),
 
     url(r"^syslogin$",
         user_logged(app_redirection, login),

@@ -70,6 +70,31 @@ def index(request):
     return render(request, "index.html", context)
 
 
+def p402(request):
+    next_url = request.GET.get("next", False)
+    if next_url:
+        next_url = urllib.quote_plus("next=" + next_url.strip() + "&")
+        next_url = urllib.quote_plus(next_url)
+
+        ulb_url = settings.ULB_LOGIN + next_url
+    else:
+        ulb_url = settings.ULB_LOGIN
+
+    def floor(num, r=1):
+        r = 10 ** r
+        return int((num // r) * r)
+
+    context = {
+        "login_url": ulb_url,
+        "debug": settings.DEBUG,
+        "documents": floor(Document.objects.count()),
+        "pages": floor(Page.objects.count(), 2),
+        "users": floor(User.objects.count()),
+        "threads": floor(Thread.objects.count()),
+    }
+    return render(request, "p402.html", context)
+
+
 @login_required
 def home(request):
     followed = request.user.directly_followed()
