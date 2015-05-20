@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.core.management.base import BaseCommand
+from django.db.models import Sum
 
 from users.models import User
 from telepathy.models import Thread, Message
@@ -37,12 +38,15 @@ class Command(BaseCommand):
         Print(" - {} READY_TO_QUEUE\n".format(Document.objects.filter(state="READY_TO_QUEUE").count()))
         Print(" - {} ERROR\n".format(Document.objects.filter(state="ERROR").count()))
         Print(" - {} DONE\n".format(Document.objects.filter(state="DONE").count()))
-        Print("{} views\n".format(sum(map(lambda x: x.views, Document.objects.all()))))
-        Print("{} downloads\n".format(sum(map(lambda x: x.downloads, Document.objects.all()))))
+        Print("{} views\n".format(Document.objects.aggregate(Sum('views'))['views__sum']))
+        Print("{} downloads\n".format(Document.objects.aggregate(Sum('downloads'))['downloads__sum']))
         Print("{} pages\n".format(Page.objects.count()))
         Print("{} future pages ({} doc not counted)\n".format(
-            sum(map(lambda x: x.pages, Document.objects.all())) - Page.objects.count(),
-            Document.objects.filter(pages=0).count()
+            (
+                Document.objects.aggregate(Sum('pages'))['pages__sum']
+                - Page.objects.count()
+            ),
+            Document.objects.exclude(state="ERROR").filter(pages=0).count()
         ))
         Print("\n")
 
@@ -59,12 +63,9 @@ class Command(BaseCommand):
         Print("\n")
 
         Print("Following summary :\n")
-        course_followed_by_user = map(lambda x: len(x.followed_courses()), User.objects.all())
+        course_followed_by_user = list(map(lambda x: len(x.followed_courses()), User.objects.all()))
         course_folowed = sum(course_followed_by_user) / float(len(course_followed_by_user))
-        node_folowed_by_user = map(lambda x: len(x.followed_nodes_id()), User.objects.all())
-        node_folowed = sum(node_folowed_by_user) / float(len(node_folowed_by_user))
-        Print("{} mean followed courses ({} max)\n".format(round(course_folowed, 2), max(course_followed_by_user)))
-        Print("{} mean followed (other)\n".format(node_folowed - course_folowed))
+        Print("{} followed courses/user\n".format(round(course_folowed, 2)))
         Print("\n")
 
         Print("Notifications summary:\n")
