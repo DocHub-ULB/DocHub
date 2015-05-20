@@ -86,6 +86,14 @@ class DocumentError(models.Model):
     traceback = models.TextField()
 
     def __unicode__(self):
-        return self.exception
+        return "#" + self.exception
+
+    def exception_type(self):
+        if '"unoconv" has failed' in self.exception:
+            return "UNOCONV"
+        if 'file has not been decrypted' in self.exception:
+            return "DECRYPT"
+
+        return "NA"
 
 from documents.cycle import add_document_to_queue
