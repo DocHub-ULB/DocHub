@@ -49,6 +49,11 @@ def is_form(doc):
     return "formulaire" in clean
 
 
+def is_labo(doc):
+    clean = clean_str(doc.name)
+    return "rapport" in clean or "labo" in clean
+
+
 class Command(BaseCommand):
 
     help = 'Auto-tag documents based on their name'
@@ -61,6 +66,7 @@ class Command(BaseCommand):
         res = list(filter(is_res, Document.objects.all()))
         slide = list(filter(is_slide, Document.objects.all()))
         form = list(filter(is_form, Document.objects.all()))
+        labo = list(filter(is_labo, Document.objects.all()))
 
         for doc in exams:
             doc.add_keywords('examen')
@@ -79,5 +85,8 @@ class Command(BaseCommand):
 
         for doc in form:
             doc.add_keywords('formulaire')
+
+        for doc in labo:
+            doc.add_keywords('laboratoire')
 
         self.stdout.write('Done \n')
