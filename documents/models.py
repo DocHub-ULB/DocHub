@@ -45,11 +45,6 @@ class Document(OneParent, Taggable):
     def __unicode__(self):
         return "#{}: {}".format(self.id, self.name)
 
-    @property
-    def page_set(self):
-        children = self.children()
-        return children.instance_of(Page)
-
     def reprocess(self):
         if self.state != "ERROR":
             raise Exception("Document is not in error state it is " + self.state)
@@ -64,8 +59,9 @@ class Document(OneParent, Taggable):
         self.save()
 
 
-class Page(OneParent, Taggable):
+class Page(models.Model):
     numero = models.IntegerField()
+    document = models.ForeignKey(Document)
 
     bitmap_120 = models.ImageField(upload_to='page_120', width_field="height_120")
     bitmap_600 = models.ImageField(upload_to='page_600', width_field="height_600")
@@ -74,9 +70,6 @@ class Page(OneParent, Taggable):
     height_120 = models.PositiveIntegerField(null=True, default=0)
     height_600 = models.PositiveIntegerField(null=True, default=0)
     height_900 = models.PositiveIntegerField(null=True, default=0)
-
-    def move(self, newparent):
-        raise NotImplementedError("You may not move a page from a document to another")
 
 
 class DocumentError(models.Model):

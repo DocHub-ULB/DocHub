@@ -173,8 +173,7 @@ def preview_pdf(self, document_id):
     document = Document.objects.get(pk=document_id)
 
     for i in range(document.pages):
-        page = Page.objects.create(numero=i)
-        document.add_child(page, acyclic_check=False)
+        page = Page.objects.create(numero=i, document=document)
 
         for width in 120, 600, 900:
             args = [
