@@ -46,7 +46,7 @@ class PreNotification(models.Model):
             return Message.objects.get(id=message_id).text
         elif self.sender_type == "Document":
             doc = self.node
-            url = doc.page_set.first().bitmap_600.url
+            url = doc.page_set.order_by('numero').first().bitmap_600.url
             return "[![{}]({})]({})".format(doc.name, url, self.url)
         else:
             return ""
