@@ -34,8 +34,8 @@ class Document(OneParent, Taggable):
     original = models.FileField(upload_to='original_document')
     pdf = models.FileField(upload_to='pdf_document')
 
-    state = models.CharField(max_length=20, default='PREPARING')
-    md5 = models.CharField(max_length=32, default='')
+    state = models.CharField(max_length=20, default='PREPARING', db_index=True)
+    md5 = models.CharField(max_length=32, default='', db_index=True)
 
     def move(self, *args, **kwargs):
         # Must move a images and associated files
@@ -60,8 +60,8 @@ class Document(OneParent, Taggable):
 
 
 class Page(models.Model):
-    numero = models.IntegerField()
-    document = models.ForeignKey(Document)
+    numero = models.IntegerField(db_index=True)
+    document = models.ForeignKey(Document, db_index=True)
 
     bitmap_120 = models.ImageField(upload_to='page_120', width_field="height_120")
     bitmap_600 = models.ImageField(upload_to='page_600', width_field="height_600")
@@ -70,6 +70,9 @@ class Page(models.Model):
     height_120 = models.PositiveIntegerField(null=True, default=0)
     height_600 = models.PositiveIntegerField(null=True, default=0)
     height_900 = models.PositiveIntegerField(null=True, default=0)
+
+    class Meta:
+        ordering = ['numero']
 
 
 class DocumentError(models.Model):
