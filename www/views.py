@@ -16,6 +16,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
 from graph.models import Category, Course
 from telepathy.models import Thread
@@ -97,11 +98,17 @@ def p402(request):
 
 @login_required
 def home(request):
-    followed = request.user.directly_followed()
-    ids = map(lambda x: x.id, followed)
-    for node in followed:
-        ids += map(lambda x: x.id, node.children())
-    wall = PreNotification.objects.filter(node__in=ids).filter(personal=False).order_by('-created').select_related('user')[:20]
+    followed_ids = cache.get('user.wall.followed_nodes.' + str(request.user.id))
+    if followed_ids is None:
+        followed = request.user.directly_followed()
+        ids = map(lambda x: x.id, followed)
+        for node in followed:
+            ids += map(lambda x: x.id, node.children())
+
+        followed_ids = ids
+        cache.set('user.wall.followed_nodes.' + str(request.user.id), followed_ids, 300)
+
+    wall = PreNotification.objects.filter(node__in=followed_ids).filter(personal=False).order_by('-created').select_related('user')[:20]
 
     welcome = {}
     if request.user.welcome:
