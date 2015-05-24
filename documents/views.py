@@ -146,7 +146,7 @@ def document_show(request, id):
         "object": document,
         "parent": document.parent,
         "is_moderator": request.user.is_moderator(document.parent),
-        "page_set": document.page_set.order_by('id'),
+        "page_set": document.page_set.order_by('numero'),
     }
     document.views = F('views') + 1
     document.save(update_fields=['views'])
