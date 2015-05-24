@@ -22,11 +22,6 @@ class Node(PolymorphicModel):
     name = models.CharField(max_length=140, db_index=True)
     _children = models.ManyToManyField("self", symmetrical=False, blank=True, db_index=True)
 
-    def __repr__(self):
-        return '<Node {} : {} "{}">'.format(
-            self.classBasename(), self.pk, self.name
-        )
-
     def __unicode__(self):
         return "Node ({}) #{}: {}".format(self.classBasename(), self.id, self.name)
 
