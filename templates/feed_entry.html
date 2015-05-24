@@ -1,5 +1,6 @@
 {% load custommardown %}
 {% load humanize %}
+{% load cache %}
 
 <div class="row">
   <div class="small-12 columns feed-element">
@@ -19,7 +20,9 @@
     </div>
     <div class="user-message-content row">
       <div class="small-12 columns feed-element-limited ">
-        {{elem.content|markdown}}
+        {% cache 86400 feedelem elem.id %}
+          {{elem.content|markdown}}
+        {% endcache %}
       </div>
     </div>
     <br>
