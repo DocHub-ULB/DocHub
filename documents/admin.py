@@ -15,20 +15,20 @@ from .models import Document, DocumentError
 
 
 class DocumentAdmin(admin.ModelAdmin):
+    fields = ('name', 'user', 'size', 'pages', 'views', 'downloads', 'state')
     readonly_fields = (
         'size',
-        'md5',
-        'pdf',
-        'original',
         'pages',
-        'words',
     )
-    exclude = ('childrens',)
+
+    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'state', 'user', )
+    list_filter = ('state',)
+    search_fields = ('md5', 'name')
 
 admin.site.register(Document, DocumentAdmin)
 
 
 class DocumentErrorAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('exception', 'document', 'task_id')
 
 admin.site.register(DocumentError, DocumentErrorAdmin)

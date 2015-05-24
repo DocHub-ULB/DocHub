@@ -18,13 +18,21 @@ class NotificationAdmin(admin.ModelAdmin):
     readonly_fields = (
         'user',
         'node',
-        'prenotif'
+        'prenotif',
     )
+
+    list_display = ('id', 'prenotif', 'user', 'node', 'read')
+    list_filter = ('read',)
+
 
 class PreNotificationAdmin(admin.ModelAdmin):
     readonly_fields = (
         'node',
+        'url',
     )
+
+    list_display = ('id', 'text', 'delivered', 'user', 'personal')
+    list_filter = ('delivered', 'personal')
 
 admin.site.register(PreNotification, PreNotificationAdmin)
 admin.site.register(Notification, NotificationAdmin)

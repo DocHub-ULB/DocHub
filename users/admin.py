@@ -17,5 +17,8 @@ from .models import User
 class UserAdmin(admin.ModelAdmin):
     exclude = ('password', 'last_login', 'follow', 'moderated_nodes')
     readonly_fields = ('netid', )
+    list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative')
+    list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login')
+    search_fields = ('netid', 'first_name', 'last_name')
 
 admin.site.register(User, UserAdmin)

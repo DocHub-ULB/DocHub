@@ -77,7 +77,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 )
 
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'Admin - DocHub',
+    'ADMIN_NAME': 'DocHub',
     'MENU_EXCLUDE': (
         'auth',
         'djcelery',
