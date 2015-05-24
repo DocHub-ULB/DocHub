@@ -1,4 +1,5 @@
 {% extends "skel.html" %}
+{% load cache %}
 
 {% comment %}
 # Copyright 2012, hast. All rights reserved.
@@ -15,6 +16,7 @@
 
 {% block script %}
 <script src="/static/scripts/viewer.js"></script>
+{% cache 86400 viewer.js object.id %}
 <script language="JavaScript">
 var doc = {
     len: {{ object.pages }},
@@ -36,11 +38,13 @@ var doc = {
 
 var viewer_instance = viewer(doc);
 </script>
+{% endcache %}
 {% endblock %}
 {% block title %}{{ object.name }}{% endblock %}
 {% block full-page %}
 {% include "viewer_bar.html" %}
 <div class="row">
+{% cache 86400 viewer.html object.id %}
   <div id="thumbs-misere"></div>
   <div id="thumbs" class="medium-2 columns show-for-medium-up">
     {% for page in page_set %}
@@ -63,6 +67,6 @@ var viewer_instance = viewer(doc);
       </div>
     {% endfor %}
   </div>
-
+{% endcache %}
 </div>
 {% endblock %}
