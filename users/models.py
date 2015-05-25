@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 import re
+import os
 from os.path import join
 
 from django.db import models
@@ -23,6 +24,7 @@ from www import settings
 import identicon
 
 PATTERN = re.compile('[\W_]+')
+
 
 class CustomUserManager(UserManager):
 
@@ -37,6 +39,8 @@ class CustomUserManager(UserManager):
         user = self.model(netid=netid, email=email, last_login=now, **extra_fields)
         if settings.IDENTICON:
             IDENTICON_SIZE = 120
+            if not os.path.exists(join(settings.MEDIA_ROOT, "profile")):
+                os.makedirs(join(settings.MEDIA_ROOT, "profile"))
             profile_path = join(settings.MEDIA_ROOT, "profile", "{}.png".format(netid))
             alpha_netid = PATTERN.sub('', netid)
             identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
@@ -164,7 +168,7 @@ class Inscription(models.Model):
 
     @property
     def next(self):
-        level = self.level if not self.level is None else 0
+        level = self.level if self.level is not None else 0
         next_starts = "{}{}".format(self.type, level + 1)
         # TODO : should use category slugs and not Inscriptions
         return Inscription.objects.filter(section__startswith=next_starts)
