@@ -285,3 +285,11 @@ i.round-icon.medium{
 .back-icon:hover {
     color: #666;
 }
+
+.tag-item:hover {
+    color: white;
+}
+
+.tag-item.active {
+    font-weight: bold;
+}
