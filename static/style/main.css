@@ -1,3 +1,19 @@
+@font-face {
+    font-family: arvo;
+    src: url(fonts/Arvo-Regular_201.ttf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: arvo;
+    src: url(fonts/Arvo-Bold_201.ttf);
+    font-weight: bold;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: arvo;
+    font-weight: bold;
+}
+
 .row.full-width {
     width: 100%;
     max-width: 100%;
