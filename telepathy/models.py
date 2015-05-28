@@ -17,6 +17,9 @@ from www import settings
 
 
 class Thread(Leaf, OneParent, Taggable):
+    # Possible placement options
+    PLACEMENT_OPTS = {'page-no': int}
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     placement = models.TextField(null=True, default=None)

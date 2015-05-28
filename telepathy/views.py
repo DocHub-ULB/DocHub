@@ -15,12 +15,12 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
+import json
 
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
 from polydag.models import Node
 from www.helpers import current_year
-
 
 @login_required
 def new_thread(request, parent_id):
@@ -38,6 +38,15 @@ def new_thread(request, parent_id):
             thread = Thread.objects.create(user=request.user, name=name, year=year)
             message = Message.objects.create(user=request.user, thread=thread, text=content)
             parentNode.add_child(thread)
+
+            placement = {}
+            for opt,typecast in Thread.PLACEMENT_OPTS.iteritems():
+                if opt in request.POST:
+                    placement[opt] = typecast(request.POST[opt])
+            if len(placement) > 0:
+                thread.placement = json.dumps(placement)
+                thread.save()
+
             if request.user.auto_follow:
                 request.user.follow.add(thread)
 
