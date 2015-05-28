@@ -80,10 +80,16 @@ a.light:hover {
 }
 
 
+.sidebar{
+    background-color:#F7F7F7;
+}
+
 .main-side-nav {
-    margin-top: .5em;
+    /*margin-top: .5em;*/
     /*border: 2px solid #EEE;*/
     height: 100%;
+    padding-left:10px;
+    padding-right:5px;
 }
 
 .main-side-nav li{
@@ -115,6 +121,20 @@ a.light:hover {
 
 .main-side-nav .nav-link a i{
     color: #007095;
+}
+
+.sidebar-button{
+    font-family: arvo;
+    color:white;
+}
+.sidebar-button i{
+    margin-right:4px;
+}
+
+ul.course-bulletlist {
+    list-style:none;
+    padding-left: 4px;
+    text-indent: -8px;
 }
 
 code {
