@@ -154,6 +154,7 @@ def document_show(request, id):
         "is_moderator": request.user.is_moderator(document.parent),
         "page_set": document.page_set.order_by('numero'),
         "form": NewThreadForm(),
+        "threads": threads
     }
     document.views = F('views') + 1
     document.save(update_fields=['views'])
