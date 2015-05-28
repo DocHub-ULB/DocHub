@@ -79,17 +79,11 @@ var insert_discussions = function(){
 $(document).ready(function(){
   insert_discussions();
 
-  /* Click page -> popup new discussion form */
+  /* Click page -> Populate discussion form */
   $('.add-page-comment').click(function(ev){
     var page_no = parseInt($(ev.delegateTarget).attr("data-id"));
     $('#page-comment-form').find('input[name=page-no]').attr("value", page_no);
     $('#page-comment-form').find('.page-no').html(page_no+1);
-  });
-
-  /* Click form close */
-  $('#page-comment-form-close').click(function(ev){
-    $('#page-comment-form').foundation('reveal', 'close');
-    return false;
   });
 });
 </script>
@@ -119,12 +113,19 @@ $(document).ready(function(){
         <div class="medium-2 columns">
           <div class="row" style="padding-top: 30px;">
             <div class="label secondary" id="discussions-label-{{ page.numero }}">
-              <i class="fi-comment"></i>
+              <i class="fi-comments"></i>
               <strong>Discussions sur cette page</strong>
             </div>
           </div>
           <div class="row">
             <ul id="discussions-list-{{ page.numero }}"></ul>
+          </div>
+          <hr>
+          <div class="row">
+            <a href="#page-{{ page.numero }}">
+              <i class="fi-link"></i>
+              Cette page
+            </a>
           </div>
         </div>
         <div class="medium-10 columns">
@@ -150,7 +151,7 @@ $(document).ready(function(){
     <div class="columns small-1">
       <i class="fi-comment round-icon big"></i>
     </div>
-    <div class="columns small-10">
+    <div class="columns small-11">
       <h3>
         Nouvelle discussion sur la page
         <span class="page-no"></span>
@@ -158,11 +159,6 @@ $(document).ready(function(){
       <p>
         {{ object.name }}
       </p>
-    </div>
-    <div class="columns small-1">
-      <a href="#" id="page-comment-form-close">
-        <i class="fi-x round-icon big"></i>
-      </a>
     </div>
   </div>
   <div class="row">
@@ -176,6 +172,10 @@ $(document).ready(function(){
         <input type="submit" class="button success radius" value="Créer" />
       </p>
     </form>
+    <p>
+      Cliquez n'importe où aileurs ou tapez sur la touche <code>ESC</code>
+      pour fermer cette fenêtre
+    </p>
   </div>
 </div>
 {% endblock %}
