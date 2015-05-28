@@ -9,9 +9,18 @@
     font-weight: bold;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
     font-family: arvo;
     font-weight: bold;
+}
+
+h1 {
+    border-bottom:dotted 1px #ccc;
+}
+
+h3 i, h2 i {
+    margin-right:10px ;
+    color:#008cba;
 }
 
 .row.full-width {
