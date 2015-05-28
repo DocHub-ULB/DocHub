@@ -16,7 +16,7 @@
 
 {% block script %}
 <script src="/static/scripts/viewer.js"></script>
-{% cache 86400 viewer.js object.id %}
+{% cache 1 viewer.js object.id %}
 <script language="JavaScript">
 var doc = {
     len: {{ object.pages }},
@@ -37,7 +37,26 @@ var doc = {
 };
 
 var viewer_instance = viewer(doc);
+
+
+$(document).ready(function(){
+
+  /* Click page -> popup new discussion form */
+  $('.add-page-comment').click(function(ev){
+    var page_no = parseInt($(ev.delegateTarget).attr("data-id"));
+    $('#page-comment-form').find('input[name=page-no]').attr("value", page_no);
+    $('#page-comment-form').find('.page-no').html(page_no+1);
+    $('#page-comment-form').foundation('reveal', 'open');
+  });
+
+  /* Click form close */
+  $('#page-comment-form-close').click(function(ev){
+    $('#page-comment-form').foundation('reveal', 'close');
+    return false;
+  });
+});
 </script>
+
 {% endcache %}
 {% endblock %}
 {% block title %}{{ object.name }}{% endblock %}
@@ -60,13 +79,57 @@ var viewer_instance = viewer(doc);
   <div id="pages" class="medium-10 small-12 columns">
     {% for page in page_set %}
       <div class="row">
-        <div class="large-12 columns">
-          <img id="page-{{ page.numero }}" class="page" src="/static/images/white.png"
-          width="600" height="{{ page.bitmap_600.height }}"/>
+        <div class="medium-2 columns">
+          <h5>Discussions...</h5>
+        </div>
+        <div class="medium-10 columns">
+          <a href="#page-{{ page.numero }}"
+             class="add-page-comment"
+             data-id="{{ page.numero }}"
+             title="Discutez de cette page...">
+            <img id="page-{{ page.numero }}"
+                 class="page" src="/static/images/white.png"
+                 width="600" height="{{ page.bitmap_600.height }}"/>
+          </a>
         </div>
       </div>
     {% endfor %}
   </div>
 {% endcache %}
+</div>
+
+
+<div id="page-comment-form" class="reveal-modal" data-reveal>
+  <div class="row">
+    <div class="columns small-1">
+      <i class="fi-comment round-icon big"></i>
+    </div>
+    <div class="columns small-10">
+      <h3>
+        Nouvelle discussion sur la page
+        <span class="page-no"></span>
+      </h3>
+      <p>
+        {{ object.name }}
+      </p>
+    </div>
+    <div class="columns small-1">
+      <a href="#" id="page-comment-form-close">
+        <i class="fi-x round-icon big"></i>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <form method="POST" action="{% url "thread_put" object.id %}">
+      {% csrf_token %}
+      {% for field in form %}
+        {% include "simple_input.html" %}
+      {% endfor %}
+      <input type="hidden" name="page-no" value=""/>
+      <p class="text-right">
+        <input type="submit" class="button success radius" value="Créer" />
+      </p>
+    </form>
+  </div>
 </div>
 {% endblock %}
