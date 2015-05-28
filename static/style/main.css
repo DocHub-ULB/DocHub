@@ -356,3 +356,8 @@ i.round-icon.medium{
 .follow-all {
     margin-bottom:0px;
 }
+
+/* Tags textbox */
+.select2-container-multi .select2-choices .select2-search-field input {
+    height:33px;
+}
