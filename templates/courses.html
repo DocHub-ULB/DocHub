@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="row">
-  <div class="medium-12 columns">
+  <div class="{% if followed_courses|length == 0 %}large-12{% else %}large-8{% endif %} medium-12 columns">
     <h1>Vos cours</h1>
     {% if followed_courses|length == 0 %}
       <p>On dirait que vous n'êtes abonné à aucun cours pour le moment.<br>
@@ -15,30 +15,32 @@
         <i class="fi-info"></i> En vous abonnant un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question
       </div>
     {% else %}
-      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+      <ul class="course-list">
         {% for course in followed_courses %}
           <li>
-            <h4>
-              <a href="{% url 'course_show' course.slug %}">
-                <i class="fi-folder round-icon small"></i>
-                {{ course.slug }}
+            <h6>
+              <a href="{% url 'course_show' course.id %}">
+                  <span class="course-label radius success label">{{ course.slug }}</span> {{ course.name }}
+                  {% with course.children as children %}
+                    {% if children|length > 0 %}
+                      <span class="course-children">
+                        ({{ children|length }} élément{{ children|pluralize }})
+                      </span>
+                    {% endif%}
+                  {% endwith %}
               </a>
-          </h4>
-            {{ course.name }}
-            {% with course.children as children %}
-              {% if children|length > 0 %}
-                ({{ children|length }} élément{{ children|pluralize }})
-              {% endif%}
-            {% endwith %}
+            </h6>
           </li>
         {% endfor %}
       </ul>
     {% endif %}
+  </div>
 
+  <div class="{% if followed_courses|length == 0 %}large-12{% else %}large-4{% endif %} medium-12 columns">
     <h3>Catalogue</h3>
-    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+    <ul class="small-block-grid-1">
     {% for fac in faculties %}
-        <li>
+        <li class="catalog-option">
           <h4>
             <a href="{% url 'category_show' fac.id %}">
               <i class="fi-annotate round-icon small"></i>

@@ -23,25 +23,23 @@
     <div class="large-6 medium-12 columns">
       <h3>Cours
         {% if follow_children %}
-          <a class="button radius success right" href="{% url 'follow_node_children' object.id %}">
+          <a class="follow-all tiny button radius success right" href="{% url 'follow_node_children' object.id %}">
             S'abonner à tous les cours de cette catégorie
           </a>
         {% endif %}
       </h3>
-      <ul class="small-block-grid-1 medium-block-grid-2">
+      <ul class="course-list">
         {% for course in object.courses %}
         <li>
           <h6>
             <a href="{% url 'course_show' course.id %}">
               {% if course in user.followed_courses %}
-                <i class="fi-folder round-icon active"></i> {{ course.slug }} <small>(abonné)</small>
+                <span class="course-label radius success label">{{ course.slug }}</span> {{ course.name }} <small>(abonné)</small>
               {% else %}
-                <i class="fi-folder round-icon"></i> {{ course.slug }}
+                <span class="course-label secondary radius label">{{ course.slug }}</span> {{ course.name }}
               {% endif %}
-
             </a>
           </h6>
-           {{ course.name }}
         </li>
         {% endfor %}
       </ul>
@@ -51,9 +49,9 @@
   {% if object.subcategories %}
     <div class="large-6 medium-12 columns">
       <h3>Catégories</h3>
-      <ul class="small-block-grid-1 medium-block-grid-2">
+      <ul class="small-block-grid-1">
         {% for cat in object.subcategories %}
-        <li>
+        <li class="catalog-option">
           <h6>
             <a href="{% url 'category_show' cat.id %}">
               <i class="fi-annotate round-icon small"></i>
