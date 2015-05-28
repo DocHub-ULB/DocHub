@@ -121,19 +121,20 @@ $(document).ready(function(){
             <ul id="discussions-list-{{ page.numero }}"></ul>
           </div>
           <hr>
+
           <div class="row">
-            <a href="#page-{{ page.numero }}">
-              <i class="fi-link"></i>
-              Cette page
+            <a href="#page-{{ page.numero }}"
+               class="add-page-comment"
+               data-reveal-id="page-comment-form"
+               data-id="{{ page.numero }}"
+               title="Discutez de cette page...">
+              <i class="fi-plus"></i>
+              Ajouter
             </a>
           </div>
         </div>
         <div class="medium-10 columns">
-          <a href="#page-{{ page.numero }}"
-             class="add-page-comment"
-             data-reveal-id="page-comment-form"
-             data-id="{{ page.numero }}"
-             title="Discutez de cette page...">
+          <a href="#page-{{ page.numero }}" title="Lien direct vers cette page">
             <img id="page-{{ page.numero }}"
                  class="page" src="/static/images/white.png"
                  width="600" height="{{ page.bitmap_600.height }}"/>
