@@ -84,7 +84,6 @@ $(document).ready(function(){
     var page_no = parseInt($(ev.delegateTarget).attr("data-id"));
     $('#page-comment-form').find('input[name=page-no]').attr("value", page_no);
     $('#page-comment-form').find('.page-no').html(page_no+1);
-    $('#page-comment-form').foundation('reveal', 'open');
   });
 
   /* Click form close */
@@ -131,6 +130,7 @@ $(document).ready(function(){
         <div class="medium-10 columns">
           <a href="#page-{{ page.numero }}"
              class="add-page-comment"
+             data-reveal-id="page-comment-form"
              data-id="{{ page.numero }}"
              title="Discutez de cette page...">
             <img id="page-{{ page.numero }}"
