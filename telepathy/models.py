@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+import json
 from django.db import models
 from polydag.models import Taggable
 from polydag.behaviors import Leaf, OneParent
@@ -26,6 +27,14 @@ class Thread(Leaf, OneParent, Taggable):
 
     def __unicode__(self):
         return "#{}: {}".format(self.id, self.name)
+
+    @property
+    def page_no(self):
+        if self.placement:
+            placement = json.loads(self.placement) 
+            if 'page-no' in placement:
+                return placement['page-no']
+        return None
 
     class Meta:
         ordering = ['-created']
