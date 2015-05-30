@@ -21,7 +21,9 @@
 <!-- Added for each discussion on a page -->
 <div id="discussion-list-item-template" style="display: none;">
   <li>
-    <a href="[[href]]">[[name]]</a>
+    <a class="show-thread-link" href="[[href]]" data-reveal-id="page-comment-view">
+      [[name]]
+    </a>
   </li>
 </div>
 
@@ -65,6 +67,8 @@ var render_template = function(template, context){
 
 var insert_discussions = function(){
   var tpl = $('#discussion-list-item-template').html();
+
+  /* Add titles for all discussions */
   for (var i=0; i<discussions.length; i++){
     var disc = discussions[i];
     var page = disc.placement['page-no'];
@@ -74,6 +78,13 @@ var insert_discussions = function(){
       $('#discussions-label-' + page).removeClass("secondary");
     }
   }
+
+  /* Bind click event to all discussions titles -> async load popup */
+  $('.show-thread-link').click(function(ev){
+    var href = $(ev.delegateTarget).attr('href');
+    $('#page-comment-view').html('Loading...');
+    $.get(href, function(data){$('#page-comment-view').html(data);});
+  });
 };
 
 $(document).ready(function(){
@@ -144,6 +155,11 @@ $(document).ready(function(){
     {% endfor %}
   </div>
 {% endcache %}
+</div>
+
+
+<div id="page-comment-view" class="reveal-modal" data-reveal>
+
 </div>
 
 

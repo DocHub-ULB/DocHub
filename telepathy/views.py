@@ -60,18 +60,27 @@ def new_thread(request, parent_id):
     })
 
 
-@login_required
-def show_thread(request, thread_id):
+def get_thread_context(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     messages = Message.objects.filter(thread__id=thread_id).select_related('user').order_by('created').all()
-    context = {
+    return {
         "object": thread,
         "messages": messages,
         "followed": thread.id in request.user.followed_nodes_id(),
         "form": MessageForm(),
         "is_moderator": request.user.is_moderator(thread)
     }
+
+@login_required
+def show_thread(request, thread_id):
+    context = get_thread_context(request, thread_id)
     return render(request, "thread.html", context)
+
+
+@login_required
+def show_thread_fragment(request, thread_id):
+    context = get_thread_context(request, thread_id)
+    return render(request, "fragments/thread.html", context)
 
 
 @login_required
