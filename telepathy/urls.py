@@ -29,7 +29,7 @@ urlpatterns = patterns("",
 
     url(r"^fragment/(?P<thread_id>[^/]*)/$",
         show_thread_fragment,
-        name="thread_show"),
+        name="thread_show_fragment"),
 
     url(r"^edit/(?P<message_id>[^/]*)$",
         edit_message,

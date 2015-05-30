@@ -51,7 +51,7 @@ var discussions = [
   {% if thread.placement %}
   {
     "name": "{{ thread.name }}",
-    "href": "{% url 'thread_show' thread.id %}",
+    "href": "{% url 'thread_show_fragment' thread.id %}",
     "placement": {% autoescape off %}{{ thread.placement }}{% endautoescape %},
   },
   {% endif %}
