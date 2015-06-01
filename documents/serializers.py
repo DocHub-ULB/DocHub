@@ -18,6 +18,12 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
+class ShortDocumentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Document
+        fields = ('id', 'url')
+
+
 class PageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Page
