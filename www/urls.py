@@ -24,10 +24,12 @@ from views import home, node_canonic, index, p402
 import settings
 
 import users.views
+import documents.views
 
 router = routers.DefaultRouter()
 router.register(r'users', users.views.UserViewSet)
-
+router.register(r'documents', documents.views.DocumentViewSet)
+router.register(r'pages', documents.views.PageViewSet)
 
 # decorator whom call function_in if user is authenticated, function_out if not
 def user_logged(function_in, function_out):

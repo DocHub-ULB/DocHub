@@ -7,6 +7,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = (
             'id',
+            'url',
             'netid',
             'name',
             'first_name',
@@ -16,3 +17,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'is_representative',
             'is_academic'
         )
+
+        extra_kwargs = {
+            'url': {'lookup_field': 'netid'}
+        }

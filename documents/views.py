@@ -19,7 +19,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 
-from documents.models import Document
+from documents.models import Document, Page
 from graph.models import Course
 from polydag.models import Node
 from documents.forms import UploadFileForm, FileForm
@@ -151,3 +151,31 @@ def document_show(request, id):
     document.views = F('views') + 1
     document.save(update_fields=['views'])
     return render(request, "viewer.html", context)
+
+
+# api
+from rest_framework import viewsets
+from documents.serializers import DocumentSerializer, PageSerializer
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
+
+
+class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+
+    @detail_route()
+    def page_set(self, request, pk):
+        page_set = Document.objects.get(pk=pk).page_set.all()
+
+        serializer = PageSerializer(
+            page_set,
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)
+
+
+class PageViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer
