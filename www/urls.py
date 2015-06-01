@@ -15,11 +15,18 @@ from django.views.generic import TemplateView
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
+from rest_framework import routers
+
 admin.autodiscover()
 
 from graph.urls import json_urls as graph_json
 from views import home, node_canonic, index, p402
 import settings
+
+import users.views
+
+router = routers.DefaultRouter()
+router.register(r'users', users.views.UserViewSet)
 
 
 # decorator whom call function_in if user is authenticated, function_out if not
@@ -73,6 +80,8 @@ urlpatterns = patterns("",
 
     url(r'^help/markdown$', TemplateView.as_view(template_name='markdown.html'), name="markdown_help"),
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
+
+    url(r'^api/', include(router.urls)),
 )
 
 handler400 = 'www.error.error400'

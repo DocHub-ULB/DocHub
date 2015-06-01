@@ -56,6 +56,7 @@ INSTALLED_APPS += (
     'fragments',
     'djcelery',
     'compressor',
+    'rest_framework',
 )
 
 # apps
@@ -93,3 +94,12 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_OFFLINE = True
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}

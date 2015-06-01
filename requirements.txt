@@ -9,8 +9,8 @@ Pillow
 wand
 django_compressor
 pygments
-django-boto
 pyPdf
+djangorestframework
 
 # Dev
 django-extensions
