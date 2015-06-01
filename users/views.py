@@ -99,3 +99,4 @@ from users.serializers import UserSerializer
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    lookup_field = 'netid'
