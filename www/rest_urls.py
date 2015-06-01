@@ -11,6 +11,7 @@ router.register(r'users', users.rest.UserViewSet)
 router.register(r'documents', documents.rest.DocumentViewSet)
 router.register(r'pages', documents.rest.PageViewSet)
 router.register(r'courses', graph.rest.CourseViewSet)
+router.register(r'categories', graph.rest.CategoryViewSet)
 
 
 urlpatterns = patterns(
