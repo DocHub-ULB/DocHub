@@ -8,7 +8,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Document
         fields = (
-            'id', 'url', 'page_set', 'description',
+            'id', 'name', 'url', 'page_set', 'description',
             'user', 'pages', 'date', 'views',
             'downloads', 'state', 'md5',
         )
