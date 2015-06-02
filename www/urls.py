@@ -18,7 +18,6 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-from graph.urls import json_urls as graph_json
 from views import home, node_canonic, index, p402
 import settings
 
@@ -35,10 +34,6 @@ def user_logged(function_in, function_out):
 
 urlpatterns = patterns(
     "",
-    # All JSON urls
-    url(r"^json/tree/", include(graph_json)),
-    url(r"^json/node/", include("polydag.urls")),
-
     # The apps entry points
     url(r"^calendar/", include("calendars.urls")),
     url(r"^ulb/", include("graph.urls")),
