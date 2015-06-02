@@ -61,7 +61,6 @@ INSTALLED_APPS += (
 # apps
 INSTALLED_APPS += (
     'www',
-    'calendars',
     'documents',
     'graph',
     'telepathy',

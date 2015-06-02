@@ -21,12 +21,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.cache import cache
 
-from documents.forms import UploadFileForm
-from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
-from calendars.gehol import gehol_url
 from polydag.models import Keyword
 from www.helpers import year_choices
 
@@ -119,7 +116,7 @@ def show_course(request, slug):
 
     return render(request, "course.html", {
         "object": course,
-        "gehol": gehol_url(course),
+        "gehol": course.gehol_url(),
         "followed": followed,
         "followers": course.followed.count(),
         "tags": tags,

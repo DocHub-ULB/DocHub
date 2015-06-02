@@ -11,6 +11,8 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from json import loads
+from datetime import datetime
+
 from polydag.models import Node
 from django.db import models
 
@@ -43,6 +45,11 @@ class Course(Node):
         data = dataset[0] if len(dataset) > 0 else CourseInfo(infos="[]")
         data.infos = loads(data.infos)
         return data
+
+    def gehol_url(self):
+        slug = self.slug.replace('-', '').upper()
+        period = '21-36' if datetime.now().month <= 6 else '1-14'
+        return "http://gehol.ulb.ac.be/gehol/#!/Course/%s/%s" % (slug, period)
 
     def __unicode__(self):
         return "{}: {}".format(self.slug.upper(), self.name)
