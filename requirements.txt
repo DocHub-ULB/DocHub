@@ -1,6 +1,5 @@
-Django==1.7
+Django>=1.7.0,<1.8
 django_polymorphic
-django-template-fragments
 markdown
 celery
 django-celery
@@ -9,7 +8,6 @@ Pillow
 wand
 django_compressor
 pygments
-django-boto
 pyPdf
 
 # Dev

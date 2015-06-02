@@ -23,9 +23,6 @@ LOGIN_REDIRECT_URL = 'index'
 # url to internal login
 LOGIN_URL = '/'
 
-# handlebars fragments for javascript templating
-FRAGMENTS_DIR = join(BASE_DIR, "templates/fragments")
-
 UPLOAD_DIR = join(MEDIA_ROOT, 'documents')
 
 DOCUMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -53,7 +50,6 @@ INSTALLED_APPS += (
     'django.contrib.humanize',
     'suit',  # Must be before admin
     'django.contrib.admin',
-    'fragments',
     'djcelery',
     'compressor',
 )
