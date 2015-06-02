@@ -42,7 +42,7 @@ var viewer_instance = viewer(doc);
 {% endblock %}
 {% block title %}{{ object.name }}{% endblock %}
 {% block full-page %}
-{% include "viewer_bar.html" %}
+{% include "documents/viewer_bar.html" %}
 <div class="row">
 {% cache 86400 viewer.html object.id %}
   <div id="thumbs-misere"></div>

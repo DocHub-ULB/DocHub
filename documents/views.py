@@ -72,7 +72,7 @@ def upload_file(request, parent_id):
     else:
         form = UploadFileForm()
 
-    return render(request, 'document_upload.html', {
+    return render(request, 'documents/document_upload.html', {
         'form': form,
         'parent': parentNode,
     })
@@ -108,7 +108,7 @@ def document_edit(request, document_id):
             'tags': doc.keywords.all()
         })
 
-    return render(request, 'document_edit.html', {
+    return render(request, 'documents/document_edit.html', {
         'form': form,
         'doc': doc,
     })
@@ -150,4 +150,4 @@ def document_show(request, id):
     }
     document.views = F('views') + 1
     document.save(update_fields=['views'])
-    return render(request, "viewer.html", context)
+    return render(request, "documents/viewer.html", context)

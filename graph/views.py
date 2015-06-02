@@ -10,13 +10,12 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from json import dumps
 import re
 import itertools
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.cache import cache
@@ -26,24 +25,6 @@ from telepathy.models import Thread
 from documents.models import Document
 from polydag.models import Keyword
 from www.helpers import year_choices
-
-
-@login_required
-def get_category(request, id):
-    category = get_object_or_404(Category, id=id)
-    jsoniser = lambda category: {
-        "id": category.id,
-        "name": category.name,
-        "description": category.description,
-        "contains": [
-            {
-                "id": c.id,
-                "name": c.name,
-                "slug": c.slug
-            } for c in category.children().instance_of(Category, Course)]
-    }
-
-    return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
 
 
 @login_required
@@ -57,7 +38,7 @@ def show_category(request, catid):
 
     followed = cat in followed_nodes
 
-    return render(request, "category.html", {
+    return render(request, "graph/category.html", {
         'object': cat,
         'follow_children': follow_children,
         'followed': followed,
@@ -114,7 +95,7 @@ def show_course(request, slug):
     else:
         tags = tags.split(",")
 
-    return render(request, "course.html", {
+    return render(request, "graph/course.html", {
         "object": course,
         "gehol": course.gehol_url(),
         "followed": followed,
@@ -142,7 +123,7 @@ def leave_course(request, slug):
 
 @login_required
 def show_courses(request):
-    return render(request, "courses.html", {
+    return render(request, "graph/my_courses.html", {
         "followed_courses": request.user.followed_courses(),
         "faculties": Category.objects.first().children()
     })

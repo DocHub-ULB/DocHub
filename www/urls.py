@@ -63,7 +63,7 @@ urlpatterns = patterns(
 
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^help/markdown$', TemplateView.as_view(template_name='markdown.html'), name="markdown_help"),
+    url(r'^help/markdown$', TemplateView.as_view(template_name='telepathy/markdown.html'), name="markdown_help"),
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 )
 

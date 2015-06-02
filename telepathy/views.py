@@ -44,7 +44,7 @@ def new_thread(request, parent_id):
     else:
         form = NewThreadForm()
 
-    return render(request, 'new_thread.html', {
+    return render(request, 'telepathy/new_thread.html', {
         'form': form,
         'parent': parentNode,
     })
@@ -61,7 +61,7 @@ def show_thread(request, thread_id):
         "form": MessageForm(),
         "is_moderator": request.user.is_moderator(thread)
     }
-    return render(request, "thread.html", context)
+    return render(request, "telepathy/thread.html", context)
 
 
 @login_required
@@ -100,7 +100,7 @@ def edit_message(request, message_id):
     index = list(thread.message_set.all()).index(message)
     print index
 
-    return render(request, 'edit_message.html', {
+    return render(request, 'telepathy/edit_message.html', {
         'form': form,
         'object': thread,
         'edited_message': message,

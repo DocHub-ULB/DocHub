@@ -66,7 +66,7 @@
 <div class="row">
   <div class="small-12 columns">
     {% for elem in wall %}
-      {% include "feed_entry.html" %}
+      {% include "notify/feed_entry.html" %}
     {% empty %}
       {% if user.followed_courses|length > 0 %}
         <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>

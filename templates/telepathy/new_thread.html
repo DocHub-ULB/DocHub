@@ -12,11 +12,11 @@
         {% for field in form %}
           {% include "simple_input.html" %}
         {% endfor %}
-        {% include "markdown_small_help.html" %}
+        {% include "telepathy/markdown_small_help.html" %}
         <p class="text-right"><input type="submit" class="button success radius" value="Envoyer" /></p>
     </form>
     <div id="makrdown-cheat" class="reveal-modal" data-reveal>
-      {% include "markdown_cheatsheet.html" %}
+      {% include "telepathy/markdown_cheatsheet.html" %}
     </div>
   </div>
 </div>

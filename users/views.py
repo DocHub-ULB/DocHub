@@ -79,7 +79,7 @@ def user_settings(request):
     else:
         form = SettingsForm()
 
-    return render(request, 'settings.html', {
+    return render(request, 'users/settings.html', {
         'form': form,
     })
 

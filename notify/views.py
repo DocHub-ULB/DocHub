@@ -82,4 +82,4 @@ def notifications_show(request):
     notifs = notifs[:unread_len]
 
     context = {"notifications": notifs, 'read_notifications': read_notifs}
-    return render(request, "notifications.html", context)
+    return render(request, "notify/notifications.html", context)
