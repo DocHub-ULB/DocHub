@@ -12,12 +12,11 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-from authentification import app_redirection, ulb_redirection, intranet_auth
+from authentification import app_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
 admin.autodiscover()
 
-from graph.urls import json_urls as graph_json
 from views import home, node_canonic, index, p402
 import settings
 
@@ -32,11 +31,8 @@ def user_logged(function_in, function_out):
     return toggle
 
 
-urlpatterns = patterns("",
-    # All JSON urls
-    url(r"^json/tree/", include(graph_json)),
-    url(r"^json/node/", include("polydag.urls")),
-
+urlpatterns = patterns(
+    "",
     # The apps entry points
     url(r"^ulb/", include("graph.urls")),
     url(r"^document/", include("documents.urls")),

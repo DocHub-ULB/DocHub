@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from json import dumps, loads
+from json import dumps
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
@@ -76,11 +76,10 @@ def notifications_show(request):
     unread_len = Notification.unread(request.user).count()
     s = unread_len + 20
     notifs = list(
-        Notification.objects.filter(user=request.user).order_by('read','-id').select_related('prenotif')[:s]
+        Notification.objects.filter(user=request.user).order_by('read', '-id').select_related('prenotif')[:s]
     )
     read_notifs = notifs[unread_len:]
     notifs = notifs[:unread_len]
-
 
     context = {"notifications": notifs, 'read_notifications': read_notifs}
     return render(request, "notifications.html", context)

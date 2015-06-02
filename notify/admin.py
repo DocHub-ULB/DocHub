@@ -11,9 +11,10 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.contrib import admin
-from .models import PreNotification, Notification
+from notify.models import PreNotification, Notification
 
 
+@admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
     readonly_fields = (
         'user',
@@ -25,6 +26,7 @@ class NotificationAdmin(admin.ModelAdmin):
     list_filter = ('read',)
 
 
+@admin.register(PreNotification)
 class PreNotificationAdmin(admin.ModelAdmin):
     readonly_fields = (
         'node',
@@ -33,6 +35,3 @@ class PreNotificationAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'text', 'delivered', 'user', 'personal')
     list_filter = ('delivered', 'personal')
-
-admin.site.register(PreNotification, PreNotificationAdmin)
-admin.site.register(Notification, NotificationAdmin)

@@ -13,7 +13,6 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
 
 from telepathy.forms import NewThreadForm, MessageForm

@@ -11,23 +11,18 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from graph.views import get_category, show_course, show_category, show_courses
 
+urlpatterns = patterns(
+    "",
 
-json_urls = patterns("",
-    url(r"^category/(?P<id>[^/]*)$", get_category, name="get_category"),
-)
-
-
-urlpatterns = patterns("",
     url(r"^course/(?P<slug>[^/]*)$",
-        show_course,
+        'graph.views.show_course',
         name="course_show"),
     url(r"^cat/(?P<catid>\d+)$",
-        show_category,
+        'graph.views.show_category',
         name="category_show"),
 
     url(r"^courses/$",
-        show_courses,
+        'graph.views.show_courses',
         name="show_courses"),
 )

@@ -21,7 +21,7 @@ class Thread(Leaf, OneParent, Taggable):
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
 
     def __unicode__(self):
-        return "#{}: {}".format(self.id, self.name)
+        return self.name
 
     class Meta:
         ordering = ['-created']
