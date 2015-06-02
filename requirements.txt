@@ -11,6 +11,7 @@ django_compressor
 pygments
 pyPdf
 djangorestframework
+drf-extensions
 
 # Dev
 django-extensions

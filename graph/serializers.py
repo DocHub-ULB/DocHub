@@ -21,15 +21,7 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Course
-        fields = (
-            'id',
-            'name',
-            'slug',
-            'url',
-            'documents',
-            'meta',
-
-        )
+        fields = ('id', 'name', 'slug', 'url', 'documents', 'meta', )
 
         extra_kwargs = {
             'url': {'lookup_field': 'slug'}
@@ -39,12 +31,7 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
 class ShortCourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Course
-        fields = (
-            'id',
-            'url',
-            'slug',
-            'name',
-        )
+        fields = ('id', 'url', 'slug', 'name', )
 
         extra_kwargs = {
             'url': {'lookup_field': 'slug'}
@@ -79,22 +66,10 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Category
-        fields = (
-            'id',
-            'url',
-            'slug',
-            'name',
-            'subcategories',
-            'courses',
-        )
+        fields = ('id', 'url', 'slug', 'name', 'subcategories', 'courses', )
 
 
 class ShortCategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = (
-            'id',
-            'url',
-            'slug',
-            'name',
-        )
+        fields = ('id', 'url', 'slug', 'name', )
