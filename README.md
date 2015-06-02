@@ -3,7 +3,7 @@
 
 Beta402 or DocHub is a website, written in django. It's main goal is to provide a space for students (for now form the [ULB](http://ulb.ac.be) univeristy) to collaborate, help each other and distribute old exams and exercices.
 
-There is a [live instance of DocHub](http://cours.urlab.be) hosted by UrLab.
+There is a [live instance of DocHub](http://dochub.be) hosted by UrLab and the Cercle-Informatique.
 
 ## Screenshots
 
@@ -54,21 +54,21 @@ Add another user to the db
 ## Contribute !
 
 
-Send an email to p402 AT cerkinfo.be, come by #urlab on freenode or just fork this repo and send a patch !
+Come by #urlab on freenode or just fork this repo and send a patch !
 
 
 ## License
 
 
-    Copyright 2014, Cercle Informatique ASBL. All rights reserved.
+Copyright 2012 - 2015, Cercle Informatique ASBL. All rights reserved.
 
-    This program is free software: you can redistribute it and/or modify it
-    under the terms of the GNU Affero General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or (at
-    your option) any later version.
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
 
-    This software was made by hast, C4, iTitou at UrLab, ULB's hackerspace
+This software was made by hast, C4, iTitou at UrLab, ULB's hackerspace
 
 
-[_Woop woop_](https://www.youtube.com/watch?v=x2FetnIZjxg)
+[_Woop woop_](https://www.youtube.com/watch?v=z13qnzUQwuI)
 
