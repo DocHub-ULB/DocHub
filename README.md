@@ -21,11 +21,11 @@ You will also need to install poppler (the binary 'pdftotext'), GraphicsMagick (
 
 For exemple on Debian/Ubuntu
 
-    sudo apt-get install poppler-utils graphicsmagick unoconv python-dev libjpeg8-dev
+    sudo apt-get install graphicsmagick unoconv python-dev
 
 Or on Fedora
 
-    sudo yum install poppler-utils GraphicsMagick unoconv python-devel libjpeg-devel
+    sudo yum install GraphicsMagick unoconv python-devel
 
 ### Installation
 
