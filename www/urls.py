@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-from authentification import app_redirection, intranet_auth
+from authentification import intranet_auth
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
 admin.autodiscover()
@@ -48,10 +48,10 @@ urlpatterns = patterns(
 
     url(r"^p402/$", p402, name="p402"),
 
-    url(r"^syslogin$",
-        user_logged(app_redirection, login),
-        {"template_name": "syslogin.html"},
-        name="syslogin"),
+    # url(r"^syslogin$",
+    #     user_logged(app_redirection, login),
+    #     {"template_name": "syslogin.html"},
+    #     name="syslogin"),
 
     url(r"^auth/(?P<next_url>.*)$",
         intranet_auth,

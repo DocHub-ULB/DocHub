@@ -31,9 +31,6 @@ DOCUMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 # ULB login, need to add the url to redirect at the end
 ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_prtm=redirect&_appl='
 
-# ULB authentificator, need 2 parameters : SID and UID
-ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid=%s&_uid=%s'
-
 # Activate the search system
 SEARCH_SYSTEM = False
 
@@ -88,3 +85,9 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_OFFLINE = True
+
+
+AUTHENTICATION_BACKENDS = (
+    'users.authBackend.NetidBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
