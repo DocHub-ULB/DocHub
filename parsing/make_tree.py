@@ -14,7 +14,7 @@ import os
 import bs4 as bs
 import json
 
-from graph.models import Course, CourseInfo, Category
+from graph.models import Course, Category
 from polydag.models import Keyword
 from users.models import User
 
@@ -178,10 +178,6 @@ def create_courses(clist):
             if cat[-1] == "*":
                 cat = cat[:-1]
             infos.append({"name": cat, "value": content})
-
-        CourseInfo.objects.create(
-            course=c, infos=json.dumps(infos),
-        )
 
 
 def walk(jsonTree, parentNode):
