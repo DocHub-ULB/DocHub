@@ -41,7 +41,7 @@ def upload_file(request, parent_id):
                 name = form.cleaned_data['name']
             else:
                 name, _ = os.path.splitext(request.FILES['file'].name)
-                name = name.lower()
+                name = name.lower().replace('_', ' ')
 
             extension = os.path.splitext(request.FILES['file'].name)[1].lower()
             description = form.cleaned_data['description']
@@ -83,7 +83,7 @@ def document_edit(request, document_id):
     doc = get_object_or_404(Document, id=document_id)
 
     if request.user != doc.user and not request.user.is_moderator(doc.parent):
-        return HttpResponse('<h1>403</h1>', status=403)
+        return HttpResponse('You may not edit this document.', status=403)
 
     if request.method == 'POST':
         form = FileForm(request.POST)
@@ -120,8 +120,9 @@ def document_download(request, id):
     body = doc.pdf.read()
     response = HttpResponse(body, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
-    doc.downloads += 1
-    doc.save()
+
+    doc.downloads = F('downloads') + 1
+    doc.save(update_fields=['downloads'])
     return response
 
 
@@ -133,8 +134,9 @@ def document_download_original(request, id):
     response['Content-Description'] = 'File Transfer'
     response['Content-Transfer-Encoding'] = 'binary'
     response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(doc.name, doc.file_type)
-    doc.downloads += 1
-    doc.save()
+
+    doc.downloads = F('downloads') + 1
+    doc.save(update_fields=['downloads'])
     return response
 
 
