@@ -361,3 +361,11 @@ i.round-icon.medium{
 .select2-container-multi .select2-choices .select2-search-field input {
     height:33px;
 }
+
+.tag-item:hover {
+    color: white;
+}
+
+.tag-item.active {
+    font-weight: bold;
+}
