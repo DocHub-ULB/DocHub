@@ -68,12 +68,20 @@ def get_thread_context(request, thread_id):
         "messages": messages,
         "followed": thread.id in request.user.followed_nodes_id(),
         "form": MessageForm(),
-        "is_moderator": request.user.is_moderator(thread)
+        "is_moderator": request.user.is_moderator(thread),
     }
 
 @login_required
 def show_thread(request, thread_id):
     context = get_thread_context(request, thread_id)
+
+    # Add page preview if this thread belongs to a document page
+    if context['object'].page_no:
+        doc = context['object'].parent
+        page = doc.page_set.get(numero=context['object'].page_no)
+        context['thumbnail'] = page.bitmap_120
+        context['preview'] = page.bitmap_600
+
     return render(request, "thread.html", context)
 
 
