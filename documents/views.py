@@ -107,7 +107,7 @@ def upload_multiple_files(request, parent_id):
                     file_type=extension
                 )
                 doc.original.save(str(uuid.uuid4()) + extension, attachment)
-                doc.year = year_choices(1).pop()
+                doc.year = year_choices(1)[0][0]
                 doc.save()
 
                 course.add_child(doc)
