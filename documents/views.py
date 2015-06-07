@@ -22,7 +22,8 @@ from django.db.models import F
 from documents.models import Document
 from graph.models import Course
 from polydag.models import Node
-from documents.forms import UploadFileForm, FileForm
+from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
+from www.helpers import year_choices
 
 from cycle import add_document_to_queue
 
@@ -71,11 +72,51 @@ def upload_file(request, parent_id):
 
     else:
         form = UploadFileForm()
+        multiform = MultipleUploadFileForm()
 
     return render(request, 'document_upload.html', {
         'form': form,
+        'multiform': multiform,
         'parent': parentNode,
     })
+
+
+@login_required
+def upload_multiple_files(request, parent_id):
+    parentNode = get_object_or_404(Node, id=parent_id)
+    if not isinstance(parentNode, Course):
+        raise NotImplementedError("Not a course")
+
+    if request.method == 'POST':
+        form = MultipleUploadFileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            for attachment in form.cleaned_data['files']:
+                name, _ = os.path.splitext(attachment.name)
+                name = name.lower()
+
+                extension = os.path.splitext(attachment.name)[1].lower()
+                description = ""
+                course = parentNode
+
+                doc = Document.objects.create(
+                    user=request.user,
+                    name=name,
+                    description=description,
+                    state="PREPARING",
+                    file_type=extension
+                )
+                doc.original.save(str(uuid.uuid4()) + extension, attachment)
+                doc.year = year_choices(1).pop()
+                doc.save()
+
+                course.add_child(doc)
+                doc.state = 'READY_TO_QUEUE'
+                doc.save()
+                add_document_to_queue(doc)
+
+            return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
+    return HttpResponseRedirect(reverse('document_put', args=(parent_id,)))
 
 
 @login_required
