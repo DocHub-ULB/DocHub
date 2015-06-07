@@ -10,26 +10,33 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
+import re
 import markdown
 
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_unicode
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe, SafeText
 
 register = template.Library()
-
+youtube_url = re.compile(r'https://(?:www\.)youtu(?:be\.com/watch/?\?v=|\.be/)([^/<&]+)(?:&.*)')
+youtube_iframe = """
+<iframe id="youtube-\\1" type="text/html" width="640" height="420"
+  src="http://www.youtube.com/embed/\\1"
+  frameborder="0"/>
+"""
 
 @register.filter(is_safe=False, name='markdown')
 @stringfilter
 def my_markdown(value):
     extensions = ["nl2br", "extra", "codehilite", "headerid(level=2)", "sane_lists"]
 
-    return mark_safe(markdown.markdown(force_unicode(value).replace("\\\\", "\\\\\\\\"),
+    html = mark_safe(markdown.markdown(force_unicode(value).replace("\\\\", "\\\\\\\\"),
                                        extensions,
                                        safe_mode='escape',
                                        enable_attributes=False,
                                        output_format="html5"))
+    return SafeText(youtube_url.sub(youtube_iframe, html))
 
 class MarkdownDemoNode(template.Node):
     def __init__(self, nodelist):
