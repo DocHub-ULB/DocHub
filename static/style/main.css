@@ -97,7 +97,7 @@ a.light:hover {
     /*margin-top: .5em;*/
     /*border: 2px solid #EEE;*/
     height: 100%;
-    padding-left:10px;
+    padding-left:0px;
     padding-right:5px;
 }
 
@@ -142,7 +142,7 @@ a.light:hover {
 
 ul.course-bulletlist {
     list-style:none;
-    padding-left: 4px;
+    padding-left: 0px;
     text-indent: -8px;
 }
 
@@ -373,4 +373,12 @@ i.round-icon.medium{
 .viewer-title {
     background-color: #aaa !important;
     font-weight: bolder;
+}
+
+.side-nav li a:not(.button) {
+    padding:3px 0.875rem 3px;
+}
+
+.side-nav li a:not(.button):hover {
+    background:none;
 }
