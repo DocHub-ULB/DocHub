@@ -19,7 +19,7 @@ from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe, SafeText
 
 register = template.Library()
-youtube_url = re.compile(r'https://(?:www\.)youtu(?:be\.com/watch/?\?v=|\.be/)([^/<&]+)(?:&.*)')
+youtube_url = re.compile(r'https://(?:www\.)?youtu(?:be\.com/watch/?\?v=|\.be/)([^/<&]+)(?:&.*)?')
 youtube_iframe = """
 <iframe id="youtube-\\1" type="text/html" width="640" height="420"
   src="http://www.youtube.com/embed/\\1"
