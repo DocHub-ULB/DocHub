@@ -31,7 +31,7 @@ shower: foundation foundation-icons select
 foundation: static/3party/foundation
 
 static/3party/foundation:
-	wget http://foundation.zurb.com/cdn/releases/foundation-5.2.2.zip -O /tmp/foundation.zip
+	wget http://foundation.zurb.com/cdn/releases/foundation-5.5.2.zip -O /tmp/foundation.zip
 	rm -rf /tmp/foundation
 	mkdir /tmp/foundation && true
 	unzip /tmp/foundation.zip -d /tmp/foundation

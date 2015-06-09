@@ -1,6 +1,7 @@
 Django==1.7
 django_polymorphic
 django-template-fragments
+django-multiupload
 markdown
 celery
 django-celery

@@ -369,3 +369,8 @@ i.round-icon.medium{
 .tag-item.active {
     font-weight: bold;
 }
+
+.viewer-title {
+    background-color: #aaa !important;
+    font-weight: bolder;
+}
