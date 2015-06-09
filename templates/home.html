@@ -69,24 +69,20 @@
   <div class="row">
     <div class="small-12 columns">
       <h1>DocHub</h1>
-      <h2>Flux d'actualités</h2>
+      <h3><i class="fi-list-thumbnails"></i> Flux d'actualités</h3>
     </div>
   </div>
 {% endif %}
 
-<div class="row">
-  <div class="small-12 columns">
-    {% for elem in wall %}
-      {% include "feed_entry.html" %}
-    {% empty %}
-      {% if user.followed_courses|length > 0 %}
-        <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>
-      {% else %}
-        <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
-        <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
-      {% endif %}
-    {% endfor %}
-  </div>
-</div>
+{% for elem in wall %}
+  {% include "feed_entry.html" %}
+{% empty %}
+  {% if user.followed_courses|length > 0 %}
+    <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>
+  {% else %}
+    <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
+    <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
+  {% endif %}
+{% endfor %}
 
 {% endblock %}
