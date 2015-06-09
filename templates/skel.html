@@ -68,28 +68,40 @@
         </section>
     </nav>
     </div>
-    <div class="row full-width collapse">
+    <div class="row full-width collapse" data-equalizer>
       {% block full-page %}
-        <div class="hide-for-small-only large-2 medium-3 columns sidebar">
+        <div class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
           <ul class="side-nav main-side-nav">
+              <li>
+                <a href="/" class="sidebar-button">
+                  <i class="fi-list-thumbnails"></i> Flux d'actualités
+                </a>
+              </li>
             {% cache 120 user_followed_list user.netid %}
               {% if user.followed_courses|length == 0 %}
-                <li><a href="{% url 'show_courses' %}" class="button radius">S'abonner à des cours</a></li>
-              {% else %}
-                <li><a href="{% url 'show_courses' %}" class="button radius">Mes cours</a></li>
-              {% endif %}
-              {% for course in user.followed_courses %}
-                <li class="nav-link">
-                  <a href="{% url 'course_show' course.slug %}">
-                    <i class="fi-folder"></i> {{ course.name }}
+                <li>
+                  <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
                   </a>
                 </li>
-              {% endfor %}
+              {% else %}
+                <li>
+                  <a href="{% url 'show_courses' %}" class="sidebar-button"><i class="fi-book"></i> Mes cours</a>
+                </li>
+              {% endif %}
+              <ul class="course-bulletlist">
+                {% for course in user.followed_courses %}
+                  <li class="nav-link">
+                    <a href="{% url 'course_show' course.slug %}">
+                      <i class="fi-folder"></i> {{ course.name }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
             {% endcache %}
           </ul>
 
         </div>
-        <div class="large-10 medium-9 columns">
+        <div class="large-10 medium-9 columns" data-equalizer-watch>
           {% block content %}
           {% endblock %}
         </div>

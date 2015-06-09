@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="large-12 columns">
+    <h1>
+      <a href="{% url "node_canonic" object.id %}">
+        <i class="fi-link"></i>
+      </a>
+      {{ object.name }}
+    </h1>
+    <h3>
+      <a href="{% url "node_canonic" object.parent.id %}{% if object.page_no %}#page-{{object.page_no}}{% endif %}" class="light">
+        <i class="fi-arrow-left back-icon"></i>  {{object.parent.name}}
+      </a>
+    </h3>
+  </div>
+</div>
+<div class="row">
+  <div class="large-10 medium-10 columns">
+    {% for message in messages %}
+      {% include "message.html" %}
+    {% endfor %}
+    <div class="row"><div class="medium-11 columns thread-separator"></div></div>
+    {% include "message_form.html" %}
+  </div>
+
+  <div class="large-2 medium-12 columns">
+    {% if thumbnail %}
+      <h3>Sur la page</h3>
+      <a href="{% url "node_canonic" object.parent.id %}{% if object.page_no %}#page-{{object.page_no}}{% endif %}" 
+         class="light" 
+         data-dropdown="page_preview" 
+         data-options="is_hover:true; hover_timeout:20; align:left">
+        <img src="{{thumbnail.url}}" alt="Aperçu"/>
+      </a>
+
+      <div id="page_preview" class="large f-dropdown" data-dropdown-content>
+        <img src="{{preview.url}}" alt="Grand aperçu"/>
+      </div>
+    {% endif %}
+
+    {% if followed %}
+      <a class="button expand alert radius" href="{% url 'unfollow_node' object.id %}">
+        <i class="fi-x"></i> Se désabonner
+      </a>
+      <small>Vous recevez pour l'instant des notifiactions pour cette discussion.</small>
+    {% else %}
+      <a class="button expand success radius" href="{% url 'follow_node' object.id %}">
+        <i class="fi-check"></i> S'abonner
+      </a>
+      <small>Pour reçevoir une notification à chaque nouvelle réponse ajoutée ici abonnez-vous.</small>
+    {% endif %}
+  </div>
+</div>

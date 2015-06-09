@@ -15,12 +15,12 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
+import json
 
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
 from polydag.models import Node
 from www.helpers import current_year
-
 
 @login_required
 def new_thread(request, parent_id):
@@ -38,6 +38,15 @@ def new_thread(request, parent_id):
             thread = Thread.objects.create(user=request.user, name=name, year=year)
             message = Message.objects.create(user=request.user, thread=thread, text=content)
             parentNode.add_child(thread)
+
+            placement = {}
+            for opt,typecast in Thread.PLACEMENT_OPTS.iteritems():
+                if opt in request.POST:
+                    placement[opt] = typecast(request.POST[opt])
+            if len(placement) > 0:
+                thread.placement = json.dumps(placement)
+                thread.save()
+
             if request.user.auto_follow:
                 request.user.follow.add(thread)
 
@@ -51,18 +60,35 @@ def new_thread(request, parent_id):
     })
 
 
-@login_required
-def show_thread(request, thread_id):
+def get_thread_context(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     messages = Message.objects.filter(thread__id=thread_id).select_related('user').order_by('created').all()
-    context = {
+    return {
         "object": thread,
         "messages": messages,
         "followed": thread.id in request.user.followed_nodes_id(),
         "form": MessageForm(),
-        "is_moderator": request.user.is_moderator(thread)
+        "is_moderator": request.user.is_moderator(thread),
     }
+
+@login_required
+def show_thread(request, thread_id):
+    context = get_thread_context(request, thread_id)
+
+    # Add page preview if this thread belongs to a document page
+    if context['object'].page_no:
+        doc = context['object'].parent
+        page = doc.page_set.get(numero=context['object'].page_no)
+        context['thumbnail'] = page.bitmap_120
+        context['preview'] = page.bitmap_600
+
     return render(request, "thread.html", context)
+
+
+@login_required
+def show_thread_fragment(request, thread_id):
+    context = get_thread_context(request, thread_id)
+    return render(request, "fragments/thread.html", context)
 
 
 @login_required
