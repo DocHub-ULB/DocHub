@@ -10,43 +10,22 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from json import dumps
 import re
 import itertools
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.cache import cache
 
-from documents.forms import UploadFileForm
-from telepathy.forms import NewThreadForm
 from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
 from calendars.gehol import gehol_url
 from polydag.models import Keyword
 from www.helpers import year_choices
-
-
-@login_required
-def get_category(request, id):
-    category = get_object_or_404(Category, id=id)
-    jsoniser = lambda category: {
-        "id": category.id,
-        "name": category.name,
-        "description": category.description,
-        "contains": [
-            {
-                "id": c.id,
-                "name": c.name,
-                "slug": c.slug
-            } for c in category.children().instance_of(Category, Course)]
-    }
-
-    return HttpResponse(dumps(jsoniser(category)), mimetype='application/json')
 
 
 @login_required

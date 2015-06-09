@@ -15,9 +15,9 @@ from django.views.generic import TemplateView
 from authentification import app_redirection, ulb_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
+
 admin.autodiscover()
 
-from graph.urls import json_urls as graph_json
 from views import home, node_canonic, index, p402
 import settings
 
@@ -32,11 +32,8 @@ def user_logged(function_in, function_out):
     return toggle
 
 
-urlpatterns = patterns("",
-    # All JSON urls
-    url(r"^json/tree/", include(graph_json)),
-    url(r"^json/node/", include("polydag.urls")),
-
+urlpatterns = patterns(
+    "",
     # The apps entry points
     url(r"^calendar/", include("calendars.urls")),
     url(r"^ulb/", include("graph.urls")),
@@ -73,6 +70,8 @@ urlpatterns = patterns("",
 
     url(r'^help/markdown$', TemplateView.as_view(template_name='markdown.html'), name="markdown_help"),
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
+
+    url(r'^api/', include("www.rest_urls")),
 )
 
 handler400 = 'www.error.error400'
