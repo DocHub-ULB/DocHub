@@ -25,4 +25,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Inscription)
 class InscriptionAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('user', )
+    list_display = ('id', 'user', 'faculty', 'section', 'year')
+    list_filter = ('faculty', 'section', 'year')
+    search_fields = ('section', )
