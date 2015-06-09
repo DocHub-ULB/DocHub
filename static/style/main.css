@@ -1,3 +1,28 @@
+@font-face {
+    font-family: arvo;
+    src: url(fonts/Arvo-Regular_201.ttf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: arvo;
+    src: url(fonts/Arvo-Bold_201.ttf);
+    font-weight: bold;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: arvo;
+    font-weight: bold;
+}
+
+h1 {
+    border-bottom:dotted 1px #ccc;
+}
+
+h3 i, h2 i {
+    margin-right:10px ;
+    color:#008cba;
+}
+
 .row.full-width {
     width: 100%;
     max-width: 100%;
@@ -64,10 +89,16 @@ a.light:hover {
 }
 
 
+.sidebar{
+    background-color:#F7F7F7;
+}
+
 .main-side-nav {
-    margin-top: .5em;
+    /*margin-top: .5em;*/
     /*border: 2px solid #EEE;*/
     height: 100%;
+    padding-left:10px;
+    padding-right:5px;
 }
 
 .main-side-nav li{
@@ -99,6 +130,20 @@ a.light:hover {
 
 .main-side-nav .nav-link a i{
     color: #007095;
+}
+
+.sidebar-button{
+    font-family: arvo;
+    color:white;
+}
+.sidebar-button i{
+    margin-right:4px;
+}
+
+ul.course-bulletlist {
+    list-style:none;
+    padding-left: 4px;
+    text-indent: -8px;
 }
 
 code {
@@ -286,10 +331,46 @@ i.round-icon.medium{
     color: #666;
 }
 
+.course-list {
+    padding-top:10px;
+    clear: both;
+    margin-left:0px;
+    list-style: none;
+}
+
+.course-label {
+    position:relative;
+    top:-3px;
+    text-transform: uppercase;
+    margin-right: 5px;
+}
+
+.course-children {
+    color:#ccc;
+}
+
+.catalog-option {
+    padding-bottom:10px !important;
+}
+
+.follow-all {
+    margin-bottom:0px;
+}
+
+/* Tags textbox */
+.select2-container-multi .select2-choices .select2-search-field input {
+    height:33px;
+}
+
 .tag-item:hover {
     color: white;
 }
 
 .tag-item.active {
     font-weight: bold;
+}
+
+.viewer-title {
+    background-color: #aaa !important;
+    font-weight: bolder;
 }
