@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.core.exceptions import ValidationError
+from multiupload.fields import MultiFileField
 from polydag.models import Keyword
 from www.helpers import year_choices
 
@@ -51,6 +52,11 @@ class FileForm(forms.Form):
 
 class UploadFileForm(FileForm):
     file = forms.FileField(validators=[validate_uploaded_file])
+
+
+Mo = 1<<20
+class MultipleUploadFileForm(forms.Form):
+    files = MultiFileField(min_num=1, max_num=25, max_file_size=25*Mo)
 
 # TODO
 # class UrlFileForm(FileForm):

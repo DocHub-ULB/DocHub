@@ -19,6 +19,10 @@ urlpatterns = patterns(
         'documents.views.upload_file',
         name="document_put"),
 
+    url(r"^multiple_put/(?P<parent_id>[^/]*)$",
+        'documents.views.upload_multiple_files',
+        name="document_put_multiple"),
+
     url(r"^edit/(?P<document_id>[^/]*)$",
         'documents.views.document_edit',
         name="document_edit"),

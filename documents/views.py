@@ -17,12 +17,15 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import F, Count
 
 from documents.models import Document
 from graph.models import Course
 from polydag.models import Node
-from documents.forms import UploadFileForm, FileForm
+from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
+from www.helpers import year_choices
+from telepathy.models import Thread
+from telepathy.forms import NewThreadForm
 
 from cycle import add_document_to_queue
 
@@ -71,11 +74,51 @@ def upload_file(request, parent_id):
 
     else:
         form = UploadFileForm()
+        multiform = MultipleUploadFileForm()
 
     return render(request, 'documents/document_upload.html', {
         'form': form,
+        'multiform': multiform,
         'parent': parentNode,
     })
+
+
+@login_required
+def upload_multiple_files(request, parent_id):
+    parentNode = get_object_or_404(Node, id=parent_id)
+    if not isinstance(parentNode, Course):
+        raise NotImplementedError("Not a course")
+
+    if request.method == 'POST':
+        form = MultipleUploadFileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            for attachment in form.cleaned_data['files']:
+                name, _ = os.path.splitext(attachment.name)
+                name = name.lower()
+
+                extension = os.path.splitext(attachment.name)[1].lower()
+                description = ""
+                course = parentNode
+
+                doc = Document.objects.create(
+                    user=request.user,
+                    name=name,
+                    description=description,
+                    state="PREPARING",
+                    file_type=extension
+                )
+                doc.original.save(str(uuid.uuid4()) + extension, attachment)
+                doc.year = year_choices(1)[0][0]
+                doc.save()
+
+                course.add_child(doc)
+                doc.state = 'READY_TO_QUEUE'
+                doc.save()
+                add_document_to_queue(doc)
+
+            return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
+    return HttpResponseRedirect(reverse('document_put', args=(parent_id,)))
 
 
 @login_required
@@ -144,11 +187,17 @@ def document_download_original(request, id):
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 
+    threads = filter(lambda x: x.get_real_instance_class() == Thread, document.children())
+    threads = map(lambda x: x.id, threads)
+    threads = Thread.objects.filter(id__in=threads).annotate(Count('message')).select_related('user').prefetch_related('keywords')
+
     context = {
         "object": document,
         "parent": document.parent,
         "is_moderator": request.user.is_moderator(document.parent),
         "page_set": document.page_set.order_by('numero'),
+        "form": NewThreadForm(),
+        "threads": threads
     }
     document.views = F('views') + 1
     document.save(update_fields=['views'])

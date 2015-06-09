@@ -15,6 +15,7 @@ from django.views.generic import TemplateView
 from authentification import app_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
+
 admin.autodiscover()
 
 from views import home, node_canonic, index, p402
@@ -65,6 +66,8 @@ urlpatterns = patterns(
 
     url(r'^help/markdown$', TemplateView.as_view(template_name='telepathy/markdown.html'), name="markdown_help"),
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
+
+    url(r'^api/', include("www.rest_urls")),
 )
 
 handler400 = 'www.error.error400'
