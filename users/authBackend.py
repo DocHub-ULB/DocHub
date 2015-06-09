@@ -3,6 +3,7 @@ import xmltodict
 from datetime import date
 import os
 from users.models import User, Inscription
+from django.db import IntegrityError
 
 
 class NetidBackend(object):
@@ -50,13 +51,15 @@ class NetidBackend(object):
                 year = int(inscription['year'])
             except ValueError:
                 continue
-
-            Inscription.objects.get_or_create(
-                user=user,
-                faculty=inscription['fac'],
-                section=inscription['slug'],
-                year=year,
-            )
+            try:
+                Inscription.objects.create(
+                    user=user,
+                    faculty=inscription['fac'],
+                    section=inscription['slug'],
+                    year=year,
+                )
+            except IntegrityError:
+                pass
 
         return user
 
