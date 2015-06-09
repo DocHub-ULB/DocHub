@@ -101,7 +101,7 @@ def home(request):
     followed_ids = cache.get('user.wall.followed_nodes.' + str(request.user.id))
     if followed_ids is None:
         followed = request.user.directly_followed()
-        ids = map(lambda x: x.id, followed)
+        ids = map(lambda x: x.id, list(followed))
         for node in followed:
             ids += map(lambda x: x.id, node.children())
 
