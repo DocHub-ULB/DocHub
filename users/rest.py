@@ -5,6 +5,6 @@ from users.models import User
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(netid="")
     serializer_class = UserSerializer
     lookup_field = 'netid'
