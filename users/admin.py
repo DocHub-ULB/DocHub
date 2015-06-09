@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.contrib import admin
-from .models import User
+from .models import User, Inscription
 
 
 @admin.register(User)
@@ -21,3 +21,8 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative')
     list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login')
     search_fields = ('netid', 'first_name', 'last_name')
+
+
+@admin.register(Inscription)
+class InscriptionAdmin(admin.ModelAdmin):
+    pass

@@ -2,7 +2,7 @@ import requests
 import xmltodict
 from datetime import date
 import os
-from users.models import User
+from users.models import User, Inscription
 
 
 class NetidBackend(object):
@@ -45,9 +45,18 @@ class NetidBackend(object):
                 registration=user_dict['raw_matricule'],
             )
 
-        # TODO
-        # for inscription in user_dict['inscriptions']:
-        #     # add inscription
+        for inscription in user_dict['inscriptions']:
+            try:
+                year = int(user_dict['year'])
+            except ValueError:
+                continue
+
+            Inscription.objects.get_or_create(
+                user=user,
+                faculty=user_dict['fac'],
+                section=user_dict['slug'],
+                year=year,
+            )
 
         return user
 
