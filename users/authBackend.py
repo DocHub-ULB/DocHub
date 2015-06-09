@@ -47,14 +47,14 @@ class NetidBackend(object):
 
         for inscription in user_dict['inscriptions']:
             try:
-                year = int(user_dict['year'])
+                year = int(inscription['year'])
             except ValueError:
                 continue
 
             Inscription.objects.get_or_create(
                 user=user,
-                faculty=user_dict['fac'],
-                section=user_dict['slug'],
+                faculty=inscription['fac'],
+                section=inscription['slug'],
                 year=year,
             )
 
