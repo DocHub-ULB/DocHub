@@ -15,6 +15,5 @@ class Migration(migrations.Migration):
             model_name='node',
             name='polymorphic_ctype',
             field=models.ForeignKey(related_name='polymorphic_polydag.node_set+', editable=False, to='contenttypes.ContentType', null=True),
-            preserve_default=True,
         ),
     ]

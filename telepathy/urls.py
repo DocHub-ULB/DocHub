@@ -27,6 +27,10 @@ urlpatterns = patterns(
         'telepathy.views.show_thread',
         name="thread_show"),
 
+    url(r"^fragment/(?P<thread_id>[^/]*)/$",
+        'telepathy.views.show_thread_fragment',
+        name="thread_show_fragment"),
+
     url(r"^edit/(?P<message_id>[^/]*)$",
         'telepathy.views.edit_message',
         name="edit_message"),

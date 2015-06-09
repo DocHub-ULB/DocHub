@@ -1,5 +1,6 @@
 Django>=1.7.0,<1.8
 django_polymorphic
+django-multiupload
 markdown
 django-celery
 django-suit
@@ -9,6 +10,8 @@ pygments
 pyPdf
 requests
 xmltodict
+djangorestframework
+drf-extensions
 
 # Dev
 django-extensions

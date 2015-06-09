@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from users.models import User
 from getpass import getpass, getuser
 from optparse import make_option
@@ -170,7 +171,8 @@ class Command(BaseCommand):
         tree = json.load(open('parsing/tree.json'))
         self.courseList = json.load(open('parsing/cours.json'))
         Root = Category.objects.create(name='P402', description='Bring back real student cooperation !')
-        self.walk(tree, Root)
-        self.stdout.write("\n")
-
-        self.add_keywords()
+        
+        with transaction.atomic():
+            self.walk(tree, Root)
+            self.stdout.write("\n")
+            self.add_keywords()
