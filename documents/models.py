@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.db import models
+from django_statsd.clients import statsd
 
 from polydag.models import Taggable
 from polydag.behaviors import OneParent
@@ -52,6 +53,7 @@ class Document(OneParent, Taggable):
         self.save()
         add_document_to_queue(self)
         self.save()
+        statsd.incr('document.reprocess')
 
 
 class Page(models.Model):

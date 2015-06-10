@@ -22,6 +22,8 @@ INSTALLED_APPS += (
 
 CELERY_BROKER = 'django://'
 
+STATSD_CLIENT = 'django_statsd.clients.null'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

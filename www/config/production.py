@@ -29,6 +29,8 @@ ULB_LOGIN = (
     '&_appl=' + AUTH_URL
 )
 
+STATSD_CLIENT = 'django_statsd.clients.normal'
+
 # CELERY_BROKER = 'amqp://guest@localhost//'
 
 # DATABASES = {
