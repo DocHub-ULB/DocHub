@@ -41,7 +41,7 @@ class Document(OneParent, Taggable):
         return self.name
 
     def reprocess(self, force=False):
-        if self.state != "ERROR" or force:
+        if self.state != "ERROR" and not force:
             raise Exception("Document is not in error state it is " + self.state)
 
         for page in self.page_set.all():
