@@ -12,6 +12,7 @@ requests
 xmltodict
 djangorestframework
 drf-extensions
+furl
 
 # Dev
 django-extensions
