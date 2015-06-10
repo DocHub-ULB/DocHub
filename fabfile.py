@@ -16,6 +16,14 @@ def deploy():
         run('sudo supervisorctl start b402-gunicorn')
 
 
+def light_deploy():
+    code_dir = '/home/b402/beta402'
+    with cd(code_dir), prefix('source ve/bin/activate'):
+        run('sudo supervisorctl stop b402-gunicorn')
+        run("git pull")
+        run('sudo supervisorctl start b402-gunicorn')
+
+
 def restart_workers():
     run('sudo supervisorctl stop  b402-worker1')
     run('sudo supervisorctl stop  b402-worker2')
