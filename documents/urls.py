@@ -11,32 +11,31 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from documents.views import upload_file, upload_multiple_files, document_show, document_download, document_download_original, document_edit
-from documents.models import Document
 
+urlpatterns = patterns(
+    "",
 
-urlpatterns = patterns("",
     url(r"^put/(?P<parent_id>[^/]*)$",
-        upload_file,
+        'documents.views.upload_file',
         name="document_put"),
 
     url(r"^multiple_put/(?P<parent_id>[^/]*)$",
-        upload_multiple_files,
+        'documents.views.upload_multiple_files',
         name="document_put_multiple"),
 
     url(r"^edit/(?P<document_id>[^/]*)$",
-        document_edit,
+        'documents.views.document_edit',
         name="document_edit"),
 
     url(r"^dl/(?P<id>[^/]*)$",
-        document_download,
+        'documents.views.document_download',
         name="document_download"),
 
     url(r"^dlo/(?P<id>[^/]*)$",
-        document_download_original,
+        'documents.views.document_download_original',
         name="document_download_original"),
 
     url(r"^v/(?P<id>[^/]*)$",
-        document_show,
+        'documents.views.document_show',
         name="document_show"),
 )

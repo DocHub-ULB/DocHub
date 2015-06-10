@@ -37,16 +37,11 @@ class Document(OneParent, Taggable):
     state = models.CharField(max_length=20, default='PREPARING', db_index=True)
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
-    def move(self, *args, **kwargs):
-        # Must move a images and associated files
-        # thus NotImplementedError
-        raise NotImplementedError
-
     def __unicode__(self):
-        return "#{}: {}".format(self.id, self.name)
+        return self.name
 
-    def reprocess(self):
-        if self.state != "ERROR":
+    def reprocess(self, force=False):
+        if self.state != "ERROR" or force:
             raise Exception("Document is not in error state it is " + self.state)
 
         for page in self.page_set.all():
@@ -83,13 +78,5 @@ class DocumentError(models.Model):
 
     def __unicode__(self):
         return "#" + self.exception
-
-    def exception_type(self):
-        if '"unoconv" has failed' in self.exception:
-            return "UNOCONV"
-        if 'file has not been decrypted' in self.exception:
-            return "DECRYPT"
-
-        return "NA"
 
 from documents.cycle import add_document_to_queue

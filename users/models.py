@@ -78,7 +78,6 @@ class User(AbstractBaseUser):
     is_representative = models.BooleanField(default=False)
     moderated_nodes = models.ManyToManyField('polydag.Node', db_index=True, blank=True)
 
-    # Standard fields
     @property
     def get_photo(self):
         photo = self.DEFAULT_PHOTO
@@ -91,12 +90,6 @@ class User(AbstractBaseUser):
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
-    get_full_name = name
-
-    def get_short_name(self, *args, **kwargs):
-        return self.netid
-
-    # Follow
     def directly_followed(self):
         return self.follow.all()
 
@@ -115,7 +108,6 @@ class User(AbstractBaseUser):
         return True # TODO use user prefs
 
     # Permissions
-
     def is_moderator(self, node):
         if self.is_staff:
             return True
@@ -149,26 +141,3 @@ class Inscription(models.Model):
 
     class Meta:
         unique_together = ('user', 'section', 'faculty', 'year')
-
-    @property
-    def level(self):
-        place = re.search('\d', self.section)
-        if place:
-            return int(self.section[place.start()])
-        else:
-            return None
-
-    @property
-    def type(self):
-        place = re.search('\d', self.section)
-        if place:
-            return self.section[:place.start()]
-        else:
-            return self.section
-
-    @property
-    def next(self):
-        level = self.level if self.level is not None else 0
-        next_starts = "{}{}".format(self.type, level + 1)
-        # TODO : should use category slugs and not Inscriptions
-        return Inscription.objects.filter(section__startswith=next_starts)

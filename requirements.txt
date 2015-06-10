@@ -1,13 +1,10 @@
-Django==1.7
+Django>=1.7.0,<1.8
 django_polymorphic
-django-template-fragments
 django-multiupload
 markdown
-celery
 django-celery
 django-suit
 Pillow
-wand
 django_compressor
 pygments
 pyPdf

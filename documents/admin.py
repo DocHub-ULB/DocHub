@@ -14,6 +14,7 @@ from django.contrib import admin
 from .models import Document, DocumentError
 
 
+@admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     fields = ('name', 'user', 'size', 'pages', 'views', 'downloads', 'state')
     readonly_fields = (
@@ -25,10 +26,7 @@ class DocumentAdmin(admin.ModelAdmin):
     list_filter = ('state',)
     search_fields = ('md5', 'name')
 
-admin.site.register(Document, DocumentAdmin)
 
-
+@admin.register(DocumentError)
 class DocumentErrorAdmin(admin.ModelAdmin):
     list_display = ('exception', 'document', 'task_id')
-
-admin.site.register(DocumentError, DocumentErrorAdmin)

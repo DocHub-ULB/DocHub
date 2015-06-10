@@ -22,7 +22,7 @@ from django.core.cache import cache
 from django.contrib import messages
 
 from polydag.models import Node
-from graph.models import Category, Course
+from graph.models import Course
 from www import settings
 
 from forms import SettingsForm
@@ -65,18 +65,21 @@ def user_settings(request):
         if form.is_valid():
             im = Image.open(request.FILES['profile_pic'])
             im = ImageOps.fit(im, (120, 120), Image.ANTIALIAS)
+
             if not os.path.exists(os.path.join(settings.MEDIA_ROOT, "profile")):
                 os.makedirs(os.path.join(settings.MEDIA_ROOT, "profile"))
+
             im.save(os.path.join(settings.MEDIA_ROOT, "profile/{}.png".format(request.user.netid)))
             request.user.photo = "png"
             request.user.save()
-            messages.success(request, 'Votre profil a été mis à jour.')
-            return render(request, "settings.html", {'form': SettingsForm()})
 
+            messages.success(request, 'Votre profil a été mis à jour.')
+
+            return render(request, "settings.html", {'form': SettingsForm()})
     else:
         form = SettingsForm()
 
-    return render(request, 'settings.html', {
+    return render(request, 'users/settings.html', {
         'form': form,
     })
 

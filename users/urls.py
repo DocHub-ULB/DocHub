@@ -11,26 +11,27 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.conf.urls import patterns, url
-from users.views import follow_node, unfollow_node, follow_node_children, user_settings, panel_hide
 
-urlpatterns = patterns("",
+urlpatterns = patterns(
+    "",
+
     url(r"^join/(?P<nodeid>\d+)$",
-        follow_node,
+        'users.views.follow_node',
         name="follow_node"),
 
     url(r"^join_children/(?P<nodeid>\d+)$",
-        follow_node_children,
+        'users.views.follow_node_children',
         name="follow_node_children"),
 
     url(r"^leave/(?P<nodeid>\d+)$",
-        unfollow_node,
+        'users.views.unfollow_node',
         name="unfollow_node"),
 
     url(r"^settings/$",
-        user_settings,
+        'users.views.user_settings',
         name="settings"),
 
     url(r"^panel_hide/$",
-        panel_hide,
+        'users.views.panel_hide',
         name="hide_new_panel"),
 )

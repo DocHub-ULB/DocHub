@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-from authentification import app_redirection, ulb_redirection, intranet_auth
+from authentification import app_redirection, intranet_auth
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
 
@@ -35,7 +35,6 @@ def user_logged(function_in, function_out):
 urlpatterns = patterns(
     "",
     # The apps entry points
-    url(r"^calendar/", include("calendars.urls")),
     url(r"^ulb/", include("graph.urls")),
     url(r"^document/", include("documents.urls")),
     url(r"^telepathy/", include("telepathy.urls")),
@@ -63,12 +62,9 @@ urlpatterns = patterns(
         logout, {"next_page": "/"},
         name="logout"),
 
-    # fragments
-    url(r"^", include("fragments.urls")),
-
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^help/markdown$', TemplateView.as_view(template_name='markdown.html'), name="markdown_help"),
+    url(r'^help/markdown$', TemplateView.as_view(template_name='telepathy/markdown.html'), name="markdown_help"),
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 
     url(r'^api/', include("www.rest_urls")),

@@ -26,7 +26,7 @@ class Thread(Leaf, OneParent, Taggable):
     placement = models.TextField(null=True, default=None)
 
     def __unicode__(self):
-        return "#{}: {}".format(self.id, self.name)
+        return self.name
 
     @property
     def page_no(self):

@@ -13,7 +13,6 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
 import json
 
@@ -21,6 +20,7 @@ from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
 from polydag.models import Node
 from www.helpers import current_year
+
 
 @login_required
 def new_thread(request, parent_id):
@@ -40,7 +40,7 @@ def new_thread(request, parent_id):
             parentNode.add_child(thread)
 
             placement = {}
-            for opt,typecast in Thread.PLACEMENT_OPTS.iteritems():
+            for opt, typecast in Thread.PLACEMENT_OPTS.iteritems():
                 if opt in request.POST:
                     placement[opt] = typecast(request.POST[opt])
             if len(placement) > 0:
@@ -54,7 +54,7 @@ def new_thread(request, parent_id):
     else:
         form = NewThreadForm()
 
-    return render(request, 'new_thread.html', {
+    return render(request, 'telepathy/new_thread.html', {
         'form': form,
         'parent': parentNode,
     })
@@ -71,6 +71,7 @@ def get_thread_context(request, thread_id):
         "is_moderator": request.user.is_moderator(thread),
     }
 
+
 @login_required
 def show_thread(request, thread_id):
     context = get_thread_context(request, thread_id)
@@ -82,7 +83,7 @@ def show_thread(request, thread_id):
         context['thumbnail'] = page.bitmap_120
         context['preview'] = page.bitmap_600
 
-    return render(request, "thread.html", context)
+    return render(request, "telepathy/thread.html", context)
 
 
 @login_required
@@ -127,7 +128,7 @@ def edit_message(request, message_id):
     index = list(thread.message_set.all()).index(message)
     print index
 
-    return render(request, 'edit_message.html', {
+    return render(request, 'telepathy/edit_message.html', {
         'form': form,
         'object': thread,
         'edited_message': message,

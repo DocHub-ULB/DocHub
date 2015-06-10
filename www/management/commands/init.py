@@ -15,7 +15,7 @@ from django.db import transaction
 from users.models import User
 from getpass import getpass, getuser
 from optparse import make_option
-from graph.models import Category, Course, CourseInfo
+from graph.models import Category, Course
 from polydag.models import Keyword
 from datetime import datetime
 import json
@@ -87,10 +87,7 @@ class Command(BaseCommand):
                 name=name, slug=slug,
                 description=json.dumps(ULBInfos)
             )
-            CourseInfo.objects.create(
-                course=course, infos=json.dumps(infos),
-                date=self.NOW
-            )
+
         parentNode.add_child(course)
         self.stdout.write('.', ending='')
         self.stdout.flush()

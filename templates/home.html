@@ -25,17 +25,6 @@
             <p>Vous souhaitez vous abonner à des cours ?<br>
               Pour ça, le plus simple est d’aller voir la <a href="{% url 'show_courses' %}">liste des cours</a>, choisir votre faculté, puis votre année (et peut-être votre option) puis vous abonner à la totalité des cours en cliquant sur "S'abonner à tous les cours de cette catégorie".</p>
             <p>Vous pouvez aussi vous balader dans la liste des cours et vous abonner aux cours qui vous plaisent, un par un.</p>
-            {% comment %}
-            {% if welcome.new_inscriptions %}
-              <p>On dirait que vous étudiiez {{ welcome.inscription.section }} l’année passée mais nous ne savons pas où vous êtes parti cette année…</p>
-              <p>Voici quelques sections que pourriez visiter :
-              {% for new in welcome.new_inscriptions %}
-                {{ new.section }}
-              {% endfor %}</p>
-            {% elif welcome.inscription %}
-              <p>Étudiez-vous {{ welcome.inscription.section }} dans la faculté {{ welcome.inscription.faculty|capfirst }} ?</p>
-            {% endif %}
-            {% endcomment %}
           </div>
         </div>
         <div class="row">
@@ -75,7 +64,7 @@
 {% endif %}
 
 {% for elem in wall %}
-  {% include "feed_entry.html" %}
+  {% include "notify/feed_entry.html" %}
 {% empty %}
   {% if user.followed_courses|length > 0 %}
     <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>

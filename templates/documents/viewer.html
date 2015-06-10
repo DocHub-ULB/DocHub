@@ -1,15 +1,6 @@
 {% extends "skel.html" %}
 {% load cache %}
 
-{% comment %}
-# Copyright 2012, hast. All rights reserved.
-
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-{% endcomment %}
-
 {% block header %}
 <link rel="stylesheet" href="/static/style/viewer.css" />
 {% endblock %}
@@ -36,8 +27,8 @@ var viewer_instance = viewer({
     {% for page in page_set %}
       {
         numero: {{ page.numero }},
-        height_600: {{ page.bitmap_600.height }},
-        height_900: {{ page.bitmap_900.height }},
+        height_600: {{ page.bitmap_600.height|default:"0" }},
+        height_900: {{ page.bitmap_900.height|default:"0" }},
         url_120: '{{ page.bitmap_120.url }}',
         url_600: '{{ page.bitmap_600.url }}',
         url_900: '{{ page.bitmap_900.url }}',
@@ -103,7 +94,7 @@ $(document).ready(function(){
 {% endblock %}
 {% block title %}{{ object.name }}{% endblock %}
 {% block full-page %}
-{% include "viewer_bar.html" %}
+{% include "documents/viewer_bar.html" %}
 <div class="row">
 {% cache 86400 viewer.html object.id %}
   <div id="thumbs-misere"></div>

@@ -23,7 +23,6 @@ from django.core.cache import cache
 from graph.models import Category, Course
 from telepathy.models import Thread
 from documents.models import Document
-from calendars.gehol import gehol_url
 from polydag.models import Keyword
 from www.helpers import year_choices
 
@@ -39,7 +38,7 @@ def show_category(request, catid):
 
     followed = cat in followed_nodes
 
-    return render(request, "category.html", {
+    return render(request, "graph/category.html", {
         'object': cat,
         'follow_children': follow_children,
         'followed': followed,
@@ -96,9 +95,9 @@ def show_course(request, slug):
     else:
         tags = tags.split(",")
 
-    return render(request, "course.html", {
+    return render(request, "graph/course.html", {
         "object": course,
-        "gehol": gehol_url(course),
+        "gehol": course.gehol_url(),
         "followed": followed,
         "followers": course.followed.count(),
         "tags": tags,
@@ -124,7 +123,7 @@ def leave_course(request, slug):
 
 @login_required
 def show_courses(request):
-    return render(request, "courses.html", {
+    return render(request, "graph/my_courses.html", {
         "followed_courses": request.user.followed_courses(),
         "faculties": Category.objects.first().children()
     })

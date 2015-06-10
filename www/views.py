@@ -23,8 +23,7 @@ from telepathy.models import Thread
 from polydag.models import Node
 from documents.models import Document, Page
 from notify.models import PreNotification
-from users.models import Inscription, User
-from .helpers import current_year
+from users.models import User
 
 import settings
 
@@ -108,18 +107,9 @@ def home(request):
         followed_ids = ids
         cache.set('user.wall.followed_nodes.' + str(request.user.id), followed_ids, 300)
 
-    wall = PreNotification.objects.filter(node__in=followed_ids).filter(personal=False).order_by('-created').select_related('user')[:20]
+    wall = PreNotification.objects.filter(node__in=followed_ids)
+    wall = wall.filter(personal=False).order_by('-created')
+    wall = wall.select_related('user')[:20]
 
-    welcome = {}
-    if request.user.welcome:
-        inscription = Inscription.objects.filter(user=request.user).order_by('-year').first()
-        if inscription and inscription.year == current_year():
-            welcome['inscription'] = inscription
-        elif inscription and inscription.year == current_year() - 1:
-            welcome['inscription'] = inscription
-            welcome['new_inscriptions'] = [inscription] + list(inscription.next)
-
-    return render(request, "home.html",
-                  {"wall": wall,
-                   "welcome": welcome,
-                   })
+    return render(
+        request, "home.html", {"wall": wall})

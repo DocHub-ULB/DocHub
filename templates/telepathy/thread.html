@@ -1,0 +1,10 @@
+{% extends "skel.html" %}
+
+{% load humanize %}
+{% load custommardown %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block content %}
+{% include "fragments/thread.html" %}
+{% endblock %}

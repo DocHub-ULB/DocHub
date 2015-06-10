@@ -3,15 +3,6 @@
 {% load custommardown %}
 {% load compress %}
 
-{% comment %}
-# Copyright 2012, hast. All rights reserved.
-
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-{% endcomment %}
-
 {% block title %}{{ object.slug|upper }}{% endblock %}
 
 {% block center-col %}
@@ -190,7 +181,7 @@
   {% endcompress %}
   {% compress js %}
   <script>
-    {% include "course-search.js" %}
+    {% include "graph/course-search.js" %}
   </script>
   {% endcompress %}
 {% endblock %}

@@ -133,7 +133,7 @@ class Node(PolymorphicModel):
             'id': self.pk, 'name': self.name,
             'type': self.classBasename()
         }
-        #res['url'] = self.canonic_url
+        # res['url'] = self.canonic_url
         if with_children:
             res['children'] = []
             for child in self.children():
@@ -162,7 +162,7 @@ class Keyword(models.Model):
     @property
     def color(self):
         return "#%02x%02x%02x" % tuple(
-            abs(int(200 * sin(self.id + x*pi/3))) for x in range(3))
+            abs(int(200 * sin(self.id + x * pi / 3))) for x in range(3))
 
     def __unicode__(self):
         return self.name
@@ -176,7 +176,7 @@ class Taggable(Node):
     @staticmethod
     def KW(name):
         """Simply create or get a keyword"""
-        #Keywords are always lowercased
+        # Keywords are always lowercased
         if isinstance(name, Keyword):
             return name
         existing, created = Keyword.objects.get_or_create(name=name.lower())
