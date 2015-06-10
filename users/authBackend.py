@@ -7,7 +7,6 @@ from django.db import IntegrityError
 from furl import furl
 from base64 import b64encode
 from www.settings import BASE_URL
-from django_statsd.clients import statsd
 
 
 class NetidBackend(object):
@@ -20,14 +19,12 @@ class NetidBackend(object):
             return None
 
     def authenticate(self, sid=None, uid=None):
-        statsd.incr('user.auth.try')
         if not (sid and uid):
             return None
 
         resp = requests.get(self.ULB_AUTH.format(sid, uid))
         resp.encoding = 'utf-8' # force utf-8 because ulb does not send the right header
         if not resp.ok:
-            statsd.incr('user.auth.ulb_not_200')
             return None
 
         try:
@@ -43,13 +40,11 @@ class NetidBackend(object):
         try:
             user_dict = self._parse_response(resp.text)
         except:
-            statsd.incr('user.auth.xml_failed')
             return None
 
         try:
             user = User.objects.get(netid=user_dict['netid'])
         except User.DoesNotExist:
-            statsd.incr('user.auth.new')
             user = User.objects.create_user(
                 netid=user_dict['netid'],
                 email=user_dict['mail'],
@@ -70,7 +65,6 @@ class NetidBackend(object):
                     section=inscription['slug'],
                     year=year,
                 )
-                statsd.incr('user.auth.new_inscription')
             except IntegrityError:
                 pass
 

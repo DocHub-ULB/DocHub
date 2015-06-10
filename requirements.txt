@@ -13,8 +13,6 @@ xmltodict
 djangorestframework
 drf-extensions
 furl
-django-statsd-mozilla
-statsd
 
 # Dev
 django-extensions

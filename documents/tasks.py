@@ -21,7 +21,6 @@ import uuid
 join = path.join
 import tempfile
 from pyPdf import PdfFileReader
-from django_statsd.clients import statsd
 
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
@@ -49,7 +48,6 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     document = Document.objects.get(id=doc_id)
     document.state = "ERROR"
     document.save()
-    statsd.incr('document.failure')
 
     # Notify the uploader
     Notification.direct(
@@ -123,7 +121,6 @@ def checksum(self, document_id):
         )
         did = document.id
         document.delete()
-        statsd.incr('document.same_checksum')
         raise ExisingChecksum("Document {} has the same checksum as {}".format(did, dup.id))
     else:
         document.md5 = hashed
@@ -147,11 +144,9 @@ def convert_office_to_pdf(self, document_id):
     except OSError:
         raise MissingBinary("unoconv")
     except subprocess.CalledProcessError as e:
-        statsd.incr('document.unoconv_fail')
         raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
-    statsd.incr('document.convert.unoconv')
 
     tmp.close()
 
@@ -179,7 +174,7 @@ def preview_pdf(self, document_id):
 
     for i in range(document.pages):
         page = Page.objects.create(numero=i, document=document)
-        statsd.incr('document.render.page')
+
         for width in 120, 600, 900:
             args = [
                 "gm", "convert",
@@ -199,7 +194,6 @@ def preview_pdf(self, document_id):
 @doctask
 def finish_file(self, document_id):
     document = Document.objects.get(pk=document_id)
-    statsd.incr('document.finished')
     document.state = 'DONE'
     document.save()
 

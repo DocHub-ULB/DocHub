@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 
 import os
 import uuid
-from django_statsd.clients import statsd
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -70,7 +69,6 @@ def upload_file(request, parent_id):
             doc.save()
 
             add_document_to_queue(doc)
-            statsd.incr('document.upload')
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
@@ -95,7 +93,6 @@ def upload_multiple_files(request, parent_id):
         form = MultipleUploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            statsd.incr('document.multiupload')
             for attachment in form.cleaned_data['files']:
                 name, _ = os.path.splitext(attachment.name)
                 name = name.lower()
@@ -119,7 +116,6 @@ def upload_multiple_files(request, parent_id):
                 doc.state = 'READY_TO_QUEUE'
                 doc.save()
                 add_document_to_queue(doc)
-                statsd.incr('document.upload')
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponseRedirect(reverse('document_put', args=(parent_id,)))
@@ -145,7 +141,6 @@ def document_edit(request, document_id):
             doc.year = form.cleaned_data['year']
             doc.save()
 
-            statsd.incr('document.edit')
             return HttpResponseRedirect(reverse('document_show', args=[doc.id]))
 
     else:
@@ -171,7 +166,6 @@ def document_download(request, id):
 
     doc.downloads = F('downloads') + 1
     doc.save(update_fields=['downloads'])
-    statsd.incr('document.download.pdf')
     return response
 
 
@@ -186,7 +180,6 @@ def document_download_original(request, id):
 
     doc.downloads = F('downloads') + 1
     doc.save(update_fields=['downloads'])
-    statsd.incr('document.download.original')
     return response
 
 
@@ -208,5 +201,4 @@ def document_show(request, id):
     }
     document.views = F('views') + 1
     document.save(update_fields=['views'])
-    statsd.incr('document.view')
     return render(request, "documents/viewer.html", context)

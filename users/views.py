@@ -29,7 +29,6 @@ from graph.models import Course
 from www import settings
 
 from forms import SettingsForm
-from django_statsd.clients import statsd
 
 
 def empty_user_followed_list_cache(user):
@@ -41,8 +40,6 @@ def follow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     request.user.follow.add(node)
     empty_user_followed_list_cache(request.user)
-
-    statsd.incr('user.follow.follow')
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
 
@@ -50,7 +47,6 @@ def follow_node(request, nodeid):
 def follow_node_children(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     for child in node.children(only=[Course]):
-        statsd.incr('user.follow.follow')
         request.user.follow.add(child)
     empty_user_followed_list_cache(request.user)
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
@@ -61,8 +57,6 @@ def unfollow_node(request, nodeid):
     node = get_object_or_404(Node, pk=nodeid)
     request.user.follow.remove(node)
     empty_user_followed_list_cache(request.user)
-
-    statsd.incr('user.follow.unfollow')
     return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
 
@@ -83,7 +77,6 @@ def user_settings(request):
             request.user.save()
 
             messages.success(request, 'Votre profil a été mis à jour.')
-            statsd.incr('user.update_profile')
 
             return render(request, "settings.html", {'form': SettingsForm()})
     else:
@@ -98,8 +91,6 @@ def user_settings(request):
 def panel_hide(request):
     request.user.welcome = False
     request.user.save()
-
-    statsd.incr('user.panel_hide')
 
     return HttpResponseRedirect(reverse('index'))
 
@@ -118,5 +109,4 @@ def auth(request):
             login(request, user)
             return HttpResponseRedirect(next_url)
 
-    statsd.incr('user.view.auth_fail')
     HttpResponseForbidden()

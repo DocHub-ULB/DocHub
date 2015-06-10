@@ -51,7 +51,6 @@ INSTALLED_APPS += (
     'djcelery',
     'compressor',
     'rest_framework',
-    'django_statsd',
 )
 
 # apps
@@ -102,17 +101,3 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
 }
-
-
-MIDDLEWARE_CLASSES = (
-    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
-    'django_statsd.middleware.GraphiteMiddleware',
-) + MIDDLEWARE_CLASSES
-
-
-# STATSD_PATCHES = [
-#     'django_statsd.patches.db',
-#     'django_statsd.patches.cache',
-# ]
-
-STATSD_CELERY_SIGNALS = True

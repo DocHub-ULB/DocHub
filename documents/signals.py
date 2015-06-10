@@ -13,7 +13,6 @@ from __future__ import unicode_literals
 import models
 from notify.models import PreNotification, Notification
 from django.core.urlresolvers import reverse
-from django_statsd.clients import statsd
 
 
 def pre_document_save(**kwargs):
@@ -28,7 +27,6 @@ def pre_document_save(**kwargs):
     else:
         if not old_doc.state == document.state:  # State changed
             if document.state == 'DONE':
-                statsd.incr('document.done_notification')
                 Notification.direct(
                     user=document.user,
                     text='Conversion de "{}" terminée'.format(document.name),
