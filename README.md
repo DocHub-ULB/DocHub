@@ -3,7 +3,7 @@
 
 Beta402 or DocHub is a website, written in django. It's main goal is to provide a space for students (for now form the [ULB](http://ulb.ac.be) univeristy) to collaborate, help each other and distribute old exams and exercices.
 
-There is a [live instance of DocHub](http://dochub.be) hosted by UrLab and the Cercle-Informatique.
+There is a [live instance of DocHub](http://dochub.be) hosted by [UrLab](http://urlab.be) and the [Cercle Informatique](http://cerkinfo.be).
 
 ## Screenshots
 
@@ -17,7 +17,7 @@ There is a [live instance of DocHub](http://dochub.be) hosted by UrLab and the C
 
 You'll need everything that is in requirements.txt (don't worry, pip will do it for you).
 
-You will also need to install poppler (the binary 'pdftotext'), GraphicsMagick (the binary 'gm') and LibreOffice/OpenOffice + unoconv (you need the binary 'unoconv') using your distribution packages.
+You will also need to install GraphicsMagick (the binary 'gm') and LibreOffice/OpenOffice + unoconv (you need the binary 'unoconv') using your distribution packages.
 
 For exemple on Debian/Ubuntu
 

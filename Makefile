@@ -65,4 +65,4 @@ static/3party/select:
 	mv ${SELECTFILES} static/3party/select
 
 shower-clean:
-	rm -rf static/3party/foundation static/3party/foundation-icons static/3party/select
+	rm -rf static/3party/
