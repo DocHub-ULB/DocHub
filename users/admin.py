@@ -18,8 +18,8 @@ from .models import User, Inscription
 class UserAdmin(admin.ModelAdmin):
     exclude = ('password', 'last_login', 'follow', 'moderated_nodes')
     readonly_fields = ('netid', )
-    list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative')
-    list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login')
+    list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative', 'last_login', 'created')
+    list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login', 'created')
     search_fields = ('netid', 'first_name', 'last_name')
 
 
