@@ -12,55 +12,29 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-from authentification import intranet_auth
-from django.contrib.auth.views import login, logout
+from django.contrib.auth.views import logout
 from django.contrib import admin
 
 admin.autodiscover()
 
-from views import home, node_canonic, index, p402
 import settings
-
-
-# decorator whom call function_in if user is authenticated, function_out if not
-def user_logged(function_in, function_out):
-    def toggle(request, *args, **kwargs):
-        if request.user.is_authenticated():
-            return function_in(request, *args, **kwargs)
-        else:
-            return function_out(request, *args, **kwargs)
-    return toggle
 
 
 urlpatterns = patterns(
     "",
     # The apps entry points
+    url(r"^$", 'www.views.index', name="index"),
+    url(r"^p402/$", 'www.views.index', {'p402': True}, name="p402"),
     url(r"^ulb/", include("graph.urls")),
     url(r"^document/", include("documents.urls")),
     url(r"^telepathy/", include("telepathy.urls")),
     url(r"^notifications/", include("notify.urls")),
     url(r"^users/", include("users.urls")),
+    url(r"^node/(?P<nodeid>\d+)$", 'www.views.node_canonic', name="node_canonic"),
 
-    url(r"^node/(?P<nodeid>\d+)$", node_canonic, name="node_canonic"),
-
-    url(r"^$",
-        user_logged(home, index),
-        name="index"),
-
-    url(r"^p402/$", p402, name="p402"),
-
-    # url(r"^syslogin$",
-    #     user_logged(app_redirection, login),
-    #     {"template_name": "syslogin.html"},
-    #     name="syslogin"),
-
-    url(r"^auth/(?P<next_url>.*)$",
-        intranet_auth,
-        name="auth_entry"),
-
-    url(r"^logout$",
-        logout, {"next_page": "/"},
-        name="logout"),
+    url(r"^syslogin$", 'django.contrib.auth.views.login', {"template_name": "syslogin.html"}, name="syslogin"),
+    url(r"^auth/$", 'users.views.auth'),
+    url(r"^logout$", logout, {"next_page": "/"}, name="logout"),
 
     url(r'^admin/', include(admin.site.urls)),
 

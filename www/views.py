@@ -10,8 +10,6 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-import urllib
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -24,42 +22,47 @@ from polydag.models import Node
 from documents.models import Document, Page
 from notify.models import PreNotification
 from users.models import User
+from users.authBackend import NetidBackend
 
 import settings
-
-Mapping = {
-    Course: 'course_show',
-    Thread: 'thread_show',
-    Document: 'document_show',
-    Category: 'category_show'
-}
 
 
 @login_required
 def node_canonic(request, nodeid):
+    MAPPING = {
+        Course: 'course_show',
+        Thread: 'thread_show',
+        Document: 'document_show',
+        Category: 'category_show'
+    }
+
     n = get_object_or_404(Node, pk=nodeid)
-    for klass in Mapping:
-        action = Mapping[klass]
+    for klass in MAPPING:
+        action = MAPPING[klass]
         if type(n) == klass:
             return HttpResponseRedirect(reverse(action, args=[n.id]))
 
 
-def index(request):
-    next_url = request.GET.get("next", False)
-    if next_url:
-        next_url = urllib.quote_plus("next=" + next_url.strip() + "&")
-        next_url = urllib.quote_plus(next_url)
-
-        ulb_url = settings.ULB_LOGIN + next_url
+def index(request, p402=False):
+    if not request.user.is_authenticated():
+        context = auth_page_context(request)
+        if p402:
+            return render(request, "p402.html", context)
+        else:
+            return render(request, "index.html", context)
     else:
-        ulb_url = settings.ULB_LOGIN
+        return feed(request)
+
+
+def auth_page_context(request):
+    next_url = request.GET.get("next", "")
 
     def floor(num, r=1):
         r = 10 ** r
         return int((num // r) * r)
 
-    context = {
-        "login_url": ulb_url,
+    return {
+        "login_url": NetidBackend.login_url(next_url),
         "debug": settings.DEBUG,
         "documents": floor(Document.objects.count()),
         "pages": floor(Page.objects.count(), 2),
@@ -67,36 +70,8 @@ def index(request):
         "threads": floor(Thread.objects.count()),
     }
 
-    return render(request, "index.html", context)
 
-
-def p402(request):
-    next_url = request.GET.get("next", False)
-    if next_url:
-        next_url = urllib.quote_plus("next=" + next_url.strip() + "&")
-        next_url = urllib.quote_plus(next_url)
-
-        ulb_url = settings.ULB_LOGIN + next_url
-    else:
-        ulb_url = settings.ULB_LOGIN
-
-    def floor(num, r=1):
-        r = 10 ** r
-        return int((num // r) * r)
-
-    context = {
-        "login_url": ulb_url,
-        "debug": settings.DEBUG,
-        "documents": floor(Document.objects.count()),
-        "pages": floor(Page.objects.count(), 2),
-        "users": floor(User.objects.count()),
-        "threads": floor(Thread.objects.count()),
-    }
-    return render(request, "p402.html", context)
-
-
-@login_required
-def home(request):
+def feed(request):
     followed_ids = cache.get('user.wall.followed_nodes.' + str(request.user.id))
     if followed_ids is None:
         followed = request.user.directly_followed()
@@ -111,5 +86,4 @@ def home(request):
     wall = wall.filter(personal=False).order_by('-created')
     wall = wall.select_related('user')[:20]
 
-    return render(
-        request, "home.html", {"wall": wall})
+    return render(request, "home.html", {"wall": wall})

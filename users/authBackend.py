@@ -4,6 +4,9 @@ from datetime import date
 import os
 from users.models import User, Inscription
 from django.db import IntegrityError
+from furl import furl
+from base64 import b64encode
+from www.settings import BASE_URL
 
 
 class NetidBackend(object):
@@ -98,3 +101,18 @@ class NetidBackend(object):
             })
 
         return user
+
+    @classmethod
+    def login_url(cls, next_url=""):
+        return_url = furl(BASE_URL)
+        return_url.path = "auth"
+        if next_url != "":
+            return_url.args['next'] = b64encode(next_url)
+
+        ulb_url = furl("https://www.ulb.ac.be/commons/intranet")
+        ulb_url.args["_prt"] = "ulb:facultes:sciences:p402"
+        ulb_url.args["_ssl"] = "on"
+        ulb_url.args["_prtm"] = "redirect"
+        ulb_url.args["_appl"] = return_url
+
+        return ulb_url

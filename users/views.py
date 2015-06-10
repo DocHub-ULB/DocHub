@@ -12,14 +12,17 @@ from __future__ import unicode_literals
 
 import os
 from PIL import Image, ImageOps
+from base64 import b64decode
+
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.cache.utils import make_template_fragment_key
 from django.core.cache import cache
 from django.contrib import messages
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.contrib.auth import authenticate, login
 
 from polydag.models import Node
 from graph.models import Course
@@ -90,3 +93,20 @@ def panel_hide(request):
     request.user.save()
 
     return HttpResponseRedirect(reverse('index'))
+
+
+def auth(request):
+    sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
+    next_url = request.GET.get("next_url", "")
+    if next_url != "":
+        next_url = b64decode(next_url)
+    else:
+        next_url = "/"
+
+    if sid and uid:
+        user = authenticate(sid=sid, uid=uid)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(next_url)
+
+    HttpResponseForbidden()
