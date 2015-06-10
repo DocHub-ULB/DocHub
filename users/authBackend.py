@@ -23,7 +23,7 @@ class NetidBackend(object):
             return None
 
         resp = requests.get(self.ULB_AUTH.format(sid, uid))
-        resp.encoding = 'utf-8' # force utf-8 because ulb does not send the right headers
+        resp.encoding = 'utf-8' # force utf-8 because ulb does not send the right header
         if not resp.ok:
             return None
 
@@ -31,8 +31,10 @@ class NetidBackend(object):
             if not os.path.exists("/tmp/netids/"):
                 os.mkdir("/tmp/netids/")
             with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
-                f.write(resp.text)
+                f.write(resp.text.encode('utf-8'))
         except OSError:
+            pass
+        except UnicodeEncodeError:
             pass
 
         try:
