@@ -64,6 +64,7 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()
 
     netid = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    created = models.DateTimeField(auto_now_add=True)
     first_name = models.CharField(max_length=127, null=False, blank=False)
     last_name = models.CharField(max_length=127, null=False, blank=False)
     email = models.CharField(max_length=255, null=False, blank=False, unique=True)
