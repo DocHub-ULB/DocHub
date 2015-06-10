@@ -27,7 +27,8 @@ class NetidBackend(object):
             return None
 
         try:
-            os.mkdir("/tmp/netids/")
+            if not os.path.exists("/tmp/netids/"):
+                os.mkdir("/tmp/netids/")
             with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
                 f.write(resp.text)
         except OSError:
