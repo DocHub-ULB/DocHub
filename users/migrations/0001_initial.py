@@ -9,7 +9,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polydag', '__first__'),
+        ('catalog', '0001_initial'),
     ]
 
     operations = [
@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(default=django.utils.timezone.now, verbose_name='last login')),
                 ('netid', models.CharField(unique=True, max_length=20)),
+                ('created', models.DateTimeField(auto_now_add=True)),
                 ('first_name', models.CharField(max_length=127)),
                 ('last_name', models.CharField(max_length=127)),
                 ('email', models.CharField(unique=True, max_length=255)),
@@ -30,8 +31,7 @@ class Migration(migrations.Migration):
                 ('is_staff', models.BooleanField(default=False)),
                 ('is_academic', models.BooleanField(default=False)),
                 ('is_representative', models.BooleanField(default=False)),
-                ('follow', models.ManyToManyField(related_name='followed', db_index=True, to='polydag.Node', blank=True)),
-                ('moderated_nodes', models.ManyToManyField(to='polydag.Node', db_index=True, blank=True)),
+                ('followed_courses', models.ManyToManyField(to='catalog.Course')),
             ],
             options={
                 'abstract': False,
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('faculty', models.CharField(max_length=80, null=True)),
                 ('section', models.CharField(max_length=80, null=True)),
                 ('year', models.PositiveIntegerField(null=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, unique=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },

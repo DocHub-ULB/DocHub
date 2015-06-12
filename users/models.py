@@ -13,20 +13,17 @@ from __future__ import unicode_literals
 import re
 import os
 from os.path import join
+import identicon
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.utils import timezone
 
-from graph.models import Course
 from www import settings
-
-import identicon
-
-PATTERN = re.compile('[\W_]+')
 
 
 class CustomUserManager(UserManager):
+    PATTERN = re.compile('[\W_]+')
 
     def _create_user(self, netid, email, password, **extra_fields):
         """
@@ -42,7 +39,7 @@ class CustomUserManager(UserManager):
             if not os.path.exists(join(settings.MEDIA_ROOT, "profile")):
                 os.makedirs(join(settings.MEDIA_ROOT, "profile"))
             profile_path = join(settings.MEDIA_ROOT, "profile", "{}.png".format(netid))
-            alpha_netid = PATTERN.sub('', netid)
+            alpha_netid = self.PATTERN.sub('', netid)
             identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
             user.photo = 'png'
         user.set_password(password)
@@ -72,7 +69,6 @@ class User(AbstractBaseUser):
     photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
     comment = models.TextField(null=True, blank=True)
-    follow = models.ManyToManyField('polydag.Node', related_name='followed', db_index=True, blank=True)
     followed_courses = models.ManyToManyField('catalog.Course')
 
     is_staff = models.BooleanField(default=False)

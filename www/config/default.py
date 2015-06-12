@@ -58,11 +58,8 @@ INSTALLED_APPS += (
 INSTALLED_APPS += (
     'www',
     'documents',
-    'graph',
     'telepathy',
     'users',
-    'polydag',
-    'notify',
     'catalog',
     'tags',
 )

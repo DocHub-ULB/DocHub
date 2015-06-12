@@ -3,14 +3,14 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 from django.conf import settings
-import polydag.behaviors
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polydag', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('documents', '0001_initial'),
+        ('catalog', '0001_initial'),
     ]
 
     operations = [
@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('text', models.TextField()),
                 ('created', models.DateTimeField(auto_now_add=True, db_index=True)),
+                ('edited', models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)),
             ],
             options={
             },
@@ -28,14 +29,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Thread',
             fields=[
-                ('taggable_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='polydag.Taggable')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255)),
                 ('created', models.DateTimeField(auto_now_add=True, db_index=True)),
+                ('edited', models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)),
+                ('placement', models.TextField(default=None, null=True)),
+                ('course', models.ForeignKey(to='catalog.Course')),
+                ('document', models.ForeignKey(to='documents.Document', null=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ['-created'],
             },
-            bases=(polydag.behaviors.Leaf, polydag.behaviors.OneParent, 'polydag.taggable'),
+            bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='message',
