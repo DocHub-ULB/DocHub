@@ -73,11 +73,11 @@ class User(AbstractBaseUser):
     welcome = models.BooleanField(default=True)
     comment = models.TextField(null=True, blank=True)
     follow = models.ManyToManyField('polydag.Node', related_name='followed', db_index=True, blank=True)
+    tmp_followed_courses = models.ManyToManyField('catalog.Course')
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
-    moderated_nodes = models.ManyToManyField('polydag.Node', db_index=True, blank=True)
 
     @property
     def get_photo(self):
@@ -92,46 +92,30 @@ class User(AbstractBaseUser):
         return "{0.first_name} {0.last_name}".format(self)
 
     def directly_followed(self):
-        return self.follow.all()
+        raise NotImplementedError()
 
     def followed_nodes_id(self):
-        return map(lambda x: x.id, self.follow.only('id').non_polymorphic())
+        raise NotImplementedError()
 
     def followed_courses(self):
-        return self.directly_followed().instance_of(Course)
+        raise NotImplementedError()
 
     def follows(self, course):
-        courses = self.follow.instance_of(Course).only('id').non_polymorphic()
-        return course.id in map(lambda x: x.id, courses)
+        raise NotImplementedError()
 
     @property
     def auto_follow(self):
-        return True # TODO use user prefs
+        raise NotImplementedError()
 
     # Permissions
     def is_moderator(self, node):
-        if self.is_staff:
-            return True
-
-        moderated_nodes = set(self.moderated_nodes.all())
-        if len(moderated_nodes) == 0:
-            return False
-        if node in moderated_nodes:
-            return True
-        ancestors = node.ancestors_set()
-        return not ancestors.isdisjoint(moderated_nodes)
+        raise NotImplementedError()
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
 
     def has_perm(self, perm_list, obj=None):
-        if self.is_staff:
-            return True
-
-        if not obj:
-            return False
-
-        return obj.user == self or self.is_moderator(obj)
+        raise NotImplementedError()
 
 
 class Inscription(models.Model):

@@ -13,6 +13,7 @@ xmltodict
 djangorestframework
 drf-extensions
 furl
+django-mptt
 
 # Dev
 django-extensions

@@ -11,13 +11,12 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.db import models
-
-from polydag.models import Taggable
-from polydag.behaviors import OneParent
 from www import settings
 
 
-class Document(OneParent, Taggable):
+class Document(models.Model):
+    name = models.CharField(max_length=255)
+    course = models.ForeignKey('catalog.Course', null=True)
 
     description = models.TextField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)

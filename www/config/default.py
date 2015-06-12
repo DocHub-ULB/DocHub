@@ -51,6 +51,7 @@ INSTALLED_APPS += (
     'djcelery',
     'compressor',
     'rest_framework',
+    'mptt',
 )
 
 # apps
@@ -62,6 +63,8 @@ INSTALLED_APPS += (
     'users',
     'polydag',
     'notify',
+    'catalog',
+    'tags',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
