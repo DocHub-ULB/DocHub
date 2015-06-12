@@ -17,24 +17,21 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Count
+from django.db.models import F
 
 from documents.models import Document
-from graph.models import Course
-from polydag.models import Node
+from catalog.models import Course
 from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
 from www.helpers import year_choices
-from telepathy.models import Thread
 from telepathy.forms import NewThreadForm
+from tags.models import Tag
 
 from cycle import add_document_to_queue
 
 
 @login_required
-def upload_file(request, parent_id):
-    parentNode = get_object_or_404(Node, id=parent_id)
-    if not isinstance(parentNode, Course):
-        raise NotImplementedError("Not a course")
+def upload_file(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
 
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -48,11 +45,11 @@ def upload_file(request, parent_id):
 
             extension = os.path.splitext(request.FILES['file'].name)[1].lower()
             description = form.cleaned_data['description']
-            course = parentNode
 
             doc = Document.objects.create(
                 user=request.user,
                 name=name,
+                course=course,
                 description=description,
                 state="PREPARING",
                 file_type=extension
@@ -60,9 +57,9 @@ def upload_file(request, parent_id):
             doc.original.save(str(uuid.uuid4()) + extension, request.FILES['file'])
             doc.save()
 
-            course.add_child(doc)
+            for tag in form.cleaned_data['tags']:
+                doc.tags.add(Tag.objects.get(name=tag))
 
-            doc.add_keywords(*form.cleaned_data['tags'])
             doc.year = form.cleaned_data['year']
 
             doc.state = 'READY_TO_QUEUE'
@@ -79,15 +76,13 @@ def upload_file(request, parent_id):
     return render(request, 'documents/document_upload.html', {
         'form': form,
         'multiform': multiform,
-        'parent': parentNode,
+        'course': course,
     })
 
 
 @login_required
-def upload_multiple_files(request, parent_id):
-    parentNode = get_object_or_404(Node, id=parent_id)
-    if not isinstance(parentNode, Course):
-        raise NotImplementedError("Not a course")
+def upload_multiple_files(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
 
     if request.method == 'POST':
         form = MultipleUploadFileForm(request.POST, request.FILES)
@@ -99,11 +94,11 @@ def upload_multiple_files(request, parent_id):
 
                 extension = os.path.splitext(attachment.name)[1].lower()
                 description = ""
-                course = parentNode
 
                 doc = Document.objects.create(
                     user=request.user,
                     name=name,
+                    course=course,
                     description=description,
                     state="PREPARING",
                     file_type=extension
@@ -118,14 +113,14 @@ def upload_multiple_files(request, parent_id):
                 add_document_to_queue(doc)
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
-    return HttpResponseRedirect(reverse('document_put', args=(parent_id,)))
+    return HttpResponseRedirect(reverse('document_put', args=(course.id,)))
 
 
 @login_required
 def document_edit(request, document_id):
     doc = get_object_or_404(Document, id=document_id)
 
-    if request.user != doc.user and not request.user.is_moderator(doc.parent):
+    if request.user != doc.user:
         return HttpResponse('You may not edit this document.', status=403)
 
     if request.method == 'POST':
@@ -135,8 +130,9 @@ def document_edit(request, document_id):
             doc.name = form.cleaned_data['name']
             doc.description = form.cleaned_data['description']
 
-            doc.keywords.clear()
-            doc.add_keywords(*form.cleaned_data['tags'])
+            doc.tags.clear()
+            for tag in form.cleaned_data['tags']:
+                doc.tags.add(Tag.objects.get(name=tag))
 
             doc.year = form.cleaned_data['year']
             doc.save()

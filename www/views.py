@@ -11,11 +11,9 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.shortcuts import render
-from django.core.cache import cache
 
 from telepathy.models import Thread
 from documents.models import Document, Page
-from notify.models import PreNotification
 from users.models import User
 from users.authBackend import NetidBackend
 

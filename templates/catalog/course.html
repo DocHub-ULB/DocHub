@@ -16,54 +16,83 @@ t²
     <a href="{{ course.gehol_url }}" class="button expand radius" target="_blank">Horaire sur GeHol</a>
   </div>
 </div>
-
 <div class="row">
   <div class="large-12 medium-12 columns">
-    {% for document in documents %}
-      <div class="row course-row"
-        node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
-        node-type="Document"
-      >
-        {% if document.state == 'DONE' %}
-          <a href="{% url 'document_show' document.id %}">
-            <i class="fi-page-copy round-icon big"></i>
-          </a>
-        {% else %}
-          <i class="fi-loop round-icon big"></i>
-        {% endif %}
-        <div class="course-row-content">
-          <h5>
-            {% if document.state == "DONE" %}
-              <a href="{% url 'document_show' document.id %}"> {{ document.name }} </a>
-            {% else %}
-              {{ document.name }}
-            {% endif %}
-            <small>par {{ document.user.name }}</small>
-          </h5>
-          {% if document.description %}
-            <p>{{ document.description|truncatechars:200 }}</p>
-          {% endif %}
-          {# <a href="{% url 'document_edit' document.id %}"><i class="fi-widget"></i> Editer</a> #}
-          <div class="course-content-last-line">
-            <i class="fi-page-filled"></i>  {{ document.pages }} page{{ document.pages|pluralize }}
-            <i class="fi-clock"></i> Uploadé le {{ document.date|date:"d F Y" }}
-            {% if document.tags.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
-            {% for kw in document.tags.all%}
-              <a data-id="{{kw.id}}" href="#"
-                 style="background-color: {{kw.color}}; border: solid 2px {{kw.color}};"
-                 class="radius label tag-item">
-                {{kw}}
+    <ul class="tabs" data-tab>
+      <li class="tab-title active"><a href="#documents">Documents</a></li>
+      <li class="tab-title"><a href="#threads">Discussions</a></li>
+    </ul>
+    <div class="tabs-content">
+      <div class="content active" id="documents">
+        {% for document in documents %}
+          <div class="row course-row"
+            node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
+            node-type="Document"
+          >
+            {% if document.state == 'DONE' %}
+              <a href="{% url 'document_show' document.id %}">
+                <i class="fi-page-copy round-icon big"></i>
               </a>
-            {% endfor %}
+            {% else %}
+              <i class="fi-loop round-icon big"></i>
+            {% endif %}
+            <div class="course-row-content">
+              <h5>
+                {% if document.state == "DONE" %}
+                  <a href="{% url 'document_show' document.id %}"> {{ document.name }} </a>
+                {% else %}
+                  {{ document.name }}
+                {% endif %}
+                <small>par {{ document.user.name }}</small>
+              </h5>
+              {% if document.description %}
+                <p>{{ document.description|truncatechars:200 }}</p>
+              {% endif %}
+              <div class="course-content-last-line">
+                <i class="fi-page-filled"></i>  {{ document.pages }} page{{ document.pages|pluralize }}
+                <i class="fi-clock"></i> Uploadé le {{ document.date|date:"d F Y" }}
+                {% if document.tags.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
+                {% for kw in document.tags.all%}
+                  <a data-id="{{kw.id}}" href="#"
+                     style="background-color: {{kw.color}}; border: solid 2px {{kw.color}};"
+                     class="radius label tag-item">
+                    {{kw}}
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
           </div>
-        </div>
+        {% empty %}
+          <h3>Il n’y a encore rien dans ce cours…</h3>
+          <p>Personne n’est encore passé ici on dirait.<br>
+            Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
+        {% endfor %}
       </div>
-    {% empty %}
-      <h3>Il n’y a encore rien dans ce cours…</h3>
-      <p>Personne n’est encore passé ici on dirait.<br>
-        Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
-    {% endfor %}
-
+      <div class="content active" id="threads">
+        {% for thread in threads %}
+          <div class="row course-row" node-type="Thread">
+            <a href="{% url 'thread_show' thread.id %}">
+              <i class="fi-comment round-icon big"></i>
+            </a>
+            <div class="course-row-content">
+              <h5>
+                <a href="{% url 'thread_show' thread.id %}"> {{ thread.name }} </a>
+                <small>par {{ thread.user.name }}</small>
+              </h5>
+              <div class="course-content-last-line">
+                <i class="fi-align-justify"></i>
+                {{ thread.message__count }} message{{ thread.message__count|pluralize }}
+                <i class="fi-clock"></i> Posté le {{ thread.created|date:"d F Y" }}
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <h3>Il n’y a encore rien dans ce cours…</h3>
+          <p>Personne n’est encore passé ici on dirait.<br>
+            Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -14,6 +14,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 from catalog.models import Category, Course
 from tags.models import Tag
@@ -33,7 +34,7 @@ def show_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
     docs = course.document_set.exclude(state="ERROR")
-    threads = course.thread_set.all()
+    threads = course.thread_set.annotate(Count('message'))
 
     return render(request, "catalog/course.html", {
         "course": course,

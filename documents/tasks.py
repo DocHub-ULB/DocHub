@@ -49,15 +49,6 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     document.state = "ERROR"
     document.save()
 
-    # Notify the uploader
-    Notification.direct(
-        user=document.user,
-        text="Une erreur c'est produite pendant la conversion de : {}".format(document.name),
-        node=document.parent,
-        url=reverse('node_canonic', args=[document.parent.id]),
-        icon="x",
-    )
-
     # Warn the admins
     DocumentError.objects.create(
         document=document,
@@ -93,16 +84,6 @@ def process_document(self, document_id):
 
 
 @doctask
-def sanity_check(self, document_id):
-    document = Document.objects.get(pk=document_id)
-
-    if not document.original:
-        raise DocumentProcessingError(document_id, "Missing original")
-
-    return document_id
-
-
-@doctask
 def checksum(self, document_id):
     document = Document.objects.get(pk=document_id)
 
@@ -112,13 +93,13 @@ def checksum(self, document_id):
     query = Document.objects.filter(md5=hashed).exclude(md5='')
     if query.count() != 0:
         dup = query.first()
-        Notification.direct(
-            user=document.user,
-            text='Votre document "{}" a été refusé car c\'est une copie conforme de {}'.format(document.name, dup.name),
-            node=document.parent,
-            url=reverse('node_canonic', args=[dup.id]),
-            icon="x",
-        )
+        # Notification.direct(
+        #     user=document.user,
+        #     text='Votre document "{}" a été refusé car c\'est une copie conforme de {}'.format(document.name, dup.name),
+        #     node=document.parent,
+        #     url=reverse('node_canonic', args=[dup.id]),
+        #     icon="x",
+        # )
         did = document.id
         document.delete()
         raise ExisingChecksum("Document {} has the same checksum as {}".format(did, dup.id))
@@ -200,7 +181,6 @@ def finish_file(self, document_id):
     return document_id
 
 process_pdf = chain(
-    sanity_check.s(),
     checksum.s(),
     mesure_pdf_length.s(),
     preview_pdf.s(),
@@ -208,7 +188,6 @@ process_pdf = chain(
 )
 
 process_office = chain(
-    sanity_check.s(),
     checksum.s(),
     convert_office_to_pdf.s(),
     mesure_pdf_length.s(),

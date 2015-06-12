@@ -1,5 +1,4 @@
 {%load humanize %}
-{% load cache %}
 {% load compress %}
 
 <!doctype html>
@@ -72,32 +71,30 @@
       {% block full-page %}
         <div class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
           <ul class="side-nav main-side-nav">
+            <li>
+              <a href="/" class="sidebar-button">
+                <i class="fi-list-thumbnails"></i> Flux d'actualités
+              </a>
+            </li>
+            {% if user.followed_courses.all|length == 0 %}
               <li>
-                <a href="/" class="sidebar-button">
-                  <i class="fi-list-thumbnails"></i> Flux d'actualités
+                <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
                 </a>
               </li>
-            {% cache 120 user_followed_list user.netid %}
-              {% if user.followed_courses.all|length == 0 %}
-                <li>
-                  <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
+            {% else %}
+              <li>
+                <a href="{% url 'show_courses' %}" class="sidebar-button"><i class="fi-book"></i> Mes cours</a>
+              </li>
+            {% endif %}
+            <ul class="course-bulletlist">
+              {% for course in user.followed_courses.all %}
+                <li class="nav-link">
+                  <a href="{% url 'course_show' course.slug %}">
+                    <i class="fi-folder"></i> {{ course.name }}
                   </a>
-                </li>
-              {% else %}
-                <li>
-                  <a href="{% url 'show_courses' %}" class="sidebar-button"><i class="fi-book"></i> Mes cours</a>
-                </li>
-              {% endif %}
-              <ul class="course-bulletlist">
-                {% for course in user.followed_courses.all %}
-                  <li class="nav-link">
-                    <a href="{% url 'course_show' course.slug %}">
-                      <i class="fi-folder"></i> {{ course.name }}
-                    </a>
                   </li>
-                {% endfor %}
-              </ul>
-            {% endcache %}
+              {% endfor %}
+            </ul>
           </ul>
 
         </div>

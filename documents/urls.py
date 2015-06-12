@@ -15,11 +15,11 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     "",
 
-    url(r"^put/(?P<parent_id>[^/]*)$",
+    url(r"^put/(?P<course_slug>[^/]*)$",
         'documents.views.upload_file',
         name="document_put"),
 
-    url(r"^multiple_put/(?P<parent_id>[^/]*)$",
+    url(r"^multiple_put/(?P<course_slug>[^/]*)$",
         'documents.views.upload_multiple_files',
         name="document_put_multiple"),
 
