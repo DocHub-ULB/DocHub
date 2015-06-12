@@ -170,7 +170,7 @@ $(document).ready(function(){
     </div>
   </div>
   <div class="row">
-    <form method="POST" action="{% url "thread_put" document.id %}">
+    <form method="POST" action="{% url "document_thread_put" document.id %}">
       {% csrf_token %}
       {% for field in form %}
         {% include "simple_input.html" %}

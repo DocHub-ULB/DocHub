@@ -19,11 +19,17 @@ import json
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
 from catalog.models import Course
+from documents.models import Document
 
 
 @login_required
-def new_thread(request, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
+def new_thread(request, course_slug=None, document_id=None):
+    if document_id is not None:
+        document = get_object_or_404(Document, id=document_id)
+        course = document.course
+    else:
+        course = get_object_or_404(Course, slug=course_slug)
+        document = None
 
     if request.method == 'POST':
         form = NewThreadForm(request.POST)
@@ -32,7 +38,7 @@ def new_thread(request, course_slug):
             name = form.cleaned_data['name']
             content = form.cleaned_data['content']
 
-            thread = Thread.objects.create(user=request.user, name=name, course=course)
+            thread = Thread.objects.create(user=request.user, name=name, course=course, document=document)
             message = Message.objects.create(user=request.user, thread=thread, text=content)
 
             placement = {}

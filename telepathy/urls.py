@@ -19,6 +19,10 @@ urlpatterns = patterns(
         'telepathy.views.new_thread',
         name="thread_put"),
 
+    url(r"^doc_put/(?P<document_id>[^/]*)$",
+        'telepathy.views.new_thread',
+        name="document_thread_put"),
+
     url(r"^reply/(?P<thread_id>[^/]*)$",
         'telepathy.views.reply_thread',
         name="thread_reply"),
