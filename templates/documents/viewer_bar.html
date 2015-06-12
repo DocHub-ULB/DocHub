@@ -9,21 +9,21 @@
     <section class="top-bar-section">
       <ul class="left">
         <li class="hide-for-medium-only">
-          <a href="{% url 'course_show' parent.id %}"  >
-            <i class="fi-arrow-left"></i> {{ parent.name }}
+          <a href="{% url 'course_show' document.course.slug %}"  >
+            <i class="fi-arrow-left"></i> {{ document.course.name }}
           </a>
         </li>
         <li class="hide-for-large-up hide-for-small-only">
-          <a href="{% url 'course_show' parent.id %}" >
+          <a href="{% url 'course_show' document.course.id %}" >
             <i class="fi-arrow-left"></i>
           </a>
         </li>
         <li>
-          <a href="{% url 'document_download' object.id %}"><i class="fi-archive"></i> Télécharger</a>
+          <a href="{% url 'document_download' document.id %}"><i class="fi-archive"></i> Télécharger</a>
         </li>
-        {% if object.original != object.pdf %}
+        {% if document.original != document.pdf %}
           <li>
-            <a href="{% url 'document_download_original' object.id %}">
+            <a href="{% url 'document_download_original' document.id %}">
               <i class="fi-archive"></i> Original
             </a>
           </li>
@@ -32,7 +32,7 @@
         </li>
         <li class="divider viewer-title"></li>
         <li class="viewer-title">
-          <i class="fi-book"></i> {{ object.name }}
+          <i class="fi-book"></i> {{ document.name }}
         </li>
       </ul>
       <ul class="right">
@@ -42,11 +42,9 @@
         <li>
           <a id="zoom-out"><i class="fi-zoom-out"></i> De-zoom</a>
         </li>
-        {% if is_moderator or user.netid == object.user.netid %}
-          <li>
-            <a href="{% url 'document_edit' object.id %}"><i class="fi-widget"></i> Editer</a>
-          </li>
-        {% endif %}
+        <li>
+          <a href="{% url 'document_edit' document.id %}"><i class="fi-widget"></i> Editer</a>
+        </li>
       </ul>
     </section>
   </nav>

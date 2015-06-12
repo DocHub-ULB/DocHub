@@ -10,37 +10,16 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.core.cache import cache
 
-from graph.models import Category, Course
 from telepathy.models import Thread
-from polydag.models import Node
 from documents.models import Document, Page
 from notify.models import PreNotification
 from users.models import User
 from users.authBackend import NetidBackend
 
 import settings
-
-
-@login_required
-def node_canonic(request, nodeid):
-    MAPPING = {
-        Course: 'course_show',
-        Thread: 'thread_show',
-        Document: 'document_show',
-        Category: 'category_show'
-    }
-
-    n = get_object_or_404(Node, pk=nodeid)
-    for klass in MAPPING:
-        action = MAPPING[klass]
-        if type(n) == klass:
-            return HttpResponseRedirect(reverse(action, args=[n.id]))
 
 
 def index(request, p402=False):

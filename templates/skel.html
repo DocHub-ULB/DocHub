@@ -78,7 +78,7 @@
                 </a>
               </li>
             {% cache 120 user_followed_list user.netid %}
-              {% if user.followed_courses|length == 0 %}
+              {% if user.followed_courses.all|length == 0 %}
                 <li>
                   <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
                   </a>
@@ -89,7 +89,7 @@
                 </li>
               {% endif %}
               <ul class="course-bulletlist">
-                {% for course in user.followed_courses %}
+                {% for course in user.followed_courses.all %}
                   <li class="nav-link">
                     <a href="{% url 'course_show' course.slug %}">
                       <i class="fi-folder"></i> {{ course.name }}

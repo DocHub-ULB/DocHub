@@ -25,12 +25,11 @@ urlpatterns = patterns(
     # The apps entry points
     url(r"^$", 'www.views.index', name="index"),
     url(r"^p402/$", 'www.views.index', {'p402': True}, name="p402"),
-    url(r"^ulb/", include("graph.urls")),
+    url(r"^ulb/", include("catalog.urls")),
     url(r"^document/", include("documents.urls")),
     url(r"^telepathy/", include("telepathy.urls")),
     url(r"^notifications/", include("notify.urls")),
     url(r"^users/", include("users.urls")),
-    url(r"^node/(?P<nodeid>\d+)$", 'www.views.node_canonic', name="node_canonic"),
 
     url(r"^syslogin$", 'django.contrib.auth.views.login', {"template_name": "syslogin.html"}, name="syslogin"),
     url(r"^auth/$", 'users.views.auth'),

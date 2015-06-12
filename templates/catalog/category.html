@@ -1,0 +1,61 @@
+{% extends "skel.html" %}
+{% load humanize %}
+
+{% block title %}{{ category.name }}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="medium-12 columns">
+    <h1>{{ category.name }}</h1>
+  </div>
+</div>
+
+<div class="row">
+  {% if category.course_set.all %}
+    <div class="large-6 medium-12 columns">
+      <h3>Cours
+        {% if follow_children %}
+          <a class="follow-all tiny button radius success right" href="{% url 'follow_node_children' category.id %}">
+            S'abonner à tous les cours de cette catégorie
+          </a>
+        {% endif %}
+      </h3>
+      <ul class="course-list">
+        {% with user.followed_courses.all as user_followed_courses %}
+          {% for course in category.course_set.all %}
+          <li>
+            <h6>
+              <a href="{% url 'course_show' course.slug %}">
+                {% if course in user_followed_courses %}
+                  <span class="course-label radius success label">{{ course.slug }}</span> {{ course.name }} <small>(abonné)</small>
+                {% else %}
+                  <span class="course-label secondary radius label">{{ course.slug }}</span> {{ course.name }}
+                {% endif %}
+              </a>
+            </h6>
+          </li>
+          {% endfor %}
+        {% endwith %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if category.children.all %}
+    <div class="large-6 medium-12 columns">
+      <h3>Catégories</h3>
+      <ul class="small-block-grid-1">
+        {% for cat in category.children.all %}
+        <li class="catalog-option">
+          <h6>
+            <a href="{% url 'category_show' cat.id %}">
+              <i class="fi-annotate round-icon small"></i>
+              {{ cat.name }}
+            </a>
+          </h6>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

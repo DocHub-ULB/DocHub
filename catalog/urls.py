@@ -16,13 +16,22 @@ urlpatterns = patterns(
     "",
 
     url(r"^course/(?P<slug>[^/]*)$",
-        'graph.views.show_course',
+        'catalog.views.show_course',
         name="course_show"),
+
     url(r"^cat/(?P<catid>\d+)$",
-        'graph.views.show_category',
+        'catalog.views.show_category',
         name="category_show"),
 
     url(r"^courses/$",
-        'graph.views.show_courses',
+        'catalog.views.show_courses',
         name="show_courses"),
+
+    url(r"^join/(?P<slug>[^/]*)$",
+        'catalog.views.join_course',
+        name="join_course"),
+
+    url(r"^leave/(?P<slug>[^/]*)$",
+        'catalog.views.leave_course',
+        name="leave_course"),
 )

@@ -16,7 +16,7 @@ from .models import User, Inscription
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    exclude = ('password', 'last_login', 'follow', 'moderated_nodes')
+    exclude = ('password', 'last_login')
     readonly_fields = ('netid', )
     list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative', 'last_login', 'created')
     list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login', 'created')

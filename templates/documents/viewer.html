@@ -8,7 +8,7 @@
 {% block script %}
 <script src="/static/scripts/viewer.js"></script>
 
-{% cache 1 viewer.js object.id %}
+{% cache 1 viewer.js document.id %}
 <!-- Added for each discussion on a page -->
 <div id="discussion-list-item-template" style="display: none;">
   <li>
@@ -20,11 +20,11 @@
 
 <script language="JavaScript">
 var viewer_instance = viewer({
-    len: {{ object.pages }},
-    id: {{ object.id }},
-    parentid: '{{ parent.id }}',
+    len: {{ document.pages }},
+    id: {{ document.id }},
+    parentid: '{{ document.course.id }}',
     pages: [
-    {% for page in page_set %}
+    {% for page in document.page_set.all %}
       {
         numero: {{ page.numero }},
         height_600: {{ page.bitmap_600.height|default:"0" }},
@@ -38,7 +38,7 @@ var viewer_instance = viewer({
 });
 
 var discussions = [
-  {% for thread in threads %}
+  {% for thread in document.thread_set.all %}
   {% if thread.placement %}
   {
     "name": "{{ thread.name }}",
@@ -92,14 +92,14 @@ $(document).ready(function(){
 
 {% endcache %}
 {% endblock %}
-{% block title %}{{ object.name }}{% endblock %}
+{% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
 {% include "documents/viewer_bar.html" %}
 <div class="row">
-{% cache 86400 viewer.html object.id %}
+{% cache 86400 viewer.html document.id %}
   <div id="thumbs-misere"></div>
   <div id="thumbs" class="medium-2 columns show-for-medium-up">
-    {% for page in page_set %}
+    {% for page in document.page_set.all %}
       <div class="row">
         <div class="large-12 columns">
           <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
@@ -165,12 +165,12 @@ $(document).ready(function(){
         <span class="page-no"></span>
       </h3>
       <p>
-        {{ object.name }}
+        {{ document.name }}
       </p>
     </div>
   </div>
   <div class="row">
-    <form method="POST" action="{% url "thread_put" object.id %}">
+    <form method="POST" action="{% url "thread_put" document.id %}">
       {% csrf_token %}
       {% for field in form %}
         {% include "simple_input.html" %}

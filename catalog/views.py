@@ -1,3 +1,64 @@
-from django.shortcuts import render
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
-# Create your views here.
+# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+
+from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
+from catalog.models import Category, Course
+from tags.models import Tag
+
+
+@login_required
+def show_category(request, catid):
+    category = get_object_or_404(Category, pk=catid)
+
+    return render(request, "catalog/category.html", {
+        'category': category,
+    })
+
+
+@login_required
+def show_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+
+    docs = course.document_set.exclude(state="ERROR")
+    threads = course.thread_set.all()
+
+    return render(request, "catalog/course.html", {
+        "course": course,
+        "documents": docs.select_related('user').prefetch_related('tags'),
+        "threads": threads,
+        "all_tags": Tag.objects.all(),
+    })
+
+
+@login_required
+def join_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    request.user.followed_courses.add(course)
+    return HttpResponseRedirect(reverse('course_show', args=[slug]))
+
+
+@login_required
+def leave_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    request.user.followed_courses.remove(course)
+    return HttpResponseRedirect(reverse('course_show', args=[slug]))
+
+
+@login_required
+def show_courses(request):
+    return render(request, "catalog/my_courses.html", {
+        "faculties": Category.objects.get(level=0).children.all()
+    })

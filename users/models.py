@@ -73,7 +73,7 @@ class User(AbstractBaseUser):
     welcome = models.BooleanField(default=True)
     comment = models.TextField(null=True, blank=True)
     follow = models.ManyToManyField('polydag.Node', related_name='followed', db_index=True, blank=True)
-    tmp_followed_courses = models.ManyToManyField('catalog.Course')
+    followed_courses = models.ManyToManyField('catalog.Course')
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
@@ -90,32 +90,6 @@ class User(AbstractBaseUser):
     @property
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
-
-    def directly_followed(self):
-        raise NotImplementedError()
-
-    def followed_nodes_id(self):
-        raise NotImplementedError()
-
-    def followed_courses(self):
-        raise NotImplementedError()
-
-    def follows(self, course):
-        raise NotImplementedError()
-
-    @property
-    def auto_follow(self):
-        raise NotImplementedError()
-
-    # Permissions
-    def is_moderator(self, node):
-        raise NotImplementedError()
-
-    def has_module_perms(self, *args, **kwargs):
-        return True # TODO : is this a good idea ?
-
-    def has_perm(self, perm_list, obj=None):
-        raise NotImplementedError()
 
 
 class Inscription(models.Model):

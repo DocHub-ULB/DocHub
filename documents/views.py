@@ -187,18 +187,12 @@ def document_download_original(request, id):
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 
-    threads = filter(lambda x: x.get_real_instance_class() == Thread, document.children())
-    threads = map(lambda x: x.id, threads)
-    threads = Thread.objects.filter(id__in=threads).annotate(Count('message')).select_related('user').prefetch_related('keywords')
-
     context = {
-        "object": document,
-        "parent": document.parent,
-        "is_moderator": request.user.is_moderator(document.parent),
-        "page_set": document.page_set.order_by('numero'),
+        "document": document,
         "form": NewThreadForm(),
-        "threads": threads
     }
+
     document.views = F('views') + 1
     document.save(update_fields=['views'])
+
     return render(request, "documents/viewer.html", context)

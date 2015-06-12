@@ -16,48 +16,15 @@ from base64 import b64decode
 
 
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.core.cache.utils import make_template_fragment_key
-from django.core.cache import cache
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import authenticate, login
 
-from polydag.models import Node
-from graph.models import Course
 from www import settings
 
 from forms import SettingsForm
-
-
-def empty_user_followed_list_cache(user):
-    cache.delete(make_template_fragment_key('user_followed_list', [user.netid]))
-
-
-@login_required
-def follow_node(request, nodeid):
-    node = get_object_or_404(Node, pk=nodeid)
-    request.user.follow.add(node)
-    empty_user_followed_list_cache(request.user)
-    return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
-
-
-@login_required
-def follow_node_children(request, nodeid):
-    node = get_object_or_404(Node, pk=nodeid)
-    for child in node.children(only=[Course]):
-        request.user.follow.add(child)
-    empty_user_followed_list_cache(request.user)
-    return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
-
-
-@login_required
-def unfollow_node(request, nodeid):
-    node = get_object_or_404(Node, pk=nodeid)
-    request.user.follow.remove(node)
-    empty_user_followed_list_cache(request.user)
-    return HttpResponseRedirect(reverse('node_canonic', args=[nodeid]))
 
 
 @login_required
