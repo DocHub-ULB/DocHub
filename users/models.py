@@ -62,6 +62,7 @@ class User(AbstractBaseUser):
 
     netid = models.CharField(max_length=20, unique=True, null=False, blank=False)
     created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
     first_name = models.CharField(max_length=127, null=False, blank=False)
     last_name = models.CharField(max_length=127, null=False, blank=False)
     email = models.CharField(max_length=255, null=False, blank=False, unique=True)
@@ -93,6 +94,9 @@ class Inscription(models.Model):
     faculty = models.CharField(max_length=80, null=True)
     section = models.CharField(max_length=80, null=True)
     year = models.PositiveIntegerField(null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'section', 'faculty', 'year')

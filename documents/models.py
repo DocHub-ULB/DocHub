@@ -20,6 +20,9 @@ class Document(models.Model):
 
     description = models.TextField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    tags = models.ManyToManyField('tags.Tag')
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     size = models.PositiveIntegerField(null=True, default=0)
     words = models.PositiveIntegerField(null=True, default=0)
@@ -35,8 +38,6 @@ class Document(models.Model):
 
     state = models.CharField(max_length=20, default='PREPARING', db_index=True)
     md5 = models.CharField(max_length=32, default='', db_index=True)
-
-    tags = models.ManyToManyField('tags.Tag')
 
     def __unicode__(self):
         return self.name
