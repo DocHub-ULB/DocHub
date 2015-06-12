@@ -44,6 +44,9 @@
                   <a href="#"><i class="fi-torso"></i> {{user.name}}</a>
                   <ul class="dropdown">
                       <li><a href="{% url 'settings' %}">Profil</a></li>
+                      {% if request.user.is_staff %}
+                        <li><a href="/admin"><i class="fi-widget"></i> Admin</a></li>
+                      {% endif %}
                       <li><a href="{% url 'logout' %}"><i class="fi-power"></i> Déconnexion</a></li>
                   </ul>
               </li>
