@@ -39,13 +39,13 @@ var viewer_instance = viewer({
 
 var discussions = [
   {% for thread in document.thread_set.all %}
-  {% if thread.placement %}
-  {
-    "name": "{{ thread.name }}",
-    "href": "{% url 'thread_show_fragment' thread.id %}",
-    "placement": {% autoescape off %}{{ thread.placement }}{% endautoescape %},
-  },
-  {% endif %}
+    {% if thread.placement %}
+      {
+        "name": "{{ thread.name }}",
+        "href": "{% url 'thread_show_fragment' thread.id %}",
+        "placement": {% autoescape off %}{{ thread.placement }}{% endautoescape %},
+      },
+    {% endif %}
   {% endfor %}
 ];
 
@@ -110,7 +110,7 @@ $(document).ready(function(){
     {% endfor %}
   </div>
   <div id="pages" class="medium-10 small-12 columns">
-    {% for page in page_set %}
+    {% for page in document.page_set.all %}
       <div class="row">
         <div class="medium-2 columns">
           <div class="row" style="padding-top: 30px;">
