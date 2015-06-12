@@ -68,7 +68,7 @@ t²
             Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
         {% endfor %}
       </div>
-      <div class="content active" id="threads">
+      <div class="content" id="threads">
         {% for thread in threads %}
           <div class="row course-row" node-type="Thread">
             <a href="{% url 'thread_show' thread.id %}">

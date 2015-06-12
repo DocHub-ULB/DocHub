@@ -30,7 +30,7 @@
       <div class="alert-box radius secondary">
         <i class="fi-info"></i> Vous recevrez une notification à chaque fois que quelqu'un ajoute un document ou pose une question dans un cours auquel vous êtes abonné.
       </div>
-      {% if user.followed_courses|length > 0 %}
+      {% if user.followed_courses.count > 0 %}
         <p>Vous êtes bien abonné à des cours, mais depuis que vous vous êtes abonné, personne n'a envoyé de document ni posé de question... Attendez un peu, ça arrivera&nbsp;!</p>
       {% else %}
         <p>Oh ! Vous n’avez pas encore reçu de notification, il faudrait peut-être
