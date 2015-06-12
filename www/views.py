@@ -51,18 +51,4 @@ def auth_page_context(request):
 
 
 def feed(request):
-    followed_ids = cache.get('user.wall.followed_nodes.' + str(request.user.id))
-    if followed_ids is None:
-        followed = request.user.directly_followed()
-        ids = map(lambda x: x.id, list(followed))
-        for node in followed:
-            ids += map(lambda x: x.id, node.children())
-
-        followed_ids = ids
-        cache.set('user.wall.followed_nodes.' + str(request.user.id), followed_ids, 300)
-
-    wall = PreNotification.objects.filter(node__in=followed_ids)
-    wall = wall.filter(personal=False).order_by('-created')
-    wall = wall.select_related('user')[:20]
-
-    return render(request, "home.html", {"wall": wall})
+    return render(request, "home.html")
