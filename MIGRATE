@@ -1,0 +1,4 @@
+./manage.py dumpdata -e sessions -e admin -e contenttypes -e auth.Permission -e djcelery > data.json
+dropdb mydatabase && createdb mydatabase
+./manage.py migrate
+./manage.py loaddata ./data.json
