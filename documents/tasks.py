@@ -26,7 +26,6 @@ from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
 
 from documents.models import Document, Page, DocumentError
-from notify.models import Notification
 from .exceptions import DocumentProcessingError, MissingBinary
 
 
@@ -93,14 +92,6 @@ def checksum(self, document_id):
     query = Document.objects.filter(md5=hashed).exclude(md5='')
     if query.count() != 0:
         dup = query.first()
-        # Notification.direct(
-        #     user=document.user,
-        #     text='Votre document "{}" a été refusé car c\'est une copie conforme de {}'.format(document.name, dup.name),
-        #     node=document.parent,
-        #     url=reverse('node_canonic', args=[dup.id]),
-        #     icon="x",
-        # )
-        did = document.id
         document.delete()
         raise ExisingChecksum("Document {} has the same checksum as {}".format(did, dup.id))
     else:
