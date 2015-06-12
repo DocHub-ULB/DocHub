@@ -16,14 +16,10 @@ from .models import Document, DocumentError
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
-    fields = ('name', 'user', 'size', 'pages', 'views', 'downloads', 'state')
-    readonly_fields = (
-        'size',
-        'pages',
-    )
+    readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5',)
 
-    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'state', 'user', )
-    list_filter = ('state',)
+    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'state', 'user', 'file_type')
+    list_filter = ('state', 'created', 'edited', 'file_type')
     search_fields = ('md5', 'name')
 
 

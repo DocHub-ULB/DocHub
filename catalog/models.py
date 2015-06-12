@@ -29,7 +29,7 @@ class Category(MPTTModel):
         ordering = ['id']
 
     def __unicode__(self):
-        return "#{}: {}".format(self.id, self.name)
+        return self.name
 
 
 class Course(models.Model):
@@ -47,4 +47,4 @@ class Course(models.Model):
         return "http://gehol.ulb.ac.be/gehol/#!/Course/%s/%s" % (slug, period)
 
     def __unicode__(self):
-        return "{}: {}".format(self.slug.upper(), self.name)
+        return self.slug.upper()

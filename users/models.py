@@ -88,6 +88,18 @@ class User(AbstractBaseUser):
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
+    def has_module_perms(self, *args, **kwargs):
+        return True # TODO : is this a good idea ?
+
+    def has_perm(self, perm_list, obj=None):
+        if self.is_staff:
+            return True
+
+        if not obj:
+            return False
+
+        return obj.user == self
+
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
