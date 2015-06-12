@@ -33,8 +33,8 @@ def show_category(request, catid):
 def show_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
-    docs = course.document_set.exclude(state="ERROR")
-    threads = course.thread_set.annotate(Count('message'))
+    docs = course.document_set.exclude(state="ERROR").order_by('-id')
+    threads = course.thread_set.annotate(Count('message')).order_by('-id')
 
     return render(request, "catalog/course.html", {
         "course": course,

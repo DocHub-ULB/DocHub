@@ -34,20 +34,6 @@
         </ul>
 
         <section class="top-bar-section">
-            <ul class="left">
-              <li class="has-form">
-                {% if notifcount %}
-                  <a href="{% url 'notif_show' %}" class="button alert">
-                {% else %}
-                  <a href="{% url 'notif_show' %}" class="button">
-                {% endif %}
-                <i class="fi-megaphone"></i>
-                <span id="notif-count-display">{{ notifcount }}</span></a>
-              </li>
-              <li class="divider"></li>
-              <li><a href="{% url 'show_courses' %}">Cours</a></li>
-              <!-- <li><a href="#">Calendrier</a></li> -->
-            </ul>
             <ul class="right">
               <li><a href="{% url 'help' %}">Aide</a></li>
               <li>
@@ -58,7 +44,6 @@
                   <a href="#"><i class="fi-torso"></i> {{user.name}}</a>
                   <ul class="dropdown">
                       <li><a href="{% url 'settings' %}">Profil</a></li>
-                      <li><a href="{% url 'notif_show' %}">Notifications</a></li>
                       <li><a href="{% url 'logout' %}"><i class="fi-power"></i> Déconnexion</a></li>
                   </ul>
               </li>

@@ -42,9 +42,11 @@
         <li>
           <a id="zoom-out"><i class="fi-zoom-out"></i> De-zoom</a>
         </li>
-        <li>
-          <a href="{% url 'document_edit' document.id %}"><i class="fi-widget"></i> Editer</a>
-        </li>
+        {% if request.user == document.user %}
+          <li>
+            <a href="{% url 'document_edit' document.id %}"><i class="fi-pencil"></i> Editer</a>
+          </li>
+        {% endif%}
       </ul>
     </section>
   </nav>

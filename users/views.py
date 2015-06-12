@@ -45,7 +45,7 @@ def user_settings(request):
 
             messages.success(request, 'Votre profil a été mis à jour.')
 
-            return render(request, "settings.html", {'form': SettingsForm()})
+            return render(request, "users/settings.html", {'form': SettingsForm()})
     else:
         form = SettingsForm()
 

@@ -13,8 +13,7 @@ from __future__ import unicode_literals
 from django import forms
 from django.core.exceptions import ValidationError
 from multiupload.fields import MultiFileField
-from polydag.models import Keyword
-from www.helpers import year_choices
+from tags.models import Tag
 
 
 def validate_uploaded_file(file):
@@ -24,7 +23,7 @@ def validate_uploaded_file(file):
 
 
 def tag_choices():
-    return map(lambda x: (x.pk, x.name), Keyword.objects.exclude(name__in=map(lambda x: x[0], year_choices())))
+    return map(lambda x: (x.pk, x.name), Tag.objects.all())
 
 
 class FileForm(forms.Form):
@@ -35,11 +34,9 @@ class FileForm(forms.Form):
         'placeholder': 'Description (optionnel)'
     }))
 
-    year = forms.ChoiceField(choices=year_choices())
-
     tags = forms.ModelMultipleChoiceField(
         required=False,
-        queryset=Keyword.objects.exclude(name__startswith="20"),
+        queryset=Tag.objects.all(),
         widget=forms.SelectMultiple(
             attrs={
                 'class': 'chosen-select',
@@ -54,9 +51,6 @@ class UploadFileForm(FileForm):
     file = forms.FileField(validators=[validate_uploaded_file])
 
 
-Mo = 1<<20
 class MultipleUploadFileForm(forms.Form):
-    files = MultiFileField(min_num=1, max_num=25, max_file_size=25*Mo)
-
-# TODO
-# class UrlFileForm(FileForm):
+    Mo = 1 << 20
+    files = MultiFileField(min_num=1, max_num=25, max_file_size=25 * Mo)

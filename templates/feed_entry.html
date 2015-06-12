@@ -7,22 +7,22 @@
     <div class="user-message-header row">
       <div class="small-10 columns feed-element">
         <strong>
-          <i class="fi-{{ elem.icon }}"></i>
-          <a href="{{ elem.url }}">{{ elem.text }}</a>
-        </strong><br>
+          <i class="fi-page"></i>
+          <a href="{% url 'document_show' document.id %}">{{ document.name }}</a>
+        </strong>
         <small>
-          <a href="{{ elem.url }}">{{ elem.created|naturaltime|capfirst }}</a> par {{elem.user.name}}
+          par {{document.user.name}}
         </small>
       </div>
       <div class="small-2 columns feed-element text-right">
-        <img width="80" src="{{ elem.user.get_photo }}" class="user-photo user-photo-feed">
+        <img width="80" src="{{ document.user.get_photo }}" class="user-photo user-photo-feed">
       </div>
     </div>
     <div class="user-message-content row">
       <div class="small-12 columns feed-element-limited ">
-        {% cache 86400 feedelem elem.id %}
-          {{elem.content|markdown}}
-        {% endcache %}
+        <a href="{% url 'document_show' document.id %}">
+          <img src="{{document.page_set.first.bitmap_600.url}}">
+        </a>
       </div>
     </div>
     <br>

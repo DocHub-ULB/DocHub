@@ -22,7 +22,6 @@ from django.db.models import F
 from documents.models import Document
 from catalog.models import Course
 from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
-from www.helpers import year_choices
 from telepathy.forms import NewThreadForm
 from tags.models import Tag
 
@@ -59,8 +58,6 @@ def upload_file(request, course_slug):
 
             for tag in form.cleaned_data['tags']:
                 doc.tags.add(Tag.objects.get(name=tag))
-
-            doc.year = form.cleaned_data['year']
 
             doc.state = 'READY_TO_QUEUE'
             doc.save()
@@ -104,7 +101,6 @@ def upload_multiple_files(request, course_slug):
                     file_type=extension
                 )
                 doc.original.save(str(uuid.uuid4()) + extension, attachment)
-                doc.year = year_choices(1)[0][0]
                 doc.save()
 
                 course.add_child(doc)
@@ -134,7 +130,6 @@ def document_edit(request, document_id):
             for tag in form.cleaned_data['tags']:
                 doc.tags.add(Tag.objects.get(name=tag))
 
-            doc.year = form.cleaned_data['year']
             doc.save()
 
             return HttpResponseRedirect(reverse('document_show', args=[doc.id]))
@@ -143,8 +138,7 @@ def document_edit(request, document_id):
         form = FileForm({
             'name': doc.name,
             'description': doc.description,
-            'year': doc.year,
-            'tags': doc.keywords.all()
+            'tags': doc.tags.all()
         })
 
     return render(request, 'documents/document_edit.html', {
