@@ -18,13 +18,12 @@ import json
 
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
-from polydag.models import Node
-from www.helpers import current_year
+from catalog.models import Course
 
 
 @login_required
-def new_thread(request, parent_id):
-    parentNode = get_object_or_404(Node, id=parent_id)
+def new_thread(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
 
     if request.method == 'POST':
         form = NewThreadForm(request.POST)
@@ -33,11 +32,8 @@ def new_thread(request, parent_id):
             name = form.cleaned_data['name']
             content = form.cleaned_data['content']
 
-            year = "{}-{}".format(current_year(), current_year() + 1)
-
-            thread = Thread.objects.create(user=request.user, name=name, year=year)
+            thread = Thread.objects.create(user=request.user, name=name, course=course)
             message = Message.objects.create(user=request.user, thread=thread, text=content)
-            parentNode.add_child(thread)
 
             placement = {}
             for opt, typecast in Thread.PLACEMENT_OPTS.iteritems():
@@ -47,39 +43,36 @@ def new_thread(request, parent_id):
                 thread.placement = json.dumps(placement)
                 thread.save()
 
-            if request.user.auto_follow:
-                request.user.follow.add(thread)
-
-            return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
+            return HttpResponseRedirect(
+                reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id)
+            )
     else:
         form = NewThreadForm()
 
     return render(request, 'telepathy/new_thread.html', {
         'form': form,
-        'parent': parentNode,
+        'course': course,
     })
 
 
 def get_thread_context(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
-    messages = Message.objects.filter(thread__id=thread_id).select_related('user').order_by('created').all()
+    messages = thread.message_set.select_related('user').order_by('created').all()
     return {
-        "object": thread,
+        "thread": thread,
         "messages": messages,
-        "followed": thread.id in request.user.followed_nodes_id(),
         "form": MessageForm(),
-        "is_moderator": request.user.is_moderator(thread),
     }
 
 
 @login_required
 def show_thread(request, thread_id):
     context = get_thread_context(request, thread_id)
+    thread = context['thread']
 
     # Add page preview if this thread belongs to a document page
-    if context['object'].page_no:
-        doc = context['object'].parent
-        page = doc.page_set.get(numero=context['object'].page_no)
+    if thread.document:
+        page = thread.document.page_set.get(numero=thread.page_no)
         context['thumbnail'] = page.bitmap_120
         context['preview'] = page.bitmap_600
 
@@ -100,10 +93,10 @@ def reply_thread(request, thread_id):
         content = form.cleaned_data['content']
         poster = request.user
         message = Message.objects.create(user=poster, thread=thread, text=content)
-        if request.user.auto_follow:
-            request.user.follow.add(thread)
 
-        return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
+        return HttpResponseRedirect(
+            reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id)
+        )
     return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#response-form")
 
 
@@ -112,7 +105,7 @@ def edit_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
     thread = message.thread
 
-    if request.user != message.user and not request.user.is_moderator(thread):
+    if request.user != message.user:
         return HttpResponse('<h1>403</h1>', status=403)
 
     if request.method == 'POST':
@@ -125,12 +118,9 @@ def edit_message(request, message_id):
     else:
         form = MessageForm({'content': message.text})
 
-    index = list(thread.message_set.all()).index(message)
-    print index
-
     return render(request, 'telepathy/edit_message.html', {
         'form': form,
-        'object': thread,
+        'thread': thread,
         'edited_message': message,
         'edit': True,
     })

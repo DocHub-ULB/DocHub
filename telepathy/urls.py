@@ -15,7 +15,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     "",
 
-    url(r"^put/(?P<parent_id>[^/]*)$",
+    url(r"^put/(?P<course_slug>[^/]*)$",
         'telepathy.views.new_thread',
         name="thread_put"),
 

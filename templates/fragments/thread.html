@@ -1,15 +1,24 @@
 <div class="row">
   <div class="large-12 columns">
     <h1>
-      <a href="{% url "node_canonic" object.id %}">
+      <a href="{% url 'thread_show' thread.id %}">
         <i class="fi-link"></i>
       </a>
-      {{ object.name }}
+      {{ thread.name }}
     </h1>
     <h3>
-      <a href="{% url "node_canonic" object.parent.id %}{% if object.page_no %}#page-{{object.page_no}}{% endif %}" class="light">
-        <i class="fi-arrow-left back-icon"></i>  {{object.parent.name}}
+    {% if thread.document == None %}
+      <a href="{% url 'course_show' thread.course.slug %}" class="light">
+        <i class="fi-arrow-left back-icon"></i>  {{thread.course.name}}
       </a>
+    {% else %}
+      <a
+        href="{% url 'document_show' thread.document.id %}{% if thread.page_no %}#page-{{thread.page_no}}{% endif %}"
+        class="light"
+      >
+        <i class="fi-arrow-left back-icon"></i>  {{thread.document.name}}
+      </a>
+    {% endif %}
     </h3>
   </div>
 </div>
@@ -25,7 +34,7 @@
   <div class="large-2 medium-12 columns">
     {% if thumbnail %}
       <h3>Sur la page</h3>
-      <a href="{% url "node_canonic" object.parent.id %}{% if object.page_no %}#page-{{object.page_no}}{% endif %}"
+      <a href="{% url "document_show" thread.document.id %}{% if thread.page_no %}#page-{{thread.page_no}}{% endif %}"
          class="light"
          data-dropdown="page_preview"
          data-options="is_hover:true; hover_timeout:20; align:left">
@@ -37,16 +46,5 @@
       </div>
     {% endif %}
 
-    {% if followed %}
-      <a class="button expand alert radius" href="{% url 'unfollow_node' object.id %}">
-        <i class="fi-x"></i> Se désabonner
-      </a>
-      <small>Vous recevez pour l'instant des notifiactions pour cette discussion.</small>
-    {% else %}
-      <a class="button expand success radius" href="{% url 'follow_node' object.id %}">
-        <i class="fi-check"></i> S'abonner
-      </a>
-      <small>Pour reçevoir une notification à chaque nouvelle réponse ajoutée ici abonnez-vous.</small>
-    {% endif %}
   </div>
 </div>
