@@ -6,7 +6,7 @@ cache: pip
 
 script:
   - ./manage.py check
-  - py.test
+  - py.test -k "not unoconv"
   - make shower
 
 before_install:

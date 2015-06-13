@@ -83,6 +83,8 @@ def test_send_duplicate():
     assert Document.objects.filter(id=doc.id).count() == 0
 
 
+# TODO : mock unoconv and provide a fake pdf instead
+@pytest.mark.unoconv
 @pytest.mark.slow
 def test_send_office():
     user = User.objects.create(netid='test_user')
