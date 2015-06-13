@@ -14,11 +14,9 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 from celery import shared_task, chain
-from os import path
 import subprocess
 import hashlib
 import uuid
-join = path.join
 import tempfile
 from pyPdf import PdfFileReader
 

@@ -10,15 +10,14 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from tasks import process_document
+from config import *
 
+CELERY_ALWAYS_EAGER = True # Skip the Celery daemon
 
-def add_document_to_queue(document):
-    document.state = "IN_QUEUE"
-    document.save()
-    try:
-        process_document.delay(document.id)
-    except Exception as e:
-        document.state = "READY_TO_QUEUE"
-        document.save()
-        raise e
+# all tasks will be executed locally by blocking until the task returns.
+# apply_async() and Task.delay() will return an EagerResult instance,
+# which emulates the API and behavior of AsyncResult,
+# except the result is already evaluated.
+
+import tempfile
+UPLOAD_DIR = tempfile.mkdtemp()
