@@ -105,7 +105,7 @@ class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     faculty = models.CharField(max_length=80, blank=True, default='')
     section = models.CharField(max_length=80, blank=True, default='')
-    year = models.PositiveIntegerField(blank=True, default='')
+    year = models.PositiveIntegerField(blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=True)

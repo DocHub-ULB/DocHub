@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='inscription',
             name='year',
-            field=models.PositiveIntegerField(default='', blank=True),
+            field=models.PositiveIntegerField(null=True, blank=True),
             preserve_default=True,
         ),
         migrations.AlterField(

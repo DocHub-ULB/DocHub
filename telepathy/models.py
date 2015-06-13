@@ -24,7 +24,7 @@ class Thread(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=True)
-    placement = models.TextField(default=None, blank=True)
+    placement = models.TextField(default="", blank=True)
 
     course = models.ForeignKey('catalog.Course')
     document = models.ForeignKey('documents.Document', null=True)
