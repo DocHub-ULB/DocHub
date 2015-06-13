@@ -1,7 +1,7 @@
-from django.test import TestCase
-import helpers
+from www import helpers
 from datetime import datetime
 import mock
+
 
 def mock_datetime(y, m, d, H, M, S):
     res = mock.MagicMock()
@@ -9,30 +9,30 @@ def mock_datetime(y, m, d, H, M, S):
     res.now = mock.Mock(return_value=datetime(y, m, d, H, M, S))
     return res
 
-class SimpleTest(TestCase):
+
+class TestClass:
     Q1 = (2012, 12, 21, 11, 11, 11)
     Q2 = (2013, 2, 12, 10, 10, 10)
     Q2_2014 = (2015, 3, 19, 15, 35, 22)
 
     def testQ1(self):
         helpers.datetime = mock_datetime(*self.Q1)
-        self.assertEquals(2012, helpers.current_year())
+        assert 2012 == helpers.current_year()
 
     def testQ2(self):
         helpers.datetime = mock_datetime(*self.Q2)
-        self.assertEquals(2012, helpers.current_year())
-
+        assert 2012 == helpers.current_year()
 
     def testQ2_2014(self):
         helpers.datetime = mock_datetime(*self.Q2_2014)
-        self.assertEquals(2014, helpers.current_year())
+        assert 2014 == helpers.current_year()
 
     def testQ1List(self):
         helpers.datetime = mock_datetime(*self.Q1)
-        expected = [("2012-2013",)*2, ("Archives",)*2]
-        self.assertEquals(expected, helpers.year_choices(backlog=1))
+        expected = [("2012-2013",) * 2, ("Archives",) * 2]
+        assert expected == helpers.year_choices(backlog=1)
 
     def testQ2List(self):
         helpers.datetime = mock_datetime(*self.Q2)
-        expected = [("2012-2013",)*2, ("Archives",)*2]
-        self.assertEquals(expected, helpers.year_choices(backlog=1))
+        expected = [("2012-2013",) * 2, ("Archives",) * 2]
+        assert expected == helpers.year_choices(backlog=1)

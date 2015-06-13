@@ -22,7 +22,6 @@ join = path.join
 import tempfile
 from pyPdf import PdfFileReader
 
-from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
 
 from documents.models import Document, Page, DocumentError
