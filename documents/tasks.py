@@ -91,8 +91,9 @@ def checksum(self, document_id):
     query = Document.objects.filter(md5=hashed).exclude(md5='')
     if query.count() != 0:
         dup = query.first()
+        document_id = document.id
         document.delete()
-        raise ExisingChecksum("Document {} has the same checksum as {}".format(did, dup.id))
+        raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, dup.id))
     else:
         document.md5 = hashed
         document.save()
@@ -169,6 +170,7 @@ def finish_file(self, document_id):
     document.save()
 
     return document_id
+
 
 process_pdf = chain(
     checksum.s(),

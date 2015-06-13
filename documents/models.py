@@ -51,9 +51,17 @@ class Document(models.Model):
 
         self.state = 'READY_TO_QUEUE'
         self.md5 = ""
+        self.add_to_queue()
+
+    def add_to_queue(self):
+        self.state = "IN_QUEUE"
         self.save()
-        add_document_to_queue(self)
-        self.save()
+        try:
+            process_document.delay(self.id)
+        except Exception as e:
+            self.state = "READY_TO_QUEUE"
+            self.save()
+            raise e
 
 
 class Page(models.Model):
@@ -81,4 +89,5 @@ class DocumentError(models.Model):
     def __unicode__(self):
         return "#" + self.exception
 
-from documents.cycle import add_document_to_queue
+
+from tasks import process_document
