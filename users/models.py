@@ -60,16 +60,16 @@ class User(AbstractBaseUser):
     DEFAULT_PHOTO = join(settings.STATIC_URL, "images/default.jpg")
     objects = CustomUserManager()
 
-    netid = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    netid = models.CharField(max_length=20, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=True)
-    first_name = models.CharField(max_length=127, null=False, blank=False)
-    last_name = models.CharField(max_length=127, null=False, blank=False)
-    email = models.CharField(max_length=255, null=False, blank=False, unique=True)
+    first_name = models.CharField(max_length=127)
+    last_name = models.CharField(max_length=127)
+    email = models.CharField(max_length=255, unique=True)
     registration = models.CharField(max_length=80, blank=True)
     photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
-    comment = models.TextField(null=True, blank=True)
+    comment = models.TextField(blank=True, default='')
     followed_courses = models.ManyToManyField('catalog.Course')
 
     is_staff = models.BooleanField(default=False)
@@ -103,9 +103,9 @@ class User(AbstractBaseUser):
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    faculty = models.CharField(max_length=80, null=True)
-    section = models.CharField(max_length=80, null=True)
-    year = models.PositiveIntegerField(null=True)
+    faculty = models.CharField(max_length=80, blank=True, default='')
+    section = models.CharField(max_length=80, blank=True, default='')
+    year = models.PositiveIntegerField(blank=True, default='')
 
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=True)

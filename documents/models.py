@@ -24,13 +24,12 @@ class Document(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=True)
 
-    size = models.PositiveIntegerField(null=True, default=0)
-    words = models.PositiveIntegerField(null=True, default=0)
-    pages = models.PositiveIntegerField(null=True, default=0)
+    size = models.PositiveIntegerField(default=0)
+    pages = models.PositiveIntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
 
-    views = models.PositiveIntegerField(null=True, default=0)
-    downloads = models.PositiveIntegerField(null=True, default=0)
+    views = models.PositiveIntegerField(default=0)
+    downloads = models.PositiveIntegerField(default=0)
 
     file_type = models.CharField(max_length=255, default='')
     original = models.FileField(upload_to='original_document')
@@ -72,9 +71,9 @@ class Page(models.Model):
     bitmap_600 = models.ImageField(upload_to='page_600', width_field="height_600")
     bitmap_900 = models.ImageField(upload_to='page_900', width_field="height_900")
 
-    height_120 = models.PositiveIntegerField(null=True, default=0)
-    height_600 = models.PositiveIntegerField(null=True, default=0)
-    height_900 = models.PositiveIntegerField(null=True, default=0)
+    height_120 = models.PositiveIntegerField(default=0)
+    height_600 = models.PositiveIntegerField(default=0)
+    height_900 = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['numero']

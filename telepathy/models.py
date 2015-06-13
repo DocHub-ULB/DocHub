@@ -24,7 +24,7 @@ class Thread(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=True)
-    placement = models.TextField(null=True, default=None)
+    placement = models.TextField(default=None, blank=True)
 
     course = models.ForeignKey('catalog.Course')
     document = models.ForeignKey('documents.Document', null=True)
@@ -52,7 +52,4 @@ class Message(models.Model):
     edited = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     def __unicode__(self):
-        t = self.text
-        if len(t) > 60:
-            t = t[:57] + "..."
-        return "#{}: {}".format(self.id, t)
+        return self.text
