@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import pytest
 from users.models import User
 from www import settings
+from PIL import Image
 
 pytestmark = pytest.mark.django_db
 
@@ -43,3 +44,11 @@ def test_photo():
     u = User.objects.create_user(netid="glagaffe", email="a@dupis.be")
     assert u.photo == 'png'
     assert u.get_photo == settings.MEDIA_URL + "profile/glagaffe.png"
+
+
+def test_identicons():
+    gaston = User.objects.create_user(netid="glagaffe", email="a@dupis.be")
+    labevue = User.objects.create_user(netid="blabevue", email="b@dupis.be")
+
+    assert gaston.get_photo != labevue.get_photo
+    assert Image.open('media/profile/glagaffe.png') != Image.open('media/profile/blabevue.png')
