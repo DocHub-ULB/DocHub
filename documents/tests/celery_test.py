@@ -131,3 +131,26 @@ def test_duplicate_checksum():
     assert result.status == celery.states.FAILURE
     assert "ExisingChecksum" in result.traceback
     assert Document.objects.filter(id=duplicate.id).count() == 0
+
+
+def test_correct_length():
+    doc = create_doc("Document name", ".pdf")
+
+    f = File(open('documents/tests/files/3pages.pdf'))
+    doc.pdf.save("another-uuid-beef-dead.pdf", f)
+
+    result = tasks.mesure_pdf_length.delay(doc.id)
+    assert result.status == celery.states.SUCCESS, result.traceback
+
+    doc = Document.objects.get(id=doc.id) # Get back the updated instance
+    assert doc.pages == 3
+
+
+def test_finish_file():
+    doc = create_doc("Document name", ".pdf")
+
+    result = tasks.finish_file.delay(doc.id)
+    assert result.status == celery.states.SUCCESS, result.traceback
+
+    doc = Document.objects.get(id=doc.id) # Get back the updated instance
+    assert doc.state == "DONE"
