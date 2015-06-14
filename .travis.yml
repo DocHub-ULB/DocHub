@@ -12,3 +12,8 @@ script:
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq  graphicsmagick unoconv python-dev
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
