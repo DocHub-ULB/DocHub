@@ -13,7 +13,7 @@ import signal
 import pytest
 
 
-pytestmark = pytest.mark.django_db
+pytestmark = [pytest.mark.django_db, pytest.mark.celery]
 
 
 class Alarm(Exception):
@@ -26,7 +26,7 @@ def alarm_handler(signum, frame):
 
 def start_unoconv():
     signal.signal(signal.SIGALRM, alarm_handler)
-
+    signal.alarm(1)
     try:
         call(["unoconv", "--listener"]) # workaround for a shitty unoconv
         # Error: Unable to connect or start own listener. Aborting.
