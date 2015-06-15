@@ -74,7 +74,10 @@ var insert_discussions = function(){
   $('.show-thread-link').click(function(ev){
     var href = $(ev.delegateTarget).attr('href');
     $('#page-comment-view').html('Loading...');
-    $.get(href, function(data){$('#page-comment-view').html(data);});
+    $.get(href, function(data){
+      $('#page-comment-view').html(data);
+      MathJax.Hub.Typeset();
+    });
   });
 };
 
