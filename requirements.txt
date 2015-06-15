@@ -23,3 +23,4 @@ honcho
 mock
 pytest-django
 responses
+WebTest
