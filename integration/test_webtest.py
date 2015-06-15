@@ -2,9 +2,12 @@
 from __future__ import unicode_literals
 
 import django_webtest
+from webtest import Upload
 from users.models import User
 from catalog.models import Category, Course
+from documents.models import Document
 
+import mock
 from django.core.urlresolvers import reverse
 import pytest
 
@@ -65,3 +68,17 @@ def test_follow(app, user, tree):
 
     index = app.get('/', user=user.netid)
     assert "swag-h-042" not in index
+
+
+# @mock.patch.object(Document, 'add_to_queue')
+@pytest.mark.slow
+def test_simple_upload(app, user, tree):
+    course = app.get(reverse('course_show', args=("swag-h-042",)), user=user.netid)
+    put = course.click(description="Uploader un fichier")
+    form = put.forms[0]
+    form['file'] = Upload('documents/tests/files/3pages.pdf')
+    response = form.submit()
+    course = response.follow()
+
+    assert Document.objects.count() == 1
+    assert "3pages" in course
