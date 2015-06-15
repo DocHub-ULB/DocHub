@@ -18,7 +18,6 @@ import uuid
 from users.models import User
 from graph.models import Course
 from documents.models import Document
-from documents.cycle import add_document_to_queue
 
 import os
 import glob

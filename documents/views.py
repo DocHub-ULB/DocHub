@@ -25,8 +25,6 @@ from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
 from telepathy.forms import NewThreadForm
 from tags.models import Tag
 
-from cycle import add_document_to_queue
-
 
 @login_required
 def upload_file(request, course_slug):
@@ -60,9 +58,7 @@ def upload_file(request, course_slug):
                 doc.tags.add(Tag.objects.get(name=tag))
 
             doc.state = 'READY_TO_QUEUE'
-            doc.save()
-
-            add_document_to_queue(doc)
+            doc.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
