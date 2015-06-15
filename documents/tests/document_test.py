@@ -34,6 +34,11 @@ def test_repr_with_accents():
     assert repr(doc).decode('utf-8') == "<Document: Lés accênts c'est cool>"
 
 
+def test_url():
+    doc = create_doc("wtf")
+    assert doc.get_absolute_url() == "/document/v/{}".format(doc.id)
+
+
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess_done(mock_add_to_queue):
     doc = create_doc("Coucou")

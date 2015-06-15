@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.db import models
+from django.core.urlresolvers import reverse
 from www import settings
 
 
@@ -62,6 +63,9 @@ class Document(models.Model):
             self.save()
             raise e
 
+    def get_absolute_url(self):
+        return reverse('document_show', args=(self.id, ))
+
 
 class Page(models.Model):
     numero = models.IntegerField(db_index=True)
@@ -77,6 +81,9 @@ class Page(models.Model):
 
     class Meta:
         ordering = ['numero']
+
+    def get_absolute_url(self):
+        return self.document.get_absolute_url() + "#page-{}".format(self.numero)
 
 
 class DocumentError(models.Model):
