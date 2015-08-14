@@ -16,15 +16,39 @@ from celery import shared_task
 import notify.models
 
 
+def upper_nodes(node):
+    """
+    Go up in graph through threads and documents until we reach a course.
+    """
+    if node.classBasename() in ("Thread", "Document"):
+        res = []
+        for parent in node.parents():
+            res += upper_nodes(parent)
+        return res
+    elif node.classBasename() == "Course":
+        return [node]
+    return []
+
+
+def find_candidates(prenotif):
+    """
+    Return all nodes interested in a notification delivery for this
+    prenotification.
+    """
+    node = prenotif.node
+    if prenotif.sender_type == "Message":
+        res = [node]
+    else:
+        res = upper_nodes(node)
+    return set(res)
+
+
 @shared_task(bind=True)
 def propagate_notification(self, notification_id):
     prenotif = notify.models.PreNotification.objects.get(pk=notification_id)
 
     notif_counter = 0
-    impacted_nodes = []
-    # TODO : if it's a new response notif don't add node's parent (which is the course of the topic)
-    impacted_nodes += list(prenotif.node.parents())
-    impacted_nodes.append(prenotif.node)
+    impacted_nodes = find_candidates(prenotif)
     delivered = set()
 
     for node in impacted_nodes:
