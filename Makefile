@@ -64,5 +64,8 @@ static/3party/select:
 	@mkdir static/3party/select && true
 	mv ${SELECTFILES} static/3party/select
 
+static/3party/js/js.cookie.js:
+	curl https://raw.githubusercontent.com/js-cookie/js-cookie/master/src/js.cookie.js > $@
+
 shower-clean:
 	rm -rf static/3party/
