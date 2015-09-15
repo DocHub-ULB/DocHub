@@ -12,9 +12,10 @@ from documents.models import process_document
 pytestmark = pytest.mark.django_db
 
 
-def create_doc(name):
+@pytest.fixture(scope='function')
+def doc():
     user = User.objects.create(netid='test_user')
-    doc = Document.objects.create(name=name, user=user)
+    doc = Document.objects.create(name='A document', user=user)
 
     return doc
 
@@ -24,24 +25,34 @@ def add_pages(doc):
         doc.page_set.add(Page(numero=i))
 
 
-def test_repr():
-    doc = create_doc("Coucou")
+def test_repr(doc):
+    doc.name = "Coucou"
     assert repr(doc).decode('utf-8') == '<Document: Coucou>'
 
 
-def test_repr_with_accents():
-    doc = create_doc("Lés accênts c'est cool")
+def test_repr_with_accents(doc):
+    doc.name = "Lés accênts c'est cool"
     assert repr(doc).decode('utf-8') == "<Document: Lés accênts c'est cool>"
 
 
-def test_url():
-    doc = create_doc("wtf")
+def test_url(doc):
     assert doc.get_absolute_url() == "/document/v/{}".format(doc.id)
 
 
+def test_tag_from_name_exam(doc):
+    doc.name = "Examen (corrigé)"
+    doc.tag_from_name()
+    assert set(map(lambda x: x.name, doc.tags.all())) == set(['examen', 'corrigé'])
+
+
+def test_tag_from_name_exam_month(doc):
+    doc.name = "Mai 2012"
+    doc.tag_from_name()
+    assert set(map(lambda x: x.name, doc.tags.all())) == set(['examen'])
+
+
 @mock.patch.object(Document, 'add_to_queue')
-def test_reprocess_done(mock_add_to_queue):
-    doc = create_doc("Coucou")
+def test_reprocess_done(mock_add_to_queue, doc):
     doc.state = "DONE"
     add_pages(doc)
 
@@ -52,8 +63,7 @@ def test_reprocess_done(mock_add_to_queue):
 
 
 @mock.patch.object(Document, 'add_to_queue')
-def test_reprocess(mock_add_to_queue):
-    doc = create_doc("Coucou")
+def test_reprocess(mock_add_to_queue, doc):
     doc.state = 'ERROR'
     add_pages(doc)
     doc.reprocess()
@@ -63,8 +73,7 @@ def test_reprocess(mock_add_to_queue):
 
 
 @mock.patch.object(process_document, 'delay')
-def test_add_to_queue(mock_process_document):
-    doc = create_doc("Coucou")
+def test_add_to_queue(mock_process_document, doc):
     doc.state = 'ANYTHING'
 
     doc.add_to_queue()

@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.db import models
+from tags.models import Tag
 from django.core.urlresolvers import reverse
 from www import settings
 
@@ -65,6 +66,27 @@ class Document(models.Model):
 
     def get_absolute_url(self):
         return reverse('document_show', args=(self.id, ))
+
+    def tag_from_name(self):
+        name = self.name.lower().replace(u"é", "e").replace(u"è", "e").replace(u"ê", "e")
+        tags = []
+
+        has_month = (
+            "janv" in name
+            or "aout" in name
+            or "sept" in name
+            or "juin" in name
+            or "mai" in name
+        )
+        if has_month or "exam" in name:
+            tags.append("examen")
+
+        if "corr" in name:
+            tags.append("corrigé")
+
+        for tag in tags:
+            tag = Tag.objects.get_or_create(name=tag)[0]
+            self.tags.add(tag)
 
 
 class Page(models.Model):
