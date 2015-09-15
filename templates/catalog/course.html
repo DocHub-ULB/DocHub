@@ -9,7 +9,7 @@ t²
 {% block center-col %}
 <div class="row">
   <div class="large-10 columns">
-    <h1 >{{ course.slug|upper }}{% if course in request.user.followed_courses %} <i class="fi-check green"></i>{% endif %}</h1>
+    <h1 >{{ course.slug|upper }}{% if request.user|is_following:course %} <i class="fi-check green"></i>{% endif %}</h1>
     <h2>{{ course.name }}</h2>
   </div>
   <div class="large-2 columns">
@@ -113,8 +113,8 @@ t²
         <i class="fi-check"></i> S’abonner
       </a>
     {% endif %}
-    {% if followers > 1 %}
-      <small>{{followers}} personnes sont abonnées à ce cours.</small>
+    {% if followers_count > 1 %}
+      <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
     {% endif %}
   </div>
 </div>

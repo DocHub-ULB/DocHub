@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
 from actstream import actions
+import actstream
 
 from catalog.models import Category, Course
 from tags.models import Tag
@@ -42,6 +43,7 @@ def show_course(request, slug):
         "course": course,
         "documents": docs.select_related('user').prefetch_related('tags'),
         "threads": threads,
+        "followers_count": len(actstream.models.followers(course)),
         "all_tags": Tag.objects.all(),
     })
 

@@ -4,9 +4,9 @@
 
 {% block content %}
 <div class="row">
-  <div class="{% if request.user.followed_courses.all|length == 0 %}large-12{% else %}large-8{% endif %} medium-12 columns">
+  <div class="{% if request.user.following_courses|length == 0 %}large-12{% else %}large-8{% endif %} medium-12 columns">
     <h1>Vos cours</h1>
-    {% if request.user.followed_courses.all|length == 0 %}
+    {% if request.user.following_courses|length == 0 %}
       <p>On dirait que vous n'êtes abonné à aucun cours pour le moment.<br>
       Vous pourriez parcourir ci-dessous le catalogue de DocHub et
       <span data-tooltip aria-haspopup="true" class="has-tip" title="En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question">vous abonner</span>
@@ -16,7 +16,7 @@
       </div>
     {% else %}
       <ul class="course-list">
-        {% for course in request.user.followed_courses.all %}
+        {% for course in request.user.following_courses %}
           <li>
             <h6>
               <a href="{% url 'course_show' course.slug %}">
@@ -32,7 +32,7 @@
     {% endif %}
   </div>
 
-  <div class="{% if followed_courses|length == 0 %}large-12{% else %}large-4{% endif %} medium-12 columns">
+  <div class="{% if request.user.following_courses|length == 0 %}large-12{% else %}large-4{% endif %} medium-12 columns">
     <h3>Catalogue</h3>
     <ul class="small-block-grid-1">
     {% for fac in faculties %}
