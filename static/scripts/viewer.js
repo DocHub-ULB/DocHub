@@ -13,6 +13,8 @@ Number.prototype.pad = function(l) {
     return padding + n;
 }
 
+const COOKIE_NAME = "viewer-preferred-zoom";
+
 var viewer = function(doc) {
     var current_page = 0;
     var current_thumb = 0;
@@ -118,8 +120,9 @@ var viewer = function(doc) {
 
     var zoom_draw = function(z) {
         console.log(z);
-        if (z != zoom) {
+        if (z && z != zoom) {
             zoom = z;
+            Cookies.set(COOKIE_NAME, zoom);
             $('#zoom').val(zoom + '%');
 
             if (zoom >= 125 && mode == 600)
@@ -178,6 +181,7 @@ var viewer = function(doc) {
         load_pages();
         load_thumbs();
         show_thumb_page(0);
+        zoom_draw(parseFloat(Cookies.get(COOKIE_NAME)));
     });
 
     return {
