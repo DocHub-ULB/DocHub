@@ -16,6 +16,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
+from actstream import actions
+
 from catalog.models import Category, Course
 from tags.models import Tag
 
@@ -47,14 +49,14 @@ def show_course(request, slug):
 @login_required
 def join_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
-    request.user.followed_courses.add(course)
+    actions.follow(request.user, course, actor_only=False)
     return HttpResponseRedirect(reverse('course_show', args=[slug]))
 
 
 @login_required
 def leave_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
-    request.user.followed_courses.remove(course)
+    actions.unfollow(request.user, course)
     return HttpResponseRedirect(reverse('course_show', args=[slug]))
 
 

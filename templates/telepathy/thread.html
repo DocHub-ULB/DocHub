@@ -1,10 +1,29 @@
-{% extends "skel.html" %}
+{% extends "3col.html" %}
 
 {% load humanize %}
 {% load custommardown %}
+{% load activity_tags %}
 
 {% block title %}{{ object.name }}{% endblock %}
 
-{% block content %}
+{% block center-col %}
 {% include "fragments/thread.html" %}
+{% endblock %}
+
+{% block right-col %}
+<div class="row">
+  <div class="large-12 columns">
+    <br>
+    {% if request.user|is_following:thread %}
+      <a class="button expand alert radius" href="{% url 'leave_thread' thread.id %}">
+        <i class="fi-x"></i> Se désabonner
+      </a>
+    {% else %}
+      <a class="button expand success radius" href="{% url 'join_thread' thread.id %}">
+        <i class="fi-check"></i> S’abonner
+      </a>
+    {% endif %}
+  </div>
+</div>
+
 {% endblock %}

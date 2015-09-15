@@ -21,6 +21,7 @@ import tempfile
 from pyPdf import PdfFileReader
 
 from django.core.files.base import ContentFile
+from actstream import action
 
 from documents.models import Document, Page, DocumentError
 from .exceptions import DocumentProcessingError, MissingBinary
@@ -166,6 +167,8 @@ def finish_file(self, document_id):
     document = Document.objects.get(pk=document_id)
     document.state = 'DONE'
     document.save()
+
+    action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
 
     return document_id
 

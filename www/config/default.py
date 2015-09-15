@@ -64,6 +64,11 @@ INSTALLED_APPS += (
     'tags',
 )
 
+# must be after everything
+INSTALLED_APPS += (
+    'actstream',
+)
+
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
     'users.processors.user',

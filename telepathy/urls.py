@@ -38,4 +38,12 @@ urlpatterns = patterns(
     url(r"^edit/(?P<message_id>[^/]*)$",
         'telepathy.views.edit_message',
         name="edit_message"),
+
+    url(r"^join/(?P<id>[^/]*)$",
+        'telepathy.views.join_thread',
+        name="join_thread"),
+
+    url(r"^leave/(?P<id>[^/]*)$",
+        'telepathy.views.leave_thread',
+        name="leave_thread"),
 )

@@ -49,13 +49,5 @@ def auth_page_context(request):
 
 
 def feed(request):
-    courses = request.user.followed_courses.all()
-    documents = Document.objects.filter(course__in=courses)
-    documents = documents.select_related('course').select_related('user')
-    documents = documents.order_by('-id').filter(state="DONE")
-    documents = documents[:20]
-
-    context = {
-        'documents': documents
-    }
+    context = {}
     return render(request, "home.html", context)

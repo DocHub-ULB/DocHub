@@ -1,5 +1,8 @@
 {% extends "skel.html" %}
 
+{% load activity_tags %}
+
+
 {% block content %}
 {% if user.welcome %}
   <div class="row">
@@ -63,10 +66,11 @@
   </div>
 {% endif %}
 
-{% for document in documents %}
-  {% include "feed_entry.html" %}
+{% activity_stream 'user' user %}
+{% for action in stream %}
+  {% display_action action %}<br>
 {% empty %}
-  {% if user.followed_courses|length > 0 %}
+  {% if user.following_courses|length > 0 %}
     <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>
   {% else %}
     <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>

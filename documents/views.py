@@ -19,6 +19,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 
+from actstream import action
+
 from documents.models import Document
 from catalog.models import Course
 from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
@@ -102,7 +104,7 @@ def upload_multiple_files(request, course_slug):
                 course.add_child(doc)
                 doc.state = 'READY_TO_QUEUE'
                 doc.save()
-                add_document_to_queue(doc)
+                doc.add_to_queue(doc)
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponseRedirect(reverse('document_put', args=(course.id,)))
@@ -127,6 +129,8 @@ def document_edit(request, document_id):
                 doc.tags.add(Tag.objects.get(name=tag))
 
             doc.save()
+
+            action.send(request.user, verb="a édité", action_object=doc, target=doc.course)
 
             return HttpResponseRedirect(reverse('document_show', args=[doc.id]))
 

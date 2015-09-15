@@ -14,12 +14,14 @@ import re
 import os
 from os.path import join
 import identicon
+import actstream
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.utils import timezone
 
 from www import settings
+from catalog.models import Course
 
 
 class CustomUserManager(UserManager):
@@ -70,7 +72,6 @@ class User(AbstractBaseUser):
     photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default='')
-    followed_courses = models.ManyToManyField('catalog.Course')
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
@@ -87,6 +88,12 @@ class User(AbstractBaseUser):
     @property
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
+
+    def following(self):
+        return actstream.models.following(self)
+
+    def following_courses(self):
+        return actstream.models.following(self, Course)
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?

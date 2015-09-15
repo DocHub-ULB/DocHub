@@ -15,6 +15,8 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
+from actstream import action, actions
+
 
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
@@ -48,6 +50,9 @@ def new_thread(request, course_slug=None, document_id=None):
             if len(placement) > 0:
                 thread.placement = json.dumps(placement)
                 thread.save()
+
+            actions.follow(request.user, thread, actor_only=False)
+            action.send(request.user, verb="a posté", action_object=thread, target=course)
 
             return HttpResponseRedirect(
                 reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id)
@@ -100,6 +105,9 @@ def reply_thread(request, thread_id):
         poster = request.user
         message = Message.objects.create(user=poster, thread=thread, text=content)
 
+        actions.follow(request.user, thread, actor_only=False)
+        action.send(request.user, verb="a répondu", action_object=message, target=thread)
+
         return HttpResponseRedirect(
             reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id)
         )
@@ -120,6 +128,10 @@ def edit_message(request, message_id):
         if form.is_valid():
             message.text = form.cleaned_data['content']
             message.save()
+
+            actions.follow(request.user, thread, actor_only=False)
+            action.send(request.user, verb="a édité", action_object=message, target=thread)
+
             return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
     else:
         form = MessageForm({'content': message.text})
@@ -130,3 +142,17 @@ def edit_message(request, message_id):
         'edited_message': message,
         'edit': True,
     })
+
+
+@login_required
+def join_thread(request, id):
+    thread = get_object_or_404(Thread, pk=id)
+    actions.follow(request.user, thread, actor_only=False)
+    return HttpResponseRedirect(reverse('thread_show', args=[id]))
+
+
+@login_required
+def leave_thread(request, id):
+    thread = get_object_or_404(Thread, pk=id)
+    actions.unfollow(request.user, thread)
+    return HttpResponseRedirect(reverse('thread_show', args=[id]))

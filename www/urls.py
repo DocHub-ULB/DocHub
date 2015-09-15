@@ -40,6 +40,7 @@ urlpatterns = patterns(
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 
     url(r'^api/', include("www.rest_urls")),
+    url(r'^activity/', include('actstream.urls')),
 )
 
 handler400 = 'www.error.error400'
