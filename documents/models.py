@@ -84,6 +84,21 @@ class Document(models.Model):
         if "corr" in name:
             tags.append("corrigé")
 
+        if "tp" in name or "seance" in name:
+            tags.append("tp")
+
+        if "resum" in name or "r?sum" in name or "rsum" in name:
+            tags.append("résumé")
+
+        if "slide" in name or "transparent" in name:
+            tags.append("slides")
+
+        if "formulaire" in name:
+            tags.append("formulaire")
+
+        if "rapport" in name or "labo" in name:
+            tags.append("laboratoire")
+
         for tag in tags:
             tag = Tag.objects.get_or_create(name=tag)[0]
             self.tags.add(tag)

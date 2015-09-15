@@ -51,6 +51,12 @@ def test_tag_from_name_exam_month(doc):
     assert set(map(lambda x: x.name, doc.tags.all())) == set(['examen'])
 
 
+def test_tag_resume(doc):
+    doc.name = "Résumé de Nicolas"
+    doc.tag_from_name()
+    assert set(map(lambda x: x.name, doc.tags.all())) == set(['résumé'])
+
+
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess_done(mock_add_to_queue, doc):
     doc.state = "DONE"
