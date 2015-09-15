@@ -10,7 +10,6 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
-from datetime import datetime
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -43,8 +42,7 @@ class Course(models.Model):
 
     def gehol_url(self):
         slug = self.slug.replace('-', '').upper()
-        period = '21-36' if datetime.now().month <= 6 else '1-14'
-        return "http://gehol.ulb.ac.be/gehol/#!/Course/%s/%s" % (slug, period)
+        return "http://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours=%s" % (slug,)
 
     def __unicode__(self):
         return self.slug.upper()
