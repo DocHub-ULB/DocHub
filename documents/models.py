@@ -72,6 +72,15 @@ class Document(models.Model):
     def get_absolute_url(self):
         return reverse('document_show', args=(self.id, ))
 
+    def has_perm(self, user, moderated_courses):
+        if user.id == self.user_id:
+            return True
+
+        if self.course_id in moderated_courses:
+            return True
+
+        return False
+
     def tag_from_name(self):
         name = self.name.lower().replace(u"é", "e").replace(u"è", "e").replace(u"ê", "e")
         tags = []

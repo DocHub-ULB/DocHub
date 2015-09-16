@@ -3,6 +3,7 @@
 {% load custommardown %}
 {% load compress %}
 {% load activity_tags %}
+{% load has_perm_on %}
 
 {% block title %}{{ course.slug|upper }}{% endblock %}
 t²
@@ -41,6 +42,11 @@ t²
               <h5>
                 {% if document.state == "DONE" %}
                   <a href="{% url 'document_show' document.id %}"> {{ document.name }} </a>
+                  {% if request.user|has_perm_on:document %}
+                    <a href="{% url 'document_edit' document.id %}">
+                      <i class="fi-pencil dark-grey"></i>
+                    </a>
+                  {% endif %}
                 {% else %}
                   {{ document.name }}
                 {% endif %}
@@ -77,7 +83,7 @@ t²
             </a>
             <div class="course-row-content">
               <h5>
-                <a href="{% url 'thread_show' thread.id %}"> {{ thread.name }} </a>
+                <a href="{% url 'thread_show' thread.id %}">{{ thread.name }} </a>
                 <small>par {{ thread.user.name }}</small>
               </h5>
               <div class="course-content-last-line">

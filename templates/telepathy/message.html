@@ -1,5 +1,7 @@
 {% load humanize %}
 {% load custommardown %}
+{% load has_perm_on %}
+
 <div class="row user-message">
   <div class="large-1 show-for-large-up columns ">
     <img width="50" src="{{ message.user.get_photo }}" class="user-photo user-photo-small" />
@@ -25,11 +27,9 @@
         {% if message.user.is_academic %}
           <span class="label radius sh-space">Académique</span>
         {% endif %}
-        {% if not edit %}
-          {% if user.netid == message.user.netid %}
-            <a href="{% url 'edit_message' message.id %}#message-edit" class="sh-space"><i class="fi-pencil dark-grey"></i></a>
-            <!-- <a href="#" class="sh-space"><i class="fi-x dark-grey"></i></a> -->
-          {% endif %}
+        {% if request.user|has_perm_on:message %}
+          <a href="{% url 'edit_message' message.id %}#message-edit" class="sh-space"><i class="fi-pencil dark-grey"></i></a>
+          <!-- <a href="#" class="sh-space"><i class="fi-x dark-grey"></i></a> -->
         {% endif %}
       </div>
     </div>

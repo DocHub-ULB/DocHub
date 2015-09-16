@@ -77,7 +77,10 @@ class User(AbstractBaseUser):
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
 
+    moderated_courses = models.ManyToManyField('catalog.Course')
+
     _following_courses = None
+    _moderated_courses = None
 
     @property
     def get_photo(self):
@@ -102,14 +105,18 @@ class User(AbstractBaseUser):
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
 
-    def has_perm(self, perm_list, obj=None):
+    def has_perm(self, perm_list=[], obj=None):
         if self.is_staff:
             return True
 
-        if not obj:
+        if obj is None:
             return False
 
-        return obj.user == self
+        if self._moderated_courses is None:
+            ids = [course.id for course in self.moderated_courses.only('id')]
+            self._moderated_courses = ids
+
+        return obj.has_perm(self, self._moderated_courses)
 
     def fullname(self):
         return self.name
