@@ -77,6 +77,8 @@ class User(AbstractBaseUser):
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
 
+    _following_courses = None
+
     @property
     def get_photo(self):
         photo = self.DEFAULT_PHOTO
@@ -93,7 +95,9 @@ class User(AbstractBaseUser):
         return actstream.models.following(self)
 
     def following_courses(self):
-        return actstream.models.following(self, Course)
+        if self._following_courses is None:
+            self._following_courses = actstream.models.following(self, Course)
+        return self._following_courses
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
