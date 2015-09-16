@@ -68,7 +68,7 @@
 
 {% activity_stream 'user' user %}
 {% for action in stream %}
-  {% display_action action %}<br>
+  {% include "feed_entry.html" %}
 {% empty %}
   {% if user.following_courses|length > 0 %}
     <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>

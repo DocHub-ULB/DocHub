@@ -2,29 +2,33 @@
 {% load humanize %}
 {% load cache %}
 
-<div class="row">
-  <div class="small-12 columns feed-element">
-    <div class="user-message-header row">
-      <div class="small-10 columns feed-element">
-        <strong>
-          <i class="fi-page"></i>
-          <a href="{% url 'document_show' document.id %}">{{ document.name }}</a>
-        </strong>
-        <small>
-          par {{document.user.name}}
-        </small>
-      </div>
-      <div class="small-2 columns feed-element text-right">
-        <img width="80" src="{{ document.user.get_photo }}" class="user-photo user-photo-feed">
-      </div>
-    </div>
-    <div class="user-message-content row">
-      <div class="small-12 columns feed-element-limited ">
-        <a href="{% url 'document_show' document.id %}">
-          <img src="{{document.page_set.first.bitmap_600.url}}">
-        </a>
-      </div>
-    </div>
-    <br>
-  </div>
-</div>
+
+{% if action.actor.get_absolute_url %}
+  <a href="{{ action.actor.get_absolute_url }}">{{ action.actor }}</a>
+{% else %}
+  {{ action.actor }}
+{% endif %}
+
+{{ action.verb }}
+
+{% if action.action_object %}
+    {% if action.action_object.get_absolute_url %}
+      <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a>
+    {% else %}
+      {{ action.action_object }}
+    {% endif %}
+{% endif %}
+
+{% if action.action_object and action.target %}dans{% endif %}
+
+{% if action.target %}
+    {% if action.target.get_absolute_url %}
+      <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+    {% else %}
+      <a href="{{ action.target_url }}">{{ action.target }}</a>
+    {% endif %}
+{% endif %}
+
+il y a {{ action.timestamp|timesince }}
+
+<br>
