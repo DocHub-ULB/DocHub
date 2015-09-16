@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.shortcuts import render
+from actstream.models import user_stream
 
 from telepathy.models import Thread
 from documents.models import Document, Page
@@ -49,5 +50,7 @@ def auth_page_context(request):
 
 
 def feed(request):
-    context = {}
+    context = {
+        'stream': user_stream(request.user).exclude(verb="started following")
+    }
     return render(request, "home.html", context)

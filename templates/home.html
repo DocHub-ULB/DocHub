@@ -1,8 +1,5 @@
 {% extends "skel.html" %}
 
-{% load activity_tags %}
-
-
 {% block content %}
 {% if user.welcome %}
   <div class="row">
@@ -66,7 +63,6 @@
   </div>
 {% endif %}
 
-{% activity_stream 'user' user %}
 {% for action in stream %}
   {% include "feed_entry.html" %}
 {% empty %}

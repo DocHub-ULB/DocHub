@@ -60,4 +60,4 @@ class Message(models.Model):
         return self.text
 
     def get_absolute_url(self):
-        return reverse('thread_show', args=(self.thread.id, )) + "#message-{}".format(self.id)
+        return reverse('thread_show', args=(self.thread_id, )) + "#message-{}".format(self.id)
