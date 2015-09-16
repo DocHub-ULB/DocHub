@@ -41,7 +41,7 @@ def show_course(request, slug):
 
     return render(request, "catalog/course.html", {
         "course": course,
-        "documents": docs.select_related('user').prefetch_related('tags'),
+        "documents": docs.filter(hidden=False).select_related('user').prefetch_related('tags'),
         "threads": threads,
         "followers_count": len(actstream.models.followers(course)),
         "all_tags": Tag.objects.all(),

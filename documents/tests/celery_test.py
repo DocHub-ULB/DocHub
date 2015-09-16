@@ -133,6 +133,24 @@ def test_duplicate_checksum():
     assert Document.objects.filter(id=duplicate.id).count() == 0
 
 
+def test_duplicate_hidden_checksum():
+    doc = create_doc("Document name2", ".pdf")
+    doc.md5 = "8be98044ac25f3050b121aceac618823"
+    doc.hidden = True
+    doc.save()
+
+    duplicate = create_doc("Document name2", ".pdf")
+
+    f = File(open('documents/tests/files/3pages.pdf'))
+    duplicate.original.save("another-uuid-beef-dead.pdf", f)
+
+    result = tasks.checksum.delay(duplicate.id)
+    assert result.status == celery.states.SUCCESS, result.traceback
+    assert Document.objects.filter(id=duplicate.id).count() == 1
+    assert Document.objects.filter(id=doc.id).count() == 0
+    assert Document.objects.get(id=duplicate.id).md5 == "8be98044ac25f3050b121aceac618823"
+
+
 def test_correct_length():
     doc = create_doc("Document name", ".pdf")
 

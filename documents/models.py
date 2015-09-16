@@ -40,6 +40,8 @@ class Document(models.Model):
     state = models.CharField(max_length=20, default='PREPARING', db_index=True)
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
+    hidden = models.BooleanField(default=False)
+
     def __unicode__(self):
         return self.name
 

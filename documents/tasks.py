@@ -90,12 +90,15 @@ def checksum(self, document_id):
     query = Document.objects.filter(md5=hashed).exclude(md5='')
     if query.count() != 0:
         dup = query.first()
-        document_id = document.id
-        document.delete()
-        raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, dup.id))
-    else:
-        document.md5 = hashed
-        document.save()
+        if dup.hidden:
+            dup.delete()
+        else:
+            document_id = document.id
+            document.delete()
+            raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, dup.id))
+
+    document.md5 = hashed
+    document.save()
 
     return document_id
 
