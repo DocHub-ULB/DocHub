@@ -11,6 +11,8 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.db import models
+from django.core.urlresolvers import reverse
+
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -43,6 +45,9 @@ class Course(models.Model):
     def gehol_url(self):
         slug = self.slug.replace('-', '').upper()
         return "http://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours=%s" % (slug,)
+
+    def get_absolute_url(self):
+        return reverse('course_show', args=(self.slug, ))
 
     def __unicode__(self):
         return self.slug.upper()

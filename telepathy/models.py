@@ -12,6 +12,8 @@ from __future__ import unicode_literals
 
 import json
 from django.db import models
+from django.core.urlresolvers import reverse
+
 from www import settings
 
 
@@ -40,6 +42,9 @@ class Thread(models.Model):
                 return placement['page-no']
         return None
 
+    def get_absolute_url(self):
+        return reverse('thread_show', args=(self.id, ))
+
     class Meta:
         ordering = ['-created']
 
@@ -53,3 +58,6 @@ class Message(models.Model):
 
     def __unicode__(self):
         return self.text
+
+    def get_absolute_url(self):
+        return reverse('thread_show', args=(self.thread.id, )) + "#message-{}".format(self.id)
