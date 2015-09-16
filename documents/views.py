@@ -114,7 +114,7 @@ def upload_multiple_files(request, course_slug):
 def document_edit(request, document_id):
     doc = get_object_or_404(Document, id=document_id)
 
-    if not request.user.has_perm(obj=doc):
+    if not request.user.write_perm(obj=doc):
         return HttpResponse('You may not edit this document.', status=403)
 
     if request.method == 'POST':

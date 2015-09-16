@@ -105,7 +105,10 @@ class User(AbstractBaseUser):
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
 
-    def has_perm(self, perm_list=[], obj=None):
+    def has_perm(self, perm_list, obj=None):
+        return self.is_staff
+
+    def write_perm(self, obj):
         if self.is_staff:
             return True
 
@@ -116,7 +119,7 @@ class User(AbstractBaseUser):
             ids = [course.id for course in self.moderated_courses.only('id')]
             self._moderated_courses = ids
 
-        return obj.has_perm(self, self._moderated_courses)
+        return obj.write_perm(self, self._moderated_courses)
 
     def fullname(self):
         return self.name

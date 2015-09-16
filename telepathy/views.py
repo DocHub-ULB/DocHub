@@ -119,7 +119,7 @@ def edit_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
     thread = message.thread
 
-    if not request.user.has_perm(obj=message):
+    if not request.user.write_perm(obj=message):
         return HttpResponse('You may not edit this message.', status=403)
 
     if request.method == 'POST':

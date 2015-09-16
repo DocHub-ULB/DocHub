@@ -72,7 +72,7 @@ class Document(models.Model):
     def get_absolute_url(self):
         return reverse('document_show', args=(self.id, ))
 
-    def has_perm(self, user, moderated_courses):
+    def write_perm(self, user, moderated_courses):
         if user.id == self.user_id:
             return True
 

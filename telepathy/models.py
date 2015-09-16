@@ -49,7 +49,7 @@ class Thread(models.Model):
     def get_absolute_url(self):
         return reverse('thread_show', args=(self.id, ))
 
-    def has_perm(self, user, moderated_courses):
+    def write_perm(self, user, moderated_courses):
         if user.id == self.user_id:
             return True
 
@@ -78,7 +78,7 @@ class Message(models.Model):
     def get_absolute_url(self):
         return reverse('thread_show', args=(self.thread_id, )) + "#message-{}".format(self.id)
 
-    def has_perm(self, user, moderated_courses):
+    def write_perm(self, user, moderated_courses):
         if user.id == self.user_id:
             return True
 

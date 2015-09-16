@@ -16,6 +16,6 @@ register = template.Library()
 
 
 def has_perm_on(user, obj):
-    return user.has_perm(obj=obj)
+    return user.write_perm(obj=obj)
 
 register.filter('has_perm_on', has_perm_on)
