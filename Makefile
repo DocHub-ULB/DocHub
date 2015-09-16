@@ -26,7 +26,7 @@ database:
 	ve/bin/python manage.py migrate
 	ve/bin/python manage.py init --netid=${USER} --password=test --first-name=Gaston --last-name=Lagaffe
 
-shower: foundation foundation-icons select
+shower: foundation foundation-icons select cookie
 
 foundation: static/3party/foundation
 
@@ -63,6 +63,8 @@ static/3party/select:
 	unzip /tmp/select.zip -d /tmp/select > /dev/null
 	@mkdir static/3party/select && true
 	mv ${SELECTFILES} static/3party/select
+
+cookie: static/3party/js/js.cookie.js
 
 static/3party/js/js.cookie.js:
 	curl https://raw.githubusercontent.com/js-cookie/js-cookie/master/src/js.cookie.js > $@
