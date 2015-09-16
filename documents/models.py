@@ -45,6 +45,9 @@ class Document(models.Model):
     def __unicode__(self):
         return self.name
 
+    def fullname(self):
+        return self.__unicode__()
+
     def reprocess(self, force=False):
         if self.state != "ERROR" and not force:
             raise Exception("Document is not in error state it is " + self.state)

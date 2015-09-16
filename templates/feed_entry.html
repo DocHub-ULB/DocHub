@@ -4,18 +4,18 @@
 
 
 {% if action.actor.get_absolute_url %}
-  <a href="{{ action.actor.get_absolute_url }}">{{ action.actor }}</a>
+  <a href="{{ action.actor.get_absolute_url }}">{{ action.actor.fullname }}</a>
 {% else %}
-  {{ action.actor }}
+  {{ action.actor.fullname }}
 {% endif %}
 
 {{ action.verb }}
 
 {% if action.action_object %}
     {% if action.action_object.get_absolute_url %}
-      <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a>
+      <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object.fullname }}</a>
     {% else %}
-      {{ action.action_object }}
+      {{ action.action_object.fullname }}
     {% endif %}
 {% endif %}
 
@@ -23,9 +23,9 @@
 
 {% if action.target %}
     {% if action.target.get_absolute_url %}
-      <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+      <a href="{{ action.target.get_absolute_url }}">{{ action.target.fullname }}</a>
     {% else %}
-      <a href="{{ action.target_url }}">{{ action.target }}</a>
+      <a href="{{ action.target_url }}">{{ action.target.fullname }}</a>
     {% endif %}
 {% endif %}
 

@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 
 import json
 from django.db import models
+from django.utils.text import Truncator
 from django.core.urlresolvers import reverse
 
 from www import settings
@@ -33,6 +34,9 @@ class Thread(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def fullname(self):
+        return self.__unicode__()
 
     @property
     def page_no(self):
@@ -58,6 +62,9 @@ class Message(models.Model):
 
     def __unicode__(self):
         return self.text
+
+    def fullname(self):
+        return Truncator(self.__unicode__()).words(9)
 
     def get_absolute_url(self):
         return reverse('thread_show', args=(self.thread_id, )) + "#message-{}".format(self.id)

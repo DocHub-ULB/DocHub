@@ -51,3 +51,6 @@ class Course(models.Model):
 
     def __unicode__(self):
         return self.slug.upper()
+
+    def fullname(self):
+        return "{} ({})".format(self.name, self.slug.lower())

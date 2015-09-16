@@ -111,6 +111,9 @@ class User(AbstractBaseUser):
 
         return obj.user == self
 
+    def fullname(self):
+        return self.name
+
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
