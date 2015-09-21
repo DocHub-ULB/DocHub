@@ -37,6 +37,20 @@ def test_empty_tree():
     assert course.categories.count() == 0
 
 
+def test_fill_twice():
+    call_command('loadtree')
+
+    course = Course.objects.last()
+    course.name = "Autre chose"
+    course.save()
+
+    call_command('loadtree')
+
+    new_course = Course.objects.get(slug=course.slug)
+    assert new_course.id == course.id
+    assert course.name == new_course.name
+
+
 @pytest.mark.slow
 @pytest.mark.network
 def test_load_tree_hit_ulb():
