@@ -1,4 +1,3 @@
-* Mettre à jour documents/management/commands/import_documents.py
 * Fixer les scripts d'import initial
 * Update README avec les tests
 * utiliser www/test.py avec py.test

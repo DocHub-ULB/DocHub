@@ -43,6 +43,8 @@ class Command(BaseCommand):
     YEAR = "201516"
 
     def handle(self, *args, **options):
+        self.stdout.write('Loading tree ... ')
+
         if not options['hitulb']:
             f = path.join(BASE_DIR, 'catalog/management/localcache.json')
             self.LOCAL_CACHE = json.loads(open(f).read())
@@ -51,6 +53,8 @@ class Command(BaseCommand):
 
         Category.objects.all().delete()
         self.add_category(None, tree)
+
+        self.stdout.write('Done \n')
 
     def add_category(self, father, category):
         cat = Category.objects.create(

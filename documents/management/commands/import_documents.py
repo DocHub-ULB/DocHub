@@ -16,8 +16,9 @@ from optparse import make_option
 import uuid
 
 from users.models import User
-from graph.models import Course
+from catalog.models import Course
 from documents.models import Document
+from tags.models import Tag
 
 import os
 import glob
@@ -98,18 +99,16 @@ class Command(BaseCommand):
                 user=user,
                 name=name,
                 state="PREPARING",
-                file_type=extension
+                file_type=extension,
+                course=course,
             )
 
-            course.add_child(dbdoc)
-            if not len(tags) == 0:
-                dbdoc.add_keywords(*tags)
+            for tag in tags:
+                dbdoc.tags.add(Tag.objects.get_or_create(name=tag)[0])
 
             dbdoc.original.save(str(uuid.uuid4()) + extension, File(open(doc)))
 
             dbdoc.state = 'READY_TO_QUEUE'
             dbdoc.save()
 
-            add_document_to_queue(dbdoc)
-
-            dbdoc.save()
+            dbdoc.add_to_queue()
