@@ -52,11 +52,11 @@ Add another user to the db
 
 ## Testing
 
-Run only fast tests (not testing actual file conversions) : < 2 sec
+Run only fast tests : not testing actual file conversions (< 2 sec)
 
     py.test -k "not slow"
 
-Run only all tests (~20 sec)
+Run all tests (~20 sec)
 
     py.test
 
