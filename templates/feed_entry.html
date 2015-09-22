@@ -3,11 +3,7 @@
 {% load cache %}
 
 
-{% if action.actor.get_absolute_url %}
-  <a href="{{ action.actor.get_absolute_url }}">{{ action.actor.fullname }}</a>
-{% else %}
-  {{ action.actor.fullname }}
-{% endif %}
+<img src="{{ action.actor.get_photo }}"> {{ action.actor.fullname }}
 
 {{ action.verb }}
 
