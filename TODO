@@ -1,4 +1,3 @@
 * Fixer les scripts d'import initial
 * Update README avec les tests
-* utiliser www/test.py avec py.test
 * test tags colors
