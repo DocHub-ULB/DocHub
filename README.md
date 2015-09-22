@@ -50,6 +50,15 @@ Add another user to the db
 
     ./manage.py useradd
 
+## Testing
+
+Run only fast tests (not testing actual file conversions) : < 2 sec
+
+    py.test -k "not slow"
+
+Run only all tests (~20 sec)
+
+    py.test
 
 ## Contribute !
 
