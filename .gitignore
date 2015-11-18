@@ -1,3 +1,4 @@
+dumper/*.json
 *pyc
 db.sql
 db.sqlite
