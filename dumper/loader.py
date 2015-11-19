@@ -89,6 +89,8 @@ for thread in threads:
 
     course = Course.objects.get(slug=thread['fields']['course'])
     thread['fields']['course'] = course.id
+    if thread['fields']['placement'] is None:
+        thread['fields']['placement'] = ""
 
 threads = json.dumps(threads)
 
