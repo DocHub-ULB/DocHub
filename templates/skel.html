@@ -61,6 +61,9 @@
                       <li><a href="{% url 'settings' %}">Profil</a></li>
                       <li><a href="{% url 'notif_show' %}">Notifications</a></li>
                       <li><a href="{% url 'logout' %}"><i class="fi-power"></i> Déconnexion</a></li>
+                      {% if user.is_staff %}
+                      <li><a href="/admin">Admin</a></li>
+                      {% endif %}
                   </ul>
               </li>
             </ul>
