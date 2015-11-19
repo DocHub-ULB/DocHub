@@ -1,26 +1,48 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
 
 from django.core.management import call_command
 from catalog.models import Course, Category
+from www.settings import BASE_DIR
 
 import pytest
 
 
 pytestmark = [pytest.mark.django_db]
 
+SIMPLE_TREE = os.path.join(BASE_DIR, 'catalog', 'tests', 'simple_tree.yaml')
+MULTIPLE_TREE = os.path.join(BASE_DIR, 'catalog', 'tests', 'multiple_tree.yaml')
+REAL_TREE = os.path.join(BASE_DIR, 'catalog', 'tests', 'real_tree.yaml')
+
 
 def test_load_tree():
-    call_command('loadtree')
+    call_command('loadtree', tree_file=SIMPLE_TREE)
 
     ulb = Category.objects.get(level=0)
     assert ulb.name == "ULB"
 
-    bio = Course.objects.get(slug="biol-f-102")
-    assert bio.name == "Bio générale"
+    opti = Course.objects.get(slug="opti-f-1001")
+    assert opti.categories.count() == 1
+    options = opti.categories.last()
 
-    options = Category.objects.get(name="Options")
-    assert options in bio.categories.all()
+    assert options.name == "Options"
+    assert options.level == 3
+
+
+def test_load_multiple_tree():
+    call_command('loadtree', tree_file=MULTIPLE_TREE)
+
+    info = Category.objects.get(name="Informatique")
+    assert info.level == 1
+
+    phys = Category.objects.get(name="Physique")
+    assert phys.level == 1
+
+    master = phys.children.first()
+    assert master.name == "Master"
+    assert master.course_set.count() == 1
+    assert master.course_set.last().slug == "phys-h-200"
 
 
 def test_empty_tree():
@@ -29,7 +51,7 @@ def test_empty_tree():
 
     course.categories.add(category)
 
-    call_command('loadtree')
+    call_command('loadtree', tree_file=SIMPLE_TREE)
 
     assert Category.objects.filter(slug="prout").count() == 0
 
@@ -38,13 +60,13 @@ def test_empty_tree():
 
 
 def test_fill_twice():
-    call_command('loadtree')
+    call_command('loadtree', tree_file=SIMPLE_TREE)
 
     course = Course.objects.last()
     course.name = "Autre chose"
     course.save()
 
-    call_command('loadtree')
+    call_command('loadtree', tree_file=SIMPLE_TREE)
 
     new_course = Course.objects.get(slug=course.slug)
     assert new_course.id == course.id
@@ -54,7 +76,7 @@ def test_fill_twice():
 @pytest.mark.slow
 @pytest.mark.network
 def test_load_tree_hit_ulb():
-    call_command('loadtree', hitulb=True)
+    call_command('loadtree', hitulb=True, tree_file=REAL_TREE)
 
-    bio = Course.objects.get(slug="biol-f-102")
-    assert bio.name == "Biologie générale"
+    info = Course.objects.get(slug="info-f-101")
+    assert info.name == "Programmation"
