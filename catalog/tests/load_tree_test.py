@@ -11,9 +11,10 @@ import pytest
 
 pytestmark = [pytest.mark.django_db]
 
-SIMPLE_TREE = os.path.join(BASE_DIR, 'catalog', 'tests', 'simple_tree.yaml')
-MULTIPLE_TREE = os.path.join(BASE_DIR, 'catalog', 'tests', 'multiple_tree.yaml')
-REAL_TREE = os.path.join(BASE_DIR, 'catalog', 'tests', 'real_tree.yaml')
+fixtures = os.path.join(BASE_DIR, 'catalog', 'tests', 'fixtures')
+SIMPLE_TREE = os.path.join(fixtures, 'simple_tree.yaml')
+MULTIPLE_TREE = os.path.join(fixtures, 'multiple_tree.yaml')
+REAL_TREE = os.path.join(fixtures, 'real_tree.yaml')
 
 
 def test_load_tree():
