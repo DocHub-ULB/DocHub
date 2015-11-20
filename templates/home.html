@@ -3,15 +3,11 @@
 {% block content %}
 {% if user.welcome %}
   {% include "welcome.html" %}
-{% else %}
-  <div class="row">
-    <div class="small-12 columns">
-      <h1>DocHub</h1>
-      <h3><i class="fi-list-thumbnails"></i> Flux d'actualités</h3>
-    </div>
-  </div>
 {% endif %}
+<br>
 <div class="row">
+  <div class="large-12 columns">
+  </div>
   <div class="large-12 columns">
     {% for action in stream %}
       {% include "feed_entry.html" %}
