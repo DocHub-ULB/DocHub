@@ -38,7 +38,17 @@
       <br>
       <span class="feed-timesince">
         Il y a {{ action.timestamp|timesince }}
-      </span></p>
+      </span>
+      {% comment %}
+      {% if verbose %}
+        {% if action.data.markdown%}
+          <div>
+            {{action.data.markdown|markdown}}
+          </div>
+        {% endif %}
+      {% endif %}
+      {% endcomment %}
+    </p>
   </div>
 </div>
 

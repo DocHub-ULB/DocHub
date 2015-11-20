@@ -52,7 +52,7 @@ def new_thread(request, course_slug=None, document_id=None):
                 thread.save()
 
             actions.follow(request.user, thread, actor_only=False)
-            action.send(request.user, verb="a posté", action_object=thread, target=course)
+            action.send(request.user, verb="a posté", action_object=thread, target=course, markdown=message.text)
 
             return HttpResponseRedirect(
                 reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id)

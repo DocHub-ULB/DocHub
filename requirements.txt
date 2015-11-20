@@ -16,6 +16,7 @@ django-mptt
 django-activity-stream
 git+https://github.com/C4ptainCrunch/libulb.git
 PyYaml
+jsonfield
 
 # Dev
 django-extensions
