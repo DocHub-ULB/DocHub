@@ -22,6 +22,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import authenticate, login
 
+from actstream.models import actor_stream
+
 from www import settings
 
 from forms import SettingsForm
@@ -51,6 +53,7 @@ def user_settings(request):
 
     return render(request, 'users/settings.html', {
         'form': form,
+        'stream': actor_stream(request.user),
     })
 
 
