@@ -73,6 +73,7 @@ class Message(models.Model):
         return self.text
 
     def fullname(self):
+        return "un message"
         return Truncator(self.__unicode__()).words(9)
 
     def get_absolute_url(self):
