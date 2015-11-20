@@ -382,3 +382,17 @@ i.round-icon.medium{
 .side-nav li a:not(.button):hover {
     background:none;
 }
+
+
+
+.feed-photo {
+  height: 2.5em;
+  float:left;
+  margin-top: .3em;
+  margin-right: .5em;
+  border-radius: .25em;
+}
+
+.feed-timesince {
+  color: #777;
+}
