@@ -77,7 +77,7 @@ class User(AbstractBaseUser):
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
 
-    moderated_courses = models.ManyToManyField('catalog.Course')
+    moderated_courses = models.ManyToManyField('catalog.Course', blank=True)
 
     _following_courses = None
     _moderated_courses = None
