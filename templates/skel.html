@@ -47,7 +47,7 @@
               </li>
               <li class="divider"></li>
               <li class="has-dropdown">
-                  <a href="#"><i class="fi-torso"></i> {{user.name}}</a>
+                  <a href="#"><i class="fi-torso"></i> {{request.user.name}}</a>
                   <ul class="dropdown">
                       <li><a href="{% url 'settings' %}">Profil</a></li>
                       {% if request.user.is_staff %}
@@ -70,7 +70,7 @@
                 <i class="fi-list-thumbnails"></i> Flux d'actualités
               </a>
             </li>
-            {% if user.following_courses|length == 0 %}
+            {% if request.user.following_courses|length == 0 %}
               <li>
                 <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
                 </a>
@@ -81,7 +81,7 @@
               </li>
             {% endif %}
             <ul class="course-bulletlist">
-              {% for course in user.following_courses %}
+              {% for course in request.user.following_courses %}
                 <li class="nav-link">
                   <a href="{% url 'course_show' course.slug %}">
                     <i class="fi-folder"></i> {{ course.name }}

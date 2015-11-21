@@ -20,7 +20,7 @@
         {% endif %}
       </h3>
       <ul class="course-list">
-        {% with user.following_courses as user_followed_courses %}
+        {% with request.user.following_courses as user_followed_courses %}
           {% for course in category.course_set.all %}
           <li>
             <h6>
