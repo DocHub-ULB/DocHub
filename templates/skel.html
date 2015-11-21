@@ -53,15 +53,22 @@
               <li>
                 <a href="https://www.facebook.com/Proj402"><i class="fi-social-facebook"></i></a>
               </li>
-              <li class="divider"></li>
               <li class="has-dropdown">
-                  <a href="#"><i class="fi-torso"></i> {{request.user.name}}</a>
+                  <a href="#">
+                    <i class="fi-torso"></i>&nbsp; {{request.user.name}}
+                  </a>
                   <ul class="dropdown">
-                      <li><a href="{% url 'settings' %}">Profil</a></li>
+                      <li>
+                        <a href="{% url 'settings' %}"><i class="fi-torso"></i>&nbsp; Profil</a>
+                      </li>
                       {% if request.user.is_staff %}
-                        <li><a href="/admin"><i class="fi-widget"></i> Admin</a></li>
+                        <li>
+                          <a href="/admin"><i class="fi-widget"></i>&nbsp; Admin</a>
+                        </li>
                       {% endif %}
-                      <li><a href="{% url 'logout' %}"><i class="fi-power"></i> Déconnexion</a></li>
+                      <li>
+                        <a href="{% url 'logout' %}"><i class="fi-power"></i>&nbsp; Déconnexion</a>
+                      </li>
                   </ul>
               </li>
             </ul>
