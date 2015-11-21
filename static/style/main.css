@@ -351,3 +351,27 @@ i.round-icon.medium{
 .feed-timesince {
   color: #777;
 }
+
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+.notifications-spinner:before {
+    font-size: 3em;
+    color: grey;
+    animation-name: spin;
+    animation-duration: 1500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+#notifications-button  {
+    background-color: #CF2A0E;
+    border-radius: 1em;
+}
