@@ -14,7 +14,24 @@
         {% include "feed_entry.html" %}
       {% empty %}
         {% if request.user.following_courses|length > 0 %}
-          <p>Il n'y a encore rien dans votre flux d'actualités... Attendez un peu, ça arrivera&nbsp;!</p>
+          <p>Il n'y a encore rien dans votre flux d'actualités, attendez un peu, ça arrivera&nbsp;!</p>
+          {% for i in "xxxx" %}
+            <div class="row feed-placeholder">
+              <div class="large-12 columns">
+                <p>
+                  <strong>
+                      <i class="fi-cloud"></i>
+                    <img src="http://placehold.it/40x40" class="feed-photo"> John Doe a commenté
+                  </strong>
+                   "Question pour l'examen" dans Bases Fondamentales (base-f-100)
+                  <br>
+                  <span class="feed-timesince">
+                    Il y a 10 minues
+                  </span>
+                </p>
+              </div>
+            </div>
+          {% endfor %}
         {% else %}
           <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
           <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>

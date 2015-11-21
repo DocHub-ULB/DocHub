@@ -375,3 +375,8 @@ i.round-icon.medium{
     background-color: #CF2A0E;
     border-radius: 1em;
 }
+
+.feed-placeholder{
+    color: grey;
+    opacity: 0.3;
+}
