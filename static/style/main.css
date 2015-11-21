@@ -180,16 +180,6 @@ pre.codehilite{
     padding: 10px;
 }
 
-.feed-element-limited {
-    max-height: 25em;
-    overflow: hidden;
-}
-
-.feed-element img {
-    border: 1px solid #eee;
-}
-
-
 .course-row {
     /*border: 1px solid black;*/
     margin-bottom: 10px !important;
@@ -240,41 +230,6 @@ i.round-icon.medium{
 
 .tooltip-box small{
     font-size: 0.8em;
-}
-
-.notification-list {
-    margin: 0;
-    padding: 0;
-    display:block;
-}
-
-.notification-list li{
-    display:block;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    min-height: 2.8em;
-}
-
-.notification-list li .notif-text {
-    margin-left: 3em;
-    margin-bottom: 10px;
-}
-
-.notification-list li .notif-text .notif-date{
-    font-size: 0.8em;
-}
-
-#read_notifs li i.round-icon{
-    color: #aaa;
-}
-
-#read_notifs li a{
-    color: #2b6275;
-}
-
-#read_notifs li a:hover{
-    color: #0095c7;
 }
 
 .course-row-content {
