@@ -1,3 +1,5 @@
+{% load has_perm_on %}
+
 <div class="sticky">
   <nav class="top-bar contain-to-grid viewer-bar" data-topbar>
     <ul class="title-area">
@@ -42,7 +44,7 @@
         <li>
           <a id="zoom-out"><i class="fi-zoom-out"></i> De-zoom</a>
         </li>
-        {% if request.user == document.user %}
+        {% if request.user|has_perm_on:document %}
           <li>
             <a href="{% url 'document_edit' document.id %}"><i class="fi-pencil"></i> Editer</a>
           </li>
