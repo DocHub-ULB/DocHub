@@ -1,0 +1,12 @@
+{% extends "skel.html" %}
+{% load humanize %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+{% for notification in object_list %}
+  {% with action=notification.action %}
+    {% include "feed_entry.html" %}
+  {% endwith %}
+{% endfor%}
+{% endblock %}

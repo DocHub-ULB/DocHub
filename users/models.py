@@ -79,8 +79,16 @@ class User(AbstractBaseUser):
 
     moderated_courses = models.ManyToManyField('catalog.Course', blank=True)
 
-    _following_courses = None
-    _moderated_courses = None
+    notify_on_response = models.BooleanField(default=True)
+    notify_on_new_doc = models.BooleanField(default=True)
+    notify_on_new_thread = models.BooleanField(default=True)
+    notify_on_mention = True
+    notify_on_upload = True
+
+    def __init__(self, *args, **kwargs):
+        self._following_courses = None
+        self._moderated_courses = None
+        super(User, self).__init__(*args, **kwargs)
 
     @property
     def get_photo(self):

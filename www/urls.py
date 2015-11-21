@@ -29,6 +29,7 @@ urlpatterns = patterns(
     url(r"^document/", include("documents.urls")),
     url(r"^telepathy/", include("telepathy.urls")),
     url(r"^users/", include("users.urls")),
+    url(r"^notifications/", include("notifications.urls")),
 
     url(r"^syslogin$", 'django.contrib.auth.views.login', {"template_name": "syslogin.html"}, name="syslogin"),
     url(r"^auth/$", 'users.views.auth'),

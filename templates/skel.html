@@ -30,10 +30,16 @@
             <li class="name">
                <h1><a href="/">P402 - DocHub</a></h1>
             </li>
+
             <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
         </ul>
 
         <section class="top-bar-section">
+            <ul class="left">
+              <li>
+                <a href="{% url "notifications" %}">{{request.user.notification_set.count}} notifications</a>
+              </li>
+            </ul>
             <ul class="right">
               <!-- <li><a href="{% url 'help' %}">Aide</a></li> -->
               <li>
