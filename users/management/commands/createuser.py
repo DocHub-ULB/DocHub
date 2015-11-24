@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 # This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
 
 from django.core.management.base import BaseCommand
+from django.db.utils import IntegrityError
 from users.models import User
 from getpass import getpass, getuser
 from optparse import make_option
@@ -40,10 +41,12 @@ class Command(BaseCommand):
         last_name = raw_input("Lastname (default: Smith): ") if options["last_name"] is None else options["last_name"]
         if not last_name:
             last_name = "Smith"
-        email = 'test@mouh.com'
 
-        user = User.objects.create_user(netid=netid, email=email, password=password)
-        user.first_name = first_name
-        user.last_name = last_name
-        user.save()
-        print "User id : " + str(user.id)
+        email = '{}@fake.ulb.ac.be'.format(netid)
+
+        try:
+            user = User.objects.create_user(netid=netid, email=email, password=password, first_name=first_name, last_name=last_name)
+            self.stdout.write('User created: {}\n'.format(repr(user)))
+        except IntegrityError as e:
+            self.stdout.write("Error:\n")
+            self.stdout.write(str(e))
