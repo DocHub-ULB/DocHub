@@ -22,3 +22,9 @@ def markAsRead(request, pk):
     notif.read = True
     notif.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('notifications')))
+
+@login_required
+def markAllAsRead(request):
+    user = request.user
+    Notification.objects.filter(user=user).filter(read=False).update(read=True)
+    return HttpResponseRedirect(reverse('notifications'))

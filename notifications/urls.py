@@ -20,5 +20,6 @@ urlpatterns = patterns(
         views.NotificationsView.as_view(),
         name="notifications"
     ),
-    url(r"^markAsRead/(?P<pk>[0-9]+)$", views.markAsRead, name="markAsRead")
+    url(r"^markAsRead/(?P<pk>[0-9]+)$", views.markAsRead, name="markAsRead"),
+    url(r"^markAllAsRead$", views.markAllAsRead, name="markAllAsRead"),
 )
