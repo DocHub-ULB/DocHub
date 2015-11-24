@@ -80,7 +80,7 @@ under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or (at
 your option) any later version.
 
-This software was made by hast, C4, iTitou at UrLab, ULB's hackerspace
+This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 
 [_Woop woop_](https://www.youtube.com/watch?v=z13qnzUQwuI)

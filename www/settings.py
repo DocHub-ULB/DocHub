@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from config import *
 
