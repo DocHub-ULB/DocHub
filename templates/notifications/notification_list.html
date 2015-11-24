@@ -4,9 +4,13 @@
 {% block title %}Notifications{% endblock %}
 
 {% block content %}
+{% if object_list %}
+    <a href="{% url "markAllAsRead" %}" class="button radius">Tout marquer comme lu</a>
+{% endif %}
 {% for notification in object_list %}
   {% with action=notification.action %}
     {% include "feed_entry.html" %}
+    <a href="{% url "markAsRead" notification.id %}" class="button small radius">Marquer comme lu</a>
   {% endwith %}
 {% empty %}
 <div class="row">
