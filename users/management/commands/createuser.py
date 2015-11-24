@@ -18,26 +18,27 @@ from optparse import make_option
 
 
 class Command(BaseCommand):
-    help = 'Initialize fognar for developpment'
+    help = 'Create a new normal user'
     option_list = BaseCommand.option_list + (
-        make_option('--netid', action='store', dest='netid', default=None, help='default netid'),
-        make_option('--password', action='store', dest='password', default=None, help='default password'),
-        make_option('--first-name', action='store', dest='first_name', default=None, help='default first name'),
-        make_option('--last-name', action='store', dest='last_name', default=None, help='default last name'),
+        make_option('--netid', action='store', dest='netid', default=None),
+        make_option('--password', action='store', dest='password', default=None),
+        make_option('--first-name', action='store', dest='first_name', default=None),
+        make_option('--last-name', action='store', dest='last_name', default=None),
     )
 
     def handle(self, *args, **options):
-        self.stdout.write('Creating user\n')
-
         netid = raw_input("Username (default: %s): " % getuser()) if options["netid"] is None else options["netid"]
         if not netid:
             netid = getuser()
+
         password = getpass("Password (default: 'test'): ") if options["password"] is None else options["password"]
         if not password:
             password = 'test'
+
         first_name = raw_input("Firstname (default: John): ") if options["first_name"] is None else options["first_name"]
         if not first_name:
             first_name = "John"
+
         last_name = raw_input("Lastname (default: Smith): ") if options["last_name"] is None else options["last_name"]
         if not last_name:
             last_name = "Smith"
