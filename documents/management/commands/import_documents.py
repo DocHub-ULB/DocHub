@@ -104,7 +104,8 @@ class Command(BaseCommand):
             )
 
             for tag in tags:
-                dbdoc.tags.add(Tag.objects.get_or_create(name=tag)[0])
+                tag = Tag.objects.get_or_create(name=tag)[0]
+                dbdoc.tags.add(tag)
 
             dbdoc.original.save(str(uuid.uuid4()) + extension, File(open(doc)))
 
