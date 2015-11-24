@@ -10,6 +10,7 @@ script:
   - ./manage.py check
   - py.test -k "not unoconv"
   - make shower
+  - make database
 
 addons:
   apt:

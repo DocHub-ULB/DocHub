@@ -25,7 +25,7 @@ For exemple on Debian/Ubuntu
 
 Or on Fedora
 
-    sudo yum install GraphicsMagick unoconv python-devel
+    sudo dnf install GraphicsMagick unoconv python-devel
 
 ### Installation
 
@@ -38,6 +38,10 @@ Or on Fedora
 
 Then go http://localhost:8000/
 
+There will already be 2 users in the database, both with `test` as a password:
+   - $(USER) : your username on your machine
+   - blabevue
+
 ### Reset
 
     make cleandata database
@@ -48,11 +52,11 @@ Then go http://localhost:8000/
 
 Add another user to the db
 
-    ./manage.py useradd
+    ./manage.py createuser
 
 ## Testing
 
-Run only fast tests : not testing actual file conversions (< 2 sec)
+Run only fast tests (total time < 2 sec) : not testing actual file conversions
 
     py.test -k "not slow"
 
@@ -76,7 +80,7 @@ under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or (at
 your option) any later version.
 
-This software was made by hast, C4, iTitou at UrLab, ULB's hackerspace
+This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 
 [_Woop woop_](https://www.youtube.com/watch?v=z13qnzUQwuI)
