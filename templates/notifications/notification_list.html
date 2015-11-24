@@ -8,5 +8,15 @@
   {% with action=notification.action %}
     {% include "feed_entry.html" %}
   {% endwith %}
+{% empty %}
+<div class="row">
+  <div class="large-12 columns">
+    <br>
+    <p>
+        Vous n'avez pas encore de notifications...<br>
+        Attendez que quelqu'un ajoute un document ou une question dans un cours de vous suivez et vous le verrez apparaitre ici.
+    </p>
+  </div>
+</div>
 {% endfor%}
 {% endblock %}

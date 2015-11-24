@@ -37,6 +37,7 @@
         <section class="top-bar-section">
             <ul class="left">
               <li>
+                {% comment %}
                 <a href="{% url "notifications" %}" data-dropdown="notif-drop" aria-controls="notif-drop" aria-expanded="false" id="notifications-button">
                     <i class="fi-megaphone"></i>
                     {{request.user.notification_set.count}}
@@ -46,6 +47,11 @@
                     <i class="fi-refresh notifications-spinner"></i>
                   </p>
                 </div>
+                {% endcomment %}
+                <a href="{% url "notifications" %}" id="notifications-button">
+                    <i class="fi-megaphone"></i>
+                    {{request.user.notification_set.count}}
+                </a>
               </li>
             </ul>
             <ul class="right">
