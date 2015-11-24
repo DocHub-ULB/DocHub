@@ -16,8 +16,9 @@ import views
 urlpatterns = patterns(
     "",
     url(
-        r"",
+        r"^$",
         views.NotificationsView.as_view(),
         name="notifications"
     ),
+    url(r"^markAsRead/(?P<pk>[0-9]+)$", views.markAsRead, name="markAsRead")
 )
