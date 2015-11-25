@@ -9,7 +9,11 @@
 {% endif %}
 {% for notification in object_list %}
   {% with action=notification.action %}
-    {% include "feed_entry.html" %}
+    {% if action.public %}
+        {% include "feed_entry.html" %}
+    {% else %}
+        {% include "notifications/notification_upload.html" %}
+    {% endif %}
     <a href="{% url "markAsRead" notification.id %}" class="button small radius">Marquer comme lu</a>
   {% endwith %}
 {% empty %}

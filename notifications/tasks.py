@@ -41,10 +41,14 @@ def user_wants_notification(user, action):
 @shared_task
 def handle_action(action_id):
     action = Action.objects.get(pk=action_id)
-    users = followers(action.target)
+    if action.public:
+        users = followers(action.target)
 
-    users = [user for user in users if user_wants_notification(user, action)]
+        users = [user for user in users if user_wants_notification(user, action)]
 
-    notifications = [Notification(user=user, action=action) for user in users]
+        notifications = [Notification(user=user, action=action) for user in users]
 
-    Notification.objects.bulk_create(notifications)
+        Notification.objects.bulk_create(notifications)
+    else:
+        user = action.actor
+        Notification.objects.create(user=user, action=action)

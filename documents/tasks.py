@@ -45,6 +45,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     document = Document.objects.get(id=doc_id)
     document.state = "ERROR"
     document.save()
+    action.send(document.user, verb="upload failed", action_object=document, target=document.course, public=False)
 
     # Warn the admins
     DocumentError.objects.create(
@@ -172,6 +173,7 @@ def finish_file(self, document_id):
     document.save()
 
     action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
+    action.send(document.user, verb="upload success", action_object=document, target=document.course, public=False)
 
     return document_id
 
