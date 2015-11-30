@@ -13,6 +13,11 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, url
 import views
 
+
+def markAsReadAndRedirect(*args, **kwargs):
+    kwargs['redirect_to_object'] = True
+    return views.markAsRead(*args, **kwargs)
+
 urlpatterns = patterns(
     "",
     url(
@@ -20,6 +25,7 @@ urlpatterns = patterns(
         views.NotificationsView.as_view(),
         name="notifications"
     ),
-    url(r"^markAsRead/(?P<pk>[0-9]+)$", views.markAsRead, name="markAsRead"),
-    url(r"^markAllAsRead$", views.markAllAsRead, name="markAllAsRead"),
+    url(r"^read/(?P<pk>[0-9]+)$", views.markAsRead, name="mark_as_read"),
+    url(r"^redirect/(?P<pk>[0-9]+)$", markAsReadAndRedirect, name="read_and_redirect"),
+    url(r"^read_all$", views.markAllAsRead, name="read_all"),
 )

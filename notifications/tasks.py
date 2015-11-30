@@ -34,6 +34,8 @@ def user_wants_notification(user, action):
         return user.notify_on_rmention
     elif action.verb == "a été uploadé":
         return user.notify_on_upload
+    elif action.verb in ("started following",):
+        return False
     else:
         raise Exception("Unknown action verb: '{}'".format(action.verb))
 

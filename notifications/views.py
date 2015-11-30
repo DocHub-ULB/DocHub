@@ -14,14 +14,26 @@ class NotificationsView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Notification.objects.filter(user=self.request.user).filter(read=False)
 
+
 @login_required
-def markAsRead(request, pk):
+def markAsRead(request, pk, redirect_to_object=False):
     notif = get_object_or_404(Notification, pk=pk)
     if notif.user != request.user:
         pass
     notif.read = True
     notif.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('notifications')))
+
+    if redirect_to_object:
+        return_url = notif.action.action_object.get_absolute_url()
+        if return_url is None:
+            return_url = notif.action.action_object_url()
+    else:
+        return_url = request.META.get('HTTP_REFERER')
+        if return_url is None:
+            return_url = reverse('notifications')
+
+    return HttpResponseRedirect(return_url)
+
 
 @login_required
 def markAllAsRead(request):

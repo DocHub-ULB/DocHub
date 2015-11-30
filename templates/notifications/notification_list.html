@@ -4,27 +4,26 @@
 {% block title %}Notifications{% endblock %}
 
 {% block content %}
-{% if object_list %}
-    <a href="{% url "markAllAsRead" %}" class="button radius">Tout marquer comme lu</a>
-{% endif %}
-{% for notification in object_list %}
-  {% with action=notification.action %}
-    {% if action.public %}
-        {% include "feed_entry.html" %}
-    {% else %}
-        {% include "notifications/notification_upload.html" %}
-    {% endif %}
-    <a href="{% url "markAsRead" notification.id %}" class="button small radius">Marquer comme lu</a>
-  {% endwith %}
-{% empty %}
 <div class="row">
   <div class="large-12 columns">
-    <br>
-    <p>
-        Vous n'avez pas encore de notifications...<br>
-        Attendez que quelqu'un ajoute un document ou une question dans un cours de vous suivez et vous le verrez apparaitre ici.
-    </p>
+    {% if object_list %}
+      <h2>
+        Notifications
+      </h2>
+      <a href="{% url "read_all" %}" class="button radius tiny success">
+        <i class="fi-check" style="color: inherit;"></i>
+        Tout marquer comme lu
+      </a>
+        {% for notification in object_list %}
+          {% include "notifications/notification.html" %}
+        {% endfor %}
+    {% else %}
+      <h2>Notifications</h2>
+          <p>
+              Vous n'avez pas encore de notifications...<br>
+              Attendez que quelqu'un ajoute un document ou une question dans un cours de vous suivez et vous le verrez apparaitre ici.
+          </p>
+    {% endif %}
   </div>
 </div>
-{% endfor%}
 {% endblock %}

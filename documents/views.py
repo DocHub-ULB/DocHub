@@ -177,6 +177,9 @@ def document_download_original(request, id):
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 
+    if document.state != "DONE":
+        return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))
+
     context = {
         "document": document,
         "form": NewThreadForm(),
