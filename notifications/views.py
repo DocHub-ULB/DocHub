@@ -12,7 +12,14 @@ class NotificationsView(LoginRequiredMixin, ListView):
     model = Notification
 
     def get_queryset(self):
-        return Notification.objects.filter(user=self.request.user).filter(read=False)
+        qs = Notification.objects.filter(user=self.request.user)
+        qs = qs.filter(read=False)
+        qs = qs.select_related('action')
+        qs = qs.prefetch_related('action__target')
+        qs = qs.prefetch_related('action__actor')
+        qs = qs.prefetch_related('action__action_object')
+
+        return qs
 
 
 @login_required
