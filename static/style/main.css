@@ -373,7 +373,11 @@ i.round-icon.medium{
 
 #notifications-button  {
     background-color: #CF2A0E;
-    border-radius: 1em;
+    /*border-radius: 1em;*/
+}
+
+#notifications-button.zero {
+    background-color: #008CBA;
 }
 
 .feed-placeholder{

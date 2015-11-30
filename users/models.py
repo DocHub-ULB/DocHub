@@ -102,6 +102,9 @@ class User(AbstractBaseUser):
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
+    def notification_count(self):
+        return self.notification_set.filter(read=False).count()
+
     def following(self):
         return actstream.models.following(self)
 
