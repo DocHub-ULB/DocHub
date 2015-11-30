@@ -2,7 +2,7 @@ from django.views.generic.list import ListView
 from www.cbv import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 
 from models import Notification
@@ -19,7 +19,7 @@ class NotificationsView(LoginRequiredMixin, ListView):
 def markAsRead(request, pk, redirect_to_object=False):
     notif = get_object_or_404(Notification, pk=pk)
     if notif.user != request.user:
-        pass
+        return HttpResponseForbidden("Not your notification")
     notif.read = True
     notif.save()
 
