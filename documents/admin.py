@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.contrib import admin
 from .models import Document, DocumentError
@@ -16,14 +16,10 @@ from .models import Document, DocumentError
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
-    fields = ('name', 'user', 'size', 'pages', 'views', 'downloads', 'state')
-    readonly_fields = (
-        'size',
-        'pages',
-    )
+    readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5',)
 
-    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'state', 'user', )
-    list_filter = ('state',)
+    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'state', 'user', 'file_type')
+    list_filter = ('state', 'created', 'edited', 'file_type')
     search_fields = ('md5', 'name')
 
 

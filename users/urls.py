@@ -8,24 +8,12 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
     "",
-
-    url(r"^join/(?P<nodeid>\d+)$",
-        'users.views.follow_node',
-        name="follow_node"),
-
-    url(r"^join_children/(?P<nodeid>\d+)$",
-        'users.views.follow_node_children',
-        name="follow_node_children"),
-
-    url(r"^leave/(?P<nodeid>\d+)$",
-        'users.views.unfollow_node',
-        name="unfollow_node"),
 
     url(r"^settings/$",
         'users.views.user_settings',

@@ -8,16 +8,20 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
     "",
 
-    url(r"^put/(?P<parent_id>[^/]*)$",
+    url(r"^put/(?P<course_slug>[^/]*)$",
         'telepathy.views.new_thread',
         name="thread_put"),
+
+    url(r"^doc_put/(?P<document_id>[^/]*)$",
+        'telepathy.views.new_thread',
+        name="document_thread_put"),
 
     url(r"^reply/(?P<thread_id>[^/]*)$",
         'telepathy.views.reply_thread',
@@ -34,4 +38,12 @@ urlpatterns = patterns(
     url(r"^edit/(?P<message_id>[^/]*)$",
         'telepathy.views.edit_message',
         name="edit_message"),
+
+    url(r"^join/(?P<id>[^/]*)$",
+        'telepathy.views.join_thread',
+        name="join_thread"),
+
+    url(r"^leave/(?P<id>[^/]*)$",
+        'telepathy.views.leave_thread',
+        name="leave_thread"),
 )

@@ -8,39 +8,17 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
+from django.shortcuts import render
+from actstream.models import user_stream
 
-from graph.models import Category, Course
 from telepathy.models import Thread
-from polydag.models import Node
 from documents.models import Document, Page
-from notify.models import PreNotification
 from users.models import User
 from users.authBackend import NetidBackend
 
 import settings
-
-
-@login_required
-def node_canonic(request, nodeid):
-    MAPPING = {
-        Course: 'course_show',
-        Thread: 'thread_show',
-        Document: 'document_show',
-        Category: 'category_show'
-    }
-
-    n = get_object_or_404(Node, pk=nodeid)
-    for klass in MAPPING:
-        action = MAPPING[klass]
-        if type(n) == klass:
-            return HttpResponseRedirect(reverse(action, args=[n.id]))
 
 
 def index(request, p402=False):
@@ -72,18 +50,7 @@ def auth_page_context(request):
 
 
 def feed(request):
-    followed_ids = cache.get('user.wall.followed_nodes.' + str(request.user.id))
-    if followed_ids is None:
-        followed = request.user.directly_followed()
-        ids = map(lambda x: x.id, list(followed))
-        for node in followed:
-            ids += map(lambda x: x.id, node.children())
-
-        followed_ids = ids
-        cache.set('user.wall.followed_nodes.' + str(request.user.id), followed_ids, 300)
-
-    wall = PreNotification.objects.filter(node__in=followed_ids)
-    wall = wall.filter(personal=False).order_by('-created')
-    wall = wall.select_related('user')[:20]
-
-    return render(request, "home.html", {"wall": wall})
+    context = {
+        'stream': user_stream(request.user).exclude(verb="started following")
+    }
+    return render(request, "home.html", context)

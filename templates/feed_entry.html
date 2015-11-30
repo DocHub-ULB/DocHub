@@ -1,0 +1,54 @@
+{% load custommardown %}
+{% load humanize %}
+{% load cache %}
+
+
+<div class="row">
+  <div class="large-12 columns">
+    <p>
+      <strong>
+        {% if action.verb == "a posté" %}
+          <i class="fi-comment"></i>
+        {% elif action.verb == "a édité" %}
+          <i class="fi-pencil"></i>
+        {% elif action.verb == "a répondu" %}
+          <i class="fi-comments"></i>
+        {% elif action.verb == "a uploadé" %}
+          <i class="fi-page-add"></i>
+        {% endif %}
+        <img src="{{ action.actor.get_photo }}" class="feed-photo"> {{ action.actor.fullname }} {{ action.verb }}
+      </strong>
+        {% if action.action_object %}
+            {% if action.action_object.get_absolute_url %}
+              <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object.fullname }}</a>
+            {% else %}
+              {{ action.action_object.fullname }}
+            {% endif %}
+        {% endif %}
+
+        {% if action.action_object and action.target %}dans{% endif %}
+
+        {% if action.target %}
+            {% if action.target.get_absolute_url %}
+              <a href="{{ action.target.get_absolute_url }}">{{ action.target.fullname }}</a>
+            {% else %}
+              <a href="{{ action.target_url }}">{{ action.target.fullname }}</a>
+            {% endif %}
+        {% endif %}
+      <br>
+      <span class="feed-timesince">
+        Il y a {{ action.timestamp|timesince }}
+      </span>
+      {% comment %}
+      {% if verbose %}
+        {% if action.data.markdown%}
+          <div>
+            {{action.data.markdown|markdown}}
+          </div>
+        {% endif %}
+      {% endif %}
+      {% endcomment %}
+    </p>
+  </div>
+</div>
+

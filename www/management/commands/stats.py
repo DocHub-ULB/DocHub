@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.core.management.base import BaseCommand
 from django.db.models import Sum
@@ -16,7 +16,6 @@ from django.db.models import Sum
 from users.models import User
 from telepathy.models import Thread, Message
 from documents.models import Document, Page
-from notify.models import PreNotification, Notification
 
 
 class Command(BaseCommand):
@@ -54,25 +53,3 @@ class Command(BaseCommand):
         Print("{} threads\n".format(Thread.objects.count()))
         Print("{} messages\n".format(Message.objects.count()))
         Print("\n")
-
-        Print("Events summary :\n")
-        Print("{} events\n".format(PreNotification.objects.count()))
-        Print("{} fired notifications\n".format(Notification.objects.count()))
-        ratio = round(float(Notification.objects.count()) / PreNotification.objects.count(), 2)
-        Print("{} ratio fired/event\n".format(ratio))
-        Print("\n")
-
-        Print("Following summary :\n")
-        course_followed_by_user = list(map(lambda x: len(x.followed_courses()), User.objects.all()))
-        course_folowed = sum(course_followed_by_user) / float(len(course_followed_by_user))
-        Print("{} followed courses/user\n".format(round(course_folowed, 2)))
-        Print("\n")
-
-        Print("Notifications summary:\n")
-        read = Notification.objects.filter(read=True).count()
-        unread = Notification.objects.filter(read=False).count()
-        Print("Read : {}, unread: {}".format(read, unread))
-        user_count = User.objects.count()
-        read_u = round(read / float(user_count), 1)
-        unread_u = round(unread / float(user_count), 1)
-        Print("Read (per user) : {}, unread (per user): {}".format(read_u, unread_u))

@@ -8,10 +8,19 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.contrib import admin
 from .models import Message, Thread
 
-admin.site.register(Message)
-admin.site.register(Thread)
+
+@admin.register(Thread)
+class ThreadAdmin(admin.ModelAdmin):
+    list_display = ('name', 'course', 'user', 'created', 'document')
+    list_filter = ('created', 'edited')
+
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'thread', 'user', 'created', 'edited')
+    list_filter = ('created', 'edited')

@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django_defaults import *
 
@@ -51,23 +51,27 @@ INSTALLED_APPS += (
     'djcelery',
     'compressor',
     'rest_framework',
+    'mptt',
 )
 
 # apps
 INSTALLED_APPS += (
     'www',
     'documents',
-    'graph',
     'telepathy',
     'users',
-    'polydag',
-    'notify',
+    'catalog',
+    'tags',
+    'notifications',
+)
+
+# must be after everything
+INSTALLED_APPS += (
+    'actstream',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
-    'users.processors.user',
-    'notify.processors.notify',
 )
 
 SUIT_CONFIG = {
@@ -100,4 +104,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
+}
+
+ACTSTREAM_SETTINGS = {
+    'USE_JSONFIELD': True,
 }

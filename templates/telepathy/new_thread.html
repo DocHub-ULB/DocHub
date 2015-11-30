@@ -4,8 +4,8 @@
 <div class="row">
   <div class="large-7 columns">
     <h1>Ajouter un nouveau sujet</h1>
-    <h3>Dans "{{parent.name}}"</h3>
-    <form action="{% url 'thread_put' parent.id %}" method="post">
+    <h3>Dans "{{course.name}}"</h3>
+    <form action="{% url 'thread_put' course.slug %}" method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
 

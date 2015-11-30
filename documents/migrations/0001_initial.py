@@ -3,21 +3,22 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 from django.conf import settings
-import polydag.behaviors
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polydag', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('catalog', '0001_initial'),
+        ('tags', '__first__'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Document',
             fields=[
-                ('taggable_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='polydag.Taggable')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255)),
                 ('description', models.TextField(blank=True)),
                 ('size', models.PositiveIntegerField(default=0, null=True)),
                 ('words', models.PositiveIntegerField(default=0, null=True)),
@@ -25,29 +26,48 @@ class Migration(migrations.Migration):
                 ('date', models.DateTimeField(auto_now_add=True)),
                 ('views', models.PositiveIntegerField(default=0, null=True)),
                 ('downloads', models.PositiveIntegerField(default=0, null=True)),
-                ('original', models.CharField(default='', max_length=2048)),
-                ('pdf', models.CharField(default='', max_length=2048)),
-                ('state', models.CharField(default='PREPARING', max_length=20)),
-                ('md5', models.CharField(default='', max_length=32)),
+                ('file_type', models.CharField(default='', max_length=255)),
+                ('original', models.FileField(upload_to='original_document')),
+                ('pdf', models.FileField(upload_to='pdf_document')),
+                ('state', models.CharField(default='PREPARING', max_length=20, db_index=True)),
+                ('md5', models.CharField(default='', max_length=32, db_index=True)),
+                ('course', models.ForeignKey(to='catalog.Course', null=True)),
+                ('tags', models.ManyToManyField(to='tags.Tag')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'abstract': False,
             },
-            bases=(polydag.behaviors.OneParent, 'polydag.taggable'),
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='DocumentError',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('task_id', models.CharField(max_length=255)),
+                ('exception', models.CharField(max_length=1000)),
+                ('traceback', models.TextField()),
+                ('document', models.ForeignKey(to='documents.Document')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Page',
             fields=[
-                ('taggable_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='polydag.Taggable')),
-                ('numero', models.IntegerField()),
-                ('height_120', models.IntegerField()),
-                ('height_600', models.IntegerField()),
-                ('height_900', models.IntegerField()),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('numero', models.IntegerField(db_index=True)),
+                ('bitmap_120', models.ImageField(width_field='height_120', upload_to='page_120')),
+                ('bitmap_600', models.ImageField(width_field='height_600', upload_to='page_600')),
+                ('bitmap_900', models.ImageField(width_field='height_900', upload_to='page_900')),
+                ('height_120', models.PositiveIntegerField(default=0, null=True)),
+                ('height_600', models.PositiveIntegerField(default=0, null=True)),
+                ('height_900', models.PositiveIntegerField(default=0, null=True)),
+                ('document', models.ForeignKey(to='documents.Document')),
             ],
             options={
-                'abstract': False,
+                'ordering': ['numero'],
             },
-            bases=(polydag.behaviors.OneParent, 'polydag.taggable'),
+            bases=(models.Model,),
         ),
     ]

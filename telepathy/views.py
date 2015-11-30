@@ -8,23 +8,30 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
+from actstream import action, actions
+
 
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
-from polydag.models import Node
-from www.helpers import current_year
+from catalog.models import Course
+from documents.models import Document
 
 
 @login_required
-def new_thread(request, parent_id):
-    parentNode = get_object_or_404(Node, id=parent_id)
+def new_thread(request, course_slug=None, document_id=None):
+    if document_id is not None:
+        document = get_object_or_404(Document, id=document_id)
+        course = document.course
+    else:
+        course = get_object_or_404(Course, slug=course_slug)
+        document = None
 
     if request.method == 'POST':
         form = NewThreadForm(request.POST)
@@ -33,11 +40,8 @@ def new_thread(request, parent_id):
             name = form.cleaned_data['name']
             content = form.cleaned_data['content']
 
-            year = "{}-{}".format(current_year(), current_year() + 1)
-
-            thread = Thread.objects.create(user=request.user, name=name, year=year)
+            thread = Thread.objects.create(user=request.user, name=name, course=course, document=document)
             message = Message.objects.create(user=request.user, thread=thread, text=content)
-            parentNode.add_child(thread)
 
             placement = {}
             for opt, typecast in Thread.PLACEMENT_OPTS.iteritems():
@@ -47,39 +51,39 @@ def new_thread(request, parent_id):
                 thread.placement = json.dumps(placement)
                 thread.save()
 
-            if request.user.auto_follow:
-                request.user.follow.add(thread)
+            actions.follow(request.user, thread, actor_only=False)
+            action.send(request.user, verb="a posté", action_object=thread, target=course, markdown=message.text)
 
-            return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
+            return HttpResponseRedirect(
+                reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id)
+            )
     else:
         form = NewThreadForm()
 
     return render(request, 'telepathy/new_thread.html', {
         'form': form,
-        'parent': parentNode,
+        'course': course,
     })
 
 
 def get_thread_context(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
-    messages = Message.objects.filter(thread__id=thread_id).select_related('user').order_by('created').all()
+    messages = thread.message_set.select_related('user').order_by('created').all()
     return {
-        "object": thread,
+        "thread": thread,
         "messages": messages,
-        "followed": thread.id in request.user.followed_nodes_id(),
         "form": MessageForm(),
-        "is_moderator": request.user.is_moderator(thread),
     }
 
 
 @login_required
 def show_thread(request, thread_id):
     context = get_thread_context(request, thread_id)
+    thread = context['thread']
 
     # Add page preview if this thread belongs to a document page
-    if context['object'].page_no:
-        doc = context['object'].parent
-        page = doc.page_set.get(numero=context['object'].page_no)
+    if thread.document:
+        page = thread.document.page_set.get(numero=thread.page_no)
         context['thumbnail'] = page.bitmap_120
         context['preview'] = page.bitmap_600
 
@@ -100,10 +104,13 @@ def reply_thread(request, thread_id):
         content = form.cleaned_data['content']
         poster = request.user
         message = Message.objects.create(user=poster, thread=thread, text=content)
-        if request.user.auto_follow:
-            request.user.follow.add(thread)
 
-        return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
+        actions.follow(request.user, thread, actor_only=False)
+        action.send(request.user, verb="a répondu", action_object=message, target=thread)
+
+        return HttpResponseRedirect(
+            reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id)
+        )
     return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#response-form")
 
 
@@ -112,8 +119,8 @@ def edit_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
     thread = message.thread
 
-    if request.user != message.user and not request.user.is_moderator(thread):
-        return HttpResponse('<h1>403</h1>', status=403)
+    if not request.user.write_perm(obj=message):
+        return HttpResponse('You may not edit this message.', status=403)
 
     if request.method == 'POST':
         form = MessageForm(request.POST)
@@ -121,16 +128,31 @@ def edit_message(request, message_id):
         if form.is_valid():
             message.text = form.cleaned_data['content']
             message.save()
+
+            actions.follow(request.user, thread, actor_only=False)
+            action.send(request.user, verb="a édité", action_object=message, target=thread)
+
             return HttpResponseRedirect(reverse('thread_show', args=[thread.id]) + "#message-" + str(message.id))
     else:
         form = MessageForm({'content': message.text})
 
-    index = list(thread.message_set.all()).index(message)
-    print index
-
     return render(request, 'telepathy/edit_message.html', {
         'form': form,
-        'object': thread,
+        'thread': thread,
         'edited_message': message,
         'edit': True,
     })
+
+
+@login_required
+def join_thread(request, id):
+    thread = get_object_or_404(Thread, pk=id)
+    actions.follow(request.user, thread, actor_only=False)
+    return HttpResponseRedirect(reverse('thread_show', args=[id]))
+
+
+@login_required
+def leave_thread(request, id):
+    thread = get_object_or_404(Thread, pk=id)
+    actions.unfollow(request.user, thread)
+    return HttpResponseRedirect(reverse('thread_show', args=[id]))

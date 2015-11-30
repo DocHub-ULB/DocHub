@@ -1,7 +1,7 @@
 <div class="row user-message">
   <div class="large-1 show-for-large-up columns ">
     {% if edit %}
-      <a href="{% url 'thread_show' object.id %}#message-{{ edited_message.id }}" class="button tiny alert">Annuler</a>
+      <a href="{% url 'thread_show' thread.id %}#message-{{ edited_message.id }}" class="button tiny alert">Annuler</a>
     {% endif %}
     {% if edit %}
       <img width="50" src="{{ edited_message.user.get_photo }}" class="user-photo user-photo-small"/>
@@ -19,7 +19,7 @@
       {% if edit %}
       <form id="response-form" class="message-form" action="" method="post">
       {% else %}
-      <form id="response-form" class="message-form" action="{% url 'thread_reply' object.id %}" method="post">
+      <form id="response-form" class="message-form" action="{% url 'thread_reply' thread.id %}" method="post">
       {% endif %}
         {% csrf_token %}
         {% for field in form %}

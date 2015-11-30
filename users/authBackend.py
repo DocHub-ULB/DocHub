@@ -92,17 +92,18 @@ class NetidBackend(object):
 
         user['inscriptions'] = []
 
-        if not isinstance(doc['intranet']['session']['user']['identity']['inscriptions']['inscription'], list):
-            inscriptions = [doc['intranet']['session']['user']['identity']['inscriptions']['inscription']]
-        else:
-            inscriptions = doc['intranet']['session']['user']['identity']['inscriptions']['inscription']
+        if doc['intranet']['session']['user']['identity']['inscriptions'] is not None:
+            if not isinstance(doc['intranet']['session']['user']['identity']['inscriptions']['inscription'], list):
+                inscriptions = [doc['intranet']['session']['user']['identity']['inscriptions']['inscription']]
+            else:
+                inscriptions = doc['intranet']['session']['user']['identity']['inscriptions']['inscription']
 
-        for inscription in inscriptions:
-            user['inscriptions'].append({
-                'year': inscription['anac'],
-                'slug': inscription['anet'],
-                'fac': inscription['facid'],
-            })
+            for inscription in inscriptions:
+                user['inscriptions'].append({
+                    'year': inscription['anac'],
+                    'slug': inscription['anet'],
+                    'fac': inscription['facid'],
+                })
 
         return user
 

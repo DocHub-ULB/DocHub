@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<intranet>
+   <session>
+      <user>
+         <username>nimarcha</username>
+         <identity>
+            <matricule>ulb:etudiants:000362588</matricule>
+            <nom>MARCHANT</nom>
+            <prenom>Nikita</prenom>
+            <dateNaissance>24/05/1993</dateNaissance>
+            <email>Nikita.Marchant@ulb.ac.be</email>
+            <biblio>3186696</biblio>
+            <inscriptions>
+            </inscriptions>
+         </identity>
+      </user>
+   </session>
+</intranet>

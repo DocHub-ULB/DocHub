@@ -1,5 +1,4 @@
-Django>=1.7.0,<1.8
-django_polymorphic
+Django>=1.7.1,<1.8
 django-multiupload
 markdown
 django-celery
@@ -13,6 +12,11 @@ xmltodict
 djangorestframework
 drf-extensions
 furl
+django-mptt
+django-activity-stream
+git+https://github.com/C4ptainCrunch/libulb.git
+PyYaml
+jsonfield
 
 # Dev
 django-extensions
@@ -21,3 +25,6 @@ honcho
 
 # Test
 mock
+pytest-django
+responses
+django-webtest

@@ -1,0 +1,48 @@
+<br>
+<div class="row">
+<div class="large-10 columns">
+  <div class="panel">
+    <div class="row">
+      <div class="small-11 columns">
+        <h3>Vous semblez nouveau !</h3>
+      </div>
+      <div class="small-1 columns text-right">
+        <a href="{% url "hide_new_panel" %}"><i class="fi-x"></i></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <p>Bienvenue sur DocHub, le site de partage de documents et d’entraide étudiante à l’ULB.<br>
+          DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes et bien plus encore.</p>
+        <p>Vous souhaitez vous abonner à des cours ?<br>
+          Pour ça, le plus simple est d’aller voir la <a href="{% url 'show_courses' %}">liste des cours</a>, choisir votre faculté, puis votre année (et peut-être votre option) puis vous abonner à la totalité des cours en cliquant sur "S'abonner à tous les cours de cette catégorie".</p>
+        <p>Vous pouvez aussi vous balader dans la liste des cours et vous abonner aux cours qui vous plaisent, un par un.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="twelve columns">
+        <h3>Vous pouvez aussi découvrir DocHub :</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-4 medium-4 columns">
+        <p><a href="{% url 'show_courses' %}">Liste des cours</a><br />
+        Pour l’instant, DocHub est disponible pour le département d'informatique ainsi que l'Ecole Polytechnique.</p>
+      </div>
+      <div class="large-4 medium-4 columns">
+        <p><a href="{% url 'help' %}">Aide</a><br />
+        Vous êtes perdu, quelque chose ne marche pas ? Vous avez une remarque ? C’est par <a href="{% url 'help' %}">ici</a> !</p>
+      </div>
+      <div class="large-4 medium-4 columns">
+        <p><a href="https://www.facebook.com/Proj402">Page Facebook</a><br>
+        Vous voulez être tenu au courant des dernières nouvelles ? Likez-nous <a href="https://www.facebook.com/Proj402">sur Facebook</a> !</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="twelve columns">
+        <p>Vous pouvez aussi <a href="{% url 'settings' %}">modifier votre profil</a> ou tout simplement attendre des actualités qui apparaitront ici en dessous après que vous vous soyez abonné à des cours.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

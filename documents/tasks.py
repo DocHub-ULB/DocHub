@@ -8,25 +8,22 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
 from celery import shared_task, chain
-from os import path
 import subprocess
 import hashlib
 import uuid
-join = path.join
 import tempfile
 from pyPdf import PdfFileReader
 
-from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
+from actstream import action
 
 from documents.models import Document, Page, DocumentError
-from notify.models import Notification
 from .exceptions import DocumentProcessingError, MissingBinary
 
 
@@ -48,15 +45,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     document = Document.objects.get(id=doc_id)
     document.state = "ERROR"
     document.save()
-
-    # Notify the uploader
-    Notification.direct(
-        user=document.user,
-        text="Une erreur c'est produite pendant la conversion de : {}".format(document.name),
-        node=document.parent,
-        url=reverse('node_canonic', args=[document.parent.id]),
-        icon="x",
-    )
+    action.send(document.user, verb="upload failed", action_object=document, target=document.course, public=False)
 
     # Warn the admins
     DocumentError.objects.create(
@@ -93,16 +82,6 @@ def process_document(self, document_id):
 
 
 @doctask
-def sanity_check(self, document_id):
-    document = Document.objects.get(pk=document_id)
-
-    if not document.original:
-        raise DocumentProcessingError(document_id, "Missing original")
-
-    return document_id
-
-
-@doctask
 def checksum(self, document_id):
     document = Document.objects.get(pk=document_id)
 
@@ -112,19 +91,15 @@ def checksum(self, document_id):
     query = Document.objects.filter(md5=hashed).exclude(md5='')
     if query.count() != 0:
         dup = query.first()
-        Notification.direct(
-            user=document.user,
-            text='Votre document "{}" a été refusé car c\'est une copie conforme de {}'.format(document.name, dup.name),
-            node=document.parent,
-            url=reverse('node_canonic', args=[dup.id]),
-            icon="x",
-        )
-        did = document.id
-        document.delete()
-        raise ExisingChecksum("Document {} has the same checksum as {}".format(did, dup.id))
-    else:
-        document.md5 = hashed
-        document.save()
+        if dup.hidden:
+            dup.delete()
+        else:
+            document_id = document.id
+            document.delete()
+            raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, dup.id))
+
+    document.md5 = hashed
+    document.save()
 
     return document_id
 
@@ -197,10 +172,13 @@ def finish_file(self, document_id):
     document.state = 'DONE'
     document.save()
 
+    action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
+    action.send(document.user, verb="upload success", action_object=document, target=document.course, public=False)
+
     return document_id
 
+
 process_pdf = chain(
-    sanity_check.s(),
     checksum.s(),
     mesure_pdf_length.s(),
     preview_pdf.s(),
@@ -208,7 +186,6 @@ process_pdf = chain(
 )
 
 process_office = chain(
-    sanity_check.s(),
     checksum.s(),
     convert_office_to_pdf.s(),
     mesure_pdf_length.s(),

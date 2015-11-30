@@ -22,8 +22,8 @@
     <div class="tabs-content">
       <div class="content active" id="upload-tab-1">
         <h1>Uploader un document</h1>
-        <h3>Dans "{{parent.name}}"</h3>
-        <form action="{% url 'document_put' parent.id %}" method="post"
+        <h3>Dans "{{course.name}}"</h3>
+        <form action="{% url 'document_put' course.slug %}" method="post"
                 enctype="multipart/form-data" class="dropzone">
             {% csrf_token %}
             {{ form.non_field_errors }}
@@ -78,8 +78,8 @@
 
       <div class="content" id="upload-tab-n">
         <h1>Uploader plusieurs documents</h1>
-        <h3>Dans "{{parent.name}}"</h3>
-        <form action="{% url 'document_put_multiple' parent.id %}" method="post"
+        <h3>Dans "{{course.name}}"</h3>
+        <form action="{% url 'document_put_multiple' course.slug %}" method="post"
                 enctype="multipart/form-data" class="dropzone">
           {% csrf_token %}
           {{ form.non_field_errors }}

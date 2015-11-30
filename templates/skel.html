@@ -1,5 +1,4 @@
 {%load humanize %}
-{% load cache %}
 {% load compress %}
 
 <!doctype html>
@@ -29,41 +28,55 @@
     <nav class="top-bar" data-topbar="">
         <ul class="title-area">
             <li class="name">
-               <h1><a href="/">P402 - DocHub</a></h1>
+               <h1><a href="/">DocHub</a></h1>
             </li>
+
             <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
         </ul>
 
         <section class="top-bar-section">
             <ul class="left">
-              <li class="has-form">
-                {% if notifcount %}
-                  <a href="{% url 'notif_show' %}" class="button alert">
-                {% else %}
-                  <a href="{% url 'notif_show' %}" class="button">
-                {% endif %}
-                <i class="fi-megaphone"></i>
-                <span id="notif-count-display">{{ notifcount }}</span></a>
+              <li>
+                {% comment %}
+                <a href="{% url "notifications" %}" data-dropdown="notif-drop" aria-controls="notif-drop" aria-expanded="false" id="notifications-button">
+                    <i class="fi-megaphone"></i>
+                    {{request.user.notification_set.count}}
+                </a>
+                <div id="notif-drop" data-dropdown-content class="medium f-dropdown content" aria-hidden="true" tabindex="-1">
+                  <p class="text-center">
+                    <i class="fi-refresh notifications-spinner"></i>
+                  </p>
+                </div>
+                {% endcomment %}
+                {% with count=request.user.notification_count %}
+                  <a href="{% url "notifications" %}" id="notifications-button" class="{% if count == 0%}zero{% endif %}">
+                      <i class="fi-megaphone"></i>
+                      {{count}}
+                  </a>
+                {% endwith %}
               </li>
-              <li class="divider"></li>
-              <li><a href="{% url 'show_courses' %}">Cours</a></li>
-              <!-- <li><a href="#">Calendrier</a></li> -->
             </ul>
             <ul class="right">
-              <li><a href="{% url 'help' %}">Aide</a></li>
+              <!-- <li><a href="{% url 'help' %}">Aide</a></li> -->
               <li>
                 <a href="https://www.facebook.com/Proj402"><i class="fi-social-facebook"></i></a>
               </li>
-              <li class="divider"></li>
               <li class="has-dropdown">
-                  <a href="#"><i class="fi-torso"></i> {{user.name}}</a>
+                  <a href="#">
+                    <i class="fi-torso"></i>&nbsp; {{request.user.name}}
+                  </a>
                   <ul class="dropdown">
-                      <li><a href="{% url 'settings' %}">Profil</a></li>
-                      <li><a href="{% url 'notif_show' %}">Notifications</a></li>
-                      <li><a href="{% url 'logout' %}"><i class="fi-power"></i> Déconnexion</a></li>
-                      {% if user.is_staff %}
-                      <li><a href="/admin">Admin</a></li>
+                      <li>
+                        <a href="{% url 'settings' %}"><i class="fi-torso"></i>&nbsp; Profil</a>
+                      </li>
+                      {% if request.user.is_staff %}
+                        <li>
+                          <a href="/admin"><i class="fi-widget"></i>&nbsp; Admin</a>
+                        </li>
                       {% endif %}
+                      <li>
+                        <a href="{% url 'logout' %}"><i class="fi-power"></i>&nbsp; Déconnexion</a>
+                      </li>
                   </ul>
               </li>
             </ul>
@@ -75,32 +88,30 @@
       {% block full-page %}
         <div class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
           <ul class="side-nav main-side-nav">
+            <li>
+              <a href="/" class="sidebar-button">
+                <i class="fi-list-thumbnails"></i> Flux d'actualités
+              </a>
+            </li>
+            {% if request.user.following_courses|length == 0 %}
               <li>
-                <a href="/" class="sidebar-button">
-                  <i class="fi-list-thumbnails"></i> Flux d'actualités
+                <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
                 </a>
               </li>
-            {% cache 120 user_followed_list user.netid %}
-              {% if user.followed_courses|length == 0 %}
-                <li>
-                  <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
+            {% else %}
+              <li>
+                <a href="{% url 'show_courses' %}" class="sidebar-button"><i class="fi-book"></i> Mes cours</a>
+              </li>
+            {% endif %}
+            <ul class="course-bulletlist">
+              {% for course in request.user.following_courses %}
+                <li class="nav-link">
+                  <a href="{% url 'course_show' course.slug %}">
+                    <i class="fi-folder"></i> {{ course.name }}
                   </a>
-                </li>
-              {% else %}
-                <li>
-                  <a href="{% url 'show_courses' %}" class="sidebar-button"><i class="fi-book"></i> Mes cours</a>
-                </li>
-              {% endif %}
-              <ul class="course-bulletlist">
-                {% for course in user.followed_courses %}
-                  <li class="nav-link">
-                    <a href="{% url 'course_show' course.slug %}">
-                      <i class="fi-folder"></i> {{ course.name }}
-                    </a>
                   </li>
-                {% endfor %}
-              </ul>
-            {% endcache %}
+              {% endfor %}
+            </ul>
           </ul>
 
         </div>

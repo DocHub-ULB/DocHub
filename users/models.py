@@ -8,25 +8,24 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 import re
 import os
 from os.path import join
+import identicon
+import actstream
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.utils import timezone
 
-from graph.models import Course
 from www import settings
-
-import identicon
-
-PATTERN = re.compile('[\W_]+')
+from catalog.models import Course
 
 
 class CustomUserManager(UserManager):
+    PATTERN = re.compile('[\W_]+')
 
     def _create_user(self, netid, email, password, **extra_fields):
         """
@@ -42,7 +41,7 @@ class CustomUserManager(UserManager):
             if not os.path.exists(join(settings.MEDIA_ROOT, "profile")):
                 os.makedirs(join(settings.MEDIA_ROOT, "profile"))
             profile_path = join(settings.MEDIA_ROOT, "profile", "{}.png".format(netid))
-            alpha_netid = PATTERN.sub('', netid)
+            alpha_netid = self.PATTERN.sub('', netid)
             identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
             user.photo = 'png'
         user.set_password(password)
@@ -63,21 +62,33 @@ class User(AbstractBaseUser):
     DEFAULT_PHOTO = join(settings.STATIC_URL, "images/default.jpg")
     objects = CustomUserManager()
 
-    netid = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    netid = models.CharField(max_length=20, unique=True)
     created = models.DateTimeField(auto_now_add=True)
-    first_name = models.CharField(max_length=127, null=False, blank=False)
-    last_name = models.CharField(max_length=127, null=False, blank=False)
-    email = models.CharField(max_length=255, null=False, blank=False, unique=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
+    first_name = models.CharField(max_length=127)
+    last_name = models.CharField(max_length=127)
+    email = models.CharField(max_length=255, unique=True)
     registration = models.CharField(max_length=80, blank=True)
     photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
-    comment = models.TextField(null=True, blank=True)
-    follow = models.ManyToManyField('polydag.Node', related_name='followed', db_index=True, blank=True)
+    comment = models.TextField(blank=True, default='')
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
-    moderated_nodes = models.ManyToManyField('polydag.Node', db_index=True, blank=True)
+
+    moderated_courses = models.ManyToManyField('catalog.Course', blank=True)
+
+    notify_on_response = models.BooleanField(default=True)
+    notify_on_new_doc = models.BooleanField(default=True)
+    notify_on_new_thread = models.BooleanField(default=True)
+    notify_on_mention = True
+    notify_on_upload = True
+
+    def __init__(self, *args, **kwargs):
+        self._following_courses = None
+        self._moderated_courses = None
+        super(User, self).__init__(*args, **kwargs)
 
     @property
     def get_photo(self):
@@ -91,54 +102,48 @@ class User(AbstractBaseUser):
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
-    def directly_followed(self):
-        return self.follow.all()
+    def notification_count(self):
+        return self.notification_set.filter(read=False).count()
 
-    def followed_nodes_id(self):
-        return map(lambda x: x.id, self.follow.only('id').non_polymorphic())
+    def following(self):
+        return actstream.models.following(self)
 
-    def followed_courses(self):
-        return self.directly_followed().instance_of(Course)
-
-    def follows(self, course):
-        courses = self.follow.instance_of(Course).only('id').non_polymorphic()
-        return course.id in map(lambda x: x.id, courses)
-
-    @property
-    def auto_follow(self):
-        return True # TODO use user prefs
-
-    # Permissions
-    def is_moderator(self, node):
-        if self.is_staff:
-            return True
-
-        moderated_nodes = set(self.moderated_nodes.all())
-        if len(moderated_nodes) == 0:
-            return False
-        if node in moderated_nodes:
-            return True
-        ancestors = node.ancestors_set()
-        return not ancestors.isdisjoint(moderated_nodes)
+    def following_courses(self):
+        if self._following_courses is None:
+            self._following_courses = actstream.models.following(self, Course)
+        return self._following_courses
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
 
     def has_perm(self, perm_list, obj=None):
+        return self.is_staff
+
+    def write_perm(self, obj):
         if self.is_staff:
             return True
 
-        if not obj:
+        if obj is None:
             return False
 
-        return obj.user == self or self.is_moderator(obj)
+        if self._moderated_courses is None:
+            ids = [course.id for course in self.moderated_courses.only('id')]
+            self._moderated_courses = ids
+
+        return obj.write_perm(self, self._moderated_courses)
+
+    def fullname(self):
+        return self.name
 
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    faculty = models.CharField(max_length=80, null=True)
-    section = models.CharField(max_length=80, null=True)
-    year = models.PositiveIntegerField(null=True)
+    faculty = models.CharField(max_length=80, blank=True, default='')
+    section = models.CharField(max_length=80, blank=True, default='')
+    year = models.PositiveIntegerField(blank=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'section', 'faculty', 'year')

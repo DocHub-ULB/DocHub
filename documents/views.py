@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 import os
 import uuid
@@ -17,24 +17,20 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Count
+from django.db.models import F
+
+from actstream import action
 
 from documents.models import Document
-from graph.models import Course
-from polydag.models import Node
+from catalog.models import Course
 from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
-from www.helpers import year_choices
-from telepathy.models import Thread
 from telepathy.forms import NewThreadForm
-
-from cycle import add_document_to_queue
+from tags.models import Tag
 
 
 @login_required
-def upload_file(request, parent_id):
-    parentNode = get_object_or_404(Node, id=parent_id)
-    if not isinstance(parentNode, Course):
-        raise NotImplementedError("Not a course")
+def upload_file(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
 
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -48,11 +44,11 @@ def upload_file(request, parent_id):
 
             extension = os.path.splitext(request.FILES['file'].name)[1].lower()
             description = form.cleaned_data['description']
-            course = parentNode
 
             doc = Document.objects.create(
                 user=request.user,
                 name=name,
+                course=course,
                 description=description,
                 state="PREPARING",
                 file_type=extension
@@ -60,15 +56,11 @@ def upload_file(request, parent_id):
             doc.original.save(str(uuid.uuid4()) + extension, request.FILES['file'])
             doc.save()
 
-            course.add_child(doc)
-
-            doc.add_keywords(*form.cleaned_data['tags'])
-            doc.year = form.cleaned_data['year']
+            for tag in form.cleaned_data['tags']:
+                doc.tags.add(Tag.objects.get(name=tag))
 
             doc.state = 'READY_TO_QUEUE'
-            doc.save()
-
-            add_document_to_queue(doc)
+            doc.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
@@ -79,15 +71,13 @@ def upload_file(request, parent_id):
     return render(request, 'documents/document_upload.html', {
         'form': form,
         'multiform': multiform,
-        'parent': parentNode,
+        'course': course,
     })
 
 
 @login_required
-def upload_multiple_files(request, parent_id):
-    parentNode = get_object_or_404(Node, id=parent_id)
-    if not isinstance(parentNode, Course):
-        raise NotImplementedError("Not a course")
+def upload_multiple_files(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
 
     if request.method == 'POST':
         form = MultipleUploadFileForm(request.POST, request.FILES)
@@ -99,33 +89,32 @@ def upload_multiple_files(request, parent_id):
 
                 extension = os.path.splitext(attachment.name)[1].lower()
                 description = ""
-                course = parentNode
 
                 doc = Document.objects.create(
                     user=request.user,
                     name=name,
+                    course=course,
                     description=description,
                     state="PREPARING",
                     file_type=extension
                 )
                 doc.original.save(str(uuid.uuid4()) + extension, attachment)
-                doc.year = year_choices(1)[0][0]
                 doc.save()
 
                 course.add_child(doc)
                 doc.state = 'READY_TO_QUEUE'
                 doc.save()
-                add_document_to_queue(doc)
+                doc.add_to_queue(doc)
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
-    return HttpResponseRedirect(reverse('document_put', args=(parent_id,)))
+    return HttpResponseRedirect(reverse('document_put', args=(course.id,)))
 
 
 @login_required
 def document_edit(request, document_id):
     doc = get_object_or_404(Document, id=document_id)
 
-    if request.user != doc.user and not request.user.is_moderator(doc.parent):
+    if not request.user.write_perm(obj=doc):
         return HttpResponse('You may not edit this document.', status=403)
 
     if request.method == 'POST':
@@ -135,11 +124,13 @@ def document_edit(request, document_id):
             doc.name = form.cleaned_data['name']
             doc.description = form.cleaned_data['description']
 
-            doc.keywords.clear()
-            doc.add_keywords(*form.cleaned_data['tags'])
+            doc.tags.clear()
+            for tag in form.cleaned_data['tags']:
+                doc.tags.add(Tag.objects.get(name=tag))
 
-            doc.year = form.cleaned_data['year']
             doc.save()
+
+            action.send(request.user, verb="a édité", action_object=doc, target=doc.course)
 
             return HttpResponseRedirect(reverse('document_show', args=[doc.id]))
 
@@ -147,8 +138,7 @@ def document_edit(request, document_id):
         form = FileForm({
             'name': doc.name,
             'description': doc.description,
-            'year': doc.year,
-            'tags': doc.keywords.all()
+            'tags': doc.tags.all()
         })
 
     return render(request, 'documents/document_edit.html', {
@@ -187,18 +177,15 @@ def document_download_original(request, id):
 def document_show(request, id):
     document = get_object_or_404(Document, id=id)
 
-    threads = filter(lambda x: x.get_real_instance_class() == Thread, document.children())
-    threads = map(lambda x: x.id, threads)
-    threads = Thread.objects.filter(id__in=threads).annotate(Count('message')).select_related('user').prefetch_related('keywords')
+    if document.state != "DONE":
+        return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))
 
     context = {
-        "object": document,
-        "parent": document.parent,
-        "is_moderator": request.user.is_moderator(document.parent),
-        "page_set": document.page_set.order_by('numero'),
+        "document": document,
         "form": NewThreadForm(),
-        "threads": threads
     }
+
     document.views = F('views') + 1
     document.save(update_fields=['views'])
+
     return render(request, "documents/viewer.html", context)

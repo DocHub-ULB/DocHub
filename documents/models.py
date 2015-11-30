@@ -8,27 +8,30 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.db import models
-
-from polydag.models import Taggable
-from polydag.behaviors import OneParent
+from tags.models import Tag
+from django.core.urlresolvers import reverse
 from www import settings
 
 
-class Document(OneParent, Taggable):
+class Document(models.Model):
+    name = models.CharField(max_length=255)
+    course = models.ForeignKey('catalog.Course', null=True)
 
     description = models.TextField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    tags = models.ManyToManyField('tags.Tag')
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
 
-    size = models.PositiveIntegerField(null=True, default=0)
-    words = models.PositiveIntegerField(null=True, default=0)
-    pages = models.PositiveIntegerField(null=True, default=0)
+    size = models.PositiveIntegerField(default=0)
+    pages = models.PositiveIntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
 
-    views = models.PositiveIntegerField(null=True, default=0)
-    downloads = models.PositiveIntegerField(null=True, default=0)
+    views = models.PositiveIntegerField(default=0)
+    downloads = models.PositiveIntegerField(default=0)
 
     file_type = models.CharField(max_length=255, default='')
     original = models.FileField(upload_to='original_document')
@@ -37,8 +40,13 @@ class Document(OneParent, Taggable):
     state = models.CharField(max_length=20, default='PREPARING', db_index=True)
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
+    hidden = models.BooleanField(default=False)
+
     def __unicode__(self):
         return self.name
+
+    def fullname(self):
+        return self.__unicode__()
 
     def reprocess(self, force=False):
         if self.state != "ERROR" and not force:
@@ -49,9 +57,65 @@ class Document(OneParent, Taggable):
 
         self.state = 'READY_TO_QUEUE'
         self.md5 = ""
+        self.add_to_queue()
+
+    def add_to_queue(self):
+        self.state = "IN_QUEUE"
         self.save()
-        add_document_to_queue(self)
-        self.save()
+        try:
+            process_document.delay(self.id)
+        except Exception as e:
+            self.state = "READY_TO_QUEUE"
+            self.save()
+            raise e
+
+    def get_absolute_url(self):
+        return reverse('document_show', args=(self.id, ))
+
+    def write_perm(self, user, moderated_courses):
+        if user.id == self.user_id:
+            return True
+
+        if self.course_id in moderated_courses:
+            return True
+
+        return False
+
+    def tag_from_name(self):
+        name = self.name.lower().replace(u"é", "e").replace(u"è", "e").replace(u"ê", "e")
+        tags = []
+
+        has_month = (
+            "janv" in name
+            or "aout" in name
+            or "sept" in name
+            or "juin" in name
+            or "mai" in name
+        )
+        if has_month or "exam" in name:
+            tags.append("examen")
+
+        if "corr" in name:
+            tags.append("corrigé")
+
+        if "tp" in name or "seance" in name:
+            tags.append("tp")
+
+        if "resum" in name or "r?sum" in name or "rsum" in name:
+            tags.append("résumé")
+
+        if "slide" in name or "transparent" in name:
+            tags.append("slides")
+
+        if "formulaire" in name:
+            tags.append("formulaire")
+
+        if "rapport" in name or "labo" in name:
+            tags.append("laboratoire")
+
+        for tag in tags:
+            tag = Tag.objects.get_or_create(name=tag)[0]
+            self.tags.add(tag)
 
 
 class Page(models.Model):
@@ -62,12 +126,15 @@ class Page(models.Model):
     bitmap_600 = models.ImageField(upload_to='page_600', width_field="height_600")
     bitmap_900 = models.ImageField(upload_to='page_900', width_field="height_900")
 
-    height_120 = models.PositiveIntegerField(null=True, default=0)
-    height_600 = models.PositiveIntegerField(null=True, default=0)
-    height_900 = models.PositiveIntegerField(null=True, default=0)
+    height_120 = models.PositiveIntegerField(default=0)
+    height_600 = models.PositiveIntegerField(default=0)
+    height_900 = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['numero']
+
+    def get_absolute_url(self):
+        return self.document.get_absolute_url() + "#page-{}".format(self.numero)
 
 
 class DocumentError(models.Model):
@@ -79,4 +146,5 @@ class DocumentError(models.Model):
     def __unicode__(self):
         return "#" + self.exception
 
-from documents.cycle import add_document_to_queue
+
+from tasks import process_document

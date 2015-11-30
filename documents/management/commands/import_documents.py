@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
 #
-# This software was made by hast, C4, ititou at UrLab, ULB's hackerspace
+# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django.core.management.base import BaseCommand
 from django.core.files import File
@@ -16,9 +16,9 @@ from optparse import make_option
 import uuid
 
 from users.models import User
-from graph.models import Course
+from catalog.models import Course
 from documents.models import Document
-from documents.cycle import add_document_to_queue
+from tags.models import Tag
 
 import os
 import glob
@@ -99,18 +99,17 @@ class Command(BaseCommand):
                 user=user,
                 name=name,
                 state="PREPARING",
-                file_type=extension
+                file_type=extension,
+                course=course,
             )
 
-            course.add_child(dbdoc)
-            if not len(tags) == 0:
-                dbdoc.add_keywords(*tags)
+            for tag in tags:
+                tag = Tag.objects.get_or_create(name=tag)[0]
+                dbdoc.tags.add(tag)
 
             dbdoc.original.save(str(uuid.uuid4()) + extension, File(open(doc)))
 
             dbdoc.state = 'READY_TO_QUEUE'
             dbdoc.save()
 
-            add_document_to_queue(dbdoc)
-
-            dbdoc.save()
+            dbdoc.add_to_queue()

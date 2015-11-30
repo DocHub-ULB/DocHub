@@ -1,29 +1,28 @@
 from documents.models import Document, Page
 from rest_framework import serializers
-# from rest_framework_extensions.fields import ResourceUriField
 
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
-    # page_set = ResourceUriField(view_name='page-set-list', read_only=True, lookup_field='document')
     # page_set = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='page-set', lookup_field='document')
 
     class Meta:
         model = Document
         fields = (
-            'id', 'name', 'url', 'description',
+            'id', 'name', 'url', 'course', 'description',
             'user', 'pages', 'date', 'views',
             'downloads', 'state', 'md5',
         )
 
         extra_kwargs = {
             'user': {'lookup_field': 'netid'},
+            'course': {'lookup_field': 'slug'},
         }
 
 
 class ShortDocumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Document
-        fields = ('id', 'url')
+        fields = ('id', 'url', 'course')
 
 
 class PageSerializer(serializers.HyperlinkedModelSerializer):

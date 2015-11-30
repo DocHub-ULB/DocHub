@@ -1,5 +1,4 @@
 {%load humanize %}
-{% load cache %}
 {% load compress %}
 
 <!doctype html>
@@ -31,17 +30,12 @@
     <nav class="top-bar" data-topbar="">
         <ul class="title-area">
             <li class="name">
-               <h1><a href="/">P402 - DocHub</a></h1>
+               <h1><a href="/">DocHub</a></h1>
             </li>
         </ul>
 
         <section class="top-bar-section">
             <ul class="left">
-              <li class="has-form">
-                <a href="{% url 'notif_show' %}" class="button">
-                  <i class="fi-megaphone"></i>
-                </a>
-              </li>
               <li class="divider"></li>
             </ul>
         </section>

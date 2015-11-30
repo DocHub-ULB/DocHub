@@ -1,22 +1,27 @@
-sudo:
-  - false
-
-cache:
-  pip: true
-  directories:
-    - /home/travis/virtualenv/
+sudo: false
 
 language: python
 python:
   - "2.7"
 
-install:
-  - "pip install -r requirements.txt"
-  - "pip install sqlparse"
+cache: pip
 
 script:
   - ./manage.py check
-  - ./manage.py test
-  - python manage.py migrate
-  - python manage.py init --netid=travis --password=test --first-name=Gaston --last-name=Lagaffe
+  - py.test -k "not unoconv"
   - make shower
+  - make database
+
+addons:
+  apt:
+    packages:
+    - graphicsmagick
+    # Unoconv is not supported on travis right now
+    # but we do not run unoconv tests on travis so it's not a problem
+    # - unoconv
+    - python-dev
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
