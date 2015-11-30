@@ -96,3 +96,18 @@ threads = json.dumps(threads)
 
 for thread in serializers.deserialize("json", threads):
     thread.save()
+
+
+from users.models import User
+
+messages = json.loads(open(os.path.join(BASE_DIR, 'dumper', 'messages.json'), 'r').read())
+
+for message in messages:
+    user = User.objects.get(netid=message['fields']['user'])
+    message['fields']['user'] = user.id
+
+
+messages = json.dumps(messages)
+
+for message in serializers.deserialize("json", messages):
+    message.save()
