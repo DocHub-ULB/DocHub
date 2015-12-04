@@ -10,6 +10,19 @@
 </div>
 
 <div class="row">
+  <div class="small-12 large-12 columns">
+    <ul class="breadcrumbs">
+      {% for parent in category.get_ancestors %}
+        <li>
+          <a href="{% url "category_show" parent.id %}">{{ parent.name }}</a>
+        </li>
+      {% endfor %}
+      <li class="current">
+        <a href="#">{{ category.name }}</a>
+      </li>
+    </ul>
+  </div>
+  <br>
   {% if category.course_set.all %}
     <div class="large-6 medium-12 columns">
       <h3>Cours
