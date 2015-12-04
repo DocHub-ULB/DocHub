@@ -38,7 +38,10 @@ def start_unoconv():
 
 
 def create_doc(name, ext):
-    user = User.objects.get_or_create(netid='test_user')[0]
+    try:
+        user = User.objects.get(netid='test_user')
+    except User.DoesNotExist:
+        user = User.objects.create_user(netid='test_user')
     doc = Document.objects.create(
         user=user,
         name=name,
