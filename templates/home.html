@@ -19,6 +19,7 @@
           <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
           <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
         {% endif %}
+        <span id="joy-flux"></span>
         {% for i in "xxxx" %}
           <div class="row feed-placeholder">
             <div class="large-12 columns">
@@ -42,3 +43,13 @@
 </div>
 
 {% endblock %}
+
+
+
+
+{% if request.user.welcome %}
+  {% block script %}
+    {{ block.super }}
+    <script src="static/3party/foundation/js/foundation/foundation.joyride.js"></script>
+  {% endblock %}
+{% endif %}

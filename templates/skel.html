@@ -62,7 +62,7 @@
             <ul class="right">
               <!-- <li><a href="{% url 'help' %}">Aide</a></li> -->
               <li>
-                <a href="https://www.facebook.com/Proj402"><i class="fi-social-facebook"></i></a>
+                <a href="https://www.facebook.com/Proj402" id="facebook"><i class="fi-social-facebook"></i></a>
               </li>
               <li class="has-dropdown">
                   <a href="#">
@@ -98,7 +98,7 @@
             </li>
             {% if request.user.following_courses|length == 0 %}
               <li>
-                <a href="{% url 'show_courses' %}" class="sidebar-button">S'abonner à des cours
+                <a href="{% url 'show_courses' %}" class="sidebar-button" id="joy-abonner">S'abonner à des cours
                 </a>
               </li>
             {% else %}
