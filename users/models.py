@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
 
     netid = models.CharField(max_length=20, unique=True)
     created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
     first_name = models.CharField(max_length=127)
     last_name = models.CharField(max_length=127)
     email = models.CharField(max_length=255, unique=True)
@@ -143,7 +143,7 @@ class Inscription(models.Model):
     year = models.PositiveIntegerField(blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('user', 'section', 'faculty', 'year')

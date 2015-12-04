@@ -15,8 +15,6 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import logout
 from django.contrib import admin
 
-admin.autodiscover()
-
 import settings
 
 

@@ -31,13 +31,8 @@ def test_create_superuser():
 
 
 def test_name():
-    u = User.objects.create(first_name="Jean", last_name="DuJardin")
+    u = User.objects.create_user(netid="jeanduj", first_name="Jean", last_name="DuJardin")
     assert u.name == "Jean DuJardin"
-
-
-def test_default_photo():
-    u = User.objects.create(netid="glagaffe")
-    assert u.get_photo == User.DEFAULT_PHOTO
 
 
 def test_photo():
