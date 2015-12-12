@@ -54,7 +54,7 @@ class NetidBackend(object):
                 registration=user_dict['raw_matricule'],
             )
 
-        for inscription in user_dict['inscriptions']:
+        for inscription in user_dict.get('inscriptions', []):
             try:
                 year = int(inscription['year'])
             except ValueError:
@@ -82,14 +82,20 @@ class NetidBackend(object):
 
         user['last_name'] = doc['intranet']['session']['user']['identity']['nom'].title()
         user['first_name'] = doc['intranet']['session']['user']['identity']['prenom']
-        user['mail'] = doc['intranet']['session']['user']['identity']['email'].lower()
+        user['mail'] = doc['intranet']['session']['user']['identity']['email']
+
+        user['raw_matricule'] = doc['intranet']['session']['user']['identity']['matricule']
+        user['matricule'] = user['raw_matricule'].split(":")[-1]
+
+        if user['mail'] is None:
+            user['mail'] = user['netid'] + "@ulb.ac.be"
+            return user
+
+        user['mail'] = user['mail'].lower()
         user['biblio'] = doc['intranet']['session']['user']['identity']['biblio']
 
         birthday = doc['intranet']['session']['user']['identity']['dateNaissance']
         user['birthday'] = date(*reversed(map(lambda x: int(x), birthday.split('/'))))
-
-        user['raw_matricule'] = doc['intranet']['session']['user']['identity']['matricule']
-        user['matricule'] = user['raw_matricule'].split(":")[-1]
 
         user['inscriptions'] = []
 
