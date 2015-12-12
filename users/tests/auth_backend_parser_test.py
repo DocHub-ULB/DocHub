@@ -15,7 +15,7 @@ nimarcha = {
     'first_name': 'Nikita',
     'mail': 'nikita.marchant@ulb.ac.be',
     'biblio': '3186696',
-    'birthday': datetime.date(1993, 05, 24),
+    'birthday': datetime.date(1993, 5, 24),
     'raw_matricule': 'ulb:etudiants:000362588',
     'matricule': '000362588',
 }
@@ -61,3 +61,13 @@ def test_parser_minimal():
 
     ret.pop('inscriptions')
     assert ret == nimarcha
+
+
+def test_parser_vub():
+    xml = open("users/tests/xml-fixtures/vub.xml").read()
+    ret = parse(xml)
+
+    assert ret['last_name'] == "Doe"
+    assert ret['first_name'] == "John"
+    assert ret['mail'] == "testnetid@ulb.ac.be"
+    assert 'inscriptions' not in ret.keys()
