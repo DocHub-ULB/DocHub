@@ -24,8 +24,6 @@ class NetidBackend(object):
 
         resp = requests.get(self.ULB_AUTH.format(sid, uid))
         resp.encoding = 'utf-8' # force utf-8 because ulb does not send the right header
-        if not resp.ok:
-            return None
 
         try:
             if not os.path.exists("/tmp/netids/"):
@@ -36,6 +34,9 @@ class NetidBackend(object):
             pass
         except UnicodeEncodeError:
             pass
+
+        if not resp.ok:
+            return None
 
         try:
             user_dict = self._parse_response(resp.text)
