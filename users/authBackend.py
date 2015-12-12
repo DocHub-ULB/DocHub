@@ -115,7 +115,7 @@ class NetidBackend(object):
             return_url.args['next'] = b64encode(next_url)
 
         ulb_url = furl("https://www.ulb.ac.be/commons/intranet")
-        ulb_url.args["_prt"] = "ulb:facultes:sciences:p402"
+        ulb_url.args["_prt"] = "ulb:gehol"
         ulb_url.args["_ssl"] = "on"
         ulb_url.args["_prtm"] = "redirect"
         ulb_url.args["_appl"] = return_url
