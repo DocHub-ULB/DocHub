@@ -14,7 +14,7 @@ pytestmark = pytest.mark.django_db
 
 @pytest.fixture(scope='function')
 def doc():
-    user = User.objects.create(netid='test_user')
+    user = User.objects.create_user(netid='test_user')
     doc = Document.objects.create(name='A document', user=user)
 
     return doc

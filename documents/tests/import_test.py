@@ -18,7 +18,7 @@ pytestmark = pytest.mark.django_db
 
 @mock.patch.object(Document, 'add_to_queue')
 def test_importer(mock_add_to_queue):
-    User.objects.create(netid='test_user')
+    User.objects.create_user(netid='test_user')
     Course.objects.create(slug="test-t-100")
 
     dir = tempfile.mkdtemp()

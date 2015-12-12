@@ -24,7 +24,7 @@ class Document(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     tags = models.ManyToManyField('tags.Tag')
     created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
 
     size = models.PositiveIntegerField(default=0)
     pages = models.PositiveIntegerField(default=0)

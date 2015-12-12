@@ -26,7 +26,7 @@ class Thread(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
     placement = models.TextField(default="", blank=True)
 
     course = models.ForeignKey('catalog.Course')
@@ -67,7 +67,7 @@ class Message(models.Model):
     thread = models.ForeignKey(Thread, db_index=True)
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.text
