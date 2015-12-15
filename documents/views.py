@@ -104,7 +104,7 @@ def upload_multiple_files(request, course_slug):
                 doc.save()
 
                 doc.state = 'READY_TO_QUEUE'
-                doc.add_to_queue(doc)
+                doc.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponseRedirect(reverse('document_put', args=(course.id,)))
