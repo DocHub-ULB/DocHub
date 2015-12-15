@@ -66,7 +66,8 @@ def upload_file(request, course_slug):
 
     else:
         form = UploadFileForm()
-        multiform = MultipleUploadFileForm()
+
+    multiform = MultipleUploadFileForm()
 
     return render(request, 'documents/document_upload.html', {
         'form': form,
