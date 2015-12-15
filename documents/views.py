@@ -99,12 +99,11 @@ def upload_multiple_files(request, course_slug):
                     state="PREPARING",
                     file_type=extension
                 )
+
                 doc.original.save(str(uuid.uuid4()) + extension, attachment)
                 doc.save()
 
-                course.add_child(doc)
                 doc.state = 'READY_TO_QUEUE'
-                doc.save()
                 doc.add_to_queue(doc)
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
