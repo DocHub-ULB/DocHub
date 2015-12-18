@@ -80,11 +80,19 @@ class NetidBackend(object):
 
         user['netid'] = doc['intranet']['session']['user']['username']
 
-        user['last_name'] = doc['intranet']['session']['user']['identity']['nom'].title()
-        user['first_name'] = doc['intranet']['session']['user']['identity']['prenom']
-        user['mail'] = doc['intranet']['session']['user']['identity']['email']
+        identities = doc['intranet']['session']['user']['identity']
+        if isinstance(identities, list):
+            for identity in identities:
+                if identity['email'] is not None:
+                    break
+        else:
+            identity = identities
 
-        user['raw_matricule'] = doc['intranet']['session']['user']['identity']['matricule']
+        user['last_name'] = identity['nom'].title()
+        user['first_name'] = identity['prenom']
+        user['mail'] = identity['email']
+
+        user['raw_matricule'] = identity['matricule']
         user['matricule'] = user['raw_matricule'].split(":")[-1]
 
         if user['mail'] is None:
@@ -92,18 +100,18 @@ class NetidBackend(object):
             return user
 
         user['mail'] = user['mail'].lower()
-        user['biblio'] = doc['intranet']['session']['user']['identity']['biblio']
+        user['biblio'] = identity['biblio']
 
-        birthday = doc['intranet']['session']['user']['identity']['dateNaissance']
+        birthday = identity['dateNaissance']
         user['birthday'] = date(*reversed(map(lambda x: int(x), birthday.split('/'))))
 
         user['inscriptions'] = []
 
-        if doc['intranet']['session']['user']['identity']['inscriptions'] is not None:
-            if not isinstance(doc['intranet']['session']['user']['identity']['inscriptions']['inscription'], list):
-                inscriptions = [doc['intranet']['session']['user']['identity']['inscriptions']['inscription']]
+        if identity['inscriptions'] is not None:
+            if not isinstance(identity['inscriptions']['inscription'], list):
+                inscriptions = [identity['inscriptions']['inscription']]
             else:
-                inscriptions = doc['intranet']['session']['user']['identity']['inscriptions']['inscription']
+                inscriptions = identity['inscriptions']['inscription']
 
             for inscription in inscriptions:
                 user['inscriptions'].append({
