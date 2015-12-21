@@ -1,3 +1,4 @@
+users/tests/xml-private-data/*.xml
 dumper/*.json
 *pyc
 db.sql
