@@ -9,6 +9,10 @@ from base64 import b64encode
 from www.settings import BASE_URL
 
 
+class IntranetError(Exception):
+    pass
+
+
 class NetidBackend(object):
     ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid={}&_uid={}'
 
@@ -72,8 +76,10 @@ class NetidBackend(object):
         return user
 
     def _parse_response(self, xml):
+        if xml.strip() == '':
+            raise IntranetError("Empty response")
         if 'errMsgFr' in xml:
-            raise Exception('Response was an error')
+            raise IntranetError('Response was an error')
 
         doc = xmltodict.parse(xml)
         user = {}
