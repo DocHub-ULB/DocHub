@@ -1,7 +1,11 @@
-from catalog.models import Course, Category
-from rest_framework import serializers
-from documents.serializers import ShortDocumentSerializer
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import json
+
+from rest_framework import serializers
+
+from catalog.models import Course, Category
 
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
@@ -46,5 +50,3 @@ class ShortCategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'url', 'slug', 'name', )
-
-
