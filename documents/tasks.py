@@ -48,11 +48,8 @@ def process_document(self, document_id):
     if document.state == "IN_QUEUE":
         document.state = "PROCESSING"
         document.save()
-    elif document.state in ("PREPARING", "PROCESSING", "READY_TO_QUEUE"):
+    else:
         raise DocumentProcessingError(document_id, "Wrong state : {}".format(document.state))
-    elif document.state in ("DONE", "ERROR"):
-        raise NotImplementedError(document_id, document.state)
-        # TODO : clean destination + celery.send_task()
 
     if document.file_type in ('.pdf', 'application/pdf'):
         document.pdf = document.original
@@ -71,13 +68,13 @@ def checksum(self, document_id):
     hashed = hashlib.md5(contents).hexdigest()
     query = Document.objects.filter(md5=hashed).exclude(md5='')
     if query.count() != 0:
-        dup = query.first()
-        if dup.hidden:
-            dup.delete()
+        duplicata = query.first()
+        if duplicata.hidden:
+            duplicata.delete()
         else:
             document_id = document.id
             document.delete()
-            raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, dup.id))
+            raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, duplicata.id))
 
     document.md5 = hashed
     document.save()
@@ -91,12 +88,12 @@ checksum.throws = (ExisingChecksum,)
 def convert_office_to_pdf(self, document_id):
     document = Document.objects.get(pk=document_id)
 
-    tmp = tempfile.NamedTemporaryFile()
-    tmp.write(document.original.read())
-    tmp.flush()
+    tmpfile = tempfile.NamedTemporaryFile()
+    tmpfile.write(document.original.read())
+    tmpfile.flush()
 
     try:
-        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmp.name])
+        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmpfile.name])
     except OSError:
         raise MissingBinary("unoconv")
     except subprocess.CalledProcessError as e:
@@ -104,7 +101,7 @@ def convert_office_to_pdf(self, document_id):
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
-    tmp.close()
+    tmpfile.close()
 
     return document_id
 
