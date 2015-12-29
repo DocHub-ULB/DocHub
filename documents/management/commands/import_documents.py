@@ -1,115 +1,99 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
+import os
+import glob
+from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django.core.files import File
-from optparse import make_option
-import uuid
 
 from users.models import User
 from catalog.models import Course
-from documents.models import Document
-from tags.models import Tag
+from documents import logic
 
-import os
-import glob
+TAGS = {
+    'off': 'officiel',
+    'ref': 'référence',
+    'sli': 'slides',
+    'res': 'résumé',
+    'exa': 'examen',
+    'tp': 'tp',
+    'syl': 'syllabus',
+    'cor': 'corrigé',
+    'corr': 'corrigé',
+    'for': 'formulaire',
+    'sol': 'corrigé',
+    'lab': 'laboratoire',
+}
 
 
 class Command(BaseCommand):
 
-    help = 'Import document in a course'
+    help = 'Import documents in a course'
     option_list = BaseCommand.option_list + (
         make_option('--path', action='store', dest='path', default='', help='Documents path'),
         make_option('--user', action='store', dest='username', default='', help='user owning the documents'),
         make_option('--course', action='store', dest='course_slug', default='', help='course slug'),
-
     )
-
-    tags = {
-        'off': 'officiel',
-        'ref': 'référence',
-        'sli': 'slides',
-        'res': 'résumé',
-        'exa': 'examen',
-        'tp': 'tp',
-        'syl': 'syllabus',
-        'cor': 'corrigé',
-        'corr': 'corrigé',
-        'for': 'formulaire',
-        'sol': 'corrigé',
-        'lab': 'laboratoire',
-    }
 
     def handle(self, *args, **options):
         netid = options["username"]
         self.stdout.write('Looking for user "{}"'.format(netid))
 
-        users = User.objects.filter(netid=netid)
-        if len(users) == 0:
+        user = User.objects.filter(netid=netid).first()
+        if user is None:
             self.stdout.write('Could not find user.')
-            return None
-        user = users[0]
+            return
 
         slug = options["course_slug"]
         self.stdout.write('Looking for course "{}"'.format(slug))
 
-        courses = Course.objects.filter(slug=slug)
-        if len(courses) == 0:
+        course = Course.objects.filter(slug=slug).first()
+        if course is None:
             self.stdout.write('Could not find course.')
-            return None
-        course = courses[0]
+            return
 
         path = options['path']
         self.stdout.write('Gathering documents in "{}"'.format(path))
         if not os.path.exists(path):
             self.stdout.write("Path does not exist")
-            return None
+            return
 
-        documents = glob.glob(os.path.join(path, "*.*"))
+        paths = glob.glob(os.path.join(path, "*.*"))
 
-        for doc in documents:
+        for doc_path in paths:
+            import_document_from_path(doc_path, course, user)
             self.stdout.write('.', ending='')
             self.stdout.flush()
-            name = os.path.split(doc)[1]
-            spli = name.split(":", 1)
-            if len(spli) == 1:
-                name = spli[0]
-                tags = []
-            else:
-                tags, name = spli
-                tags = tags.split(',')
-                try:
-                    tags = map(lambda x: self.tags[x.lower()], tags)
-                except KeyError:
-                    tags = []
 
-            name = name.replace("_", " ")
-            name, extension = os.path.splitext(name)
 
-            dbdoc = Document.objects.create(
-                user=user,
-                name=name,
-                state="PREPARING",
-                file_type=extension,
-                course=course,
-            )
+def import_document_from_path(doc_path, course, user):
+    filename = os.path.split(doc_path)[1]
+    tags, filename = extract_tags(filename)
+    name, extension = os.path.splitext(filename)
 
-            for tag in tags:
-                tag = Tag.objects.get_or_create(name=tag)[0]
-                dbdoc.tags.add(tag)
+    name = logic.clean_filename(name)
 
-            dbdoc.original.save(str(uuid.uuid4()) + extension, File(open(doc)))
+    document = logic.add_file_to_course(
+        file=File(open(doc_path)),
+        name=name,
+        extension=extension,
+        course=course,
+        tags=tags,
+        user=user
+    )
 
-            dbdoc.state = 'READY_TO_QUEUE'
-            dbdoc.save()
+    document.add_to_queue()
 
-            dbdoc.add_to_queue()
+
+def extract_tags(filename):
+    if ":" not in filename:
+        return [], filename
+
+    tags, name = filename.split(":", 1)
+    tags = tags.split(',')
+    tags = [TAGS.get(x.lower()) for x in tags]
+    tags = [tag for tag in tags if tag]
+
+    return tags, name

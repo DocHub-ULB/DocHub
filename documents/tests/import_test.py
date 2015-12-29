@@ -21,12 +21,12 @@ def test_importer(mock_add_to_queue):
     User.objects.create_user(netid='test_user')
     Course.objects.create(slug="test-t-100")
 
-    dir = tempfile.mkdtemp()
+    tmpdir = tempfile.mkdtemp()
     src = os.path.join(BASE_DIR, "documents/tests/files/3pages.pdf")
-    dst = os.path.join(dir, "off,ref:My_Doc.pdf")
+    dst = os.path.join(tmpdir, "off,ref,invalid_tag:My_Doc.pdf")
     os.symlink(src, dst)
 
-    call_command('import_documents', username="test_user", course_slug="test-t-100", path=dir)
+    call_command('import_documents', username="test_user", course_slug="test-t-100", path=tmpdir)
 
     assert mock_add_to_queue.called == 1
     doc = Document.objects.last()
@@ -35,3 +35,4 @@ def test_importer(mock_add_to_queue):
     assert doc.tags.count() == 2
     assert doc.course.slug == 'test-t-100'
     assert doc.user.netid == "test_user"
+    assert doc.tags.count() == 2

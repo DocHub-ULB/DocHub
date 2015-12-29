@@ -1,15 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 import os
 import uuid
 
@@ -26,6 +17,7 @@ from catalog.models import Course
 from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
 from telepathy.forms import NewThreadForm
 from tags.models import Tag
+from documents import logic
 
 
 @login_required
@@ -45,22 +37,18 @@ def upload_file(request, course_slug):
             extension = os.path.splitext(request.FILES['file'].name)[1].lower()
             description = form.cleaned_data['description']
 
-            doc = Document.objects.create(
-                user=request.user,
+            document = logic.add_file_to_course(
+                file=request.FILES['file'],
                 name=name,
+                extension=extension,
                 course=course,
-                description=description,
-                state="PREPARING",
-                file_type=extension
+                tags=form.cleaned_data['tags'],
+                user=request.user
             )
-            doc.original.save(str(uuid.uuid4()) + extension, request.FILES['file'])
-            doc.save()
+            document.description = description
+            document.save()
 
-            for tag in form.cleaned_data['tags']:
-                doc.tags.add(Tag.objects.get(name=tag))
-
-            doc.state = 'READY_TO_QUEUE'
-            doc.add_to_queue()
+            document.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
