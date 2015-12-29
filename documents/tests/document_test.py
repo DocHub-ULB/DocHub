@@ -36,7 +36,7 @@ def test_repr_with_accents(doc):
 
 
 def test_url(doc):
-    assert doc.get_absolute_url() == "/document/v/{}".format(doc.id)
+    assert doc.get_absolute_url() == "/document/{}".format(doc.id)
 
 
 def test_tag_from_name_exam(doc):
