@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import os
-import uuid
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -30,13 +29,11 @@ def upload_file(request, slug):
         if form.is_valid():
             file = request.FILES['file']
 
-            name, _ = os.path.splitext(file.name)
+            name, extension = os.path.splitext(file.name)
             name = logic.clean_filename(name)
 
             if form.cleaned_data['name']:
                 name = form.cleaned_data['name']
-
-            extension = os.path.splitext(file.name)[1].lower()
 
             document = logic.add_file_to_course(
                 file=file,
@@ -75,26 +72,18 @@ def upload_multiple_files(request, slug):
 
         if form.is_valid():
             for attachment in form.cleaned_data['files']:
-                name, _ = os.path.splitext(attachment.name)
-                name = name.lower()
+                name, extension = os.path.splitext(attachment.name)
+                name = logic.clean_filename(name)
 
-                extension = os.path.splitext(attachment.name)[1].lower()
-                description = ""
-
-                doc = Document.objects.create(
-                    user=request.user,
+                document = logic.add_file_to_course(
+                    file=attachment,
                     name=name,
+                    extension=extension,
                     course=course,
-                    description=description,
-                    state="PREPARING",
-                    file_type=extension
+                    tags=[],
+                    user=request.user
                 )
-
-                doc.original.save(str(uuid.uuid4()) + extension, attachment)
-                doc.save()
-
-                doc.state = 'READY_TO_QUEUE'
-                doc.add_to_queue()
+                document.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponseRedirect(reverse('document_put', args=(course.id,)))

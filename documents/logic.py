@@ -20,11 +20,11 @@ def add_file_to_course(file, name, extension, course, tags, user):
         name=name,
         course=course,
         state="PREPARING",
-        file_type=extension
+        file_type=extension.lower()
     )
 
     if len(tags) > 0:
-        tags = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
+        tags = [Tag.objects.get_or_create(name=tag.lower())[0] for tag in tags]
         document.tags.add(*tags)
     else:
         document.tag_from_name()
