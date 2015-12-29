@@ -21,8 +21,8 @@ from documents import logic
 
 
 @login_required
-def upload_file(request, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
+def upload_file(request, slug):
+    course = get_object_or_404(Course, slug=slug)
 
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -65,8 +65,8 @@ def upload_file(request, course_slug):
 
 
 @login_required
-def upload_multiple_files(request, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
+def upload_multiple_files(request, slug):
+    course = get_object_or_404(Course, slug=slug)
 
     if request.method == 'POST':
         form = MultipleUploadFileForm(request.POST, request.FILES)
@@ -99,8 +99,8 @@ def upload_multiple_files(request, course_slug):
 
 
 @login_required
-def document_edit(request, document_id):
-    doc = get_object_or_404(Document, id=document_id)
+def document_edit(request, pk):
+    doc = get_object_or_404(Document, id=pk)
 
     if not request.user.write_perm(obj=doc):
         return HttpResponse('You may not edit this document.', status=403)
@@ -136,8 +136,8 @@ def document_edit(request, document_id):
 
 
 @login_required
-def document_download(request, id):
-    doc = get_object_or_404(Document, id=id)
+def document_download(request, pk):
+    doc = get_object_or_404(Document, pk=pk)
     body = doc.pdf.read()
     response = HttpResponse(body, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
@@ -148,8 +148,8 @@ def document_download(request, id):
 
 
 @login_required
-def document_download_original(request, id):
-    doc = get_object_or_404(Document, id=id)
+def document_download_original(request, pk):
+    doc = get_object_or_404(Document, pk=pk)
     body = doc.original.read()
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
@@ -162,8 +162,8 @@ def document_download_original(request, id):
 
 
 @login_required
-def document_show(request, id):
-    document = get_object_or_404(Document, id=id)
+def document_show(request, pk):
+    document = get_object_or_404(Document, pk=pk)
 
     if document.state != "DONE":
         return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))
