@@ -28,24 +28,26 @@ def upload_file(request, slug):
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            if len(form.cleaned_data['name']) > 0:
-                name = form.cleaned_data['name']
-            else:
-                name, _ = os.path.splitext(request.FILES['file'].name)
-                name = name.lower().replace('_', ' ')
+            file = request.FILES['file']
 
-            extension = os.path.splitext(request.FILES['file'].name)[1].lower()
-            description = form.cleaned_data['description']
+            name, _ = os.path.splitext(file.name)
+            name = logic.clean_filename(name)
+
+            if form.cleaned_data['name']:
+                name = form.cleaned_data['name']
+
+            extension = os.path.splitext(file.name)[1].lower()
 
             document = logic.add_file_to_course(
-                file=request.FILES['file'],
+                file=file,
                 name=name,
                 extension=extension,
                 course=course,
                 tags=form.cleaned_data['tags'],
                 user=request.user
             )
-            document.description = description
+
+            document.description = form.cleaned_data['description']
             document.save()
 
             document.add_to_queue()
