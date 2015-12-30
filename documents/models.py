@@ -5,7 +5,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 
 from tags.models import Tag
-from www import settings
+from django.conf import settings
 
 
 class Document(models.Model):

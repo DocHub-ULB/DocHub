@@ -1,22 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 from django.core.management.base import BaseCommand
 import json
 from os import path
 from optparse import make_option
 import yaml
 
-from www.settings import BASE_DIR
+from django.conf import settings
 from catalog.models import Category, Course
 from libulb.catalog.course import Course as ULBCourse
 
@@ -46,7 +37,7 @@ class Command(BaseCommand):
         self.stdout.write('Loading tree ... ')
 
         if not options['hitulb']:
-            f = path.join(BASE_DIR, 'catalog/management/localcache.json')
+            f = path.join(settings.BASE_DIR, 'catalog/management/localcache.json')
             self.LOCAL_CACHE = json.loads(open(f).read())
 
         tree = yaml.load(open(options['tree_file']))

@@ -6,8 +6,7 @@ import json
 from django.db import models
 from django.utils.text import Truncator
 from django.core.urlresolvers import reverse
-
-from www import settings
+from django.conf import settings
 
 
 class Thread(models.Model):

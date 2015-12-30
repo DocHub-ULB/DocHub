@@ -9,7 +9,7 @@ from users.models import User, Inscription
 from django.db import IntegrityError
 from furl import furl
 from base64 import b64encode
-from www.settings import BASE_URL
+from django.conf import settings
 
 
 class IntranetError(Exception):
@@ -133,7 +133,7 @@ class NetidBackend(object):
 
     @classmethod
     def login_url(cls, next_url=""):
-        return_url = furl(BASE_URL)
+        return_url = furl(settings.BASE_URL)
         return_url.path = "auth"
         if next_url != "":
             return_url.args['next'] = b64encode(next_url)

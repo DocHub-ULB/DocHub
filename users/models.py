@@ -8,10 +8,10 @@ from os.path import join
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.utils import timezone
+from django.conf import settings
 import actstream
 import identicon
 
-from www import settings
 from catalog.models import Course
 
 

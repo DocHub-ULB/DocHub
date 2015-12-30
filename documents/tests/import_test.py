@@ -8,7 +8,7 @@ import pytest
 import mock
 import tempfile
 import os
-from www.settings import BASE_DIR
+from django.conf import settings
 
 from django.core.management import call_command
 
@@ -22,7 +22,7 @@ def test_importer(mock_add_to_queue):
     Course.objects.create(slug="test-t-100")
 
     tmpdir = tempfile.mkdtemp()
-    src = os.path.join(BASE_DIR, "documents/tests/files/3pages.pdf")
+    src = os.path.join(settings.BASE_DIR, "documents/tests/files/3pages.pdf")
     dst = os.path.join(tmpdir, "off,ref,invalid_tag:My_Doc.pdf")
     os.symlink(src, dst)
 
@@ -43,7 +43,7 @@ def test_importer_with_no_tags(mock_add_to_queue):
     Course.objects.create(slug="test-t-100")
 
     tmpdir = tempfile.mkdtemp()
-    src = os.path.join(BASE_DIR, "documents/tests/files/3pages.pdf")
+    src = os.path.join(settings.BASE_DIR, "documents/tests/files/3pages.pdf")
     dst = os.path.join(tmpdir, "doc corrigé with no_tags.pdf")
     os.symlink(src, dst)
 

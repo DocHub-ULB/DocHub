@@ -3,13 +3,12 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from actstream.models import user_stream
+from django.conf import settings
 
 from telepathy.models import Thread
 from documents.models import Document, Page
 from users.models import User
 from users.authBackend import NetidBackend
-
-import settings
 
 
 def index(request):

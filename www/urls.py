@@ -5,8 +5,8 @@ from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.contrib.auth.views import logout, login
 from django.contrib import admin
+from django.conf import settings
 
-import settings
 from www.legacy_urls import urlpatterns as legacy_patterns
 
 

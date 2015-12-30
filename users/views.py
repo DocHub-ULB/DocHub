@@ -12,10 +12,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import authenticate, login
+from django.conf import settings
 
 from actstream.models import actor_stream
 
-from www import settings
 from forms import SettingsForm
 
 
