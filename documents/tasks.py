@@ -64,17 +64,15 @@ def checksum(self, document_id):
     document = Document.objects.get(pk=document_id)
 
     contents = document.original.read()
-
     hashed = hashlib.md5(contents).hexdigest()
-    query = Document.objects.filter(md5=hashed).exclude(md5='')
-    if query.count() != 0:
-        duplicata = query.first()
-        if duplicata.hidden:
-            duplicata.delete()
-        else:
-            document_id = document.id
-            document.delete()
-            raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, duplicata.id))
+    duplicata = Document.objects.filter(md5=hashed).exclude(md5='').first()
+
+    if duplicata and duplicata.hidden:
+        duplicata.delete()
+    elif duplicata:
+        document.delete()
+        self.request.callbacks = None
+        raise ExisingChecksum("Document {} had the same checksum as {}".format(document_id, duplicata.id))
 
     document.md5 = hashed
     document.save()
