@@ -7,6 +7,7 @@ from django.contrib.auth.views import logout, login
 from django.contrib import admin
 
 import settings
+from www.legacy_urls import urlpatterns as legacy_patterns
 
 
 urlpatterns = [
@@ -27,7 +28,8 @@ urlpatterns = [
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 
     url(r'^api/', include("www.rest_urls")),
-]
+
+] + legacy_patterns
 
 handler400 = 'www.error.error400'
 handler403 = 'www.error.error403'
