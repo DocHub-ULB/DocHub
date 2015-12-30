@@ -15,10 +15,6 @@ def validate_uploaded_file(file):
         raise ValidationError('Les fichiers compressés ne sont pas supportés pour le moment.')
 
 
-def tag_choices():
-    return map(lambda x: (x.pk, x.name), Tag.objects.all())
-
-
 class FileForm(forms.Form):
     name = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'placeholder': 'Titre (optionnel)'
