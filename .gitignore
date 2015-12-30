@@ -1,6 +1,8 @@
 users/tests/xml-private-data/*.xml
 dumper/*.json
 *pyc
+.coverage
+htmlcov/
 db.sql
 db.sqlite
 initial_data.json
