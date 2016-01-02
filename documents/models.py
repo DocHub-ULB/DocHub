@@ -22,7 +22,7 @@ class Document(models.Model):
 
     description = models.TextField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    tags = models.ManyToManyField('tags.Tag')
+    tags = models.ManyToManyField('tags.Tag', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 

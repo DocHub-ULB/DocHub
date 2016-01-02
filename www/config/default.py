@@ -46,7 +46,6 @@ IDENTICON = True
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
-    'suit',  # Must be before admin
     'django.contrib.admin',
     'djcelery',
     'compressor',
@@ -74,13 +73,6 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
 )
 
-SUIT_CONFIG = {
-    'ADMIN_NAME': 'DocHub',
-    'MENU_EXCLUDE': (
-        'auth',
-        'djcelery',
-    ),
-}
 
 COMPRESS_ROOT = join(BASE_DIR, "static")
 
