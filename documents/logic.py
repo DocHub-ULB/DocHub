@@ -35,3 +35,39 @@ def add_file_to_course(file, name, extension, course, tags, user):
     document.save()
 
     return document
+
+
+def tags_from_name(name):
+    translate = {
+        'é': 'e',
+        'è': 'e',
+        'ê': 'e',
+        '-': ' ',
+        '_': ' ',
+        'û': 'u',
+        'ô': 'o'
+    }
+    name = name.lower().translate(translate)
+    tokens = name.split(' ')
+    tags = []
+
+    mapping = {
+        ("aout", "sept", "juin", "mai", "exam", "questions", "oral"): "examen",
+        ("corr", "reponse", "rponse"): "corrigé",
+        ("tp", "pratique", "exo", "exercice", "seance", "enonce",): "tp",
+        ("resum", "r?sum", "rsum", "synthese", "synthse", ): "résumé",
+        ("slide", "transparent",): "slides",
+        ("formule",): "formulaire",
+        ("rapport", "labo", "cahier",): "laboratoire",
+        ("note",): "notes",
+        ("sylabus", "syllabus"): "syllabus",
+        ("officiel", "oficiel"): "officiel",
+    }
+
+    for token in tokens:
+        for key, val in mapping.items():
+            if key in token:
+                tags.append(val)
+
+    tags = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
+    return tags
