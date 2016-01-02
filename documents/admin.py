@@ -39,6 +39,26 @@ class DocumentAdmin(admin.ModelAdmin):
 
     actions = (reprocess, autotag,)
 
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name',
+                ('course', 'user'),
+                ('pages', 'state', 'hidden'),
+                'tags',
+                'description',
+            )
+        }),
+        ('Extra', {
+            'classes': ('collapse',),
+            'fields': (
+                ('file_type', 'md5'),
+                ('original', 'pdf'),
+                ('views', 'downloads')
+            )
+        })
+    )
+
 
 @admin.register(DocumentError)
 class DocumentErrorAdmin(admin.ModelAdmin):
