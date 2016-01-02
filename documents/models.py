@@ -17,11 +17,20 @@ from www import settings
 
 
 class Document(models.Model):
-    name = models.CharField(max_length=255)
-    course = models.ForeignKey('catalog.Course', null=True)
+    STATES = (
+        ('PREPARING', 'En préparation'),
+        ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery'),
+        ('IN_QUEUE', 'Envoyé à Celery'),
+        ('PROCESSING', 'En cours de traitement'),
+        ('DONE', 'Rendu fini'),
+        ('ERROR', 'Erreur'),
+    )
+
+    name = models.CharField(max_length=255, verbose_name='Titre')
+    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours')
 
     description = models.TextField(blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
     tags = models.ManyToManyField('tags.Tag', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
@@ -37,10 +46,10 @@ class Document(models.Model):
     original = models.FileField(upload_to='original_document')
     pdf = models.FileField(upload_to='pdf_document')
 
-    state = models.CharField(max_length=20, default='PREPARING', db_index=True)
+    state = models.CharField(max_length=20, choices=STATES, default='PREPARING', db_index=True, verbose_name='État')
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
-    hidden = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False, verbose_name='Est caché')
 
     def __unicode__(self):
         return self.name

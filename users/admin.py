@@ -16,6 +16,7 @@ from .models import User, Inscription
 
 class InscriptionInline(admin.TabularInline):
     model = Inscription
+    extra = 1
 
 
 @admin.register(User)
@@ -53,4 +54,3 @@ class InscriptionAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'faculty', 'section', 'year')
     list_filter = ('year', 'faculty', 'section',)
     search_fields = ('section', 'user__netid', 'user__first_name', 'user__last_name')
-
