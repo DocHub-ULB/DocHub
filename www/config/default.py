@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from django_defaults import *
+from www.config.django_defaults import *
 
 EMAIL_SUBJECT_PREFIX = "[DocHub] "
 

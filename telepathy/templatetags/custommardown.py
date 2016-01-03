@@ -6,7 +6,7 @@ import markdown
 
 from django import template
 from django.template.defaultfilters import stringfilter
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe, SafeText
 
 register = template.Library()
@@ -23,7 +23,7 @@ youtube_iframe = """
 def my_markdown(value):
     extensions = ["nl2br", "extra", "codehilite", "headerid(level=2)", "sane_lists"]
 
-    html = mark_safe(markdown.markdown(force_unicode(value).replace("\\\\", "\\\\\\\\"),
+    html = mark_safe(markdown.markdown(force_text(value).replace("\\\\", "\\\\\\\\"),
                                        extensions,
                                        safe_mode='escape',
                                        enable_attributes=False,

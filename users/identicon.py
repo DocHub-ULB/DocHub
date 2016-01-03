@@ -21,12 +21,12 @@ class Matrix2D(list):
         list.__init__(self, initial)
 
     def clear(self):
-        for i in xrange(9):
+        for i in range(9):
             self[i] = 0.
 
     def set_identity(self):
         self.clear()
-        for i in xrange(3):
+        for i in range(3):
             self[i] = 1.
 
     def __str__(self):
@@ -35,10 +35,10 @@ class Matrix2D(list):
     def __mul__(self, other):
         r = []
         if isinstance(other, Matrix2D):
-            for y in xrange(3):
-                for x in xrange(3):
+            for y in range(3):
+                for x in range(3):
                     v = 0.0
-                    for i in xrange(3):
+                    for i in range(3):
                         v += (self[i * 3 + x] * other[y * 3 + i])
                     r.append(v)
         else:
@@ -126,13 +126,13 @@ class IdenticonRendererBase(object):
 
         # side patch
         kwds['type'] = side[0]
-        for i in xrange(4):
+        for i in range(4):
             pos = [(1, 0), (2, 1), (1, 2), (0, 1)][i]
             self.drawPatch(pos, side[2] + 1 + i, side[1], **kwds)
 
         # corner patch
         kwds['type'] = corner[0]
-        for i in xrange(4):
+        for i in range(4):
             pos = [(0, 0), (2, 0), (2, 2), (0, 2)][i]
             self.drawPatch(pos, corner[2] + 1 + i, corner[1], **kwds)
 
@@ -192,9 +192,9 @@ class DonRenderer(IdenticonRendererBase):
     MIDDLE_PATCH_SET = [0, 4, 8, 15]
 
     # modify path set
-    for idx in xrange(len(PATH_SET)):
+    for idx in range(len(PATH_SET)):
         if PATH_SET[idx]:
-            p = map(lambda vec: (vec[0] / 4.0, vec[1] / 4.0), PATH_SET[idx])
+            p = list(map(lambda vec: (vec[0] / 4.0, vec[1] / 4.0), PATH_SET[idx]))
             PATH_SET[idx] = p + p[:1]
 
     def decode(self, code):
@@ -222,23 +222,4 @@ class DonRenderer(IdenticonRendererBase):
 def render_identicon(code, size, renderer=None):
     if not renderer:
         renderer = DonRenderer
-    return renderer(code).render(size)
-
-
-if __name__ == '__main__':
-    import sys
-
-    if len(sys.argv) < 2:
-        print 'usage: python identicon.py [CODE]....'
-        raise SystemExit
-
-    for code in sys.argv[1:]:
-        if code.startswith('0x') or code.startswith('0X'):
-            code = int(code[2:], 16)
-        elif code.startswith('0'):
-            code = int(code[1:], 8)
-        else:
-            code = int(code)
-
-        icon = render_identicon(code, 24)
-        icon.save('%08x.png' % code, 'PNG')
+    return renderer(code).render(int(size))

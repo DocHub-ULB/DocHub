@@ -10,7 +10,7 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.utils import timezone
 from django.conf import settings
 import actstream
-import identicon
+import users.identicon
 
 from catalog.models import Course
 
@@ -33,7 +33,7 @@ class CustomUserManager(UserManager):
                 os.makedirs(join(settings.MEDIA_ROOT, "profile"))
             profile_path = join(settings.MEDIA_ROOT, "profile", "{}.png".format(netid))
             alpha_netid = self.PATTERN.sub('', netid)
-            identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
+            users.identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
             user.photo = 'png'
         user.set_password(password)
         user.save(using=self._db)

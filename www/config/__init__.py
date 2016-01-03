@@ -13,10 +13,10 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 
 try:
-    from .local import *
+    from www.config.local import *
 except ImportError:
     try:
-        from .dev import *
+        from www.config.dev import *
     except ImportError as e:
         raise Exception("Failed to import from dev or local, are the files present? exception: %s" % e)
 

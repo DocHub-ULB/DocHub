@@ -148,4 +148,4 @@ class DocumentError(models.Model):
         return "#" + self.exception
 
 
-from tasks import process_document
+from documents.tasks import process_document

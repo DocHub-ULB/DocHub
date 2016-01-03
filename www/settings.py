@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from config import *
+from www.config import *
 
 # Do not write anything here !
 # Configuration must be written in www/config/

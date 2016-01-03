@@ -25,4 +25,4 @@ def action_save_handler(sender, created, instance, **kwargs):
     handle_action.delay(instance.id)
 
 
-from tasks import handle_action
+from notifications.tasks import handle_action

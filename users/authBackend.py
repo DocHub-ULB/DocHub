@@ -112,7 +112,7 @@ class NetidBackend(object):
         user['biblio'] = identity['biblio']
 
         birthday = identity['dateNaissance']
-        user['birthday'] = date(*reversed(map(lambda x: int(x), birthday.split('/'))))
+        user['birthday'] = date(*reversed(list(map(lambda x: int(x), birthday.split('/')))))
 
         user['inscriptions'] = []
 

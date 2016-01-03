@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 
 from www.cbv import LoginRequiredMixin
 
-from models import Notification
+from notifications.models import Notification
 
 
 class NotificationsView(LoginRequiredMixin, ListView):
