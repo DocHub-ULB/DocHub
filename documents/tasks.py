@@ -8,7 +8,7 @@ import uuid
 import tempfile
 
 from celery import shared_task, chain
-from pyPdf import PdfFileReader
+from PyPDF2 import PdfFileReader
 from django.core.files.base import ContentFile
 from actstream import action
 

@@ -4,7 +4,7 @@ markdown
 django-celery
 Pillow
 pygments
-pyPdf
+pyPdf2
 requests
 xmltodict
 djangorestframework
