@@ -5,6 +5,7 @@ from documents.models import Document, Page
 from users.models import User
 import pytest
 import mock
+import sys
 
 from documents.models import process_document
 
@@ -27,12 +28,22 @@ def add_pages(doc):
 
 def test_repr(doc):
     doc.name = "Coucou"
-    assert repr(doc).decode('utf-8') == '<Document: Coucou>'
+    r = repr(doc)
+
+    if sys.version_info.major < 3:
+        r = r.decode('utf-8')
+
+    assert r == '<Document: Coucou>'
 
 
 def test_repr_with_accents(doc):
     doc.name = "Lés accênts c'est cool"
-    assert repr(doc).decode('utf-8') == "<Document: Lés accênts c'est cool>"
+    r = repr(doc)
+
+    if sys.version_info.major < 3:
+        r = r.decode('utf-8')
+
+    assert r == "<Document: Lés accênts c'est cool>"
 
 
 def test_url(doc):
