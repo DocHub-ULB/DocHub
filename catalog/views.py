@@ -1,51 +1,43 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.views.generic.detail import DetailView
 
 from actstream import actions
 import actstream
 
+from www.cbv import LoginRequiredMixin
 from catalog.models import Category, Course
-from tags.models import Tag
 
 
-@login_required
-def show_category(request, catid):
-    category = get_object_or_404(Category, pk=catid)
-
-    return render(request, "catalog/category.html", {
-        'category': category,
-    })
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+    template_name = "catalog/category.html"
+    context_object_name = "category"
 
 
-@login_required
-def show_course(request, slug):
-    course = get_object_or_404(Course, slug=slug)
+class CourseDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = "catalog/course.html"
+    context_object_name = "course"
 
-    docs = course.document_set.exclude(state="ERROR").order_by('-id')
-    threads = course.thread_set.annotate(Count('message')).order_by('-id')
+    def get_context_data(self, **kwargs):
+        context = super(CourseDetailView, self).get_context_data(**kwargs)
+        course = context['course']
 
-    return render(request, "catalog/course.html", {
-        "course": course,
-        "documents": docs.filter(hidden=False).select_related('user').prefetch_related('tags'),
-        "threads": threads,
-        "followers_count": len(actstream.models.followers(course)),
-        "all_tags": Tag.objects.all(),
-    })
+        context['documents'] = course.document_set\
+            .exclude(state="ERROR", hidden=True)\
+            .select_related('user')\
+            .prefetch_related('tags')
+        context['threads'] = course.thread_set.annotate(Count('message')).order_by('-id')
+        context['followers_count'] = len(actstream.models.followers(course))
+
+        return context
 
 
 @login_required

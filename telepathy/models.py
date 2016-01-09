@@ -1,21 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 import json
 from django.db import models
 from django.utils.text import Truncator
 from django.core.urlresolvers import reverse
-
-from www import settings
+from django.conf import settings
 
 
 class Thread(models.Model):

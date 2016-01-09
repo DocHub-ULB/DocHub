@@ -4,14 +4,14 @@ import os
 
 from django.core.management import call_command
 from catalog.models import Course, Category
-from www.settings import BASE_DIR
+from django.conf import settings
 
 import pytest
 
 
 pytestmark = [pytest.mark.django_db]
 
-fixtures = os.path.join(BASE_DIR, 'catalog', 'tests', 'fixtures')
+fixtures = os.path.join(settings.BASE_DIR, 'catalog', 'tests', 'fixtures')
 SIMPLE_TREE = os.path.join(fixtures, 'simple_tree.yaml')
 MULTIPLE_TREE = os.path.join(fixtures, 'multiple_tree.yaml')
 REAL_TREE = os.path.join(fixtures, 'real_tree.yaml')

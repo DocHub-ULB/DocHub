@@ -1,38 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 from __future__ import absolute_import
-from __future__ import unicode_literals
 
-from celery import shared_task, chain
 import subprocess
 import hashlib
 import uuid
 import tempfile
-from pyPdf import PdfFileReader
 
+from celery import shared_task, chain
+from pyPdf import PdfFileReader
 from django.core.files.base import ContentFile
 from actstream import action
 
 from documents.models import Document, Page, DocumentError
-from .exceptions import DocumentProcessingError, MissingBinary
-
-
-class SkipException(StandardError):
-    pass
-
-
-class ExisingChecksum(SkipException):
-    pass
+from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
 
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -67,11 +48,8 @@ def process_document(self, document_id):
     if document.state == "IN_QUEUE":
         document.state = "PROCESSING"
         document.save()
-    elif document.state in ("PREPARING", "PROCESSING", "READY_TO_QUEUE"):
+    else:
         raise DocumentProcessingError(document_id, "Wrong state : {}".format(document.state))
-    elif document.state in ("DONE", "ERROR"):
-        raise NotImplementedError(document_id, document.state)
-        # TODO : clean destination + celery.send_task()
 
     if document.file_type in ('.pdf', 'application/pdf'):
         document.pdf = document.original
@@ -86,17 +64,15 @@ def checksum(self, document_id):
     document = Document.objects.get(pk=document_id)
 
     contents = document.original.read()
-
     hashed = hashlib.md5(contents).hexdigest()
-    query = Document.objects.filter(md5=hashed).exclude(md5='')
-    if query.count() != 0:
-        dup = query.first()
-        if dup.hidden:
-            dup.delete()
-        else:
-            document_id = document.id
-            document.delete()
-            raise ExisingChecksum("Document {} has the same checksum as {}".format(document_id, dup.id))
+    duplicata = Document.objects.filter(md5=hashed).exclude(md5='').first()
+
+    if duplicata and duplicata.hidden:
+        duplicata.delete()
+    elif duplicata:
+        document.delete()
+        self.request.callbacks = None
+        raise ExisingChecksum("Document {} had the same checksum as {}".format(document_id, duplicata.id))
 
     document.md5 = hashed
     document.save()
@@ -110,12 +86,12 @@ checksum.throws = (ExisingChecksum,)
 def convert_office_to_pdf(self, document_id):
     document = Document.objects.get(pk=document_id)
 
-    tmp = tempfile.NamedTemporaryFile()
-    tmp.write(document.original.read())
-    tmp.flush()
+    tmpfile = tempfile.NamedTemporaryFile()
+    tmpfile.write(document.original.read())
+    tmpfile.flush()
 
     try:
-        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmp.name])
+        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmpfile.name])
     except OSError:
         raise MissingBinary("unoconv")
     except subprocess.CalledProcessError as e:
@@ -123,7 +99,7 @@ def convert_office_to_pdf(self, document_id):
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
-    tmp.close()
+    tmpfile.close()
 
     return document_id
 

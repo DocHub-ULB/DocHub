@@ -1,15 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 import re
 import markdown
 
@@ -26,6 +17,7 @@ youtube_iframe = """
   frameborder="0"></iframe>
 """
 
+
 @register.filter(is_safe=False, name='markdown')
 @stringfilter
 def my_markdown(value):
@@ -37,6 +29,7 @@ def my_markdown(value):
                                        enable_attributes=False,
                                        output_format="html5"))
     return SafeText(youtube_url.sub(youtube_iframe, html))
+
 
 class MarkdownDemoNode(template.Node):
     def __init__(self, nodelist):
@@ -61,6 +54,7 @@ class MarkdownDemoNode(template.Node):
           <div class="content active" id="%smd"><pre class="codehilite">%s</pre></div>
           <div class="content" id="%srender">%s</div>
         </div>"""%(uid, uid, uid, input_text, uid, rendered)
+
 
 @register.tag(name='markdown_demo')
 def do_comment(parser, token):

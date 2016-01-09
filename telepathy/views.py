@@ -1,22 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
+import json
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-import json
 from actstream import action, actions
-
 
 from telepathy.forms import NewThreadForm, MessageForm
 from telepathy.models import Thread, Message
@@ -66,9 +57,9 @@ def new_thread(request, course_slug=None, document_id=None):
     })
 
 
-def get_thread_context(request, thread_id):
-    thread = get_object_or_404(Thread, id=thread_id)
-    messages = thread.message_set.select_related('user').order_by('created').all()
+def get_thread_context(request, pk):
+    thread = get_object_or_404(Thread, pk=pk)
+    messages = thread.message_set.select_related('user').order_by('created')
     return {
         "thread": thread,
         "messages": messages,
@@ -77,8 +68,8 @@ def get_thread_context(request, thread_id):
 
 
 @login_required
-def show_thread(request, thread_id):
-    context = get_thread_context(request, thread_id)
+def show_thread(request, pk):
+    context = get_thread_context(request, pk)
     thread = context['thread']
 
     # Add page preview if this thread belongs to a document page
@@ -91,15 +82,15 @@ def show_thread(request, thread_id):
 
 
 @login_required
-def show_thread_fragment(request, thread_id):
-    context = get_thread_context(request, thread_id)
+def show_thread_fragment(request, pk):
+    context = get_thread_context(request, pk)
     return render(request, "fragments/thread.html", context)
 
 
 @login_required
-def reply_thread(request, thread_id):
+def reply_thread(request, pk):
     form = MessageForm(request.POST)
-    thread = get_object_or_404(Thread, id=thread_id)
+    thread = get_object_or_404(Thread, pk=pk)
     if form.is_valid():
         content = form.cleaned_data['content']
         poster = request.user
@@ -115,8 +106,8 @@ def reply_thread(request, thread_id):
 
 
 @login_required
-def edit_message(request, message_id):
-    message = get_object_or_404(Message, id=message_id)
+def edit_message(request, pk):
+    message = get_object_or_404(Message, pk=pk)
     thread = message.thread
 
     if not request.user.write_perm(obj=message):
@@ -145,14 +136,14 @@ def edit_message(request, message_id):
 
 
 @login_required
-def join_thread(request, id):
-    thread = get_object_or_404(Thread, pk=id)
+def join_thread(request, pk):
+    thread = get_object_or_404(Thread, pk=pk)
     actions.follow(request.user, thread, actor_only=False)
     return HttpResponseRedirect(reverse('thread_show', args=[id]))
 
 
 @login_required
-def leave_thread(request, id):
-    thread = get_object_or_404(Thread, pk=id)
+def leave_thread(request, pk):
+    thread = get_object_or_404(Thread, pk=pk)
     actions.unfollow(request.user, thread)
     return HttpResponseRedirect(reverse('thread_show', args=[id]))

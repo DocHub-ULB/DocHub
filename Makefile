@@ -88,3 +88,6 @@ static/3party/js/js.cookie.js:
 
 shower-clean:
 	rm -rf static/3party/
+
+coverage:
+	py.test --cov-report html --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www

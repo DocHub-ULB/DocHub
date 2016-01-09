@@ -1,17 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 import os
-import uuid
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -26,41 +16,38 @@ from catalog.models import Course
 from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
 from telepathy.forms import NewThreadForm
 from tags.models import Tag
+from documents import logic
 
 
 @login_required
-def upload_file(request, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
+def upload_file(request, slug):
+    course = get_object_or_404(Course, slug=slug)
 
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            if len(form.cleaned_data['name']) > 0:
+            file = request.FILES['file']
+
+            name, extension = os.path.splitext(file.name)
+            name = logic.clean_filename(name)
+
+            if form.cleaned_data['name']:
                 name = form.cleaned_data['name']
-            else:
-                name, _ = os.path.splitext(request.FILES['file'].name)
-                name = name.lower().replace('_', ' ')
 
-            extension = os.path.splitext(request.FILES['file'].name)[1].lower()
-            description = form.cleaned_data['description']
-
-            doc = Document.objects.create(
-                user=request.user,
+            document = logic.add_file_to_course(
+                file=file,
                 name=name,
+                extension=extension,
                 course=course,
-                description=description,
-                state="PREPARING",
-                file_type=extension
+                tags=form.cleaned_data['tags'],
+                user=request.user
             )
-            doc.original.save(str(uuid.uuid4()) + extension, request.FILES['file'])
-            doc.save()
 
-            for tag in form.cleaned_data['tags']:
-                doc.tags.add(Tag.objects.get(name=tag))
+            document.description = form.cleaned_data['description']
+            document.save()
 
-            doc.state = 'READY_TO_QUEUE'
-            doc.add_to_queue()
+            document.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
@@ -77,42 +64,34 @@ def upload_file(request, course_slug):
 
 
 @login_required
-def upload_multiple_files(request, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
+def upload_multiple_files(request, slug):
+    course = get_object_or_404(Course, slug=slug)
 
     if request.method == 'POST':
         form = MultipleUploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
             for attachment in form.cleaned_data['files']:
-                name, _ = os.path.splitext(attachment.name)
-                name = name.lower()
+                name, extension = os.path.splitext(attachment.name)
+                name = logic.clean_filename(name)
 
-                extension = os.path.splitext(attachment.name)[1].lower()
-                description = ""
-
-                doc = Document.objects.create(
-                    user=request.user,
+                document = logic.add_file_to_course(
+                    file=attachment,
                     name=name,
+                    extension=extension,
                     course=course,
-                    description=description,
-                    state="PREPARING",
-                    file_type=extension
+                    tags=[],
+                    user=request.user
                 )
-
-                doc.original.save(str(uuid.uuid4()) + extension, attachment)
-                doc.save()
-
-                doc.state = 'READY_TO_QUEUE'
-                doc.add_to_queue()
+                document.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
     return HttpResponseRedirect(reverse('document_put', args=(course.id,)))
 
 
 @login_required
-def document_edit(request, document_id):
-    doc = get_object_or_404(Document, id=document_id)
+def document_edit(request, pk):
+    doc = get_object_or_404(Document, id=pk)
 
     if not request.user.write_perm(obj=doc):
         return HttpResponse('You may not edit this document.', status=403)
@@ -148,8 +127,8 @@ def document_edit(request, document_id):
 
 
 @login_required
-def document_download(request, id):
-    doc = get_object_or_404(Document, id=id)
+def document_download(request, pk):
+    doc = get_object_or_404(Document, pk=pk)
     body = doc.pdf.read()
     response = HttpResponse(body, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
@@ -160,8 +139,8 @@ def document_download(request, id):
 
 
 @login_required
-def document_download_original(request, id):
-    doc = get_object_or_404(Document, id=id)
+def document_download_original(request, pk):
+    doc = get_object_or_404(Document, pk=pk)
     body = doc.original.read()
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
@@ -174,8 +153,8 @@ def document_download_original(request, id):
 
 
 @login_required
-def document_show(request, id):
-    document = get_object_or_404(Document, id=id)
+def document_show(request, pk):
+    document = get_object_or_404(Document, pk=pk)
 
     if document.state != "DONE":
         return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))

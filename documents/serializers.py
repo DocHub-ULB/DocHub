@@ -1,10 +1,12 @@
-from documents.models import Document, Page
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from rest_framework import serializers
+
+from documents.models import Document, Page
 
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
-    # page_set = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='page-set', lookup_field='document')
-
     class Meta:
         model = Document
         fields = (
