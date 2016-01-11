@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 from django.db import models
-from tags.models import Tag
 from django.core.urlresolvers import reverse
-from www import settings
+
+from tags.models import Tag
+from django.conf import settings
 
 
 class Document(models.Model):
-    name = models.CharField(max_length=255)
-    course = models.ForeignKey('catalog.Course', null=True)
+    STATES = (
+        ('PREPARING', 'En préparation'),
+        ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery'),
+        ('IN_QUEUE', 'Envoyé à Celery'),
+        ('PROCESSING', 'En cours de traitement'),
+        ('DONE', 'Rendu fini'),
+        ('ERROR', 'Erreur'),
+    )
+
+    name = models.CharField(max_length=255, verbose_name='Titre')
+    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours')
 
     description = models.TextField(blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    tags = models.ManyToManyField('tags.Tag')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    tags = models.ManyToManyField('tags.Tag', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
@@ -37,10 +38,10 @@ class Document(models.Model):
     original = models.FileField(upload_to='original_document')
     pdf = models.FileField(upload_to='pdf_document')
 
-    state = models.CharField(max_length=20, default='PREPARING', db_index=True)
+    state = models.CharField(max_length=20, choices=STATES, default='PREPARING', db_index=True, verbose_name='État')
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
-    hidden = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False, verbose_name='Est caché')
 
     def __unicode__(self):
         return self.name

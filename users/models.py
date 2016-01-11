@@ -1,26 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 import re
 import os
 from os.path import join
-import identicon
-import actstream
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.utils import timezone
+from django.conf import settings
+import actstream
+import identicon
 
-from www import settings
 from catalog.models import Course
 
 
@@ -53,6 +44,7 @@ class CustomUserManager(UserManager):
 
     def create_superuser(self, netid, email, password, **extra_fields):
         return self._create_user(netid, email, password, is_staff=True, **extra_fields)
+
 
 
 class User(AbstractBaseUser):
@@ -134,6 +126,9 @@ class User(AbstractBaseUser):
 
     def fullname(self):
         return self.name
+
+    def get_short_name(self):
+        return self.netid
 
 
 class Inscription(models.Model):

@@ -18,12 +18,12 @@ def create_thread(name):
     return thread
 
 
-def test_page_no_none():
+def test_page_number_is_none():
     thread = create_thread('coucou')
     assert thread.page_no is None
 
 
-def test_page_no():
+def test_page_number():
     thread = create_thread('coucou')
     thread.placement = json.dumps({'page-no': 100})
     assert thread.page_no is 100

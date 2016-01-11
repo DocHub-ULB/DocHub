@@ -1,18 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# Copyright 2014, Cercle Informatique ASBL. All rights reserved.
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
-#
-# This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
-
 from config import *
 
-# No not write anything here !
+# Do not write anything here !
 # Configuration must be written in www/config/
 # 	- django_default.py if it is a non-project related setting
 # 	- default.py if you want it to be for all instances of b402

@@ -5,6 +5,7 @@ import django_webtest
 from webtest import Upload
 from users.models import User
 from catalog.models import Category, Course
+from tags.models import Tag
 from documents.models import Document
 
 import mock
@@ -30,6 +31,10 @@ def user():
         first_name="Nikita",
         last_name="Marchant"
     )
+
+@pytest.fixture(scope='function')
+def tags():
+    return [Tag.objects.create(name="my tag"), Tag.objects.create(name="my other tag")]
 
 
 @pytest.fixture(scope='function')
@@ -72,11 +77,12 @@ def test_follow(app, user, tree):
 
 # @mock.patch.object(Document, 'add_to_queue')
 @pytest.mark.slow
-def test_simple_upload(app, user, tree):
+def test_simple_upload(app, user, tree, tags):
     course = app.get(reverse('course_show', args=("swag-h-042",)), user=user.netid)
     put = course.click(description="Uploader un fichier")
     form = put.forms[0]
     form['file'] = Upload('documents/tests/files/3pages.pdf')
+    form['tags'].select_multiple(texts=['my tag'])
     response = form.submit()
     course = response.follow()
 

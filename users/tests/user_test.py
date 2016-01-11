@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import pytest
 from users.models import User
-from www import settings
+from django.conf import settings
 from PIL import Image
 
 pytestmark = pytest.mark.django_db

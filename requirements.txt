@@ -2,7 +2,6 @@ Django>=1.8,<1.9
 django-multiupload
 markdown
 django-celery
-django-suit
 Pillow
 django_compressor
 pygments
@@ -28,3 +27,4 @@ mock
 pytest-django
 responses
 django-webtest
+pytest-cov

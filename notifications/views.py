@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.views.generic.list import ListView
-from www.cbv import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
+
+from www.cbv import LoginRequiredMixin
 
 from models import Notification
 
@@ -12,12 +16,9 @@ class NotificationsView(LoginRequiredMixin, ListView):
     model = Notification
 
     def get_queryset(self):
-        qs = Notification.objects.filter(user=self.request.user)
-        qs = qs.filter(read=False)
+        qs = Notification.objects.filter(user=self.request.user, read=False)
         qs = qs.select_related('action')
-        qs = qs.prefetch_related('action__target')
-        qs = qs.prefetch_related('action__actor')
-        qs = qs.prefetch_related('action__action_object')
+        qs = qs.prefetch_related('action__target', 'action__actor', 'action__action_object')
 
         return qs
 
@@ -43,7 +44,12 @@ def markAsRead(request, pk, redirect_to_object=False):
 
 
 @login_required
+def markAsReadAndRedirect(*args, **kwargs):
+    kwargs['redirect_to_object'] = True
+    return markAsRead(*args, **kwargs)
+
+
+@login_required
 def markAllAsRead(request):
-    user = request.user
-    Notification.objects.filter(user=user).filter(read=False).update(read=True)
+    Notification.objects.filter(user=request.user, read=False).update(read=True)
     return HttpResponseRedirect(reverse('notifications'))
