@@ -14,7 +14,16 @@ def clean_filename(name):
     return name.replace("_", " ")
 
 
+def cast_tag(tag):
+    if isinstance(tag, Tag):
+        return tag
+    else:
+        return Tag.objects.get_or_create(name=tag.lower())[0]
+
+
 def add_file_to_course(file, name, extension, course, tags, user):
+    if not extension.startswith("."):
+        raise ValueError("extension must start with a '.'")
     document = Document.objects.create(
         user=user,
         name=name,
@@ -24,7 +33,7 @@ def add_file_to_course(file, name, extension, course, tags, user):
     )
 
     if len(tags) > 0:
-        tags = [Tag.objects.get_or_create(name=tag.lower())[0] for tag in tags]
+        tags = [cast_tag(tag) for tag in tags]
         document.tags.add(*tags)
     else:
         document.tag_from_name()
