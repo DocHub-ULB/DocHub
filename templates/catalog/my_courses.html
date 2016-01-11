@@ -29,6 +29,23 @@
           </li>
         {% endfor %}
       </ul>
+
+      {% if suggestions %}
+        <h3>Suggestions</h3>
+        Ces cours-ci semblent similaires aux vôtres, vous pourriez vous y abonner.
+        <ul class="course-list">
+          {% for course, rank in suggestions %}
+            <li>
+                  <a href="{% url 'course_show' course.slug %}">
+                      <span class="course-label radius info label">
+                        {{ course.slug }}
+                      </span>
+                      {{ course.name }}
+                  </a>
+              </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     {% endif %}
   </div>
 

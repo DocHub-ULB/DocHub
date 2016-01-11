@@ -29,7 +29,8 @@ def suggest(target_user, K=15):
     for user_id, following in users_following.items():
         vectors[user_id] = [course.id in following for course in courses]
 
-    target_vector = vectors[target_user.id]
+    # If the users is not following any courses, he is not in 'vectors'
+    target_vector = vectors.get(target_user.id, [False] * len(courses))
 
     distances = {user_id: distance(target_vector, vector) for user_id, vector in vectors.items()}
     non_null_distances = {user_id: distance for user_id, distance in distances.items() if distance > 0}

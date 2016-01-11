@@ -13,6 +13,7 @@ import actstream
 
 from www.cbv import LoginRequiredMixin
 from catalog.models import Category, Course
+from catalog.suggestions import suggest
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -57,5 +58,6 @@ def leave_course(request, slug):
 @login_required
 def show_courses(request):
     return render(request, "catalog/my_courses.html", {
-        "faculties": Category.objects.get(level=0).children.all()
+        "faculties": Category.objects.get(level=0).children.all(),
+        "suggestions": suggest(request.user)
     })
