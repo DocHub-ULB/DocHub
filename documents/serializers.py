@@ -4,15 +4,16 @@ from __future__ import unicode_literals
 from rest_framework import serializers
 
 from documents.models import Document, Page
-
+from tags.serializers import TagSerializer
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
+    tags = TagSerializer(many=True)
     class Meta:
         model = Document
         fields = (
             'id', 'name', 'url', 'course', 'description',
             'user', 'pages', 'date', 'views',
-            'downloads', 'state', 'md5',
+            'downloads', 'state', 'md5', 'tags'
         )
 
         extra_kwargs = {
