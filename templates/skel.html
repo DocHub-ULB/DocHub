@@ -18,6 +18,9 @@
     {% compress js %}
       <script src="/static/3party/js/vendor/modernizr.js"></script>
       <script src="/static/3party/js/vendor/jquery.js"></script>
+      <script src="/static/3party/js/babel.min.js"></script>
+      <script src="/static/3party/js/react.js"></script>
+      <script src="/static/3party/js/react-dom.js"></script>
     {% endcompress %}
 
     {% block header %}
@@ -55,8 +58,9 @@
                   </a>
                 {% endwith %}
               </li>
-              <li>
+              <li class="has-dropdown">
                 <a href="{% url 'show_courses' %}">Mes cours</a>
+                <ul class="dropdown" id="course-tree-menu"></ul>
               </li>
             </ul>
             <ul class="right">
@@ -140,13 +144,59 @@
     </footer>
     {% compress js %}
       <script src="/static/3party/js/foundation.min.js"></script>
-      <script>
-        $(document).foundation();
-      </script>
     {% endcompress %}
     <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
+    </script>
+    <script type="text/babel">
+        const Course = React.createClass({
+            base_url: '{% url "course_show" slug="__TEMPLATE__" %}',
+            url: function(){
+                return this.base_url.replace('__TEMPLATE__', this.props.slug);
+            },
+            render: function(){
+                return <li><a href={this.url()}>
+                    {this.props.slug}: <strong>{this.props.name}</strong>
+                </a></li>;
+            }
+        });
+
+
+        const Category = React.createClass({
+            base_url: '{% url "category_show" pk=424242424242 %}',
+            url: function(){
+                return this.base_url.replace('424242424242', this.props.id);
+            },
+            render: function(){
+                var children = this.props.children.map(function(cat){
+                    return <Category {...cat}/>;
+                });
+                var courses = this.props.courses.map(function(course){
+                    return <Course {...course}/>;
+                });
+                var contents = "";
+                if (children.length > 0 || courses.length > 0){
+                    contents = <ul className="dropdown">
+                        {children}
+                        <li className="divider"></li>
+                        {courses}
+                    </ul>;
+                }
+                return <li className="has-dropdown">
+                    <a href={this.url()}>{this.props.name}</a>
+                    {contents}
+                </li>;
+            }
+        });
+
+        $(document).ready(function(){
+            $.get('{% url "course_tree" %}', function(data){
+                ReactDOM.render(<Category {...data[0]}/>,
+                    document.getElementById('course-tree-menu'));
+                $(document).foundation();
+            });
+        });
     </script>
     {% block script %}
     {% endblock %}
