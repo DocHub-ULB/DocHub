@@ -9,8 +9,6 @@ from catalog.models import Course, Category
 
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
-    meta = serializers.SerializerMethodField()
-
     class Meta:
         model = Course
         fields = (
