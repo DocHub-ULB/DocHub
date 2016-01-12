@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import json
+
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.views.generic.detail import DetailView
+from mptt.utils import get_cached_trees
 
 from actstream import actions
 import actstream
@@ -61,3 +64,25 @@ def show_courses(request):
         "faculties": Category.objects.get(level=0).children.all(),
         "suggestions": suggest(request.user)
     })
+
+
+@login_required
+def course_tree(request):
+    def course(node):
+        return {
+            'name': node.name,
+            'id': node.id,
+            'slug': node.slug,
+        }
+
+    def category(node):
+        return {
+            'name': node.name,
+            'id': node.id,
+            'children': map(category, node.get_children()),
+            'courses': map(course, node.course_set.all()),
+        }
+
+    categories = map(category, get_cached_trees(Category.objects.all()))
+    return HttpResponse(json.dumps(categories),
+                        content_type="application/json")
