@@ -11,13 +11,10 @@ from catalog.models import Course, Category
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     meta = serializers.SerializerMethodField()
 
-    def get_meta(self, course):
-        return json.loads(course.description)
-
     class Meta:
         model = Course
         fields = (
-            'id', 'name', 'slug', 'url', 'meta',
+            'id', 'name', 'slug', 'url'
             'categories', 'document_set', 'thread_set'
         )
 
