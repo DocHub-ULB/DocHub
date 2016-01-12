@@ -6,9 +6,12 @@ import json
 from rest_framework import serializers
 
 from catalog.models import Course, Category
+from documents.serializers import DocumentSerializer
 
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
+    document_set = DocumentSerializer(many=True)
+
     class Meta:
         model = Course
         fields = (
