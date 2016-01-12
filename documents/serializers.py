@@ -5,9 +5,11 @@ from rest_framework import serializers
 
 from documents.models import Document, Page
 from tags.serializers import TagSerializer
+from users.serializers import SmallUserSerializer
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     tags = TagSerializer(many=True)
+    user = SmallUserSerializer()
     class Meta:
         model = Document
         fields = (
