@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.views.generic.detail import DetailView
+from django.views.decorators.cache import cache_page
 from mptt.utils import get_cached_trees
 
 from actstream import actions
@@ -66,6 +67,7 @@ def show_courses(request):
     })
 
 
+@cache_page(60 * 60)
 @login_required
 def course_tree(request):
     def course(node):

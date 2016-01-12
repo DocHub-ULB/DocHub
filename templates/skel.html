@@ -191,10 +191,12 @@
         });
 
         $(document).ready(function(){
+            $(document).foundation();
             $.get('{% url "course_tree" %}', function(data){
                 ReactDOM.render(<Category {...data[0]}/>,
-                    document.getElementById('course-tree-menu'));
-                $(document).foundation();
+                    document.getElementById('course-tree-menu')
+                );
+                $(document).foundation('topbar', 'reflow');
             });
         });
     </script>
