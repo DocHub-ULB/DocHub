@@ -15,6 +15,8 @@ def user_wants_notification(user, action):
         return False
     elif action.verb == "a uploadé":
         return user.notify_on_new_doc
+    elif action.verb == "a uploadé une nouvelle version de":
+        return user.notify_on_new_doc
     elif action.verb == "a posté":
         return user.notify_on_new_thread
     elif action.verb == "a répondu":

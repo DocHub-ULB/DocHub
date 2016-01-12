@@ -16,6 +16,10 @@ urlpatterns = [
         'documents.views.document_edit',
         name="document_edit"),
 
+    url(r"^(?P<pk>[^/]*)/reupload$",
+        'documents.views.document_reupload',
+        name="document_reupload"),
+
     url(r"^(?P<pk>[^/]*)/download$",
         'documents.views.document_download',
         name="document_download"),
