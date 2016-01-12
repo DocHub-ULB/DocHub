@@ -12,5 +12,5 @@ class DocumentRedirectView(RedirectView):
 
 urlpatterns = [
     url(r'^document/v/(?P<pk>[^/]*)$', DocumentRedirectView.as_view()),
-    url(r'^p402$', RedirectView.as_view(url='/', permanent=True))
+    url(r'^p402', RedirectView.as_view(url='/', permanent=True))
 ]
