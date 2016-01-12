@@ -240,11 +240,11 @@ i.round-icon.medium{
     padding-bottom: 0px;
 }
 
-.course-row[node-type="Thread"] .course-row-content {
+.course-row.thread .course-row-content {
     border-left: 5px solid #007095;
 }
 
-.course-row[node-type="Document"] .course-row-content {
+.course-row.document .course-row-content {
     border-left: 5px solid #CF2A0E;
 }
 

@@ -28,9 +28,8 @@ t²
       <div class="tabs-content">
         <div class="content active" id="documents">
           {% for document in documents %}
-            <div class="row course-row"
+            <div class="row course-row document"
               node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
-              node-type="Document"
             >
               {% if document.state == 'DONE' %}
                 <a href="{% url 'document_show' document.id %}">
@@ -78,7 +77,7 @@ t²
         </div>
         <div class="content" id="threads">
           {% for thread in threads %}
-            <div class="row course-row" node-type="Thread">
+            <div class="row course-row thread">
               <a href="{% url 'thread_show' thread.id %}">
                 <i class="fi-comment round-icon big"></i>
               </a>
