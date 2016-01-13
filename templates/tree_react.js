@@ -17,10 +17,10 @@ const Category = React.createClass({
     },
     render: function(){
         var children = this.props.children.map(function(cat){
-            return <Category {...cat}/>;
+            return <Category key={"cat"+cat.id} {...cat}/>;
         });
         var courses = this.props.courses.map(function(course){
-            return <Course {...course}/>;
+            return <Course key={"course"+course.id} {...course}/>;
         });
         var contents = "";
         if (children.length > 0 || courses.length > 0){

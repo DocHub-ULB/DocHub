@@ -317,12 +317,23 @@ i.round-icon.medium{
     height:33px;
 }
 
+.tag-item {
+    color: white;
+    transition: border-radius 0.5s;
+}
+
+.tag-item:visited {
+    color: white;
+}
+
 .tag-item:hover {
     color: white;
+    border-radius: 25px;
 }
 
 .tag-item.active {
     font-weight: bold;
+    border-radius: 25px;
 }
 
 .viewer-title {
