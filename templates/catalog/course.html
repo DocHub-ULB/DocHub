@@ -31,7 +31,7 @@
         <li class="tab-title"><a href="#threads">Discussions ({{threads.count}})</a></li>
       </ul>
       <div class="tabs-content">
-        <div class="content active" id="documents">
+        <div class="content active" id="documents" data-id="{{ course.slug }}">
           {% for document in documents %}
             <div class="row course-row document"
               node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
@@ -130,5 +130,10 @@
     {% endif %}
   </div>
 </div>
+{% endblock %}
 
+{% block script %}
+<script type="text/javascript">
+    loadCourseViewer('documents');
+</script>
 {% endblock %}

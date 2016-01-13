@@ -146,6 +146,13 @@
 
     {% block script %}{% endblock %}
 
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $(document).foundation();
+          MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
+      });
+
+    </script>
     {% analytical_body_bottom %}
   </body>
 </html>

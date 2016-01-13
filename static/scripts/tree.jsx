@@ -1,7 +1,6 @@
 const Course = React.createClass({
-    base_url: '{% url "course_show" slug="__TEMPLATE__" %}',
     url: function(){
-        return this.base_url.replace('__TEMPLATE__', this.props.slug);
+        return Urls.course_show(this.props.slug);
     },
     render: function(){
         return <li><a href={this.url()}>
@@ -11,9 +10,8 @@ const Course = React.createClass({
 });
 
 const Category = React.createClass({
-    base_url: '{% url "category_show" pk=424242424242 %}',
     url: function(){
-        return this.base_url.replace('424242424242', this.props.id);
+        return Urls.category_show(this.props.id);
     },
     render: function(){
         var children = this.props.children.map(function(cat){
@@ -38,10 +36,9 @@ const Category = React.createClass({
 });
 
 $(document).ready(function(){
-    $(document).foundation();
-    $.get('{% url "course_tree" %}', function(data){
+    $.get(Urls.course_tree(), function(data){
         ReactDOM.render(<Category {...data[0]}/>,
-            document.getElementById('course-tree-menu')
+                        document.getElementById('course-tree-menu')
         );
         $(document).foundation('topbar', 'reflow');
     });

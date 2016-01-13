@@ -52,7 +52,7 @@ const Tag = React.createClass({
     }
 });
 
-const Document = React.createClass({
+const DDDocument = React.createClass({
     ready: function(){return (this.props.state == 'DONE');},
     editable: function(){return this.props.has_perm;},
     date: function(){return moment(this.props.date).format("D MMMM YYYY");},
@@ -127,7 +127,7 @@ const Document = React.createClass({
     }
 });
 
-const DocumentList = React.createClass({
+const DDDocumentList = React.createClass({
     getInitialState: function(){return {tag_filter: []};},
     has_tag: function(doc, tag){
         for (var i=0; i<doc.tags.length; i++){
@@ -182,7 +182,7 @@ const DocumentList = React.createClass({
     },
     render: function(){
         var docs = this.documents_filtered().map(function(doc){
-            return <Document key={"doc"+doc.id} {...doc} />;
+            return <DDDocument key={"doc"+doc.id} {...doc} />;
         });
 
         return <div>
@@ -201,9 +201,12 @@ const DocumentList = React.createClass({
     }
 });
 
-$(document).ready(function(){
-    $.get('{% url "course-detail" slug=course.slug %}', function(course){
-        ReactDOM.render(<DocumentList {...course}/>,
-                    document.getElementById('documents'));
+const loadCourseViewer = function(dest){
+    $(document).ready(function(){
+        var doc_id = $('#'+dest).attr('data-id');
+        $.get(Urls['course-detail'](doc_id), function(data){
+            ReactDOM.render(<DDDocumentList {...data} />,
+                            document.getElementById(dest));
+        });
     });
-});
+};
