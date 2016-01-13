@@ -57,12 +57,10 @@ const DDDocument = React.createClass({
     editable: function(){return this.props.has_perm;},
     date: function(){return moment(this.props.date).format("D MMMM YYYY");},
     edit_url: function(){
-        return "{% url 'document_edit' 4242424242 %}"
-                             .replace('4242424242', this.props.id);
+        return Urls.document_edit(this.props.id);
     },
     url: function(){
-        return "{% url 'document_show' 4242424242 %}"
-                             .replace('4242424242', this.props.id);
+        return Urls.document_show(this.props.id);
     },
     icon: function(){
         if (this.props.state == 'DONE'){
