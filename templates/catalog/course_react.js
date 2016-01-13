@@ -144,7 +144,7 @@ const DocumentList = React.createClass({
     getInitialState: function(){return {tag_filter: []};},
     tags_in_documents: function(){
         var res = {};
-        this.documents().map(function(doc){
+        this.props.document_set.map(function(doc){
             doc.tags.map(function(t){res[t.id] = t;});
         });
         return clone(Object.keys(res).map(function(k){return res[k];}));
