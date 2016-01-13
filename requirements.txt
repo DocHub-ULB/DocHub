@@ -18,6 +18,7 @@ jsonfield
 django-analytical
 django-pipeline
 PyReact
+django-js-reverse
 
 # Dev
 django-extensions

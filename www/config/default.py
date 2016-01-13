@@ -52,6 +52,7 @@ INSTALLED_APPS += (
     'mptt',
     'analytical',
     'pipeline',
+    'django_js_reverse',
 )
 
 # apps
@@ -100,6 +101,8 @@ REST_FRAMEWORK = {
 ACTSTREAM_SETTINGS = {
     'USE_JSONFIELD': True,
 }
+
+JS_REVERSE_EXCLUDE_NAMESPACES = ['admin', 'djdt']
 
 PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
 PIWIK_SITE_ID = '1'
