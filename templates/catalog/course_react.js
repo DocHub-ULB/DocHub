@@ -94,8 +94,10 @@ const Document = React.createClass({
         return '';
     },
     description: function(){
-        if (this.props.description != ''){
-            return <p>{this.props.description}</p>;
+        var text = markdown.toHTML(this.props.description);
+        if (text != ''){
+            var wrap = {__html: text};
+            return <p dangerouslySetInnerHTML={wrap} />;
         }
         return '';
     },
