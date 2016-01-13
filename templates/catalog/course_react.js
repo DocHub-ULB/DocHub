@@ -32,20 +32,18 @@ const Tag = React.createClass({
         }
     },
     render: function(){
-        var style;
+        var style = {border: 'solid 2px ' + this.color()};
         var klass = "radius label tag-item";
+        if (this.props.onClick){
+            klass += " selectionable";
+        }
         if (this.props.active){
             klass += " active";
-            style = {
-                color: this.color(),
-                backgroundColor: 'white',
-                border: 'solid 2px ' + this.color()
-            };
+            style['color'] = this.color();
+            style['backgroundColor'] = 'white';
         } else {
-            style = {
-                backgroundColor: this.color(),
-                border: 'solid 2px ' + this.color()
-            };
+            style['backgroundColor'] = this.color();
+            style['color'] = 'white';
         }
         return <span><a onClick={this.clicked} href="#"
                         style={style} className={klass}>
@@ -131,6 +129,14 @@ const Document = React.createClass({
 
 const DocumentList = React.createClass({
     getInitialState: function(){return {tag_filter: []};},
+    has_tag: function(doc, tag){
+        for (var i=0; i<doc.tags.length; i++){
+            if (doc.tags[i].id == tag.id){
+                return true;
+            }
+        }
+        return false;
+    },
     tags_in_documents: function(){
         var res = {};
         this.props.document_set.map(function(doc){
@@ -151,7 +157,7 @@ const DocumentList = React.createClass({
             });
         }
     },
-    documents: function(){
+    documents_filtered: function(){
         return this.props.document_set.filter(function(doc){
             var admissible = true;
             var dtags = doc.tags.map(function(tag){return tag.id;});
@@ -163,22 +169,33 @@ const DocumentList = React.createClass({
             return admissible;
         }.bind(this));
     },
+    tag_bar: function(){
+        return this.tags_in_documents().map(function(tag){
+            console.log(this);
+            var occurences = this.documents_filtered()
+                                 .map(function(x){return this.has_tag(x, tag);}.bind(this))
+                                 .reduce(function(x, y){return x+y;}, 0);
+            tag.active = (this.state.tag_filter.indexOf(tag.id) >= 0);
+            tag.name += " (" + occurences + ")";
+            return <Tag key={"tag"+tag.id} onClick={this.select_tag} {...tag}/>;
+        }.bind(this));
+    },
     render: function(){
-        var docs = this.documents().map(function(doc){
+        var docs = this.documents_filtered().map(function(doc){
             return <Document key={"doc"+doc.id} {...doc} />;
         });
 
-        var tag_filter = this.tags_in_documents().map(function(tag){
-            tag.active = (this.state.tag_filter.indexOf(tag.id) >= 0);
-            return <Tag key={"tag"+tag.id} onClick={this.select_tag} {...tag}/>;
-        }.bind(this));
-
         return <div>
             <div className="row">
-                <h3>Filtres</h3>
-                {tag_filter}
-                <hr/>
+                <div className="column small-8">
+                    <h3>Filtrer <small>par tag</small></h3>
+                    {this.tag_bar()}
+                </div>
+                <div className="column small-4">
+                    <h3>Trier</h3>
+                </div>
             </div>
+            <hr/>
             {docs}
         </div>;
     }
