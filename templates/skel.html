@@ -143,6 +143,9 @@
     <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
     {% javascript '3party' %}
     {% javascript 'main' %}
+
+    {% block script %}{% endblock %}
+
     {% analytical_body_bottom %}
   </body>
 </html>

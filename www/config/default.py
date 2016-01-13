@@ -133,7 +133,7 @@ PIPELINE['JAVASCRIPT'] = {
         'source_filenames': (
             'scripts/viewer.js',
             'scripts/main.js',
-            'scripts/tree.jsx',
+            'scripts/*.jsx',
         ),
         'output_filename': 'main.js',
     }
