@@ -29,6 +29,7 @@ ULB_LOGIN = (
     '&_appl=' + AUTH_URL
 )
 
+
 # CELERY_BROKER = 'amqp://guest@localhost//'
 
 # DATABASES = {

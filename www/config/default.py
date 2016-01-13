@@ -51,6 +51,7 @@ INSTALLED_APPS += (
     'compressor',
     'rest_framework',
     'mptt',
+    'analytical',
 )
 
 # apps
@@ -101,3 +102,6 @@ REST_FRAMEWORK = {
 ACTSTREAM_SETTINGS = {
     'USE_JSONFIELD': True,
 }
+
+PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
+PIWIK_SITE_ID = '1'

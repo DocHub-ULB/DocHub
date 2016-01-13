@@ -1,9 +1,11 @@
 {%load humanize %}
 {% load compress %}
+{% load analytical %}
 
 <!doctype html>
 <html class="no-js" lang="en">
   <head>
+    {% analytical_head_top %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
@@ -25,8 +27,10 @@
 
     {% block header %}
     {% endblock %}
+    {% analytical_head_bottom %}
   </head>
   <body>
+    {% analytical_body_top %}
     <div class="sticky">
     <nav class="top-bar" data-topbar="">
         <ul class="title-area">
@@ -202,6 +206,6 @@
     </script>
     {% block script %}
     {% endblock %}
-    {% include "piwik.html" %}
+    {% analytical_body_bottom %}
   </body>
 </html>
