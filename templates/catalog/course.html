@@ -1,16 +1,21 @@
 {% extends "3col.html" %}
+
 {% load humanize %}
 {% load custommardown %}
-{% load compress %}
 {% load activity_tags %}
 {% load has_perm_on %}
 
 {% block title %}{{ course.slug|upper }}{% endblock %}
-t²
+
 {% block center-col %}
 <div class="row">
   <div class="large-10 columns">
-    <h1 >{{ course.slug|upper }}{% if request.user|is_following:course %} <i class="fi-check green"></i>{% endif %}</h1>
+    <h1 >
+      {{ course.slug|upper }}
+      {% if request.user|is_following:course %}
+        <i class="fi-check green"></i>
+      {% endif %}
+    </h1>
     <h2>{{ course.name }}</h2>
   </div>
   <div class="large-2 columns">
@@ -103,9 +108,6 @@ t²
     </div>
   {% endwith %}
 </div>
-<script type="text/babel">
-  {% include "catalog/course_react.js" %}
-</script>
 {% endblock %}
 
 {% block right-col %}
