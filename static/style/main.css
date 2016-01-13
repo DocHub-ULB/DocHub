@@ -1,11 +1,11 @@
 @font-face {
     font-family: arvo;
-    src: url(fonts/Arvo-Regular_201.ttf);
+    src: url(/static/3party/arvo/Arvo-Regular_201.ttf);
     font-weight: normal;
 }
 @font-face {
     font-family: arvo;
-    src: url(fonts/Arvo-Bold_201.ttf);
+    src: url(/static/3party/arvo/Arvo-Bold_201.ttf);
     font-weight: bold;
 }
 

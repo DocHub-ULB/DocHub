@@ -14,8 +14,5 @@ www/secret_key.txt
 www/config/local.py
 media/
 .cache
-static/3party/foundation-icons/
-static/3party/foundation/
-static/3party/select/
-static/3party/
-static/CACHE/
+node_modules/
+collected_static/

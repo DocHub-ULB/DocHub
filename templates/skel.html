@@ -1,6 +1,6 @@
 {%load humanize %}
-{% load compress %}
 {% load analytical %}
+{% load pipeline %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -9,27 +9,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
-    {% compress css %}
-      <link rel="stylesheet" href="/static/3party/css/foundation.css" />
-      <link rel="stylesheet" href="/static/3party/foundation-icons/foundation-icons.css" />
-      <link rel="stylesheet" href="/static/style/main.css" />
-      <link rel="stylesheet" href="/static/style/syntax-highlight.css" />
-    {% endcompress %}
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
-    {% compress js %}
-      <script src="/static/3party/js/vendor/modernizr.js"></script>
-      <script src="/static/3party/js/vendor/jquery.js"></script>
-      <script src="/static/3party/js/markdown.js"></script>
-      <script src="/static/3party/js/babel.min.js"></script>
-      <script src="/static/3party/js/react.js"></script>
-      <script src="/static/3party/js/react-dom.js"></script>
-      <script src="/static/3party/js/moment.min.js"></script>
-      <script type="text/javascript">moment.locale('fr');</script>
-    {% endcompress %}
+
+    {% stylesheet '3party' %}
+    {% stylesheet 'main' %}
 
     {% block header %}
     {% endblock %}
+
     {% analytical_head_bottom %}
   </head>
   <body>
@@ -141,26 +129,18 @@
       <a href="mailto:nikita.marchant@ulb.ac.be">Contact us</a> -
       Made with love at
       <a href="http://urlab.be">
-      <img src="/static/images/urlab.png" style="height: 1em;">
-      UrLab</a> - Code on <a href="http://github.com/UrLab/beta402">GitHub</a>
-      - <a href="http://cerkinfo.be">
-        <img style="height: 1.0em;" src="/static/images/ci.png">
-      - <a href="/api">API</a>
+        <img src="/static/images/urlab.png" style="height: 1em;">
+        UrLab
       </a>
+      - Code on <a href="http://github.com/UrLab/beta402">GitHub</a>
+      - <a href="http://cerkinfo.be">
+          <img style="height: 1.0em;" src="/static/images/ci.png">
+        </a>
+      - <a href="/api">API</a>
       <br><br>
     </footer>
-    {% compress js %}
-      <script src="/static/3party/js/foundation.min.js"></script>
-    {% endcompress %}
-    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-    </script>
-    <script type="text/babel">
-      {% include "tree_react.js" %}
-    </script>
-    {% block script %}
-    {% endblock %}
+    {% javascript '3party' %}
+    {% javascript 'main' %}
     {% analytical_body_bottom %}
   </body>
 </html>
