@@ -115,6 +115,7 @@ PIPELINE = {
 PIPELINE['JAVASCRIPT'] = {
     '3party': {
         'source_filenames': (
+            '3party/foundation/js/vendor/modernizr.js',
             '3party/jquery/jquery.js',
             '3party/foundation/js/foundation.min.js',
             '3party/markdown/markdown.js',
