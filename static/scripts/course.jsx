@@ -26,11 +26,7 @@ const Tag = React.createClass({
     id: function(){return this.props.id;},
     name: function(){return this.props.name;},
     color: function(){return this.props.color;},
-    clicked: function(){
-        if (this.props.onClick){
-            this.props.onClick(this);
-        }
-    },
+    clicked: function(){if (this.props.onClick) this.props.onClick(this);},
     render: function(){
         var style = {border: 'solid 2px ' + this.color()};
         var klass = "radius label tag-item";
@@ -122,7 +118,12 @@ const CourseDocument = React.createClass({
 });
 
 const CourseDocumentList = React.createClass({
-    getInitialState: function(){return {tag_filter: []};},
+    getInitialState: function(){
+        return {
+            tag_filter: [],
+            search_text: ""
+        };
+    },
     has_tag: function(doc, tag){
         for (var i=0; i<doc.tags.length; i++){
             if (doc.tags[i].id == tag.id){
@@ -138,7 +139,7 @@ const CourseDocumentList = React.createClass({
         });
         return clone(Object.keys(res).map(function(k){return res[k];}));
     },
-    select_tag: function(tag){
+    tag_clicked: function(tag){
         var t = tag.id();
         var i = this.state.tag_filter.indexOf(t);
         if (i >= 0){
@@ -151,8 +152,15 @@ const CourseDocumentList = React.createClass({
             });
         }
     },
+    search_changed: function(evt){
+        this.setState({search_text: evt.target.value});
+    },
     documents_filtered: function(){
+        var pattern = new RegExp(this.state.search_text, 'i');
         return this.props.document_set.filter(function(doc){
+            if (doc.name.search(pattern) < 0){
+                return false;
+            }
             var admissible = true;
             var dtags = doc.tags.map(function(tag){return tag.id;});
             this.state.tag_filter.map(function(tag){
@@ -165,13 +173,12 @@ const CourseDocumentList = React.createClass({
     },
     tag_bar: function(){
         return this.tags_in_documents().map(function(tag){
-            console.log(this);
             var occurences = this.documents_filtered()
                                  .map(function(x){return this.has_tag(x, tag);}.bind(this))
                                  .reduce(function(x, y){return x+y;}, 0);
             tag.active = (this.state.tag_filter.indexOf(tag.id) >= 0);
             tag.name += " (" + occurences + ")";
-            return <Tag key={"tag"+tag.id} onClick={this.select_tag} {...tag}/>;
+            return <Tag key={"tag"+tag.id} onClick={this.tag_clicked} {...tag}/>;
         }.bind(this));
     },
     render: function(){
@@ -181,12 +188,13 @@ const CourseDocumentList = React.createClass({
 
         return <div>
             <div className="row">
-                <div className="column small-8">
+                <div className="column small-6">
                     <h3>Filtrer <small>par tag</small></h3>
                     {this.tag_bar()}
                 </div>
-                <div className="column small-4">
-                    <h3>Trier</h3>
+                <div className="column small-3">
+                    <h3>Chercher <small>dans le titre</small></h3>
+                    <input type="text" onChange={this.search_changed}/>
                 </div>
             </div>
             <hr/>
