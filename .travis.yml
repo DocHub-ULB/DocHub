@@ -9,7 +9,6 @@ cache: pip
 script:
   - ./manage.py check
   - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www
-  - make shower
   - make database
 
 addons:

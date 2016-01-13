@@ -106,46 +106,50 @@ PIWIK_SITE_ID = '1'
 
 
 PIPELINE = {
-    'JAVASCRIPT': {
-        '3party': {
-            'source_filenames': (
-                '3party/jquery/jquery.js',
-                '3party/foundation/js/foundation.min.js',
-                '3party/markdown/markdown.js',
-                '3party/moment/moment-with-locales.js',
-                '3party/react/react.js',
-                '3party/react/react-dom.js',
-                '3party/mathjax/mathjax.js',
-                '3party/select/js/select2.js',
-                '3party/select/js/i18n/fr.js',
-                '3party/cookie/cookie.js'
-            ),
-            'output_filename': '3party.js',
-        },
-        'main': {
-            'source_filenames': (
-                'scripts/viewer.js',
-                'scripts/main.js',
-            ),
-            'output_filename': 'main.js',
-        }
+    'COMPILERS': ('react.utils.pipeline.JSXCompiler', ),
+}
+
+PIPELINE['JAVASCRIPT'] = {
+    '3party': {
+        'source_filenames': (
+            '3party/jquery/jquery.js',
+            '3party/foundation/js/foundation.min.js',
+            '3party/markdown/markdown.js',
+            '3party/moment/moment-with-locales.js',
+            '3party/react/react.js',
+            '3party/react/react-dom.js',
+            '3party/mathjax/mathjax.js',
+            '3party/select/js/select2.js',
+            '3party/select/js/i18n/fr.js',
+            '3party/cookie/cookie.js'
+        ),
+        'output_filename': '3party.js',
     },
-    'STYLESHEETS': {
-        '3party': {
-            'source_filenames': (
-                '3party/foundation/css/normalize.css',
-                '3party/foundation/css/foundation.css',
-                '3party/foundation-icons/foundation-icons.css',
-                '3party/select/css/select2.css',
-            ),
-            'output_filename': '3party.css',
-        },
-        'main': {
-            'source_filenames': (
-                'style/main.css',
-                'style/viewer.css',
-            ),
-            'output_filename': 'main.css',
-        },
+    'main': {
+        'source_filenames': (
+            'scripts/viewer.js',
+            'scripts/main.js',
+            'scripts/tree.jsx',
+        ),
+        'output_filename': 'main.js',
+    }
+}
+
+PIPELINE['STYLESHEETS'] = {
+    '3party': {
+        'source_filenames': (
+            '3party/foundation/css/normalize.css',
+            '3party/foundation/css/foundation.css',
+            '3party/foundation-icons/foundation-icons.css',
+            '3party/select/css/select2.css',
+        ),
+        'output_filename': '3party.css',
+    },
+    'main': {
+        'source_filenames': (
+            'style/main.css',
+            'style/viewer.css',
+        ),
+        'output_filename': 'main.css',
     },
 }

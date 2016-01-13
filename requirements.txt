@@ -17,6 +17,7 @@ PyYaml
 jsonfield
 django-analytical
 django-pipeline
+PyReact
 
 # Dev
 django-extensions
