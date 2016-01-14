@@ -25,6 +25,7 @@ addons:
     - python-dev
     - nodejs
     - npm
+    - sass
 
 notifications:
   email:
