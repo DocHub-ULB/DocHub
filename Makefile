@@ -16,7 +16,7 @@ packages: ve
 	chmod +x ./manage.py
 
 database:
-	$(PY) manage.py migrate
+	$(PY) manage.py migrate -v 0
 	@echo "Creating user ${USER} with password 'test'"
 	$(PY) manage.py createsuperuser --netid=${USER} --first_name=Gaston --last_name=Lagaffe --email=${USER}@fake.ulb.ac.be --noinput
 	@echo "from users.models import User; u=User.objects.get(netid='${USER}'); u.set_password('test'); u.save()" | $(PY) manage.py shell > /dev/null
@@ -29,6 +29,3 @@ database:
 
 	@echo "Creating some tags"
 	@echo "from tags.models import Tag; [Tag.objects.create(name=x) for x in ('syllabus', 'officiel', 'examen')]" | $(PY) manage.py shell > /dev/null
-
-coverage:
-	py.test --cov-report html --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www

@@ -12,8 +12,8 @@ before_script:
 
 script:
   - ./manage.py check
-  - ./manage.py collectstatic --noinput
-  - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www
+  - ./manage.py collectstatic --noinput -v 0
+  - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www --cov-report=
   - make database
 
 addons:
