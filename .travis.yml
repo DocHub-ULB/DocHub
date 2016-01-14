@@ -6,8 +6,12 @@ python:
 
 cache: pip
 
+before_script:
+  - npm install yuglify
+
 script:
   - ./manage.py check
+  - ./manage.py collectstatic --noinput
   - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www
   - make database
 
@@ -19,6 +23,8 @@ addons:
     # but we do not run unoconv tests on travis so it's not a problem
     # - unoconv
     - python-dev
+    - nodejs
+    - npm
 
 notifications:
   email:
