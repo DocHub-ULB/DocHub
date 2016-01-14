@@ -4,7 +4,12 @@ language: python
 python:
   - "2.7"
 
-cache: pip
+cache:
+  apt: true
+  bundler: true
+  directories:
+    - $HOME/.cache/pip
+    - node_modules
 
 before_script:
   - npm install yuglify
