@@ -25,8 +25,10 @@ There is a [live instance of DocHub](http://dochub.be) hosted by [UrLab](http://
 ### Installation
 
     gem install sass
-    npm install yuglify
+    sudo npm install -g yuglify
     make install database
+
+    If you don't want to run npm as root (we could understand), just run `npm install yuglify` and add the `yuglify` binary to your path. (it might be `/usr/local/bin/yuglify` or `./node_modules/.bin/yuglify` depending on your distro)
 
 ### Run
 
