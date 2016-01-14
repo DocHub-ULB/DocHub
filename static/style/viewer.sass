@@ -1,7 +1,15 @@
+@import 'colors'
+
+.viewer-title
+    background-color: $gray !important
+    font-weight: bold !important
+    padding-top: .2em !important
+
+
 .viewer-bar
-    background-color: #AAA
+    background-color: $gray
     section li a
-        background-color: #AAA !important
+        background-color: $gray !important
         color: #333 !important
         &:hover
             background-color: #333 !important
@@ -10,7 +18,7 @@
 #thumbs
     position: fixed
     overflow: auto
-    background-color: #eee
+    background-color: $light-gray
     padding: 15px 28px 10px 20px
     text-align: center
     height: 100%
@@ -19,14 +27,14 @@
         text-align: center
 
 .thumb
-    border: 1px #eee solid
+    border: 1px $light-gray solid
 
 #thumbs-misere
     position: fixed
-    top: -10px
-    background-color: #eee
+    top: 0px
+    background-color: $light-gray
     height: 100px
-    width: 16.6667%
+    width: 100%/6
     z-index: -1
     display: none
 
@@ -35,7 +43,7 @@
         display: inherit !important
 
 .page
-    border: 1px #eee solid
+    border: 1px $light-gray solid
     margin: 10px
     display: block
     margin-left: auto
@@ -46,7 +54,7 @@
     border: 2px #bde solid
 
 .viewer-title
-    background-color: #aaa
+    background-color: $gray
     padding: 0px 15px
     line-height: 45px
     font-size: 0.8125rem

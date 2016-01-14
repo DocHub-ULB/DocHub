@@ -1,3 +1,5 @@
+@import 'colors'
+
 @font-face
     font-family: arvo
     src: url(/static/3party/arvo/Arvo-Regular_201.ttf)
@@ -12,22 +14,26 @@ h1, h2, h3, h4, h5, h6
     font-family: arvo
     font-weight: bold
 
+
 h1
-    border-bottom: dotted 1px #ccc
+    border-bottom: dotted 1px $gray
 
 h3 i, h2 i
     margin-right: 10px
-    color: #008cba
+    color: $foundation-blue
+
+h3, h4, h5, h6
+    color: #333
 
 .row.full-width
     width: 100%
     max-width: 100%
 
 .green
-    color: #368A55
+    color: $foundation-green
 
 .dark-grey
-    color: #666
+    color: $dark-gray
     &:hover
         color: #333
 
@@ -43,15 +49,15 @@ h3 i, h2 i
     margin-bottom: 20px !important
 
 a.light
-    color: grey
+    color: $dark-gray
     &:hover
         text-decoration: underline
 
 .user-message-header
-    border: 1px solid #EEE
+    border: 1px solid $light-gray
     padding: 5px
     padding-right: 0px
-    background-color: #F7F7F7
+    background-color: $light-gray
     -webkit-border-top-left-radius: 4px
     -webkit-border-top-right-radius: 4px
     -moz-border-radius-topleft: 4px
@@ -60,7 +66,7 @@ a.light
     border-top-right-radius: 4px
 
 .user-message-content
-    border: 1px solid #EEE
+    border: 1px solid $light-gray
     border-top: 0px
     padding-top: 10px
     padding-left: 15px
@@ -74,19 +80,18 @@ a.light
     h2
         color: #333
 
-h3, h4, h5, h6
-    color: #333
+
 
 .thread-separator
-    border-top: 5px solid #EEE
+    border-top: 5px solid $light-gray
     margin-bottom: 20px
 
 .sidebar
     background-color: #F7F7F7
 
 .main-side-nav
-    // margin-top: .5em;
-    // border: 2px solid #EEE;
+    // margin-top: .5em
+    // border: 2px solid $light-gray
     height: 100%
     padding-left: 0px
     padding-right: 5px
@@ -121,7 +126,7 @@ ul.course-bulletlist
 
 code
     color: #333
-    background-color: #eee
+    background-color: $light-gray
     padding: 3px
     padding-left: 5px
     padding-right: 5px
@@ -139,7 +144,7 @@ pre.codehilite
     -webkit-border-radius: 4px
     -moz-border-radius: 4px
     border-radius: 4px
-    border: 1px solid #eee
+    border: 1px solid $light-gray
     margin: 5px
     margin-left: 20px
     padding: 10px
@@ -151,7 +156,7 @@ pre.codehilite
 i.round-icon
     float: left
     color: #222
-    background-color: #eee
+    background-color: $light-gray
     border: 1px solid #ddd
     text-align: center
     clear: both
@@ -197,7 +202,7 @@ i.round-icon
         border-left: 5px solid #007095
 
     &.document .course-row-content
-        border-left: 5px solid #CF2A0E
+        border-left: 5px solid $foundation-red
 
 .course-content-last-line
     min-height: 1.5em
@@ -248,9 +253,6 @@ i.round-icon
 .follow-all
     margin-bottom: 0px
 
-.select2-container-multi .select2-choices .select2-search-field input
-    height: 33px
-
 .tag-item
     transition: border-radius 0.5s
     &.selectionable:hover
@@ -258,10 +260,6 @@ i.round-icon
     &.active
         font-weight: bold
         border-radius: 25px
-
-.viewer-title
-    background-color: #aaa !important
-    font-weight: bolder
 
 .side-nav li a:not(.button)
     padding: 3px 0.875rem 3px
@@ -276,43 +274,28 @@ i.round-icon
     border-radius: .25em
 
 .feed-timesince
-    color: #777
-
-@keyframes spin
-    from
-        transform: rotate(0deg)
-    to
-        transform: rotate(360deg)
-
-.notifications-spinner:before
-    font-size: 3em
-    color: grey
-    animation-name: spin
-    animation-duration: 1500ms
-    animation-iteration-count: infinite
-    animation-timing-function: linear
+    color: $dark-gray
 
 #notifications-button
-    background-color: #CF2A0E
-    // border-radius: 1em;
+    background-color: $foundation-red
     &.zero
-        background-color: #008CBA
+        background-color: $foundation-blue
 
 .feed-placeholder
-    color: grey
+    color: $dark-gray
     opacity: 0.3
 
 ul.tabs li.active, dl.tabs dd.active
-    border-top: 3px solid #2BA6CB
-    border-left: 1px solid #E6E6E6
-    border-right: 1px solid #E6E6E6
+    border-top: 3px solid $foundation-blue
+    border-left: 1px solid $gray
+    border-right: 1px solid $gray
     border-bottom: 1px solid white
 
 ul.tabs li, dl.tabs dd
     border-top: 3px solid white
     border-left: 1px solid white
     border-right: 1px solid white
-    border-bottom: 1px solid #E6E6E6
+    border-bottom: 1px solid $gray
 
 .tab-title a, dd a
     background-color: white !important
