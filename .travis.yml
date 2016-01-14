@@ -8,6 +8,7 @@ cache: pip
 
 before_script:
   - npm install yuglify
+  - gem install sass
 
 script:
   - ./manage.py check
@@ -24,8 +25,6 @@ addons:
     # - unoconv
     - python-dev
     - nodejs
-    - npm
-    - sass
 
 notifications:
   email:
