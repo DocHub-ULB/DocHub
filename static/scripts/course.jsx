@@ -80,7 +80,7 @@ const CourseDocument = React.createClass({
     },
     title: function(){
         if (this.ready()){
-            return <a href={this.url()}>{this.props.name}</a>; 
+            return <a href={this.url()}>{this.props.name}</a>;
         }
         return this.props.name;
     },
@@ -188,11 +188,11 @@ const CourseDocumentList = React.createClass({
 
         return <div>
             <div className="row">
-                <div className="column small-6">
+                <div className="column small-7">
                     <h3>Filtrer <small>par tag</small></h3>
                     {this.tag_bar()}
                 </div>
-                <div className="column small-3">
+                <div className="column small-5">
                     <h3>Chercher <small>dans le titre</small></h3>
                     <input type="text" onChange={this.search_changed}/>
                 </div>
