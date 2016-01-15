@@ -30,10 +30,11 @@ class ThreadSerializer(serializers.HyperlinkedModelSerializer):
 
 class SmallThreadSerializer(serializers.HyperlinkedModelSerializer):
     user = SmallUserSerializer()
+    placement = serializers.JSONField(source="json_placement")
 
     class Meta:
         model = Thread
-        fields = ('id', 'name', 'user', 'created', 'edited', 'course', 'document', 'url')
+        fields = ('id', 'name', 'user', 'created', 'edited', 'course', 'document', 'url', 'placement')
 
         extra_kwargs = {
             'course': {'lookup_field': 'slug'},

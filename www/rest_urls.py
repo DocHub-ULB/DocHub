@@ -29,5 +29,11 @@ docs.register(
     base_name='page-set',
     parents_query_lookups=['document'],
 )
+docs.register(
+    r'thread_set',
+    telepathy.rest.ThreadViewSet,
+    base_name='thread-set',
+    parents_query_lookups=['document'],
+)
 
 urlpatterns = router.urls

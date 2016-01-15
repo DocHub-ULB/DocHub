@@ -37,6 +37,11 @@ class Thread(models.Model):
                 return placement['page-no']
         return None
 
+    @property
+    def json_placement(self):
+        return json.loads(self.placement)
+
+
     def get_absolute_url(self):
         return reverse('thread_show', args=(self.id, ))
 
