@@ -4,8 +4,13 @@ const pageSize = function(zoom){
     return [parseInt(600 * zoom), parseInt(zoom * this.height_600)];
 };
 
+const aspectRatio = function(){
+    return 900.0/this.height_900;
+};
+
 const PageObj = function(page){
     page.pageSize = pageSize.bind(page);
+    page.aspectRatio = aspectRatio.bind(this);
     return page;
 };
 
@@ -38,7 +43,7 @@ const Page = React.createClass({
     }
 });
 
-const DOGE = 12;
+const PAGES_PADDING = 12;
 
 const DocumentViewer = React.createClass({
     /* Return the index of the first (partially) visible page */
@@ -47,7 +52,7 @@ const DocumentViewer = React.createClass({
         var n = this.props.pages.length;
         for (var i=0; i<n; i++){
             var s = this.props.pages[i].pageSize(1);
-            acc += s[1] + DOGE;
+            acc += s[1] + PAGES_PADDING;
             if (acc > top){
                 return i;
             }
@@ -64,14 +69,11 @@ const DocumentViewer = React.createClass({
         }.bind(this));
     },
     shouldComponentUpdate: function(nextProps, nextState) {
-        if(_.isEqual(nextState, this.state) && _.isEqual(nextProps, this.props)){
-            return false;
-        }
-        return true;
+        return (! (_.isEqual(nextState, this.state) &&
+                   _.isEqual(nextProps, this.props)));
     },
     render: function(){
         var firstVisible = this.state.firstVisible;
-        console.log("First visible page: " + firstVisible);
         var pages = this.props.pages.map(function(p, i){
             var v = Math.abs(i - firstVisible) <= 5;
             return <Page key={p.numero} visible={v} {...p}/>;
