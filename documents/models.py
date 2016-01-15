@@ -123,9 +123,9 @@ class Page(models.Model):
     numero = models.IntegerField(db_index=True)
     document = models.ForeignKey(Document, db_index=True)
 
-    bitmap_120 = models.ImageField(upload_to='page_120', width_field="height_120")
-    bitmap_600 = models.ImageField(upload_to='page_600', width_field="height_600")
-    bitmap_900 = models.ImageField(upload_to='page_900', width_field="height_900")
+    bitmap_120 = models.ImageField(upload_to='page_120', height_field="height_120")
+    bitmap_600 = models.ImageField(upload_to='page_600', height_field="height_600")
+    bitmap_900 = models.ImageField(upload_to='page_900', height_field="height_900")
 
     height_120 = models.PositiveIntegerField(default=0)
     height_600 = models.PositiveIntegerField(default=0)
