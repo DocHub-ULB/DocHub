@@ -30,7 +30,6 @@ class FileForm(forms.Form):
             attrs={
                 'class': 'chosen-select',
                 'data-placeholder': 'Tags (optionnel)',
-                'style': "width: 100%; margin-bottom: 15px;"
             }
         )
     )
