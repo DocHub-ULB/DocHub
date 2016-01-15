@@ -55,15 +55,22 @@ const DocumentViewer = React.createClass({
         return n;
     },
     getInitialState: function(){
-        return {zoom: 1, top: $(document).scrollTop()};
+        return {zoom: 1, firstVisible: 0};
     },
     componentDidMount: function(){
         $(window).scroll(function(evt){
-            this.setState({top: $(document).scrollTop()});
+            var firstVisible = this.topPageIndex($(document).scrollTop());
+            this.setState({firstVisible: firstVisible});
         }.bind(this));
     },
+    shouldComponentUpdate: function(nextProps, nextState) {
+        if(_.isEqual(nextState, this.state) && _.isEqual(nextProps, this.props)){
+            return false;
+        }
+        return true;
+    },
     render: function(){
-        var firstVisible = this.topPageIndex(this.state.top);
+        var firstVisible = this.state.firstVisible;
         console.log("First visible page: " + firstVisible);
         var pages = this.props.pages.map(function(p, i){
             var v = Math.abs(i - firstVisible) <= 5;
