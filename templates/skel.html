@@ -35,17 +35,6 @@
         <section class="top-bar-section">
             <ul class="left">
               <li>
-                {% comment %}
-                <a href="{% url "notifications" %}" data-dropdown="notif-drop" aria-controls="notif-drop" aria-expanded="false" id="notifications-button">
-                    <i class="fi-megaphone"></i>
-                    {{request.user.notification_set.count}}
-                </a>
-                <div id="notif-drop" data-dropdown-content class="medium f-dropdown content" aria-hidden="true" tabindex="-1">
-                  <p class="text-center">
-                    <i class="fi-refresh notifications-spinner"></i>
-                  </p>
-                </div>
-                {% endcomment %}
                 {% with count=request.user.notification_count %}
                   <a href="{% url "notifications" %}" id="notifications-button" class="{% if count == 0%}zero{% endif %}">
                       <i class="fi-megaphone"></i>
@@ -55,11 +44,14 @@
               </li>
               <li class="has-dropdown">
                 <a href="{% url 'show_courses' %}">Mes cours</a>
-                <ul class="dropdown" id="course-tree-menu"></ul>
+                <ul class="dropdown" id="course-tree-menu">
+                  <li><a href="#">
+                    <i class="fi-loop" class="spinning"></i> Chargement
+                  </a></li>
+                </ul>
               </li>
             </ul>
             <ul class="right">
-              <!-- <li><a href="{% url 'help' %}">Aide</a></li> -->
               <li>
                 <a href="https://www.facebook.com/Proj402" id="facebook"><i class="fi-social-facebook"></i></a>
               </li>
