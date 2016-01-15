@@ -30,21 +30,30 @@ const Tag = React.createClass({
     render: function(){
         var style = {border: 'solid 2px ' + this.color()};
         var klass = "radius label tag-item";
-        if (this.props.onClick){
-            klass += " selectionable";
-        }
+        var icon = "";
         if (this.props.active){
             klass += " active";
             style['color'] = this.color();
             style['backgroundColor'] = 'white';
+            icon = (<i className="fi-check"> </i>)
         } else {
             style['backgroundColor'] = this.color();
             style['color'] = 'white';
+            icon = (<i className="fi-stop"> </i>)
         }
-        return <span><a onClick={this.clicked} href="#"
+
+        if (this.props.onClick){
+            klass += " selectionable";
+        } else {
+            icon = "";
+        }
+        return <span>
+            <span onClick={this.clicked}
                         style={style} className={klass}>
+            {icon}
             {this.name()}
-        </a> </span>;
+            </span>&nbsp;
+        </span>;
     }
 });
 
