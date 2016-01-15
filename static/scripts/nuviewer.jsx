@@ -12,8 +12,7 @@ const PageObj = function(page){
 const Page = React.createClass({
     img_url: function(){
         if (! this.props.visible){return white;}
-        return "loliol";
-        if (this.props.width <= 120){return this.props.bitmap_120;} 
+        if (this.props.width <= 120){return this.props.bitmap_120;}
         if (this.props.width <= 600){return this.props.bitmap_600;}
         return this.props.bitmap_900;
     },
