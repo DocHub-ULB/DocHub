@@ -308,3 +308,23 @@ ul.tabs li, dl.tabs dd
 
 .select2
     margin-bottom: 1.2em
+
+.spinning, .spinning:before
+    animation: 1s linear 0s normal none infinite running spin
+
+.fading, .fading:before
+    animation: 1s linear 0s normal none infinite running fading
+
+@keyframes spin
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(359deg)
+
+@keyframes fading
+    0%
+        opacity: 1
+    50%
+        opacity: 0.3
+    100%
+        opacity: 1
