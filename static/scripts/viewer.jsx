@@ -47,7 +47,8 @@ const PAGES_PADDING = 12;
 
 const DocumentViewer = React.createClass({
     /* Return the index of the first (partially) visible page */
-    topPageIndex: function(top){
+    topPageIndex: function(){
+        var top = $(document).scrollTop();
         var acc = 0;
         var n = this.props.pages.length;
         for (var i=0; i<n; i++){
@@ -64,7 +65,7 @@ const DocumentViewer = React.createClass({
     },
     componentDidMount: function(){
         $(window).scroll(function(evt){
-            var firstVisible = this.topPageIndex($(document).scrollTop());
+            var firstVisible = this.topPageIndex();
             this.setState({firstVisible: firstVisible});
         }.bind(this));
     },
