@@ -8,11 +8,11 @@
     <h1>Vos cours</h1>
     {% if request.user.following_courses|length == 0 %}
       <p>On dirait que vous n'êtes abonné à aucun cours pour le moment.<br>
-      Vous pourriez parcourir ci-dessous le catalogue de DocHub et
-      <span data-tooltip aria-haspopup="true" class="has-tip" title="En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question">vous abonner</span>
-      les cours qui vous intéressent.</p>
+      Vous pourriez parcourir le catalogue de DocHub et
+      <span data-tooltip aria-haspopup="true" class="has-tip" title="En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question.">vous abonner</span>
+      aux cours qui vous intéressent.</p>
       <div class="alert-box radius secondary medium-8">
-        <i class="fi-info"></i> En vous abonnant un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question
+        <i class="fi-info"></i> En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question.
       </div>
     {% else %}
       <ul class="course-list">
