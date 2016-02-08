@@ -43,13 +43,3 @@
 </div>
 
 {% endblock %}
-
-
-
-
-{% if request.user.welcome %}
-  {% block script %}
-    {{ block.super }}
-    <script src="static/3party/foundation/js/foundation/foundation.joyride.js"></script>
-  {% endblock %}
-{% endif %}

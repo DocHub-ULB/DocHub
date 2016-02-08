@@ -4,12 +4,21 @@ language: python
 python:
   - "2.7"
 
-cache: pip
+cache:
+  apt: true
+  bundler: true
+  directories:
+    - $HOME/.cache/pip
+    - node_modules
+
+before_script:
+  - npm install yuglify
+  - gem install sass
 
 script:
   - ./manage.py check
-  - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www
-  - make shower
+  - ./manage.py collectstatic --noinput -v 0
+  - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www --cov-report=
   - make database
 
 addons:
@@ -20,6 +29,7 @@ addons:
     # but we do not run unoconv tests on travis so it's not a problem
     # - unoconv
     - python-dev
+    - nodejs
 
 notifications:
   email:

@@ -1,106 +1,11 @@
 {% extends "skel.html" %}
 {% load cache %}
 
-{% block header %}
-<link rel="stylesheet" href="/static/style/viewer.css" />
-{% endblock %}
-
-{% block script %}
-<script src="/static/3party/js/js.cookie.js" type="text/javascript"></script>
-<script src="/static/scripts/viewer.js"></script>
-
-{% cache 1 viewer.js document.id %}
-<!-- Added for each discussion on a page -->
-<div id="discussion-list-item-template" style="display: none;">
-  <li>
-    <a class="show-thread-link" href="[[href]]" data-reveal-id="page-comment-view">
-      [[name]]
-    </a>
-  </li>
-</div>
-
-<script language="JavaScript">
-var viewer_instance = viewer({
-    len: {{ document.pages }},
-    id: {{ document.id }},
-    parentid: '{{ document.course.id }}',
-    pages: [
-    {% for page in document.page_set.all %}
-      {
-        numero: {{ page.numero }},
-        height_600: {{ page.bitmap_600.height|default:"0" }},
-        height_900: {{ page.bitmap_900.height|default:"0" }},
-        url_120: '{{ page.bitmap_120.url }}',
-        url_600: '{{ page.bitmap_600.url }}',
-        url_900: '{{ page.bitmap_900.url }}',
-      },
-    {% endfor %}
-    ]
-});
-
-var discussions = [
-  {% for thread in document.thread_set.all %}
-    {% if thread.placement %}
-      {
-        "name": "{{ thread.name }}",
-        "href": "{% url 'thread_show_fragment' thread.id %}",
-        "placement": {% autoescape off %}{{ thread.placement }}{% endautoescape %},
-      },
-    {% endif %}
-  {% endfor %}
-];
-
-var render_template = function(template, context){
-  for (key in context){
-    template = template.replace('[[' + key + ']]', context[key]);
-  }
-  return template;
-};
-
-var insert_discussions = function(){
-  var tpl = $('#discussion-list-item-template').html();
-
-  /* Add titles for all discussions */
-  for (var i=0; i<discussions.length; i++){
-    var disc = discussions[i];
-    var page = disc.placement['page-no'];
-
-    if (page != undefined){
-      $('#discussions-list-' + page).append(render_template(tpl, disc));
-      $('#discussions-label-' + page).removeClass("secondary");
-    }
-  }
-
-  /* Bind click event to all discussions titles -> async load popup */
-  $('.show-thread-link').click(function(ev){
-    var href = $(ev.delegateTarget).attr('href');
-    $('#page-comment-view').html('Loading...');
-    $.get(href, function(data){
-      $('#page-comment-view').html(data);
-      MathJax.Hub.Typeset();
-    });
-  });
-};
-
-$(document).ready(function(){
-  insert_discussions();
-
-  /* Click page -> Populate discussion form */
-  $('.add-page-comment').click(function(ev){
-    var page_no = parseInt($(ev.delegateTarget).attr("data-id"));
-    $('#page-comment-form').find('input[name=page-no]').attr("value", page_no);
-    $('#page-comment-form').find('.page-no').html(page_no+1);
-  });
-});
-</script>
-
-{% endcache %}
-{% endblock %}
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
+
 {% include "documents/viewer_bar.html" %}
 <div class="row">
-{% cache 86400 viewer.html document.id %}
   <div id="thumbs-misere"></div>
   <div id="thumbs" class="medium-2 columns show-for-medium-up">
     {% for page in document.page_set.all %}
@@ -113,43 +18,11 @@ $(document).ready(function(){
       </div>
     {% endfor %}
   </div>
-  <div id="pages" class="medium-10 small-12 columns">
-    {% for page in document.page_set.all %}
-      <div class="row">
-        <div class="medium-2 columns">
-          <div class="row" style="padding-top: 30px;">
-            <div class="label secondary" id="discussions-label-{{ page.numero }}">
-              <i class="fi-comments"></i>
-              <strong>Discussions sur cette page</strong>
-            </div>
-          </div>
-          <div class="row">
-            <ul id="discussions-list-{{ page.numero }}"></ul>
-          </div>
-          <hr>
-
-          <div class="row">
-            <a href="#page-{{ page.numero }}"
-               class="add-page-comment"
-               data-reveal-id="page-comment-form"
-               data-id="{{ page.numero }}"
-               title="Discutez de cette page...">
-              <i class="fi-plus"></i>
-              Ajouter
-            </a>
-          </div>
-        </div>
-        <div class="medium-10 columns">
-          <a href="#page-{{ page.numero }}" title="Lien direct vers cette page">
-            <img id="page-{{ page.numero }}"
-                 class="page" src="/static/images/white.png"
-                 width="600" height="{{ page.bitmap_600.height }}"/>
-          </a>
-        </div>
-      </div>
-    {% endfor %}
+  <div class="medium-10 small-12 columns">
+    <div id="pages" data-id="{{ document.id }}">
+      <h3>Loading ...</h3>
+    </div>
   </div>
-{% endcache %}
 </div>
 
 
@@ -190,4 +63,8 @@ $(document).ready(function(){
     </p>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">loadDocumentViewer('pages');</script>
 {% endblock %}

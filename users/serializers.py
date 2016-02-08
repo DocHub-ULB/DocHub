@@ -24,3 +24,18 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'url': {'lookup_field': 'netid'}
         }
+
+
+class SmallUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'name',
+            'is_staff',
+            'is_representative',
+            'is_academic'
+        )
+
+        extra_kwargs = {
+            'url': {'lookup_field': 'netid'}
+        }

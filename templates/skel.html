@@ -1,6 +1,6 @@
 {%load humanize %}
-{% load compress %}
 {% load analytical %}
+{% load pipeline %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -9,24 +9,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
-    {% compress css %}
-      <link rel="stylesheet" href="/static/3party/css/foundation.css" />
-      <link rel="stylesheet" href="/static/3party/foundation-icons/foundation-icons.css" />
-      <link rel="stylesheet" href="/static/style/main.css" />
-      <link rel="stylesheet" href="/static/style/syntax-highlight.css" />
-    {% endcompress %}
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
-    {% compress js %}
-      <script src="/static/3party/js/vendor/modernizr.js"></script>
-      <script src="/static/3party/js/vendor/jquery.js"></script>
-      <script src="/static/3party/js/babel.min.js"></script>
-      <script src="/static/3party/js/react.js"></script>
-      <script src="/static/3party/js/react-dom.js"></script>
-    {% endcompress %}
+
+    {% stylesheet '3party' %}
+    {% stylesheet 'main' %}
 
     {% block header %}
     {% endblock %}
+
     {% analytical_head_bottom %}
   </head>
   <body>
@@ -44,17 +35,6 @@
         <section class="top-bar-section">
             <ul class="left">
               <li>
-                {% comment %}
-                <a href="{% url "notifications" %}" data-dropdown="notif-drop" aria-controls="notif-drop" aria-expanded="false" id="notifications-button">
-                    <i class="fi-megaphone"></i>
-                    {{request.user.notification_set.count}}
-                </a>
-                <div id="notif-drop" data-dropdown-content class="medium f-dropdown content" aria-hidden="true" tabindex="-1">
-                  <p class="text-center">
-                    <i class="fi-refresh notifications-spinner"></i>
-                  </p>
-                </div>
-                {% endcomment %}
                 {% with count=request.user.notification_count %}
                   <a href="{% url "notifications" %}" id="notifications-button" class="{% if count == 0%}zero{% endif %}">
                       <i class="fi-megaphone"></i>
@@ -64,11 +44,14 @@
               </li>
               <li class="has-dropdown">
                 <a href="{% url 'show_courses' %}">Mes cours</a>
-                <ul class="dropdown" id="course-tree-menu"></ul>
+                <ul class="dropdown" id="course-tree-menu">
+                  <li><a href="#">
+                    <i class="fi-loop spinning"></i> <span class="fading">Chargement</span>
+                  </a></li>
+                </ul>
               </li>
             </ul>
             <ul class="right">
-              <!-- <li><a href="{% url 'help' %}">Aide</a></li> -->
               <li>
                 <a href="https://www.facebook.com/Proj402" id="facebook"><i class="fi-social-facebook"></i></a>
               </li>
@@ -138,74 +121,30 @@
       <a href="mailto:nikita.marchant@ulb.ac.be">Contact us</a> -
       Made with love at
       <a href="http://urlab.be">
-      <img src="/static/images/urlab.png" style="height: 1em;">
-      UrLab</a> - Code on <a href="http://github.com/UrLab/beta402">GitHub</a>
-      - <a href="http://cerkinfo.be">
-        <img style="height: 1.0em;" src="/static/images/ci.png">
-      - <a href="/api">API</a>
+        <img src="/static/images/urlab.png" style="height: 1em;">
+        UrLab
       </a>
+      - Code on <a href="http://github.com/UrLab/beta402">GitHub</a>
+      - <a href="http://cerkinfo.be">
+          <img style="height: 1.0em;" src="/static/images/ci.png">
+        </a>
+      - <a href="/api">API</a>
       <br><br>
     </footer>
-    {% compress js %}
-      <script src="/static/3party/js/foundation.min.js"></script>
-    {% endcompress %}
-    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
+
+    <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
+    {% javascript '3party' %}
+    {% javascript 'main' %}
+
+    {% block script %}{% endblock %}
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $(document).foundation();
+          MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
+      });
+
     </script>
-    <script type="text/babel">
-        const Course = React.createClass({
-            base_url: '{% url "course_show" slug="__TEMPLATE__" %}',
-            url: function(){
-                return this.base_url.replace('__TEMPLATE__', this.props.slug);
-            },
-            render: function(){
-                return <li><a href={this.url()}>
-                    {this.props.slug}: <strong>{this.props.name}</strong>
-                </a></li>;
-            }
-        });
-
-
-        const Category = React.createClass({
-            base_url: '{% url "category_show" pk=424242424242 %}',
-            url: function(){
-                return this.base_url.replace('424242424242', this.props.id);
-            },
-            render: function(){
-                var children = this.props.children.map(function(cat){
-                    return <Category {...cat}/>;
-                });
-                var courses = this.props.courses.map(function(course){
-                    return <Course {...course}/>;
-                });
-                var contents = "";
-                if (children.length > 0 || courses.length > 0){
-                    contents = <ul className="dropdown">
-                        {children}
-                        <li className="divider"></li>
-                        {courses}
-                    </ul>;
-                }
-                return <li className="has-dropdown">
-                    <a href={this.url()}>{this.props.name}</a>
-                    {contents}
-                </li>;
-            }
-        });
-
-        $(document).ready(function(){
-            $(document).foundation();
-            $.get('{% url "course_tree" %}', function(data){
-                ReactDOM.render(<Category {...data[0]}/>,
-                    document.getElementById('course-tree-menu')
-                );
-                $(document).foundation('topbar', 'reflow');
-            });
-        });
-    </script>
-    {% block script %}
-    {% endblock %}
     {% analytical_body_bottom %}
   </body>
 </html>

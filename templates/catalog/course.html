@@ -1,16 +1,21 @@
 {% extends "3col.html" %}
+
 {% load humanize %}
 {% load custommardown %}
-{% load compress %}
 {% load activity_tags %}
 {% load has_perm_on %}
 
 {% block title %}{{ course.slug|upper }}{% endblock %}
-t²
+
 {% block center-col %}
 <div class="row">
   <div class="large-10 columns">
-    <h1 >{{ course.slug|upper }}{% if request.user|is_following:course %} <i class="fi-check green"></i>{% endif %}</h1>
+    <h1 >
+      {{ course.slug|upper }}
+      {% if request.user|is_following:course %}
+        <i class="fi-check green"></i>
+      {% endif %}
+    </h1>
     <h2>{{ course.name }}</h2>
   </div>
   <div class="large-2 columns">
@@ -26,11 +31,10 @@ t²
         <li class="tab-title"><a href="#threads">Discussions ({{threads.count}})</a></li>
       </ul>
       <div class="tabs-content">
-        <div class="content active" id="documents">
+        <div class="content active" id="documents" data-id="{{ course.slug }}">
           {% for document in documents %}
-            <div class="row course-row"
+            <div class="row course-row document"
               node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
-              node-type="Document"
             >
               {% if document.state == 'DONE' %}
                 <a href="{% url 'document_show' document.id %}">
@@ -78,7 +82,7 @@ t²
         </div>
         <div class="content" id="threads">
           {% for thread in threads %}
-            <div class="row course-row" node-type="Thread">
+            <div class="row course-row thread">
               <a href="{% url 'thread_show' thread.id %}">
                 <i class="fi-comment round-icon big"></i>
               </a>
@@ -126,5 +130,10 @@ t²
     {% endif %}
   </div>
 </div>
+{% endblock %}
 
+{% block script %}
+<script type="text/javascript">
+    loadCourseViewer('documents');
+</script>
 {% endblock %}
