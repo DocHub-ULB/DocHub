@@ -255,8 +255,10 @@ i.round-icon
 
 .tag-item
     transition: border-radius 0.5s
-    &.selectionable:hover
-        border-radius: 25px
+    &.selectionable
+        cursor: pointer
+        &:hover
+            border-radius: 25px
     &.active
         font-weight: bold
         border-radius: 25px
