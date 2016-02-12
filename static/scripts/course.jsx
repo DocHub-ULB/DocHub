@@ -221,3 +221,5 @@ const loadCourseViewer = function(dest){
         });
     });
 };
+
+window.loadCourseViewer = loadCourseViewer;

@@ -191,3 +191,6 @@ var viewer = function(doc) {
         }
     };
 };
+
+
+window.viewer = viewer;
