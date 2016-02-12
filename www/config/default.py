@@ -155,5 +155,6 @@ PIPELINE = {
             ),
             'output_filename': 'main.css',
         },
-    }
+    },
+    'YUGLIFY_JS_ARGUMENTS': '--terminal --no-mangle-functions'
 }
