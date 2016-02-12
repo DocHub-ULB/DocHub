@@ -3,7 +3,6 @@ django-multiupload
 markdown
 django-celery
 Pillow
-django_compressor
 pygments
 pyPdf
 requests
@@ -17,6 +16,9 @@ git+https://github.com/C4ptainCrunch/libulb.git
 PyYaml
 jsonfield
 django-analytical
+django-pipeline
+PyReact
+django-js-reverse
 
 # Dev
 django-extensions

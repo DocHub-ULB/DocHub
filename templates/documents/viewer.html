@@ -1,13 +1,8 @@
 {% extends "skel.html" %}
 {% load cache %}
 
-{% block header %}
-<link rel="stylesheet" href="/static/style/viewer.css" />
-{% endblock %}
-
-{% block script %}
-<script src="/static/3party/js/js.cookie.js" type="text/javascript"></script>
-<script src="/static/scripts/viewer.js"></script>
+{% block title %}{{ document.name }}{% endblock %}
+{% block full-page %}
 
 {% cache 1 viewer.js document.id %}
 <!-- Added for each discussion on a page -->
@@ -19,70 +14,71 @@
   </li>
 </div>
 
-<script language="JavaScript">
-var viewer_instance = viewer({
-    len: {{ document.pages }},
-    id: {{ document.id }},
-    parentid: '{{ document.course.id }}',
-    pages: [
-    {% for page in document.page_set.all %}
-      {
-        numero: {{ page.numero }},
-        height_600: {{ page.bitmap_600.height|default:"0" }},
-        height_900: {{ page.bitmap_900.height|default:"0" }},
-        url_120: '{{ page.bitmap_120.url }}',
-        url_600: '{{ page.bitmap_600.url }}',
-        url_900: '{{ page.bitmap_900.url }}',
-      },
-    {% endfor %}
-    ]
-});
-
-var discussions = [
-  {% for thread in document.thread_set.all %}
-    {% if thread.placement %}
-      {
-        "name": "{{ thread.name }}",
-        "href": "{% url 'thread_show_fragment' thread.id %}",
-        "placement": {% autoescape off %}{{ thread.placement }}{% endautoescape %},
-      },
-    {% endif %}
-  {% endfor %}
-];
-
-var render_template = function(template, context){
-  for (key in context){
-    template = template.replace('[[' + key + ']]', context[key]);
-  }
-  return template;
-};
-
-var insert_discussions = function(){
-  var tpl = $('#discussion-list-item-template').html();
-
-  /* Add titles for all discussions */
-  for (var i=0; i<discussions.length; i++){
-    var disc = discussions[i];
-    var page = disc.placement['page-no'];
-
-    if (page != undefined){
-      $('#discussions-list-' + page).append(render_template(tpl, disc));
-      $('#discussions-label-' + page).removeClass("secondary");
-    }
-  }
-
-  /* Bind click event to all discussions titles -> async load popup */
-  $('.show-thread-link').click(function(ev){
-    var href = $(ev.delegateTarget).attr('href');
-    $('#page-comment-view').html('Loading...');
-    $.get(href, function(data){
-      $('#page-comment-view').html(data);
-      MathJax.Hub.Typeset();
-    });
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+  var viewer_instance = viewer({
+      len: {{ document.pages }},
+      id: {{ document.id }},
+      parentid: '{{ document.course.id }}',
+      pages: [
+      {% for page in document.page_set.all %}
+        {
+          numero: {{ page.numero }},
+          height_600: {{ page.bitmap_600.height|default:"0" }},
+          height_900: {{ page.bitmap_900.height|default:"0" }},
+          url_120: '{{ page.bitmap_120.url }}',
+          url_600: '{{ page.bitmap_600.url }}',
+          url_900: '{{ page.bitmap_900.url }}',
+        },
+      {% endfor %}
+      ]
   });
-};
 
-$(document).ready(function(){
+  var discussions = [
+    {% for thread in document.thread_set.all %}
+      {% if thread.placement %}
+        {
+          "name": "{{ thread.name }}",
+          "href": "{% url 'thread_show_fragment' thread.id %}",
+          "placement": {% autoescape off %}{{ thread.placement }}{% endautoescape %},
+        },
+      {% endif %}
+    {% endfor %}
+  ];
+
+  var render_template = function(template, context){
+    for (key in context){
+      template = template.replace('[[' + key + ']]', context[key]);
+    }
+    return template;
+  };
+
+  var insert_discussions = function(){
+    var tpl = $('#discussion-list-item-template').html();
+
+    /* Add titles for all discussions */
+    for (var i=0; i<discussions.length; i++){
+      var disc = discussions[i];
+      var page = disc.placement['page-no'];
+
+      if (page != undefined){
+        $('#discussions-list-' + page).append(render_template(tpl, disc));
+        $('#discussions-label-' + page).removeClass("secondary");
+      }
+    }
+
+    /* Bind click event to all discussions titles -> async load popup */
+    $('.show-thread-link').click(function(ev){
+      var href = $(ev.delegateTarget).attr('href');
+      $('#page-comment-view').html('Loading...');
+      $.get(href, function(data){
+        $('#page-comment-view').html(data);
+        MathJax.Hub.Typeset();
+      });
+    });
+  };
+
+
   insert_discussions();
 
   /* Click page -> Populate discussion form */
@@ -95,9 +91,8 @@ $(document).ready(function(){
 </script>
 
 {% endcache %}
-{% endblock %}
-{% block title %}{{ document.name }}{% endblock %}
-{% block full-page %}
+
+
 {% include "documents/viewer_bar.html" %}
 <div class="row">
 {% cache 86400 viewer.html document.id %}

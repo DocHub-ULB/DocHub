@@ -6,9 +6,14 @@ import json
 from rest_framework import serializers
 
 from catalog.models import Course, Category
+from documents.serializers import DocumentSerializer
+from telepathy.serializers import SmallThreadSerializer
 
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
+    document_set = DocumentSerializer(many=True)
+    thread_set = SmallThreadSerializer(many=True)
+
     class Meta:
         model = Course
         fields = (

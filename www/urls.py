@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 
     url(r'^api/', include("www.rest_urls")),
+    url(r'^jsreverse/$', 'django_js_reverse.views.urls_js', name='js_reverse'),
 
 ] + legacy_patterns
 

@@ -17,22 +17,18 @@ There is a [live instance of DocHub](http://dochub.be) hosted by [UrLab](http://
 
 ### Dependencies
 
-You'll need everything that is in requirements.txt (don't worry, pip will do it for you).
-
-You will also need to install GraphicsMagick (the binary 'gm') and LibreOffice/OpenOffice + unoconv (you need the binary 'unoconv') using your distribution packages.
-
-For exemple on Debian/Ubuntu
-
-    sudo apt-get install graphicsmagick unoconv python-dev
-
-Or on Fedora
-
-    sudo dnf install GraphicsMagick unoconv python-devel
+    # Ubuntu
+    sudo apt-get install graphicsmagick unoconv python-dev nodejs ruby
+    # Feodra
+    sudo dnf install GraphicsMagick unoconv python-devel nodejs ruby
 
 ### Installation
 
-    # Install dependencies then
+    gem install sass
+    sudo npm install -g yuglify
     make install database
+
+    If you don't want to run npm as root (we could understand), just run `npm install yuglify` and add the `yuglify` binary to your path. (it might be `/usr/local/bin/yuglify` or `./node_modules/.bin/yuglify` depending on your distro)
 
 ### Run
 
@@ -43,10 +39,6 @@ Then go http://localhost:8000/
 There will already be 2 users in the database, both with `test` as a password:
    - $(USER) : your username on your machine
    - blabevue
-
-### Reset
-
-    make cleandata database
 
 
 ### Misc

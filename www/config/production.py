@@ -39,11 +39,3 @@ ULB_LOGIN = (
 #         'USER': 'mydatabaseuser',
 #     }
 # }
-
-
-# AWS_ACCESS_KEY_ID = "sfdsqdgsg"
-# AWS_SECRET_ACCESS_KEY = "fsdfqsfs"
-# BOTO_S3_BUCKET = "dochub-production"
-# BOTO_S3_HOST = "filehost.example.com"
-
-# DOCUMENT_STORAGE = 'django_boto.s3.storage.S3Storage'

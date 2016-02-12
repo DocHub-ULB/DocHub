@@ -11,7 +11,11 @@ from catalog.models import Course, Category
 
 
 class CourseViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Course.objects.all()
+    queryset = Course.objects.prefetch_related(
+        "document_set",
+        "document_set__user",
+        "document_set__tags"
+    )
     serializer_class = ShortCourseSerializer
     serializer_detail_class = CourseSerializer
 
