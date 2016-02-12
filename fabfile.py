@@ -10,8 +10,6 @@ def deploy():
         run("./save_db.sh")
         run("git pull")
         run("pip install -r requirements.txt --upgrade -q")
-        run("make shower")
-        run("./manage.py compress -v 0")
         run("./manage.py collectstatic --noinput -v 0")
         run("./manage.py migrate")
         run('sudo supervisorctl start b402-gunicorn')
