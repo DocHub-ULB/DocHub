@@ -178,7 +178,7 @@ const CourseDocumentList = React.createClass({
                 }
             });
             return admissible;
-        }.bind(this)).sort(function(a, b){a.date >= b.date;});
+        }.bind(this)).sort(function(a, b){return a.date >= b.date;});
     },
     tag_bar: function(){
         return this.tags_in_documents().map(function(tag){
