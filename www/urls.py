@@ -6,12 +6,15 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import logout, login
 from django.contrib import admin
 from django.conf import settings
+import django_js_reverse.views
 
 from www.legacy_urls import urlpatterns as legacy_patterns
+import users.views
+import www.views
 
 
 urlpatterns = [
-    url(r"^$", 'www.views.index', name="index"),
+    url(r"^$", www.views.index, name="index"),
     url(r"^catalog/", include("catalog.urls")),
     url(r"^documents/", include("documents.urls")),
     url(r"^telepathy/", include("telepathy.urls")),
@@ -19,7 +22,7 @@ urlpatterns = [
     url(r"^notifications/", include("notifications.urls")),
 
     url(r"^syslogin$", login, {"template_name": "syslogin.html"}, name="syslogin"),
-    url(r"^auth/$", 'users.views.auth'),
+    url(r"^auth/$", users.views.auth),
     url(r"^logout$", logout, {"next_page": "/"}, name="logout"),
 
     url(r'^admin/', include(admin.site.urls)),
@@ -28,7 +31,7 @@ urlpatterns = [
     url(r'^help/$', TemplateView.as_view(template_name='help.html'), name="help"),
 
     url(r'^api/', include("www.rest_urls")),
-    url(r'^jsreverse/$', 'django_js_reverse.views.urls_js', name='js_reverse'),
+    url(r'^jsreverse/$', django_js_reverse.views.urls_js, name='js_reverse'),
 
 ] + legacy_patterns
 

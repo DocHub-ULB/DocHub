@@ -71,7 +71,7 @@ INSTALLED_APPS += (
     'actstream',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS += (
+TEMPLATES[0]['OPTIONS']['context_processors'] += (
     'django.core.context_processors.request',
 )
 

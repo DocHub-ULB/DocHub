@@ -23,7 +23,7 @@ def doc():
 
 def add_pages(doc):
     for i in range(5):
-        doc.page_set.add(Page(numero=i))
+        Page.objects.create(numero=i, document=doc)
 
 
 def test_repr(doc):
