@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.views.generic.detail import DetailView
 from django.views.decorators.cache import cache_page
@@ -15,7 +16,6 @@ from mptt.utils import get_cached_trees
 from actstream import actions
 import actstream
 
-from www.cbv import LoginRequiredMixin
 from catalog.models import Category, Course
 from catalog.suggestions import suggest
 
