@@ -49,7 +49,14 @@
                     <a href="{% url 'document_show' document.id %}"> {{ document.name }} </a>
                     {% if request.user|has_perm_on:document %}
                       <a href="{% url 'document_edit' document.id %}">
-                        <i class="fi-pencil dark-grey"></i>
+                        <abbr title="Editer ce document">
+                          <i class="fi-pencil dark-grey"></i>
+                        </abbr>
+                      </a>
+                      <a href="{% url 'document_reupload' document.id %}">
+                        <abbr title="Uploader une nouvelle version">
+                          <i class="fi-page-add dark-grey"></i>
+                        </abbr>
                       </a>
                     {% endif %}
                   {% else %}

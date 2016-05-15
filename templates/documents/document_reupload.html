@@ -1,0 +1,51 @@
+{% extends "skel.html" %}
+{% load compress %}
+{% block title %}Ré-uploader {{document.name}}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="large-7 columns">
+    <h1>Ré-uploader</h1>
+    <h3>{{document.name}}</h3>
+    <form action="" method="post" enctype="multipart/form-data" class="dropzone">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% with form.file as field %}
+            {% if field.errors %}
+              <small class="error">
+                {% for error in field.errors %}
+                  {{error}}</br>
+                {% endfor %}
+              </small>
+            {% endif %}
+            <div class="panel callout drop-panel">
+                <br>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{field}}
+                    </div>
+                    <div  class="small-6 columns">
+                    </div>
+                </div>
+            </div>
+        {% endwith %}
+
+        <p class="text-right"><input type="submit" class="button success radius" value="Ré-uploader" /></p>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+  {% compress css %}
+    <link href="/static/3party/select/select2.css" rel="stylesheet"/>
+  {% endcompress %}
+  {% compress js %}
+    <script src="/static/3party/select/select2.js"></script>
+    <script src="/static/3party/select/select2_locale_fr.js"></script>
+  {% endcompress %}
+  <script>
+    $(document).ready(function() { $(".chosen-select").select2(); });
+  </script>
+{% endblock %}

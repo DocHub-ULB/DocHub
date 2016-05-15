@@ -39,6 +39,10 @@ class UploadFileForm(FileForm):
     file = forms.FileField(validators=[validate_uploaded_file])
 
 
+class ReUploadForm(forms.Form):
+    file = forms.FileField(validators=[validate_uploaded_file])
+
+
 class MultipleUploadFileForm(forms.Form):
     Mo = 1 << 20
     files = MultiFileField(min_num=1, max_num=25, max_file_size=25 * Mo)

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import os
+import uuid
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -13,7 +14,7 @@ from actstream import action
 
 from documents.models import Document
 from catalog.models import Course
-from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm
+from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm, ReUploadForm
 from telepathy.forms import NewThreadForm
 from tags.models import Tag
 from documents import logic
@@ -124,6 +125,51 @@ def document_edit(request, pk):
         'form': form,
         'doc': doc,
     })
+
+
+@login_required
+def document_reupload(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+
+    if not request.user.write_perm(obj=document):
+        return HttpResponse('You may not edit this document.', status=403)
+
+    if document.state != "DONE":
+        return HttpResponse('You may not edit this document while it is processing.', status=403)
+
+    if request.method == 'POST':
+        form = ReUploadForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            file = request.FILES['file']
+            name, extension = os.path.splitext(file.name)
+
+            document.pdf.delete(save=False)
+            document.original.delete(save=False)
+
+            document.original.save(str(uuid.uuid4()) + extension, file)
+
+            document.state = "PREPARING"
+            document.save()
+
+            document.reprocess(force=True)
+
+            action.send(
+                request.user,
+                verb="a uploadé une nouvelle version de",
+                action_object=document,
+                target=document.course
+            )
+
+            return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))
+
+    else:
+        form = ReUploadForm()
+
+    return render(request, 'documents/document_reupload.html', {'form': form, 'document': document})
+
+
+
 
 
 @login_required
