@@ -6,7 +6,7 @@ from catalog.models import Course
 from tags.models import Tag
 import pytest
 from documents import logic
-import StringIO
+from six import StringIO
 
 pytestmark = pytest.mark.django_db
 
