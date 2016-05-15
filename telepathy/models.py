@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
 
 
-
+@python_2_unicode_compatible
 class Thread(models.Model):
     # Possible placement options
     PLACEMENT_OPTS = {'page-no': int}
@@ -25,7 +25,6 @@ class Thread(models.Model):
     course = models.ForeignKey('catalog.Course')
     document = models.ForeignKey('documents.Document', null=True)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.name
 
@@ -56,6 +55,7 @@ class Thread(models.Model):
         ordering = ['-created']
 
 
+@python_2_unicode_compatible
 class Message(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     thread = models.ForeignKey(Thread, db_index=True)
@@ -63,7 +63,6 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.text
 

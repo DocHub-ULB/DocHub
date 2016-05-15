@@ -7,6 +7,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from math import sin, pi
 
 
+@python_2_unicode_compatible
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -15,6 +16,5 @@ class Tag(models.Model):
         return "#%02x%02x%02x" % tuple(
             abs(int(200 * sin(self.id + x * pi / 3))) for x in range(3))
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.name

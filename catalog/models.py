@@ -8,6 +8,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from mptt.models import MPTTModel, TreeForeignKey
 
 
+@python_2_unicode_compatible
 class Category(MPTTModel):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(db_index=True)
@@ -21,11 +22,11 @@ class Category(MPTTModel):
         verbose_name_plural = "categories"
         ordering = ['id']
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
@@ -42,7 +43,6 @@ class Course(models.Model):
     def get_absolute_url(self):
         return reverse('course_show', args=(self.slug, ))
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.slug.upper()
 
