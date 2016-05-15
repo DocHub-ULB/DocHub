@@ -76,7 +76,7 @@ def import_document_from_path(doc_path, course, user):
     name = logic.clean_filename(name)
 
     document = logic.add_file_to_course(
-        file=File(open(doc_path)),
+        file=File(open(doc_path, 'rb')),
         name=name,
         extension=extension,
         course=course,
