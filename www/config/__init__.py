@@ -22,7 +22,6 @@ except ImportError:
 
 try:
     DEBUG
-    TEMPLATE_DEBUG
     DATABASES['default']
     CELERY_BROKER
     if not DEBUG:

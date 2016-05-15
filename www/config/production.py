@@ -13,7 +13,6 @@ from __future__ import unicode_literals
 from www.config.default import *
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 # Install some prod apps
 # eg : sentry, graphite, analytics, ...

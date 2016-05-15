@@ -13,7 +13,6 @@ from __future__ import unicode_literals
 from www.config.default import *
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 INSTALLED_APPS += (
     'django_extensions',
