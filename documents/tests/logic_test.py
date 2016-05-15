@@ -6,7 +6,7 @@ from catalog.models import Course
 from tags.models import Tag
 import pytest
 from documents import logic
-import StringIO
+from six import StringIO
 
 pytestmark = pytest.mark.django_db
 
@@ -25,7 +25,7 @@ def test_add_file_to_course(user, course):
     Tag.objects.create(name="tag one")
     tags = ["tag one", "tag two", Tag.objects.create(name="tag three")]
 
-    file = StringIO.StringIO("mybinarydocumentcontent")
+    file = StringIO("mybinarydocumentcontent")
     file.size = len("mybinarydocumentcontent")
 
     doc = logic.add_file_to_course(

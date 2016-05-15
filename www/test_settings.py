@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from config import *
+from www.config import *
 
 CELERY_ALWAYS_EAGER = True # Skip the Celery daemon
 

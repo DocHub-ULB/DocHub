@@ -10,6 +10,7 @@ from django.db import IntegrityError
 from furl import furl
 from base64 import b64encode
 from django.conf import settings
+import sys
 
 
 class IntranetError(Exception):
@@ -36,7 +37,10 @@ class NetidBackend(object):
             if not os.path.exists("/tmp/netids/"):
                 os.mkdir("/tmp/netids/")
             with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
-                f.write(resp.text.encode('utf-8'))
+                if sys.version_info.major >= 3:
+                    f.write(resp.text)
+                else:
+                    f.write(resp.text.encode('utf-8'))
         except OSError:
             pass
         except UnicodeEncodeError:
@@ -112,7 +116,7 @@ class NetidBackend(object):
         user['biblio'] = identity['biblio']
 
         birthday = identity['dateNaissance']
-        user['birthday'] = date(*reversed(map(lambda x: int(x), birthday.split('/'))))
+        user['birthday'] = date(*reversed(list(map(lambda x: int(x), birthday.split('/')))))
 
         user['inscriptions'] = []
 

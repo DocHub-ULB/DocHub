@@ -56,7 +56,7 @@ def create_doc(name, ext):
 def test_add_to_queue():
 
     doc = create_doc("Document name", ".pdf")
-    f = File(open('documents/tests/files/3pages.pdf'))
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
     doc.original.save("silly-unique-deadbeef-file.pdf", f)
 
     result = process_document.delay(doc.id)
@@ -76,7 +76,7 @@ def test_send_duplicate():
 
     doc = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf'))
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
     doc.original.save("another-uuid-beef-dead.pdf", f)
 
     result = process_document.delay(doc.id)
@@ -91,7 +91,7 @@ def test_send_duplicate():
 def test_send_office():
     doc = create_doc("My office doc", ".docx")
 
-    f = File(open('documents/tests/files/2pages.docx'))
+    f = File(open('documents/tests/files/2pages.docx', 'rb'))
     doc.original.save("silly-unique-deadbeef-file.docx", f)
 
     start_unoconv()
@@ -110,7 +110,7 @@ def test_send_office():
 def test_correct_checksum():
     doc = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf'))
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
     doc.original.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.checksum.delay(doc.id)
@@ -127,7 +127,7 @@ def test_duplicate_checksum():
 
     duplicate = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf'))
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
     duplicate.original.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.checksum.delay(duplicate.id)
@@ -144,7 +144,7 @@ def test_duplicate_hidden_checksum():
 
     duplicate = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf'))
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
     duplicate.original.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.checksum.delay(duplicate.id)
@@ -157,7 +157,7 @@ def test_duplicate_hidden_checksum():
 def test_correct_length():
     doc = create_doc("Document name", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf'))
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
     doc.pdf.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.mesure_pdf_length.delay(doc.id)

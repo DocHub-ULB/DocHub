@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import url
-from views import CategoryDetailView, CourseDetailView
+from catalog.views import CategoryDetailView, CourseDetailView
 
 urlpatterns = [
     url(r"^course/(?P<slug>[^/]*)$", CourseDetailView.as_view(), name="course_show"),

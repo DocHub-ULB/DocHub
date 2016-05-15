@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from default import *
+from www.config.default import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

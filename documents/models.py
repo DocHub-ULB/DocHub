@@ -3,11 +3,14 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils.encoding import python_2_unicode_compatible
+
 
 from tags.models import Tag
 from django.conf import settings
 
 
+@python_2_unicode_compatible
 class Document(models.Model):
     STATES = (
         ('PREPARING', 'En préparation'),
@@ -43,11 +46,11 @@ class Document(models.Model):
 
     hidden = models.BooleanField(default=False, verbose_name='Est caché')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def fullname(self):
-        return self.__unicode__()
+        return self.__str__()
 
     def reprocess(self, force=False):
         if self.state != "ERROR" and not force:
@@ -138,14 +141,15 @@ class Page(models.Model):
         return self.document.get_absolute_url() + "#page-{}".format(self.numero)
 
 
+@python_2_unicode_compatible
 class DocumentError(models.Model):
     document = models.ForeignKey(Document)
     task_id = models.CharField(max_length=255)
     exception = models.CharField(max_length=1000)
     traceback = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return "#" + self.exception
 
 
-from tasks import process_document
+from documents.tasks import process_document

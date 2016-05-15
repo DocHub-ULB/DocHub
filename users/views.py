@@ -16,7 +16,7 @@ from django.conf import settings
 
 from actstream.models import actor_stream
 
-from forms import SettingsForm
+from users.forms import SettingsForm
 
 
 @login_required
