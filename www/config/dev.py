@@ -33,3 +33,5 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+
+AUTH_PASSWORD_VALIDATORS = []
