@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+
 from math import sin, pi
 
 
@@ -13,5 +15,6 @@ class Tag(models.Model):
         return "#%02x%02x%02x" % tuple(
             abs(int(200 * sin(self.id + x * pi / 3))) for x in range(3))
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name

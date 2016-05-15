@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils.encoding import python_2_unicode_compatible
+
 
 from tags.models import Tag
 from django.conf import settings
@@ -43,11 +45,12 @@ class Document(models.Model):
 
     hidden = models.BooleanField(default=False, verbose_name='Est caché')
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     def fullname(self):
-        return self.__unicode__()
+        return self.__str__()
 
     def reprocess(self, force=False):
         if self.state != "ERROR" and not force:
@@ -144,7 +147,8 @@ class DocumentError(models.Model):
     exception = models.CharField(max_length=1000)
     traceback = models.TextField()
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return "#" + self.exception
 
 

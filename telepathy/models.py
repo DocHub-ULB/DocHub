@@ -7,6 +7,8 @@ from django.db import models
 from django.utils.text import Truncator
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.utils.encoding import python_2_unicode_compatible
+
 
 
 class Thread(models.Model):
@@ -23,11 +25,12 @@ class Thread(models.Model):
     course = models.ForeignKey('catalog.Course')
     document = models.ForeignKey('documents.Document', null=True)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     def fullname(self):
-        return self.__unicode__()
+        return self.__str__()
 
     @property
     def page_no(self):
@@ -60,7 +63,8 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.text
 
     def fullname(self):

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils.encoding import python_2_unicode_compatible
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -20,7 +21,8 @@ class Category(MPTTModel):
         verbose_name_plural = "categories"
         ordering = ['id']
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
 
@@ -40,7 +42,8 @@ class Course(models.Model):
     def get_absolute_url(self):
         return reverse('course_show', args=(self.slug, ))
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.slug.upper()
 
     def fullname(self):
