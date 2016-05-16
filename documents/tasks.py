@@ -49,7 +49,7 @@ def process_document(self, document_id):
         document.state = "PROCESSING"
         document.save()
     else:
-        raise DocumentProcessingError(document_id, "Wrong state : {}".format(document.state))
+        raise DocumentProcessingError(document, "Wrong state : {}".format(document.state))
 
     if document.file_type in ('.pdf', 'application/pdf'):
         document.pdf = document.original
