@@ -81,10 +81,10 @@ def course_tree(request):
         return {
             'name': node.name,
             'id': node.id,
-            'children': map(category, node.get_children()),
-            'courses': map(course, node.course_set.all()),
+            'children': list(map(category, node.get_children())),
+            'courses': list(map(course, node.course_set.all())),
         }
 
-    categories = map(category, get_cached_trees(Category.objects.all()))
+    categories = list(map(category, get_cached_trees(Category.objects.all())))
     return HttpResponse(json.dumps(categories),
                         content_type="application/json")
