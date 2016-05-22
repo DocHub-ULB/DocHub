@@ -62,6 +62,7 @@ const CourseDocument = React.createClass({
     editable: function(){return this.props.has_perm;},
     date: function(){return moment(this.props.date).format("D MMMM YYYY");},
     edit_url: function(){return Urls.document_edit(this.props.id);},
+    reupload_url: function(){return Urls.document_reupload(this.props.id);},
     url: function(){return Urls.document_show(this.props.id);},
     icon: function(){
         if (this.props.state == 'DONE'){
@@ -73,11 +74,18 @@ const CourseDocument = React.createClass({
     },
     edit_icon: function(){
         if (this.ready() && this.editable()){
-            return <a href={this.edit_url()}>
+            return <a href={this.edit_url()} title="Éditer">
                 <i className="fi-pencil dark-grey"></i>
             </a>;
         }
         return '';
+    },
+    reupload_icon: function(){
+        if (this.ready() && this.editable()){
+            return <a href={this.reupload_url()}>
+                <i className="fi-page-add dark-grey" title="Nouvelle version"></i>
+            </a>;
+        }
     },
     description: function(){
         var text = markdown.toHTML(this.props.description);
@@ -112,8 +120,9 @@ const CourseDocument = React.createClass({
             {this.icon()}
             <div className="course-row-content">
                 <h5>
-                    {this.title()} {this.edit_icon()}
-                    <small> par {this.props.user.name}</small>
+                    {this.title()}
+                    <small> par {this.props.user.name}</small><br/>
+                    {this.edit_icon()} {this.reupload_icon()}
                 </h5>
                 {this.description()}
                 <div className="course-content-last-line">
