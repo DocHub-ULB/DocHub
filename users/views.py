@@ -57,11 +57,7 @@ def panel_hide(request):
 
 def auth(request):
     sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
-    next_url = request.GET.get("next", "")
-    if next_url != "":
-        next_url = b64decode(next_url)
-    else:
-        next_url = "/"
+    next_url = "/"
 
     if sid and uid:
         user = authenticate(sid=sid, uid=uid)
