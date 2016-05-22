@@ -23,7 +23,7 @@ def index(request):
             return int((num // r) * r)
 
         context = {
-            "login_url": NetidBackend.login_url(request.GET.get("next", "")),
+            "login_url": NetidBackend.login_url(""),
             "debug": settings.DEBUG,
             "documents": floor(Document.objects.count()),
             "pages": floor(Page.objects.count(), 2),
