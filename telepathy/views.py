@@ -35,7 +35,7 @@ def new_thread(request, course_slug=None, document_id=None):
             message = Message.objects.create(user=request.user, thread=thread, text=content)
 
             placement = {}
-            for opt, typecast in Thread.PLACEMENT_OPTS.iteritems():
+            for opt, typecast in Thread.PLACEMENT_OPTS.items():
                 if opt in request.POST:
                     placement[opt] = typecast(request.POST[opt])
             if len(placement) > 0:
