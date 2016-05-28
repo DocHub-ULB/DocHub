@@ -36,12 +36,14 @@ class MarkdownDemoNode(template.Node):
       self.nodelist = nodelist
 
     def render(self, context):
+      a = map(
+        lambda x: list(map(lambda y: y.strip(), x.render(context).split('\n'))),
+        self.nodelist
+      )
+
       input_text = '\n'.join(
-        sum(
-          map(
-            lambda x: map(
-              lambda y: y.strip(), x.render(context).split('\n')
-            ), self.nodelist), []))
+        sum(list(a), [])
+      )
       uid = "d" + hex(abs(hash(input_text)))[2:]
       rendered = my_markdown(input_text)
       input_text = input_text.replace('>', '&gt;').replace('<', '&lt;')
