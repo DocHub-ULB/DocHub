@@ -130,6 +130,9 @@ class User(AbstractBaseUser):
     def get_short_name(self):
         return self.netid
 
+    def get_full_name(self):
+        return self.fullname()
+
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)

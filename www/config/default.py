@@ -53,6 +53,7 @@ INSTALLED_APPS += (
     'analytical',
     'pipeline',
     'django_js_reverse',
+    'reversion',
 )
 
 # apps
@@ -64,6 +65,7 @@ INSTALLED_APPS += (
     'catalog',
     'tags',
     'notifications',
+    'questions',
 )
 
 # must be after everything

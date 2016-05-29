@@ -19,6 +19,7 @@ django-analytical
 django-pipeline
 PyReact
 django-js-reverse
+django-reversion
 
 # Dev
 django-extensions

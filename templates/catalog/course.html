@@ -18,20 +18,26 @@
     </h1>
     <h2>{{ course.name }}</h2>
   </div>
-  <div class="large-2 columns">
-    <br/>
-    <a href="{{ course.gehol_url }}" class="button expand radius" target="_blank">Horaire sur GeHol</a>
-  </div>
 </div>
 <div class="row">
   {% with documents=documents.all threads=threads.all %}
     <div class="large-12 medium-12 columns">
       <ul class="tabs" data-tab>
-        <li class="tab-title active"><a href="#documents">Documents ({{documents.count}})</a></li>
-        <li class="tab-title"><a href="#threads">Discussions ({{threads.count}})</a></li>
+        <li class="tab-title"><a href="#documents">Documents ({{documents.count}})</a></li>
+        <li class="tab-title">
+          <a href="#threads">
+            Discussions ({{threads.count}})
+            &nbsp;<span class="round label">new</span>
+          </a>
+        </li>
+        <li class="tab-title active">
+          <a href="#questions">Questions d'examens ({{questions.count}})
+            &nbsp;<span class="round alert label">new <i class="fi-star"></i></span>
+          </a>
+        </li>
       </ul>
       <div class="tabs-content">
-        <div class="content active" id="documents" data-id="{{ course.slug }}">
+        <div class="content" id="documents" data-id="{{ course.slug }}">
           {% for document in documents %}
             <div class="row course-row document"
               node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
@@ -88,6 +94,12 @@
           {% endfor %}
         </div>
         <div class="content" id="threads">
+          <div class="row">
+            <p style="color: #666" class="large-8  columns">
+              La section "discussion" permet de discuter sur des concepts du cours, poser des questions au sujet de ce que vous n'avez pas compris, ...<br>
+              La même chose que sur une groupe Facebook mais avec le support du $\LaTeX$, du markdown et une pérénité d'années en années.
+            </p>
+          </div>
           {% for thread in threads %}
             <div class="row course-row thread">
               <a href="{% url 'thread_show' thread.id %}">
@@ -111,6 +123,51 @@
               Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
           {% endfor %}
         </div>
+        <div class="content active" id="questions">
+          <div class="row">
+            <p style="color: #666" class="large-8  columns">
+              La section "questions" sert à regrouper d'anciennes questions d'examens oraux, des questions que le professeur pose souvent ou pourquoi pas des questions de tp.<br>
+              Vous pouvez regarder les réponses que d'autres élèves on proposé ou y répondre vous-même. Vous pouvez aussi voter pour les réponses qui vous semblent correctes, n'hésitez pas à le faire !
+            </p>
+            <a class="button disabled small secondary">Télécharger toutes les questions en .pdf (bientôt)</a>
+          </div>
+          {% for question in questions %}
+            <div class="row">
+              <h3>
+                <a href="">
+                  {{question.text|truncatewords:10}}
+                </a>
+                <small>
+                  {{question.context}},
+                  {{question.answer__count}} réponse{{question.answer__count|pluralize}}.
+                </small>
+              </h3>
+              <p>
+                {{question.text}}
+              </p>
+              <a class="button tiny success">
+                <i class="fi-plus"></i>
+                Proposer une réponse
+              </a>
+              {% if question.answer__count == 1 %}
+                <a class="button tiny info">
+                  <i class="fi-eye"></i>
+                  Voir la réponse
+                </a>
+              {% elif question.answer__count > 1 %}
+                <a class="button tiny info">
+                  <i class="fi-eye"></i>
+                  Voir les {{question.answer__count}} réponses
+                </a>
+              {% endif %}
+
+            </div>
+          {% empty %}
+            <h3>Il n’y a encore rien dans ce cours…</h3>
+            <p>Personne n’est encore passé ici on dirait.<br>
+              Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
+          {% endfor %}
+        </div>
       </div>
     </div>
   {% endwith %}
@@ -122,7 +179,8 @@
   <div class="large-12 columns">
     <br>
     <a class="button expand radius" href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
-    <a class="button expand radius" href="{% url 'thread_put' course.slug %}">Poser une question</a>
+    <a class="button expand radius" href="{% url 'thread_put' course.slug %}">Lancer une discussion</a>
+    <a class="button expand radius" href="">Partager une question</a>
     {% if request.user|is_following:course %}
       <a class="button expand alert radius" href="{% url 'leave_course' course.slug %}">
         <i class="fi-x"></i> Se désabonner

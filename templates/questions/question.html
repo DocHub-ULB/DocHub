@@ -1,0 +1,44 @@
+{% extends "skel.html" %}
+{% load custommardown %}
+
+{% block title %}Question{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="large-12 columns">
+    <h1>
+        {{question.course.name}}
+        {% if question.context %}
+          <small>{{question.context}}</small>
+        {% endif %}
+    </h1>
+  </div>
+  <div class="large-8 columns">
+    <div class="panel">
+      <h3>Question :</h3>
+      <p>
+        Posée par {{question.user.name}}.
+        {% if authors %}
+          Editée par {{authors|join:", "}}
+        {% endif %}
+      </p>
+      {{question.text|markdown}}
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-7 columns">
+    <h3>Réponses</h3>
+    {% for answer in answers %}
+      <div class="column small-2 medium-1 panel">
+        <h3>{{answer.vote__count}}</h3>
+        {{answer.user.name}}
+      </div>
+      <div class="column small-10 medium-11">
+        {{answer.text|markdown}}
+      </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

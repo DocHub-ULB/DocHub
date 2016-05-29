@@ -40,6 +40,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
             .select_related('user')\
             .prefetch_related('tags')
         context['threads'] = course.thread_set.annotate(Count('message')).order_by('-id')
+        context['questions'] = course.question_set.annotate(Count('answer'))
         context['followers_count'] = len(actstream.models.followers(course))
 
         return context

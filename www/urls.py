@@ -20,6 +20,7 @@ urlpatterns = [
     url(r"^telepathy/", include("telepathy.urls")),
     url(r"^users/", include("users.urls")),
     url(r"^notifications/", include("notifications.urls")),
+    url(r"^questions/", include("questions.urls")),
 
     url(r"^syslogin$", login, {"template_name": "syslogin.html"}, name="syslogin"),
     url(r"^auth/$", users.views.auth),
