@@ -99,6 +99,10 @@
               La section "discussion" permet de discuter sur des concepts du cours, poser des questions au sujet de ce que vous n'avez pas compris, ...<br>
               La même chose que sur une groupe Facebook mais avec le support du $\LaTeX$, du markdown et une pérénité d'années en années.
             </p>
+            <a class="button small large-4 columns" href="{% url 'thread_put' course.slug %}">
+              <i class="fi-comment"></i>
+              Lancer une discussion
+            </a>
           </div>
           {% for thread in threads %}
             <div class="row course-row thread">
@@ -129,7 +133,14 @@
               La section "questions" sert à regrouper d'anciennes questions d'examens oraux, des questions que le professeur pose souvent ou pourquoi pas des questions de tp.<br>
               Vous pouvez regarder les réponses que d'autres élèves on proposé ou y répondre vous-même. Vous pouvez aussi voter pour les réponses qui vous semblent correctes, n'hésitez pas à le faire !
             </p>
-            <a class="button disabled small secondary">Télécharger toutes les questions en .pdf (bientôt)</a>
+            <a class="button small large-4 columns" href="">
+              <i class="fi-plus"></i>
+              Ajouter une question
+            </a>
+            <a class="button disabled small secondary  large-4 columns">
+              <i class="fi-arrow-down"></i>
+              Télécharger toutes les questions en .pdf (bientôt)
+            </a>
           </div>
           {% for question in questions %}
             <div class="row">
@@ -150,7 +161,7 @@
                 Proposer une réponse
               </a>
               {% if question.answer__count == 1 %}
-                <a class="button tiny info">
+                <a class="button tiny info" href="{% url 'question_show' question.id %}">
                   <i class="fi-eye"></i>
                   Voir la réponse
                 </a>
@@ -178,15 +189,13 @@
 <div class="row">
   <div class="large-12 columns">
     <br>
-    <a class="button expand radius" href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
-    <a class="button expand radius" href="{% url 'thread_put' course.slug %}">Lancer une discussion</a>
-    <a class="button expand radius" href="">Partager une question</a>
+    <a class="button expand" href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
     {% if request.user|is_following:course %}
-      <a class="button expand alert radius" href="{% url 'leave_course' course.slug %}">
+      <a class="button expand alert" href="{% url 'leave_course' course.slug %}">
         <i class="fi-x"></i> Se désabonner
       </a>
     {% else %}
-      <a class="button expand success radius" href="{% url 'join_course' course.slug %}">
+      <a class="button expand success" href="{% url 'join_course' course.slug %}">
         <i class="fi-check"></i> S’abonner
       </a>
     {% endif %}
