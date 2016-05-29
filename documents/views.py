@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import os
 import uuid
+import unicodedata
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -176,8 +177,10 @@ def document_reupload(request, pk):
 def document_download(request, pk):
     doc = get_object_or_404(Document, pk=pk)
     body = doc.pdf.read()
+    safe_name = unicodedata.normalize("NFKD", doc.name)
+
     response = HttpResponse(body, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % (doc.name)
+    response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % safe_name).encode("ascii", "ignore")
 
     doc.downloads = F('downloads') + 1
     doc.save(update_fields=['downloads'])
@@ -188,10 +191,12 @@ def document_download(request, pk):
 def document_download_original(request, pk):
     doc = get_object_or_404(Document, pk=pk)
     body = doc.original.read()
+    safe_name = unicodedata.normalize("NFKD", doc.name)
+
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
     response['Content-Transfer-Encoding'] = 'binary'
-    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(doc.name, doc.file_type)
+    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(safe_name, doc.file_type).encode("ascii", "ignore")
 
     doc.downloads = F('downloads') + 1
     doc.save(update_fields=['downloads'])

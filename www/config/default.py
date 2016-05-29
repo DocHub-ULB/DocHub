@@ -124,10 +124,6 @@ PIPELINE = {
                 '3party/select/js/select2.js',
                 '3party/select/js/i18n/fr.js',
                 '3party/cookie/cookie.js',
-                '3party/mathjax/MathJax.js',
-                '3party/mathjax/extensions/MathMenu.js',
-                '3party/mathjax/extensions/MathZoom.js',
-
             ),
             'output_filename': '3party.js',
         },
