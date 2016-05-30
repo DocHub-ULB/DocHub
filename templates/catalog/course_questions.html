@@ -1,0 +1,56 @@
+{% load humanize %}
+{% load custommardown %}
+{% load activity_tags %}
+{% load has_perm_on %}
+
+<div class="row">
+  <p style="color: #666" class="large-8  columns">
+    La section "questions" sert à regrouper d'anciennes questions d'examens oraux, des questions que le professeur pose souvent ou pourquoi pas des questions de tp.<br>
+    Vous pouvez regarder les réponses que d'autres élèves on proposé ou y répondre vous-même. Vous pouvez aussi voter pour les réponses qui vous semblent correctes, n'hésitez pas à le faire !
+  </p>
+  <a class="button small large-4 columns" href="">
+    <i class="fi-plus"></i>
+    Ajouter une question
+  </a>
+  <a class="button disabled small secondary  large-4 columns">
+    <i class="fi-arrow-down"></i>
+    Télécharger toutes les questions en .pdf (bientôt)
+  </a>
+</div>
+{% for question in questions %}
+  <div class="row">
+    <h3>
+      <a href="">
+        {{question.text|truncatewords:10}}
+      </a>
+      <small>
+        {{question.context}},
+        {{question.answer__count}} réponse{{question.answer__count|pluralize}}.
+      </small>
+    </h3>
+    <p>
+      {{question.text}}
+    </p>
+    <a class="button tiny success">
+      <i class="fi-plus"></i>
+      Proposer une réponse
+    </a>
+    {% if question.answer__count == 1 %}
+      <a class="button tiny info" href="{% url 'question_show' question.id %}">
+        <i class="fi-eye"></i>
+        Voir la réponse
+      </a>
+    {% elif question.answer__count > 1 %}
+      <a class="button tiny info">
+        <i class="fi-eye"></i>
+        Voir les {{question.answer__count}} réponses
+      </a>
+    {% endif %}
+
+  </div>
+{% empty %}
+  <h3>Il n’y a pas encore de questions d'examen dans ce cours…</h3>
+  <p>
+    Personne n’est encore passé ici on dirait.<br>
+  </p>
+{% endfor %}

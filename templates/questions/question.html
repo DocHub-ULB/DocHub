@@ -31,13 +31,29 @@
   <div class="large-7 columns">
     <h3>Réponses</h3>
     {% for answer in answers %}
-      <div class="column small-2 medium-1 panel">
-        <h3>{{answer.vote__count}}</h3>
-        {{answer.user.name}}
-      </div>
-      <div class="column small-10 medium-11">
-        {{answer.text|markdown}}
-      </div>
+      {{answer.text|markdown}}
+      <p>
+        <span class="button tiny disabled info">
+        {{answer.votes__count}} vote{{answer.votes__count|pluralize}}
+        </span>
+        {% if answer.has_voted %}
+          <a class="button tiny warning">
+            <i class="fi-x"></i>
+            Retirer mon vote
+          </a>
+        {% else %}
+          <a class="button tiny success">
+            <i class="fi-check"></i>
+            Cette réponse est correcte
+          </a>
+        {% endif %}
+        <a class="button tiny">
+          <i class="fi-pencil"></i>
+          Editer la réponse
+        </a>
+        <br>
+        Réponse rédigée par : {{answer.authors|join:", "}}
+      </p>
     {% endfor %}
     </div>
 </div>

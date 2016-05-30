@@ -20,6 +20,14 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
         revision = revisions.get_for_object(q).select_related("revision__user").exclude(revision__user=q.user)
         authors = set(map(lambda x: x.revision.user, revision))
 
-        context["answers"] = q.answer_set.annotate(Count('vote'))
+        context["answers"] = q\
+            .answer_set.annotate(Count('votes'))\
+            .prefetch_related("votes", "votes__user")\
+            .order_by("-votes__count")
+        for answer in context["answers"]:
+            if self.request.user in list(map(lambda x: x.user, answer.votes.all())):
+                answer.has_voted = True
+            else:
+                answer.has_voted = False
         context["authors"] = authors
         return context

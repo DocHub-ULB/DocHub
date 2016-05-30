@@ -54,10 +54,13 @@ class Answer(models.Model):
 class Vote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True)
-    answer = models.ForeignKey('questions.Answer')
+    answer = models.ForeignKey('questions.Answer', related_name='votes')
 
     def __str__(self):
-        return "%s voted on %s" % (self.user, self.question)
+        return "%s voted on %s" % (self.user, self.answer)
 
     def fullname(self):
         return self.__str__()
+
+    class Meta:
+        unique_together = (("user", "answer"),)

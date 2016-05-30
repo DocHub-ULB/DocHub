@@ -1,0 +1,36 @@
+{% load humanize %}
+{% load custommardown %}
+{% load activity_tags %}
+{% load has_perm_on %}
+
+<div class="row">
+  <p style="color: #666" class="large-8  columns">
+    La section "discussion" permet de discuter sur des concepts du cours, poser des questions au sujet de ce que vous n'avez pas compris, ...<br>
+    La même chose que sur une groupe Facebook mais avec le support du $\LaTeX$, du markdown et une pérénité d'années en années.
+  </p>
+  <a class="button small large-4 columns" href="{% url 'thread_put' course.slug %}">
+    <i class="fi-comment"></i>
+    Lancer une discussion
+  </a>
+</div>
+{% for thread in threads %}
+  <div class="row course-row thread">
+    <a href="{% url 'thread_show' thread.id %}">
+      <i class="fi-comment round-icon big"></i>
+    </a>
+    <div class="course-row-content">
+      <h5>
+        <a href="{% url 'thread_show' thread.id %}">{{ thread.name }} </a>
+        <small>par {{ thread.user.name }}</small>
+      </h5>
+      <div class="course-content-last-line">
+        <i class="fi-align-justify"></i>
+        {{ thread.message__count }} message{{ thread.message__count|pluralize }}
+        <i class="fi-clock"></i> Posté le {{ thread.created|date:"d F Y" }}
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <h3>Il n’y a pas encore de discussions dans ce cours…</h3>
+  <p>Personne n’est encore passé ici on dirait.</p>
+{% endfor %}
