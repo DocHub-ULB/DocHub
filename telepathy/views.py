@@ -139,11 +139,11 @@ def edit_message(request, pk):
 def join_thread(request, pk):
     thread = get_object_or_404(Thread, pk=pk)
     actions.follow(request.user, thread, actor_only=False)
-    return HttpResponseRedirect(reverse('thread_show', args=[id]))
+    return HttpResponseRedirect(reverse('thread_show', args=[pk]))
 
 
 @login_required
 def leave_thread(request, pk):
     thread = get_object_or_404(Thread, pk=pk)
     actions.unfollow(request.user, thread)
-    return HttpResponseRedirect(reverse('thread_show', args=[id]))
+    return HttpResponseRedirect(reverse('thread_show', args=[pk]))
