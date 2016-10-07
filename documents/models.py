@@ -12,6 +12,10 @@ from django.dispatch import receiver
 
 from tags.models import Tag
 
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
 
 @python_2_unicode_compatible
 class Document(models.Model):
@@ -183,7 +187,5 @@ def cleanup_page_files(instance, **kwargs):
         os.remove(instance.bitmap_900.file.name)
     except FileNotFoundError:
         pass
-
-
 
 from documents.tasks import process_document
