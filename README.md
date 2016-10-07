@@ -18,8 +18,8 @@ There is a [live instance of DocHub](http://dochub.be) hosted by [UrLab](http://
 ### Dependencies
 
     # Ubuntu
-    sudo apt-get install graphicsmagick unoconv python-dev nodejs ruby
-    # Feodra
+    sudo apt-get install graphicsmagick unoconv python-dev nodejs ruby npm libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
+    # Fedora
     sudo dnf install GraphicsMagick unoconv python-devel nodejs ruby
 
 ### Installation
