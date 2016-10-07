@@ -162,12 +162,12 @@ class DocumentError(models.Model):
 def cleanup_document_files(instance, **kwargs):
     try:
         os.remove(instance.pdf.file.name)
-    except FileNotFoundError:
+    except:
         pass
 
     try:
         os.remove(instance.original.file.name)
-    except FileNotFoundError:
+    except:
         pass
 
 
@@ -175,17 +175,17 @@ def cleanup_document_files(instance, **kwargs):
 def cleanup_page_files(instance, **kwargs):
     try:
         os.remove(instance.bitmap_120.file.name)
-    except FileNotFoundError:
+    except:
         pass
 
     try:
         os.remove(instance.bitmap_600.file.name)
-    except FileNotFoundError:
+    except:
         pass
 
     try:
         os.remove(instance.bitmap_900.file.name)
-    except FileNotFoundError:
+    except:
         pass
 
 from documents.tasks import process_document
