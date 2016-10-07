@@ -8,7 +8,7 @@
     La section "questions" sert à regrouper d'anciennes questions d'examens oraux, des questions que le professeur pose souvent ou pourquoi pas des questions de tp.<br>
     Vous pouvez regarder les réponses que d'autres élèves on proposé ou y répondre vous-même. Vous pouvez aussi voter pour les réponses qui vous semblent correctes, n'hésitez pas à le faire !
   </p>
-  <a class="button small large-4 columns" href="">
+  <a class="button small large-4 columns" href="{% url 'question_add' %}">
     <i class="fi-plus"></i>
     Ajouter une question
   </a>
@@ -20,7 +20,7 @@
 {% for question in questions %}
   <div class="row">
     <h3>
-      <a href="">
+      <a href="{% url 'question_show' question.id %}">
         {{question.text|truncatewords:10}}
       </a>
       <small>

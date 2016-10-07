@@ -3,21 +3,26 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 from django.db.models import Count
-from reversion import revisions
+from reversion.models import Version
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
-from questions.models import Question, Answer
+from questions.models import Question, Answer, Vote
 
-class CategoryDetailView(LoginRequiredMixin, DetailView):
+
+class QuestionDetailView(LoginRequiredMixin, DetailView):
     queryset = Question.objects.select_related("course").all()
     template_name = "questions/question.html"
     context_object_name = "question"
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CategoryDetailView, self).get_context_data(*args, **kwargs)
+        context = super(QuestionDetailView, self).get_context_data(*args, **kwargs)
         q = context["question"]
 
-        revision = revisions.get_for_object(q).select_related("revision__user").exclude(revision__user=q.user)
+        revision = Version.objects.get_for_object(q).select_related("revision__user").exclude(revision__user=q.user)
         authors = set(map(lambda x: x.revision.user, revision))
 
         context["answers"] = q\
@@ -31,3 +36,36 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
                 answer.has_voted = False
         context["authors"] = authors
         return context
+
+
+@login_required
+def upvote(request, pk):
+    answer = get_object_or_404(Answer, pk=pk)
+    if Vote.objects.filter(user=request.user, answer=answer).count() == 0:
+        Vote.objects.create(user=request.user, answer=answer)
+    return redirect(reverse('question_show', args=(answer.question.pk,)))
+
+
+@login_required
+def downvote(request, pk):
+    answer = get_object_or_404(Answer, pk=pk)
+    Vote.objects.filter(user=request.user, answer=answer).delete()
+    return redirect(reverse('question_show', args=(answer.question.pk,)))
+
+
+class QuestionUpdateView(LoginRequiredMixin, UpdateView):
+    model = Question
+    context_object_name = "question"
+    fields = ['text', 'context']
+
+    def get_success_url(self):
+        return reverse('question_show', args=(self.object.pk,))
+
+
+class AnswerUpdateView(LoginRequiredMixin, UpdateView):
+    model = Answer
+    context_object_name = "answer"
+    fields = ['text']
+
+    def get_success_url(self):
+        return reverse('question_show', args=(self.object.question.pk,))

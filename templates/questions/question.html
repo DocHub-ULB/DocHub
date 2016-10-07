@@ -23,6 +23,11 @@
         {% endif %}
       </p>
       {{question.text|markdown}}
+
+      <a class="button tiny" href="{% url 'question_edit' question.id %}">
+          <i class="fi-pencil"></i>
+          Editer la question
+      </a>
     </div>
   </div>
 </div>
@@ -37,17 +42,17 @@
         {{answer.votes__count}} vote{{answer.votes__count|pluralize}}
         </span>
         {% if answer.has_voted %}
-          <a class="button tiny warning">
+          <a class="button tiny warning" href="{% url 'question_answer_downvote' answer.id %}">
             <i class="fi-x"></i>
             Retirer mon vote
           </a>
         {% else %}
-          <a class="button tiny success">
+          <a class="button tiny success" href="{% url 'question_answer_upvote' answer.id %}">
             <i class="fi-check"></i>
             Cette réponse est correcte
           </a>
         {% endif %}
-        <a class="button tiny">
+        <a class="button tiny" href="{% url 'question_answer_edit' answer.id %}">
           <i class="fi-pencil"></i>
           Editer la réponse
         </a>
