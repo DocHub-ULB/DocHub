@@ -129,6 +129,9 @@ const CourseDocument = React.createClass({
                     <i className="fi-page-filled"></i> {this.pages()}&nbsp;
                     <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;
                     <i className="fi-pricetag-multiple"></i> {this.tags()}
+                    <a href={Urls.document_download(this.props.id)}>
+                        <i className="fi-download"></i>
+                    </a>
                 </div>
             </div>
         </div>;
