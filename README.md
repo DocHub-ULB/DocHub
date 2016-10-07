@@ -15,6 +15,20 @@ There is a [live instance of DocHub](http://dochub.be) hosted by [UrLab](http://
 
 ## Tech
 
+### Vagrant
+You can run a dev instance in a Vagrant box with the following steps or read further for manual installation instructions.
+
+Download and install vagrant (and probably virtualbox with it), then
+    
+    vagrant up
+    vagrant ssh
+    cd /vagrant
+    source ve/bin/activate
+    honcho start -f VagrantProcfile
+
+Dochub should be accessible on your host machine at localhost:8000.
+The files in the repo on your host machine are shared and available from within the vagrantbox (in `/vagrant`).
+
 ### Dependencies
 
     # Ubuntu
