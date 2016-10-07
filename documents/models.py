@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
+
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
-
+from django.conf import settings
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 from tags.models import Tag
-from django.conf import settings
 
 
 @python_2_unicode_compatible
@@ -150,6 +153,37 @@ class DocumentError(models.Model):
 
     def __str__(self):
         return "#" + self.exception
+
+@receiver(pre_delete, sender=Document)
+def cleanup_document_files(instance, **kwargs):
+    try:
+        os.remove(instance.pdf.file.name)
+    except FileNotFoundError:
+        pass
+
+    try:
+        os.remove(instance.original.file.name)
+    except FileNotFoundError:
+        pass
+
+
+@receiver(pre_delete, sender=Page)
+def cleanup_page_files(instance, **kwargs):
+    try:
+        os.remove(instance.bitmap_120.file.name)
+    except FileNotFoundError:
+        pass
+
+    try:
+        os.remove(instance.bitmap_600.file.name)
+    except FileNotFoundError:
+        pass
+
+    try:
+        os.remove(instance.bitmap_900.file.name)
+    except FileNotFoundError:
+        pass
+
 
 
 from documents.tasks import process_document
