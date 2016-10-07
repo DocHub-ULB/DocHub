@@ -65,12 +65,20 @@ const CourseDocument = React.createClass({
     reupload_url: function(){return Urls.document_reupload(this.props.id);},
     url: function(){return Urls.document_show(this.props.id);},
     icon: function(){
-        if (this.props.state == 'DONE'){
+        if (this.ready()){
             return <a href={this.url()}>
                 <i className="fi-page-copy round-icon big"></i>
             </a>;
         }
         return <i className="fi-loop round-icon big"></i>;
+    },
+    download_icon: function(){
+        if (this.ready()){
+            return <a href={Urls.document_download(this.props.id)} title="Télécharger">
+                <i className="fi-download"></i>
+            </a>
+        }
+        return ''
     },
     edit_icon: function(){
         if (this.ready() && this.editable()){
@@ -122,16 +130,13 @@ const CourseDocument = React.createClass({
                 <h5>
                     {this.title()}
                     <small> par {this.props.user.name}</small><br/>
-                    {this.edit_icon()} {this.reupload_icon()}
+                    {this.download_icon()} {this.edit_icon()} {this.reupload_icon()}
                 </h5>
                 {this.description()}
                 <div className="course-content-last-line">
                     <i className="fi-page-filled"></i> {this.pages()}&nbsp;
                     <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;
                     <i className="fi-pricetag-multiple"></i> {this.tags()}
-                    <a href={Urls.document_download(this.props.id)}>
-                        <i className="fi-download"></i>
-                    </a>
                 </div>
             </div>
         </div>;
