@@ -7,15 +7,11 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, post_delete
 from django.dispatch import receiver
 
 from tags.models import Tag
 
-try:
-    FileNotFoundError
-except NameError:
-    FileNotFoundError = IOError
 
 @python_2_unicode_compatible
 class Document(models.Model):
@@ -158,34 +154,30 @@ class DocumentError(models.Model):
     def __str__(self):
         return "#" + self.exception
 
-@receiver(pre_delete, sender=Document)
+@receiver(post_delete, sender=Document)
 def cleanup_document_files(instance, **kwargs):
-    try:
-        os.remove(instance.pdf.file.name)
-    except:
-        pass
+    pdf_file_name = instance.pdf.name
+    if pdf_file_name != '' and instance.pdf.storage.exists(pdf_file_name):
+        instance.pdf.storage.delete(pdf_file_name)
 
-    try:
-        os.remove(instance.original.file.name)
-    except:
-        pass
+    original_file_name = instance.original.name
+    if original_file_name != '' and instance.original.storage.exists(original_file_name):
+        instance.original.storage.delete(original_file_name)
 
 
-@receiver(pre_delete, sender=Page)
+@receiver(post_delete, sender=Page)
 def cleanup_page_files(instance, **kwargs):
-    try:
-        os.remove(instance.bitmap_120.file.name)
-    except:
-        pass
 
-    try:
-        os.remove(instance.bitmap_600.file.name)
-    except:
-        pass
+    filename_120 = instance.bitmap_120.name
+    if filename_120 != '' and instance.bitmap_120.storage.exists(filename_120):
+        instance.bitmap_120.storage.delete(filename_120)
 
-    try:
-        os.remove(instance.bitmap_900.file.name)
-    except:
-        pass
+    filename_600 = instance.bitmap_600.name
+    if filename_120 != '' and instance.bitmap_600.storage.exists(filename_600):
+        instance.bitmap_600.storage.delete(filename_600)
+
+    filename_900 = instance.bitmap_900.name
+    if filename_120 != '' and instance.bitmap_900.storage.exists(filename_900):
+        instance.bitmap_900.storage.delete(filename_900)
 
 from documents.tasks import process_document
