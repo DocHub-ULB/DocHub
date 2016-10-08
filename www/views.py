@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from actstream.models import user_stream
 from django.conf import settings
+from django.views.generic import TemplateView
+from django.template.loader import get_template
 
 from telepathy.models import Thread
 from documents.models import Document, Page
@@ -31,3 +33,10 @@ def index(request):
             "threads": floor(Thread.objects.count()),
         }
         return render(request, "index.html", context)
+
+
+class HelpView(TemplateView):
+    def get_context_data(self):
+        r = super(HelpView, self).get_context_data()
+        r["faq_md"] = get_template("faq.md").render()
+        return r
