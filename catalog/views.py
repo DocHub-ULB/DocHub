@@ -55,8 +55,8 @@ def set_follow_course(request, slug, action):
 
 @login_required
 def join_course(request, slug):
-    unfollow = partial(actions.follow, actor_only=False)
-    return set_follow_course(request, slug, unfollow)
+    follow = partial(actions.follow, actor_only=False)
+    return set_follow_course(request, slug, follow)
 
 
 @login_required
