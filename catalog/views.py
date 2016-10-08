@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import json
+from functools import partial
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
@@ -45,18 +46,22 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
+def set_follow_course(request, slug, action):
+    course = get_object_or_404(Course, slug=slug)
+    action(request.user, course)
+    nextpage = request.GET.get('next', reverse('course_show', args=[slug]))
+    return HttpResponseRedirect(nextpage)
+
+
 @login_required
 def join_course(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-    actions.follow(request.user, course, actor_only=False)
-    return HttpResponseRedirect(reverse('course_show', args=[slug]))
+    unfollow = partial(actions.follow, actor_only=False)
+    return set_follow_course(request, slug, unfollow)
 
 
 @login_required
 def leave_course(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-    actions.unfollow(request.user, course)
-    return HttpResponseRedirect(reverse('course_show', args=[slug]))
+    return set_follow_course(request, slug, actions.unfollow)
 
 
 @login_required
