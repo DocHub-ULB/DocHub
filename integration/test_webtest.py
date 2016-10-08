@@ -56,7 +56,7 @@ def test_follow(app, user, tree):
     index = app.get('/', user=user.netid)
     catalog = index.click(href=reverse("show_courses"), index=0)
     category = catalog.click(description="science")
-    course = category.click(description=lambda x: "swag-h-042" in x)
+    course = category.click(description=lambda x: "Optimization" in x)
     course = course.click(
         # description="S'abonner",
         href=reverse('join_course', args=("swag-h-042",)),
@@ -73,6 +73,15 @@ def test_follow(app, user, tree):
 
     index = app.get('/', user=user.netid)
     assert "swag-h-042" not in index
+
+
+def test_follow_from_category(app, user, tree):
+    index = app.get('/', user=user.netid)
+    catalog = index.click(href=reverse("show_courses"), index=0)
+    category = catalog.click(description="science")
+    category = category.click(description=lambda x: "swag-h-042" in x).follow()
+    course = category.click(description=lambda x: x.startswith("Optimization"))
+    assert "Se désabonner" in course
 
 
 # @mock.patch.object(Document, 'add_to_queue')
