@@ -3,6 +3,7 @@
 
 {% block title %}{{ category.name }}{% endblock %}
 {% block content %}
+
 <div class="row">
   <div class="medium-12 columns">
     <h1>{{ category.name }}</h1>
@@ -37,13 +38,25 @@
           {% for course in category.course_set.all %}
           <li>
             <h6>
-              <a href="{% url 'course_show' course.slug %}">
-                {% if course in user_followed_courses %}
-                  <span class="course-label radius success label">{{ course.slug }}</span> {{ course.name }} <small>(abonné)</small>
-                {% else %}
-                  <span class="course-label secondary radius label">{{ course.slug }}</span> {{ course.name }}
-                {% endif %}
-              </a>
+              {% if course in user_followed_courses %}
+                <a href="{% url "leave_course" course.slug %}?next={% url "category_show" category.id %}"
+                   class="course-label radius success label toggle-follow"
+                   title="Se désabonner du cours">
+                  {{ course.slug }}
+                </a>
+              {% else %}
+                <a href="{% url "join_course" course.slug %}?next={% url "category_show" category.id %}"
+                   class="course-label secondary radius label toggle-follow"
+                   title="S'abonner au cours">
+                  {{ course.slug }}
+                </a>
+              {% endif %}
+
+              <a href="{% url 'course_show' course.slug %}">{{ course.name }}</a>
+              
+              {% if course in user_followed_courses %}
+                <small> (abonné)</small>
+              {% endif %}
             </h6>
           </li>
           {% endfor %}
