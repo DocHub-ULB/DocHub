@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from documents.models import Document, Page
-from users.models import User
 import pytest
 import mock
 import sys
 
-from documents.models import process_document
+from django.core.files import File
 
+from users.models import User
+from documents.models import Document, Page
+from documents.models import process_document
+from documents.tests.celery_test import create_doc
 
 pytestmark = pytest.mark.django_db
 
@@ -97,3 +99,25 @@ def test_add_to_queue(mock_process_document, doc):
 
     assert doc.state == "IN_QUEUE"
     assert mock_process_document.called == 1
+
+
+def test_document_file_cleanup():
+    doc = create_doc('TestDocumentToDelete', '.pdf') # from celery tests
+    doc.save()
+
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
+    doc.pdf.save('ThisPdfShouldGetDeleted.pdf', f)
+    doc.original.save("ThisOriginalShouldGetDeleted.pdf", f)
+
+    # Get file paths
+    originalfilename = doc.original.file.name
+    pdffilename = doc.pdf.file.name
+
+    doc.delete()
+    with pytest.raises(IOError) as errorinfo:
+        file = open(originalfilename, 'r')
+    assert 'No such file or directory' in str(errorinfo)
+
+    with pytest.raises(IOError) as errorinfo:
+        file = open(pdffilename, 'r')
+    assert 'No such file or directory' in str(errorinfo)
