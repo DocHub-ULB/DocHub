@@ -10,7 +10,7 @@ from django.core.files import File
 from users.models import User
 from documents.models import Document, Page
 from documents.models import process_document
-from documents.tests.celery_test import create_doc
+from celery_test import create_doc
 
 pytestmark = pytest.mark.django_db
 
