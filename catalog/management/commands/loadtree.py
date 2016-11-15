@@ -31,7 +31,7 @@ class Command(BaseCommand):
     )
 
     LOCAL_CACHE = {}
-    YEAR = "201516"
+    YEAR = "201617"
 
     def handle(self, *args, **options):
         self.stdout.write('Loading tree ... ')
@@ -71,8 +71,8 @@ class Command(BaseCommand):
                 if self.LOCAL_CACHE:
                     name = self.LOCAL_CACHE.get(tree, "Unknown course in cache")
                 else:
-                    ulbCourse = ULBCourse.get_from_slug(tree, self.YEAR)
-                    name = ulbCourse.name
+                    ulb_course = ULBCourse.get_from_slug(tree, self.YEAR)
+                    name = ulb_course.name
                 course = Course.objects.create(name=name, slug=tree, description="")
             course.categories.add(father)
 
