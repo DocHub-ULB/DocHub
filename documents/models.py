@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
+
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
-
+from django.conf import settings
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 from tags.models import Tag
-from django.conf import settings
 
 
 @python_2_unicode_compatible
@@ -151,5 +154,42 @@ class DocumentError(models.Model):
     def __str__(self):
         return "#" + self.exception
 
+
+@receiver(pre_delete, sender=Document)
+def cleanup_document_files(instance, **kwargs):
+    """
+    Deletes all files when the database object is deleted.
+    Checks that the name is not empty as that is what is returned when there is
+        no file associated with the database object.
+    """
+
+    pdf_file_name = instance.pdf.name
+    if pdf_file_name != '' and instance.pdf.storage.exists(pdf_file_name):
+        instance.pdf.storage.delete(pdf_file_name)
+
+    original_file_name = instance.original.name
+    if original_file_name != '' and instance.original.storage.exists(original_file_name):
+        instance.original.storage.delete(original_file_name)
+
+
+@receiver(pre_delete, sender=Page)
+def cleanup_page_files(instance, **kwargs):
+    """
+    Deletes all files when the database object is deleted.
+    Checks that the name is not empty as that is what is returned when there is
+        no file associated with the database object.
+    """
+
+    filename_120 = instance.bitmap_120.name
+    if filename_120 != '' and instance.bitmap_120.storage.exists(filename_120):
+        instance.bitmap_120.storage.delete(filename_120)
+
+    filename_600 = instance.bitmap_600.name
+    if filename_120 != '' and instance.bitmap_600.storage.exists(filename_600):
+        instance.bitmap_600.storage.delete(filename_600)
+
+    filename_900 = instance.bitmap_900.name
+    if filename_120 != '' and instance.bitmap_900.storage.exists(filename_900):
+        instance.bitmap_900.storage.delete(filename_900)
 
 from documents.tasks import process_document
