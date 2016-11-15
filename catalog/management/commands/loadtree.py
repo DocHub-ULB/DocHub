@@ -73,7 +73,7 @@ class Command(BaseCommand):
                 else:
                     ulb_course = ULBCourse.get_from_slug(tree, self.YEAR)
                     name = ulb_course.name
-                course = Course.objects.create(name=name, slug=tree, description="")
+                course = Course.objects.create(name=name, slug=tree)
             course.categories.add(father)
 
         if isinstance(tree, list):

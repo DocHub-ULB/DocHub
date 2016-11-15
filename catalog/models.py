@@ -30,7 +30,6 @@ class Category(MPTTModel):
 class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
-    description = models.TextField(blank=True, default='')
     categories = models.ManyToManyField(Category)
 
     class Meta:
