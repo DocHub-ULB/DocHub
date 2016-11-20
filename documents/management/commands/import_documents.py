@@ -25,6 +25,7 @@ TAGS = {
     'for': 'formulaire',
     'sol': 'corrigé',
     'lab': 'laboratoire',
+    'law': 'loi',
 }
 
 
