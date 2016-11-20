@@ -16,7 +16,7 @@ DEBUG = True
 
 INSTALLED_APPS += (
     'django_extensions',
-    'kombu.transport.django',  # celery_broker
+    # 'kombu.transport.django',  # celery_broker
 )
 
 CELERY_BROKER = 'django://'
