@@ -1,7 +1,7 @@
 Django>1.9, <1.10
 django-multiupload
 markdown
-django-celery
+django-celery >3.1, <4.0
 Pillow
 pygments
 pyPdf2
