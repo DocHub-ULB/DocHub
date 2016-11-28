@@ -13,7 +13,7 @@ register = template.Library()
 youtube_url = re.compile(r'https://(?:www\.)?youtu(?:be\.com/watch/?\?v=|\.be/)([^/<&]+)(?:&.*)?')
 youtube_iframe = """
 <iframe id="youtube-\\1" type="text/html" width="640" height="420"
-  src="http://www.youtube.com/embed/\\1"
+  src="https://www.youtube.com/embed/\\1"
   frameborder="0"></iframe>
 """
 

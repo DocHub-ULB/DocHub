@@ -37,7 +37,7 @@ class Course(models.Model):
 
     def gehol_url(self):
         slug = self.slug.replace('-', '').upper()
-        return "http://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours=%s" % (slug,)
+        return "https://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours=%s" % (slug,)
 
     def get_absolute_url(self):
         return reverse('course_show', args=(self.slug, ))
