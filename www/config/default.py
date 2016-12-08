@@ -27,7 +27,7 @@ UPLOAD_DIR = join(MEDIA_ROOT, 'documents')
 
 DOCUMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
-BASE_URL = "http://dochub.be/"
+BASE_URL = "https://dochub.be/"
 
 # ULB login, need to add the url to redirect at the end
 ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_prtm=redirect&_appl='
