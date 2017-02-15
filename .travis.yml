@@ -2,12 +2,12 @@ sudo: false
 
 language:
   - python
-  - node_js
+
 python:
   - "3.6"
 
-node_js:
-  - "node"
+env:
+  - TRAVIS_NODE_VERSION="6.1"
 
 cache:
   apt: true
