@@ -6,9 +6,6 @@ language:
 python:
   - "3.6"
 
-env:
-  - TRAVIS_NODE_VERSION="6.1"
-
 cache:
   apt: true
   bundler: true
@@ -17,6 +14,7 @@ cache:
     - node_modules
 
 before_script:
+  - nvm install node
   - pip install -U setuptools
   - npm install yuglify
   - gem install sass
