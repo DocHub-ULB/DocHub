@@ -139,8 +139,14 @@
 </div>
 {% endblock %}
 
-{% block script %}
 <script type="text/javascript">
-    loadCourseViewer('documents');
+  $(document).ready(function () {
+    var dest = 'documents';
+    var doc_id = $('#' + dest).attr('data-id');
+    $.get(Urls['course-detail'](doc_id), function (data) {
+      loadCourseViewer(dest, data);
+    });
+  })
 </script>
-{% endblock %}
+
+{% block script %}{% endblock %}

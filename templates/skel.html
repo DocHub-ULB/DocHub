@@ -1,6 +1,8 @@
 {%load humanize %}
 {% load analytical %}
 {% load pipeline %}
+{% load render_bundle from webpack_loader %}
+
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -135,15 +137,24 @@
       <br><br>
     </footer>
 
+
+
     <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
     {% javascript '3party' %}
     {% javascript 'main' %}
+    {% render_bundle 'tree' %}
 
     {% block script %}{% endblock %}
 
     <script type="text/javascript">
       $(document).ready(function(){
-          $(document).foundation();
+        $(document).foundation();
+
+        // Rendering react.
+        $.get(Urls.course_tree(), function (data) {                                    
+            courseTreeRender(data);
+            $(document).foundation('topbar', 'reflow');
+        }); 
       });
 
     </script>

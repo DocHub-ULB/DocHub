@@ -43,6 +43,7 @@ The files in the repo on your host machine are shared and available from within 
     gem install sass
     sudo npm install -g yuglify
     make install database
+    npm install
 
     If you don't want to run npm as root (we could understand), just run `npm install yuglify` and add the `yuglify` binary to your path. (it might be `/usr/local/bin/yuglify` or `./node_modules/.bin/yuglify` depending on your distro)
 

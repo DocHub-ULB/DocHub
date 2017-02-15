@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
 
 # Copyright 2014, Cercle Informatique ASBL. All rights reserved.
 #
@@ -43,6 +44,13 @@ CELERYD_PREFETCH_MULTIPLIER = 1  # Do not prefetch more than 1 task
 # Activate identicons
 IDENTICON = True
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'scripts/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
+
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
@@ -53,6 +61,7 @@ INSTALLED_APPS += (
     'analytical',
     'pipeline',
     'django_js_reverse',
+    'webpack_loader',
 )
 
 # apps
@@ -109,8 +118,7 @@ PIWIK_SITE_ID = '1'
 
 
 PIPELINE = {
-    'COMPILERS': ('react.utils.pipeline.JSXCompiler',
-                  'pipeline.compilers.sass.SASSCompiler',),
+    'COMPILERS': ('pipeline.compilers.sass.SASSCompiler',),
     'JAVASCRIPT': {
         '3party': {
             'source_filenames': (
@@ -119,21 +127,12 @@ PIPELINE = {
                 '3party/foundation/js/foundation.min.js',
                 '3party/markdown/markdown.js',
                 '3party/moment/moment-with-locales.js',
-                '3party/react/react.js',
-                '3party/react/react-dom.js',
                 '3party/select/js/select2.js',
                 '3party/select/js/i18n/fr.js',
                 '3party/cookie/cookie.js',
             ),
             'output_filename': '3party.js',
         },
-        'main': {
-            'source_filenames': (
-                'scripts/viewer.js',
-                'scripts/*.jsx',
-            ),
-            'output_filename': 'main.js',
-        }
     },
     'STYLESHEETS': {
         '3party': {
