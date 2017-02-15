@@ -20,6 +20,7 @@ django-analytical
 django-pipeline
 PyReact
 django-js-reverse
+django-webpack-loader
 
 # Dev
 django-extensions
