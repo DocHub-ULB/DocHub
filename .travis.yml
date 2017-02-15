@@ -15,8 +15,10 @@ before_script:
   - pip install -U setuptools
   - npm install yuglify
   - gem install sass
+  - npm install
 
 script:
+  - npm run prod
   - ./manage.py check
   - ./manage.py collectstatic --noinput -v 0
   - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www --cov-report=
@@ -31,6 +33,7 @@ addons:
     # - unoconv
     - python-dev
     - nodejs
+    - npm
 
 notifications:
   email:
