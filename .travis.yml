@@ -4,6 +4,9 @@ language: python
 python:
   - "3.6"
 
+node_js:
+  - "node"
+
 cache:
   apt: true
   bundler: true
@@ -32,8 +35,6 @@ addons:
     # but we do not run unoconv tests on travis so it's not a problem
     # - unoconv
     - python-dev
-    - nodejs
-    - npm
 
 notifications:
   email:
