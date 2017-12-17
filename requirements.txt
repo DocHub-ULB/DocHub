@@ -35,7 +35,7 @@ django-webtest
 pytest-cov
 coveralls
 
-pyscopg2
+psycopg2
 django-debug-toolbar
 django-jsonfield
 django-jsonfield-compat
