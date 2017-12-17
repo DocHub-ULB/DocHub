@@ -34,3 +34,8 @@ responses
 django-webtest
 pytest-cov
 coveralls
+
+pyscopg2
+django-debug-toolbar
+django-jsonfield
+django-jsonfield-compat

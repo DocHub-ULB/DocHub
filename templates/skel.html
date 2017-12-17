@@ -44,16 +44,19 @@
                   </a>
                 {% endwith %}
               </li>
-              <li class="has-dropdown">
+              <li>
                 <a href="{% url 'show_courses' %}">Mes cours</a>
-                <ul class="dropdown" id="course-tree-menu">
-                  <li><a href="#">
-                    <i class="fi-loop spinning"></i> <span class="fading">Chargement</span>
-                  </a></li>
-                </ul>
               </li>
+              <li class="divider"></li>
+            </ul>
+            <ul class="left" id="course-tree-menu">
             </ul>
             <ul class="right">
+              <li>
+                    <a href="{% url "help" %}#jobs">
+                            DocHub cherche des développeurs et modérateurs !
+                    </a>
+              </li>
               <li>
                 <a href="https://www.facebook.com/DocHub" id="facebook"><i class="fi-social-facebook"></i></a>
               </li>
@@ -151,10 +154,10 @@
         $(document).foundation();
 
         // Rendering react.
-        $.get(Urls.course_tree(), function (data) {                                    
+        $.get(Urls.course_tree(), function (data) {
             courseTreeRender(data);
             $(document).foundation('topbar', 'reflow');
-        }); 
+        });
       });
 
     </script>
