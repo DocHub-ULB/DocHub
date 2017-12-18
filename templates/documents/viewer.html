@@ -1,6 +1,10 @@
 {% extends "skel.html" %}
 {% load cache %}
 
+{% block header %}
+<script src="/static/scripts/viewer.js" type="text/javascript"></script>
+{% endblock %}
+
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
 
