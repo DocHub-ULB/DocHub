@@ -205,5 +205,14 @@
     drift.load('dzkrmavg2zw3');
     </script>
     <!-- End of Async Drift Code -->
+    <script>
+        drift.identify(
+            {{request.user.id}},
+            {
+                email:'{{request.user.email}}',
+                startDate: '{{request.user.created|date:"U"}}000',
+            }
+        );
+    </script>
   </body>
 </html>
