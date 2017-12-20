@@ -1,4 +1,5 @@
 {% extends "3col.html" %}
+{% load render_bundle from webpack_loader %}
 
 {% load humanize %}
 {% load custommardown %}
@@ -6,6 +7,10 @@
 {% load has_perm_on %}
 
 {% block title %}{{ course.slug|upper }}{% endblock %}
+
+{% block header %}
+{% render_bundle 'courses' %}
+{% endblock %}
 
 {% block center-col %}
 <div class="row">

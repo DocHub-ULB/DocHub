@@ -1,7 +1,5 @@
 {%load humanize %}
-{% load pipeline %}
 {% load render_bundle from webpack_loader %}
-
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -12,12 +10,72 @@
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 
-    {% stylesheet '3party' %}
-    {% stylesheet 'main' %}
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
+
+    <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/fastclick.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/modernizr.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/placeholder.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.abide.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.accordion.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.alert.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.clearing.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.dropdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.equalizer.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.interchange.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.joyride.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.magellan.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.offcanvas.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.orbit.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.slider.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tab.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tooltip.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.topbar.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
+
+    <!-- <script src="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.abide.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.accordion.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.accordionMenu.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.core.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.drilldown.js"></script><script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.dropdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.dropdownMenu.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.equalizer.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.interchange.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.magellan.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.offcanvas.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.orbit.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.responsiveMenu.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.responsiveToggle.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.slider.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.sticky.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.tabs.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.toggler.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.tooltip.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.box.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.keyboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.mediaQuery.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.motion.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.nest.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.timerAndImageLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.touch.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.2.4/js/foundation.util.triggers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css"> -->
+
+    {% render_bundle 'styles' %}
 
     {% block header %}
     {% endblock %}
-
   </head>
   <body>
     <div class="sticky">
@@ -136,11 +194,6 @@
       <br><br>
     </footer>
 
-
-
-    <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
-    {% javascript '3party' %}
-    {% javascript 'main' %}
     {% render_bundle 'tree' %}
 
     {% block script %}{% endblock %}

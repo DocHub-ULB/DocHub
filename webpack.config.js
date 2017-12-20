@@ -1,5 +1,5 @@
 var path = require("path");
-var BundleTracker = require('webpack-bundle-tracker');                                                                                                                           
+var BundleTracker = require('webpack-bundle-tracker');
 var webpack = require('webpack');
 
 module.exports = {
@@ -12,32 +12,38 @@ module.exports = {
     courses: [
       './assets/courses/index.jsx',
     ],
+    viewer: [
+      './assets/viewer/viewer.js',
+    ],
+    styles: [
+      './assets/styles/index.js',
+    ],
   },
 
   output: {
     path: path.resolve('./static/scripts/'),
-    filename: '[name].js',
+    filename: '[name]-[hash].js',
   },
-  
+
   plugins: [
     new BundleTracker({filename: './webpack-stats.json'}),
   ],
 
   module: {
     rules: [
-      { 
-        test: /\.jsx?$/,
-        exclude: /node_modules/, 
+      {
+        test: [/\.jsx?$/, /\.js?$/, ],
+        exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
           presets:[
-            ['es2015', {modules: false}], 
+            ['es2015', {modules: false}],
             'react'
           ],
         },
       }, {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        test: /\.sass?$/,
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
     ],
   },
