@@ -59,7 +59,6 @@ INSTALLED_APPS += (
     'rest_framework',
     'mptt',
     'analytical',
-    'pipeline',
     'django_js_reverse',
     'webpack_loader',
 )
@@ -84,13 +83,11 @@ TEMPLATES[0]['OPTIONS']['context_processors'] += (
     'django.core.context_processors.request',
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 STATIC_ROOT = 'collected_static'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
 )
 
 
@@ -112,41 +109,3 @@ ACTSTREAM_SETTINGS = {
 }
 
 JS_REVERSE_EXCLUDE_NAMESPACES = ['admin', 'djdt']
-
-
-PIPELINE = {
-    'COMPILERS': ('pipeline.compilers.sass.SASSCompiler',),
-    'JAVASCRIPT': {
-        '3party': {
-            'source_filenames': (
-                '3party/foundation/js/vendor/modernizr.js',
-                '3party/jquery/jquery.js',
-                '3party/foundation/js/foundation.min.js',
-                '3party/markdown/markdown.js',
-                '3party/moment/moment-with-locales.js',
-                '3party/select/js/select2.js',
-                '3party/select/js/i18n/fr.js',
-                '3party/cookie/cookie.js',
-            ),
-            'output_filename': '3party.js',
-        },
-    },
-    'STYLESHEETS': {
-        '3party': {
-            'source_filenames': (
-                '3party/foundation/css/normalize.css',
-                '3party/foundation/css/foundation.css',
-                '3party/foundation-icons/foundation-icons.css',
-                '3party/select/css/select2.css',
-            ),
-            'output_filename': '3party.css',
-        },
-        'main': {
-            'source_filenames': (
-                'style/*.sass',
-            ),
-            'output_filename': 'main.css',
-        },
-    },
-    'JS_COMPRESSOR': None,
-}
