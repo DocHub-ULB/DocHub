@@ -81,7 +81,7 @@ INSTALLED_APPS += (
 )
 
 TEMPLATES[0]['OPTIONS']['context_processors'] += (
-    'django.core.context_processors.request',
+    'django.template.context_processors.request',
 )
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
