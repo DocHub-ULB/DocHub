@@ -9,7 +9,7 @@ from tags.models import Tag
 from documents.models import Document
 
 import mock
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import pytest
 
 pytestmark = [pytest.mark.django_db, pytest.mark.webtest]

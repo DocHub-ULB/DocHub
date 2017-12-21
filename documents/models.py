@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import os
 
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.db.models.signals import pre_delete
@@ -25,10 +25,10 @@ class Document(models.Model):
     )
 
     name = models.CharField(max_length=255, verbose_name='Titre')
-    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours')
+    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours', on_delete=models.CASCADE)
 
     description = models.TextField(blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
     tags = models.ManyToManyField('tags.Tag', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
@@ -127,7 +127,7 @@ class Document(models.Model):
 
 class Page(models.Model):
     numero = models.IntegerField(db_index=True)
-    document = models.ForeignKey(Document, db_index=True)
+    document = models.ForeignKey(Document, db_index=True, on_delete=models.CASCADE)
 
     bitmap_120 = models.ImageField(upload_to='page_120', height_field="height_120")
     bitmap_600 = models.ImageField(upload_to='page_600', height_field="height_600")
@@ -146,7 +146,7 @@ class Page(models.Model):
 
 @python_2_unicode_compatible
 class DocumentError(models.Model):
-    document = models.ForeignKey(Document)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
     task_id = models.CharField(max_length=255)
     exception = models.CharField(max_length=1000)
     traceback = models.TextField()
