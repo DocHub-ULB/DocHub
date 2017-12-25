@@ -14,6 +14,9 @@
     <meta property="og:url" content="https://dochub.be" />
     <meta property="og:description" content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. " />
 
+    {% render_bundle 'commons' %}
+    {% render_bundle 'styles' %}
+
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 
     <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.js"></script>
@@ -43,8 +46,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
-
-    {% render_bundle 'styles' %}
 
     <!-- Start of Async Drift Code -->
     <script>

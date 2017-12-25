@@ -8,9 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
 
-    <link rel="icon" type="image/png" href="/static/images/favicon.png" />
+    {% render_bundle 'commons' %}
+    {% render_bundle 'styles' %}
 
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
+    <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 
     <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
 
@@ -41,8 +42,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
-
-    {% render_bundle 'styles' %}
 
     {% block header %}
     {% endblock %}
