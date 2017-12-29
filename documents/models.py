@@ -185,11 +185,11 @@ def cleanup_page_files(instance, **kwargs):
         instance.bitmap_120.storage.delete(filename_120)
 
     filename_600 = instance.bitmap_600.name
-    if filename_120 != '' and instance.bitmap_600.storage.exists(filename_600):
+    if filename_600 != '' and instance.bitmap_600.storage.exists(filename_600):
         instance.bitmap_600.storage.delete(filename_600)
 
     filename_900 = instance.bitmap_900.name
-    if filename_120 != '' and instance.bitmap_900.storage.exists(filename_900):
+    if filename_900 != '' and instance.bitmap_900.storage.exists(filename_900):
         instance.bitmap_900.storage.delete(filename_900)
 
 from documents.tasks import process_document
