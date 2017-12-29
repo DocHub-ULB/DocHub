@@ -15,6 +15,8 @@ from actstream import action
 from documents.models import Document, Page, DocumentError
 from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
 
+from django.conf import settings
+
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):
     if isinstance(exc, SkipException):
@@ -123,7 +125,7 @@ def preview_pdf(self, document_id):
 
     document = Document.objects.get(pk=document_id)
 
-    for i in range(document.pages):
+    for i in range(min(document.pages, settings.MAX_RENDER_PAGES)):
         page = Page.objects.create(numero=i, document=document)
 
         for width in 120, 600, 900:

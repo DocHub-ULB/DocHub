@@ -150,3 +150,6 @@ PIPELINE = {
     },
     'JS_COMPRESSOR': None,
 }
+
+
+MAX_RENDER_PAGES = 100

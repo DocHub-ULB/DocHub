@@ -112,7 +112,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
       </div>
     {% endfor %}
   </div>
+
   <div id="pages" class="medium-10 small-12 columns">
+      {% if document.page_set.count != document.pages %}
+      <div class="alert-box info radius">
+          Ce document est trop grand pour être vu en entier sur DocHub, téléchargez le si vous voulez voir la fin.
+      </div>
+      {% endif %}
     {% for page in document.page_set.all %}
       <div class="row">
         <div class="medium-2 columns">
@@ -147,6 +153,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         </div>
       </div>
     {% endfor %}
+    {% if document.page_set.count != document.pages %}
+    <div class="alert-box info radius">
+        Ce document est trop grand pour être vu en entier sur DocHub, téléchargez le si vous voulez voir la fin.
+    </div>
+    {% endif %}
   </div>
 {% endcache %}
 </div>
