@@ -175,3 +175,55 @@ def test_finish_file():
 
     doc = Document.objects.get(id=doc.id) # Get back the updated instance
     assert doc.state == "DONE"
+
+
+def test_repair():
+    doc = create_doc("Document name", ".pdf")
+
+    f = File(open('documents/tests/files/broken.pdf', 'rb'))
+    doc.pdf.save("another-uuid-beef-yolo.pdf", f)
+
+    # Magic number of a PDF should be "%PDF" but the broken pdf has "PDF"
+    # (missing "%")
+    doc.pdf.open()
+    assert doc.pdf.read(3) == b"PDF"
+    doc.pdf.close()
+
+    result = tasks.repair.delay(doc.id)
+    assert result.status == celery.states.SUCCESS, result.traceback
+
+    doc = Document.objects.get(pk=doc.id)
+
+    # File should be repaired
+    doc.pdf.open()
+    assert doc.pdf.read(4) == b"%PDF"
+    doc.pdf.close()
+
+
+def test_repairs_original_too():
+    doc = create_doc("Document name", ".pdf")
+
+    f = File(open('documents/tests/files/broken.pdf', 'rb'))
+    doc.original.save("another-uuid-beef-yolo.pdf", f)
+    doc.pdf = doc.original
+    doc.save()
+
+    # Magic number of a PDF should be "%PDF" but the broken pdf has "PDF"
+    # (missing "%")
+    doc.pdf.open()
+    assert doc.pdf.read(3) == b"PDF"
+    doc.pdf.close()
+
+    result = tasks.repair.delay(doc.id)
+    assert result.status == celery.states.SUCCESS, result.traceback
+
+    doc = Document.objects.get(pk=doc.id)
+
+    # File should be repaired
+    doc.pdf.open()
+    assert doc.pdf.read(4) == b"%PDF"
+    doc.pdf.close()
+
+    doc.original.open()
+    assert doc.original.read(4) == b"%PDF"
+    doc.original.close()

@@ -6,10 +6,12 @@ import subprocess
 import hashlib
 import uuid
 import tempfile
+import os
+
 
 from celery import shared_task, chain
 from PyPDF2 import PdfFileReader
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from actstream import action
 
 from documents.models import Document, Page, DocumentError
@@ -152,6 +154,42 @@ def finish_file(self, document_id):
 
     action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
     action.send(document.user, verb="upload success", action_object=document, target=document.course, public=False)
+
+    return document_id
+
+
+@doctask
+def repair(self, document_id):
+    document = Document.objects.get(pk=document_id)
+
+    pdf_is_original = document.pdf == document.original
+
+    tmpfile = tempfile.NamedTemporaryFile(prefix="dochub_pdf_repair_", suffix=".broken.pdf")
+    tmpfile.write(document.pdf.read())
+    tmpfile.flush()
+
+    try:
+        _, output_path = tempfile.mkstemp(prefix="dochub_pdf_repair_", suffix=".repaired.pdf")
+
+        try:
+            sub = subprocess.check_output(["mutool", "clean", tmpfile.name, output_path])
+        except OSError:
+            raise MissingBinary("mutool")
+        except subprocess.CalledProcessError as e:
+            raise DocumentProcessingError(document, exc=e, message='mutool clean has failed')
+
+        with open(output_path, 'rb') as fd:
+            document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
+            document.pdf.close()
+
+        tmpfile.close()
+    finally:
+        os.remove(output_path)
+
+    if pdf_is_original:
+        document.original = document.pdf
+
+    document.save()
 
     return document_id
 
