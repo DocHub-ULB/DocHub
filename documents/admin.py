@@ -20,6 +20,13 @@ def autotag(modeladmin, request, queryset):
 autotag.short_description = "Auto-tag selected documents"
 
 
+def repair(modeladmin, request, queryset):
+    for doc in queryset:
+        doc.repair()
+
+autotag.short_description = "Repair selected documents"
+
+
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5', 'state',)

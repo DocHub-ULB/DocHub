@@ -55,6 +55,9 @@ class Document(models.Model):
     def fullname(self):
         return self.__str__()
 
+    def repair(self):
+        repair.delay(self.id)
+
     def reprocess(self, force=False):
         if self.state != "ERROR" and not force:
             raise Exception("Document is not in error state it is " + self.state)
@@ -192,4 +195,4 @@ def cleanup_page_files(instance, **kwargs):
     if filename_900 != '' and instance.bitmap_900.storage.exists(filename_900):
         instance.bitmap_900.storage.delete(filename_900)
 
-from documents.tasks import process_document
+from documents.tasks import process_document, repair
