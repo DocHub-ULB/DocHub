@@ -22,6 +22,7 @@ class Document(models.Model):
         ('PROCESSING', 'En cours de traitement'),
         ('DONE', 'Rendu fini'),
         ('ERROR', 'Erreur'),
+        ('REPAIRED', 'Réparé'),
     )
 
     name = models.CharField(max_length=255, verbose_name='Titre')
