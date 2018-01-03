@@ -172,11 +172,11 @@ def repair(self, document_id):
         _, output_path = tempfile.mkstemp(prefix="dochub_pdf_repair_", suffix=".repaired.pdf")
 
         try:
-            sub = subprocess.check_output(["mutool", "clean", tmpfile.name, output_path], stderr=subprocess.STDOUT)
+            subprocess.check_output(["mutool", "clean", tmpfile.name, output_path], stderr=subprocess.STDOUT)
         except OSError:
             raise MissingBinary("mutool")
         except subprocess.CalledProcessError as e:
-            raise DocumentProcessingError(document, exc=e, message='mutool clean has failed')
+            raise DocumentProcessingError(document, exc=e, message='mutool clean has failed : %s' % e.output)
 
         with open(output_path, 'rb') as fd:
             document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
