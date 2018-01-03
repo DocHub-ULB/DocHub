@@ -182,6 +182,7 @@ def test_repair():
 
     f = File(open('documents/tests/files/broken.pdf', 'rb'))
     doc.pdf.save("another-uuid-beef-yolo.pdf", f)
+    old_path = doc.pdf.path
 
     # Magic number of a PDF should be "%PDF" but the broken pdf has "PDF"
     # (missing "%")
@@ -198,6 +199,8 @@ def test_repair():
     doc.pdf.open()
     assert doc.pdf.read(4) == b"%PDF"
     doc.pdf.close()
+
+    assert old_path != doc.pdf.path
 
 
 def test_repairs_original_too():

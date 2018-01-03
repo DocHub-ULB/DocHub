@@ -24,7 +24,7 @@ def repair(modeladmin, request, queryset):
     for doc in queryset:
         doc.repair()
 
-autotag.short_description = "Repair selected documents"
+repair.short_description = "Repair selected documents"
 
 
 @admin.register(Document)
@@ -36,7 +36,7 @@ class DocumentAdmin(admin.ModelAdmin):
     list_filter = ('state', 'created', 'edited', 'file_type')
     search_fields = ('md5', 'name')
 
-    actions = (reprocess, autotag,)
+    actions = (reprocess, autotag, repair)
 
     fieldsets = (
         (None, {
