@@ -59,6 +59,8 @@ def process_document(self, document_id):
         document.pdf = document.original
         document.save()
         process_pdf.delay(document_id)
+    elif document.is_unconvertible():
+        process_unconvertible.delay(document_id)
     else:
         process_office.delay(document_id)
 
@@ -207,5 +209,10 @@ process_office = chain(
     convert_office_to_pdf.s(),
     mesure_pdf_length.s(),
     preview_pdf.s(),
+    finish_file.s()
+)
+
+process_unconvertible = chain(
+    checksum.s(),
     finish_file.s()
 )

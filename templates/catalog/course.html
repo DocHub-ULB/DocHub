@@ -36,17 +36,23 @@
             <div class="row course-row document"
               node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
             >
-              {% if document.state == 'DONE' %}
+              {% if document.is_ready %}
                 <a href="{% url 'document_show' document.id %}">
                   <i class="fi-page-copy round-icon big"></i>
                 </a>
-              {% else %}
+              {% elif document.is_processing %}
                 <i class="fi-loop round-icon big"></i>
+              {% else %}
+                <i class="fi-save round-icon big"></i>
               {% endif %}
               <div class="course-row-content">
                 <h5>
-                  {% if document.state == "DONE" %}
-                    <a href="{% url 'document_show' document.id %}"> {{ document.name }} </a>
+                  {% if document.is_ready %}
+                    {% if not document.is_unconvertible %}
+                      <a href="{% url 'document_show' document.id %}"> {{ document.name }} </a>
+                    {% else %}
+                      {{ document.name }}
+                    {% endif %}
                     {% if request.user|has_perm_on:document %}
                       <a href="{% url 'document_edit' document.id %}">
                         <abbr title="Editer ce document">
@@ -68,7 +74,13 @@
                   <p>{{ document.description|truncatechars:200 }}</p>
                 {% endif %}
                 <div class="course-content-last-line">
-                  <i class="fi-page-filled"></i>  {{ document.pages }} page{{ document.pages|pluralize }}
+                  {% if document.is_ready and not document.is_unconvertible %}
+                    <i class="fi-page-filled"></i>  {{ document.pages }} page{{ document.pages|pluralize }}
+                  {% else %}
+                    <a href="{% url 'document_download_original' document.id %}">
+                      <i class="fi-download"></i> Télécharger le fichier ({{document.file_type}})
+                    </a>
+                  {% endif %}
                   <i class="fi-clock"></i> Uploadé le {{ document.date|date:"d F Y" }}
                   {% if document.tags.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
                   {% for kw in document.tags.all%}

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import os
-
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
@@ -11,6 +9,14 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
 from tags.models import Tag
+
+UNCONVERTIBLE_TYPES = [
+    '.zip',
+    '.rar',
+    '.tex',
+    '.djvu',
+    '.pages',
+]
 
 
 @python_2_unicode_compatible
@@ -58,6 +64,15 @@ class Document(models.Model):
 
     def repair(self):
         repair.delay(self.id)
+
+    def is_unconvertible(self):
+        return self.file_type in UNCONVERTIBLE_TYPES
+
+    def is_ready(self):
+        return self.state in ('DONE', 'REPAIRED')
+
+    def is_processing(self):
+        return self.state in ('PREPARING', 'IN_QUEUE', 'PROCESSING')
 
     def reprocess(self, force=False):
         if self.state != "ERROR" and not force:
