@@ -15,6 +15,15 @@ There is a [live instance of DocHub](https://dochub.be) hosted by [UrLab](https:
 
 ## Tech
 
+### Docker
+You can run a dev instance in a docker container with the following command or read further for manual installation instructions.
+
+
+    docker build -t dochub . && docker run --name dochublive -d -p 8000:8000 dochub
+
+Dochub should be accessible on your host machine at localhost:8000.
+The files in the repo on your host machine are shared and available from within the docker (in `/usr/src/app`).
+
 ### Vagrant
 You can run a dev instance in a Vagrant box with the following steps or read further for manual installation instructions.
 
