@@ -22,7 +22,8 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'id', 'name', 'url', 'course', 'description',
             'user', 'pages', 'date', 'views',
-            'downloads', 'state', 'md5', 'tags', 'has_perm'
+            'downloads', 'state', 'md5', 'tags', 'has_perm',
+            'is_unconvertible', 'is_ready', 'is_processing',
         )
 
         extra_kwargs = {
