@@ -71,6 +71,31 @@ def test_add_to_queue():
 
 
 @pytest.mark.slow
+def test_warning_to_stdout():
+    """
+    Some document output warnings to stdout when converting
+    But the conversion succeeds. We have to verify that we don't write the warnings
+    text to the jpg file.
+    """
+
+    doc = create_doc("Document name", ".pdf")
+    f = File(open('documents/tests/files/warn_to_stdout.pdf', 'rb'))
+    doc.original.save("silly-unique-deadbeef-file.pdf", f)
+
+    result = process_document.delay(doc.id)
+    assert result.status == celery.states.SUCCESS, result.traceback
+
+    doc = Document.objects.get(id=doc.id) # Get back the updated instance
+
+    assert doc.state == "DONE"
+    assert doc.page_set.count() == 8
+    assert doc.page_set.count() == doc.pages
+    assert doc.original.path == doc.pdf.path
+
+    assert b'**** Error reading a content stream' not in doc.page_set.get(numero=2).bitmap_120.read()
+
+
+@pytest.mark.slow
 def test_send_duplicate():
     test_add_to_queue()
 

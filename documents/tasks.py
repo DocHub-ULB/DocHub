@@ -133,17 +133,24 @@ def preview_pdf(self, document_id):
         page = Page.objects.create(numero=i, document=document)
 
         for width in 120, 600, 900:
-            args = [
-                "gm", "convert",
-                "-geometry", "{}x".format(width),
-                "-quality", "90",
-                "-density", "300",
-                "pdf:{}[{}]".format(document.pdf.path, i),
-                "jpg:-"
-            ]
-            converter = subprocess.Popen(args, stdout=subprocess.PIPE)
-            destination = page.__getattribute__('bitmap_' + str(width))
-            destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(converter.stdout.read()))
+            try:
+                _, output_path = tempfile.mkstemp(prefix="dochub_preview_dest_", suffix=".jpg")
+
+                args = [
+                    "gm", "convert",
+                    "-geometry", "{}x".format(width),
+                    "-quality", "90",
+                    "-density", "300",
+                    "pdf:{}[{}]".format(document.pdf.path, i),
+                    "jpg:{}".format(output_path),
+                ]
+                subprocess.check_output(args)
+                destination = page.__getattribute__('bitmap_' + str(width))
+                with open(output_path, 'rb') as fd:
+                    destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(fd.read()))
+
+            finally:
+                os.remove(output_path)
 
     return document_id
 
