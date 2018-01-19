@@ -45,4 +45,10 @@ def suggest(target_user, K=15):
         differences = users_following[user_id] - target_set
         best_matches.update(differences)
 
-    return [(Course.objects.get(id=course_id), hits) for course_id, hits in best_matches.most_common()]
+    try:
+        return [(Course.objects.get(id=course_id), hits) for course_id, hits in best_matches.most_common()]
+    except:
+        # Ugly fix to avoid crashing the page if we don't compute the courses
+        # TODO log the error (DoesNotExist: Course matching query does not exist.)
+        # TODO Scope the except
+        return []
