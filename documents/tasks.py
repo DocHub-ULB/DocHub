@@ -134,7 +134,8 @@ def preview_pdf(self, document_id):
 
         for width in 120, 600, 900:
             try:
-                _, output_path = tempfile.mkstemp(prefix="dochub_preview_dest_", suffix=".jpg")
+                fd, output_path = tempfile.mkstemp(prefix="dochub_preview_dest_", suffix=".jpg")
+                os.close(fd)
 
                 args = [
                     "gm", "convert",
@@ -178,7 +179,8 @@ def repair(self, document_id):
     tmpfile.flush()
 
     try:
-        _, output_path = tempfile.mkstemp(prefix="dochub_pdf_repair_", suffix=".repaired.pdf")
+        fd, output_path = tempfile.mkstemp(prefix="dochub_pdf_repair_", suffix=".repaired.pdf")
+        os.close(fd)
 
         try:
             subprocess.check_output(["mutool", "clean", tmpfile.name, output_path], stderr=subprocess.STDOUT)
