@@ -32,7 +32,7 @@ class DocumentAdmin(admin.ModelAdmin):
     readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5', 'state',)
     filter_horizontal = ('tags',)
 
-    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'state', 'user', 'file_type')
+    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type')
     list_filter = ('state', 'created', 'edited', 'file_type')
     search_fields = ('md5', 'name')
 
@@ -43,13 +43,14 @@ class DocumentAdmin(admin.ModelAdmin):
             'fields': (
                 'name',
                 ('course', 'user'),
-                ('pages', 'state', 'hidden'),
+                ('pages', 'state'),
+                'hidden',
                 'tags',
+                ('created', 'edited'),
                 'description',
             )
         }),
         ('Extra', {
-            'classes': ('collapse',),
             'fields': (
                 ('file_type', 'md5'),
                 ('original', 'pdf'),
