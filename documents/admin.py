@@ -46,8 +46,6 @@ class DocumentAdmin(admin.ModelAdmin):
                 ('pages', 'state'),
                 'hidden',
                 'tags',
-                'created',
-                'edited',
                 'description',
             )
         }),
