@@ -6,6 +6,8 @@ import json
 from os import path
 from optparse import make_option
 import yaml
+from raven.contrib.django.raven_compat.models import client
+
 
 from django.conf import settings
 from catalog.models import Category, Course
@@ -71,8 +73,13 @@ class Command(BaseCommand):
                 if self.LOCAL_CACHE:
                     name = self.LOCAL_CACHE.get(tree, "Unknown course in cache")
                 else:
-                    ulb_course = ULBCourse.get_from_slug(tree, self.YEAR)
-                    name = ulb_course.name
+                    try:
+                        ulb_course = ULBCourse.get_from_slug(tree, self.YEAR)
+                        name = ulb_course.name
+                    except Exception:
+                        print("Slug %s failed" % tree)
+                        client.captureException()
+                        name = "Unknown course in cache"
                 course = Course.objects.create(name=name, slug=tree)
             course.categories.add(father)
 
