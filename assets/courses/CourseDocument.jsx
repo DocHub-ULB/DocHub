@@ -1,5 +1,6 @@
 const React = require('react');
 const Tag = require('./Tag.jsx');
+import {markdown} from 'markdown';
 
 const CourseDocument = React.createClass({
     ready: function(){return (this.props.is_ready);},
@@ -33,7 +34,8 @@ const CourseDocument = React.createClass({
     },
     edit_icon: function(){
         if (this.ready() && this.editable()){
-            return <a href={this.edit_url()} title="Éditer">
+            return
+            <a href={this.edit_url()} title="Éditer">
                 <i className="fi-pencil dark-grey"></i> Editer
             </a>;
         }
@@ -41,9 +43,9 @@ const CourseDocument = React.createClass({
     },
     reupload_icon: function(){
         if (this.ready() && this.editable()){
-            return <a href={this.reupload_url()}>
+            return (<a href={this.reupload_url()}>
                 <i className="fi-page-add dark-grey" title="Nouvelle version"></i> Ré-uploader
-            </a>;
+            </a>);
         }
     },
     description: function(){
@@ -78,7 +80,7 @@ const CourseDocument = React.createClass({
         });
     },
     render: function(){
-        return <div className="row course-row document">
+        return (<div className="row course-row document">
             {this.icon()}
             <div className="course-row-content">
                 <h5>
@@ -93,8 +95,8 @@ const CourseDocument = React.createClass({
                     <i className="fi-pricetag-multiple"></i> {this.tags()}
                 </div>
             </div>
-        </div>;
+        </div>);
     }
 });
 
-module.exports = CourseDocument;
+export default CourseDocument;

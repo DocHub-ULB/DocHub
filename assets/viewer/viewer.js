@@ -6,6 +6,8 @@
  * your option) any later version.
  */
 
+window.Cookies = require('js-cookie');
+
 Number.prototype.pad = function(l) {
     var n = Math.abs(this);
     var zeros = Math.max(0, l - Math.floor(n).toString().length );
