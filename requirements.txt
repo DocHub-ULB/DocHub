@@ -39,3 +39,5 @@ psycopg2
 django-debug-toolbar
 django-jsonfield
 django-jsonfield-compat
+gunicorn
+raven
