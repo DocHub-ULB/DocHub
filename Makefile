@@ -1,7 +1,11 @@
 ifeq ($(TRAVIS),true)
     PY=python
 else
-    PY=ve/bin/python
+ifndef VIRTUAL_ENV
+PY=ve/bin/python
+else
+PY=python
+endif
 endif
 
 init: database
