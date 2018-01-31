@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 
 class MissingBinary(EnvironmentError):
     def __repr__(self):
-        return "MissingBinary: %s" % self.message
+        message = self.args[0] if self.args else ""
+        return "MissingBinary: %s" % message
 
     __str__ = __repr__
 
