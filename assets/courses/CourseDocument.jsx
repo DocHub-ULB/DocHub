@@ -1,14 +1,15 @@
 const React = require('react');
 const Tag = require('./Tag.jsx');
 import {markdown} from 'markdown';
+import moment from 'moment'
 
 const CourseDocument = React.createClass({
     ready: function(){return (this.props.is_ready);},
     editable: function(){return this.props.has_perm;},
     date: function(){return moment(this.props.date).format("D MMMM YYYY");},
-    edit_url: function(){return Urls.document_edit(this.props.id);},
-    reupload_url: function(){return Urls.document_reupload(this.props.id);},
-    url: function(){return Urls.document_show(this.props.id);},
+    edit_url: function(){return window.Urls.document_edit(this.props.id);},
+    reupload_url: function(){return window.Urls.document_reupload(this.props.id);},
+    url: function(){return window.Urls.document_show(this.props.id);},
     icon: function(){
         if (this.ready()){
             return (<a href={this.url()}>
@@ -22,9 +23,9 @@ const CourseDocument = React.createClass({
     },
     download_icon: function(){
         if (this.ready()){
-            url = Urls.document_download(this.props.id)
+            var url = window.Urls.document_download(this.props.id)
         } else {
-            url = Urls.document_download_original(this.props.id)
+            var url = window.Urls.document_download_original(this.props.id)
         }
         return (
             <a href={url} title="Télécharger">
