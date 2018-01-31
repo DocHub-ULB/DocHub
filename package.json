@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js",
-    "watch": "webpack --config ./webpack.dev.config.js --watch"
+    "watch": "webpack --config ./webpack.dev.config.js --watch",
+    "runserver": "./manage.py runserver",
+    "runworker": "celery -A www worker -l info",
+    "dev": "concurrently --kill-others \"npm run watch\" \"npm run runserver\"  \"npm run runworker\""
   },
   "repository": {
     "type": "git",
@@ -37,6 +40,7 @@
     "webpack-bundle-tracker": "^0.2.1"
   },
   "dependencies": {
+    "concurrently": "^3.5.1",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
     "markdown": "^0.5.0",
