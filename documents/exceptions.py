@@ -3,7 +3,11 @@ from __future__ import unicode_literals
 
 
 class MissingBinary(EnvironmentError):
-    pass
+    def __repr__(self):
+        message = self.args[0] if self.args else ""
+        return "MissingBinary: %s" % message
+
+    __str__ = __repr__
 
 
 class DocumentProcessingError(Exception):

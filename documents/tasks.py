@@ -6,14 +6,18 @@ import subprocess
 import hashlib
 import uuid
 import tempfile
+import os
+
 
 from celery import shared_task, chain
 from PyPDF2 import PdfFileReader
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from actstream import action
 
 from documents.models import Document, Page, DocumentError
 from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
+
+from django.conf import settings
 
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -55,6 +59,8 @@ def process_document(self, document_id):
         document.pdf = document.original
         document.save()
         process_pdf.delay(document_id)
+    elif document.is_unconvertible():
+        process_unconvertible.delay(document_id)
     else:
         process_office.delay(document_id)
 
@@ -123,21 +129,29 @@ def preview_pdf(self, document_id):
 
     document = Document.objects.get(pk=document_id)
 
-    for i in range(document.pages):
+    for i in range(min(document.pages, settings.MAX_RENDER_PAGES)):
         page = Page.objects.create(numero=i, document=document)
 
         for width in 120, 600, 900:
-            args = [
-                "gm", "convert",
-                "-geometry", "{}x".format(width),
-                "-quality", "90",
-                "-density", "300",
-                "pdf:{}[{}]".format(document.pdf.path, i),
-                "jpg:-"
-            ]
-            converter = subprocess.Popen(args, stdout=subprocess.PIPE)
-            destination = page.__getattribute__('bitmap_' + str(width))
-            destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(converter.stdout.read()))
+            try:
+                fd, output_path = tempfile.mkstemp(prefix="dochub_preview_dest_", suffix=".jpg")
+                os.close(fd)
+
+                args = [
+                    "gm", "convert",
+                    "-geometry", "{}x".format(width),
+                    "-quality", "90",
+                    "-density", "300",
+                    "pdf:{}[{}]".format(document.pdf.path, i),
+                    "jpg:{}".format(output_path),
+                ]
+                subprocess.check_output(args)
+                destination = page.__getattribute__('bitmap_' + str(width))
+                with open(output_path, 'rb') as fd:
+                    destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(fd.read()))
+
+            finally:
+                os.remove(output_path)
 
     return document_id
 
@@ -154,6 +168,44 @@ def finish_file(self, document_id):
     return document_id
 
 
+@doctask
+def repair(self, document_id):
+    document = Document.objects.get(pk=document_id)
+
+    pdf_is_original = document.pdf == document.original
+
+    tmpfile = tempfile.NamedTemporaryFile(prefix="dochub_pdf_repair_", suffix=".broken.pdf")
+    tmpfile.write(document.pdf.read())
+    tmpfile.flush()
+
+    try:
+        fd, output_path = tempfile.mkstemp(prefix="dochub_pdf_repair_", suffix=".repaired.pdf")
+        os.close(fd)
+
+        try:
+            subprocess.check_output(["mutool", "clean", tmpfile.name, output_path], stderr=subprocess.STDOUT)
+        except OSError:
+            raise MissingBinary("mutool")
+        except subprocess.CalledProcessError as e:
+            raise DocumentProcessingError(document, exc=e, message='mutool clean has failed : %s' % e.output)
+
+        with open(output_path, 'rb') as fd:
+            document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
+            document.pdf.close()
+
+        tmpfile.close()
+    finally:
+        os.remove(output_path)
+
+    if pdf_is_original:
+        document.original = document.pdf
+
+    document.state = 'REPAIRED'
+    document.save()
+
+    return document_id
+
+
 process_pdf = chain(
     checksum.s(),
     mesure_pdf_length.s(),
@@ -166,5 +218,10 @@ process_office = chain(
     convert_office_to_pdf.s(),
     mesure_pdf_length.s(),
     preview_pdf.s(),
+    finish_file.s()
+)
+
+process_unconvertible = chain(
+    checksum.s(),
     finish_file.s()
 )

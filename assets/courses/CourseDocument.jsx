@@ -1,7 +1,8 @@
 const React = require('react');
+const Tag = require('./Tag.jsx');
 
 const CourseDocument = React.createClass({
-    ready: function(){return (this.props.state == 'DONE');},
+    ready: function(){return (this.props.is_ready);},
     editable: function(){return this.props.has_perm;},
     date: function(){return moment(this.props.date).format("D MMMM YYYY");},
     edit_url: function(){return Urls.document_edit(this.props.id);},
@@ -9,24 +10,31 @@ const CourseDocument = React.createClass({
     url: function(){return Urls.document_show(this.props.id);},
     icon: function(){
         if (this.ready()){
-            return <a href={this.url()}>
+            return (<a href={this.url()}>
                 <i className="fi-page-copy round-icon big"></i>
-            </a>;
+            </a>);
+        } else if (this.props.is_processing) {
+            return <i className="fi-loop round-icon big"></i>;
+        } else {
+            return <i className="fi-save round-icon big"></i>;
         }
-        return <i className="fi-loop round-icon big"></i>;
     },
     download_icon: function(){
         if (this.ready()){
-            return <a href={Urls.document_download(this.props.id)} title="Télécharger">
-                <i className="fi-download"></i>
-            </a>
+            url = Urls.document_download(this.props.id)
+        } else {
+            url = Urls.document_download_original(this.props.id)
         }
-        return ''
+        return (
+            <a href={url} title="Télécharger">
+                <i className="fi-download dark-grey"></i> Télécharger
+            </a>
+        )
     },
     edit_icon: function(){
         if (this.ready() && this.editable()){
             return <a href={this.edit_url()} title="Éditer">
-                <i className="fi-pencil dark-grey"></i>
+                <i className="fi-pencil dark-grey"></i> Editer
             </a>;
         }
         return '';
@@ -34,7 +42,7 @@ const CourseDocument = React.createClass({
     reupload_icon: function(){
         if (this.ready() && this.editable()){
             return <a href={this.reupload_url()}>
-                <i className="fi-page-add dark-grey" title="Nouvelle version"></i>
+                <i className="fi-page-add dark-grey" title="Nouvelle version"></i> Ré-uploader
             </a>;
         }
     },
@@ -59,6 +67,9 @@ const CourseDocument = React.createClass({
         else if (this.props.pages == 1){
             return "1 page";
         }
+        else if (this.props.is_unconvertible){
+            return "";
+        }
         return this.props.pages + " pages";
     },
     tags: function(){
@@ -73,9 +84,9 @@ const CourseDocument = React.createClass({
                 <h5>
                     {this.title()}
                     <small> par {this.props.user.name}</small><br/>
-                    {this.download_icon()} {this.edit_icon()} {this.reupload_icon()}
                 </h5>
                 {this.description()}
+                {this.download_icon()} {this.edit_icon()} {this.reupload_icon()}
                 <div className="course-content-last-line">
                     <i className="fi-page-filled"></i> {this.pages()}&nbsp;
                     <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;

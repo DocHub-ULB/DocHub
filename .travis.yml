@@ -31,6 +31,8 @@ addons:
   apt:
     packages:
     - graphicsmagick
+    - mupdf-tools
+    - ghostscript
     # Unoconv is not supported on travis right now
     # but we do not run unoconv tests on travis so it's not a problem
     # - unoconv
