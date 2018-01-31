@@ -15,41 +15,23 @@ There is a [live instance of DocHub](https://dochub.be) hosted by [UrLab](https:
 
 ## Tech
 
-### Vagrant
-You can run a dev instance in a Vagrant box with the following steps or read further for manual installation instructions.
-
-Download and install vagrant (and probably virtualbox with it), then
-    
-    vagrant up
-    vagrant ssh
-    cd /vagrant
-    source ve/bin/activate
-    honcho start -f VagrantProcfile
-
-Dochub should be accessible on your host machine at localhost:8000.
-The files in the repo on your host machine are shared and available from within the vagrantbox (in `/vagrant`).
-
 ### Dependencies
 
     # Ubuntu
-    sudo apt-get install graphicsmagick unoconv python3-dev nodejs ruby npm libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
+    sudo apt-get install graphicsmagick unoconv python3-dev nodejs ruby npm libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
     # Fedora
-    sudo dnf install GraphicsMagick unoconv python-devel nodejs ruby npm
+    sudo dnf install GraphicsMagick unoconv python-devel nodejs ruby npm mupdf
     # Arch linux
-    sudo pacman -S graphicsmagick unoconv nodejs ruby python npm
+    sudo pacman -S graphicsmagick unoconv nodejs ruby python npm mupdf-tools
 
 ### Installation
 
-    gem install sass
-    sudo npm install -g yuglify
     make install database
     npm install
 
-    If you don't want to run npm as root (we could understand), just run `npm install yuglify` and add the `yuglify` binary to your path. (it might be `/usr/local/bin/yuglify` or `./node_modules/.bin/yuglify` depending on your distro)
-
 ### Run
 
-    honcho start
+    npm run dev
 
 Then go http://localhost:8000/
 
@@ -95,4 +77,3 @@ This software was made by hast, C4, ititou and rom1 at UrLab (https://urlab.be):
 
 
 [_Woop woop_](https://www.youtube.com/watch?v=z13qnzUQwuI)
-
