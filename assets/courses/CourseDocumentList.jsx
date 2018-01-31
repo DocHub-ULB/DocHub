@@ -1,5 +1,5 @@
 const React = require('react');
-const CourseDocument = require('./CourseDocument.jsx');
+const CourseDocument = require('./CourseDocument.jsx').default;
 const Tag = require('./Tag.jsx');
 
 /* http://stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object */
@@ -95,7 +95,7 @@ const CourseDocumentList = React.createClass({
             return <CourseDocument key={"doc"+doc.id} {...doc} />;
         });
 
-        return <div>
+        return (<div>
             <div className="row">
                 <div className="column small-7">
                     <h3>Filtrer <small>par tag</small></h3>
@@ -108,8 +108,8 @@ const CourseDocumentList = React.createClass({
             </div>
             <hr/>
             {docs}
-        </div>;
+        </div>);
     }
 });
 
-module.exports = CourseDocumentList;
+export default CourseDocumentList;

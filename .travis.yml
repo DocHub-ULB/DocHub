@@ -16,8 +16,6 @@ cache:
 before_script:
   - nvm install node
   - pip install -U setuptools
-  - npm install -g yuglify
-  - gem install sass
   - npm install
 
 script:

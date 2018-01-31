@@ -8,7 +8,7 @@ pygments
 pyPdf2
 requests
 xmltodict
-djangorestframework==3.5.3
+djangorestframework>3.6, <3.7
 drf-extensions
 furl
 django-mptt

@@ -1,13 +1,15 @@
 const React = require('react');
 const Tag = require('./Tag.jsx');
+import {markdown} from 'markdown';
+import moment from 'moment'
 
 const CourseDocument = React.createClass({
     ready: function(){return (this.props.is_ready);},
     editable: function(){return this.props.has_perm;},
     date: function(){return moment(this.props.date).format("D MMMM YYYY");},
-    edit_url: function(){return Urls.document_edit(this.props.id);},
-    reupload_url: function(){return Urls.document_reupload(this.props.id);},
-    url: function(){return Urls.document_show(this.props.id);},
+    edit_url: function(){return window.Urls.document_edit(this.props.id);},
+    reupload_url: function(){return window.Urls.document_reupload(this.props.id);},
+    url: function(){return window.Urls.document_show(this.props.id);},
     icon: function(){
         if (this.ready()){
             return (<a href={this.url()}>
@@ -21,9 +23,9 @@ const CourseDocument = React.createClass({
     },
     download_icon: function(){
         if (this.ready()){
-            url = Urls.document_download(this.props.id)
+            var url = window.Urls.document_download(this.props.id)
         } else {
-            url = Urls.document_download_original(this.props.id)
+            var url = window.Urls.document_download_original(this.props.id)
         }
         return (
             <a href={url} title="Télécharger">
@@ -33,7 +35,8 @@ const CourseDocument = React.createClass({
     },
     edit_icon: function(){
         if (this.ready() && this.editable()){
-            return <a href={this.edit_url()} title="Éditer">
+            return
+            <a href={this.edit_url()} title="Éditer">
                 <i className="fi-pencil dark-grey"></i> Editer
             </a>;
         }
@@ -41,9 +44,9 @@ const CourseDocument = React.createClass({
     },
     reupload_icon: function(){
         if (this.ready() && this.editable()){
-            return <a href={this.reupload_url()}>
+            return (<a href={this.reupload_url()}>
                 <i className="fi-page-add dark-grey" title="Nouvelle version"></i> Ré-uploader
-            </a>;
+            </a>);
         }
     },
     description: function(){
@@ -78,7 +81,7 @@ const CourseDocument = React.createClass({
         });
     },
     render: function(){
-        return <div className="row course-row document">
+        return (<div className="row course-row document">
             {this.icon()}
             <div className="course-row-content">
                 <h5>
@@ -93,8 +96,8 @@ const CourseDocument = React.createClass({
                     <i className="fi-pricetag-multiple"></i> {this.tags()}
                 </div>
             </div>
-        </div>;
+        </div>);
     }
 });
 
-module.exports = CourseDocument;
+export default CourseDocument;
