@@ -5,7 +5,7 @@ import json
 from functools import partial
 
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,6 +13,7 @@ from django.db.models import Count
 from django.views.generic.detail import DetailView
 from django.views.decorators.cache import cache_page
 from mptt.utils import get_cached_trees
+from django.utils import timezone
 
 from actstream import actions
 import actstream
@@ -66,9 +67,11 @@ def leave_course(request, slug):
 
 @login_required
 def show_courses(request):
+    end_of_year = timezone.now().month in [7,8,9,10]
     return render(request, "catalog/my_courses.html", {
         "faculties": Category.objects.get(level=0).children.all(),
-        "suggestions": suggest(request.user)
+        "suggestions": suggest(request.user),
+        "show_unfollow_button": end_of_year
     })
 
 
@@ -93,3 +96,9 @@ def course_tree(request):
     categories = list(map(category, get_cached_trees(Category.objects.all())))
     return HttpResponse(json.dumps(categories),
                         content_type="application/json")
+
+@login_required
+def unfollow_courses(request):
+    for course in request.user.following_courses():
+        actions.unfollow(request.user, course)
+    return redirect("show_courses")
