@@ -17,7 +17,7 @@ before_script:
   - nvm install node
   - pip install -U setuptools
   - npm install -g yuglify
-  - gem install -g sass
+  - gem install sass
   - npm install
 
 script:
