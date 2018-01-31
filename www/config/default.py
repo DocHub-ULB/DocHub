@@ -58,7 +58,6 @@ INSTALLED_APPS += (
     'djcelery',
     'rest_framework',
     'mptt',
-    'analytical',
     'django_js_reverse',
     'webpack_loader',
 )

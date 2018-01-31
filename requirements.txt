@@ -16,7 +16,6 @@ django-activity-stream
 git+https://github.com/C4ptainCrunch/libulb.git
 PyYaml
 jsonfield
-django-analytical
 django-pipeline
 PyReact
 django-js-reverse
