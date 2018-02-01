@@ -1,34 +1,82 @@
-{%load humanize %}
-{% load analytical %}
-{% load pipeline %}
-
+{% load humanize %}
+{% load render_bundle from webpack_loader %}
 
 <!doctype html>
 <html class="no-js" lang="en">
   <head>
-    {% analytical_head_top %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub - ULB{% endblock %}</title>
 
     <meta property="og:title" content="DocHub" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="http://dochub.be/static/images/facebook_cover.png" />
-    <meta property="og:url" content="http://dochub.be" />
+    <meta property="og:image" content="https://dochub.be/static/images/facebook_cover.png" />
+    <meta property="og:url" content="https://dochub.be" />
     <meta property="og:description" content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. " />
+
+    {% render_bundle 'commons' %}
+    {% render_bundle 'styles' %}
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 
-    {% stylesheet '3party' %}
-    {% stylesheet 'main' %}
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/fastclick.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/modernizr.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/placeholder.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.abide.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.accordion.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.alert.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.clearing.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.dropdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.equalizer.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.interchange.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.joyride.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.magellan.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.offcanvas.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.orbit.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.slider.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tab.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tooltip.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.topbar.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
 
-    {% analytical_head_bottom %}
+    <!-- Start of Async Drift Code -->
+    <script>
+    !function() {
+      var t;
+      if (t = window.driftt = window.drift = window.driftt || [], !t.init) return t.invoked ? void (window.console && console.error && console.error("Drift snippet included twice.")) : (t.invoked = !0,
+      t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ],
+      t.factory = function(e) {
+        return function() {
+          var n;
+          return n = Array.prototype.slice.call(arguments), n.unshift(e), t.push(n), t;
+        };
+      }, t.methods.forEach(function(e) {
+        t[e] = t.factory(e);
+      }), t.load = function(t) {
+        var e, n, o, i;
+        e = 3e5, i = Math.ceil(new Date() / e) * e, o = document.createElement("script"),
+        o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + i + "/" + t + ".js",
+        n = document.getElementsByTagName("script")[0], n.parentNode.insertBefore(o, n);
+      });
+    }();
+    drift.SNIPPET_VERSION = '0.3.1';
+    drift.load('dzkrmavg2zw3');
+    </script>
+    <!-- End of Async Drift Code -->
+
   </head>
   <body>
-    {% analytical_body_top %}
     <div class="sticky">
     <nav class="top-bar" data-topbar="">
-        <ul class="title-area">
+        <ul class="title-area text-center">
             <li class="name">
                <h1><a href="/">DocHub</a></h1>
             </li>
@@ -58,20 +106,24 @@
           </p>
           <p>
           <i class="fi-page-copy"></i>
-          DocHub, c'est actuellement plus de {{documents}} documents contenant plus de {{pages}} pages
-          {% if users >= 20%}
-            ajoutées par plus de {{users}} utilisateurs
-          {%endif%}
-          .<br>
-          {% if threads >= 20 %}
-           <i class="fi-comment"></i> Sur DocHub, vous pouvez poser des questions et les autres étudiants peuvent y répondre. Il y a déjà eu plus de {{threads}} questions posées.
+          DocHub, c'est actuellement plus de {{documents|intcomma}} documents contenant
+          plus de {{pages|intcomma}} pages ajoutées par plus de {{users|intcomma}} utilisateurs.<br>
+          <i class="fi-comment"></i>
+          Sur DocHub, vous pouvez poser des questions et les autres étudiants peuvent y répondre.
+          {% if threads >= 100 %}
+            Il y a déjà eu plus de {{threads}} questions posées.
           {% endif %}
           </p>
         </div>
       {% endblock %}
     </div>
-    {% javascript '3party' %}
-    {% javascript 'main' %}
-    {% analytical_body_bottom %}
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89986937-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-89986937-2');
+    </script>
   </body>
 </html>

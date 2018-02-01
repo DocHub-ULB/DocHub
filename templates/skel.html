@@ -1,27 +1,52 @@
 {%load humanize %}
-{% load analytical %}
-{% load pipeline %}
+{% load render_bundle from webpack_loader %}
 
 <!doctype html>
 <html class="no-js" lang="en">
   <head>
-    {% analytical_head_top %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
 
+    {% render_bundle 'commons' %}
+    {% render_bundle 'styles' %}
+
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 
-    {% stylesheet '3party' %}
-    {% stylesheet 'main' %}
+    <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/fastclick.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/modernizr.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/placeholder.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.abide.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.accordion.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.alert.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.clearing.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.dropdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.equalizer.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.interchange.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.joyride.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.magellan.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.offcanvas.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.orbit.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.slider.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tab.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tooltip.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.topbar.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
 
     {% block header %}
     {% endblock %}
-
-    {% analytical_head_bottom %}
   </head>
   <body>
-    {% analytical_body_top %}
     <div class="sticky">
     <nav class="top-bar" data-topbar="">
         <ul class="title-area">
@@ -42,16 +67,19 @@
                   </a>
                 {% endwith %}
               </li>
-              <li class="has-dropdown">
+              <li>
                 <a href="{% url 'show_courses' %}">Mes cours</a>
-                <ul class="dropdown" id="course-tree-menu">
-                  <li><a href="#">
-                    <i class="fi-loop spinning"></i> <span class="fading">Chargement</span>
-                  </a></li>
-                </ul>
               </li>
+              <li class="divider"></li>
+            </ul>
+            <ul class="left" id="course-tree-menu">
             </ul>
             <ul class="right">
+              <li>
+                    <a href="{% url "help" %}#jobs">
+                            DocHub cherche des développeurs et modérateurs !
+                    </a>
+              </li>
               <li>
                 <a href="https://www.facebook.com/DocHub" id="facebook"><i class="fi-social-facebook"></i></a>
               </li>
@@ -123,27 +151,31 @@
       <br>
       <a href="mailto:nikita.marchant@ulb.ac.be">Contact us</a> -
       Made with love at
-      <a href="http://urlab.be">
+      <a href="https://urlab.be">
         <img src="/static/images/urlab.png" style="height: 1em;">
         UrLab
       </a>
-      - Code on <a href="http://github.com/UrLab/beta402">GitHub</a>
-      - <a href="http://cerkinfo.be">
+      - Code on <a href="https://github.com/UrLab/beta402">GitHub</a>
+      - <a href="https://cerkinfo.be">
           <img style="height: 1.0em;" src="/static/images/ci.png">
         </a>
       - <a href="/api">API</a>
       <br><br>
     </footer>
 
-    <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
-    {% javascript '3party' %}
-    {% javascript 'main' %}
+    {% render_bundle 'tree' %}
 
     {% block script %}{% endblock %}
 
     <script type="text/javascript">
       $(document).ready(function(){
-          $(document).foundation();
+        $(document).foundation();
+
+        // Rendering react.
+        $.get(Urls.course_tree(), function (data) {
+            courseTreeRender(data);
+            $(document).foundation('topbar', 'reflow');
+        });
       });
 
     </script>
@@ -154,8 +186,55 @@
     });
     </script>
     <script type="text/javascript" async
-      src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-    {% analytical_body_bottom %}
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89986937-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      {% if request.user.is_authenticated %}
+          gtag('config', 'UA-89986937-2', {
+            'user_id': '{{ request.user.id }}'
+          });
+      {% else %}
+          gtag('config', 'UA-89986937-2');
+      {% endif %}
+    </script>
+    <!-- Start of Async Drift Code -->
+    <script>
+    !function() {
+      var t;
+      if (t = window.driftt = window.drift = window.driftt || [], !t.init) return t.invoked ? void (window.console && console.error && console.error("Drift snippet included twice.")) : (t.invoked = !0,
+      t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ],
+      t.factory = function(e) {
+        return function() {
+          var n;
+          return n = Array.prototype.slice.call(arguments), n.unshift(e), t.push(n), t;
+        };
+      }, t.methods.forEach(function(e) {
+        t[e] = t.factory(e);
+      }), t.load = function(t) {
+        var e, n, o, i;
+        e = 3e5, i = Math.ceil(new Date() / e) * e, o = document.createElement("script"),
+        o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + i + "/" + t + ".js",
+        n = document.getElementsByTagName("script")[0], n.parentNode.insertBefore(o, n);
+      });
+    }();
+    drift.SNIPPET_VERSION = '0.3.1';
+    drift.load('dzkrmavg2zw3');
+    </script>
+    <!-- End of Async Drift Code -->
+    <script>
+        drift.identify(
+            {{request.user.id}},
+            {
+                email:'{{request.user.email}}',
+                startDate: '{{request.user.created|date:"U"}}000',
+            }
+        );
+    </script>
   </body>
 </html>

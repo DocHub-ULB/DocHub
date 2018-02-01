@@ -1,10 +1,10 @@
 sudo: false
 
-language: python
+language:
+  - python
+
 python:
-  - "2.7"
-  - "3.4"
-  # - "3.5"
+  - "3.6"
 
 cache:
   apt: true
@@ -14,10 +14,12 @@ cache:
     - node_modules
 
 before_script:
-  - npm install yuglify
-  - gem install sass
+  - nvm install node
+  - pip install -U setuptools
+  - npm install
 
 script:
+  - npm run build
   - ./manage.py check
   - ./manage.py collectstatic --noinput -v 0
   - py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www --cov-report=
@@ -27,11 +29,12 @@ addons:
   apt:
     packages:
     - graphicsmagick
+    - mupdf-tools
+    - ghostscript
     # Unoconv is not supported on travis right now
     # but we do not run unoconv tests on travis so it's not a problem
     # - unoconv
     - python-dev
-    - nodejs
 
 notifications:
   email:

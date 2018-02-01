@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
 
 # Copyright 2014, Cercle Informatique ASBL. All rights reserved.
 #
@@ -27,7 +28,7 @@ UPLOAD_DIR = join(MEDIA_ROOT, 'documents')
 
 DOCUMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
-BASE_URL = "http://dochub.be/"
+BASE_URL = "https://dochub.be/"
 
 # ULB login, need to add the url to redirect at the end
 ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_prtm=redirect&_appl='
@@ -43,6 +44,13 @@ CELERYD_PREFETCH_MULTIPLIER = 1  # Do not prefetch more than 1 task
 # Activate identicons
 IDENTICON = True
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'scripts/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
+
 # libs
 INSTALLED_APPS += (
     'django.contrib.humanize',
@@ -50,10 +58,9 @@ INSTALLED_APPS += (
     'djcelery',
     'rest_framework',
     'mptt',
-    'analytical',
-    'pipeline',
     'django_js_reverse',
     'reversion',
+    'webpack_loader',
 )
 
 # apps
@@ -77,13 +84,11 @@ TEMPLATES[0]['OPTIONS']['context_processors'] += (
     'django.core.context_processors.request',
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 STATIC_ROOT = 'collected_static'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
 )
 
 
@@ -106,53 +111,4 @@ ACTSTREAM_SETTINGS = {
 
 JS_REVERSE_EXCLUDE_NAMESPACES = ['admin', 'djdt']
 
-PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
-PIWIK_SITE_ID = '1'
-
-
-PIPELINE = {
-    'COMPILERS': ('react.utils.pipeline.JSXCompiler',
-                  'pipeline.compilers.sass.SASSCompiler',),
-    'JAVASCRIPT': {
-        '3party': {
-            'source_filenames': (
-                '3party/foundation/js/vendor/modernizr.js',
-                '3party/jquery/jquery.js',
-                '3party/foundation/js/foundation.min.js',
-                '3party/markdown/markdown.js',
-                '3party/moment/moment-with-locales.js',
-                '3party/react/react.js',
-                '3party/react/react-dom.js',
-                '3party/select/js/select2.js',
-                '3party/select/js/i18n/fr.js',
-                '3party/cookie/cookie.js',
-            ),
-            'output_filename': '3party.js',
-        },
-        'main': {
-            'source_filenames': (
-                'scripts/viewer.js',
-                'scripts/*.jsx',
-            ),
-            'output_filename': 'main.js',
-        }
-    },
-    'STYLESHEETS': {
-        '3party': {
-            'source_filenames': (
-                '3party/foundation/css/normalize.css',
-                '3party/foundation/css/foundation.css',
-                '3party/foundation-icons/foundation-icons.css',
-                '3party/select/css/select2.css',
-            ),
-            'output_filename': '3party.css',
-        },
-        'main': {
-            'source_filenames': (
-                'style/*.sass',
-            ),
-            'output_filename': 'main.css',
-        },
-    },
-    'JS_COMPRESSOR': None,
-}
+MAX_RENDER_PAGES = 100

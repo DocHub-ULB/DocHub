@@ -88,7 +88,7 @@ def upload_multiple_files(request, slug):
                 document.add_to_queue()
 
             return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
-    return HttpResponseRedirect(reverse('document_put', args=(course.id,)))
+    return HttpResponseRedirect(reverse('document_put', args=(course.slug,)))
 
 
 @login_required
@@ -168,9 +168,6 @@ def document_reupload(request, pk):
         form = ReUploadForm()
 
     return render(request, 'documents/document_reupload.html', {'form': form, 'document': document})
-
-
-
 
 
 @login_required

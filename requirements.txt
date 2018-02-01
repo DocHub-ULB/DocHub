@@ -1,13 +1,14 @@
 Django>1.9, <1.10
 django-multiupload
 markdown
+celery>3.1, <4.0
 django-celery
 Pillow
 pygments
 pyPdf2
 requests
 xmltodict
-djangorestframework
+djangorestframework>3.6, <3.7
 drf-extensions
 furl
 django-mptt
@@ -15,11 +16,11 @@ django-activity-stream
 git+https://github.com/C4ptainCrunch/libulb.git
 PyYaml
 jsonfield
-django-analytical
 django-pipeline
 PyReact
 django-js-reverse
 django-reversion
+django-webpack-loader
 
 # Dev
 django-extensions
@@ -33,3 +34,10 @@ responses
 django-webtest
 pytest-cov
 coveralls
+
+psycopg2
+django-debug-toolbar
+django-jsonfield
+django-jsonfield-compat
+gunicorn
+raven

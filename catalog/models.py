@@ -30,7 +30,6 @@ class Category(MPTTModel):
 class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
-    description = models.TextField(blank=True, default='')
     categories = models.ManyToManyField(Category)
 
     class Meta:
@@ -38,7 +37,7 @@ class Course(models.Model):
 
     def gehol_url(self):
         slug = self.slug.replace('-', '').upper()
-        return "http://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours=%s" % (slug,)
+        return "https://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours=%s" % (slug,)
 
     def get_absolute_url(self):
         return reverse('course_show', args=(self.slug, ))

@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 import json
+from functools import partial
 
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +13,7 @@ from django.db.models import Count
 from django.views.generic.detail import DetailView
 from django.views.decorators.cache import cache_page
 from mptt.utils import get_cached_trees
+from django.utils import timezone
 
 from actstream import actions
 import actstream
@@ -46,25 +48,31 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
+def set_follow_course(request, slug, action):
+    course = get_object_or_404(Course, slug=slug)
+    action(request.user, course)
+    nextpage = request.GET.get('next', reverse('course_show', args=[slug]))
+    return HttpResponseRedirect(nextpage)
+
+
 @login_required
 def join_course(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-    actions.follow(request.user, course, actor_only=False)
-    return HttpResponseRedirect(reverse('course_show', args=[slug]))
+    follow = partial(actions.follow, actor_only=False)
+    return set_follow_course(request, slug, follow)
 
 
 @login_required
 def leave_course(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-    actions.unfollow(request.user, course)
-    return HttpResponseRedirect(reverse('course_show', args=[slug]))
+    return set_follow_course(request, slug, actions.unfollow)
 
 
 @login_required
 def show_courses(request):
+    end_of_year = timezone.now().month in [7, 8, 9, 10]
     return render(request, "catalog/my_courses.html", {
         "faculties": Category.objects.get(level=0).children.all(),
-        "suggestions": suggest(request.user)
+        "suggestions": suggest(request.user),
+        "show_unfollow_all_button": end_of_year
     })
 
 
@@ -89,3 +97,10 @@ def course_tree(request):
     categories = list(map(category, get_cached_trees(Category.objects.all())))
     return HttpResponse(json.dumps(categories),
                         content_type="application/json")
+
+
+@login_required
+def unfollow_all_courses(request):
+    for course in request.user.following_courses():
+        actions.unfollow(request.user, course)
+    return redirect("show_courses")

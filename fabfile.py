@@ -2,38 +2,38 @@ from __future__ import with_statement
 from fabric.api import run, cd
 from fabric.context_managers import prefix
 
+BASE_DIR = "/srv/dochub/source"
+ACTIVATE = 'source ../ve/bin/activate'
+
 
 def deploy():
-    code_dir = '/home/b402/beta402'
-    with cd(code_dir), prefix('source ve/bin/activate'):
-        run('sudo supervisorctl stop b402-gunicorn')
-        run("./save_db.sh")
+    with cd(BASE_DIR), prefix(ACTIVATE):
+        run('sudo systemctl stop dochub-gunicorn.socket')
+        run('sudo systemctl stop dochub-gunicorn.service')
+        run("../backup_db.sh")
         run("git pull")
-        run("pip install -r requirements.txt --upgrade -q")
+        run("pip install -r requirements.txt -q")
+        run("npm run build")
         run("./manage.py collectstatic --noinput -v 0")
         run("./manage.py migrate")
-        run('sudo supervisorctl start b402-gunicorn')
+        run('sudo systemctl start dochub-gunicorn.service')
+        run('sudo systemctl start dochub-gunicorn.socket')
 
 
 def light_deploy():
-    code_dir = '/home/b402/beta402'
-    with cd(code_dir), prefix('source ve/bin/activate'):
-        run('sudo supervisorctl stop b402-gunicorn')
+    with cd(BASE_DIR), prefix(ACTIVATE):
+        run('sudo systemctl stop dochub-gunicorn.socket')
+        run('sudo systemctl stop dochub-gunicorn.service')
         run("git pull")
-        run('sudo supervisorctl start b402-gunicorn')
+        run('sudo systemctl start dochub-gunicorn.service')
+        run('sudo systemctl start dochub-gunicorn.socket')
 
 
 def restart_workers():
-    run('sudo supervisorctl stop  b402-worker1')
-    run('sudo supervisorctl stop  b402-worker2')
-    run('sudo supervisorctl stop  b402-worker3')
-
-    run('sudo supervisorctl start b402-worker3')
-    run('sudo supervisorctl start b402-worker2')
-    run('sudo supervisorctl start b402-worker1')
+    run('sudo systemctl stop dochub-celery')
+    run('sudo systemctl start dochub-celery')
 
 
 def stats():
-    code_dir = '/home/b402/beta402'
-    with cd(code_dir), prefix('source ve/bin/activate'):
+    with cd(BASE_DIR), prefix(ACTIVATE):
         run('./manage.py stats')

@@ -1,7 +1,11 @@
 ifeq ($(TRAVIS),true)
     PY=python
 else
-    PY=ve/bin/python
+ifndef VIRTUAL_ENV
+PY=ve/bin/python
+else
+PY=python
+endif
 endif
 
 init: database
@@ -9,7 +13,7 @@ init: database
 install: packages
 
 ve:
-	python2.7 `(which virtualenv || which virtualenv2) | tail -1` --distribute --no-site-package ve
+	virtualenv ve
 
 packages: ve
 	ve/bin/pip install -r requirements.txt

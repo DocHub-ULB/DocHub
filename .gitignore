@@ -16,3 +16,6 @@ media/
 .cache
 node_modules/
 collected_static/
+.vagrant/
+webpack-stats.json
+static/scripts/
