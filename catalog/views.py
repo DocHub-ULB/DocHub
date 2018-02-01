@@ -67,11 +67,11 @@ def leave_course(request, slug):
 
 @login_required
 def show_courses(request):
-    end_of_year = timezone.now().month in [7,8,9,10]
+    end_of_year = timezone.now().month in [7, 8, 9, 10]
     return render(request, "catalog/my_courses.html", {
         "faculties": Category.objects.get(level=0).children.all(),
         "suggestions": suggest(request.user),
-        "show_unfollow_button": end_of_year
+        "show_unfollow_all_button": end_of_year
     })
 
 
@@ -97,8 +97,9 @@ def course_tree(request):
     return HttpResponse(json.dumps(categories),
                         content_type="application/json")
 
+
 @login_required
-def unfollow_courses(request):
+def unfollow_all_courses(request):
     for course in request.user.following_courses():
         actions.unfollow(request.user, course)
     return redirect("show_courses")
