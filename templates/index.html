@@ -1,6 +1,5 @@
-{%load humanize %}
-{% load pipeline %}
-
+{% load humanize %}
+{% load render_bundle from webpack_loader %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -15,10 +14,38 @@
     <meta property="og:url" content="https://dochub.be" />
     <meta property="og:description" content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. " />
 
+    {% render_bundle 'commons' %}
+    {% render_bundle 'styles' %}
+
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 
-    {% stylesheet '3party' %}
-    {% stylesheet 'main' %}
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/fastclick.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/modernizr.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/placeholder.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.abide.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.accordion.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.alert.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.clearing.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.dropdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.equalizer.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.interchange.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.joyride.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.magellan.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.offcanvas.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.orbit.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.slider.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tab.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tooltip.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.topbar.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
 
     <!-- Start of Async Drift Code -->
     <script>
@@ -90,8 +117,6 @@
         </div>
       {% endblock %}
     </div>
-    {% javascript '3party' %}
-    {% javascript 'main' %}
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89986937-2"></script>
     <script>
