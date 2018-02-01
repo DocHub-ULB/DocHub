@@ -96,4 +96,3 @@ def test_simple_upload(app, user, tree, tags):
     course = response.follow()
 
     assert Document.objects.count() == 1
-    assert "3pages" in course
