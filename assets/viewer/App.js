@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Document, Page } from 'react-pdf/build/entry.webpack';
+import Navbar from './navbar';
 
 class Loader extends Component {
     render () {
@@ -11,7 +12,8 @@ export default class App extends Component {
   state = {
     numPages: null,
     pageNumber: 1,
-    view_more: 1
+    view_more: 1,
+    zoomlevel: 100
   }
 
   onDocumentLoad = ({ numPages }) => {
@@ -22,8 +24,16 @@ export default class App extends Component {
       this.setState({view_more: this.state["view_more"] + 1})
   }
 
+  zoomin(){
+    this.setState({zoomlevel: this.state.zoomlevel + 10})
+  }
+
+  zoomout(){
+    this.setState({zoomlevel: this.state.zoomlevel - 10})
+  }
+
   render() {
-    const { pageNumber, numPages, view_more } = this.state;
+    const { pageNumber, numPages, view_more, zoomlevel} = this.state;
 
     const renderPages = Math.min(5 * view_more, numPages);
 
@@ -40,6 +50,7 @@ export default class App extends Component {
 
     return (
       <div className="viewer">
+        <Navbar zoomin={this.zoomin.bind(this)} zoomout={this.zoomout.bind(this)}/>
         <Document
           className="viewer-document"
           file={url}
@@ -54,7 +65,7 @@ export default class App extends Component {
                   key={`page_${index + 1}`}
                   pageNumber={index + 1}
                   renderTextLayer={false}
-                  width={1000}
+                  width={10 * zoomlevel}
                 />
               ),
             )
