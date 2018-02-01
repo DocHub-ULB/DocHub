@@ -23,6 +23,7 @@ module.exports = {
   output: {
     path: path.resolve('./static/scripts/'),
     filename: '[name]-[hash].js',
+    publicPath: "/static/scripts/",
   },
 
   plugins: [

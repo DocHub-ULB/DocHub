@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-// import { Document, Page } from 'react-pdf/build/entry.webpack';
-import { Document, Page } from 'react-pdf/build/entry.noworker';
-// import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf/build/entry.webpack';
+
 class Loader extends Component {
     render () {
-        return (<div className="loader">LOAD</div>)
+        return (<div className="viewer-loader">LOAD</div>)
     }
 }
 
@@ -31,18 +30,18 @@ export default class App extends Component {
     var render_not_full = ""
     if (renderPages < numPages) {
         render_not_full = (
-            <div className="render_not_full" onClick={this.view_more.bind(this)}>
+            <button className="viewer-show-more btn" onClick={this.view_more.bind(this)}>
                 This document has {numPages - renderPages} more pages. Click to view more.
-            </div>
+            </button>
         );
     }
 
     var url = document.getElementById('pdf-url').dataset.url
 
     return (
-      <div>
+      <div className="viewer">
         <Document
-          className="doc"
+          className="viewer-document"
           file={url}
           onLoadSuccess={this.onDocumentLoad}
           loading={<Loader />}
