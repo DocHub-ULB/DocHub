@@ -40,6 +40,7 @@
     "webpack-bundle-tracker": "^0.2.1"
   },
   "dependencies": {
+    "babel-preset-stage-0": "^6.24.1",
     "concurrently": "^3.5.1",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
@@ -47,6 +48,7 @@
     "moment": "^2.20.1",
     "prepack-webpack-plugin": "^1.1.0",
     "react": "^15.6.2",
-    "react-dom": "^15.6.2"
+    "react-dom": "^15.6.2",
+    "react-pdf": "^2.5.2"
   }
 }

@@ -21,7 +21,9 @@
           </a>
         </li>
         <li>
-          <a href="{% url 'document_download' document.id %}"><i class="fi-archive"></i> Télécharger</a>
+          <a href="{% url 'document_download' document.id %}">
+              <i class="fi-archive"></i> Télécharger
+          </a>
         </li>
         {% if document.original != document.pdf %}
           <li>
