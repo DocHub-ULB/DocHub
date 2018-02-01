@@ -28,14 +28,14 @@
   {% with documents=documents.all threads=threads.all %}
     <div class="large-12 medium-12 columns">
       <ul class="tabs" data-tab>
-        <li class="tab-title"><a href="#documents">Documents ({{documents.count}})</a></li>
+        <li class="tab-title active"><a href="#documents">Documents ({{documents.count}})</a></li>
         <li class="tab-title">
           <a href="#threads">
             Discussions ({{threads.count}})
             &nbsp;<span class="round label">new</span>
           </a>
         </li>
-        <li class="tab-title active">
+        <li class="tab-title">
           <a href="#questions">Questions d'examens ({{questions.count}})
             &nbsp;<span class="round alert label">new <i class="fi-star"></i></span>
           </a>
@@ -48,7 +48,7 @@
         <div class="content" id="threads">
           {% include "catalog/course_threads.html" %}
         </div>
-        <div class="content active" id="questions">
+        <div class="content" id="questions">
           {% include "catalog/course_questions.html" %}
         </div>
       </div>
