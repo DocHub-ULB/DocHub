@@ -37,72 +37,7 @@
       </ul>
       <div class="tabs-content">
         <div class="content active" id="documents" data-id="{{ course.slug }}">
-          {% for document in documents %}
-            <div class="row course-row document"
-              node-keywords="{% for kw in document.tags.all %}{{kw}} {% endfor %}"
-            >
-              {% if document.is_ready %}
-                <a href="{% url 'document_show' document.id %}">
-                  <i class="fi-page-copy round-icon big"></i>
-                </a>
-              {% elif document.is_processing %}
-                <i class="fi-loop round-icon big"></i>
-              {% else %}
-                <i class="fi-save round-icon big"></i>
-              {% endif %}
-              <div class="course-row-content">
-                <h5>
-                  {% if document.is_ready %}
-                    {% if not document.is_unconvertible %}
-                      <a href="{% url 'document_show' document.id %}"> {{ document.name }} </a>
-                    {% else %}
-                      {{ document.name }}
-                    {% endif %}
-                    {% if request.user|has_perm_on:document %}
-                      <a href="{% url 'document_edit' document.id %}">
-                        <abbr title="Editer ce document">
-                          <i class="fi-pencil dark-grey"></i>
-                        </abbr>
-                      </a>
-                      <a href="{% url 'document_reupload' document.id %}">
-                        <abbr title="Uploader une nouvelle version">
-                          <i class="fi-page-add dark-grey"></i>
-                        </abbr>
-                      </a>
-                    {% endif %}
-                  {% else %}
-                    {{ document.name }}
-                  {% endif %}
-                  <small>par {{ document.user.name }}</small>
-                </h5>
-                {% if document.description %}
-                  <p>{{ document.description|truncatechars:200 }}</p>
-                {% endif %}
-                <div class="course-content-last-line">
-                  {% if document.is_ready and not document.is_unconvertible %}
-                    <i class="fi-page-filled"></i>  {{ document.pages }} page{{ document.pages|pluralize }}
-                  {% else %}
-                    <a href="{% url 'document_download_original' document.id %}">
-                      <i class="fi-download"></i> Télécharger le fichier ({{document.file_type}})
-                    </a>
-                  {% endif %}
-                  <i class="fi-clock"></i> Uploadé le {{ document.date|date:"d F Y" }}
-                  {% if document.tags.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
-                  {% for kw in document.tags.all%}
-                    <a data-id="{{kw.id}}" href="#"
-                       style="background-color: {{kw.color}}; border: solid 2px {{kw.color}};"
-                       class="radius label tag-item">
-                      {{kw}}
-                    </a>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-          {% empty %}
-            <h3>Il n’y a encore rien dans ce cours…</h3>
-            <p>Personne n’est encore passé ici on dirait.<br>
-              Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
-          {% endfor %}
+            Loading...
         </div>
         <div class="content" id="threads">
           {% for thread in threads %}
