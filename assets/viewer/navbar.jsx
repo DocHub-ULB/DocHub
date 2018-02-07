@@ -4,8 +4,8 @@ export default class Navbar extends Component {
   render() {
     return (
         <div className="top-bar" id="navbar">
-            <a className="button left" href='#'>
-              <i className="fi-arrow-left"></i> Back
+            <a className="button left" href={"/catalog/course/" + this.props.couname} >
+              <i className="fi-arrow-left"></i> {this.props.couname}
             </a>
 
             <a className="button left" href={window.Urls.document_download(this.props.docid)}>
