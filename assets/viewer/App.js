@@ -48,10 +48,11 @@ export default class App extends Component {
 
     var url = document.getElementById('pdf-url').dataset.url
     var name = document.getElementById('pdf-url').dataset.name
+    var id = document.getElementById('pdf-url').dataset.id
 
     return (
       <div className="viewer">
-        <Navbar zoomin={this.zoomin.bind(this)} zoomout={this.zoomout.bind(this)} docname={name} />
+        <Navbar zoomin={this.zoomin.bind(this)} zoomout={this.zoomout.bind(this)} docname={name} docid={id}/>
         <Document
           className="viewer-document"
           file={url}
