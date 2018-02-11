@@ -24,6 +24,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
             'user', 'pages', 'date', 'views',
             'downloads', 'state', 'md5', 'tags', 'has_perm',
             'is_unconvertible', 'is_ready', 'is_processing',
+            'hidden',
         )
 
         extra_kwargs = {

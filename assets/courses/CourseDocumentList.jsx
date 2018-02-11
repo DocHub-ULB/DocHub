@@ -67,6 +67,8 @@ const CourseDocumentList = React.createClass({
     documents_filtered: function(){
         var pattern = new RegExp(this.state.search_text, 'i');
         return this.props.document_set.filter(function(doc){
+            return doc.hidden == false;
+        }).filter(function(doc){
             if (doc.name.search(pattern) < 0){
                 return false;
             }
