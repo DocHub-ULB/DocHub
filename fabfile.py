@@ -13,6 +13,7 @@ def deploy():
         run("../backup_db.sh")
         run("git pull")
         run("pip install -r requirements.txt -q")
+        run("npm install --no-progress")
         run("npm run build")
         run("./manage.py collectstatic --noinput -v 0")
         run("./manage.py migrate")
