@@ -13,9 +13,9 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     user = SmallUserSerializer()
 
     has_perm = serializers.SerializerMethodField()
-    has_upvoted = serializers.SerializerMethodField()
+    user_vote = serializers.SerializerMethodField()
 
-    def get_has_upvoted(self, document):
+    def get_user_vote(self, document):
         user = self.context['request'].user
         try:
             vote = Vote.objects.get(document=document, user=user)
@@ -37,7 +37,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         model = Document
         fields = (
             'id', 'name', 'url', 'course', 'description',
-            'user', 'pages', 'date', 'views', 'has_upvoted', 'votes',
+            'user', 'pages', 'date', 'views', 'user_vote', 'votes',
             'downloads', 'state', 'md5', 'tags', 'has_perm',
             'is_unconvertible', 'is_ready', 'is_processing',
             'hidden',
