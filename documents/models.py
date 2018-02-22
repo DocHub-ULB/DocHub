@@ -60,7 +60,7 @@ class Document(models.Model):
         return self.name
 
     @property
-    def get_votes(self):
+    def votes(self):
         # Naive implementation, must be replaced with better stats. CC:C4ptainBidDataAndMachineLearning
         upvotes = Vote.objects.filter(vote_type=Vote.UPVOTE).count()
         downvotes = Vote.objects.filter(vote_type=Vote.DOWNVOTE).count()

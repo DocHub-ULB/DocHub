@@ -7,6 +7,7 @@ from documents.models import Document, Page, Vote
 from tags.serializers import TagSerializer
 from users.serializers import SmallUserSerializer
 
+
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     tags = TagSerializer(many=True)
     user = SmallUserSerializer()
@@ -36,7 +37,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         model = Document
         fields = (
             'id', 'name', 'url', 'course', 'description',
-            'user', 'pages', 'date', 'views', 'has_upvoted', 'get_votes',
+            'user', 'pages', 'date', 'views', 'has_upvoted', 'votes',
             'downloads', 'state', 'md5', 'tags', 'has_perm',
             'is_unconvertible', 'is_ready', 'is_processing',
             'hidden',
