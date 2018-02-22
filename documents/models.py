@@ -159,6 +159,7 @@ class Vote(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     document = models.ForeignKey(Document)
+    when = models.DateTimeField(auto_now=True)
     vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
 
     class Meta:
