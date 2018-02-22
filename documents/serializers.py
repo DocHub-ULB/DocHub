@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from rest_framework import serializers
 
-from documents.models import Document, Page
+from documents.models import Document, Page, Vote
 from tags.serializers import TagSerializer
 from users.serializers import SmallUserSerializer
 
@@ -12,6 +12,21 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     user = SmallUserSerializer()
 
     has_perm = serializers.SerializerMethodField()
+    has_upvoted = serializers.SerializerMethodField()
+
+    def get_has_upvoted(self, document):
+        user = self.context['request'].user
+        try:
+            vote = Vote.objects.get(document=document, user=user)
+        except Vote.DoesNotExist:
+            return 0
+
+        if vote.vote_type == vote.UPVOTE:
+            return 1
+        elif vote.vote_type == vote.DOWNVOTE:
+            return -1
+        else:
+            raise NotImplemented("Vote not of known type.")
 
     def get_has_perm(self, document):
         user = self.context['request'].user
@@ -21,7 +36,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         model = Document
         fields = (
             'id', 'name', 'url', 'course', 'description',
-            'user', 'pages', 'date', 'views',
+            'user', 'pages', 'date', 'views', 'has_upvoted', 'get_votes',
             'downloads', 'state', 'md5', 'tags', 'has_perm',
             'is_unconvertible', 'is_ready', 'is_processing',
             'hidden',

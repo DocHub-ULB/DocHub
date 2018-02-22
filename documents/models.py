@@ -59,6 +59,13 @@ class Document(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def get_votes(self):
+        # Naive implementation, must be replaced with better stats. CC:C4ptainBidDataAndMachineLearning
+        upvotes = Vote.objects.filter(vote_type=Vote.UPVOTE).count()
+        downvotes = Vote.objects.filter(vote_type=Vote.DOWNVOTE).count()
+        return {"upvotes": upvotes, "downvotes": downvotes}
+
     def fullname(self):
         return self.__str__()
 
@@ -142,6 +149,20 @@ class Document(models.Model):
         for tag in tags:
             tag = Tag.objects.get_or_create(name=tag)[0]
             self.tags.add(tag)
+
+
+class Vote(models.Model):
+    UPVOTE = "up"
+    DOWNVOTE = "down"
+    VOTE_TYPE_CHOICES = ((UPVOTE, "Upvote"),
+                         (DOWNVOTE, "Downvote"))
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    document = models.ForeignKey(Document)
+    vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
+
+    class Meta:
+        unique_together = ("user", "document")
 
 
 class Page(models.Model):
