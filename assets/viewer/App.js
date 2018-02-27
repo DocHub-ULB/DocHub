@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Document, Page } from 'react-pdf/build/entry.webpack';
+import Navbar from './navbar';
 
 class Loader extends Component {
     render () {
@@ -32,7 +33,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { pageNumber, numPages, view_more } = this.state;
+    const { pageNumber, numPages, view_more, zoomlevel} = this.state;
 
     const renderPages = Math.min(5 * view_more, numPages);
 
@@ -46,9 +47,13 @@ export default class App extends Component {
     }
 
     var url = document.getElementById('pdf-url').dataset.url
+    var name = document.getElementById('pdf-url').dataset.name
+    var id = document.getElementById('pdf-url').dataset.id
+    var coursename = document.getElementById('pdf-url').dataset.coursename
 
     return (
       <div className="viewer">
+        <Navbar zoomin={this.zoomin.bind(this)} zoomout={this.zoomout.bind(this)} docname={name} docid={id} couname={coursename}/>
         <Document
           className="viewer-document"
           file={url}

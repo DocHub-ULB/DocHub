@@ -10,11 +10,8 @@
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
 
-
-{% include "documents/viewer_bar.html" %}
-
 <div class="row">
-<span id="pdf-url" data-url="{{document.pdf.url}}"></span>
+<span id="pdf-url" data-url="{{document.pdf.url}}" data-name="{{document.name}}" data-id="{{document.id}}" data-coursename="{{document.course.slug}}"></span>
 <div id="root"></div>
 </div>
 
