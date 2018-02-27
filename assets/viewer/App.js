@@ -11,7 +11,8 @@ export default class App extends Component {
   state = {
     numPages: null,
     pageNumber: 1,
-    view_more: 1
+    view_more: 1,
+    zoomlevel: 1.2
   }
 
   onDocumentLoad = ({ numPages }) => {
@@ -20,6 +21,14 @@ export default class App extends Component {
 
   view_more() {
       this.setState({view_more: this.state["view_more"] + 1})
+  }
+
+  zoomin(){
+    this.setState({zoomlevel: this.state.zoomlevel + 0.1})
+  }
+
+  zoomout(){
+    this.setState({zoomlevel: this.state.zoomlevel - 0.1})
   }
 
   render() {
@@ -54,8 +63,9 @@ export default class App extends Component {
                   key={`page_${index + 1}`}
                   pageNumber={index + 1}
                   renderTextLayer={false}
-                  width={1000}
+                  scale={zoomlevel}
                 />
+
               ),
             )
             }
