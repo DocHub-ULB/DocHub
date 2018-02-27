@@ -159,7 +159,7 @@ i.round-icon
     background-color: $light-gray
     border: 1px solid #ddd
     text-align: center
-    // clear: both
+    clear: both
     margin-right: 10px
     text-align: center
     width: 1.6em
@@ -180,9 +180,11 @@ a i.round-icon:hover
 i.round-icon
     &.downvote
         color: #ff0202
+        margin-left: 10px
 
     &.upvote
         color: #0eea07
+        margin-left: 10px
 
 i.upvote:hover
     color: #000
@@ -198,6 +200,9 @@ i.round-icon
 
     &.medium
         font-size: 1.5em
+
+span.vote-button-span
+    border-top: 100px
 
 .tooltip-box
     font-size: 0.9em
@@ -217,6 +222,7 @@ i.round-icon
         border-left: 5px solid #007095
 
     &.document .course-row-content
+        padding-top: 10px
         border-left: 5px solid $foundation-red
 
 .course-content-last-line

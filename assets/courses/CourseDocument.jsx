@@ -141,14 +141,14 @@ const CourseDocument = React.createClass({
     render: function(){
         console.log(this.props)
         return (<div className="row course-row document">
-            {this.icon()}
+            {this.icon()} {this.upvote_icon()} {this.downvote_icon()}
             <div className="cell course-row-content">
                 <h5>
                     {this.title()}
                     <small> par {this.props.user.name}</small><br/>
                 </h5>
                 {this.description()}
-                {this.download_icon()} {this.edit_icon()} {this.reupload_icon()} {this.upvote_icon()} {this.downvote_icon()}
+                {this.download_icon()} {this.edit_icon()} {this.reupload_icon()}
                 <div className="course-content-last-line">
                     <i className="fi-page-filled"></i> {this.pages()}&nbsp;
                     <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;
