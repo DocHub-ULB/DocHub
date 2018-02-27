@@ -12,7 +12,7 @@ const UpvoteButton = React.createClass({
         $.ajax({
             type : "POST",
             url : window.Urls.upvote_document(),
-            data : JSON.stringify(["bla", 1]),
+            data : JSON.stringify({"doc_id": this.props.doc_id}),
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -139,6 +139,7 @@ const CourseDocument = React.createClass({
         });
     },
     render: function(){
+        console.log(this.props)
         return (<div className="row course-row document">
             {this.icon()}
             <div className="cell course-row-content">
