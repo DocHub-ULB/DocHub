@@ -19,6 +19,12 @@ export default class Navbar extends Component {
 
                 <font color="white">{this.props.docname}</font>
 
+                {window.hasperm?
+                    (<a className="button right" href={window.Urls.document_edit(this.props.docid)} style={buttonStyle}>
+                      <i className="fi-pencil"></i> Editer
+                    </a>):null}
+
+
                 <button className="button right" onClick={this.props.zoomin} style={buttonStyle}>
                   <i className="fi-zoom-in"></i> Zoom
                 </button>

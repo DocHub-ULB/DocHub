@@ -1,17 +1,31 @@
 {% extends "skel.html" %}
 {% load cache %}
 {% load render_bundle from webpack_loader %}
+{% load has_perm_on %}
 
 
 {% block script %}
+
 {% render_bundle 'viewer' %}
+{% if request.user|has_perm_on:document %}
+    <script type="text/javascript">
+        window.hasperm = 1
+    </script>
+{% else %}
+    <script type="text/javascript">
+        window.hasperm = 0
+    </script>
+{% endif %}
+
 {% endblock %}
 
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
 
+
+
 <div class="row">
-<span id="pdf-url" data-url="{{document.pdf.url}}" data-name="{{document.name}}" data-id="{{document.id}}" data-coursename="{{document.course.slug}}"></span>
+<span id="pdf-url" data-url="{{document.pdf.url}}" data-name="{{document.name}}" data-id="{{document.id}}" data-coursename="{{document.course.slug}}" ></span>
 <div id="root"></div>
 </div>
 
