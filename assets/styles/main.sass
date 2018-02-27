@@ -180,15 +180,25 @@ a i.round-icon:hover
 i.round-icon
     &.downvote
         color: #ff0202
+        border: 0px
         margin-left: 10px
 
+        &.active
+            background-color: #ff0202
+            color: #000
+
     &.upvote
-        color: #0eea07
+        color: #00cc00
+        border: 0px
         margin-left: 10px
+
+        &.active
+            background-color: #00cc00
+            color: #000
 
 i.upvote:hover
     color: #000
-    background-color: #0eea07
+    background-color: #00cc00
 
 i.downvote:hover
     color: #000
