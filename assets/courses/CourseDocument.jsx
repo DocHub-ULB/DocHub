@@ -16,8 +16,11 @@ const UpvoteButton = React.createClass({
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
-              'X-CSRFToken': this.csrf_token()
+              'X-CSRFToken': this.csrf_token(),
               },
+            success: function(){
+                this.props.vote_callback();
+            }.bind(this),
         });
     },
     csrf_token: function(){
@@ -25,7 +28,7 @@ const UpvoteButton = React.createClass({
     render: function(){
             return (
                 <span onClick={this.clicked}>
-                    <i className="fi-like round-icon medium upvote"></i>
+                    <i className={`fi-like round-icon medium upvote ${this.props.isActive ? 'active' : ''}`}></i>
                 </span>);
         }
 });
@@ -41,20 +44,27 @@ const DownvoteButton = React.createClass({
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
-              'X-CSRFToken': this.csrf_token()
+              'X-CSRFToken': this.csrf_token(),
               },
+            success: function(){
+                this.props.vote_callback();
+            }.bind(this),
         });
     },
     csrf_token: function(){return Cookies.get('csrftoken')},
     render: function(){
             return (
                 <span onClick={this.clicked}>
-                    <i className="fi-dislike round-icon medium downvote"></i>
+                    <i className={`fi-dislike round-icon medium downvote ${this.props.isActive ? 'active' : ''}`}></i>
                 </span>);
         }
 });
 
 const CourseDocument = React.createClass({
+    getInitialState: function(){
+        return {upvote_active: this.props.user_vote==1,
+                downvote_active: this.props.user_vote==-1};
+    },
     ready: function(){return (this.props.is_ready);},
     editable: function(){return this.props.has_perm;},
     date: function(){return moment(this.props.date).format("D MMMM YYYY");},
@@ -101,11 +111,19 @@ const CourseDocument = React.createClass({
         }
     },
     upvote_icon: function(){
-        return (<UpvoteButton doc_id={this.props.id} />);
+        return (<UpvoteButton doc_id={this.props.id} isActive={this.state.upvote_active} vote_callback={this.upvote_callback} />);
 
     },
     downvote_icon: function(){
-        return (<DownvoteButton doc_id={this.props.id} />);
+        return (<DownvoteButton doc_id={this.props.id} isActive={this.state.downvote_active} vote_callback={this.downvote_callback}/>);
+    },
+    downvote_callback: function(){
+        this.setState({upvote_active: false,
+                        downvote_active: true});
+    },
+    upvote_callback: function(){
+        this.setState({upvote_active: true,
+                        downvote_active: false});
     },
     description: function(){
         var text = markdown.toHTML(this.props.description);
@@ -139,7 +157,6 @@ const CourseDocument = React.createClass({
         });
     },
     render: function(){
-        console.log(this.props)
         return (<div className="row course-row document">
             {this.icon()} {this.upvote_icon()} {this.downvote_icon()}
             <div className="cell course-row-content">

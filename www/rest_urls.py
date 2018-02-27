@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf.urls import url
+
 from rest_framework_extensions.routers import NestedRouterMixin
 from rest_framework.routers import DefaultRouter
 
@@ -30,4 +32,7 @@ docs.register(
     parents_query_lookups=['document'],
 )
 
-urlpatterns = router.urls
+urlpatterns = [
+    url("upvote/document/", documents.rest.UpvoteView.as_view(), name='upvote_document'),
+    url("downvote/document/", documents.rest.DownvoteView.as_view(), name='downvote_document'),
+] + router.urls
