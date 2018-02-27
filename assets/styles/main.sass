@@ -159,7 +159,7 @@ i.round-icon
     background-color: $light-gray
     border: 1px solid #ddd
     text-align: center
-    clear: both
+    // clear: both
     margin-right: 10px
     text-align: center
     width: 1.6em
@@ -176,6 +176,21 @@ i.round-icon
 a i.round-icon:hover
     color: #444
     background-color: #fff
+
+i.round-icon
+    &.downvote
+        color: #ff0202
+
+    &.upvote
+        color: #0eea07
+
+i.upvote:hover
+    color: #000
+    background-color: #0eea07
+
+i.downvote:hover
+    color: #000
+    background-color: #ff0202
 
 i.round-icon
     &.big

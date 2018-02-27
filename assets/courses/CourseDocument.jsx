@@ -1,7 +1,58 @@
 const React = require('react');
 const Tag = require('./Tag.jsx');
+window.Cookies = require('js-cookie');
+
 import {markdown} from 'markdown';
 import moment from 'moment'
+
+const UpvoteButton = React.createClass({
+    clicked: function(e){
+        e.preventDefault();
+        // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
+        $.ajax({
+            type : "POST",
+            url : window.Urls.upvote_document(),
+            data : JSON.stringify(["bla", 1]),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': this.csrf_token()
+              },
+        });
+    },
+    csrf_token: function(){
+        return Cookies.get('csrftoken')},
+    render: function(){
+            return (
+                <span onClick={this.clicked}>
+                    <i className="fi-like round-icon medium upvote"></i>
+                </span>);
+        }
+});
+
+const DownvoteButton = React.createClass({
+    clicked: function(e){
+        e.preventDefault();
+        // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
+        $.ajax({
+            type : "POST",
+            url : window.Urls.downvote_document(),
+            data : JSON.stringify({"doc_id": this.props.doc_id}),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': this.csrf_token()
+              },
+        });
+    },
+    csrf_token: function(){return Cookies.get('csrftoken')},
+    render: function(){
+            return (
+                <span onClick={this.clicked}>
+                    <i className="fi-dislike round-icon medium downvote"></i>
+                </span>);
+        }
+});
 
 const CourseDocument = React.createClass({
     ready: function(){return (this.props.is_ready);},
@@ -49,6 +100,13 @@ const CourseDocument = React.createClass({
             </a>);
         }
     },
+    upvote_icon: function(){
+        return (<UpvoteButton doc_id={this.props.id} />);
+
+    },
+    downvote_icon: function(){
+        return (<DownvoteButton doc_id={this.props.id} />);
+    },
     description: function(){
         var text = markdown.toHTML(this.props.description);
         if (text != ''){
@@ -83,13 +141,13 @@ const CourseDocument = React.createClass({
     render: function(){
         return (<div className="row course-row document">
             {this.icon()}
-            <div className="course-row-content">
+            <div className="cell course-row-content">
                 <h5>
                     {this.title()}
                     <small> par {this.props.user.name}</small><br/>
                 </h5>
                 {this.description()}
-                {this.download_icon()} {this.edit_icon()} {this.reupload_icon()}
+                {this.download_icon()} {this.edit_icon()} {this.reupload_icon()} {this.upvote_icon()} {this.downvote_icon()}
                 <div className="course-content-last-line">
                     <i className="fi-page-filled"></i> {this.pages()}&nbsp;
                     <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;
