@@ -112,17 +112,17 @@ def download_all_files_for_course(request, slug):
     course = Course.objects.get(slug=slug)
     documents = course.document_set.all()
 
-    tmp_file = tempfile.TemporaryFile()
-    final_zip = zipfile.ZipFile(tmp_file, mode="w")
+    with tempfile.TemporaryFile() as tmp_file:
+        final_zip = zipfile.ZipFile(tmp_file, mode="w")
 
-    for document in documents:
-        document.pdf.read()
-        final_zip.writestr(document.name + document.file_type, document.pdf.read())
+        for document in documents:
+            document.pdf.read()
+            final_zip.writestr(document.name + document.file_type, document.pdf.read())
 
-    final_zip.close()
-    tmp_file.seek(0)
-    zip_name = slug + ".zip"
-    resp = HttpResponse(tmp_file.read(), content_type="application/x-zip-compressed")
-    resp['Content-Disposition'] = 'attachment; filename=%s' % zip_name
+        final_zip.close()
+        tmp_file.seek(0)
+        zip_name = slug + ".zip"
+        resp = HttpResponse(tmp_file.read(), content_type="application/x-zip-compressed")
+        resp['Content-Disposition'] = 'attachment; filename=%s' % zip_name
 
     return resp
