@@ -31,7 +31,6 @@ repair.short_description = "Repair selected documents"
 
 
 class VoteInline(admin.StackedInline):
-    """Inline in a tab to easily add shipments from an existing order."""
     readonly_fields = ["when"]
     extra = 1
     model = Vote
