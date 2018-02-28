@@ -25,6 +25,13 @@ const UpvoteButton = React.createClass({
             });
         }
     },
+    pretty_vote_num: function(){
+        if (this.props.num < 1000){
+            return this.props.num.toString();
+        }else{
+            return ((this.props.num / 1000).toString()).slice(0,3) + "k"
+        }
+    },
     csrf_token: function(){
         return Cookies.get('csrftoken')},
     render: function(){
@@ -33,7 +40,7 @@ const UpvoteButton = React.createClass({
             <span onClick={this.clicked}>
                 <i className={`fi-like round-icon medium upvote ${this.props.isActive ? 'active' : ''}`}></i>
             </span>
-            <span className="round success label votelabel">{this.props.num}</span>
+            <span className="round success label votelabel">{this.pretty_vote_num()}</span>
             </div>
         );
     }
@@ -60,6 +67,13 @@ const DownvoteButton = React.createClass({
         }
     },
     csrf_token: function(){return Cookies.get('csrftoken')},
+    pretty_vote_num: function(){
+        if (this.props.num < 1000){
+            return this.props.num.toString();
+        }else{
+            return ((this.props.num / 1000).toString()).slice(0,3) + "k"
+        }
+    },
     render: function(){
         var num = "5";
         return (
@@ -67,7 +81,7 @@ const DownvoteButton = React.createClass({
             <span onClick={this.clicked}>
                 <i className={`fi-dislike round-icon medium downvote ${this.props.isActive ? 'active' : ''}`}></i>
             </span>
-            <span className="round alert label votelabel">{this.props.num}</span>
+            <span className="round alert label votelabel">{this.pretty_vote_num()}</span>
             </div>
         );
     }
