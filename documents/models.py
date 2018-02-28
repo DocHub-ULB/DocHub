@@ -62,8 +62,8 @@ class Document(models.Model):
     @property
     def votes(self):
         # Naive implementation, must be replaced with better stats. CC:C4ptainBidDataAndMachineLearning
-        upvotes = Vote.objects.filter(vote_type=Vote.UPVOTE).count()
-        downvotes = Vote.objects.filter(vote_type=Vote.DOWNVOTE).count()
+        upvotes = self.vote_set.filter(vote_type=Vote.UPVOTE).count()
+        downvotes = self.vote_set.filter(vote_type=Vote.DOWNVOTE).count()
         return {"upvotes": upvotes, "downvotes": downvotes}
 
     def fullname(self):
