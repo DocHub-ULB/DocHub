@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 import json
+import zipfile
+import tempfile
 from functools import partial
 
 from django.core.urlresolvers import reverse
@@ -103,3 +105,24 @@ def unfollow_all_courses(request):
     for course in request.user.following_courses():
         actions.unfollow(request.user, course)
     return redirect("show_courses")
+
+
+@login_required
+def download_all_files_for_course(request, slug):
+    course = Course.objects.get(slug=slug)
+    documents = course.document_set.all()
+
+    tmp_file = tempfile.TemporaryFile()
+    final_zip = zipfile.ZipFile(tmp_file, mode="w")
+
+    for document in documents:
+        document.pdf.read()
+        final_zip.writestr(document.name + document.file_type, document.pdf.read())
+
+    final_zip.close()
+    tmp_file.seek(0)
+    zip_name = slug + ".zip"
+    resp = HttpResponse(tmp_file.read(), content_type="application/x-zip-compressed")
+    resp['Content-Disposition'] = 'attachment; filename=%s' % zip_name
+
+    return resp

@@ -13,6 +13,10 @@ urlpatterns = [
     url(r"^leave/(?P<slug>[^/]*)$", catalog.views.leave_course, name="leave_course"),
     url(r"^subscribed_courses/$", catalog.views.show_courses, name="show_courses"),
     url(r"^unfollow_all_courses/$", catalog.views.unfollow_all_courses, name="unfollow_all_courses"),
+    url(r"^download_all/(?P<slug>[^/]*)$",
+        catalog.views.download_all_files_for_course,
+        name="download_all_files_for_course"
+        ),
 
     url(r"^course_tree.json$", catalog.views.course_tree, name="course_tree"),
 ]
