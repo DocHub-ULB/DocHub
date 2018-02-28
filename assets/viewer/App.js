@@ -20,8 +20,17 @@ export default class App extends Component {
     this.setState({ numPages });
   }
 
+  onDocumentFail() {
+    return (
+    <div>Une erreur est survenue, souhaitez-vous &nbsp;
+        <a className="small" href={window.Urls.document_download(this.props.docid)}>
+            <i className="fi-download"></i> télécharger
+        </a>
+    &nbsp; le document ?</div>)
+  }
+
   view_more() {
-      this.setState({view_more: this.state["view_more"] + 1})
+    this.setState({view_more: this.state["view_more"] + 1})
   }
 
   zoomin(){
@@ -41,7 +50,7 @@ export default class App extends Component {
     if (renderPages < numPages) {
         render_not_full = (
             <button className="viewer-show-more btn" onClick={this.view_more.bind(this)}>
-                This document has {numPages - renderPages} more pages. Click to view more.
+                Ce document à {numPages - renderPages} pages supplémentaires. Cliquez ici pour la suite.
             </button>
         );
     }
@@ -57,8 +66,9 @@ export default class App extends Component {
         <Document
           className="viewer-document"
           file={url}
-          onLoadSuccess={this.onDocumentLoad}
           loading={<Loader />}
+          onLoadSuccess={this.onDocumentLoad}
+          error={this.onDocumentFail()}
         >
             {
             Array.from(

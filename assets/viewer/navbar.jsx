@@ -14,7 +14,7 @@ export default class Navbar extends Component {
                 </a>
 
                 <a className="button left" href={window.Urls.document_download(this.props.docid)} style={buttonStyle}>
-                  <i className="fi-download"></i> Download
+                  <i className="fi-download"></i> Télécharger
                 </a>
 
                 <font color="white">{this.props.docname}</font>
