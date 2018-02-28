@@ -8,62 +8,77 @@ import moment from 'moment'
 const UpvoteButton = React.createClass({
     clicked: function(e){
         e.preventDefault();
-        // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
-        $.ajax({
-            type : "POST",
-            url : window.Urls.upvote_document(),
-            data : JSON.stringify({"doc_id": this.props.doc_id}),
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'X-CSRFToken': this.csrf_token(),
-              },
-            success: function(){
-                this.props.vote_callback();
-            }.bind(this),
-        });
+        if (!this.props.isActive){
+            // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
+            $.ajax({
+                type : "POST",
+                url : window.Urls.upvote_document(),
+                data : JSON.stringify({"doc_id": this.props.doc_id}),
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': this.csrf_token(),
+                  },
+                success: function(response){
+                    this.props.vote_callback(response);
+                }.bind(this),
+            });
+        }
     },
     csrf_token: function(){
         return Cookies.get('csrftoken')},
     render: function(){
-            return (
-                <span onClick={this.clicked}>
-                    <i className={`fi-like round-icon medium upvote ${this.props.isActive ? 'active' : ''}`}></i>
-                </span>);
-        }
+        return (
+            <div>
+            <span onClick={this.clicked}>
+                <i className={`fi-like round-icon medium upvote ${this.props.isActive ? 'active' : ''}`}></i>
+            </span>
+            <span className="round success label votelabel">{this.props.num}</span>
+            </div>
+        );
+    }
 });
 
 const DownvoteButton = React.createClass({
     clicked: function(e){
         e.preventDefault();
-        // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
-        $.ajax({
-            type : "POST",
-            url : window.Urls.downvote_document(),
-            data : JSON.stringify({"doc_id": this.props.doc_id}),
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'X-CSRFToken': this.csrf_token(),
-              },
-            success: function(){
-                this.props.vote_callback();
-            }.bind(this),
-        });
+        if (!this.props.isActive){
+            // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
+            $.ajax({
+                type : "POST",
+                url : window.Urls.downvote_document(),
+                data : JSON.stringify({"doc_id": this.props.doc_id}),
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': this.csrf_token(),
+                  },
+                  success: function(response){
+                      this.props.vote_callback(response);
+                  }.bind(this),
+            });
+        }
     },
     csrf_token: function(){return Cookies.get('csrftoken')},
     render: function(){
-            return (
-                <span onClick={this.clicked}>
-                    <i className={`fi-dislike round-icon medium downvote ${this.props.isActive ? 'active' : ''}`}></i>
-                </span>);
-        }
+        var num = "5";
+        return (
+            <div>
+            <span onClick={this.clicked}>
+                <i className={`fi-dislike round-icon medium downvote ${this.props.isActive ? 'active' : ''}`}></i>
+            </span>
+            <span className="round alert label votelabel">{this.props.num}</span>
+            </div>
+        );
+    }
 });
 
 const CourseDocument = React.createClass({
     getInitialState: function(){
         return {upvote_active: this.props.user_vote==1,
-                downvote_active: this.props.user_vote==-1};
+                downvote_active: this.props.user_vote==-1,
+                upvotes: this.props.votes.upvotes,
+                downvotes: this.props.votes.downvotes};
     },
     ready: function(){return (this.props.is_ready);},
     editable: function(){return this.props.has_perm;},
@@ -111,19 +126,27 @@ const CourseDocument = React.createClass({
         }
     },
     upvote_icon: function(){
-        return (<UpvoteButton doc_id={this.props.id} isActive={this.state.upvote_active} vote_callback={this.upvote_callback} />);
+        return (<UpvoteButton doc_id={this.props.id} num={this.state.upvotes} isActive={this.state.upvote_active} vote_callback={this.upvote_callback} />);
 
     },
     downvote_icon: function(){
-        return (<DownvoteButton doc_id={this.props.id} isActive={this.state.downvote_active} vote_callback={this.downvote_callback}/>);
+        return (<DownvoteButton doc_id={this.props.id} num={this.state.downvotes} isActive={this.state.downvote_active} vote_callback={this.downvote_callback}/>);
     },
-    downvote_callback: function(){
+    downvote_callback: function(response){
+        var new_downvotes = this.state.downvotes + 1
+        var new_upvotes = this.state.upvotes - (response.created ? 0 : 1)
         this.setState({upvote_active: false,
-                        downvote_active: true});
+                        downvote_active: true,
+                        upvotes: new_upvotes,
+                        downvotes: new_downvotes,});
     },
-    upvote_callback: function(){
+    upvote_callback: function(response){
+        var new_upvotes = this.state.upvotes + 1
+        var new_downvotes = this.state.downvotes - (response.created ? 0 : 1)
         this.setState({upvote_active: true,
-                        downvote_active: false});
+                        downvote_active: false,
+                        upvotes: new_upvotes,
+                        downvotes: new_downvotes,});
     },
     description: function(){
         var text = markdown.toHTML(this.props.description);

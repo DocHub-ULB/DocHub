@@ -28,13 +28,15 @@ class UpvoteView(APIView):
 
         try:
             vote = Vote.objects.get(document=document, user=user)
+            response = {"created": False}
         except Vote.DoesNotExist:
             vote = Vote(document=document, user=user)
+            response = {"created": True}
 
         vote.vote_type = vote.UPVOTE
         vote.save()
 
-        return Response("Success")
+        return Response(response)
 
 
 class DownvoteView(APIView):
@@ -45,10 +47,12 @@ class DownvoteView(APIView):
 
         try:
             vote = Vote.objects.get(document=document, user=user)
+            response = {"created": False}
         except Vote.DoesNotExist:
             vote = Vote(document=document, user=user)
+            response = {"created": True}
 
         vote.vote_type = vote.DOWNVOTE
         vote.save()
 
-        return Response("Success")
+        return Response(response)
