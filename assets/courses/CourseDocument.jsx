@@ -17,8 +17,8 @@ class VoteButton extends React.Component {
             // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
             $.ajax({
                 type : "POST",
-                url : this.props.request_url,
-                data : JSON.stringify({"doc_id": this.props.doc_id, "vote": this.props.vote_type}),
+                url : window.Urls.vote_document(this.props.doc_id),
+                data : JSON.stringify({"vote_type": this.props.vote_type}),
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',
@@ -53,7 +53,6 @@ class VoteButton extends React.Component {
 };
 
 VoteButton.propTypes = {
-    request_url: PropTypes.string.isRequired,
     vote_type: PropTypes.string.isRequired,
     icon_class: PropTypes.string.isRequired,
     label_class: PropTypes.string.isRequired,
@@ -66,7 +65,6 @@ class UpvoteButton extends React.Component {
     render() {
         return (        // isActive, vote_callback, num
             <VoteButton {...this.props}
-                request_url={window.Urls.upvote_document()}
                 vote_type={"up"}
                 label_class={"round success label votelabel"}
                 icon_class={"fi-like round-icon medium upvote"}
@@ -79,7 +77,6 @@ class DownvoteButton extends React.Component{
     render() {
         return (        // isActive, vote_callback, num
             <VoteButton {...this.props}
-                request_url={window.Urls.downvote_document()}
                 vote_type={"down"}
                 label_class={"round alert label votelabel"}
                 icon_class={"fi-dislike round-icon medium downvote"}

@@ -20,39 +20,13 @@ class PageViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = PageSerializer
 
 
-class UpvoteView(APIView):
-    def post(self, request, format=None):
+class VoteView(APIView):
+    def post(self, request, pk, format=None):
         user = request.user
         data = request.data
-        document = Document.objects.get(pk=data["doc_id"])
 
-        try:
-            vote = Vote.objects.get(document=document, user=user)
-            response = {"created": False}
-        except Vote.DoesNotExist:
-            vote = Vote(document=document, user=user)
-            response = {"created": True}
-
-        vote.vote_type = vote.UPVOTE
+        vote, created = Vote.objects.get_or_create(document_id=pk, user=user)
+        vote.vote_type = data["vote_type"]
         vote.save()
 
-        return Response(response)
-
-
-class DownvoteView(APIView):
-    def post(self, request, format=None):
-        user = request.user
-        data = request.data
-        document = Document.objects.get(pk=data["doc_id"])
-
-        try:
-            vote = Vote.objects.get(document=document, user=user)
-            response = {"created": False}
-        except Vote.DoesNotExist:
-            vote = Vote(document=document, user=user)
-            response = {"created": True}
-
-        vote.vote_type = vote.DOWNVOTE
-        vote.save()
-
-        return Response(response)
+        return Response({"created": created})
