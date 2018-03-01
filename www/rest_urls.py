@@ -15,6 +15,7 @@ import telepathy.rest
 class SimpleRouterWithNesting(NestedRouterMixin, DefaultRouter):
     pass
 
+
 router = SimpleRouterWithNesting()
 
 router.register(r'users', users.rest.UserViewSet)
@@ -33,6 +34,5 @@ docs.register(
 )
 
 urlpatterns = [
-    url("upvote/document/", documents.rest.UpvoteView.as_view(), name='upvote_document'),
-    url("downvote/document/", documents.rest.DownvoteView.as_view(), name='downvote_document'),
+    url(r"vote/document/(?P<pk>[^/]*)", documents.rest.VoteView.as_view(), name='vote_document'),
 ] + router.urls
