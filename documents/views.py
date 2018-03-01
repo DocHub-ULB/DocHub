@@ -209,7 +209,6 @@ def document_show(request, pk):
 
     context = {
         "document": document,
-        "form": NewThreadForm(),
     }
 
     document.views = F('views') + 1

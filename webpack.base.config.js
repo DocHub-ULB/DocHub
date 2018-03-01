@@ -13,7 +13,7 @@ module.exports = {
       './assets/courses/index.jsx',
     ],
     viewer: [
-      './assets/viewer/viewer.js',
+      './assets/viewer/index.js',
     ],
     styles: [
       './assets/styles/index.js',
@@ -23,6 +23,7 @@ module.exports = {
   output: {
     path: path.resolve('./static/scripts/'),
     filename: '[name]-[hash].js',
+    publicPath: "/static/scripts/",
   },
 
   plugins: [
@@ -43,10 +44,19 @@ module.exports = {
         options: {
           presets:[
             ['es2015', {modules: false}],
+            'stage-0',
             'react'
           ],
         },
-      }, {
+      },
+      {
+        test: /\.css$/,
+        loaders: [
+          'style-loader',
+          'css-loader',
+        ],
+      },
+      {
         test: /\.sass?$/,
         loaders: ['style-loader', 'css-loader', 'sass-loader']
       },

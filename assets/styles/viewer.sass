@@ -1,5 +1,29 @@
 @import 'colors'
 
+.viewer-loader
+    margin: auto
+    margin-top: 3em
+    border: 16px solid #f3f3f3
+    border-top: 16px solid #3498db
+    border-radius: 50%
+    width: 120px
+    height: 120px
+    animation: spin 2s linear infinite
+
+.viewer-error-message
+    width: 40%
+    margin: auto
+    margin-top: 3em
+    color: #000 !important
+
+.viewer-error-link
+    color: #FFF
+    font-weight: bold
+    text-decoration: underline
+
+.viewer-error-icon
+    text-decoration: underline
+
 .viewer-title
     background-color: $gray !important
     font-weight: bold !important
@@ -7,7 +31,7 @@
 
 
 .viewer-bar
-    background-color: $gray
+    background-color: $gray !important
     section li a
         background-color: $gray !important
         color: #333 !important
@@ -15,50 +39,33 @@
             background-color: #333 !important
             color: #FFF !important
 
-#thumbs
-    position: fixed
-    overflow: auto
-    background-color: $light-gray
-    padding: 15px 28px 10px 20px
+.viewer
     text-align: center
-    height: 100%
-    p
-        font-size: 10px
-        text-align: center
-
-.thumb
-    border: 1px $light-gray solid
-
-#thumbs-misere
-    position: fixed
-    top: 0px
-    background-color: $light-gray
-    height: 100px
-    width: 100%/6
-    z-index: -1
-    display: none
-
-@media only screen and (min-width: 40.063em)
-    #thumbs-misere
-        display: inherit !important
-
-.page
-    border: 1px $light-gray solid
-    margin: 10px
-    display: block
-    margin-left: auto
-    margin-right: auto
-    background-color: white
-
-.hilight
-    border: 2px #bde solid
+    width: 100%
 
 .viewer-title
     background-color: $gray
     padding: 0px 15px
-    line-height: 45px
+    line-height: 42px
     font-size: 0.8125rem
     font-weight: normal
     color: #333
     &.divider
         border-color: #999 !important
+
+.viewer-document
+    align-content: right
+    overflow-x: hidden
+    margin: auto
+
+.viewer-show-more
+        margin: auto
+        width: 50vw
+
+.ReactPDF__Page__canvas
+    margin: auto
+
+.button.navbar-button
+    background-color: #333
+    &:hover
+        background-color: #222

@@ -1,205 +1,26 @@
 {% extends "skel.html" %}
 {% load cache %}
 {% load render_bundle from webpack_loader %}
+{% load has_perm_on %}
 
-
-{% block header %}
+{% block script %}
 {% render_bundle 'viewer' %}
 {% endblock %}
 
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
 
-{% cache 1 viewer.js document.id %}
-<!-- Added for each discussion on a page -->
-<div id="discussion-list-item-template" style="display: none;">
-  <li>
-    <a class="show-thread-link" href="[[href]]" data-reveal-id="page-comment-view">
-      [[name]]
-    </a>
-  </li>
-</div>
-
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function(event) {
-  var viewer_instance = viewer({
-      len: {{ document.pages }},
-      id: {{ document.id }},
-      parentid: '{{ document.course.id }}',
-      pages: [
-      {% for page in document.page_set.all %}
-        {
-          numero: {{ page.numero }},
-          height_600: {{ page.bitmap_600.height|default:"0" }},
-          height_900: {{ page.bitmap_900.height|default:"0" }},
-          url_120: '{{ page.bitmap_120.url }}',
-          url_600: '{{ page.bitmap_600.url }}',
-          url_900: '{{ page.bitmap_900.url }}',
-        },
-      {% endfor %}
-      ]
-  });
-
-  var discussions = [
-    {% for thread in document.thread_set.all %}
-      {% if thread.placement %}
-        {
-          "name": "{{ thread.name }}",
-          "href": "{% url 'thread_show_fragment' thread.id %}",
-          "placement": {% autoescape off %}{{ thread.placement }}{% endautoescape %},
-        },
-      {% endif %}
-    {% endfor %}
-  ];
-
-  var render_template = function(template, context){
-    for (key in context){
-      template = template.replace('[[' + key + ']]', context[key]);
-    }
-    return template;
-  };
-
-  var insert_discussions = function(){
-    var tpl = $('#discussion-list-item-template').html();
-
-    /* Add titles for all discussions */
-    for (var i=0; i<discussions.length; i++){
-      var disc = discussions[i];
-      var page = disc.placement['page-no'];
-
-      if (page != undefined){
-        $('#discussions-list-' + page).append(render_template(tpl, disc));
-        $('#discussions-label-' + page).removeClass("secondary");
-      }
-    }
-
-    /* Bind click event to all discussions titles -> async load popup */
-    $('.show-thread-link').click(function(ev){
-      var href = $(ev.delegateTarget).attr('href');
-      $('#page-comment-view').html('Loading...');
-      $.get(href, function(data){
-        $('#page-comment-view').html(data);
-        MathJax.Hub.Typeset();
-      });
-    });
-  };
-
-
-  insert_discussions();
-
-  /* Click page -> Populate discussion form */
-  $('.add-page-comment').click(function(ev){
-    var page_no = parseInt($(ev.delegateTarget).attr("data-id"));
-    $('#page-comment-form').find('input[name=page-no]').attr("value", page_no);
-    $('#page-comment-form').find('.page-no').html(page_no+1);
-  });
-});
-</script>
-
-{% endcache %}
-
-
-{% include "documents/viewer_bar.html" %}
 <div class="row">
-{% cache 86400 viewer.html document.id %}
-  <div id="thumbs-misere"></div>
-  <div id="thumbs" class="medium-2 columns show-for-medium-up">
-    {% for page in document.page_set.all %}
-      <div class="row">
-        <div class="large-12 columns">
-          <img id="thumb-{{ page.numero }}" class="thumb" data-num="{{ page.numero }}"
-            src="/static/images/white.png" width="120" height="{{ page.bitmap_120.height }}"/>
-          <p>{{ page.numero|add:1 }}</p>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-
-  <div id="pages" class="medium-10 small-12 columns">
-      {% if document.page_set.count != document.pages %}
-      <div class="alert-box info radius">
-          Ce document est trop grand pour être vu en entier sur DocHub, téléchargez le si vous voulez voir la fin.
-      </div>
-      {% endif %}
-    {% for page in document.page_set.all %}
-      <div class="row">
-        <div class="medium-2 columns">
-          <div class="row" style="padding-top: 30px;">
-            <div class="label secondary" id="discussions-label-{{ page.numero }}">
-              <i class="fi-comments"></i>
-              <strong>Discussions sur cette page</strong>
-            </div>
-          </div>
-          <div class="row">
-            <ul id="discussions-list-{{ page.numero }}"></ul>
-          </div>
-          <hr>
-
-          <div class="row">
-            <a href="#page-{{ page.numero }}"
-               class="add-page-comment"
-               data-reveal-id="page-comment-form"
-               data-id="{{ page.numero }}"
-               title="Discutez de cette page...">
-              <i class="fi-plus"></i>
-              Ajouter
-            </a>
-          </div>
-        </div>
-        <div class="medium-10 columns">
-          <a href="#page-{{ page.numero }}" title="Lien direct vers cette page">
-            <img id="page-{{ page.numero }}"
-                 class="page" src="/static/images/white.png"
-                 width="600" height="{{ page.bitmap_600.height }}"/>
-          </a>
-        </div>
-      </div>
-    {% endfor %}
-    {% if document.page_set.count != document.pages %}
-    <div class="alert-box info radius">
-        Ce document est trop grand pour être vu en entier sur DocHub, téléchargez le si vous voulez voir la fin.
-    </div>
-    {% endif %}
-  </div>
-{% endcache %}
+<span id="document_data"
+        data-url="{{document.pdf.url}}"
+        data-name="{{document.name}}"
+        data-id="{{document.id}}"
+        data-coursename="{{document.course.slug}}"
+        data-original="{{document.original}}"
+        data-pdf="{{document.pdf}}"
+        data-hasperm="{% if request.user|has_perm_on:document %}1{% else %}0{% endif %}"
+></span>
+<div id="root"></div>
 </div>
 
-
-<div id="page-comment-view" class="reveal-modal" data-reveal>
-
-</div>
-
-
-<div id="page-comment-form" class="reveal-modal" data-reveal>
-  <div class="row">
-    <div class="columns small-1">
-      <i class="fi-comment round-icon big"></i>
-    </div>
-    <div class="columns small-11">
-      <h3>
-        Nouvelle discussion sur la page
-        <span class="page-no"></span>
-      </h3>
-      <p>
-        {{ document.name }}
-      </p>
-    </div>
-  </div>
-  <div class="row">
-    <form method="POST" action="{% url "document_thread_put" document.id %}">
-      {% csrf_token %}
-      {% for field in form %}
-        {% include "simple_input.html" %}
-      {% endfor %}
-      <input type="hidden" name="page-no" value=""/>
-      <p class="text-right">
-        <input type="submit" class="button success radius" value="Créer" />
-      </p>
-    </form>
-    <p>
-      Cliquez n'importe où aileurs ou tapez sur la touche <code>ESC</code>
-      pour fermer cette fenêtre
-    </p>
-  </div>
-</div>
 {% endblock %}
