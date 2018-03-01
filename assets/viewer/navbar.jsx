@@ -21,7 +21,7 @@ export default class Navbar extends Component {
 
                 <font color="white">{this.props.docname}</font>
 
-                {this.props.has_perm?
+                {this.props.has_perm == "1"?
                     (<a className="button navbar-button right" href={window.Urls.document_edit(this.props.docid)}>
                       <i className="fi-pencil"></i> Editer
                     </a>)
