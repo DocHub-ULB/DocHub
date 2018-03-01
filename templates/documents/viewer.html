@@ -3,26 +3,12 @@
 {% load render_bundle from webpack_loader %}
 {% load has_perm_on %}
 
-
 {% block script %}
-
 {% render_bundle 'viewer' %}
-{% if request.user|has_perm_on:document %}
-    <script type="text/javascript">
-        var hasperm = 1
-    </script>
-{% else %}
-    <script type="text/javascript">
-        var hasperm = 0
-    </script>
-{% endif %}
-
 {% endblock %}
 
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
-
-
 
 <div class="row">
 <span id="document_data"
@@ -32,10 +18,9 @@
         data-coursename="{{document.course.slug}}"
         data-original="{{document.original}}"
         data-pdf="{{document.pdf}}"
-        data-hasperm="{hasperm}"
+        data-hasperm="{{request.user|has_perm_on:document}}"
 ></span>
 <div id="root"></div>
 </div>
-
 
 {% endblock %}
