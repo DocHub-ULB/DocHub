@@ -4,16 +4,21 @@ import Cookies from 'js-cookie'
 
 import {markdown} from 'markdown';
 import moment from 'moment'
+import PropTypes from 'prop-types';
 
-const UpvoteButton = React.createClass({
-    clicked: function(e){
+class VoteButton extends React.Component {
+    constructor(props) {
+        super(props)
+        this.clicked = this.clicked.bind(this)
+    }
+    clicked(e) {
         e.preventDefault();
         if (!this.props.isActive){
             // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
             $.ajax({
                 type : "POST",
-                url : window.Urls.upvote_document(),
-                data : JSON.stringify({"doc_id": this.props.doc_id}),
+                url : this.props.request_url,
+                data : JSON.stringify({"doc_id": this.props.doc_id, "vote": this.props.vote_type}),
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',
@@ -21,71 +26,67 @@ const UpvoteButton = React.createClass({
                   },
                 success: function(response){
                     this.props.vote_callback(response);
-                }.bind(this),
+                }.bind(this)
             });
         }
-    },
-    pretty_vote_num: function(){
+    }
+    pretty_vote_num() {
         if (this.props.num < 1000){
             return this.props.num.toString();
         }else{
             return ((this.props.num / 1000).toString()).slice(0,3) + "k"
         }
-    },
-    csrf_token: function(){
-        return Cookies.get('csrftoken')},
-    render: function(){
+    }
+    csrf_token() {
+        return Cookies.get('csrftoken')
+    }
+    render() {
         return (
             <div>
             <span onClick={this.clicked}>
-                <i className={`fi-like round-icon medium upvote ${this.props.isActive ? 'active' : ''}`}></i>
+                <i className={`${this.props.icon_class} ${this.props.isActive ? 'active' : ''}`}></i>
             </span>
-            <span className="round success label votelabel">{this.pretty_vote_num()}</span>
+            <span className={this.props.label_class}>{this.pretty_vote_num()}</span>
             </div>
         );
     }
-});
+};
 
-const DownvoteButton = React.createClass({
-    clicked: function(e){
-        e.preventDefault();
-        if (!this.props.isActive){
-            // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
-            $.ajax({
-                type : "POST",
-                url : window.Urls.downvote_document(),
-                data : JSON.stringify({"doc_id": this.props.doc_id}),
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'X-CSRFToken': this.csrf_token(),
-                  },
-                  success: function(response){
-                      this.props.vote_callback(response);
-                  }.bind(this),
-            });
-        }
-    },
-    csrf_token: function(){return Cookies.get('csrftoken')},
-    pretty_vote_num: function(){
-        if (this.props.num < 1000){
-            return this.props.num.toString();
-        }else{
-            return ((this.props.num / 1000).toString()).slice(0,3) + "k"
-        }
-    },
-    render: function(){
-        var num = "5";
-        return (
-            <div>
-            <span onClick={this.clicked}>
-                <i className={`fi-dislike round-icon medium downvote ${this.props.isActive ? 'active' : ''}`}></i>
-            </span>
-            <span className="round alert label votelabel">{this.pretty_vote_num()}</span>
-            </div>
+VoteButton.propTypes = {
+    request_url: PropTypes.string.isRequired,
+    vote_type: PropTypes.string.isRequired,
+    icon_class: PropTypes.string.isRequired,
+    label_class: PropTypes.string.isRequired,
+    isActive: PropTypes.bool.isRequired,
+    vote_callback: PropTypes.func.isRequired,
+    num: PropTypes.number.isRequired
+}
+
+class UpvoteButton extends React.Component {
+    render() {
+        return (        // isActive, vote_callback, num
+            <VoteButton {...this.props}
+                request_url={window.Urls.upvote_document()}
+                vote_type={"up"}
+                label_class={"round success label votelabel"}
+                icon_class={"fi-like round-icon medium upvote"}
+            />
         );
     }
-});
+};
+
+class DownvoteButton extends React.Component{
+    render() {
+        return (        // isActive, vote_callback, num
+            <VoteButton {...this.props}
+                request_url={window.Urls.downvote_document()}
+                vote_type={"down"}
+                label_class={"round alert label votelabel"}
+                icon_class={"fi-dislike round-icon medium downvote"}
+            />
+        );
+    }
+};
 
 const CourseDocument = React.createClass({
     getInitialState: function(){
