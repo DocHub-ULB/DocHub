@@ -9,11 +9,11 @@
 {% render_bundle 'viewer' %}
 {% if request.user|has_perm_on:document %}
     <script type="text/javascript">
-        window.hasperm = 1
+        var hasperm = 1
     </script>
 {% else %}
     <script type="text/javascript">
-        window.hasperm = 0
+        var hasperm = 0
     </script>
 {% endif %}
 
@@ -25,7 +25,15 @@
 
 
 <div class="row">
-<span id="pdf-url" data-url="{{document.pdf.url}}" data-name="{{document.name}}" data-id="{{document.id}}" data-coursename="{{document.course.slug}}" ></span>
+<span id="document_data"
+        data-url="{{document.pdf.url}}"
+        data-name="{{document.name}}"
+        data-id="{{document.id}}"
+        data-coursename="{{document.course.slug}}"
+        data-original="{{document.original}}"
+        data-pdf="{{document.pdf}}"
+        data-hasperm="{hasperm}"
+></span>
 <div id="root"></div>
 </div>
 

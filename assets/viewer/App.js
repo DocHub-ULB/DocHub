@@ -22,15 +22,15 @@ export default class App extends Component {
 
   onDocumentFail() {
     return (
-    <div>Une erreur est survenue, souhaitez-vous &nbsp;
-        <a className="small" href={window.Urls.document_download(this.props.docid)}>
-            <i className="fi-download"></i> télécharger
+    <div className="alert-box alert round viewer-error-message">Une erreur est survenue, souhaitez-vous &nbsp;
+        <a className="viewer-error-link small" href={window.Urls.document_download(this.props.docid)}>
+            <i className="fi-download viewer-error-icon"></i> télécharger
         </a>
     &nbsp; le document ?</div>)
   }
 
   view_more() {
-    this.setState({view_more: this.state["view_more"] + 1})
+    this.setState({view_more: this.state.view_more + 1})
   }
 
   zoomin(){
@@ -55,17 +55,22 @@ export default class App extends Component {
         );
     }
 
-    var url = document.getElementById('pdf-url').dataset.url
-    var name = document.getElementById('pdf-url').dataset.name
-    var id = document.getElementById('pdf-url').dataset.id
-    var coursename = document.getElementById('pdf-url').dataset.coursename
+    var document_data = document.getElementById('document_data').dataset
 
     return (
       <div className="viewer">
-        <Navbar zoomin={this.zoomin.bind(this)} zoomout={this.zoomout.bind(this)} docname={name} docid={id} couname={coursename}/>
+        <Navbar zoomin={this.zoomin.bind(this)}
+                zoomout={this.zoomout.bind(this)}
+                docname={document_data.name}
+                docid={document_data.id}
+                course_name={document_data.coursename}
+                original={document_data.original}
+                pdf={document_data.pdf}
+                has_perm={document_data.hasperm}
+        />
         <Document
           className="viewer-document"
-          file={url}
+          file={document_data.url}
           loading={<Loader />}
           onLoadSuccess={this.onDocumentLoad}
           error={this.onDocumentFail()}

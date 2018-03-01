@@ -1,35 +1,36 @@
 import React, { Component } from 'react';
 
-const buttonStyle = {
-  "backgroundColor":'rgba(51, 51, 51, 1)',
-}
-
 export default class Navbar extends Component {
   render() {
     return (
         <div className="sticky">
             <nav className="top-bar" id="navbar">
-                <a className="button left" href={"/catalog/course/" + this.props.couname} style={buttonStyle}>
-                  <i className="fi-arrow-left"></i> {this.props.couname}
+                <a className="button navbar-button left" href={window.Urls.course_show(this.props.course_name)}>
+                  <i className="fi-arrow-left"></i> {this.props.course_name}
                 </a>
 
-                <a className="button left" href={window.Urls.document_download(this.props.docid)} style={buttonStyle}>
-                  <i className="fi-download"></i> Télécharger
+                <a className="button navbar-button left" href={window.Urls.document_download(this.props.docid)}>
+                  <i className="fi-download"></i> Télécharger - PDF
                 </a>
+
+                {this.props.original != this.props.pdf?
+                    (<a className="button navbar-button left" href={window.Urls.document_download_original(this.props.docid)}>
+                      <i className="fi-download"></i> Télécharger - Original
+                    </a>):null}
 
                 <font color="white">{this.props.docname}</font>
 
-                {window.hasperm?
-                    (<a className="button right" href={window.Urls.document_edit(this.props.docid)} style={buttonStyle}>
+                {this.props.has_perm?
+                    (<a className="button navbar-button right" href={window.Urls.document_edit(this.props.docid)}>
                       <i className="fi-pencil"></i> Editer
                     </a>):null}
 
 
-                <button className="button right" onClick={this.props.zoomin} style={buttonStyle}>
+                <button className="button navbar-button right" onClick={this.props.zoomin}>
                   <i className="fi-zoom-in"></i> Zoom
                 </button>
 
-                <button className="button right" onClick={this.props.zoomout} style={buttonStyle}>
+                <button className="button navbar-button right" onClick={this.props.zoomout}>
                   <i className="fi-zoom-out"></i> De-zoom
                 </button>
 
