@@ -1,6 +1,6 @@
 const React = require('react');
 const Tag = require('./Tag.jsx');
-window.Cookies = require('js-cookie');
+import Cookies from 'js-cookie'
 
 import {markdown} from 'markdown';
 import moment from 'moment'
