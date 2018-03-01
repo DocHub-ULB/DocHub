@@ -18,7 +18,7 @@
         data-coursename="{{document.course.slug}}"
         data-original="{{document.original}}"
         data-pdf="{{document.pdf}}"
-        data-hasperm="{{request.user|has_perm_on:document}}"
+        data-hasperm="{% if request.user|has_perm_on:document %}1{% else %}0{% endif %}"
 ></span>
 <div id="root"></div>
 </div>
