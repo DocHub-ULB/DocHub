@@ -34,7 +34,7 @@ class VoteButton extends React.Component {
         if (this.props.num < 1000){
             return this.props.num.toString();
         }else{
-            return ((this.props.num / 1000).toString()).slice(0,3) + "k"
+            return ((this.props.num / 1000).toFixed(1).toString()) + "k"
         }
     }
     csrf_token() {
