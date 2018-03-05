@@ -29,4 +29,4 @@ class VoteView(APIView):
         vote.vote_type = data["vote_type"]
         vote.save()
 
-        return Response({"created": created})
+        return Response({"status": "ok"})

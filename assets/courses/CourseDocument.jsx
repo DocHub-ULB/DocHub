@@ -93,8 +93,7 @@ class CourseDocument extends React.Component{
                       upvotes: this.props.votes.upvotes,
                       downvotes: this.props.votes.downvotes
         };
-        this.downvote_callback = this.downvote_callback.bind(this)
-        this.upvote_callback = this.upvote_callback.bind(this)
+        this.vote_callback = this.vote_callback.bind(this)
     }
     ready() {return (this.props.is_ready);}
     editable() {return this.props.has_perm;}
@@ -142,27 +141,19 @@ class CourseDocument extends React.Component{
         }
     }
     upvote_icon() {
-        return (<UpvoteButton doc_id={this.props.id} num={this.state.upvotes} isActive={this.state.upvote_active} vote_callback={this.upvote_callback} />);
+        return (<UpvoteButton doc_id={this.props.id} num={this.state.upvotes} isActive={this.state.upvote_active} vote_callback={this.vote_callback} />);
 
     }
     downvote_icon() {
-        return (<DownvoteButton doc_id={this.props.id} num={this.state.downvotes} isActive={this.state.downvote_active} vote_callback={this.downvote_callback}/>);
+        return (<DownvoteButton doc_id={this.props.id} num={this.state.downvotes} isActive={this.state.downvote_active} vote_callback={this.vote_callback}/>);
     }
-    downvote_callback(response) {
-        var new_downvotes = this.state.downvotes + 1
-        var new_upvotes = this.state.upvotes - (response.created ? 0 : 1)
-        this.setState({upvote_active: false,
-                        downvote_active: true,
-                        upvotes: new_upvotes,
-                        downvotes: new_downvotes,});
-    }
-    upvote_callback(response) {
-        var new_upvotes = this.state.upvotes + 1
-        var new_downvotes = this.state.downvotes - (response.created ? 0 : 1)
-        this.setState({upvote_active: true,
-                        downvote_active: false,
-                        upvotes: new_upvotes,
-                        downvotes: new_downvotes,});
+    vote_callback() {
+        $.get(window.Urls.document_detail(this.props.id), function (data) {
+            this.setState({upvote_active: data.user_vote==1,
+                            downvote_active: data.user_vote==-1,
+                            upvotes: data.votes.upvotes,
+                            downvotes: data.votes.downvotes});
+        }.bind(this))
     }
     description() {
         var text = markdown.toHTML(this.props.description);
