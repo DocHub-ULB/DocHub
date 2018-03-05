@@ -9,7 +9,7 @@
     "watch": "webpack --config ./webpack.dev.config.js --watch",
     "runserver": "./manage.py runserver",
     "runworker": "celery -A www worker -l info",
-    "dev": "concurrently --kill-others \"npm run watch\"  \"npm run runworker\""
+    "dev": "concurrently --kill-others \"npm run watch\" \"npm run runserver\"  \"npm run runworker\""
   },
   "repository": {
     "type": "git",
