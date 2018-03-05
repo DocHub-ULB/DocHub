@@ -18,7 +18,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     def get_user_vote(self, document):
         user = self.context['request'].user
         try:
-            vote = Vote.objects.get(document=document, user=user)
+            vote = document.vote_set.get(user=user)
         except Vote.DoesNotExist:
             return 0
 
