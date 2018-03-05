@@ -8,7 +8,7 @@ import sys
 from django.core.files import File
 
 from users.models import User
-from documents.models import Document, Page
+from documents.models import Document
 from documents.models import process_document
 from celery_test import create_doc
 
@@ -21,11 +21,6 @@ def doc():
     doc = Document.objects.create(name='A document', user=user)
 
     return doc
-
-
-def add_pages(doc):
-    for i in range(5):
-        Page.objects.create(numero=i, document=doc)
 
 
 def test_repr(doc):
@@ -73,22 +68,18 @@ def test_tag_resume(doc):
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess_done(mock_add_to_queue, doc):
     doc.state = "DONE"
-    add_pages(doc)
 
     with pytest.raises(Exception):
         doc.reprocess()
     assert mock_add_to_queue.called == 0
-    assert doc.page_set.count() != 0
 
 
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess(mock_add_to_queue, doc):
     doc.state = 'ERROR'
-    add_pages(doc)
     doc.reprocess()
 
     assert mock_add_to_queue.called == 1
-    assert doc.page_set.count() == 0
 
 
 @mock.patch.object(process_document, 'delay')

@@ -14,7 +14,7 @@ from PyPDF2 import PdfFileReader
 from django.core.files.base import ContentFile, File
 from actstream import action
 
-from documents.models import Document, Page, DocumentError
+from documents.models import Document, DocumentError
 from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
 
 from django.conf import settings
@@ -121,42 +121,6 @@ def mesure_pdf_length(self, document_id):
 
 
 @doctask
-def preview_pdf(self, document_id):
-    try:
-        subprocess.check_output(['gm', 'help'])
-    except OSError:
-        raise MissingBinary("gm")
-
-    document = Document.objects.get(pk=document_id)
-
-    for i in range(min(document.pages, settings.MAX_RENDER_PAGES)):
-        page = Page.objects.create(numero=i, document=document)
-
-        for width in 120, 600, 900:
-            try:
-                fd, output_path = tempfile.mkstemp(prefix="dochub_preview_dest_", suffix=".jpg")
-                os.close(fd)
-
-                args = [
-                    "gm", "convert",
-                    "-geometry", "{}x".format(width),
-                    "-quality", "90",
-                    "-density", "300",
-                    "pdf:{}[{}]".format(document.pdf.path, i),
-                    "jpg:{}".format(output_path),
-                ]
-                subprocess.check_output(args)
-                destination = page.__getattribute__('bitmap_' + str(width))
-                with open(output_path, 'rb') as fd:
-                    destination.save(str(uuid.uuid4()) + ".jpg", ContentFile(fd.read()))
-
-            finally:
-                os.remove(output_path)
-
-    return document_id
-
-
-@doctask
 def finish_file(self, document_id):
     document = Document.objects.get(pk=document_id)
     document.state = 'DONE'
@@ -209,7 +173,6 @@ def repair(self, document_id):
 process_pdf = chain(
     checksum.s(),
     mesure_pdf_length.s(),
-    preview_pdf.s(),
     finish_file.s()
 )
 
@@ -217,7 +180,6 @@ process_office = chain(
     checksum.s(),
     convert_office_to_pdf.s(),
     mesure_pdf_length.s(),
-    preview_pdf.s(),
     finish_file.s()
 )
 

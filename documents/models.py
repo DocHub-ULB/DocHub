@@ -78,9 +78,6 @@ class Document(models.Model):
         if self.state != "ERROR" and not force:
             raise Exception("Document is not in error state it is " + self.state)
 
-        for page in self.page_set.all():
-            page.delete()
-
         self.state = 'READY_TO_QUEUE'
         self.md5 = ""
         self.add_to_queue()
@@ -144,25 +141,6 @@ class Document(models.Model):
             self.tags.add(tag)
 
 
-class Page(models.Model):
-    numero = models.IntegerField(db_index=True)
-    document = models.ForeignKey(Document, db_index=True)
-
-    bitmap_120 = models.ImageField(upload_to='page_120', height_field="height_120")
-    bitmap_600 = models.ImageField(upload_to='page_600', height_field="height_600")
-    bitmap_900 = models.ImageField(upload_to='page_900', height_field="height_900")
-
-    height_120 = models.PositiveIntegerField(default=0)
-    height_600 = models.PositiveIntegerField(default=0)
-    height_900 = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        ordering = ['numero']
-
-    def get_absolute_url(self):
-        return self.document.get_absolute_url() + "#page-{}".format(self.numero)
-
-
 @python_2_unicode_compatible
 class DocumentError(models.Model):
     document = models.ForeignKey(Document)
@@ -190,25 +168,5 @@ def cleanup_document_files(instance, **kwargs):
     if original_file_name != '' and instance.original.storage.exists(original_file_name):
         instance.original.storage.delete(original_file_name)
 
-
-@receiver(pre_delete, sender=Page)
-def cleanup_page_files(instance, **kwargs):
-    """
-    Deletes all files when the database object is deleted.
-    Checks that the name is not empty as that is what is returned when there is
-        no file associated with the database object.
-    """
-
-    filename_120 = instance.bitmap_120.name
-    if filename_120 != '' and instance.bitmap_120.storage.exists(filename_120):
-        instance.bitmap_120.storage.delete(filename_120)
-
-    filename_600 = instance.bitmap_600.name
-    if filename_600 != '' and instance.bitmap_600.storage.exists(filename_600):
-        instance.bitmap_600.storage.delete(filename_600)
-
-    filename_900 = instance.bitmap_900.name
-    if filename_900 != '' and instance.bitmap_900.storage.exists(filename_900):
-        instance.bitmap_900.storage.delete(filename_900)
 
 from documents.tasks import process_document, repair

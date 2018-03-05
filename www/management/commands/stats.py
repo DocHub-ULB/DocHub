@@ -15,7 +15,7 @@ from django.db.models import Sum
 
 from users.models import User
 from telepathy.models import Thread, Message
-from documents.models import Document, Page
+from documents.models import Document
 
 
 class Command(BaseCommand):
@@ -39,14 +39,6 @@ class Command(BaseCommand):
         Print(" - {} DONE\n".format(Document.objects.filter(state="DONE").count()))
         Print("{} views\n".format(Document.objects.aggregate(Sum('views'))['views__sum']))
         Print("{} downloads\n".format(Document.objects.aggregate(Sum('downloads'))['downloads__sum']))
-        Print("{} pages\n".format(Page.objects.count()))
-        Print("{} future pages ({} doc not counted)\n".format(
-            (
-                Document.objects.aggregate(Sum('pages'))['pages__sum']
-                - Page.objects.count()
-            ),
-            Document.objects.exclude(state="ERROR").filter(pages=0).count()
-        ))
         Print("\n")
 
         Print("Thread summary :\n")

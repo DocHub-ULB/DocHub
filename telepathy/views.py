@@ -72,12 +72,6 @@ def show_thread(request, pk):
     context = get_thread_context(request, pk)
     thread = context['thread']
 
-    # Add page preview if this thread belongs to a document page
-    if thread.document:
-        page = thread.document.page_set.get(numero=thread.page_no)
-        context['thumbnail'] = page.bitmap_120
-        context['preview'] = page.bitmap_600
-
     return render(request, "telepathy/thread.html", context)
 
 
