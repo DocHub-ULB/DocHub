@@ -75,7 +75,9 @@
     <br>
     <a class="button expand radius" href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
     <a class="button expand radius" href="{% url 'thread_put' course.slug %}">Poser une question</a>
+    {% if documents.count > 0 %}
     <a class="button expand success radius" href="{% url 'download_all_files_for_course' course.slug %}">Télécharger tous les documents</a>
+    {% endif %}
     {% if request.user|is_following:course %}
       <a class="button expand alert radius" href="{% url 'leave_course' course.slug %}">
         <i class="fi-x"></i> Se désabonner
