@@ -17,7 +17,9 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_user_vote(self, document):
         user = self.context['request'].user
-
+        # We do the filtering in python as this method is called from REST with all the necessary
+        #   data already prefetched. Using self.vote_set.filter() would lead to another roundtrip
+        #   to the database for each document. Thats bad.
         users_vote = None
         for vote in document.vote_set.all():
             if vote.user == user:

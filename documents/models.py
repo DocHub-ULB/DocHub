@@ -62,7 +62,9 @@ class Document(models.Model):
     @property
     def votes(self):
         upvotes, downvotes = 0, 0
-
+        # We do the filtering in python as this method is called from REST with all the necessary
+        #   data already prefetched. Using self.vote_set.filter() would lead to another roundtrip
+        #   to the database for each document. Thats bad.
         for vote in self.vote_set.all():
             vote_type = vote.vote_type
             if vote_type == Vote.UPVOTE:
