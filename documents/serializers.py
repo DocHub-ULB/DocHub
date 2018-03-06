@@ -17,14 +17,18 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_user_vote(self, document):
         user = self.context['request'].user
-        try:
-            vote = document.vote_set.get(user=user)
-        except Vote.DoesNotExist:
-            return 0
 
-        if vote.vote_type == vote.UPVOTE:
+        users_vote = None
+        for vote in document.vote_set.all():
+            if vote.user == user:
+                users_vote = vote
+                break
+
+        if users_vote is None:
+            return 0
+        elif users_vote.vote_type == Vote.UPVOTE:
             return 1
-        elif vote.vote_type == vote.DOWNVOTE:
+        elif users_vote.vote_type == Vote.DOWNVOTE:
             return -1
         else:
             raise NotImplemented("Vote not of known type.")

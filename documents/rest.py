@@ -11,7 +11,11 @@ from documents.models import Document, Page, Vote
 
 
 class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Document.objects.all().prefetch_related("vote_set")
+    queryset = Document.objects.all() \
+                               .prefetch_related("vote_set__user") \
+                               .prefetch_related("tags") \
+                               .select_related("course") \
+                               .select_related("user")
     serializer_class = DocumentSerializer
 
 
