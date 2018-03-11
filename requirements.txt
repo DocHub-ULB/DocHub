@@ -34,6 +34,9 @@ django-webtest
 pytest-cov
 coveralls
 
+
+# prod
+redis
 psycopg2-binary
 python-memcached
 django-debug-toolbar
