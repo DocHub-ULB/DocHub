@@ -47,6 +47,7 @@
     "markdown": "^0.5.0",
     "moment": "^2.20.1",
     "prepack-webpack-plugin": "^1.1.0",
+    "prop-types": "^15.6.1",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "react-pdf": "^2.5.2"

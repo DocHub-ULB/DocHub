@@ -59,6 +59,23 @@ class Document(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def votes(self):
+        upvotes, downvotes = 0, 0
+        # We do the filtering in python as this method is called from REST with all the necessary
+        #   data already prefetched. Using self.vote_set.filter() would lead to another roundtrip
+        #   to the database for each document. Thats bad.
+        for vote in self.vote_set.all():
+            vote_type = vote.vote_type
+            if vote_type == Vote.UPVOTE:
+                upvotes += 1
+            elif vote_type == Vote.DOWNVOTE:
+                downvotes += 1
+            else:
+                raise NotImplemented("Vote not of known type.")
+
+        return {"upvotes": upvotes, "downvotes": downvotes}
+
     def fullname(self):
         return self.__str__()
 
@@ -139,6 +156,21 @@ class Document(models.Model):
         for tag in tags:
             tag = Tag.objects.get_or_create(name=tag)[0]
             self.tags.add(tag)
+
+
+class Vote(models.Model):
+    UPVOTE = "up"
+    DOWNVOTE = "down"
+    VOTE_TYPE_CHOICES = ((UPVOTE, "Upvote"),
+                         (DOWNVOTE, "Downvote"))
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    document = models.ForeignKey(Document)
+    when = models.DateTimeField(auto_now=True)
+    vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
+
+    class Meta:
+        unique_together = ("user", "document")
 
 
 @python_2_unicode_compatible
