@@ -41,14 +41,13 @@ class VoteButton extends React.Component {
         return Cookies.get('csrftoken')
     }
     render() {
-        return (
-            <div>
+        let res =  <div>
             <span onClick={this.clicked}>
                 <i className={`${this.props.icon_class} ${this.props.isActive ? 'active' : ''}`}></i>
             </span>
             <span className={this.props.label_class}>{this.pretty_vote_num()}</span>
-            </div>
-        );
+        </div>;
+        return (this.props.description) ? <abbr title={this.props.description}>{res}</abbr> : res;
     }
 };
 
@@ -68,6 +67,7 @@ class UpvoteButton extends React.Component {
                 vote_type={"up"}
                 label_class={"round success label votelabel"}
                 icon_class={"fi-like round-icon medium upvote"}
+                description="Ce document est très utile et mérite plus d'attention"
             />
         );
     }
@@ -80,6 +80,7 @@ class DownvoteButton extends React.Component{
                 vote_type={"down"}
                 label_class={"round alert label votelabel"}
                 icon_class={"fi-dislike round-icon medium downvote"}
+                description="Ce document est décevant et/ou inintéressant pour le cours"
             />
         );
     }
