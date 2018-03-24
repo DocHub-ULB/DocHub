@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Document, Page } from 'react-pdf/build/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import Navbar from './navbar';
 
 class Loader extends Component {

@@ -27,13 +27,22 @@ module.exports = {
   },
 
   plugins: [
-    new BundleTracker({filename: './webpack-stats.json'}),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'commons',
-      filename: '[name]-[hash].js',
-      minChunks: 2,
-    }),
+      new BundleTracker({filename: './webpack-stats.json'}),
   ],
+
+
+
+  optimization: {
+      splitChunks: {
+    	cacheGroups: {
+    		commons: {
+    			name: "commons",
+    			chunks: "initial",
+    			minChunks: 2
+    		}
+    	}
+      },
+ },
 
   module: {
     rules: [
