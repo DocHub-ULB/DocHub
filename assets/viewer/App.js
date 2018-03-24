@@ -23,7 +23,7 @@ export default class App extends Component {
   onDocumentFail() {
     return (
     <div className="alert-box alert round viewer-error-message">Une erreur est survenue, souhaitez-vous &nbsp;
-        <a className="viewer-error-link small" href={window.Urls.document_download(this.props.docid)}>
+        <a className="viewer-error-link small" href={window.Urls.document_download(document.getElementById('document_data').dataset.id)}>
             <i className="fi-download viewer-error-icon"></i> télécharger
         </a>
     &nbsp; le document ?</div>)
