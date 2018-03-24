@@ -19,19 +19,11 @@ class SimpleRouterWithNesting(NestedRouterMixin, DefaultRouter):
 router = SimpleRouterWithNesting()
 
 router.register(r'users', users.rest.UserViewSet)
-router.register(r'pages', documents.rest.PageViewSet)
 router.register(r'courses', catalog.rest.CourseViewSet)
 router.register(r'categories', catalog.rest.CategoryViewSet)
 router.register(r'threads', telepathy.rest.ThreadViewSet)
 router.register(r'messages', telepathy.rest.MessageViewSet)
-
-docs = router.register(r'documents', documents.rest.DocumentViewSet)
-docs.register(
-    r'page_set',
-    documents.rest.PageViewSet,
-    base_name='page-set',
-    parents_query_lookups=['document'],
-)
+router.register(r'documents', documents.rest.DocumentViewSet)
 
 urlpatterns = [
     url(r"vote/document/(?P<pk>[^/]*)", documents.rest.VoteView.as_view(), name='vote_document'),

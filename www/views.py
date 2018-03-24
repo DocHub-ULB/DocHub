@@ -6,9 +6,10 @@ from actstream.models import user_stream
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.template.loader import get_template
+from django.db.models import Sum
 
 from telepathy.models import Thread
-from documents.models import Document, Page
+from documents.models import Document
 from users.models import User
 from users.authBackend import NetidBackend
 
@@ -24,11 +25,13 @@ def index(request):
             r = 10 ** r
             return int((num // r) * r)
 
+        page_count = Document.objects.all().aggregate(Sum('pages'))['pages__sum']
+
         context = {
             "login_url": NetidBackend.login_url(""),
             "debug": settings.DEBUG,
             "documents": floor(Document.objects.count()),
-            "pages": floor(Page.objects.count(), 2),
+            "pages": floor(page_count, 2),
             "users": floor(User.objects.count()),
             "threads": floor(Thread.objects.count()),
         }

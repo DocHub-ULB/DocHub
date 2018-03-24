@@ -18,11 +18,11 @@ There is a [live instance of DocHub](https://dochub.be) hosted by [UrLab](https:
 ### Dependencies
 
     # Ubuntu
-    sudo apt-get install graphicsmagick unoconv python3-dev nodejs ruby npm libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
+    sudo apt-get install unoconv python3-dev nodejs ruby npm libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
     # Fedora
-    sudo dnf install GraphicsMagick unoconv python-devel nodejs ruby npm mupdf
+    sudo dnf install unoconv python-devel nodejs ruby npm mupdf
     # Arch linux
-    sudo pacman -S graphicsmagick unoconv nodejs ruby python npm mupdf-tools
+    sudo pacman -S unoconv nodejs ruby python npm mupdf-tools
 
 ### Installation
 

@@ -2,30 +2,16 @@
 from __future__ import unicode_literals
 
 from rest_framework import viewsets
-from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from documents.serializers import DocumentSerializer, PageSerializer
-from documents.models import Document, Page, Vote
+from documents.serializers import DocumentSerializer
+from documents.models import Document, Vote
 
 
 class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-
-    def get_queryset(self):
-        queryset = super().get_queryset() \
-                                         .prefetch_related("vote_set__user") \
-                                         .prefetch_related("tags") \
-                                         .select_related("course") \
-                                         .select_related("user")
-        return queryset
-
-
-class PageViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Page.objects.all()
-    serializer_class = PageSerializer
 
 
 class VoteView(APIView):
