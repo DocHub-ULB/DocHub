@@ -14,6 +14,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
 
     user_vote = serializers.SerializerMethodField()
     has_perm = serializers.SerializerMethodField()
+    file_size = serializers.SerializerMethodField()
 
     def get_user_vote(self, document):
         user = self.context['request'].user
@@ -39,12 +40,15 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         user = self.context['request'].user
         return user.write_perm(obj=document)
 
+    def get_file_size(self, document):
+        return document.original.size
+
     class Meta:
         model = Document
         fields = (
-            'course', 'date', 'description', 'downloads', 'file_type',
-            'has_perm', 'hidden', 'id', 'is_processing', 'is_ready',
-            'is_unconvertible', 'md5', 'name', 'pages', 'size', 'state',
+            'course', 'date', 'description', 'downloads', 'file_size',
+            'file_type', 'has_perm', 'hidden', 'id', 'is_processing',
+            'is_ready', 'is_unconvertible', 'md5', 'name', 'pages', 'state',
             'tags', 'url', 'user', 'user_vote', 'views', 'votes',
         )
 
