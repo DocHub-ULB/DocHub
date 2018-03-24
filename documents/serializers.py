@@ -12,8 +12,8 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     tags = TagSerializer(many=True)
     user = SmallUserSerializer()
 
-    has_perm = serializers.SerializerMethodField()
     user_vote = serializers.SerializerMethodField()
+    has_perm = serializers.SerializerMethodField()
 
     def get_user_vote(self, document):
         user = self.context['request'].user
@@ -42,11 +42,10 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Document
         fields = (
-            'id', 'name', 'url', 'course', 'description',
-            'user', 'pages', 'date', 'views', 'user_vote', 'votes',
-            'downloads', 'state', 'md5', 'tags', 'has_perm',
-            'is_unconvertible', 'is_ready', 'is_processing',
-            'hidden',
+            'course', 'date', 'description', 'downloads', 'file_type',
+            'has_perm', 'hidden', 'id', 'is_processing', 'is_ready',
+            'is_unconvertible', 'md5', 'name', 'pages', 'size', 'state',
+            'tags', 'url', 'user', 'user_vote', 'views', 'votes',
         )
 
         extra_kwargs = {
