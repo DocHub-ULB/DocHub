@@ -1,11 +1,11 @@
 const React = require('react');
 
-const Tag = React.createClass({
-    id: function(){return this.props.id;},
-    name: function(){return this.props.name;},
-    color: function(){return this.props.color;},
-    clicked: function(){if (this.props.onClick) this.props.onClick(this);},
-    render: function(){
+class Tag extends React.Component {
+    id =  function(){return this.props.id;}
+    name =  function(){return this.props.name;}
+    color =  function(){return this.props.color;}
+    clicked =  function(){if (this.props.onClick) this.props.onClick(this);}
+    render = function(){
         var style = {border: 'solid 2px ' + this.color()};
         var klass = "radius label tag-item";
         var icon = "";
@@ -33,6 +33,6 @@ const Tag = React.createClass({
             </span>&nbsp;
         </span>;
     }
-});
+}
 
 module.exports = Tag;
