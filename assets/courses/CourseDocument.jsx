@@ -11,20 +11,23 @@ import {UpvoteButton, DownvoteButton} from './Vote.jsx';
 class CourseDocument extends React.Component{
     constructor(props) {
         super(props)
-        this.state = {upvote_active: this.props.user_vote==1,
-                      downvote_active: this.props.user_vote==-1,
-                      upvotes: this.props.votes.upvotes,
-                      downvotes: this.props.votes.downvotes
-        };
         this.vote_callback = this.vote_callback.bind(this)
     }
-    ready() {return (this.props.is_ready);}
-    editable() {return this.props.has_perm;}
-    date() {return moment(this.props.date).format("D MMMM YYYY");}
-    edit_url() {return window.Urls.document_edit(this.props.id);}
-    reupload_url() {return window.Urls.document_reupload(this.props.id);}
-    url() {return window.Urls.document_show(this.props.id);}
-    icon() {
+
+    state = {
+        upvote_active: this.props.user_vote==1 || false,
+        downvote_active: this.props.user_vote==-1 || false,
+        upvotes: this.props.votes.upvotes || 0,
+        downvotes: this.props.votes.downvotes || 0,
+    }
+
+    ready = () => this.props.is_ready
+    editable = () => this.props.has_perm
+    date = () => moment(this.props.date).format("D MMMM YYYY")
+    edit_url = () => window.Urls.document_edit(this.props.id)
+    reupload_url = () => window.Urls.document_reupload(this.props.id)
+    url = () => window.Urls.document_show(this.props.id)
+    icon = () => {
         if (this.ready()){
             return (<a href={this.url()}>
                 <i className="fi-page-copy round-icon big"></i>
@@ -49,12 +52,10 @@ class CourseDocument extends React.Component{
     }
     edit_icon() {
         if (this.ready() && this.editable()){
-            return
-            <a href={this.edit_url()} title="Éditer">
+            return (<a href={this.edit_url()} title="Éditer">
                 <i className="fi-pencil dark-grey"></i> Editer
-            </a>;
+            </a>);
         }
-        return '';
     }
     reupload_icon() {
         if (this.ready() && this.editable()){

@@ -39,14 +39,14 @@ class CourseDocumentList extends React.Component {
         }
         return false;
     }
-    tags_in_documents = function(){
+    tags_in_documents = () => {
         var res = {};
         this.props.document_set.map(function(doc){
             doc.tags.map(function(t){res[t.id] = t;});
         });
         return clone(Object.keys(res).map(function(k){return res[k];}));
     }
-    tag_clicked = function(tag){
+    tag_clicked = (tag) => {
         var t = tag.id();
         var i = this.state.tag_filter.indexOf(t);
         if (i >= 0){
@@ -59,10 +59,10 @@ class CourseDocumentList extends React.Component {
             });
         }
     }
-    search_changed = function(evt){
+    search_changed = (evt) => {
         this.setState({search_text: evt.target.value});
     }
-    documents_filtered = function(){
+    documents_filtered = () => {
         var pattern = new RegExp(this.state.search_text, 'i');
         return this.props.document_set.filter(function(doc){
             return doc.hidden == false;
@@ -80,7 +80,7 @@ class CourseDocumentList extends React.Component {
             return admissible;
         }.bind(this)).sort(function(a, b){return a.date >= b.date;});
     }
-    tag_bar = function(){
+    tag_bar = () => {
         return this.tags_in_documents().map(function(tag){
             var occurences = this.documents_filtered()
                                  .map(function(x){return this.has_tag(x, tag);}.bind(this))
@@ -90,7 +90,7 @@ class CourseDocumentList extends React.Component {
             return <Tag key={"tag"+tag.id} onClick={this.tag_clicked} {...tag}/>;
         }.bind(this));
     }
-    render = function(){
+    render = () => {
         var docs = this.documents_filtered().map(function(doc){
             return <CourseDocument key={"doc"+doc.id} {...doc} />;
         });
