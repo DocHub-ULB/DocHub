@@ -8,6 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
 
+    {% if RAVEN_DSN %}
+        <script src="https://cdn.ravenjs.com/3.24.0/raven.min.js" crossorigin="anonymous"></script>
+        <script>
+            Raven.config('{{RAVEN_DSN}}').install()
+            Raven.setUserContext({
+                email: '{{request.user.email}}',
+                id: {{request.user.id}},
+                netid: '{{request.user.netid}}',
+            })
+        </script>
+    {% endif %}
     {% render_bundle 'commons' %}
     {% render_bundle 'styles' %}
 
