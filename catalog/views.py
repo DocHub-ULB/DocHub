@@ -50,6 +50,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
 def set_follow_course(request, slug, action):
     course = get_object_or_404(Course, slug=slug)
     action(request.user, course)
+    request.user.update_inferred_faculty()
     nextpage = request.GET.get('next', reverse('course_show', args=[slug]))
     return HttpResponseRedirect(nextpage)
 

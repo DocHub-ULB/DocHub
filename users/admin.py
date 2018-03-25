@@ -12,11 +12,11 @@ class InscriptionInline(admin.TabularInline):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative', 'last_login', 'created')
-    list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login', 'created')
+    list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative', 'last_login', 'created', 'inferred_faculty', 'inscription_faculty')
+    list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login', 'created', 'inferred_faculty', 'inscription_faculty')
     search_fields = ('netid', 'first_name', 'last_name')
 
-    readonly_fields = ('netid', 'last_login', 'registration')
+    readonly_fields = ('netid', 'last_login', 'registration', 'inferred_faculty', 'inscription_faculty')
     filter_horizontal = ('moderated_courses',)
     inlines = (InscriptionInline,)
 

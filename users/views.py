@@ -62,6 +62,7 @@ def auth(request):
     if sid and uid:
         user = authenticate(sid=sid, uid=uid)
         if user is not None:
+            user.update_inscription_faculty()
             login(request, user)
             return HttpResponseRedirect(next_url)
 

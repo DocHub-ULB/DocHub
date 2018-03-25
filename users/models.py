@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 import re
 import os
 from os.path import join
+import itertools
+import collections
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager
@@ -65,6 +67,9 @@ class User(AbstractBaseUser):
     welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default='')
 
+    inferred_faculty = models.TextField(blank=True)
+    inscription_faculty = models.TextField(blank=True)
+
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
@@ -103,7 +108,7 @@ class User(AbstractBaseUser):
     def following_courses(self):
         if self._following_courses is None:
             self._following_courses = actstream.models.following(self, Course)
-        return self._following_courses
+        return [x for x in self._following_courses if x]
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
@@ -129,6 +134,26 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.netid
+
+    def update_inscription_faculty(self):
+        inscription = self.inscription_set.order_by("-year").first()
+        if inscription:
+            self.inscription_faculty = inscription.faculty
+            self.save()
+
+    def update_inferred_faculty(self):
+        courses = self.following_courses()
+        categories = [x.categories.all() for x in courses]
+        categories = list(itertools.chain.from_iterable(categories))
+
+        faculties = [x.get_ancestors().filter(level=1).all() for x in categories]
+        faculties = list(itertools.chain.from_iterable(faculties))
+
+        counts = collections.Counter(faculties)
+        if counts:
+            faculty = counts.most_common()[0][0]
+            self.inferred_faculty = faculty.name
+            self.save()
 
 
 class Inscription(models.Model):

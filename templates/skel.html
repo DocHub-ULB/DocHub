@@ -16,6 +16,8 @@
                 email: '{{request.user.email}}',
                 id: {{request.user.id}},
                 netid: '{{request.user.netid}}',
+                inferred_faculty: '{{request.user.inferred_faculty}}',
+                inscription_faculty: '{{request.user.inscription_faculty}}',
             })
         </script>
     {% endif %}
@@ -208,7 +210,15 @@
 
       {% if request.user.is_authenticated %}
           gtag('config', 'UA-89986937-2', {
-            'user_id': '{{ request.user.id }}'
+            'user_id': '{{ request.user.id }}',
+            'custom_map': {
+                'dimension1': 'inscription_faculty',
+                'dimension2': 'inferred_faculty',
+            },
+          });
+          gtag('event', 'page_view', {
+              'inscription_faculty': '{{request.user.inscription_faculty}}',
+              'inferred_faculty': '{{request.user.inferred_faculty}}',
           });
       {% else %}
           gtag('config', 'UA-89986937-2');
@@ -244,6 +254,8 @@
             {
                 email:'{{request.user.email}}',
                 startDate: '{{request.user.created|date:"U"}}000',
+                inferred_faculty: '{{request.user.inferred_faculty}}',
+                inscription_faculty: '{{request.user.inscription_faculty}}',
             }
         );
     </script>
