@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js --mode production",
-    "watch": "webpack --config ./webpack.dev.config.js --watch --mode development",
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
     "runserver": "./manage.py runserver",
     "runworker": "celery -A www worker -l info",
     "dev": "concurrently --kill-others \"npm run watch\" \"npm run runserver\"  \"npm run runworker\""

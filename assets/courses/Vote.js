@@ -1,5 +1,5 @@
 const React = require('react');
-const Tag = require('./Tag.jsx');
+const Tag = require('./Tag.js');
 import Cookies from 'js-cookie'
 
 import {markdown} from 'markdown';

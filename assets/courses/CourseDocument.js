@@ -1,12 +1,12 @@
 const React = require('react');
-const Tag = require('./Tag.jsx');
+const Tag = require('./Tag.js');
 import Cookies from 'js-cookie'
 
 import {markdown} from 'markdown';
 import moment from 'moment'
 import PropTypes from 'prop-types';
 
-import {UpvoteButton, DownvoteButton} from './Vote.jsx';
+import {UpvoteButton, DownvoteButton} from './Vote.js';
 
 class CourseDocument extends React.Component{
     constructor(props) {

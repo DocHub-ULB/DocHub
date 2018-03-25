@@ -1,6 +1,6 @@
 const React = require('react');
-const CourseDocument = require('./CourseDocument.jsx').default;
-const Tag = require('./Tag.jsx');
+const CourseDocument = require('./CourseDocument.js').default;
+const Tag = require('./Tag.js');
 
 /* http://stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object */
 const clone = function(obj){
