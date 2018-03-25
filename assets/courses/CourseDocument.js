@@ -1,108 +1,33 @@
 const React = require('react');
-const Tag = require('./Tag.jsx');
+const Tag = require('./Tag.js');
 import Cookies from 'js-cookie'
 
 import {markdown} from 'markdown';
 import moment from 'moment'
 import PropTypes from 'prop-types';
 
-class VoteButton extends React.Component {
-    constructor(props) {
-        super(props)
-        this.clicked = this.clicked.bind(this)
-    }
-    clicked(e) {
-        e.preventDefault();
-        if (!this.props.isActive){
-            // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
-            $.ajax({
-                type : "POST",
-                url : window.Urls.vote_document(this.props.doc_id),
-                data : JSON.stringify({"vote_type": this.props.vote_type}),
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'X-CSRFToken': this.csrf_token(),
-                  },
-                success: function(response){
-                    this.props.vote_callback(response);
-                }.bind(this)
-            });
-        }
-    }
-    pretty_vote_num() {
-        if (this.props.num < 1000){
-            return this.props.num.toString();
-        }else{
-            return ((this.props.num / 1000).toFixed(1).toString()) + "k"
-        }
-    }
-    csrf_token() {
-        return Cookies.get('csrftoken')
-    }
-    render() {
-        let res =  <div>
-            <span onClick={this.clicked}>
-                <i className={`${this.props.icon_class} ${this.props.isActive ? 'active' : ''}`}></i>
-            </span>
-            <span className={this.props.label_class}>{this.pretty_vote_num()}</span>
-        </div>;
-        return (this.props.description) ? <abbr title={this.props.description}>{res}</abbr> : res;
-    }
-};
-
-VoteButton.propTypes = {
-    vote_type: PropTypes.string.isRequired,
-    icon_class: PropTypes.string.isRequired,
-    label_class: PropTypes.string.isRequired,
-    isActive: PropTypes.bool.isRequired,
-    vote_callback: PropTypes.func.isRequired,
-    num: PropTypes.number.isRequired
-}
-
-class UpvoteButton extends React.Component {
-    render() {
-        return (        // isActive, vote_callback, num
-            <VoteButton {...this.props}
-                vote_type={"up"}
-                label_class={"round success label votelabel"}
-                icon_class={"fi-like round-icon medium upvote"}
-                description="Ce document est très utile et mérite plus d'attention"
-            />
-        );
-    }
-};
-
-class DownvoteButton extends React.Component{
-    render() {
-        return (        // isActive, vote_callback, num
-            <VoteButton {...this.props}
-                vote_type={"down"}
-                label_class={"round alert label votelabel"}
-                icon_class={"fi-dislike round-icon medium downvote"}
-                description="Ce document est décevant et/ou inintéressant pour le cours"
-            />
-        );
-    }
-};
+import {UpvoteButton, DownvoteButton} from './Vote.js';
 
 class CourseDocument extends React.Component{
     constructor(props) {
         super(props)
-        this.state = {upvote_active: this.props.user_vote==1,
-                      downvote_active: this.props.user_vote==-1,
-                      upvotes: this.props.votes.upvotes,
-                      downvotes: this.props.votes.downvotes
-        };
         this.vote_callback = this.vote_callback.bind(this)
     }
-    ready() {return (this.props.is_ready);}
-    editable() {return this.props.has_perm;}
-    date() {return moment(this.props.date).format("D MMMM YYYY");}
-    edit_url() {return window.Urls.document_edit(this.props.id);}
-    reupload_url() {return window.Urls.document_reupload(this.props.id);}
-    url() {return window.Urls.document_show(this.props.id);}
-    icon() {
+
+    state = {
+        upvote_active: this.props.user_vote==1 || false,
+        downvote_active: this.props.user_vote==-1 || false,
+        upvotes: this.props.votes.upvotes || 0,
+        downvotes: this.props.votes.downvotes || 0,
+    }
+
+    ready = () => this.props.is_ready
+    editable = () => this.props.has_perm
+    date = () => moment(this.props.date).format("D MMMM YYYY")
+    edit_url = () => window.Urls.document_edit(this.props.id)
+    reupload_url = () => window.Urls.document_reupload(this.props.id)
+    url = () => window.Urls.document_show(this.props.id)
+    icon = () => {
         if (this.ready()){
             return (<a href={this.url()}>
                 <i className="fi-page-copy round-icon big"></i>
@@ -127,12 +52,10 @@ class CourseDocument extends React.Component{
     }
     edit_icon() {
         if (this.ready() && this.editable()){
-            return
-            <a href={this.edit_url()} title="Éditer">
+            return (<a href={this.edit_url()} title="Éditer">
                 <i className="fi-pencil dark-grey"></i> Editer
-            </a>;
+            </a>);
         }
-        return '';
     }
     reupload_icon() {
         if (this.ready() && this.editable()){

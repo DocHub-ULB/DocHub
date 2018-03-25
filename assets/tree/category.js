@@ -1,5 +1,5 @@
 const React = require('react');
-const Course = require('./course.jsx');
+const Course = require('./course.js');
 
 class Category extends React.Component {
     constructor (props) {

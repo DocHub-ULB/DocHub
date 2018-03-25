@@ -1,6 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-const Category = require('./category.jsx');
+const Category = require('./category.js');
 
 
 class Menu extends React.Component {

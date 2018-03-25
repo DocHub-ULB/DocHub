@@ -80,6 +80,7 @@ INSTALLED_APPS += (
 
 TEMPLATES[0]['OPTIONS']['context_processors'] += (
     'django.core.context_processors.request',
+    'www.context_processors.raven',
 )
 
 STATIC_ROOT = 'collected_static'

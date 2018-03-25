@@ -1,11 +1,11 @@
 const React = require('react');
 
-const Tag = React.createClass({
-    id: function(){return this.props.id;},
-    name: function(){return this.props.name;},
-    color: function(){return this.props.color;},
-    clicked: function(){if (this.props.onClick) this.props.onClick(this);},
-    render: function(){
+class Tag extends React.Component {
+    id = () => this.props.id
+    name = () => this.props.name
+    color = () => this.props.color
+    clicked = () => {if (this.props.onClick) this.props.onClick(this)}
+    render = function(){
         var style = {border: 'solid 2px ' + this.color()};
         var klass = "radius label tag-item";
         var icon = "";
@@ -25,14 +25,14 @@ const Tag = React.createClass({
         } else {
             icon = "";
         }
-        return <span>
+        return (<span>
             <span onClick={this.clicked}
                         style={style} className={klass}>
             {icon}
             {this.name()}
             </span>&nbsp;
-        </span>;
+        </span>);
     }
-});
+}
 
 module.exports = Tag;

@@ -1,6 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-const Menu = require('./menu.jsx');
+const Menu = require('./menu.js');
 
 window.courseTreeRender = (data) => {
     ReactDOM.render(
