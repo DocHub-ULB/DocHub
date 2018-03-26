@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import authenticate, login
 from django.conf import settings
 
+from rest_framework.authtoken.models import Token
 from actstream.models import actor_stream
 
 from users.forms import SettingsForm
@@ -41,10 +42,22 @@ def user_settings(request):
     else:
         form = SettingsForm()
 
+    token, created = Token.objects.get_or_create(user=request.user)
+
     return render(request, 'users/settings.html', {
         'form': form,
         'stream': actor_stream(request.user),
+        'token': token,
     })
+
+
+@login_required
+def reset_token(request):
+    Token.objects.filter(user=request.user).delete()
+    Token.objects.create(user=request.user)
+    messages.success(request, "La clé d'API a été regénérée")
+
+    return HttpResponseRedirect(reverse('settings'))
 
 
 @login_required
