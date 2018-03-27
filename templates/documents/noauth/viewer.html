@@ -1,0 +1,27 @@
+{% extends "noauth.html" %}
+
+{% block title %}{{ document.name }} (dans {{ document.course.slug|upper }}) - DocHub{% endblock %}
+
+{% block opengraph %}
+<meta property="og:title" content="{{ document.name }}" />
+<meta property="article:tag" content="{{ document.tags.all|join:"," }}"
+<meta property="og:type" content="article" />
+<meta property="og:description" content="{{ document.name }} est un {{document.file_type}} de {{document.pages}} pages et est taggé dans les catégories : {{ document.tags.all|join:"," }}" />
+{% endblock opengraph %}
+
+{% block preview %}
+  <h1 class="text-center">{{ document.course.slug|upper }}</h1>
+
+  <p>
+      {{ document.user.first_name}} a uploadé le document
+      <strong>"{{ document.name }}"</strong>
+      dans le cours "{{document.course.name}}" ({{document.course.slug|upper}}).
+  </p>
+  <p>
+      Ce document {{document.file_type}} fait {{document.pages}} pages et
+      est taggé dans les catégories
+      {% for tag in document.tags.all %}
+        {% if forloop.last %}{{tag}}.{% else %}{{tag}},{% endif %}
+      {% endfor %}
+  </p>
+{% endblock preview %}

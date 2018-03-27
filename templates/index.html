@@ -8,11 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub - ULB{% endblock %}</title>
 
+    {% block opengraph %}
     <meta property="og:title" content="DocHub" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://dochub.be/static/images/facebook_cover.png" />
     <meta property="og:url" content="https://dochub.be" />
     <meta property="og:description" content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. " />
+    {% endblock opengraph %}
 
     {% render_bundle 'commons' %}
     {% render_bundle 'styles' %}

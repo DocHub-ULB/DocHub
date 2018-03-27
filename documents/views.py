@@ -200,9 +200,11 @@ def document_download_original(request, pk):
     return response
 
 
-@login_required
 def document_show(request, pk):
     document = get_object_or_404(Document, pk=pk)
+
+    if not request.user.is_authenticated():
+        return render(request, "documents/noauth/viewer.html", {"document": document})
 
     if document.state != "DONE":
         return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))
