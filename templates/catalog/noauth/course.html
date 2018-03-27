@@ -1,0 +1,20 @@
+{% extends "noauth.html" %}
+
+
+{% block title %}{{ course.slug|upper }}: {{ course.name }} - DocHub{% endblock %}
+
+{% block preview %}
+  <h1 class="text-center">{{ course.slug|upper }}</h1>
+  <p>
+      Le cours de <strong>{{ course.name }} ({{ course.slug|upper }})</strong> contient
+      {{documents.count}} documents
+      {% if threads.count > 2 %}
+        et {{threads.count}} discussion.
+      {% endif %}
+  </p>
+  <p>
+  {% if followers_count > 1 %}
+    {{followers_count}} personnes sont abonnées à ce cours.
+  {% endif %}
+  </p>
+{% endblock preview %}

@@ -41,7 +41,10 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         return user.write_perm(obj=document)
 
     def get_file_size(self, document):
-        return document.original.size
+        try:
+            return document.original.size
+        except FileNotFoundError:
+            return None
 
     class Meta:
         model = Document

@@ -28,10 +28,15 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "category"
 
 
-class CourseDetailView(LoginRequiredMixin, DetailView):
+class CourseDetailView(DetailView):
     model = Course
-    template_name = "catalog/course.html"
     context_object_name = "course"
+
+    def get_template_names(self, **kwargs):
+        if self.request.user.is_authenticated():
+            return "catalog/course.html"
+        else:
+            return "catalog/noauth/course.html"
 
     def get_context_data(self, **kwargs):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
