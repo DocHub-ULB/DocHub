@@ -26,5 +26,5 @@ router.register(r'messages', telepathy.rest.MessageViewSet)
 router.register(r'documents', documents.rest.DocumentViewSet)
 
 urlpatterns = [
-    url(r"vote/document/(?P<pk>[^/]*)", documents.rest.VoteView.as_view(), name='vote_document'),
+    url(r"vote/document/(?P<pk>\d+)", documents.rest.VoteView.as_view(), name='vote_document'),
 ] + router.urls
