@@ -2,6 +2,13 @@
 
 {% block title %}{{ document.name }} (dans {{ document.course.slug|upper }}) - DocHub{% endblock %}
 
+{% block opengraph %}
+<meta property="og:title" content="{{ document.name }}" />
+<meta property="article:tag" content="{{ document.tags.all|join:"," }}"
+<meta property="og:type" content="article" />
+<meta property="og:description" content="{{ document.name }} est un {{document.file_type}} de {{document.pages}} pages et est taggé dans les catégories : {{ document.tags.all|join:"," }}" />
+{% endblock opengraph %}
+
 {% block preview %}
   <h1 class="text-center">{{ document.course.slug|upper }}</h1>
 
