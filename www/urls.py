@@ -6,12 +6,21 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import logout, login
 from django.contrib import admin
 from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
 import django_js_reverse.views
 
 from www.legacy_urls import urlpatterns as legacy_patterns
 import users.views
 import www.views
 
+from documents.sitemap import DocumentSitemap
+from catalog.sitemap import CourseSitemap
+
+
+sitemaps = {
+    'course': CourseSitemap,
+    'document': DocumentSitemap,
+}
 
 urlpatterns = [
     url(r"^$", www.views.index, name="index"),
@@ -32,6 +41,10 @@ urlpatterns = [
 
     url(r'^api/', include("www.rest_urls")),
     url(r'^jsreverse/$', django_js_reverse.views.urls_js, name='js_reverse'),
+
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap')
+
 
 ] + legacy_patterns
 
