@@ -47,6 +47,43 @@
     {% endwith %}
   </div>
 </div>
+<div class="row">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+  <div class="medium-6 columns">
+    <h3><i class="fi-key"></i>Token d'accès à l'API</h3>
+    <input type="text" id="foo" disabled value="{{token.key}}">
+
+    <a href="#" data-reveal-id="myModal"><small>
+        <i class="fi-info"></i>
+        Exemples d'utilisation
+    </small></a> -
+    <a href="{% url "reset_token" %}"><small>
+        <i class="fi-refresh"></i>
+        Supprimer cette clé et générer une nouvelle
+    </small></a>
+
+    <div id="myModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+      <h2 id="modalTitle">Utilisation de l'API</h2>
+      <p class="lead">Utilisation avec CURL</p>
+      <p>
+          <pre>
+curl -X GET https://dochub.be/api/ -H 'Authorization: Token {{token.key}}'
+          </pre>
+      </p>
+      <p class="lead">Ou requests</p>
+      <p>
+          <pre>
+import requests
+headers = {'Authorization': 'Token {{token.key}}'}
+response = request.get("https://dochub.be/api/", headers=headers)
+print(response.json())
+          </pre>
+      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    </div>
+
+
+  </div>
+</div>
 
 
 {% endblock %}
