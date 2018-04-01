@@ -99,7 +99,7 @@ def course_tree(request):
             'courses': list(map(course, node.course_set.all())),
         }
 
-    categories = list(map(category, get_cached_trees(Category.objects.all())))
+    categories = list(map(category, get_cached_trees(Category.objects.prefetch_related('course_set').all())))
     return HttpResponse(json.dumps(categories),
                         content_type="application/json")
 
