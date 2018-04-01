@@ -37,17 +37,20 @@ class ShortCourseSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Category
-        fields = ('id', 'url', 'name', 'parent', 'children', 'course_set')
-
-        extra_kwargs = {
-            'course_set': {'lookup_field': 'slug'},
-        }
-
-
 class ShortCategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'url', 'name', )
+
+
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    children = ShortCategorySerializer(many=True)
+    courses = ShortCourseSerializer(many=True, source="course_set")
+
+    class Meta:
+        model = Category
+        fields = ('id', 'url', 'name', 'parent', 'children', 'courses')
+
+        extra_kwargs = {
+            'course_set': {'lookup_field': 'slug'},
+        }

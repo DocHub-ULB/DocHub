@@ -26,7 +26,7 @@ class CourseViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
 
 
 class CategoryViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.prefetch_related('children').prefetch_related('course_set').all()
     serializer_detail_class = CategorySerializer
     serializer_class = ShortCategorySerializer
 
