@@ -54,7 +54,7 @@ class VaryBrowsableAPIRenderer(BrowsableAPIRenderer):
                 if method in ('PUT', 'PATCH'):
                     serializer = view.get_serializer(instance=instance, method=method, **kwargs)
                 else:
-                    serializer = view.get_serializer(**kwargs, method=method)
+                    serializer = view.get_serializer(method=method, **kwargs)
             else:
                 # at this point we must have a serializer_class
                 if method in ('PUT', 'PATCH'):
