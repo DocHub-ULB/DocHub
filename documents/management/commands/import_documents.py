@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import os
 import glob
-from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django.core.files import File
@@ -32,11 +31,11 @@ TAGS = {
 class Command(BaseCommand):
 
     help = 'Import documents in a course'
-    option_list = BaseCommand.option_list + (
-        make_option('--path', action='store', dest='path', default='', help='Documents path'),
-        make_option('--user', action='store', dest='username', default='', help='user owning the documents'),
-        make_option('--course', action='store', dest='course_slug', default='', help='course slug'),
-    )
+
+    def add_arguments(self, parser):
+        parser.add_argument('--path', action='store', dest='path', default='', help='Documents path')
+        parser.add_argument('--user', action='store', dest='username', default='', help='user owning the documents')
+        parser.add_argument('--course', action='store', dest='course_slug', default='', help='course slug')
 
     def handle(self, *args, **options):
         netid = options["username"]
