@@ -9,7 +9,7 @@ from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'www.settings')
 
-app = Celery('proj', broker=settings.CELERY_BROKER)
+app = Celery('proj', broker=settings.BROKER_URL)
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 

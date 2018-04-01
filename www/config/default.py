@@ -37,9 +37,13 @@ ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p
 SEARCH_SYSTEM = False
 
 
-CELERY_TASK_SERIALIZER = "json"
-CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
-CELERYD_PREFETCH_MULTIPLIER = 1  # Do not prefetch more than 1 task
+# CELERY ---
+
+task_serializer = "json"
+accept_content = ['json', 'msgpack']
+worker_prefetch_multiplier = 1  # Do not prefetch more than 1 task
+
+# END CELERY ----
 
 # Activate identicons
 IDENTICON = True

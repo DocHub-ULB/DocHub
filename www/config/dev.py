@@ -16,10 +16,9 @@ DEBUG = True
 
 INSTALLED_APPS += (
     'django_extensions',
-    'kombu.transport.django',  # celery_broker
 )
 
-CELERY_BROKER = 'django://'
+BROKER_URL = 'redis://localhost:6379/0'
 
 DATABASES = {
     'default': {
