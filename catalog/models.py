@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 
 from mptt.models import MPTTModel, TreeForeignKey
+import actstream
 
 
 @python_2_unicode_compatible
@@ -47,3 +48,7 @@ class Course(models.Model):
 
     def fullname(self):
         return "{} ({})".format(self.name, self.slug.lower())
+
+    @property
+    def followers_count(self):
+        return len(actstream.models.followers(self))

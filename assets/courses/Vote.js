@@ -18,7 +18,7 @@ class VoteButton extends React.Component {
             // https://briancaffey.github.io/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html
             $.ajax({
                 type : "POST",
-                url : window.Urls.vote_document(this.props.doc_id),
+                url : window.Urls.document_vote(this.props.doc_id),
                 data : JSON.stringify({"vote_type": this.props.vote_type}),
                 headers: {
                   'Accept': 'application/json',
