@@ -47,7 +47,7 @@ class CourseDetailView(DetailView):
             .select_related('user')\
             .prefetch_related('tags')
         context['threads'] = course.thread_set.annotate(Count('message')).order_by('-id')
-        context['followers_count'] = len(actstream.models.followers(course))
+        context['followers_count'] = course.followers_count
 
         return context
 

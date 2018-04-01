@@ -18,7 +18,8 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
         model = Course
         fields = (
             'id', 'name', 'slug', 'url',
-            'categories', 'document_set', 'thread_set'
+            'categories', 'document_set', 'thread_set',
+            'gehol_url', 'followers_count'
         )
 
         extra_kwargs = {
