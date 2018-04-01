@@ -157,7 +157,7 @@ class User(AbstractBaseUser):
 
 
 class Inscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     faculty = models.CharField(max_length=80, blank=True, default='')
     section = models.CharField(max_length=80, blank=True, default='')
     year = models.PositiveIntegerField(blank=True, null=True)

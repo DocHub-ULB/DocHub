@@ -9,9 +9,9 @@ from actstream.models import Action
 
 
 class Notification(models.Model):
-    user = models.ForeignKey('users.User')
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     read = models.BooleanField(default=False)
-    action = models.ForeignKey(Action)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['-id']
