@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework import permissions
 from www.rest import VaryModelViewSet
 
-from documents.serializers import DocumentSerializer, UploadDocumentSerializer
+from documents.serializers import DocumentSerializer, UploadDocumentSerializer, EditDocumentSerializer
 from documents.models import Document, Vote
 
 
@@ -28,7 +28,7 @@ class DocumentViewSet(VaryModelViewSet):
     queryset = Document.objects.filter(hidden=False)
     serializer_class = DocumentSerializer
     create_serializer_class = UploadDocumentSerializer
-    update_serializer_class = DocumentSerializer
+    update_serializer_class = EditDocumentSerializer
 
     @detail_route()
     def original(self, request, pk):

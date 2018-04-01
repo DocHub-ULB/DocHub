@@ -2,8 +2,6 @@
 from __future__ import unicode_literals
 import os
 
-from django.shortcuts import get_object_or_404
-
 from rest_framework import serializers
 
 from documents.models import Document, Vote
@@ -12,10 +10,12 @@ from users.serializers import SmallUserSerializer
 
 from documents import logic
 from catalog.models import Course
+from tags.models import Tag
 
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
+
     user = SmallUserSerializer(read_only=True)
 
     user_vote = serializers.SerializerMethodField(read_only=True)
@@ -29,6 +29,27 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     pdf_url = serializers.HyperlinkedIdentityField(
         view_name='document-pdf',
     )
+
+    class Meta:
+        model = Document
+
+        read_only_fields = (
+            'course', 'date', 'downloads', 'file_size',
+            'file_type', 'has_perm', 'id', 'is_processing',
+            'is_ready', 'is_unconvertible', 'md5', 'pages', 'state',
+            'url', 'user', 'user_vote', 'views', 'votes',
+            'original_url', 'pdf_url',
+        )
+        writable_fields = (
+            'description', 'name', 'tags'
+        )
+
+        fields = writable_fields + read_only_fields
+
+        extra_kwargs = {
+            'user': {'lookup_field': 'netid'},
+            'course': {'lookup_field': 'slug'},
+        }
 
     def get_user_vote(self, document):
         user = self.context['request'].user
@@ -60,28 +81,6 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         except FileNotFoundError:
             return None
 
-    class Meta:
-        model = Document
-
-        read_only_fields = (
-            'course', 'date', 'downloads', 'file_size',
-            'file_type', 'has_perm', 'id', 'is_processing',
-            'is_ready', 'is_unconvertible', 'md5', 'pages', 'state',
-            'url', 'user', 'user_vote', 'views', 'votes',
-            'original_url', 'pdf_url', 'tags'
-        )
-        writable_fields = (
-            'description', 'name',
-        )
-
-        fields = writable_fields + read_only_fields
-
-        extra_kwargs = {
-            'user': {'lookup_field': 'netid'},
-            'course': {'lookup_field': 'slug'},
-            'original_url': {'view_name': 'contents-detail'}
-        }
-
 
 class ShortDocumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -89,15 +88,27 @@ class ShortDocumentSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'url', 'course')
 
 
+class EditDocumentSerializer(serializers.HyperlinkedModelSerializer):
+    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
+
+    class Meta:
+        model = Document
+
+        fields = (
+            'description', 'name', 'tags'
+        )
+
+
 class UploadDocumentSerializer(serializers.ModelSerializer):
     file = serializers.FileField()
-    course_slug = serializers.CharField()
+    course = serializers.SlugRelatedField(slug_field='slug', queryset=Course.objects)
+    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
 
     # TODO : add tags
 
     class Meta:
         model = Document
-        fields = ('name', 'description', 'file', 'course_slug')
+        fields = ('name', 'description', 'file', 'course', 'tags')
 
     def create(self, validated_data):
         file = validated_data['file']
@@ -107,14 +118,12 @@ class UploadDocumentSerializer(serializers.ModelSerializer):
         if validated_data['name']:
             name = validated_data['name']
 
-        course = get_object_or_404(Course, slug=validated_data['course_slug'])
-
         document = logic.add_file_to_course(
             file=file,
             name=name,
             extension=extension,
-            course=course,
-            tags=[],
+            course=validated_data['course'],
+            tags=validated_data['tags'],
             user=self.context['request'].user
         )
 
