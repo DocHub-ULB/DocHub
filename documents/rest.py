@@ -44,14 +44,12 @@ class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
         document.save(update_fields=['downloads'])
         return response
 
+    @detail_route(methods=['post'])
+    def vote(self, request, pk):
+        document = self.get_object()
 
-class VoteView(APIView):
-    def post(self, request, pk, format=None):
-        user = request.user
-        data = request.data
-
-        vote, created = Vote.objects.get_or_create(document_id=pk, user=user)
-        vote.vote_type = data["vote_type"]
+        vote, created = Vote.objects.get_or_create(document=document, user=request.user)
+        vote.vote_type = request.data["vote_type"]
         vote.save()
 
         return Response({"status": "ok"})

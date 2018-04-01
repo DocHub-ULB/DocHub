@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf.urls import url
-
-from rest_framework_extensions.routers import NestedRouterMixin
 from rest_framework.routers import DefaultRouter, APIRootView
 
 import users.rest
@@ -48,6 +45,4 @@ router.register(r'documents', documents.rest.DocumentViewSet)
 router.register(r'me', users.rest.Me, base_name="users-me")
 router.register(r'tree', catalog.rest.Tree, base_name="catalog-tree")
 
-urlpatterns = [
-    url(r"vote/document/(?P<pk>\d+)", documents.rest.VoteView.as_view(), name='vote_document'),
-] + router.urls
+urlpatterns = router.urls
