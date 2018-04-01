@@ -48,5 +48,6 @@ router.register(r'documents', documents.rest.DocumentViewSet)
 
 urlpatterns = [
     url(r"vote/document/(?P<pk>\d+)", documents.rest.VoteView.as_view(), name='vote_document'),
+    url(r"^me/$", users.rest.Me.as_view(), name='me'),
     url(r"^tree/$", catalog.rest.Tree.as_view(), name='tree'),
 ] + router.urls
