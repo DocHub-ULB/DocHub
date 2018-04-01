@@ -31,11 +31,12 @@ class CategoryViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = ShortCategorySerializer
 
 
-class Tree(APIView):
+class Tree(viewsets.ViewSet):
     """
     A view of the course and category tree, viewed from the top node.
     """
-    def get(self, request):
+
+    def list(self, request):
         def course(node):
             return {
                 'name': node.name,

@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from rest_framework import viewsets
-from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
@@ -29,10 +28,11 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         }, status=403)
 
 
-class Me(APIView):
+class Me(viewsets.ViewSet):
     """
     View details on the current logged-in user.
     """
-    def get(self, request):
+
+    def list(self, request):
         serializer = UserSerializer(request.user, context={'request': request})
         return Response(serializer.data)

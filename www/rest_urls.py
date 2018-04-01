@@ -45,9 +45,9 @@ router.register(r'categories', catalog.rest.CategoryViewSet)
 router.register(r'threads', telepathy.rest.ThreadViewSet)
 router.register(r'messages', telepathy.rest.MessageViewSet)
 router.register(r'documents', documents.rest.DocumentViewSet)
+router.register(r'me', users.rest.Me, base_name="users-me")
+router.register(r'tree', catalog.rest.Tree, base_name="catalog-tree")
 
 urlpatterns = [
     url(r"vote/document/(?P<pk>\d+)", documents.rest.VoteView.as_view(), name='vote_document'),
-    url(r"^me/$", users.rest.Me.as_view(), name='me'),
-    url(r"^tree/$", catalog.rest.Tree.as_view(), name='tree'),
 ] + router.urls
