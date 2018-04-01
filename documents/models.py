@@ -169,8 +169,8 @@ class Vote(models.Model):
     VOTE_TYPE_CHOICES = ((UPVOTE, "Upvote"),
                          (DOWNVOTE, "Downvote"))
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    document = models.ForeignKey(Document)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
     when = models.DateTimeField(auto_now=True)
     vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
 
