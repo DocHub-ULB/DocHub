@@ -7,6 +7,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+import unicodedata
 
 from tags.models import Tag
 
@@ -90,6 +91,10 @@ class Document(models.Model):
 
     def is_processing(self):
         return self.state in ('PREPARING', 'IN_QUEUE', 'PROCESSING')
+
+    @property
+    def safe_name(self):
+        return unicodedata.normalize("NFKD", self.name)
 
     def reprocess(self, force=False):
         if self.state != "ERROR" and not force:

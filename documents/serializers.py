@@ -16,6 +16,14 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     has_perm = serializers.SerializerMethodField()
     file_size = serializers.SerializerMethodField()
 
+    original_url = serializers.HyperlinkedIdentityField(
+        view_name='document-original',
+    )
+
+    pdf_url = serializers.HyperlinkedIdentityField(
+        view_name='document-pdf',
+    )
+
     def get_user_vote(self, document):
         user = self.context['request'].user
         # We do the filtering in python as this method is called from REST with all the necessary
@@ -53,11 +61,13 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
             'file_type', 'has_perm', 'hidden', 'id', 'is_processing',
             'is_ready', 'is_unconvertible', 'md5', 'name', 'pages', 'state',
             'tags', 'url', 'user', 'user_vote', 'views', 'votes',
+            'original_url', 'pdf_url',
         )
 
         extra_kwargs = {
             'user': {'lookup_field': 'netid'},
             'course': {'lookup_field': 'slug'},
+            'original_url': {'view_name': 'contents-detail'}
         }
 
 
