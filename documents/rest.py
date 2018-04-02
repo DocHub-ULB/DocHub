@@ -1,22 +1,34 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import unicodedata
 from django.http import HttpResponse
 from django.db.models import F
 
-from rest_framework import viewsets
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
+from rest_framework import status
+from rest_framework import permissions
+from www.rest import VaryModelViewSet
 
-from documents.serializers import DocumentSerializer
+from documents.serializers import DocumentSerializer, UploadDocumentSerializer, EditDocumentSerializer
 from documents.models import Document, Vote
 
 
-class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Document.objects.all()
+class DocumentAccessPermission(permissions.IsAuthenticated):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return request.user.write_perm(obj=obj)
+
+
+class DocumentViewSet(VaryModelViewSet):
+    permission_classes = (DocumentAccessPermission,)
+
+    queryset = Document.objects.filter(hidden=False)
     serializer_class = DocumentSerializer
+    create_serializer_class = UploadDocumentSerializer
+    update_serializer_class = EditDocumentSerializer
 
     @detail_route()
     def original(self, request, pk):
@@ -53,3 +65,10 @@ class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
         vote.save()
 
         return Response({"status": "ok"})
+
+    def destroy(self, request, pk=None):
+        document = self.get_object()
+        document.hidden = True
+        document.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

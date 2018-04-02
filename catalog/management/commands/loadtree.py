@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.core.management.base import BaseCommand
 import json
 from os import path
-from optparse import make_option
 import yaml
 from raven.contrib.django.raven_compat.models import client
 
@@ -17,20 +16,19 @@ from libulb.catalog.course import Course as ULBCourse
 class Command(BaseCommand):
     help = 'Loads a new courses tree into the database'
 
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+        parser.add_argument(
             '--hit-ulb',
             action='store_true',
             dest='hitulb',
             default=False,
             help='Hit ULB servers to get courses names from slugs'
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '--tree',
             dest='tree_file',
             help='Path to the .yaml tree file'
-        ),
-    )
+        )
 
     LOCAL_CACHE = {}
     YEAR = "201617"
