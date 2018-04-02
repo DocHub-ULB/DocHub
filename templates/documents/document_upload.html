@@ -10,8 +10,26 @@
 {% endblock %}
 
 {% block content %}
+<style>
+.dropzone {
+    margin: 5px;
+    width: 100%;
+    height: 10em;
+    border: 2px dashed grey;
+    border-radius: .3em;
+}
+
+.activedrop {
+    border-width: 3px !important;
+}
+
+.rejectdrop {
+    border-width: 3px !important;
+    border-color: red !important;
+}
+
+</style>
 <div id="react-data" data-slug="{{course.slug}}" data-name="{{course.name}}"></div>
-<!-- <button onclick="onApiLoad()">Pick From Google Drive</button> -->
 <div id="result"></div>
 <div id="root"></div>
 {% endblock %}

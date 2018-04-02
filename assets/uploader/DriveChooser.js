@@ -25,7 +25,7 @@ export default class DropboxChooser extends Component {
             type: 'drive',
         }))
         console.log("New documents from Google DRIVE", documents)
-        // this.props.onNewDocument(documents)
+        this.props.onFiles(documents)
     }
 
     onPickerCancel = () => {}
@@ -86,6 +86,11 @@ export default class DropboxChooser extends Component {
     }
 
     render = () => {
-        return <button onClick={this.runPicker}>Google Drive</button>
+        return (<div>
+            <button onClick={this.runPicker} className="button success">
+                <i className="fi-social-drive"></i>&nbsp;
+                Importer depuis Google Drive
+            </button>
+        </div>)
     }
 }

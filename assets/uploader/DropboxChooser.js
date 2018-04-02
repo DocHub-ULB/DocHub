@@ -23,6 +23,7 @@ export default class DropboxChooser extends Component {
             type: 'dropbox',
         }))
         console.log("New documents from Dropbox", documents)
+        this.props.onFiles(documents)
     }
 
     on_cancel = () => {
@@ -35,6 +36,11 @@ export default class DropboxChooser extends Component {
     }
 
     render = () => {
-        return <button onClick={this.run_chooser}>Dropbox</button>
+        return (<div>
+            <button onClick={this.run_chooser} className="button success">
+                <i className="fi-social-dropbox"></i>&nbsp;
+                Importer depuis Dropbox
+            </button>
+        </div>)
     }
 }
