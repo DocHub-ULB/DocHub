@@ -9,10 +9,6 @@ urlpatterns = [
         documents.views.upload_file,
         name="document_put"),
 
-    url(r"^multiple_upload/(?P<slug>[\w-]+)$",
-        documents.views.upload_multiple_files,
-        name="document_put_multiple"),
-
     url(r"^(?P<pk>\d+)/edit$",
         documents.views.document_edit,
         name="document_edit"),

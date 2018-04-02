@@ -10,85 +10,26 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
+from django.conf import settings
 
 from actstream import action
 
 from documents.models import Document
-from catalog.models import Course
-from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm, ReUploadForm
-from telepathy.forms import NewThreadForm
+from documents.forms import FileForm, ReUploadForm
 from tags.models import Tag
-from documents import logic
+from catalog.models import Course
 
 
 @login_required
 def upload_file(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            file = request.FILES['file']
-
-            name, extension = os.path.splitext(file.name)
-            name = logic.clean_filename(name)
-
-            if form.cleaned_data['name']:
-                name = form.cleaned_data['name']
-
-            document = logic.add_file_to_course(
-                file=file,
-                name=name,
-                extension=extension,
-                course=course,
-                tags=form.cleaned_data['tags'],
-                user=request.user
-            )
-
-            document.description = form.cleaned_data['description']
-            document.save()
-
-            document.add_to_queue()
-
-            return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
-
-    else:
-        form = UploadFileForm()
-
-    multiform = MultipleUploadFileForm()
-
     return render(request, 'documents/document_upload.html', {
-        'form': form,
-        'multiform': multiform,
         'course': course,
+        'DROPBOX_CHOOSER_KEY': getattr(settings, 'DROPBOX_CHOOSER_KEY', 'NO_KEY_PROVIDED'),
+        'GOOGLE_DRIVE_CHOOSER_CLIENT_ID': getattr(settings, 'GOOGLE_DRIVE_CHOOSER_CLIENT_ID', 'NO_KEY_PROVIDED'),
+        'GOOGLE_DRIVE_CHOOSER_API_KEY': getattr(settings, 'GOOGLE_DRIVE_CHOOSER_API_KEY', 'NO_KEY_PROVIDED'),
     })
-
-
-@login_required
-def upload_multiple_files(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-
-    if request.method == 'POST':
-        form = MultipleUploadFileForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            for attachment in form.cleaned_data['files']:
-                name, extension = os.path.splitext(attachment.name)
-                name = logic.clean_filename(name)
-
-                document = logic.add_file_to_course(
-                    file=attachment,
-                    name=name,
-                    extension=extension,
-                    course=course,
-                    tags=[],
-                    user=request.user
-                )
-                document.add_to_queue()
-
-            return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
-    return HttpResponseRedirect(reverse('document_put', args=(course.slug,)))
 
 
 @login_required

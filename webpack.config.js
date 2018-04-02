@@ -17,6 +17,9 @@ module.exports = {
         viewer: [
             './assets/viewer/index.js',
         ],
+        uploader: [
+            './assets/uploader/index.js',
+        ],
         styles: [
             './assets/styles/index.js',
         ],

@@ -1,127 +1,17 @@
 {% extends "skel.html" %}
+{% load render_bundle from webpack_loader %}
+
 {% block title %}Uploader{% endblock %}
-{% block content %}
-<div class="row">
-  <div class="large-7 columns">
-    <ul class="tabs" data-tab>
-      <li class="tab-title active">
-        <a href="#upload-tab-1" >
-          <i class="fi-page-filled"></i>
-          Un seul fichier
-        </a>
-      </li>
-      <li class="tab-title">
-        <a href="#upload-tab-n">
-          <i class="fi-page-multiple"></i>
-          Plusieurs fichiers
-        </a>
-      </li>
-    </ul>
-
-    <div class="tabs-content">
-      <div class="content active" id="upload-tab-1">
-        <h1>Uploader un document</h1>
-        <h3>Dans "{{course.name}}"</h3>
-        <form action="{% url 'document_put' course.slug %}" method="post"
-                enctype="multipart/form-data" class="dropzone">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <div class="alert-box info radius row">
-              <div class="small-2 columns">
-                <i class="fi-info round-icon big"></i>
-              </div>
-              <div class="small-10 columns">
-                <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png, doc(x), ppt(x), odt, et bien plus encore.</p>
-                <p>Complétez une brève description du document afin d'aider tout le monde à trouver les informations plus efficacement. Vous pourrez encore les éditer plus tard s'il le faut.</p>
-              </div>
-            </div>
-
-            {% with form.file as field %}
-                {% if field.errors %}
-                  <small class="error">
-                    {% for error in field.errors %}
-                      {{error}}</br>
-                    {% endfor %}
-                  </small>
-                {% endif %}
-                <div class="panel callout drop-panel">
-                    <br>
-                    <div class="row">
-                        <div class="small-6 columns">
-                            {{field}}
-                        </div>
-                        <div  class="small-6 columns">
-                        </div>
-                    </div>
-                </div>
-            {% endwith %}
-
-            {% with form.name as field %}
-                {% include "simple_input.html" %}
-            {% endwith %}
-            {% with form.tags as field %}
-                {% include "simple_input.html" %}
-            {% endwith %}
-            {% with form.description as field %}
-                {% include "simple_input.html" %}
-            {% endwith %}
-
-            <p class="text-right">
-              <input type="submit" class="button success radius" value="Upload" />
-            </p>
-        </form>
-      </div>
-
-      <div class="content" id="upload-tab-n">
-        <h1>Uploader plusieurs documents</h1>
-        <h3>Dans "{{course.name}}"</h3>
-        <form action="{% url 'document_put_multiple' course.slug %}" method="post"
-                enctype="multipart/form-data" class="dropzone">
-          {% csrf_token %}
-          {{ form.non_field_errors }}
-          <div class="alert-box info radius row">
-            <div class="small-2 columns">
-              <i class="fi-info round-icon big"></i>
-            </div>
-            <div class="small-10 columns">
-              <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png, doc(x), ppt(x), odt, et bien plus encore.</p>
-              <p>Vous pourrez éditer la description et les tags de chaque document individuellement par après</p>
-            </div>
-          </div>
-
-          {% with multiform.files as field %}
-            {% if field.errors %}
-              <small class="error">
-                {% for error in field.errors %}
-                  {{error}}</br>
-                {% endfor %}
-              </small>
-            {% endif %}
-            <div class="panel callout drop-panel">
-                <br>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{field}}
-                    </div>
-                    <div  class="small-6 columns">
-                    </div>
-                </div>
-            </div>
-          {% endwith %}
-          <p class="text-right">
-            <input type="submit" class="button success radius" value="Upload" />
-          </p>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
 
 {% block script %}
-<script>
-  $(document).ready(function() { $(".chosen-select").select2(); });
-</script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="{{DROPBOX_CHOOSER_KEY}}"></script>
+<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+{% render_bundle 'uploader' %}
+{% endblock %}
+
+{% block content %}
+<div id="react-data" data-slug="{{course.slug}}" data-name="{{course.name}}"></div>
+<!-- <button onclick="onApiLoad()">Pick From Google Drive</button> -->
+<div id="result"></div>
+<div id="root"></div>
 {% endblock %}
