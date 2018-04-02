@@ -83,7 +83,7 @@ INSTALLED_APPS += (
     'actstream',
 )
 
-TEMPLATES[0]['OPTIONS']['context_processors'] += (
+TEMPLATES[0]['OPTIONS']['context_processors'] += ( # NOQA
     'django.template.context_processors.request',
     'www.context_processors.raven',
 )
