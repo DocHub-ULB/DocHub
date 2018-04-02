@@ -17,7 +17,12 @@ const CHOOSER_OPTIONS = {
 
 export default class DropboxChooser extends Component {
     on_success = (files) => {
-        console.log(files)
+        let documents = files.map(doc => ({
+            doc_id: doc.id,
+            name: doc.name,
+            type: 'dropbox',
+        }))
+        console.log("New documents from Dropbox", documents)
     }
 
     on_cancel = () => {

@@ -6,25 +6,34 @@ const scope = 'https://www.googleapis.com/auth/drive.readonly';
 
 export default class DropboxChooser extends Component {
     onPickerDone = (data) => {
-        console.log("Picker done")
         if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
             this.onPickerSuccess(data)
-        } else {
+        } else if (data[google.picker.Response.ACTION] == google.picker.Action.CANCEL) {
             this.onPickerCancel()
+        } else if (data[google.picker.Response.ACTION] == google.picker.Action.LOADED) {
+            // NOP
         }
     }
 
     onPickerSuccess = (data) => {
-        console.log(this.state.oauthToken)
         console.log(data)
+        let documents = data.docs.map(doc => ({
+            doc_id: doc.id,
+            mime: doc.mimeType,
+            name: doc.name,
+            token: this.state.oauthToken,
+            type: 'drive',
+        }))
+        console.log("New documents from Google DRIVE", documents)
+        // this.props.onNewDocument(documents)
     }
 
-    onPickerCancel = () => {
-        console.log("Cancel")
-    }
+    onPickerCancel = () => {}
 
     runPicker = () => {
-        gapi.load('auth', {'callback': this.onAuthApiLoad});
+        if(this.state.oauthToken === null){
+            gapi.load('auth', {'callback': this.onAuthApiLoad});
+        }
         gapi.load('picker', {'callback': this.onPickerApiLoad});
     }
 
@@ -53,12 +62,14 @@ export default class DropboxChooser extends Component {
 
     createPicker = () => {
         if (this.state.pickerApiLoaded && this.state.oauthToken) {
-            var picker = new google.picker.PickerBuilder().
+            let view = new google.picker.DocsView()
+                .setOwnedByMe(false)
+
+            let picker = new google.picker.PickerBuilder().
                 addView(google.picker.ViewId.DOCS).
-                addView(google.picker.ViewId.DOCUMENTS).
                 addView(google.picker.ViewId.FOLDERS).
                 addView(google.picker.ViewId.PDFS).
-                // .enableFeature(google.picker.Feature.NAV_HIDDEN).
+                addView(view).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
                 setOAuthToken(this.state.oauthToken).
                 setDeveloperKey(developerKey).
