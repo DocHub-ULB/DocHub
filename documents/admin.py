@@ -50,8 +50,10 @@ class DocumentAdmin(admin.ModelAdmin):
     filter_horizontal = ('tags',)
 
     list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type', 'imported')
-    list_filter = ('state', 'created', 'edited', 'file_type', 'imported')
+    list_filter = ('state', 'created', 'edited', 'file_type',)
     search_fields = ('md5', 'name', 'imported', 'user')
+    raw_id_fields = ('user',)
+
     inlines = [VoteInline]
 
     actions = (reprocess, autotag, repair)
