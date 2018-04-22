@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 
+const developerKey = 'AIzaSyCir9AWwfpuav6m6UqG5k3kQ3Nv9qoTC6Y';
+const clientId = '144187155988-dvcd62a8sripg171p9aensumd1tnancf.apps.googleusercontent.com';
 const scope = 'https://www.googleapis.com/auth/drive.readonly';
 
 
