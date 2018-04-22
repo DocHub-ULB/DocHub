@@ -38,7 +38,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
             'file_type', 'has_perm', 'id', 'is_processing',
             'is_ready', 'is_unconvertible', 'md5', 'pages', 'state',
             'url', 'user', 'user_vote', 'views', 'votes',
-            'original_url', 'pdf_url',
+            'original_url', 'pdf_url', 'imported',
         )
         writable_fields = (
             'description', 'name', 'tags'
