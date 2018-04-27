@@ -6,16 +6,16 @@
 <div class="row">
   <div class="{% if request.user.following_courses|length == 0 %}large-12{% else %}large-8{% endif %} medium-12 columns">
     {% if request.user.following_courses|length == 0 %}
-    <h1>Vos cours</h1>
-      <p>On dirait que vous n'êtes abonné à aucun cours pour le moment.<br>
-      Vous pourriez parcourir le catalogue de DocHub et
-      <span data-tooltip aria-haspopup="true" class="has-tip" title="En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question.">vous abonner</span>
-      aux cours qui vous intéressent.</p>
+    <h1>Mes cours</h1>
+      <p>On dirait que tu n'es abonné à aucun cours pour le moment.<br>
+      Tu pourrais parcourir le catalogue de DocHub et
+      <span data-tooltip aria-haspopup="true" class="has-tip" title="En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question.">t'abonner</span>
+      aux cours qui t'intéressent.</p>
       <div class="alert-box radius secondary medium-8">
-        <i class="fi-info"></i> En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question.
+        <i class="fi-info"></i> En t'abonnant à un cours, tu recevras une notification quand quelqu'un ajoute un document ou pose une question.
       </div>
     {% else %}
-    <h1>Vos cours
+    <h1>Cours
       {% if show_unfollow_button %}
         <a href="{% url 'unfollow_all_courses' %}" class="button alert right">Me désabonner de tous les cours</a>
       {% endif %}
@@ -37,7 +37,7 @@
 
       {% if suggestions %}
         <h3>Suggestions</h3>
-        Ces cours-ci semblent similaires aux vôtres, vous pourriez vous y abonner.
+        Ces cours-ci semblent similaires aux tiens, tu pourrais t'y abonner.
         <ul class="course-list">
           {% for course, rank in suggestions %}
             <li>
@@ -55,7 +55,7 @@
   </div>
 
   <div class="{% if request.user.following_courses|length == 0 %}large-12{% else %}large-4{% endif %} medium-12 columns">
-    <h3>Catalogue</h3>
+    <h1>Catalogue</h1>
     <ul class="small-block-grid-1">
     {% for fac in faculties %}
         <li class="catalog-option">

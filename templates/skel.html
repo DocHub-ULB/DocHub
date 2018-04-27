@@ -60,103 +60,11 @@
     {% endblock %}
   </head>
   <body>
-    <div class="sticky">
-    <nav class="top-bar" data-topbar="">
-        <ul class="title-area">
-            <li class="name">
-               <h1><a href="/">DocHub</a></h1>
-            </li>
-
-            <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
-        </ul>
-
-        <section class="top-bar-section">
-            <ul class="left">
-              <li>
-                {% with count=request.user.notification_count %}
-                  <a href="{% url 'notifications' %}" id="notifications-button" class="{% if count == 0%}zero{% endif %}">
-                      <i class="fi-megaphone"></i>
-                      {{count}}
-                  </a>
-                {% endwith %}
-              </li>
-              <li>
-                <a href="{% url 'show_courses' %}">Mes cours</a>
-              </li>
-              <li class="divider"></li>
-            </ul>
-            <ul class="left" id="course-tree-menu">
-            </ul>
-            <ul class="right">
-              <li>
-                    <a href="{% url 'help' %}#jobs">
-                            DocHub cherche des développeurs et modérateurs !
-                    </a>
-              </li>
-              <li>
-                <a href="https://www.facebook.com/DocHub" id="facebook"><i class="fi-social-facebook"></i></a>
-              </li>
-              <li>
-                <a href="{% url 'help' %}">Aide</a>
-              </li>
-              <li class="has-dropdown">
-                  <a href="#">
-                    <i class="fi-torso"></i>&nbsp; {{request.user.name}}
-                  </a>
-                  <ul class="dropdown">
-                      <li>
-                        <a href="{% url 'settings' %}"><i class="fi-torso"></i>&nbsp; Profil</a>
-                      </li>
-                      {% if request.user.is_staff %}
-                        <li>
-                          <a href="/admin"><i class="fi-widget"></i>&nbsp; Admin</a>
-                        </li>
-                      {% endif %}
-                      <li>
-                        <a href="{% url 'logout' %}"><i class="fi-power"></i>&nbsp; Déconnexion</a>
-                      </li>
-                  </ul>
-              </li>
-            </ul>
-
-        </section>
-    </nav>
-    </div>
-    <div class="row full-width collapse" data-equalizer>
+    {% include "navbar.html" %}
+    <div class="row">
       {% block full-page %}
-        <div class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
-          <ul class="side-nav main-side-nav">
-            <li>
-              <a href="/" class="sidebar-button">
-                <i class="fi-list-thumbnails"></i> Flux d'actualités
-              </a>
-            </li>
-            {% if request.user.following_courses|length == 0 %}
-              <li>
-                <a href="{% url 'show_courses' %}" class="sidebar-button" id="joy-abonner">S'abonner à des cours
-                </a>
-              </li>
-            {% else %}
-              <li>
-                <a href="{% url 'show_courses' %}" class="sidebar-button" id="joy-abonner"><i class="fi-book"></i> Mes cours</a>
-              </li>
-            {% endif %}
-            <ul class="course-bulletlist">
-              {% for course in request.user.following_courses %}
-                <li class="nav-link">
-                  <a href="{% url 'course_show' course.slug %}">
-                    <i class="fi-folder"></i> {{ course.name }}
-                  </a>
-                  </li>
-              {% endfor %}
-            </ul>
-          </ul>
-
-        </div>
-        <div class="large-10 medium-9 columns" data-equalizer-watch>
           {% block content %}
           {% endblock %}
-        </div>
       {% endblock %}
     </div>
     <footer class="text-center">

@@ -24,7 +24,7 @@
           {% if notification.action.verb == "upload failed" or notification.action.verb == "upload success" %}
            <img src="{{ notification.action.actor.get_photo }}" class="feed-photo">
             {% if notification.action.verb == "upload success" %}
-              Votre upload a réussi :
+              Ton upload a réussi :
             {% else %}
               Il y a eu une erreur durant la conversion de
             {% endif %}
@@ -54,4 +54,3 @@
     </p>
   </div>
 </div>
-

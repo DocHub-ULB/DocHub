@@ -1,22 +1,14 @@
 @import 'colors'
 
-@font-face
-    font-family: arvo
-    src: url(/static/3party/arvo/Arvo-Regular_201.ttf)
-    font-weight: normal
-
-@font-face
-    font-family: arvo
-    src: url(/static/3party/arvo/Arvo-Bold_201.ttf)
-    font-weight: bold
-
 h1, h2, h3, h4, h5, h6
-    font-family: arvo
     font-weight: bold
-
 
 h1
     border-bottom: dotted 1px $gray
+
+nav
+    h1
+        border-bottom: none
 
 h3 i, h2 i
     margin-right: 10px
@@ -80,49 +72,12 @@ a.light
     h2
         color: #333
 
-
-
 .thread-separator
     border-top: 5px solid $light-gray
     margin-bottom: 20px
 
 .sidebar
     background-color: #F7F7F7
-
-.main-side-nav
-    // margin-top: .5em
-    // border: 2px solid $light-gray
-    height: 100%
-    padding-left: 0px
-    padding-right: 5px
-    li
-        padding-left: 5px !important
-        margin: 0px
-        padding: 0px
-        &:nth-child(even)
-            // background-color: #EFEFEF;
-    .nav-link
-        padding-left: 12px !important
-        padding-right: 5px !important
-        &:hover
-            background-color: #F2F2F2
-        a
-            color: #222 !important
-            &:hover
-                color: #555 !important
-            i
-                color: #007095
-
-.sidebar-button
-    font-family: arvo
-    color: white
-    i
-        margin-right: 4px
-
-ul.course-bulletlist
-    list-style: none
-    padding-left: 0px
-    text-indent: -8px
 
 code
     color: #333
@@ -149,73 +104,6 @@ pre.codehilite
     margin-left: 20px
     padding: 10px
 
-.course-row
-    // border: 1px solid black;
-    margin-bottom: 10px !important
-
-i.round-icon
-    float: left
-    color: #222
-    background-color: $light-gray
-    border: 1px solid #ddd
-    text-align: center
-    clear: both
-    margin-right: 10px
-    margin-left: 7px
-    text-align: center
-    width: 1.6em
-    height: 1.6em
-    line-height: 1.6em
-    -webkit-border-radius: 0.8em
-    -moz-border-radius: 0.8em
-    border-radius: 0.8em
-    &.active
-        background-color: #333
-        color: #ffe
-        border-color: #444
-
-a i.round-icon:hover
-    color: #444
-    background-color: #fff
-
-i.round-icon
-    &.downvote
-        color: #ff0202
-        border: 0px
-        margin-top: 5px
-        margin-right: 3px
-        margin-left: 0px
-
-        &.active
-            background-color: #ff0202
-            color: #000
-
-    &.upvote
-        color: #00cc00
-        border: 0px
-        margin-top: 5px
-        margin-right: 3px
-        margin-left: 0px
-
-        &.active
-            background-color: #00cc00
-            color: #000
-
-i.upvote:hover
-    color: #000
-    background-color: #00cc00
-
-i.downvote:hover
-    color: #000
-    background-color: #ff0202
-
-i.round-icon
-    &.big
-        font-size: 2.5em
-
-    &.medium
-        font-size: 1.5em
-
 .votelabel
     margin-top: 15px
     float: left
@@ -226,31 +114,6 @@ i.round-icon
 
     small
         font-size: 0.8em
-
-.course-row-content
-    min-height: 4em
-    margin-left: 4.5em
-    padding: 10px
-    padding-top: 0px
-    padding-bottom: 0px
-
-.course-row
-    &.thread .course-row-content
-        border-left: 5px solid #007095
-
-    &.document .course-row-content
-        padding-top: 10px
-        border-left: 5px solid $foundation-red
-        min-height: 155px
-        margin-left: 82px
-
-.course-content-last-line
-    min-height: 1.5em
-    padding-bottom: 5px
-
-    .label
-        position: relative
-        top: -0.30em
 
 .user-photo
     -webkit-border-radius: 4px
@@ -370,3 +233,6 @@ ul.tabs li, dl.tabs dd
         opacity: 0.3
     100%
         opacity: 1
+
+.contain-to-grid
+    // background-color: white !important

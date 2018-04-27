@@ -111,9 +111,8 @@ class CourseDocument extends React.Component{
         });
     }
     render() {
-        return (<div className="row course-row document">
-            {this.icon()} {this.upvote_icon()} {this.downvote_icon()}
-            <div className="cell course-row-content">
+        return (<div className="row course-document">
+            <div className="large-12 columns">
                 <h5>
                     {this.title()}
                     <small> par {this.props.user.name}</small><br/>

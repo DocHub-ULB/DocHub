@@ -6,7 +6,30 @@
 {% endif %}
 <br>
 <div class="row">
-  <div class="large-12 columns">
+  <div class="large-6 columns">
+      <h2>Documents récents</h2>
+      <ul>
+        {% for doc in recent_docs %}
+          <li class="nav-link">
+            <a href="{% url 'document_show' doc.id %}">
+              <i class="fi-page"></i> {{ doc.name }} ({{doc.course.slug}})
+            </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+  </div>
+  <div class="large-6 columns">
+      <h2>Mes cours</h2>
+            <ul>
+              {% for course in request.user.following_courses %}
+                <li class="nav-link">
+                  <a href="{% url 'course_show' course.slug %}">
+                    <i class="fi-folder"></i> {{ course.name }}
+                  </a>
+                  </li>
+              {% endfor %}
+          </ul>
   </div>
   <div class="large-12 columns">
     {% with verbose=1 %}
@@ -14,9 +37,9 @@
         {% include "feed_entry.html" %}
       {% empty %}
         {% if request.user.following_courses|length > 0 %}
-          <p>Il n'y a encore rien dans votre flux d'actualités, attendez un peu, ça arrivera&nbsp;!</p>
+          <p>Il n'y a encore rien dans ton flux d'actualités, attends un peu, ça arrivera&nbsp;!</p>
         {% else %}
-          <p>Il n'y a encore rien dans votre flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
+          <p>Il n'y a encore rien dans ton flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
           <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
         {% endif %}
         <span id="joy-flux"></span>

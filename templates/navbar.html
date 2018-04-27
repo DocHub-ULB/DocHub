@@ -1,0 +1,58 @@
+<div class="sticky contain-to-grid">
+    <nav class="top-bar" data-topbar="">
+        <ul class="title-area">
+            <li class="name">
+               <h1><a href="/">DocHub</a></h1>
+            </li>
+
+            <li class="toggle-topbar menu-icon">
+                <a href="#" style="padding-right: 1em">
+                    Menu <i class="fi-list"></i>
+                </a>
+            </li>
+        </ul>
+
+        <section class="top-bar-section">
+            <ul class="left">
+              <li>
+                {% with count=request.user.notification_count %}
+                  <a href="{% url 'notifications' %}" id="notifications-button" class="{% if count == 0%}zero{% endif %}">
+                      <i class="fi-megaphone"></i>
+                      {{count}}
+                  </a>
+                {% endwith %}
+              </li>
+              <li class="has-form">
+                  <input type="text" placeholder="{% block search %}Cherchez quelque chose{% endblock search %}">
+              </li>
+            </ul>
+            <ul class="right">
+              <li class="has-dropdown">
+                  <a href="#">
+                    <i class="fi-torso"></i>&nbsp; {{request.user.first_name}}
+                  </a>
+                  <ul class="dropdown">
+                      <li>
+                        <a href="{% url 'settings' %}"><i class="fi-torso"></i>&nbsp; Profil</a>
+                      </li>
+                      <li>
+                          <a href="{% url 'show_courses' %}">
+                              <i class="fi-page"></i>&nbsp;
+                              Mes cours
+                          </a>
+                      </li>
+                      {% if request.user.is_staff %}
+                        <li>
+                          <a href="/admin"><i class="fi-widget"></i>&nbsp; Admin</a>
+                        </li>
+                      {% endif %}
+                      <li>
+                        <a href="{% url 'logout' %}"><i class="fi-power"></i>&nbsp; Déconnexion</a>
+                      </li>
+                  </ul>
+              </li>
+            </ul>
+
+        </section>
+    </nav>
+</div>

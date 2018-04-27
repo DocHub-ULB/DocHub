@@ -104,8 +104,12 @@ class CourseDocumentList extends React.Component {
                     <input type="text" onChange={this.search_changed}/>
                 </div>
             </div>
-            <hr/>
-            {docs}
+            {docs.length > 0 ? (docs) : (
+                <span>
+                <br/>
+                Il n'y a aucun document qui correspond à ta recherche.
+                </span>
+            )}
         </div>);
     }
 }
