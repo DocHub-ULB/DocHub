@@ -1,14 +1,15 @@
 @import 'colors'
 
+body
+    font: normal 13px "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "Tahoma", "Verdana", sans-serif !important
+    font-weight: 400
+    background-color: $background-blue !important
+
 h1, h2, h3, h4, h5, h6
     font-weight: bold
 
 h1
     border-bottom: dotted 1px $gray
-
-nav
-    h1
-        border-bottom: none
 
 h3 i, h2 i
     margin-right: 10px
@@ -16,10 +17,6 @@ h3 i, h2 i
 
 h3, h4, h5, h6
     color: #333
-
-.row.full-width
-    width: 100%
-    max-width: 100%
 
 .green
     color: $foundation-green
@@ -34,100 +31,6 @@ h3, h4, h5, h6
     &:hover
         color: #333
 
-.sh-space
-    padding-left: 7px
-
-.user-message
-    margin-bottom: 20px !important
-
-a.light
-    color: $dark-gray
-    &:hover
-        text-decoration: underline
-
-.user-message-header
-    border: 1px solid $light-gray
-    padding: 5px
-    padding-right: 0px
-    background-color: $light-gray
-    -webkit-border-top-left-radius: 4px
-    -webkit-border-top-right-radius: 4px
-    -moz-border-radius-topleft: 4px
-    -moz-border-radius-topright: 4px
-    border-top-left-radius: 4px
-    border-top-right-radius: 4px
-
-.user-message-content
-    border: 1px solid $light-gray
-    border-top: 0px
-    padding-top: 10px
-    padding-left: 15px
-    padding-right: 15px
-    -webkit-border-bottom-left-radius: 4px
-    -webkit-border-bottom-right-radius: 4px
-    -moz-border-radius-bottomleft: 4px
-    -moz-border-radius-bottomright: 4px
-    border-bottom-left-radius: 4px
-    border-bottom-right-radius: 4px
-    h2
-        color: #333
-
-.thread-separator
-    border-top: 5px solid $light-gray
-    margin-bottom: 20px
-
-.sidebar
-    background-color: #F7F7F7
-
-code
-    color: #333
-    background-color: $light-gray
-    padding: 3px
-    padding-left: 5px
-    padding-right: 5px
-    font-weight: normal
-    -webkit-border-radius: 4px
-    -moz-border-radius: 4px
-    border-radius: 4px
-
-pre.codehilite
-    code
-        font-weight: normal
-        background-color: white
-        padding: 0px
-        font-size: 1.1em
-    -webkit-border-radius: 4px
-    -moz-border-radius: 4px
-    border-radius: 4px
-    border: 1px solid $light-gray
-    margin: 5px
-    margin-left: 20px
-    padding: 10px
-
-.votelabel
-    margin-top: 15px
-    float: left
-    min-width: 37px
-
-.tooltip-box
-    font-size: 0.9em
-
-    small
-        font-size: 0.8em
-
-.user-photo
-    -webkit-border-radius: 4px
-    -moz-border-radius: 4px
-    border-radius: 4px
-
-.user-photo-small
-    width: 50px
-
-.user-photo-feed
-    width: 2em
-
-.user-photo-big
-    width: 80px
 
 .back-icon
     color: #AAA
@@ -140,8 +43,8 @@ pre.codehilite
     clear: both
     margin-left: 0px
     list-style: none
+    .course-label
 
-.course-label
     position: relative
     top: -3px
     text-transform: uppercase
@@ -166,46 +69,6 @@ pre.codehilite
         font-weight: bold
         border-radius: 25px
 
-.side-nav li a:not(.button)
-    padding: 3px 0.875rem 3px
-    &:hover
-        background: none
-
-.feed-photo
-    height: 2.5em
-    float: left
-    margin-top: .3em
-    margin-right: .5em
-    border-radius: .25em
-
-.feed-timesince
-    color: $dark-gray
-
-#notifications-button
-    background-color: $foundation-red
-    &.zero
-        background-color: $foundation-blue
-
-.feed-placeholder
-    color: $dark-gray
-    opacity: 0.3
-
-ul.tabs li.active, dl.tabs dd.active
-    border-top: 3px solid $foundation-blue
-    border-left: 1px solid $gray
-    border-right: 1px solid $gray
-    border-bottom: 1px solid white
-
-ul.tabs li, dl.tabs dd
-    border-top: 3px solid white
-    border-left: 1px solid white
-    border-right: 1px solid white
-    border-bottom: 1px solid $gray
-
-.tab-title a, dd a
-    background-color: white !important
-
-
 .select2-selection
     border-radius: 0 !important
     border: 1px solid #AAA !important
@@ -213,26 +76,3 @@ ul.tabs li, dl.tabs dd
 
 .select2
     margin-bottom: 1.2em
-
-.spinning, .spinning:before
-    animation: 1s linear 0s normal none infinite running spin
-
-.fading, .fading:before
-    animation: 1s linear 0s normal none infinite running fading
-
-@keyframes spin
-    0%
-        transform: rotate(0deg)
-    100%
-        transform: rotate(359deg)
-
-@keyframes fading
-    0%
-        opacity: 1
-    50%
-        opacity: 0.3
-    100%
-        opacity: 1
-
-.contain-to-grid
-    // background-color: white !important
