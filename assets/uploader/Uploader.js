@@ -6,9 +6,9 @@ import Drop from './Drop';
 import {detect_tags, clean_filename} from './utils'
 
 const type_icons = {
-    'dropbox': 'fi-social-dropbox',
-    'drive': 'fi-social-drive',
-    'dnd': 'fi-monitor',
+    'DROPBOOX': 'fi-social-dropbox',
+    'DRIVE': 'fi-social-drive',
+    'DND': 'fi-monitor',
 }
 
 class Tag extends React.Component {
@@ -64,6 +64,12 @@ export default class Uploader extends Component {
         this.setState({files: this.state.files.concat(processed)})
     }
 
+    upload = () => {
+        this.state.files.map(file => {
+
+        })
+    }
+
     render() {
         return (
             <div>
@@ -90,7 +96,7 @@ export default class Uploader extends Component {
                         <DropboxChooser onFiles={this.onFiles} />
                         <DriveChooser onFiles={this.onFiles} />
                         <Drop onFiles={this.onFiles} />
-                        <button className="button">
+                        <button className="button" onClick={this.upload}>
                             <i className="fi-arrow-up"></i>&nbsp;
                             Envoyer ces {this.state.files.length} fichiers sur DocHub
                         </button>

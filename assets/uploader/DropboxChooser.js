@@ -15,13 +15,22 @@ const CHOOSER_OPTIONS = {
 };
 
 
+class DropboxDocument {
+    constructor(doc_id, name) {
+        this.doc_id = doc_id
+        this.name = name
+
+        this.state = "CREATED"
+        this.type = "DROPBOX"
+    }
+}
+
+
 export default class DropboxChooser extends Component {
     on_success = (files) => {
-        let documents = files.map(doc => ({
-            doc_id: doc.id,
-            name: doc.name,
-            type: 'dropbox',
-        }))
+        let documents = files.map(doc => (
+            new DropboxDocument(doc.id, doc.name)
+        ))
         console.log("New documents from Dropbox", documents)
         this.props.onFiles(documents)
     }

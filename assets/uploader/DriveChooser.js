@@ -5,6 +5,19 @@ const developerKey = 'AIzaSyCir9AWwfpuav6m6UqG5k3kQ3Nv9qoTC6Y';
 const clientId = '144187155988-dvcd62a8sripg171p9aensumd1tnancf.apps.googleusercontent.com';
 const scope = 'https://www.googleapis.com/auth/drive.readonly';
 
+class DriveDocument {
+    constructor(doc_id, mime, name, token) {
+        this.doc_id = doc_id
+        this.mime = mime
+        this.name = name
+        this.token = token
+
+        this.state = "CREATED"
+        this.type = "DRIVE"
+    }
+}
+
+
 
 export default class DropboxChooser extends Component {
     onPickerDone = (data) => {
@@ -19,13 +32,9 @@ export default class DropboxChooser extends Component {
 
     onPickerSuccess = (data) => {
         console.log(data)
-        let documents = data.docs.map(doc => ({
-            doc_id: doc.id,
-            mime: doc.mimeType,
-            name: doc.name,
-            token: this.state.oauthToken,
-            type: 'drive',
-        }))
+        let documents = data.docs.map(doc => (
+            new DriveDocument(doc.id, doc.mimeType, doc.name, this.state.oauthToken)
+        ))
         console.log("New documents from Google DRIVE", documents)
         this.props.onFiles(documents)
     }
