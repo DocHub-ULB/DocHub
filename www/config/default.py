@@ -61,7 +61,6 @@ INSTALLED_APPS += (
     'django.contrib.admin',
     'django.contrib.sites', # needed for sitemap
     'django.contrib.sitemaps',
-    'djcelery',
     'rest_framework',
     'mptt',
     'django_js_reverse',
