@@ -15,6 +15,22 @@ class DriveDocument {
         this.state = "CREATED"
         this.type = "DRIVE"
     }
+
+    upload(slug) {
+        var formData = new FormData()
+
+        formData.append('doc_id', this.doc_id)
+        formData.append('title', this.name)
+        formData.append('token', this.token)
+        formData.append('course', slug)
+
+        this.tags.map(tag => {
+            formData.append('tags', tag)
+        })
+
+        upload_form_data(formData, UPLOAD_URL)
+    }
+
 }
 
 

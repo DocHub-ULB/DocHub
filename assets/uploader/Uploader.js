@@ -66,7 +66,7 @@ export default class Uploader extends Component {
 
     upload = () => {
         this.state.files.map(file => {
-
+            file.upload()
         })
     }
 

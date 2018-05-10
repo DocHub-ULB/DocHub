@@ -14,6 +14,7 @@ const CHOOSER_OPTIONS = {
     folderselect: false,
 };
 
+const UPLOAD_URL = '/api/documents/dropbox'
 
 class DropboxDocument {
     constructor(doc_id, name) {
@@ -23,6 +24,21 @@ class DropboxDocument {
         this.state = "CREATED"
         this.type = "DROPBOX"
     }
+
+    upload(slug) {
+        var formData = new FormData()
+
+        formData.append('title', this.name)
+        formData.append('docid', this.doc_id)
+        formData.append('course', slug)
+
+        this.tags.map(tag => {
+            formData.append('tags', tag)
+        })
+
+        upload_form_data(formData, UPLOAD_URL)
+    }
+
 }
 
 
