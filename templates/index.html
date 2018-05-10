@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load render_bundle from webpack_loader %}
+{% load login_url %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -80,7 +81,7 @@
     <nav class="top-bar" data-topbar="">
         <ul class="title-area text-center">
             <li class="name">
-               <h1><a href="/">Doc<span class="april">hub</span></a></h1>
+               <h1><a href="/">DocHub</a></h1>
             </li>
         </ul>
 
@@ -101,7 +102,7 @@
           </p>
           <p class="text-center">
             Vous n'avez pas besoin de créer un compte, il suffit d'employer votre netid.<br><br>
-            <a href="{{login_url}}" id="login_link" class="button success expand">Connexion</a></strong><br>
+            <a href="{% login_url %}" id="login_link" class="button success expand">Connexion</a></strong><br>
             {% if debug %}
             <small>Developpers could also <a href="/syslogin">syslogin</a></small>
             {% endif %}
