@@ -1,4 +1,4 @@
-Django>=1.11,<2.0
+Django>=2.0,<2.1
 django-multiupload
 markdown
 celery>=4.0, <5.0
@@ -7,11 +7,12 @@ pygments
 pyPdf2
 requests
 xmltodict
-djangorestframework>3.6, <3.7
+djangorestframework>3.7,<4
 drf-extensions
 furl
 django-mptt
-django-activity-stream
+# django-activity-stream>=0.6.6
+git+https://github.com/justquick/django-activity-stream.git
 git+https://github.com/C4ptainCrunch/libulb.git
 PyYaml
 jsonfield
