@@ -30,13 +30,6 @@ DOCUMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 BASE_URL = "https://dochub.be/"
 
-# ULB login, need to add the url to redirect at the end
-ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_prtm=redirect&_appl='
-
-# Activate the search system
-SEARCH_SYSTEM = False
-
-
 # CELERY ---
 
 task_serializer = "json"
