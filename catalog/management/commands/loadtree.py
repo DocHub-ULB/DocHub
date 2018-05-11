@@ -6,6 +6,7 @@ import json
 from os import path
 import yaml
 from raven.contrib.django.raven_compat.models import client
+from django.db import transaction
 
 
 from django.conf import settings
@@ -42,15 +43,16 @@ class Command(BaseCommand):
 
         tree = yaml.load(open(options['tree_file']))
 
-        Category.objects.all().delete()
+        with transaction.atomic():
+            Category.objects.all().delete()
 
-        root = Category.objects.create(
-            name="ULB",
-            slug="root",
-            parent=None,
-        )
+            root = Category.objects.create(
+                name="ULB",
+                slug="root",
+                parent=None,
+            )
 
-        self.create_tree(root, tree)
+            self.create_tree(root, tree)
 
         self.stdout.write('Done \n')
 
