@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('faculty', models.CharField(max_length=80, null=True)),
                 ('section', models.CharField(max_length=80, null=True)),
                 ('year', models.PositiveIntegerField(null=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },

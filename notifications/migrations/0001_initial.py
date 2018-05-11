@@ -18,8 +18,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('read', models.BooleanField(default=False)),
-                ('action', models.ForeignKey(to='actstream.Action')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('action', models.ForeignKey(on_delete=models.deletion.CASCADE, to='actstream.Action')),
+                ('user', models.ForeignKey(on_delete=models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },
