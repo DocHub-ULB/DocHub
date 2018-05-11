@@ -33,7 +33,7 @@ class CourseDetailView(DetailView):
     context_object_name = "course"
 
     def get_template_names(self, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return "catalog/course.html"
         else:
             return "catalog/noauth/course.html"
