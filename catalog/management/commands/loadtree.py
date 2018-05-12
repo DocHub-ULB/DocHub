@@ -32,7 +32,7 @@ class Command(BaseCommand):
         )
 
     LOCAL_CACHE = {}
-    YEAR = "201617"
+    YEAR = "201718"
 
     def handle(self, *args, **options):
         self.stdout.write('Loading tree ... ')
