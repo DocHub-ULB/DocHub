@@ -32,6 +32,7 @@ repair.short_description = "Repair selected documents"
 
 class VoteInline(admin.StackedInline):
     readonly_fields = ["when"]
+    raw_id_fields = ('user',)
     extra = 1
     model = Vote
 
