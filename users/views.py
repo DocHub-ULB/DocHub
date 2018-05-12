@@ -46,7 +46,7 @@ def user_settings(request):
 
     return render(request, 'users/settings.html', {
         'form': form,
-        'stream': actor_stream(request.user),
+        'stream': actor_stream(request.user)[:5],
         'token': token,
     })
 
