@@ -8,10 +8,15 @@ from notifications.models import Notification
 
 
 def user_wants_notification(user, action):
+    """With an action and a user as input, determine
+    if the user is interested to receive a notification"""
+
     if action.actor == user:
+        # Do not self notify
         return False
 
     if action.verb == "a édité":
+        # Editions are not useful
         return False
     elif action.verb == "a uploadé":
         return user.notify_on_new_doc
@@ -21,11 +26,10 @@ def user_wants_notification(user, action):
         return user.notify_on_new_thread
     elif action.verb == "a répondu":
         return user.notify_on_response
-    elif action.verb == "a mentionné":
-        return user.notify_on_rmention
     elif action.verb == "a été uploadé":
         return user.notify_on_upload
     elif action.verb in ("started following",):
+        # Do not notify when another user starts following something
         return False
     else:
         raise Exception("Unknown action verb: '{}'".format(action.verb))

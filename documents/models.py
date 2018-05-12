@@ -130,11 +130,11 @@ class Document(models.Model):
         tags = []
 
         has_month = (
-            "janv" in name
-            or "aout" in name
-            or "sept" in name
-            or "juin" in name
-            or "mai" in name
+            "janv" in name or
+            "aout" in name or
+            "sept" in name or
+            "juin" in name or
+            "mai" in name
         )
         if has_month or "exam" in name:
             tags.append("examen")
@@ -165,8 +165,10 @@ class Document(models.Model):
 class Vote(models.Model):
     UPVOTE = "up"
     DOWNVOTE = "down"
-    VOTE_TYPE_CHOICES = ((UPVOTE, "Upvote"),
-                         (DOWNVOTE, "Downvote"))
+    VOTE_TYPE_CHOICES = (
+        (UPVOTE, "Upvote"),
+        (DOWNVOTE, "Downvote")
+    )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     document = models.ForeignKey(Document, on_delete=models.CASCADE)

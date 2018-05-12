@@ -109,8 +109,6 @@ class UploadDocumentSerializer(serializers.ModelSerializer):
     course = serializers.SlugRelatedField(slug_field='slug', queryset=Course.objects)
     tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
 
-    # TODO : add tags
-
     class Meta:
         model = Document
         fields = ('name', 'description', 'file', 'course', 'tags')

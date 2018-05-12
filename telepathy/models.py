@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 import json
 from django.db import models
-from django.utils.text import Truncator
 from django.urls import reverse
 from django.conf import settings
 
@@ -65,7 +64,6 @@ class Message(models.Model):
 
     def fullname(self):
         return "un message"
-        return Truncator(self.__unicode__()).words(9)
 
     def get_absolute_url(self):
         return reverse('thread_show', args=(self.thread_id, )) + "#message-{}".format(self.id)

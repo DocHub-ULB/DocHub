@@ -17,8 +17,6 @@ from actstream import action
 from documents.models import Document, DocumentError
 from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
 
-from django.conf import settings
-
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):
     if isinstance(exc, SkipException):
@@ -74,9 +72,14 @@ def checksum(self, document_id):
     duplicata = Document.objects.filter(md5=hashed).exclude(md5='').first()
 
     if duplicata and duplicata.hidden:
+        # If there exists a document with the same checksum
+        # But the existing document is hidden, we delete the old
+        # document and accept the new one
         duplicata.delete()
     elif duplicata:
+        # Else, we reject the upload
         document.delete()
+        # and break the task chain in celery
         self.request.callbacks = None
         raise ExisingChecksum("Document {} had the same checksum as {}".format(document_id, duplicata.id))
 
@@ -84,6 +87,7 @@ def checksum(self, document_id):
     document.save()
 
     return document_id
+
 
 checksum.throws = (ExisingChecksum,)
 

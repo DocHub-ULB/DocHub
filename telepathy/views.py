@@ -70,8 +70,6 @@ def get_thread_context(request, pk):
 @login_required
 def show_thread(request, pk):
     context = get_thread_context(request, pk)
-    thread = context['thread']
-
     return render(request, "telepathy/thread.html", context)
 
 

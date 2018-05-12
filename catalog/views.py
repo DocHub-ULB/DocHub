@@ -16,7 +16,6 @@ from mptt.utils import get_cached_trees
 from django.utils import timezone
 
 from actstream import actions
-import actstream
 
 from catalog.models import Category, Course
 from catalog.suggestions import suggest

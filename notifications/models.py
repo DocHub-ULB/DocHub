@@ -25,4 +25,5 @@ def action_save_handler(sender, created, instance, **kwargs):
     handle_action.delay(instance.id)
 
 
-from notifications.tasks import handle_action
+# Import at the end to avoid cyclic imports
+from notifications.tasks import handle_action # NOQA
