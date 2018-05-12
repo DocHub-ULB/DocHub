@@ -40,9 +40,9 @@ class CourseDocument extends React.Component{
     }
     download_icon() {
         if (this.ready()){
-            var url = window.Urls.document_download(this.props.id)
+            var url = window.Urls['document-pdf'](this.props.id)
         } else {
-            var url = window.Urls.document_download_original(this.props.id)
+            var url = window.Urls['document-original'](this.props.id)
         }
         return (
             <a href={url} title="Télécharger">

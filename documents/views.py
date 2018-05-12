@@ -169,34 +169,6 @@ def document_reupload(request, pk):
     return render(request, 'documents/document_reupload.html', {'form': form, 'document': document})
 
 
-@login_required
-def document_download(request, pk):
-    doc = get_object_or_404(Document, pk=pk)
-    body = doc.pdf.read()
-
-    response = HttpResponse(body, content_type='application/pdf')
-    response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % doc.safe_name).encode("ascii", "ignore")
-
-    doc.downloads = F('downloads') + 1
-    doc.save(update_fields=['downloads'])
-    return response
-
-
-@login_required
-def document_download_original(request, pk):
-    doc = get_object_or_404(Document, pk=pk)
-    body = doc.original.read()
-
-    response = HttpResponse(body, content_type='application/octet-stream')
-    response['Content-Description'] = 'File Transfer'
-    response['Content-Transfer-Encoding'] = 'binary'
-    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(doc.safe_name, doc.file_type).encode("ascii", "ignore")
-
-    doc.downloads = F('downloads') + 1
-    doc.save(update_fields=['downloads'])
-    return response
-
-
 def document_show(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
