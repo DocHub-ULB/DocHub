@@ -163,7 +163,7 @@ def repair(self, document_id):
     with file_as_local(document.pdf, prefix="dochub_pdf_repair_", suffix=".broken.pdf") as tmpfile:
         with temporary_file_path(prefix="dochub_pdf_repair_", suffix=".repaired.pdf") as output_path:
             try:
-                subprocess.check_output(["mutool", "clean", "-gggg", "-l", "-s", tmpfile.name, output_path], stderr=subprocess.STDOUT)
+                subprocess.check_output(["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path], stderr=subprocess.STDOUT)
             except OSError:
                 raise MissingBinary("mutool")
             except subprocess.CalledProcessError as e:
