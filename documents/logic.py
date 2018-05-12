@@ -56,7 +56,10 @@ def tags_from_name(name):
         'û': 'u',
         'ô': 'o'
     }
-    name = name.lower().translate(translate)
+    name = name.lower()
+    for k, v in translate.items():
+        name = name.replace(k, v)
+
     tags = set()
 
     mapping = {
