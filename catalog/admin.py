@@ -9,7 +9,6 @@ from .models import Course, Category
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('slug', 'name')
     search_fields = ('slug', 'name')
-    # filter_horizontal = ('categories',)
     raw_id_fields = ("categories",)
 
 

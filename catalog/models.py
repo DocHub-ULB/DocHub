@@ -3,13 +3,12 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
+
 
 from mptt.models import MPTTModel, TreeForeignKey
 import actstream
 
 
-@python_2_unicode_compatible
 class Category(MPTTModel):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(db_index=True)
@@ -27,7 +26,6 @@ class Category(MPTTModel):
         return self.name
 
 
-@python_2_unicode_compatible
 class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)

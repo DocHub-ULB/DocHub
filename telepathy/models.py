@@ -7,10 +7,8 @@ from django.db import models
 from django.utils.text import Truncator
 from django.urls import reverse
 from django.conf import settings
-from django.utils.encoding import python_2_unicode_compatible
 
 
-@python_2_unicode_compatible
 class Thread(models.Model):
     # Possible placement options
     PLACEMENT_OPTS = {'page-no': int}
@@ -55,7 +53,6 @@ class Thread(models.Model):
         ordering = ['-created']
 
 
-@python_2_unicode_compatible
 class Message(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     thread = models.ForeignKey(Thread, db_index=True, on_delete=models.CASCADE)

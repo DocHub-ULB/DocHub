@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
+
 from django.conf import settings
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -20,7 +20,6 @@ UNCONVERTIBLE_TYPES = [
 ]
 
 
-@python_2_unicode_compatible
 class Document(models.Model):
     STATES = (
         ('PREPARING', 'En préparation'),
@@ -178,7 +177,6 @@ class Vote(models.Model):
         unique_together = ("user", "document")
 
 
-@python_2_unicode_compatible
 class DocumentError(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     task_id = models.CharField(max_length=255)
@@ -206,4 +204,5 @@ def cleanup_document_files(instance, **kwargs):
         instance.original.storage.delete(original_file_name)
 
 
-from documents.tasks import process_document, repair
+# Import at the end to avoid circular imports
+from documents.tasks import process_document, repair # NOQA
