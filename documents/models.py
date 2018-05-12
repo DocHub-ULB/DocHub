@@ -9,8 +9,6 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import unicodedata
 
-from tags.models import Tag
-
 UNCONVERTIBLE_TYPES = [
     '.zip',
     '.rar',
@@ -126,40 +124,8 @@ class Document(models.Model):
         return False
 
     def tag_from_name(self):
-        name = self.name.lower().replace(u"é", "e").replace(u"è", "e").replace(u"ê", "e")
-        tags = []
-
-        has_month = (
-            "janv" in name or
-            "aout" in name or
-            "sept" in name or
-            "juin" in name or
-            "mai" in name
-        )
-        if has_month or "exam" in name:
-            tags.append("examen")
-
-        if "corr" in name:
-            tags.append("corrigé")
-
-        if "tp" in name or "seance" in name:
-            tags.append("tp")
-
-        if "resum" in name or "r?sum" in name or "rsum" in name:
-            tags.append("résumé")
-
-        if "slide" in name or "transparent" in name:
-            tags.append("slides")
-
-        if "formulaire" in name:
-            tags.append("formulaire")
-
-        if "rapport" in name or "labo" in name:
-            tags.append("laboratoire")
-
-        for tag in tags:
-            tag = Tag.objects.get_or_create(name=tag)[0]
-            self.tags.add(tag)
+        tags = logic.tags_from_name(self.name)
+        self.tags.add(*tags)
 
 
 class Vote(models.Model):
@@ -208,3 +174,4 @@ def cleanup_document_files(instance, **kwargs):
 
 # Import at the end to avoid circular imports
 from documents.tasks import process_document, repair # NOQA
+from documents import logic # NOQA
