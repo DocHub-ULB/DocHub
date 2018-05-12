@@ -79,9 +79,21 @@ def checksum(self, document_id):
     elif duplicata:
         # Else, we reject the upload
         document.delete()
+
         # and break the task chain in celery
         self.request.callbacks = None
-        raise ExisingChecksum("Document {} had the same checksum as {}".format(document_id, duplicata.id))
+
+        # Warn the user
+        action.send(
+            document.user,
+            verb="a uploadé un doublon de",
+            action_object=duplicata,
+            target=document.course,
+            public=False
+        )
+        raise ExisingChecksum(
+            "Document {} had the same checksum as {}".format(document_id, duplicata.id)
+        )
 
     document.md5 = hashed
     document.save()

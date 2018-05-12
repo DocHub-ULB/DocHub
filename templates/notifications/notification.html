@@ -16,16 +16,19 @@
         {% elif notification.action.verb == "a uploadé" %}
           <i class="fi-page-add"></i>
         {% elif notification.action.verb == "upload success" %}
-          <i class="fi-check"></i>
+          <i class="fi-check" style="color: #368a55"></i>
         {% elif notification.action.verb == "upload failed" %}
-          <i class="fi-x"></i>
+          <i class="fi-x" style="color: #cf2a0e"></i>
+        {% elif notification.action.verb == "a uploadé un doublon de" %}
+          <i class="fi-x" style="color: #cf2a0e"></i>
         {% endif %}
         <a href="{% url "read_and_redirect" notification.id %}">
-          {% if notification.action.verb == "upload failed" or notification.action.verb == "upload success" %}
-           <img src="{{ notification.action.actor.get_photo }}" class="feed-photo">
+          {% if not notification.action.public %}
             {% if notification.action.verb == "upload success" %}
               Votre upload a réussi :
-            {% else %}
+            {% elif notification.action.verb == "a uploadé un doublon de" %}
+              Vous avez uploadé un doublon de
+            {% elif notification.action.verb == "upload failed" %}
               Il y a eu une erreur durant la conversion de
             {% endif %}
           {% else %}
@@ -46,6 +49,11 @@
             <i class="fi-x"></i>
           </a>
         <br>
+        {% if notification.action.verb == "a uploadé un doublon de" %}
+            <span>
+              Votre doublon a été supprimé.
+            </span>
+        {% endif %}
         <span class="feed-timesince">
           Il y a {{ notification.action.timestamp|timesince }}
         </span>
@@ -54,4 +62,3 @@
     </p>
   </div>
 </div>
-
