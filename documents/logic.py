@@ -20,7 +20,7 @@ def cast_tag(tag):
         return Tag.objects.get_or_create(name=tag.lower())[0]
 
 
-def add_file_to_course(file, name, extension, course, tags, user, import_source=None):  #NOQA
+def add_file_to_course(file, name, extension, course, tags, user, import_source=None):
     if not extension.startswith("."):
         raise ValueError("extension must start with a '.'")
     if import_source is not None:
