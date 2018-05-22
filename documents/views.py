@@ -5,7 +5,7 @@ import os
 import uuid
 import unicodedata
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -16,7 +16,6 @@ from actstream import action
 from documents.models import Document
 from catalog.models import Course
 from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm, ReUploadForm
-from telepathy.forms import NewThreadForm
 from tags.models import Tag
 from documents import logic
 
@@ -174,10 +173,9 @@ def document_reupload(request, pk):
 def document_download(request, pk):
     doc = get_object_or_404(Document, pk=pk)
     body = doc.pdf.read()
-    safe_name = unicodedata.normalize("NFKD", doc.name)
 
     response = HttpResponse(body, content_type='application/pdf')
-    response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % safe_name).encode("ascii", "ignore")
+    response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % doc.safe_name).encode("ascii", "ignore")
 
     doc.downloads = F('downloads') + 1
     doc.save(update_fields=['downloads'])
@@ -188,12 +186,11 @@ def document_download(request, pk):
 def document_download_original(request, pk):
     doc = get_object_or_404(Document, pk=pk)
     body = doc.original.read()
-    safe_name = unicodedata.normalize("NFKD", doc.name)
 
     response = HttpResponse(body, content_type='application/octet-stream')
     response['Content-Description'] = 'File Transfer'
     response['Content-Transfer-Encoding'] = 'binary'
-    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(safe_name, doc.file_type).encode("ascii", "ignore")
+    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(doc.safe_name, doc.file_type).encode("ascii", "ignore")
 
     doc.downloads = F('downloads') + 1
     doc.save(update_fields=['downloads'])
@@ -203,7 +200,7 @@ def document_download_original(request, pk):
 def document_show(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
     if document.state != "DONE":

@@ -4,26 +4,23 @@ from __future__ import unicode_literals
 
 import json
 from django.db import models
-from django.utils.text import Truncator
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
-from django.utils.encoding import python_2_unicode_compatible
 
 
-@python_2_unicode_compatible
 class Thread(models.Model):
     # Possible placement options
     PLACEMENT_OPTS = {'page-no': int}
 
     name = models.CharField(max_length=255)
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     placement = models.TextField(default="", blank=True)
 
-    course = models.ForeignKey('catalog.Course')
-    document = models.ForeignKey('documents.Document', null=True)
+    course = models.ForeignKey('catalog.Course', on_delete=models.CASCADE)
+    document = models.ForeignKey('documents.Document', null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -55,10 +52,9 @@ class Thread(models.Model):
         ordering = ['-created']
 
 
-@python_2_unicode_compatible
 class Message(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    thread = models.ForeignKey(Thread, db_index=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, db_index=True, on_delete=models.CASCADE)
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
@@ -68,7 +64,6 @@ class Message(models.Model):
 
     def fullname(self):
         return "un message"
-        return Truncator(self.__unicode__()).words(9)
 
     def get_absolute_url(self):
         return reverse('thread_show', args=(self.thread_id, )) + "#message-{}".format(self.id)

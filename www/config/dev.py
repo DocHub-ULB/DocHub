@@ -10,21 +10,21 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from www.config.default import *
+from www.config.default import *  # noqa
 
 DEBUG = True
 
-INSTALLED_APPS += (
+INSTALLED_APPS += ( # noqa
     'django_extensions',
-    'kombu.transport.django',  # celery_broker
 )
 
-CELERY_BROKER = 'django://'
+BROKER_URL = 'redis://localhost:6379/0'
+task_always_eager = False
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(BASE_DIR, 'db.sqlite'),
+        'NAME': join(BASE_DIR, 'db.sqlite'),  # noqa
     }
 }
 

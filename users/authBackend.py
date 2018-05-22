@@ -11,7 +11,6 @@ from furl import furl
 from base64 import b64encode
 from django.conf import settings
 import sys
-import six
 
 
 class IntranetError(Exception):

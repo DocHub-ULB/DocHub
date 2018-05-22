@@ -4,6 +4,11 @@ import os
 
 from rest_framework import serializers
 
+try:
+    from minio.error import NoSuchKey
+except ImportError:
+    pass
+
 from documents.models import Document, Vote
 from tags.serializers import TagSerializer
 from users.serializers import SmallUserSerializer
@@ -78,7 +83,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     def get_file_size(self, document):
         try:
             return document.original.size
-        except FileNotFoundError:
+        except (FileNotFoundError, NoSuchKey):
             return None
 
 
@@ -103,8 +108,6 @@ class UploadDocumentSerializer(serializers.ModelSerializer):
     file = serializers.FileField()
     course = serializers.SlugRelatedField(slug_field='slug', queryset=Course.objects)
     tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
-
-    # TODO : add tags
 
     class Meta:
         model = Document

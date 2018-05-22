@@ -44,6 +44,14 @@ class VoteInline(admin.StackedInline):
     )
 
 
+@admin.register(Vote)
+class VoteAdmin(admin.ModelAdmin):
+    raw_id_fields = ('user', 'document')
+    list_display = ('document', 'user', 'vote_type', 'when')
+
+    list_filter = ('vote_type', 'when')
+
+
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5', 'state',)
@@ -55,6 +63,8 @@ class DocumentAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
     inlines = [VoteInline]
+
+    raw_id_fields = ('user', 'course')
 
     actions = (reprocess, autotag, repair)
 

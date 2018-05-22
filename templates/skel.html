@@ -88,20 +88,9 @@
             <ul class="left" id="course-tree-menu">
             </ul>
             <ul class="right">
-              <li>
-                    <a href="{% url 'help' %}#jobs">
-                            DocHub cherche des développeurs et modérateurs !
-                    </a>
-              </li>
-              <li>
-                <a href="https://www.facebook.com/DocHub" id="facebook"><i class="fi-social-facebook"></i></a>
-              </li>
-              <li>
-                <a href="{% url 'help' %}">Aide</a>
-              </li>
               <li class="has-dropdown">
                   <a href="#">
-                    <i class="fi-torso"></i>&nbsp; {{request.user.name}}
+                    <i class="fi-torso"></i>&nbsp; {{request.user.first_name|title}}
                   </a>
                   <ul class="dropdown">
                       <li>
@@ -162,7 +151,6 @@
     <footer class="text-center">
       <hr>
       <br>
-      <a href="mailto:nikita.marchant@ulb.ac.be">Contact us</a> -
       Made with love at
       <a href="https://urlab.be">
         <img src="/static/images/urlab.png" style="height: 1em;">

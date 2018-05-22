@@ -34,33 +34,35 @@ def my_markdown(value):
     )
     return SafeText(youtube_url.sub(youtube_iframe, html))
 
-    class MarkdownDemoNode(template.Node):
-        def __init__(self, nodelist):
-            self.nodelist = nodelist
 
-            def render(self, context):
-                a = map(
-                    lambda x: list(map(lambda y: y.strip(), x.render(context).split('\n'))),
-                    self.nodelist
-                )
+class MarkdownDemoNode(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
 
-                input_text = '\n'.join(sum(list(a), []))
+    def render(self, context):
+        a = map(
+            lambda x: list(map(lambda y: y.strip(), x.render(context).split('\n'))),
+            self.nodelist
+        )
 
-                uid = "d" + hex(abs(hash(input_text)))[2:]
-                rendered = my_markdown(input_text)
-                input_text = input_text.replace('>', '&gt;').replace('<', '&lt;')
-                return """
-                <dl class="tabs" data-tab>
-                <dd class="active"><a href="#%smd">Markdown</a></dd>
-                <dd><a href="#%srender">Aperçu</a></dd>
-                </dl>
-                <div class="tabs-content">
-                <div class="content active" id="%smd"><pre class="codehilite">%s</pre></div>
-                <div class="content" id="%srender">%s</div>
-                </div>""" % (uid, uid, uid, input_text, uid, rendered)
+        input_text = '\n'.join(sum(list(a), []))
 
-                @register.tag(name='markdown_demo')
-                def do_comment(parser, token):
-                    nodelist = parser.parse(('end_markdown_demo',))
-                    parser.delete_first_token()
-                    return MarkdownDemoNode(nodelist)
+        uid = "d" + hex(abs(hash(input_text)))[2:]
+        rendered = my_markdown(input_text)
+        input_text = input_text.replace('>', '&gt;').replace('<', '&lt;')
+        return """
+        <dl class="tabs" data-tab>
+        <dd class="active"><a href="#%smd">Markdown</a></dd>
+        <dd><a href="#%srender">Aperçu</a></dd>
+        </dl>
+        <div class="tabs-content">
+        <div class="content active" id="%smd"><pre class="codehilite">%s</pre></div>
+        <div class="content" id="%srender">%s</div>
+        </div>""" % (uid, uid, uid, input_text, uid, rendered)
+
+
+@register.tag(name='markdown_demo')
+def do_comment(parser, token):
+    nodelist = parser.parse(('end_markdown_demo',))
+    parser.delete_first_token()
+    return MarkdownDemoNode(nodelist)

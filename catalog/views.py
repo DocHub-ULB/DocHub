@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import json
 from functools import partial
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -16,7 +16,6 @@ from mptt.utils import get_cached_trees
 from django.utils import timezone
 
 from actstream import actions
-import actstream
 
 from catalog.models import Category, Course
 from catalog.suggestions import suggest
@@ -33,7 +32,7 @@ class CourseDetailView(DetailView):
     context_object_name = "course"
 
     def get_template_names(self, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return "catalog/course.html"
         else:
             return "catalog/noauth/course.html"

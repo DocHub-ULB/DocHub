@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.core.urlresolvers import reverse
-from django.utils.encoding import python_2_unicode_compatible
+from django.urls import reverse
+
 from django.conf import settings
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -20,7 +20,6 @@ UNCONVERTIBLE_TYPES = [
 ]
 
 
-@python_2_unicode_compatible
 class Document(models.Model):
     STATES = (
         ('PREPARING', 'En préparation'),
@@ -33,10 +32,10 @@ class Document(models.Model):
     )
 
     name = models.CharField(max_length=255, verbose_name='Titre')
-    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours')
+    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours', on_delete=models.CASCADE)
 
     description = models.TextField(blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
     tags = models.ManyToManyField('tags.Tag', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
@@ -136,11 +135,11 @@ class Document(models.Model):
         tags = []
 
         has_month = (
-            "janv" in name
-            or "aout" in name
-            or "sept" in name
-            or "juin" in name
-            or "mai" in name
+            "janv" in name or
+            "aout" in name or
+            "sept" in name or
+            "juin" in name or
+            "mai" in name
         )
         if has_month or "exam" in name:
             tags.append("examen")
@@ -171,11 +170,13 @@ class Document(models.Model):
 class Vote(models.Model):
     UPVOTE = "up"
     DOWNVOTE = "down"
-    VOTE_TYPE_CHOICES = ((UPVOTE, "Upvote"),
-                         (DOWNVOTE, "Downvote"))
+    VOTE_TYPE_CHOICES = (
+        (UPVOTE, "Upvote"),
+        (DOWNVOTE, "Downvote")
+    )
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    document = models.ForeignKey(Document)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
     when = models.DateTimeField(auto_now=True)
     vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
 
@@ -183,9 +184,8 @@ class Vote(models.Model):
         unique_together = ("user", "document")
 
 
-@python_2_unicode_compatible
 class DocumentError(models.Model):
-    document = models.ForeignKey(Document)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
     task_id = models.CharField(max_length=255)
     exception = models.CharField(max_length=1000)
     traceback = models.TextField()
@@ -211,4 +211,5 @@ def cleanup_document_files(instance, **kwargs):
         instance.original.storage.delete(original_file_name)
 
 
-from documents.tasks import process_document, repair
+# Import at the end to avoid circular imports
+from documents.tasks import process_document, repair # NOQA

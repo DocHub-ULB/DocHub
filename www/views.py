@@ -15,7 +15,7 @@ from users.authBackend import NetidBackend
 
 
 def index(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         context = {
             'stream': user_stream(request.user).exclude(verb="started following")
         }

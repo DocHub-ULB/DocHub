@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='document',
             name='course',
-            field=models.ForeignKey(verbose_name='Cours', to='catalog.Course', null=True),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, verbose_name='Cours', to='catalog.Course', null=True),
         ),
         migrations.AlterField(
             model_name='document',
@@ -40,6 +40,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='document',
             name='user',
-            field=models.ForeignKey(verbose_name='Utilisateur', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, verbose_name='Utilisateur', to=settings.AUTH_USER_MODEL),
         ),
     ]
