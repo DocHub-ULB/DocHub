@@ -119,8 +119,6 @@ def convert_office_to_pdf(self, document_id):
         except OSError:
             raise MissingBinary("unoconv")
         except subprocess.CalledProcessError as e:
-            print(e)
-            print(e.output)
             raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
