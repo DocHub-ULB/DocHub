@@ -52,6 +52,7 @@ class Command(BaseCommand):
                     ))
                 continue
 
+            srckey = self.source + '?document_id=%d' % doc['document_id']
             filename = matching_files[0]
             _, extension = filename.rsplit('.', 1)
             name = logic.clean_filename(doc['name'])
@@ -62,7 +63,8 @@ class Command(BaseCommand):
                 extension='.' + extension,
                 course=course,
                 tags=[],
-                user=self.user
+                user=self.user,
+                import_source=srckey,
             )
             document.add_to_queue()
             self.stdout.write(self.style.SUCCESS(
@@ -80,6 +82,9 @@ class Command(BaseCommand):
                             required=True, dest='dump_dir', default=None,
                             help=('Directory containing the dump of '
                                   'downloaded files'))
+        parser.add_argument('-s', '--source', action='store',
+                            dest='source', default='respublicae',
+                            help='Identifier for the import_source')
 
     def handle(self, *args, **options):
         def query(table, columns, limit=None):
@@ -100,6 +105,7 @@ class Command(BaseCommand):
         self.verbose = options['verbosity'] > 1
         self.dump_dir = options['dump_dir']
         self.user = User.objects.get(netid=options['netid'])
+        self.source = options['source']
 
         with transaction.atomic():
             courses = self.create_courses(query('course', [

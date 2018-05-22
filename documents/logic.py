@@ -20,16 +20,28 @@ def cast_tag(tag):
         return Tag.objects.get_or_create(name=tag.lower())[0]
 
 
-def add_file_to_course(file, name, extension, course, tags, user):
+def add_file_to_course(file, name, extension, course, tags, user, import_source=None):  #NOQA
     if not extension.startswith("."):
         raise ValueError("extension must start with a '.'")
-    document = Document.objects.create(
-        user=user,
-        name=name,
-        course=course,
-        state="PREPARING",
-        file_type=extension.lower()
-    )
+    if import_source is not None:
+        document, created = Document.objects.get_or_create(
+            user=user,
+            name=name,
+            course=course,
+            import_source=import_source,
+            file_type=extension.lower(),
+            defaults={'state': 'PREPARING'}
+        )
+        if not created:
+            return document
+    else:
+        document = Document.objects.create(
+            user=user,
+            name=name,
+            course=course,
+            state="PREPARING",
+            file_type=extension.lower()
+        )
 
     if len(tags) > 0:
         tags = [cast_tag(tag) for tag in tags]
