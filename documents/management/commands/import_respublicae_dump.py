@@ -125,16 +125,16 @@ class Command(BaseCommand):
         self.user = User.objects.get(netid=options['netid'])
         self.source = options['source']
 
-        with transaction.atomic():
-            courses = self.create_courses(query('course', [
-                'id',
-                'name',
-                'slug'
-            ]))
-            self.create_documents(courses, query('document', [
-                'document_id',
-                'course_id',
-                'download_id',
-                'was_downloaded',
-                'name'
-            ]))
+        courses = self.create_courses(query('course', [
+            'id',
+            'name',
+            'slug'
+        ]))
+
+        self.create_documents(courses, query('document', [
+            'document_id',
+            'course_id',
+            'download_id',
+            'was_downloaded',
+            'name'
+        ]))
