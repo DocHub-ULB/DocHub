@@ -83,10 +83,11 @@ class Command(BaseCommand):
                 user=self.user,
                 import_source=srckey,
             )
-            document.add_to_queue()
-            self.stdout.write(self.style.SUCCESS(
-                'Enqueued "%s" (pk %s) for processing' % (document, document.id)
-            ))
+            if document:
+                document.add_to_queue()
+                self.stdout.write(self.style.SUCCESS(
+                    'Enqueued "%s" (pk %s) for processing' % (document, document.id)
+                ))
 
     def add_arguments(self, parser):
         parser.add_argument('respublicae_db', type=str,

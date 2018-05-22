@@ -33,7 +33,7 @@ def add_file_to_course(file, name, extension, course, tags, user, import_source=
             defaults={'state': 'PREPARING'}
         )
         if not created:
-            return document
+            return None
     else:
         document = Document.objects.create(
             user=user,
