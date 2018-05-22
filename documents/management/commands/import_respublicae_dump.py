@@ -6,11 +6,13 @@ See also https://github.com/C4ptainCrunch/improved-goggles
 
 import sqlite3
 import re
+import os
 from os import path
 from glob import glob
 from django.db import transaction
 from django.core.files import File
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 import documents.logic as logic
 from users.models import User
@@ -61,13 +63,21 @@ class Command(BaseCommand):
 
             srckey = self.source + '?document_id=%d' % doc['document_id']
             filename = matching_files[0]
-            _, extension = filename.rsplit('.', 1)
+            _, extension = os.path.splitext(filename)
+
+            if extension in settings.REJECTED_FILE_FORMATS:
+                if self.verbose:
+                    self.stdout.write(self.style.WARNING(
+                        'REJECT: %s has a wrong format (%s)' % (doc['download_id'], extension)
+                    ))
+                continue
+
             name = logic.clean_filename(doc['name'])
 
             document = logic.add_file_to_course(
                 file=File(open(filename, 'rb')),
                 name=name,
-                extension='.' + extension,
+                extension=extension,
                 course=course,
                 tags=[],
                 user=self.user,
@@ -75,7 +85,7 @@ class Command(BaseCommand):
             )
             document.add_to_queue()
             self.stdout.write(self.style.SUCCESS(
-                'Enqueued %s for processing' % document
+                'Enqueued "%s" (pk %s) for processing' % (document, document.id)
             ))
 
     def add_arguments(self, parser):
