@@ -123,3 +123,5 @@ JS_REVERSE_EXCLUDE_NAMESPACES = ['admin', 'djdt']
 MAX_RENDER_PAGES = 100
 
 READ_ONLY = False
+
+REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")

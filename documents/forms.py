@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 from multiupload.fields import MultiFileField
 
@@ -11,7 +12,7 @@ from tags.models import Tag
 
 def validate_uploaded_file(file):
     name = file.name
-    if name.endswith((".zip", ".tar", ".gz", ".rar")):
+    if name.endswith(settings.REJECTED_FILE_FORMATS):
         raise ValidationError('Les fichiers compressés ne sont pas supportés pour le moment.')
 
 

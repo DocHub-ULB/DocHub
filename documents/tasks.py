@@ -113,20 +113,15 @@ checksum.throws = (ExisingChecksum,)
 def convert_office_to_pdf(self, document_id):
     document = Document.objects.get(pk=document_id)
 
-    tmpfile = tempfile.NamedTemporaryFile()
-    tmpfile.write(document.original.read())
-    tmpfile.flush()
-
-    try:
-        sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmpfile.name])
-    except OSError:
-        raise MissingBinary("unoconv")
-    except subprocess.CalledProcessError as e:
-        raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
+    with file_as_local(document.original, prefix="dochub_unoconv_input_") as tmpfile:
+        try:
+            sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmpfile.name])
+        except OSError:
+            raise MissingBinary("unoconv")
+        except subprocess.CalledProcessError as e:
+            raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
-
-    tmpfile.close()
 
     return document_id
 
