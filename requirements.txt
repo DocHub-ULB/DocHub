@@ -44,3 +44,4 @@ django-jsonfield
 django-jsonfield-compat
 gunicorn
 raven
+django-minio-storage
