@@ -5,6 +5,7 @@ See also https://github.com/C4ptainCrunch/improved-goggles
 """
 
 import sqlite3
+import re
 from os import path
 from glob import glob
 from django.db import transaction
@@ -22,8 +23,14 @@ class Command(BaseCommand):
     def create_courses(self, courses):
         res = {}
         for c in courses:
+            slug = c['slug'].lower()
+            if not re.match(r'([A-Za-z]+)-([A-Za-z])-(\d+)', slug):
+                self.stdout.write(self.style.ERROR(
+                    'Course %s has not the right format' % slug
+                ))
+
             course, created = Course.objects.get_or_create(
-                slug=c['slug'],
+                slug=slug,
                 defaults={'name': c['name']}
             )
             if created:
