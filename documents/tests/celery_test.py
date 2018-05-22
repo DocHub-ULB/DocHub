@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from documents.models import Document
 from users.models import User
-from documents.tasks import process_document
+from documents.tasks import process_document, mutool_get_pages
 from documents import tasks
 from django.core.files import File
 import celery
@@ -148,6 +148,15 @@ def test_duplicate_hidden_checksum():
     assert Document.objects.filter(id=duplicate.id).count() == 1
     assert Document.objects.filter(id=doc.id).count() == 0
     assert Document.objects.get(id=duplicate.id).md5 == "8be98044ac25f3050b121aceac618823"
+
+
+def test_correct_mutool_length():
+    doc = create_doc("Document name", ".pdf")
+
+    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
+    doc.pdf.save("another-uuid-beef-dead.pdf", f)
+
+    assert mutool_get_pages(doc) == 3
 
 
 def test_correct_length():

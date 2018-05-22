@@ -9,12 +9,12 @@ export default class Navbar extends Component {
                   <i className="fi-arrow-left"></i> {this.props.course_name}
                 </a>
 
-                <a className="button navbar-button left" href={window.Urls.document_download(this.props.docid)}>
+                <a className="button navbar-button left" href={window.Urls['document-pdf'](this.props.docid)}>
                   <i className="fi-download"></i> Télécharger - PDF
                 </a>
 
                 {this.props.original != this.props.pdf?
-                    (<a className="button navbar-button left" href={window.Urls.document_download_original(this.props.docid)}>
+                    (<a className="button navbar-button left" href={window.Urls['document-original'](this.props.docid)}>
                       <i className="fi-download"></i> Télécharger - Original
                     </a>)
                     :null}

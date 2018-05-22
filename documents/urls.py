@@ -21,14 +21,6 @@ urlpatterns = [
         documents.views.document_reupload,
         name="document_reupload"),
 
-    url(r"^(?P<pk>\d+)/download$",
-        documents.views.document_download,
-        name="document_download"),
-
-    url(r"^(?P<pk>\d+)/original$",
-        documents.views.document_download_original,
-        name="document_download_original"),
-
     url(r"^(?P<pk>\d+)$",
         documents.views.document_show,
         name="document_show"),
