@@ -25,8 +25,6 @@ try:
     DATABASES['default']
     BROKER_URL
     if not DEBUG:
-        EMAIL_HOST
-        SERVER_EMAIL
         ADMINS
         MANAGERS
         ALLOWED_HOSTS
