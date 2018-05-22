@@ -55,9 +55,14 @@ class Document(models.Model):
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
     hidden = models.BooleanField(default=False, verbose_name='Est caché')
+    import_source = models.CharField(max_length=1024, null=True, verbose_name="Importé depuis")
 
     def __str__(self):
         return self.name
+
+    @property
+    def imported(self):
+        return self.import_source is not None
 
     @property
     def votes(self):

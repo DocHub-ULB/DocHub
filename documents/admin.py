@@ -57,9 +57,11 @@ class DocumentAdmin(admin.ModelAdmin):
     readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5', 'state',)
     filter_horizontal = ('tags',)
 
-    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type')
-    list_filter = ('state', 'created', 'edited', 'file_type')
-    search_fields = ('md5', 'name')
+    list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type', 'imported')
+    list_filter = ('state', 'created', 'edited', 'file_type',)
+    search_fields = ('md5', 'name', 'imported', 'user')
+    raw_id_fields = ('user',)
+
     inlines = [VoteInline]
 
     raw_id_fields = ('user', 'course')
@@ -75,6 +77,7 @@ class DocumentAdmin(admin.ModelAdmin):
                 'hidden',
                 'tags',
                 'description',
+                'import_source',
             )
         }),
         ('Extra', {

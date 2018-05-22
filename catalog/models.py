@@ -30,6 +30,7 @@ class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
     categories = models.ManyToManyField(Category)
+    description = models.TextField(default="")
 
     class Meta:
         ordering = ['slug']
