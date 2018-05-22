@@ -83,6 +83,8 @@ class Document(models.Model):
         return self.__str__()
 
     def repair(self):
+        if settings.READ_ONLY:
+            raise Exception("Documents are read-only.")
         repair.delay(self.id)
 
     def is_unconvertible(self):
@@ -99,6 +101,9 @@ class Document(models.Model):
         return unicodedata.normalize("NFKD", self.name)
 
     def reprocess(self, force=False):
+        if settings.READ_ONLY:
+            raise Exception("Documents are read-only.")
+
         if self.state != "ERROR" and not force:
             raise Exception("Document is not in error state it is " + self.state)
 
@@ -107,6 +112,9 @@ class Document(models.Model):
         self.add_to_queue()
 
     def add_to_queue(self):
+        if settings.READ_ONLY:
+            raise Exception("Documents are read-only.")
+
         self.state = "IN_QUEUE"
         self.save()
         try:
@@ -167,6 +175,9 @@ def cleanup_document_files(instance, **kwargs):
     Checks that the name is not empty as that is what is returned when there is
         no file associated with the database object.
     """
+
+    if settings.READ_ONLY:
+        raise Exception("Documents are read-only.")
 
     pdf_file_name = instance.pdf.name
     if pdf_file_name != '' and instance.pdf.storage.exists(pdf_file_name):
