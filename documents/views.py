@@ -3,13 +3,14 @@ from __future__ import unicode_literals
 
 import os
 import uuid
-import unicodedata
 
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
+from django.conf import settings
+
 
 from actstream import action
 
@@ -25,6 +26,9 @@ def upload_file(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
     if request.method == 'POST':
+        if settings.READ_ONLY:
+            return HttpResponse('Upload is disabled for a few hours', status=401)
+
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -69,6 +73,9 @@ def upload_multiple_files(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
     if request.method == 'POST':
+        if settings.READ_ONLY:
+            return HttpResponse('Upload is disabled for a few hours', status=401)
+
         form = MultipleUploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -98,6 +105,9 @@ def document_edit(request, pk):
         return HttpResponse('You may not edit this document.', status=403)
 
     if request.method == 'POST':
+        if settings.READ_ONLY:
+            return HttpResponse('Upload is disabled for a few hours', status=401)
+
         form = FileForm(request.POST)
 
         if form.is_valid():
@@ -138,6 +148,9 @@ def document_reupload(request, pk):
         return HttpResponse('You may not edit this document while it is processing.', status=403)
 
     if request.method == 'POST':
+        if settings.READ_ONLY:
+            return HttpResponse('Upload is disabled for a few hours', status=401)
+
         form = ReUploadForm(request.POST, request.FILES)
 
         if form.is_valid():

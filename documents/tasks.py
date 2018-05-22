@@ -14,6 +14,7 @@ from celery import shared_task, chain
 from PyPDF2 import PdfFileReader
 from django.core.files.base import ContentFile, File
 from actstream import action
+from django.conf import settings
 
 from documents.models import Document, DocumentError
 from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
@@ -46,6 +47,9 @@ def doctask(*args, **kwargs):
 
 @doctask
 def process_document(self, document_id):
+    if settings.READ_ONLY:
+        raise Exception("Documents are read-only.")
+
     document = Document.objects.get(pk=document_id)
 
     if document.state == "IN_QUEUE":

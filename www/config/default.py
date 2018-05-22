@@ -82,6 +82,7 @@ INSTALLED_APPS += (
 TEMPLATES[0]['OPTIONS']['context_processors'] += ( # NOQA
     'django.template.context_processors.request',
     'www.context_processors.raven',
+    'www.context_processors.read_only',
 )
 
 STATIC_ROOT = 'collected_static'
@@ -120,3 +121,5 @@ ACTSTREAM_SETTINGS = {
 JS_REVERSE_EXCLUDE_NAMESPACES = ['admin', 'djdt']
 
 MAX_RENDER_PAGES = 100
+
+READ_ONLY = False
