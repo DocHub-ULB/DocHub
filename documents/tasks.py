@@ -15,6 +15,7 @@ from PyPDF2 import PdfFileReader
 from django.core.files.base import ContentFile, File
 from actstream import action
 from django.conf import settings
+from celery.exceptions import SoftTimeLimitExceeded
 
 from documents.models import Document, DocumentError
 from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
@@ -43,6 +44,10 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
 
 def doctask(*args, **kwargs):
     return shared_task(*args, bind=True, on_failure=on_failure, **kwargs)
+
+
+def short_doctask(*args, **kwargs):
+    return shared_task(*args, bind=True, on_failure=on_failure, soft_time_limit=60, hard_time_limit=90, **kwargs)
 
 
 @doctask
@@ -109,24 +114,33 @@ def checksum(self, document_id):
 checksum.throws = (ExisingChecksum,)
 
 
-@doctask
+@short_doctask
 def convert_office_to_pdf(self, document_id):
-    document = Document.objects.get(pk=document_id)
+    try:
+        document = Document.objects.get(pk=document_id)
 
-    with file_as_local(document.original, prefix="dochub_unoconv_input_") as tmpfile:
-        try:
-            sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmpfile.name])
-        except OSError:
-            raise MissingBinary("unoconv")
-        except subprocess.CalledProcessError as e:
-            raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed: %s' % e.output[:800])
+        with file_as_local(document.original, prefix="dochub_unoconv_input_") as tmpfile:
+            try:
+                sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmpfile.name])
+            except OSError:
+                raise MissingBinary("unoconv")
+            except subprocess.CalledProcessError as e:
+                raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed: %s' % e.output[:800])
 
-    document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
+        document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
-    return document_id
+        return document_id
+
+    except SoftTimeLimitExceeded as e:
+        # If we timeouted, kill the faulty openoffice daemon
+        # it will respawn at the next unoconv invocation
+        os.system("killall soffice.bin")
+        # Still raise the exception so the pipeline for this
+        # document is still stopped
+        raise e
 
 
-@doctask
+@short_doctask
 def mesure_pdf_length(self, document_id):
     document = Document.objects.get(pk=document_id)
 
@@ -153,7 +167,7 @@ def finish_file(self, document_id):
     return document_id
 
 
-@doctask
+@short_doctask
 def repair(self, document_id):
     document = Document.objects.get(pk=document_id)
 
