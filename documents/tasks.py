@@ -119,7 +119,7 @@ def convert_office_to_pdf(self, document_id):
         except OSError:
             raise MissingBinary("unoconv")
         except subprocess.CalledProcessError as e:
-            raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed')
+            raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed: %s' % e.output[:800])
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
@@ -166,7 +166,7 @@ def repair(self, document_id):
             except OSError:
                 raise MissingBinary("mutool")
             except subprocess.CalledProcessError as e:
-                raise DocumentProcessingError(document, exc=e, message='mutool clean has failed : %s' % e.output)
+                raise DocumentProcessingError(document, exc=e, message='mutool clean has failed : %s' % e.output[:900])
 
             with open(output_path, 'rb') as fd:
                 document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
