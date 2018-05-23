@@ -1,0 +1,84 @@
+$base-bkg-color: #333333
+
+$base-font-color: #aaaaaa
+$active-font-color: #ffffff
+$secondary-font-color: #eeeeee
+
+$dark-shadow-color: rgba(0, 0, 0, 0.5)
+$light-shadow-color: rgba(255, 255, 255, 0.033)
+
+$item-height: 2.5em
+
+.metismenu
+  background: $base-bkg-color
+  font-size: .75em
+  overflow: hidden
+  position: relative
+
+  > .metismenu-container > .metismenu-item > .metismenu-link
+    line-height: $item-height
+
+    .metismenu-state-icon
+      line-height: $item-height
+
+.metismenu-container, .metismenu-item
+  margin: 0
+  padding: 0
+
+.metismenu-container
+  list-style: none
+
+  .metismenu-container
+    transition: padding 300ms
+    -webkit-transition: padding 300ms
+    background: $light-shadow-color
+
+    .metismenu-item > .metismenu-link
+      height: 0
+      overflow: hidden
+
+    .metismenu-link
+      padding-left: 1em
+
+    .metismenu-container .metismenu-link
+      padding-left: 2em
+
+  &.visible
+    > .metismenu-item > .metismenu-link
+      height: $item-height
+
+.metismenu-link
+  color: $base-font-color
+  transition: height 300ms, color 300ms, background-color 300ms
+  -webkit-transition: height 300ms, color 300ms, background-color 300ms
+  display: block
+  line-height: $item-height
+  text-decoration: none
+
+  &:hover
+    background: $light-shadow-color
+    color: #f7f7f7
+
+  &.active
+    color: $active-font-color
+
+  &.has-active-child
+    color: $secondary-font-color
+
+i
+  &.metismenu-icon
+    text-align: center
+    width: 3em
+    padding-right: .3em
+
+  &.metismenu-state-icon
+    transition: transform 300ms
+    -webkit-transition: transform 300ms
+    float: right
+    line-height: $item-height
+    text-align: center
+    width: 3em
+
+    &.rotate-minus-90
+      transform: rotate(-90deg)
+      -webkit-transform: rotate(-90deg)

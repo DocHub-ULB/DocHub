@@ -113,34 +113,7 @@
     </div>
     <div class="row full-width collapse" data-equalizer>
       {% block full-page %}
-        <div class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
-          <ul class="side-nav main-side-nav">
-            <li>
-              <a href="/" class="sidebar-button">
-                <i class="fi-list-thumbnails"></i> Flux d'actualités
-              </a>
-            </li>
-            {% if request.user.following_courses|length == 0 %}
-              <li>
-                <a href="{% url 'show_courses' %}" class="sidebar-button" id="joy-abonner">S'abonner à des cours
-                </a>
-              </li>
-            {% else %}
-              <li>
-                <a href="{% url 'show_courses' %}" class="sidebar-button" id="joy-abonner"><i class="fi-book"></i> Mes cours</a>
-              </li>
-            {% endif %}
-            <ul class="course-bulletlist">
-              {% for course in request.user.following_courses %}
-                <li class="nav-link">
-                  <a href="{% url 'course_show' course.slug %}">
-                    <i class="fi-folder"></i> {{ course.name }}
-                  </a>
-                  </li>
-              {% endfor %}
-            </ul>
-          </ul>
-
+        <div id="side-tree-menu" class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
         </div>
         <div class="large-10 medium-9 columns" data-equalizer-watch>
           {% block content %}
