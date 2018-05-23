@@ -55,7 +55,7 @@
 
 .viewer-document
     align-content: right
-    overflow-x: hidden
+    overflow: hidden
     margin: auto
 
 .viewer-show-more
@@ -64,29 +64,11 @@
 
 .react-pdf__Page__canvas
     margin: auto
+    border: 1px solid #CCC
+    margin-top: 20px
+    border-radius: 2px
 
 .button.navbar-button
     background-color: #333
     &:hover
         background-color: #222
-
-
-.spinning, .spinning:before
-    animation: 1s linear 0s normal none infinite running spin
-
-.fading, .fading:before
-    animation: 1s linear 0s normal none infinite running fading
-
-@keyframes spin
-    0%
-        transform: rotate(0deg)
-    100%
-        transform: rotate(359deg)
-
-@keyframes fading
-    0%
-        opacity: 1
-    50%
-        opacity: 0.3
-    100%
-        opacity: 1
