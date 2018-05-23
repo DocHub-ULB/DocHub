@@ -2,11 +2,12 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import url
-from catalog.views import CategoryDetailView, CourseDetailView
+from catalog.views import CategoryDetailView, CourseDetailView, search_course
 import catalog.views
 
 urlpatterns = [
     url(r"^course/(?P<slug>[\w-]+)$", CourseDetailView.as_view(), name="course_show"),
+    url(r"^search/$", search_course, name="course_search"),
     url(r"^category/(?P<pk>\d+)$", CategoryDetailView.as_view(), name="category_show"),
 
     url(r"^join/(?P<slug>[\w-]+)$", catalog.views.join_course, name="join_course"),

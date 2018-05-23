@@ -59,6 +59,7 @@ INSTALLED_APPS += (
     'django_js_reverse',
     'webpack_loader',
     'rest_framework.authtoken',
+    'django.contrib.postgres',
 )
 
 SITE_ID = 1
