@@ -12,10 +12,10 @@
         {% for doc in recent_docs %}
           <li>
             <a href="{% url 'document_show' doc.id %}">
-              <i class="fi-page"></i> {{ doc.name|truncatechars:40 }}
-              <span class="course-label secondary radius label recent-blob">
+              <span class="course-label secondary radius label recent-blob fixed-label">
                 {{ doc.course.slug }}
               </span>
+             {{ doc.name|truncatechars:40 }}
             </a>
             </li>
         {% endfor %}
@@ -28,7 +28,7 @@
               {% for course in request.user.following_courses %}
                 <li class="nav-link">
                   <a href="{% url 'course_show' course.slug %}">
-                      <span class="course-label success radius label">
+                      <span class="course-label success radius label fixed-label">
                         {{ course.slug }}
                     </span>
                     {{ course.name }}
