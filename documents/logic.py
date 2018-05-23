@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import uuid
 
-from documents.models import Document
 from tags.models import Tag
 
 
@@ -21,22 +20,35 @@ def cast_tag(tag):
         return Tag.objects.get_or_create(name=tag.lower())[0]
 
 
-def add_file_to_course(file, name, extension, course, tags, user):
+def add_file_to_course(file, name, extension, course, tags, user, import_source=None):
     if not extension.startswith("."):
         raise ValueError("extension must start with a '.'")
-    document = Document.objects.create(
-        user=user,
-        name=name,
-        course=course,
-        state="PREPARING",
-        file_type=extension.lower()
-    )
+    if import_source is not None:
+        document, created = Document.objects.get_or_create(
+            user=user,
+            name=name,
+            course=course,
+            import_source=import_source,
+            file_type=extension.lower(),
+            defaults={'state': 'PREPARING'}
+        )
+        if not created:
+            return None
+    else:
+        document = Document.objects.create(
+            user=user,
+            name=name,
+            course=course,
+            state="PREPARING",
+            file_type=extension.lower()
+        )
 
     if len(tags) > 0:
         tags = [cast_tag(tag) for tag in tags]
-        document.tags.add(*tags)
     else:
-        document.tag_from_name()
+        tags = tags_from_name(name)
+
+    document.tags.add(*tags)
 
     document.original.save(str(uuid.uuid4()) + extension, file)
     document.state = 'READY_TO_QUEUE'
@@ -56,9 +68,11 @@ def tags_from_name(name):
         'û': 'u',
         'ô': 'o'
     }
-    name = name.lower().translate(translate)
-    tokens = name.split(' ')
-    tags = []
+    name = name.lower()
+    for k, v in translate.items():
+        name = name.replace(k, v)
+
+    tags = set()
 
     mapping = {
         ("aout", "sept", "juin", "mai", "exam", "questions", "oral"): "examen",
@@ -66,17 +80,19 @@ def tags_from_name(name):
         ("tp", "pratique", "exo", "exercice", "seance", "enonce",): "tp",
         ("resum", "r?sum", "rsum", "synthese", "synthse", ): "résumé",
         ("slide", "transparent",): "slides",
-        ("formule",): "formulaire",
+        ("formul",): "formulaire",
         ("rapport", "labo", "cahier",): "laboratoire",
         ("note",): "notes",
         ("sylabus", "syllabus"): "syllabus",
         ("officiel", "oficiel"): "officiel",
     }
 
-    for token in tokens:
-        for key, val in mapping.items():
-            if key in token:
-                tags.append(val)
+    for keys, val in mapping.items():
+        for key in keys:
+            if key in name:
+                tags.add(val)
 
     tags = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
     return tags
+
+from documents.models import Document # NOQA

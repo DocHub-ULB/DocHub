@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name='user',
             managers=[
-                (b'objects', users.models.CustomUserManager()),
+                ('objects', users.models.CustomUserManager()),
             ],
         ),
         migrations.AlterField(

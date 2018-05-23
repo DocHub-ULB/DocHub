@@ -2,11 +2,15 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.conf import settings
 
 from .models import Document, DocumentError, Vote
 
 
 def reprocess(modeladmin, request, queryset):
+    if settings.READ_ONLY:
+        raise Exception("Documents are read-only.")
+
     for doc in queryset:
         doc.reprocess(force=True)
 
@@ -23,6 +27,9 @@ autotag.short_description = "Auto-tag selected documents"
 
 
 def repair(modeladmin, request, queryset):
+    if settings.READ_ONLY:
+        raise Exception("Documents are read-only.")
+        
     for doc in queryset:
         doc.repair()
 
@@ -32,6 +39,7 @@ repair.short_description = "Repair selected documents"
 
 class VoteInline(admin.StackedInline):
     readonly_fields = ["when"]
+    raw_id_fields = ('user',)
     extra = 1
     model = Vote
 
@@ -42,6 +50,14 @@ class VoteInline(admin.StackedInline):
             ),
         }),
     )
+
+
+@admin.register(Vote)
+class VoteAdmin(admin.ModelAdmin):
+    raw_id_fields = ('user', 'document')
+    list_display = ('document', 'user', 'vote_type', 'when')
+
+    list_filter = ('vote_type', 'when')
 
 
 @admin.register(Document)
@@ -55,6 +71,8 @@ class DocumentAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
     inlines = [VoteInline]
+
+    raw_id_fields = ('user', 'course')
 
     actions = (reprocess, autotag, repair)
 

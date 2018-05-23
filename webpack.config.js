@@ -5,7 +5,7 @@ var webpack = require('webpack');
 module.exports = {
     context: __dirname,
 
-    devtool: "eval-source-map",
+    devtool: "source-map",
 
     entry: {
         tree: [
@@ -26,6 +26,7 @@ module.exports = {
         path: path.resolve('./static/scripts/'),
         filename: '[name]-[hash].js',
         publicPath: "/static/scripts/",
+        sourceMapFilename: "[name]-[hash].js.map",
     },
 
     plugins: [

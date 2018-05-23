@@ -23,10 +23,8 @@ except ImportError:
 try:
     DEBUG
     DATABASES['default']
-    CELERY_BROKER
+    BROKER_URL
     if not DEBUG:
-        EMAIL_HOST
-        SERVER_EMAIL
         ADMINS
         MANAGERS
         ALLOWED_HOSTS

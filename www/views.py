@@ -12,14 +12,16 @@ from telepathy.models import Thread
 from documents.models import Document
 from users.models import User
 from users.authBackend import NetidBackend
+from catalog.forms import SearchForm
 
 
 def index(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         following = request.user.following_courses()
         ndocs = max(5, len(following))
         docs = Document.objects.filter(course__in=following).order_by("-created")[:ndocs]
         context = {
+            'search': SearchForm(),
             'stream': user_stream(request.user).exclude(verb="started following")[:10],
             'recent_docs': docs
         }

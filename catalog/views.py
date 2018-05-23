@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import json
 from functools import partial
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -14,12 +14,14 @@ from django.views.generic.detail import DetailView
 from django.views.decorators.cache import cache_page
 from mptt.utils import get_cached_trees
 from django.utils import timezone
+from django.db.models import Q
+import re
 
 from actstream import actions
-import actstream
 
 from catalog.models import Category, Course
 from catalog.suggestions import suggest
+from catalog.forms import SearchForm
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -33,7 +35,7 @@ class CourseDetailView(DetailView):
     context_object_name = "course"
 
     def get_template_names(self, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return "catalog/course.html"
         else:
             return "catalog/noauth/course.html"
@@ -109,3 +111,29 @@ def unfollow_all_courses(request):
     for course in request.user.following_courses():
         actions.unfollow(request.user, course)
     return redirect("show_courses")
+
+
+@login_required
+def search_course(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+
+            q = Q(slug__search=name) | Q(name__search=name) | Q(name__icontains=name)
+            extracted_slugs = re.findall(r'([A-Za-z]+)-([A-Za-z])(\d+)', name) + re.findall(r'([A-Za-z]+)-([A-Za-z])-(\d+)', name)
+            for fac, middle, digits in extracted_slugs:
+                q = q | Q(slug__search="%s-%s-%s" % (fac, middle, digits))
+            results = Course.objects.filter(q).annotate(Count('document')).order_by("-document__count")
+        else:
+            form = SearchForm()
+            results = None
+    else:
+        form = SearchForm()
+        results = None
+
+    return render(request, 'catalog/course_search.html', {
+        'form': form,
+        'results': results,
+    })
