@@ -106,7 +106,9 @@ class CourseDocumentList extends React.Component {
             <div className="row">
                 <div className="column small-7">
                     <h4>Filtrer <small>par tag</small></h4>
-                    {this.tag_bar()}
+                    <span className="tag-bar">
+                        {this.tag_bar()}
+                    </span>
                 </div>
                 <div className="column small-5">
                     <h4>Chercher <small>dans le titre</small></h4>
