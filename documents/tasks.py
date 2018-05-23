@@ -133,7 +133,7 @@ def mesure_pdf_length(self, document_id):
     try:
         reader = PdfFileReader(document.pdf)
         num_pages = reader.getNumPages()
-    except KeyError:
+    except:
         num_pages = mutool_get_pages(document)
     document.pages = num_pages
     document.save()
