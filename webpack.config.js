@@ -20,6 +20,9 @@ module.exports = {
         styles: [
             './assets/styles/index.js',
         ],
+        search: [
+            './assets/search/index.js',
+        ],
     },
 
     output: {
