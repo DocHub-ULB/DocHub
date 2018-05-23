@@ -1,7 +1,8 @@
 import re
 
-from django.db.models import Q
+# from django.db.models import Q
 from django.db.models import Count
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 
 from catalog.models import Course
 
@@ -20,5 +21,11 @@ def search_course(string):
         if len(exact_slug) > 0:
             return exact_slug
 
-    q = Q(slug__search=string) | Q(name__search=string) | Q(name__icontains=string)
-    return Course.objects.filter(q).annotate(Count('document')).order_by("-document__count")
+    vector = SearchVector('slug', config='french') + SearchVector('name', config='french')
+    query = SearchQuery(string, config='french')
+
+    return Course.objects.annotate(
+        rank=SearchRank(vector, query),
+        similarity=TrigramSimilarity('name', string),
+        document__count=Count('document'),
+    ).filter(similarity__gt=0.2).order_by('-rank', '-similarity', '-document__count')
