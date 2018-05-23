@@ -2,6 +2,11 @@ const React = require('react');
 const CourseDocument = require('./CourseDocument.js').default;
 const Tag = require('./Tag.js');
 
+
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+
 /* http://stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object */
 const clone = function(obj){
     var copy;
@@ -63,7 +68,11 @@ class CourseDocumentList extends React.Component {
         this.setState({search_text: evt.target.value});
     }
     documents_filtered = () => {
-        var pattern = new RegExp(this.state.search_text, 'i');
+        try {
+            var pattern = new RegExp(this.state.search_text, 'i');
+        } catch(error) {
+            var pattern = new RegExp(escapeRegExp(this.state.search_text), 'i');
+        }
         return this.props.document_set.filter(function(doc){
             if (doc.name.search(pattern) < 0){
                 return false;
@@ -96,11 +105,11 @@ class CourseDocumentList extends React.Component {
         return (<div>
             <div className="row">
                 <div className="column small-7">
-                    <h3>Filtrer <small>par tag</small></h3>
+                    <h4>Filtrer <small>par tag</small></h4>
                     {this.tag_bar()}
                 </div>
                 <div className="column small-5">
-                    <h3>Chercher <small>dans le titre</small></h3>
+                    <h4>Chercher <small>dans le titre</small></h4>
                     <input type="text" onChange={this.search_changed}/>
                 </div>
             </div>
