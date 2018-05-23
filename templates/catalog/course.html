@@ -20,23 +20,31 @@
       {% if request.user|is_following:course %}
         <i class="fi-check green"></i>
       {% endif %}
+      {% if followers_count > 1 %}
+        <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
+      {% endif %}
     </h1>
-    <a href="{{ course.gehol_url }}" target="_blank">Horaire sur GeHol</a>
-    {% if request.user|is_following:course %}
-      <a href="{% url 'leave_course' course.slug %}">
-        <i class="fi-x"></i> Se désabonner
-      </a>
-    {% else %}
-      <a href="{% url 'join_course' course.slug %}">
-        <i class="fi-check"></i> S’abonner
-      </a>
-    {% endif %}
-    <a href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
-    <!-- <a href="{% url 'thread_put' course.slug %}">Poser une question</a> -->
+    <div >
+        <a href="{{ course.gehol_url }}" target="_blank" class="button radius tiny secondary">
+            <i class="fi-calendar"></i>
+            Horaire sur GeHol
+        </a>
+        {% if request.user|is_following:course %}
+          <a href="{% url 'leave_course' course.slug %}" class="button radius info tiny">
+            <i class="fi-x"></i> Se désabonner
+          </a>
+        {% else %}
+          <a href="{% url 'join_course' course.slug %}" class="button radius info tiny">
+            <i class="fi-check"></i> S’abonner au cours
+          </a>
+        {% endif %}
+        <a href="{% url 'document_put' course.slug %}" class="button radius tiny success">
+            <i class="fi-plus"></i>
+            Uploader un fichier
+        </a>
+    </div>
 
-    {% if followers_count > 1 %}
-      <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
-    {% endif %}
+
 
   </div>
 </div>

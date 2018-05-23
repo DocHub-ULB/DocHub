@@ -103,7 +103,7 @@ class CourseDocumentList extends React.Component {
         });
 
         return (<div>
-            <div className="row">
+            <div className="row course-top">
                 <div className="column small-7">
                     <h4>Filtrer <small>par tag</small></h4>
                     <span className="tag-bar">
