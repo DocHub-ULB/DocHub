@@ -43,7 +43,7 @@ router.register(r'categories', catalog.rest.CategoryViewSet)
 router.register(r'threads', telepathy.rest.ThreadViewSet)
 router.register(r'messages', telepathy.rest.MessageViewSet)
 router.register(r'documents', documents.rest.DocumentViewSet)
-router.register(r'search', search.rest.CourseSearchViewSet, base_name="search")
+router.register(r'search/courses', search.rest.CourseSearchViewSet, base_name="search-courses")
 router.register(r'me', users.rest.Me, base_name="users-me")
 router.register(r'tree', catalog.rest.Tree, base_name="catalog-tree")
 
