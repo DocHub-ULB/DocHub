@@ -6,14 +6,14 @@
 {% endif %}
 <br>
 <div class="row">
-    <div class="large-8 columns">
+    <div class="large-12 columns">
         <form action="{% url 'course_search' %}" method="post">
             {% csrf_token %}
             {{ search.non_field_errors }}
 
 
             <div class="row collapse">
-              <div class="small-10 columns">
+              <div class="small-9 columns">
                 <label {% if field.errors %} class="error" {% endif %}>
                   {{ search.name }}
                 </label>
@@ -27,7 +27,7 @@
 
               </div>
 
-              <div class="small-2 columns">
+              <div class="small-3 columns">
                 <input type="submit" class="button postfix" value="Chercher" />
               </div>
             </div>
