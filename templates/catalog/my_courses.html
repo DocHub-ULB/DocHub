@@ -23,14 +23,12 @@
       <ul class="course-list">
         {% for course in request.user.following_courses %}
           <li>
-            <h6>
               <a href="{% url 'course_show' course.slug %}">
                   <span class="course-label radius success label">
                     {{ course.slug }}
-                  </span>
+                </span>
                   {{ course.name }}
               </a>
-            </h6>
           </li>
         {% endfor %}
       </ul>
@@ -56,15 +54,15 @@
 
   <div class="{% if request.user.following_courses|length == 0 %}large-12{% else %}large-4{% endif %} medium-12 columns">
     <h1>Catalogue</h1>
+    Tu peux aussi aller voir tous les autre cours de l'ULB.
+    Ils sont classés par faculté, section et année.<br><br>
     <ul class="small-block-grid-1">
     {% for fac in faculties %}
         <li class="catalog-option">
-          <h4>
             <a href="{% url 'category_show' fac.id %}">
-              <i class="fi-annotate round-icon small"></i>
+              <i class="fi-folder round-icon small"></i>
               {{ fac.name }}
             </a>
-          </h4>
         </li>
       {% endfor %}
       </ul>

@@ -34,21 +34,25 @@
       </form>
   </div>
   <div class="large-12 columns">
+      <ul class="no-list">
       {% for course in results %}
+        <li>
           <a href="{% url 'course_show' course.slug %}"
-             class="course-label secondary radius label search-blob">
+             class="course-label success radius label search-blob" style="opacity: 0.8">
             {{ course.slug }}
           </a>
 
           <a href="{% url 'course_show' course.slug %}">{{ course.name }}</a>
           {% if course.document__count %}
-            <small>({{course.document__count}} documents)</small>
+            <small style="color: grey">({{course.document__count}} documents)</small>
           {% endif %}
-          <br>
+          <!-- <br> -->
+      </li>
       {% empty %}
         On dirait qu'il n'y a aucune cours qui s'appelle comme ça...<br>
         Essaie peut-être une autre orthographe ou une recherche plus générale ?
       {% endfor %}
+      </ul>
   </div>
 </div>
 {% endblock %}

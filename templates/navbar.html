@@ -16,9 +16,9 @@
             <ul class="left">
               <li>
                 {% with count=request.user.notification_count %}
-                  <a href="{% url 'notifications' %}" id="notifications-button" class="{% if count == 0%}zero{% endif %}">
-                      <i class="fi-megaphone"></i>
-                      {{count}}
+                  <a href="{% url 'notifications' %}">
+                      <i class="fi-megaphone" {% if count > 0%}style="color: #cf2a0e"{% endif %}></i>
+                      <span >{{count}}</span>
                   </a>
                 {% endwith %}
               </li>

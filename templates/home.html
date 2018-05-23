@@ -6,42 +6,16 @@
 {% endif %}
 <br>
 <div class="row">
-    <div class="large-12 columns">
-        <form action="{% url 'course_search' %}" method="post">
-            {% csrf_token %}
-            {{ search.non_field_errors }}
-
-
-            <div class="row collapse">
-              <div class="small-9 columns">
-                <label {% if field.errors %} class="error" {% endif %}>
-                  {{ search.name }}
-                </label>
-                {% if search.name.errors %}
-                  <small class="error">
-                    {% for error in search.name.errors %}
-                      {{error}}</br>
-                    {% endfor %}
-                  </small>
-                {% endif %}
-
-              </div>
-
-              <div class="small-3 columns">
-                <input type="submit" class="button postfix" value="Chercher" />
-              </div>
-            </div>
-
-        </form>
-    </div>
-
   <div class="large-6 columns">
-      <h2>Documents récents</h2>
-      <ul>
+      <h3>Documents récents</h3>
+      <ul class="no-list">
         {% for doc in recent_docs %}
-          <li class="nav-link">
+          <li>
             <a href="{% url 'document_show' doc.id %}">
-              <i class="fi-page"></i> {{ doc.name }} ({{doc.course.slug}})
+              <i class="fi-page"></i> {{ doc.name|truncatechars:40 }}
+              <span class="course-label secondary radius label recent-blob">
+                {{ doc.course.slug }}
+              </span>
             </a>
             </li>
         {% endfor %}
@@ -49,18 +23,51 @@
 
   </div>
   <div class="large-6 columns">
-      <h2>Mes cours</h2>
-            <ul>
+      <h3>Mes cours</h3>
+            <ul class="no-list">
               {% for course in request.user.following_courses %}
                 <li class="nav-link">
                   <a href="{% url 'course_show' course.slug %}">
-                    <i class="fi-folder"></i> {{ course.name }}
+                      <span class="course-label success radius label">
+                        {{ course.slug }}
+                    </span>
+                    {{ course.name }}
                   </a>
                   </li>
               {% endfor %}
           </ul>
   </div>
+  <div class="large-12 columns">
+      <h4>Recherche</h4>
+      <form action="{% url 'course_search' %}" method="post">
+          {% csrf_token %}
+          {{ search.non_field_errors }}
+
+
+          <div class="row collapse">
+            <div class="small-9 columns">
+              <label {% if field.errors %} class="error" {% endif %}>
+                {{ search.name }}
+              </label>
+              {% if search.name.errors %}
+                <small class="error">
+                  {% for error in search.name.errors %}
+                    {{error}}</br>
+                  {% endfor %}
+                </small>
+              {% endif %}
+
+            </div>
+
+            <div class="small-3 columns">
+              <input type="submit" class="button postfix" value="Chercher" />
+            </div>
+          </div>
+
+      </form>
+  </div>
   <div class="large-12 columns feed">
+    <h4>Flux d'actualités</h4>
     {% with verbose=1 %}
       {% for action in stream %}
         {% include "feed_entry.html" %}
