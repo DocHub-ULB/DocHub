@@ -84,6 +84,7 @@ TEMPLATES[0]['OPTIONS']['context_processors'] += ( # NOQA
     'django.template.context_processors.request',
     'www.context_processors.raven',
     'www.context_processors.read_only',
+    'django_settings_export.settings_export',
 )
 
 STATIC_ROOT = 'collected_static'
@@ -126,3 +127,7 @@ MAX_RENDER_PAGES = 100
 READ_ONLY = False
 
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
+
+SETTINGS_EXPORT = (
+    'DEBUG',
+)
