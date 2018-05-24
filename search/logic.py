@@ -9,9 +9,7 @@ from catalog.models import Course
 
 def search_course(string):
 
-    slug_matches = []
-    slug_matches += re.findall(r'([A-Za-z]+)-([A-Za-z])(\d+)', string)
-    slug_matches += re.findall(r'([A-Za-z]+)-([A-Za-z])-(\d+)', string)
+    slug_matches = re.findall(r'([A-Za-z]+)[- ]{0,1}([A-Za-z])[- ]{0,1}(\d+)', string)
 
     if slug_matches:
         fac, middle, digits = slug_matches[0]
@@ -21,6 +19,11 @@ def search_course(string):
         if len(exact_slug) > 0:
             return exact_slug
 
+    if len(string) < 6:
+        similarity = 0.05
+    else:
+        similarity = 0.2
+
     vector = SearchVector('slug', config='french') + SearchVector('name', config='french')
     query = SearchQuery(string, config='french')
 
@@ -28,4 +31,4 @@ def search_course(string):
         rank=SearchRank(vector, query),
         similarity=TrigramSimilarity('name', string),
         document__count=Count('document'),
-    ).filter(similarity__gt=0.2).order_by('-rank', '-similarity', '-document__count')
+    ).filter(similarity__gt=similarity).order_by('-rank', '-similarity', '-document__count')

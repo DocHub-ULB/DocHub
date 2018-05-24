@@ -23,6 +23,6 @@ class CourseSearchViewSet(viewsets.ViewSet):
         query = self.request.query_params.get('query', "")
         return search.logic.search_course(query)[:30]
 
-    def list(self, request):
+    def list(self, request, format=None):
         serializer = CourseSearchSerializer(self.get_queryset(), context={'request': request}, many=True)
         return Response(serializer.data)
