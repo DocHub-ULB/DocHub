@@ -12,12 +12,12 @@
 
 <div class="row">
 <span id="document_data"
-        data-url="{{document.pdf.url}}"
+        data-url="{% url 'document-pdf' document.pk %}"
         data-name="{{document.name}}"
         data-id="{{document.id}}"
         data-coursename="{{document.course.slug}}"
-        data-original="{{document.original}}"
-        data-pdf="{{document.pdf}}"
+        data-original="{% url 'document-original' document.pk %}"
+        data-pdf="{% url 'document-pdf' document.pk %}"
         data-hasperm="{% if request.user|has_perm_on:document %}1{% else %}0{% endif %}"
 ></span>
 <div id="root"></div>

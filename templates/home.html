@@ -1,12 +1,20 @@
 {% extends "skel.html" %}
 
+{% load render_bundle from webpack_loader %}
+
 {% block content %}
 {% if request.user.welcome %}
   {% include "welcome.html" %}
 {% endif %}
+
+{% block header %}
+{% render_bundle 'search' %}
+{% endblock %}
+
 <br>
 <div class="row">
-  <div class="large-12 columns">
+  <div class="large-8 columns">
+    <div id="react-search"></div>
   </div>
   <div class="large-12 columns">
     {% with verbose=1 %}

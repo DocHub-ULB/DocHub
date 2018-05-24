@@ -9,7 +9,7 @@ from tags.models import Tag
 from documents.models import Document
 
 import mock
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import pytest
 
 pytestmark = [pytest.mark.django_db, pytest.mark.webtest]
@@ -32,6 +32,7 @@ def user():
         last_name="Marchant"
     )
 
+
 @pytest.fixture(scope='function')
 def tags():
     return [Tag.objects.create(name="my tag"), Tag.objects.create(name="my other tag")]
@@ -49,7 +50,7 @@ def tree():
 
 def test_full_name_in_page(app, user):
     index = app.get('/', user=user.netid)
-    assert user.name in index
+    assert user.first_name in index
 
 
 def test_follow(app, user, tree):

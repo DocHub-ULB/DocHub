@@ -30,16 +30,13 @@ DOCUMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 BASE_URL = "https://dochub.be/"
 
-# ULB login, need to add the url to redirect at the end
-ULB_LOGIN = 'https://www.ulb.ac.be/commons/intranet?_prt=ulb:facultes:sciences:p402&_ssl=on&_prtm=redirect&_appl='
+# CELERY ---
 
-# Activate the search system
-SEARCH_SYSTEM = False
+task_serializer = "json"
+accept_content = ['json', 'msgpack']
+worker_prefetch_multiplier = 1  # Do not prefetch more than 1 task
 
-
-CELERY_TASK_SERIALIZER = "json"
-CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
-CELERYD_PREFETCH_MULTIPLIER = 1  # Do not prefetch more than 1 task
+# END CELERY ----
 
 # Activate identicons
 IDENTICON = True
@@ -57,12 +54,12 @@ INSTALLED_APPS += (
     'django.contrib.admin',
     'django.contrib.sites', # needed for sitemap
     'django.contrib.sitemaps',
-    'djcelery',
     'rest_framework',
     'mptt',
     'django_js_reverse',
     'webpack_loader',
     'rest_framework.authtoken',
+    'django.contrib.postgres',
 )
 
 SITE_ID = 1
@@ -76,6 +73,7 @@ INSTALLED_APPS += (
     'catalog',
     'tags',
     'notifications',
+    'search'
 )
 
 # must be after everything
@@ -86,6 +84,7 @@ INSTALLED_APPS += (
 TEMPLATES[0]['OPTIONS']['context_processors'] += ( # NOQA
     'django.template.context_processors.request',
     'www.context_processors.raven',
+    'www.context_processors.read_only',
 )
 
 STATIC_ROOT = 'collected_static'
@@ -128,3 +127,7 @@ MAX_RENDER_PAGES = 100
 DROPBOX_CHOOSER_KEY = 'jm00taswhtkcfnb'
 GOOGLE_DRIVE_CHOOSER_CLIENT_ID = '144187155988-dvcd62a8sripg171p9aensumd1tnancf.apps.googleusercontent.com'
 GOOGLE_DRIVE_CHOOSER_API_KEY = 'AIzaSyCir9AWwfpuav6m6UqG5k3kQ3Nv9qoTC6Y'
+
+READ_ONLY = False
+
+REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")

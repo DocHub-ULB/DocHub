@@ -3,9 +3,8 @@ from __future__ import unicode_literals
 
 import os
 import uuid
-import unicodedata
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -14,8 +13,9 @@ from django.conf import settings
 
 from actstream import action
 
-from documents.models import Document
+from documents.models import Documentupload
 from documents.forms import FileForm, ReUploadForm
+from catalog.models import Course
 from tags.models import Tag
 from catalog.models import Course
 
@@ -40,6 +40,9 @@ def document_edit(request, pk):
         return HttpResponse('You may not edit this document.', status=403)
 
     if request.method == 'POST':
+        if settings.READ_ONLY:
+            return HttpResponse('Upload is disabled for a few hours', status=401)
+
         form = FileForm(request.POST)
 
         if form.is_valid():
@@ -80,6 +83,9 @@ def document_reupload(request, pk):
         return HttpResponse('You may not edit this document while it is processing.', status=403)
 
     if request.method == 'POST':
+        if settings.READ_ONLY:
+            return HttpResponse('Upload is disabled for a few hours', status=401)
+
         form = ReUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -111,40 +117,10 @@ def document_reupload(request, pk):
     return render(request, 'documents/document_reupload.html', {'form': form, 'document': document})
 
 
-@login_required
-def document_download(request, pk):
-    doc = get_object_or_404(Document, pk=pk)
-    body = doc.pdf.read()
-    safe_name = unicodedata.normalize("NFKD", doc.name)
-
-    response = HttpResponse(body, content_type='application/pdf')
-    response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % safe_name).encode("ascii", "ignore")
-
-    doc.downloads = F('downloads') + 1
-    doc.save(update_fields=['downloads'])
-    return response
-
-
-@login_required
-def document_download_original(request, pk):
-    doc = get_object_or_404(Document, pk=pk)
-    body = doc.original.read()
-    safe_name = unicodedata.normalize("NFKD", doc.name)
-
-    response = HttpResponse(body, content_type='application/octet-stream')
-    response['Content-Description'] = 'File Transfer'
-    response['Content-Transfer-Encoding'] = 'binary'
-    response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(safe_name, doc.file_type).encode("ascii", "ignore")
-
-    doc.downloads = F('downloads') + 1
-    doc.save(update_fields=['downloads'])
-    return response
-
-
 def document_show(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
     if document.state != "DONE":

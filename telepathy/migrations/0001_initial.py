@@ -34,9 +34,9 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True, db_index=True)),
                 ('edited', models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)),
                 ('placement', models.TextField(default=None, null=True)),
-                ('course', models.ForeignKey(to='catalog.Course')),
-                ('document', models.ForeignKey(to='documents.Document', null=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('course', models.ForeignKey(on_delete=models.deletion.CASCADE, to='catalog.Course')),
+                ('document', models.ForeignKey(on_delete=models.deletion.CASCADE, to='documents.Document', null=True)),
+                ('user', models.ForeignKey(on_delete=models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ['-created'],
@@ -46,13 +46,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='thread',
-            field=models.ForeignKey(to='telepathy.Thread'),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to='telepathy.Thread'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='message',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
             preserve_default=True,
         ),
     ]

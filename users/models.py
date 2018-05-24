@@ -48,7 +48,6 @@ class CustomUserManager(UserManager):
         return self._create_user(netid, email, password, is_staff=True, **extra_fields)
 
 
-
 class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'netid'
@@ -79,7 +78,6 @@ class User(AbstractBaseUser):
     notify_on_response = models.BooleanField(default=True)
     notify_on_new_doc = models.BooleanField(default=True)
     notify_on_new_thread = models.BooleanField(default=True)
-    notify_on_mention = True
     notify_on_upload = True
 
     def __init__(self, *args, **kwargs):
@@ -157,7 +155,7 @@ class User(AbstractBaseUser):
 
 
 class Inscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     faculty = models.CharField(max_length=80, blank=True, default='')
     section = models.CharField(max_length=80, blank=True, default='')
     year = models.PositiveIntegerField(blank=True, null=True)

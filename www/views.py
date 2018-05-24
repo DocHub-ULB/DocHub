@@ -12,11 +12,13 @@ from telepathy.models import Thread
 from documents.models import Document
 from users.models import User
 from users.authBackend import NetidBackend
+from catalog.forms import SearchForm
 
 
 def index(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         context = {
+            'search': SearchForm(),
             'stream': user_stream(request.user).exclude(verb="started following")
         }
         return render(request, "home.html", context)

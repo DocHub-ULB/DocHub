@@ -2,19 +2,18 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.core.urlresolvers import reverse
-from django.utils.encoding import python_2_unicode_compatible
+from django.urls import reverse
+
 
 from mptt.models import MPTTModel, TreeForeignKey
 import actstream
 
 
-@python_2_unicode_compatible
 class Category(MPTTModel):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(db_index=True)
     description = models.TextField(blank=True, default='')
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=models.CASCADE)
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -27,11 +26,11 @@ class Category(MPTTModel):
         return self.name
 
 
-@python_2_unicode_compatible
 class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
     categories = models.ManyToManyField(Category)
+    description = models.TextField(default="")
 
     class Meta:
         ordering = ['slug']

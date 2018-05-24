@@ -73,7 +73,7 @@
 <div class="row">
   <div class="large-12 columns">
     <br>
-    <a class="button expand radius" href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
+    <a class="button expand radius {% if READ_ONLY %}disabled{% endif %}" href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
     <a class="button expand radius" href="{% url 'thread_put' course.slug %}">Poser une question</a>
     {% if request.user|is_following:course %}
       <a class="button expand alert radius" href="{% url 'leave_course' course.slug %}">

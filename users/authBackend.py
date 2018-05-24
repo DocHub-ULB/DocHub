@@ -11,7 +11,6 @@ from furl import furl
 from base64 import b64encode
 from django.conf import settings
 import sys
-import six
 
 
 class IntranetError(Exception):
@@ -140,6 +139,8 @@ class NetidBackend(object):
     def login_url(cls, next_url=""):
         return_url = furl(settings.BASE_URL)
         return_url.path = "auth"
+        if next_url:
+            return_url.args['next64'] = b64encode(next_url.encode()).decode()
 
         ulb_url = furl("https://www.ulb.ac.be/commons/intranet")
         ulb_url.args["_prt"] = "ulb:gehol"

@@ -9,11 +9,11 @@ from telepathy.models import Thread, Message
 
 
 class ThreadViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Thread.objects.all()
+    queryset = Thread.objects.select_related('user', 'course', 'document').all()
     serializer_class = SmallThreadSerializer
     serializer_detail_class = ThreadSerializer
 
 
 class MessageViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Message.objects.all()
+    queryset = Message.objects.select_related('user').all()
     serializer_class = MessageSerializer

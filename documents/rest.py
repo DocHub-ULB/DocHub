@@ -25,7 +25,9 @@ class DocumentAccessPermission(permissions.IsAuthenticated):
 class DocumentViewSet(VaryModelViewSet):
     permission_classes = (DocumentAccessPermission,)
 
-    queryset = Document.objects.filter(hidden=False)
+    queryset = Document.objects.filter(hidden=False)\
+        .select_related("course", 'user')\
+        .prefetch_related('tags', 'vote_set')
     serializer_class = DocumentSerializer
     create_serializer_class = UploadDocumentSerializer
     update_serializer_class = EditDocumentSerializer
@@ -52,8 +54,8 @@ class DocumentViewSet(VaryModelViewSet):
         response = HttpResponse(body, content_type='application/pdf')
         response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % document.safe_name).encode("ascii", "ignore")
 
-        document.downloads = F('downloads') + 1
-        document.save(update_fields=['downloads'])
+        document.downloads = F('views') + 1
+        document.save(update_fields=['views'])
         return response
 
     @detail_route(methods=['post'])

@@ -2,14 +2,12 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.core.urlresolvers import reverse
-from django.utils.encoding import python_2_unicode_compatible
+from django.urls import reverse
+
 from django.conf import settings
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import unicodedata
-
-from tags.models import Tag
 
 UNCONVERTIBLE_TYPES = [
     '.zip',
@@ -20,7 +18,6 @@ UNCONVERTIBLE_TYPES = [
 ]
 
 
-@python_2_unicode_compatible
 class Document(models.Model):
     STATES = (
         ('PREPARING', 'En préparation'),
@@ -33,10 +30,10 @@ class Document(models.Model):
     )
 
     name = models.CharField(max_length=255, verbose_name='Titre')
-    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours')
+    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours', on_delete=models.CASCADE)
 
     description = models.TextField(blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
     tags = models.ManyToManyField('tags.Tag', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
@@ -56,9 +53,14 @@ class Document(models.Model):
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
     hidden = models.BooleanField(default=False, verbose_name='Est caché')
+    import_source = models.CharField(max_length=1024, null=True, verbose_name="Importé depuis")
 
     def __str__(self):
         return self.name
+
+    @property
+    def imported(self):
+        return self.import_source is not None
 
     @property
     def votes(self):
@@ -81,6 +83,8 @@ class Document(models.Model):
         return self.__str__()
 
     def repair(self):
+        if settings.READ_ONLY:
+            raise Exception("Documents are read-only.")
         repair.delay(self.id)
 
     def is_unconvertible(self):
@@ -97,6 +101,9 @@ class Document(models.Model):
         return unicodedata.normalize("NFKD", self.name)
 
     def reprocess(self, force=False):
+        if settings.READ_ONLY:
+            raise Exception("Documents are read-only.")
+
         if self.state != "ERROR" and not force:
             raise Exception("Document is not in error state it is " + self.state)
 
@@ -105,6 +112,9 @@ class Document(models.Model):
         self.add_to_queue()
 
     def add_to_queue(self):
+        if settings.READ_ONLY:
+            raise Exception("Documents are read-only.")
+
         self.state = "IN_QUEUE"
         self.save()
         try:
@@ -127,50 +137,20 @@ class Document(models.Model):
         return False
 
     def tag_from_name(self):
-        name = self.name.lower().replace(u"é", "e").replace(u"è", "e").replace(u"ê", "e")
-        tags = []
-
-        has_month = (
-            "janv" in name
-            or "aout" in name
-            or "sept" in name
-            or "juin" in name
-            or "mai" in name
-        )
-        if has_month or "exam" in name:
-            tags.append("examen")
-
-        if "corr" in name:
-            tags.append("corrigé")
-
-        if "tp" in name or "seance" in name:
-            tags.append("tp")
-
-        if "resum" in name or "r?sum" in name or "rsum" in name:
-            tags.append("résumé")
-
-        if "slide" in name or "transparent" in name:
-            tags.append("slides")
-
-        if "formulaire" in name:
-            tags.append("formulaire")
-
-        if "rapport" in name or "labo" in name:
-            tags.append("laboratoire")
-
-        for tag in tags:
-            tag = Tag.objects.get_or_create(name=tag)[0]
-            self.tags.add(tag)
+        tags = logic.tags_from_name(self.name)
+        self.tags.add(*tags)
 
 
 class Vote(models.Model):
     UPVOTE = "up"
     DOWNVOTE = "down"
-    VOTE_TYPE_CHOICES = ((UPVOTE, "Upvote"),
-                         (DOWNVOTE, "Downvote"))
+    VOTE_TYPE_CHOICES = (
+        (UPVOTE, "Upvote"),
+        (DOWNVOTE, "Downvote")
+    )
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    document = models.ForeignKey(Document)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
     when = models.DateTimeField(auto_now=True)
     vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
 
@@ -178,9 +158,8 @@ class Vote(models.Model):
         unique_together = ("user", "document")
 
 
-@python_2_unicode_compatible
 class DocumentError(models.Model):
-    document = models.ForeignKey(Document)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
     task_id = models.CharField(max_length=255)
     exception = models.CharField(max_length=1000)
     traceback = models.TextField()
@@ -197,6 +176,9 @@ def cleanup_document_files(instance, **kwargs):
         no file associated with the database object.
     """
 
+    if settings.READ_ONLY:
+        raise Exception("Documents are read-only.")
+
     pdf_file_name = instance.pdf.name
     if pdf_file_name != '' and instance.pdf.storage.exists(pdf_file_name):
         instance.pdf.storage.delete(pdf_file_name)
@@ -206,4 +188,6 @@ def cleanup_document_files(instance, **kwargs):
         instance.original.storage.delete(original_file_name)
 
 
-from documents.tasks import process_document, repair
+# Import at the end to avoid circular imports
+from documents.tasks import process_document, repair # NOQA
+from documents import logic # NOQA

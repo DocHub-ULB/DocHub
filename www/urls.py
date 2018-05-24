@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf.urls import url, include
+from django.urls import include, path
 from django.views.generic import TemplateView
 from django.contrib.auth.views import logout, login
 from django.contrib import admin
 from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
 import django_js_reverse.views
+from django.conf.urls import url
 
-from www.legacy_urls import urlpatterns as legacy_patterns
 import users.views
 import www.views
 
@@ -23,30 +23,33 @@ sitemaps = {
 }
 
 urlpatterns = [
-    url(r"^$", www.views.index, name="index"),
-    url(r"^catalog/", include("catalog.urls")),
-    url(r"^documents/", include("documents.urls")),
-    url(r"^telepathy/", include("telepathy.urls")),
-    url(r"^users/", include("users.urls")),
-    url(r"^notifications/", include("notifications.urls")),
+    path("", www.views.index, name="index"),
 
-    url(r"^syslogin$", login, {"template_name": "syslogin.html"}, name="syslogin"),
-    url(r"^auth/$", users.views.auth),
-    url(r"^logout$", logout, {"next_page": "/"}, name="logout"),
+    path("catalog/", include("catalog.urls")),
+    path("documents/", include("documents.urls")),
+    path("telepathy/", include("telepathy.urls")),
+    path("users/", include("users.urls")),
+    path("notifications/", include("notifications.urls")),
+    path("admin/", admin.site.urls),
+    path("api/", include("www.rest_urls")),
+    path("jsreverse/", django_js_reverse.views.urls_js, name='js_reverse'),
 
-    url(r'^admin/', include(admin.site.urls)),
+    path("syslogin", login, {"template_name": "syslogin.html"}, name="syslogin"),
+    path("auth", users.views.auth),
+    path("logout", logout, {"next_page": "/"}, name="logout"),
 
-    url(r'^help/markdown$', TemplateView.as_view(template_name='telepathy/markdown.html'), name="markdown_help"),
-    url(r'^help/$', www.views.HelpView.as_view(template_name='help.html'), name="help"),
+    path("help/", www.views.HelpView.as_view(template_name='help.html'), name="help"),
+    path(
+        "help/markdown/",
+        TemplateView.as_view(template_name='telepathy/markdown.html'),
+        name="markdown_help"
+    ),
 
-    url(r'^api/', include("www.rest_urls")),
-    url(r'^jsreverse/$', django_js_reverse.views.urls_js, name='js_reverse'),
-
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
-        name='django.contrib.sitemaps.views.sitemap')
-
-
-] + legacy_patterns
+    path(
+        "sitemap\.xml", sitemap, {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap'
+    ),
+]
 
 handler400 = 'www.error.error400'
 handler403 = 'www.error.error403'
@@ -57,3 +60,8 @@ handler500 = 'www.error.error500'
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
