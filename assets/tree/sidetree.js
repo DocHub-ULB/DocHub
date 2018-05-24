@@ -13,18 +13,17 @@ const MetisMenu = require('react-metismenu').default;
  * See also https://github.com/alpertuna/react-metismenu/#active-link-selectors
  */
 
-const courseToMenu = parent => {
-    return course => {
+const courseToMenu = parent =>
+    course => {
         return {
             icon: 'book',
-            label: `${course.slug} ${course.name}`,
+            label: course.name,
             to: `/catalog/course/${course.slug}#_${parent}`
         };
     };
-};
 
-const categoryToMenu = parent => {
-    return category => {
+const categoryToMenu = parent =>
+    category => {
         let subcategories = category.children.map(categoryToMenu(category.id));
         let courses = category.courses.map(courseToMenu(category.id));
         return {
@@ -34,19 +33,10 @@ const categoryToMenu = parent => {
             content: subcategories.concat(courses)
         };
     };
-};
 
-class SideTree extends React.Component {
-    constructor(props){
-        super(props);
-        this.menuContent = props['content'].map(categoryToMenu(""));
-    }
-
-    render(){
-        return <MetisMenu content={this.menuContent}
-                          iconNamePrefix='fi-'
-                          activeLinkFromLocation />
-    }
-}
+const SideTree = ({content}) =>
+    <MetisMenu content={content.map(categoryToMenu(""))}
+               iconNamePrefix='fi-'
+               activeLinkFromLocation />;
 
 module.exports = SideTree;
