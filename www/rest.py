@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from actstream.models import user_stream
+
+from www.serializers import FeedSerializer
 
 
 class VaryModelViewSet(viewsets.ModelViewSet):
@@ -44,3 +47,10 @@ class VaryModelViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
 
         return Response(view_serializer.data)
+
+
+class FeedViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = FeedSerializer
+
+    def get_queryset(self):
+        return user_stream(self.request.user).exclude(verb="started following")
