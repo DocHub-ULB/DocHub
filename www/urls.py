@@ -8,6 +8,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
 import django_js_reverse.views
+from django.conf.urls import url
 
 import users.views
 import www.views
@@ -59,3 +60,8 @@ handler500 = 'www.error.error500'
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

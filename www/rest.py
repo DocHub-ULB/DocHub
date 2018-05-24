@@ -53,7 +53,9 @@ class FeedViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = FeedSerializer
 
     def get_queryset(self):
-        return user_stream(self.request.user).exclude(verb="started following")
+        return user_stream(self.request.user)\
+            .exclude(verb="started following")\
+            .select_related('actor_content_type', 'target_content_type', 'action_object_content_type')
 
 
 class SelfFeedViewSet(viewsets.ReadOnlyModelViewSet):
