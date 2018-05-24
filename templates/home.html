@@ -1,9 +1,16 @@
 {% extends "skel.html" %}
 
+{% load render_bundle from webpack_loader %}
+
 {% block content %}
 {% if request.user.welcome %}
   {% include "welcome.html" %}
 {% endif %}
+
+{% block header %}
+{% render_bundle 'search' %}
+{% endblock %}
+
 <br>
 <div class="row">
   <div class="large-6 columns">
@@ -39,32 +46,7 @@
   </div>
   <div class="large-12 columns">
       <h4>Recherche</h4>
-      <form action="{% url 'course_search' %}" method="post">
-          {% csrf_token %}
-          {{ search.non_field_errors }}
-
-
-          <div class="row collapse">
-            <div class="small-9 columns">
-              <label {% if field.errors %} class="error" {% endif %}>
-                {{ search.name }}
-              </label>
-              {% if search.name.errors %}
-                <small class="error">
-                  {% for error in search.name.errors %}
-                    {{error}}</br>
-                  {% endfor %}
-                </small>
-              {% endif %}
-
-            </div>
-
-            <div class="small-3 columns">
-              <input type="submit" class="button postfix" value="Chercher" />
-            </div>
-          </div>
-
-      </form>
+      <div id="react-search"></div>
   </div>
   <div class="large-12 columns feed">
     <h4>Flux d'actualités</h4>

@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from users.serializers import UserSerializer, SmallUserSerializer
 from users.models import User
+from rest_framework.authtoken.models import Token
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -33,6 +34,8 @@ class Me(viewsets.ViewSet):
     View details on the current logged-in user.
     """
 
-    def list(self, request):
+    def list(self, request, format=None):
+        token, created = Token.objects.get_or_create(user=request.user)
+
         serializer = UserSerializer(request.user, context={'request': request})
         return Response(serializer.data)
