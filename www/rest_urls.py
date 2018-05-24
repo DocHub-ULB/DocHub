@@ -47,6 +47,7 @@ router.register(r'documents', documents.rest.DocumentViewSet)
 router.register(r'search/courses', search.rest.CourseSearchViewSet, base_name="search-courses")
 router.register(r'feed', www.rest.FeedViewSet, base_name="feed")
 router.register(r'me', users.rest.Me, base_name="users-me")
+router.register(r'me/actions', www.rest.SelfFeedViewSet, base_name="user-actions")
 router.register(r'tree', catalog.rest.Tree, base_name="catalog-tree")
 
 urlpatterns = router.urls

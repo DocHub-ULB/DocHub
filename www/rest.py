@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from actstream.models import user_stream
+from actstream.models import user_stream, actor_stream
 
 from www.serializers import FeedSerializer
 
@@ -54,3 +54,11 @@ class FeedViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return user_stream(self.request.user).exclude(verb="started following")
+
+
+class SelfFeedViewSet(viewsets.ReadOnlyModelViewSet):
+    """List of the actions the user"""
+    serializer_class = FeedSerializer
+
+    def get_queryset(self):
+        return actor_stream(self.request.user)

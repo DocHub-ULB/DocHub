@@ -36,7 +36,7 @@ class Tree(viewsets.ViewSet):
     A view of the course and category tree, viewed from the top node.
     """
 
-    def list(self, request):
+    def list(self, request, format=None):
         def course(node):
             return {
                 'name': node.name,
