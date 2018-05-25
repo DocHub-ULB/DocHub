@@ -117,8 +117,19 @@ class CourseDocumentList extends React.Component {
             </div>
             {docs.length > 0 ? (docs) : (
                 <span>
-                <br/>
-                Il n'y a aucun document qui correspond à ta recherche.
+                {this.props.document_set.length == 0 ? (
+                    <span>
+                        <br/>
+                        Ce cours ne contient pas de documents...
+                        Tu peux en uploader toi même !
+                    </span>
+                ) : (
+                    <span>
+                        <br/>
+                        Il ny a aucun document qui correspond à ta recherche.
+                    </span>
+                )}
+
                 </span>
             )}
         </div>);

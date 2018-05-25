@@ -7,9 +7,6 @@
   {% include "welcome.html" %}
 {% endif %}
 
-{% block header %}
-{% render_bundle 'search' %}
-{% endblock %}
 
 <br>
 <div class="row">
@@ -43,11 +40,6 @@
                   </li>
               {% endfor %}
           </ul>
-  </div>
-  <div class="large-12 columns">
-      <h4>Recherche</h4>
-      <div id="react-search"></div>
-      <br>
   </div>
   <div class="large-12 columns feed">
     <h4>Flux d'actualités</h4>
