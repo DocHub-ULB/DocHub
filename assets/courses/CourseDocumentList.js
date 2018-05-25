@@ -121,8 +121,8 @@ class CourseDocumentList extends React.Component {
                 {this.props.document_set.length == 0 ? (
                     <span>
                         <br/>
-                        Ce cours ne contient pas de documents...
-                        Tu peux en uploader toi même !
+                        <p>Ce cours ne contient pas encode de documents...
+                        Tu peux en uploader toi même !</p>
                     </span>
                 ) : (
                     <span>
