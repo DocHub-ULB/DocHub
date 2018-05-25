@@ -13,7 +13,7 @@ from django.conf import settings
 
 from actstream import action
 
-from documents.models import Documentupload
+from documents.models import Document
 from documents.forms import FileForm, ReUploadForm
 from catalog.models import Course
 from tags.models import Tag
