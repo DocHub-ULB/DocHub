@@ -16,6 +16,7 @@ from users.serializers import SmallUserSerializer
 from documents import logic
 from catalog.models import Course
 from tags.models import Tag
+from documents import cloud
 
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
@@ -135,3 +136,30 @@ class UploadDocumentSerializer(serializers.ModelSerializer):
 
         document.add_to_queue()
         return document
+
+
+class DriveDocumentSerializer(serializers.ModelSerializer):
+    course = serializers.SlugRelatedField(slug_field='slug', queryset=Course.objects)
+    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
+    file_id = serializers.CharField()
+    token = serializers.CharField()
+
+    class Meta:
+        model = Document
+        fields = ('name', 'description', 'course', 'tags', 'file_id', 'token')
+
+    def create(self, validated_data):
+        return cloud.get_drive_file(validated_data['file_id'], validated_data['token'])
+
+
+class DropboxDocumentSerializer(serializers.ModelSerializer):
+    course = serializers.SlugRelatedField(slug_field='slug', queryset=Course.objects)
+    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
+    link = serializers.CharField()
+
+    class Meta:
+        model = Document
+        fields = ('name', 'description', 'course', 'tags', 'link')
+
+    def create(self, validated_data):
+        return cloud.get_dropbox_file(validated_data['link'])

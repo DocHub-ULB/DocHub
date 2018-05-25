@@ -17,9 +17,9 @@ const CHOOSER_OPTIONS = {
 const UPLOAD_URL = '/api/documents/dropbox'
 
 class DropboxDocument {
-    constructor(doc_id, name) {
-        this.doc_id = doc_id
+    constructor(name, link) {
         this.name = name
+        this.link = link
 
         this.state = "CREATED"
         this.type = "DROPBOX"
@@ -29,7 +29,7 @@ class DropboxDocument {
         var formData = new FormData()
 
         formData.append('title', this.name)
-        formData.append('docid', this.doc_id)
+        formData.append('link', this.link)
         formData.append('course', slug)
 
         this.tags.map(tag => {
@@ -45,7 +45,7 @@ class DropboxDocument {
 export default class DropboxChooser extends Component {
     on_success = (files) => {
         let documents = files.map(doc => (
-            new DropboxDocument(doc.id, doc.name)
+            new DropboxDocument(doc.name, doc.link)
         ))
         console.log("New documents from Dropbox", documents)
         this.props.onFiles(documents)

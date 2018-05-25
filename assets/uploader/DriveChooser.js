@@ -6,8 +6,8 @@ const clientId = '144187155988-dvcd62a8sripg171p9aensumd1tnancf.apps.googleuserc
 const scope = 'https://www.googleapis.com/auth/drive.readonly';
 
 class DriveDocument {
-    constructor(doc_id, mime, name, token) {
-        this.doc_id = doc_id
+    constructor(file_id, mime, name, token) {
+        this.file_id = file_id
         this.mime = mime
         this.name = name
         this.token = token
@@ -19,7 +19,7 @@ class DriveDocument {
     upload(slug) {
         var formData = new FormData()
 
-        formData.append('doc_id', this.doc_id)
+        formData.append('file_id', this.file_id)
         formData.append('title', this.name)
         formData.append('token', this.token)
         formData.append('course', slug)
@@ -35,7 +35,7 @@ class DriveDocument {
 
 
 
-export default class DropboxChooser extends Component {
+export default class DriveChooser extends Component {
     onPickerDone = (data) => {
         if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
             this.onPickerSuccess(data)

@@ -5,12 +5,12 @@ from django.http import HttpResponse
 from django.db.models import F
 
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, action
 from rest_framework import status
 from rest_framework import permissions
 from www.rest import VaryModelViewSet
 
-from documents.serializers import DocumentSerializer, UploadDocumentSerializer, EditDocumentSerializer
+from documents.serializers import DocumentSerializer, UploadDocumentSerializer, EditDocumentSerializer, DropboxDocumentSerializer, DriveDocumentSerializer
 from documents.models import Document, Vote
 
 
@@ -23,6 +23,7 @@ class DocumentAccessPermission(permissions.IsAuthenticated):
 
 
 class DocumentViewSet(VaryModelViewSet):
+    """Upload a dropbox via /documents/dropbox and a drive via /documents/drive"""
     permission_classes = (DocumentAccessPermission,)
 
     queryset = Document.objects.filter(hidden=False)\
@@ -74,3 +75,25 @@ class DocumentViewSet(VaryModelViewSet):
         document.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['post'])
+    def dropbox(self, request):
+        serializer = DropboxDocumentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        view_serializer = DocumentSerializer(serializer.instance)
+        return Response(view_serializer.data, status=status.HTTP_201_CREATED)
+
+    dropbox.serializer = DropboxDocumentSerializer
+
+    @action(detail=False, methods=['post'])
+    def drive(self, request):
+        serializer = DriveDocumentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        view_serializer = DocumentSerializer(serializer.instance)
+        return Response(view_serializer.data, status=status.HTTP_201_CREATED)
+
+    drive.serializer = DriveDocumentSerializer

@@ -17,6 +17,18 @@ class VaryModelViewSet(viewsets.ModelViewSet):
         assert self.serializer_class is not None
         assert self.update_serializer_class is not None
         assert self.create_serializer_class is not None
+
+        # do we have a serializer for this action ?
+        action = getattr(self, self.action)
+        if action:
+            print(action)
+            serializer = getattr(action, 'serializer', None)
+            if serializer:
+                method = method.lower() if method else 'get'
+                if isinstance(serializer, dict):
+                    serializer = serializer[method]
+                return serializer
+
         if method == "PUT":
             return self.update_serializer_class
 
