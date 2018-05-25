@@ -34,6 +34,17 @@ export default class Search extends React.Component {
   		.then(response => ({ options: response.data }));
   }
 
+  renderOption (option) {
+		return (
+			<span>
+                <span className="course-label secondary radius label recent-blob fixed-label">
+                  {option.slug}
+                </span>&nbsp;
+			   {option.name}
+			</span>
+		);
+	}
+
   render() {
     return (
       <Select.Async
@@ -45,6 +56,7 @@ export default class Search extends React.Component {
         labelKey="name"
         loadOptions={this.getCourses}
         backspaceRemoves={true}
+        optionRenderer={this.renderOption}
         placeholder="Chercher un cours (exemple: info-f-101 ou Microéconomie)"
         searchPromptText="Écrivez pour rechercher"
       />
