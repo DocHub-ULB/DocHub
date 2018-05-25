@@ -78,22 +78,20 @@ class DocumentViewSet(VaryModelViewSet):
 
     @action(detail=False, methods=['post'])
     def dropbox(self, request):
-        serializer = DropboxDocumentSerializer(data=request.data)
+        serializer = DropboxDocumentSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        view_serializer = DocumentSerializer(serializer.instance)
-        return Response(view_serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"success": "document enqueued"}, status=status.HTTP_201_CREATED)
 
     dropbox.serializer = DropboxDocumentSerializer
 
     @action(detail=False, methods=['post'])
     def drive(self, request):
-        serializer = DriveDocumentSerializer(data=request.data)
+        serializer = DriveDocumentSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        view_serializer = DocumentSerializer(serializer.instance)
-        return Response(view_serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"success": "document enqueued"}, status=status.HTTP_201_CREATED)
 
     drive.serializer = DriveDocumentSerializer

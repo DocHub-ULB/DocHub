@@ -12,11 +12,12 @@ except ImportError:
 from documents.models import Document, Vote
 from tags.serializers import TagSerializer
 from users.serializers import SmallUserSerializer
+from rest_framework.fields import CurrentUserDefault
 
 from documents import logic
 from catalog.models import Course
 from tags.models import Tag
-from documents import cloud
+from documents import tasks
 
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):
@@ -149,7 +150,14 @@ class DriveDocumentSerializer(serializers.ModelSerializer):
         fields = ('name', 'description', 'course', 'tags', 'file_id', 'token')
 
     def create(self, validated_data):
-        return cloud.get_drive_file(validated_data['file_id'], validated_data['token'])
+        tasks.import_drive_file.delay(
+            name=validated_data['name'],
+            file_id=validated_data['file_id'],
+            token=validated_data['token'],
+            netid=self.context['request'].user.netid,
+            slug=validated_data['course'].slug,
+            tags=[x.name for x in validated_data['tags']]
+        )
 
 
 class DropboxDocumentSerializer(serializers.ModelSerializer):
@@ -162,4 +170,10 @@ class DropboxDocumentSerializer(serializers.ModelSerializer):
         fields = ('name', 'description', 'course', 'tags', 'link')
 
     def create(self, validated_data):
-        return cloud.get_dropbox_file(validated_data['link'])
+        tasks.import_dropbox_file.delay(
+            name=validated_data['name'],
+            url=validated_data['link'],
+            netid=self.context['request'].user.netid,
+            slug=validated_data['course'].slug,
+            tags=[x.name for x in validated_data['tags']]
+        )

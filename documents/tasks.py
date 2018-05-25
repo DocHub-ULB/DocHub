@@ -9,6 +9,7 @@ import tempfile
 import os
 import contextlib
 import re
+import mimetypes
 
 from celery import shared_task, chain
 from PyPDF2 import PdfFileReader
@@ -16,8 +17,12 @@ from django.core.files.base import ContentFile, File
 from actstream import action
 from django.conf import settings
 from celery.exceptions import SoftTimeLimitExceeded
+from django.core.files.base import ContentFile
 
 from documents.models import Document, DocumentError
+from documents import cloud, logic
+from users.models import User
+from catalog.models import Course
 from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
 
 
@@ -212,6 +217,50 @@ process_unconvertible = chain(
     checksum.s(),
     finish_file.s()
 )
+
+
+@doctask
+def import_drive_file(self, name, file_id, token, netid, slug, tags):
+    user = User.objects.get(netid=netid)
+    course = Course.objects.get(slug=slug)
+
+    payload = cloud.get_drive_file(file_id, token)
+    extension = mimetypes.guess_extension(payload['mime'])
+    fd = ContentFile(payload['blob'])
+
+    document = logic.add_file_to_course(
+        file=fd,
+        name=name,
+        extension=extension,
+        course=course,
+        tags=tags,
+        user=user
+    )
+
+    document.add_to_queue()
+    return document.id
+
+
+@doctask
+def import_dropbox_file(self, name, url, netid, slug, tags):
+    user = User.objects.get(netid=netid)
+    course = Course.objects.get(slug=slug)
+
+    payload = cloud.get_dropbox_file(url)
+    extension = mimetypes.guess_extension(payload['mime'])
+    fd = ContentFile(payload['blob'])
+
+    document = logic.add_file_to_course(
+        file=fd,
+        name=name,
+        extension=extension,
+        course=course,
+        tags=tags,
+        user=user
+    )
+
+    document.add_to_queue()
+    return document.id
 
 
 @contextlib.contextmanager
