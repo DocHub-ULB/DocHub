@@ -9,38 +9,76 @@
 
 
 <br>
-<div class="row">
-  <div class="large-6 columns">
-      <h3>Documents récents</h3>
-      <ul class="no-list">
-        {% for doc in recent_docs %}
-          <li>
-            <a href="{% url 'document_show' doc.id %}">
-              <span class="course-label secondary radius label recent-blob fixed-label">
-                {{ doc.course.slug }}
-              </span>
-             {{ doc.name|truncatechars:40 }}
-            </a>
-            </li>
-        {% endfor %}
-    </ul>
+    {% if request.user.following_courses|length > 0 %}
+    <div class="row">
+      <div class="large-6 columns">
+          <h3>Documents récents</h3>
+          <ul class="no-list">
+            {% for doc in recent_docs %}
+              <li>
+                <a href="{% url 'document_show' doc.id %}">
+                  <span class="course-label secondary radius label recent-blob fixed-label">
+                    {{ doc.course.slug }}
+                  </span>
+                 {{ doc.name|truncatechars:40 }}
+                </a>
+                </li>
+            {% endfor %}
+        </ul>
 
+      </div>
+      <div class="large-6 columns">
+          <h3>Mes cours</h3>
+                <ul class="no-list">
+                  {% for course in request.user.following_courses %}
+                    <li class="nav-link">
+                      <a href="{% url 'course_show' course.slug %}">
+                          <span class="course-label success radius label fixed-label">
+                            {{ course.slug }}
+                        </span>
+                        {{ course.name|truncatechars:40 }}
+                      </a>
+                      </li>
+                  {% endfor %}
+              </ul>
+      </div>
   </div>
-  <div class="large-6 columns">
-      <h3>Mes cours</h3>
-            <ul class="no-list">
-              {% for course in request.user.following_courses %}
-                <li class="nav-link">
-                  <a href="{% url 'course_show' course.slug %}">
-                      <span class="course-label success radius label fixed-label">
-                        {{ course.slug }}
-                    </span>
-                    {{ course.name|truncatechars:40 }}
-                  </a>
-                  </li>
-              {% endfor %}
+  {% endif %}
+  {% if request.user.following_courses|length < 3 %}
+  <div class="row">
+    <div class="large-6 columns">
+        <h3>Abonne toi à des cours</h3>
+        <p>
+            Sur DocHub, tu peux mettre des cours en favoris.
+            Ca te permet de voir directement dans ton flux d'actualités,
+            de recevoir des notifications dans la barre du haut et tout simplement
+            d'y accéder facilement.<br>
+            Les cours de DocHub sont classés par faculté ici à droite ou via le menu dans
+            <span class="label secondary radius">
+                <i class="fi-torso"></i>
+                {{request.user.first_name}}
+                <i class="fi-play"></i>
+                Mes cours
+            </span>.<br>
+            Tu peux aussi directement chercher ton cours dans la barre de recherche.
+        </p>
+    </div>
+    <div class="large-6 columns">
+        <h3>Facultés</h3>
+        <ul class="small-block-grid-1">
+        {% for fac in faculties %}
+            <li class="catalog-option">
+                <a href="{% url 'category_show' fac.id %}">
+                  <i class="fi-folder round-icon small"></i>
+                  {{ fac.name }}
+                </a>
+            </li>
+          {% endfor %}
           </ul>
-  </div>
+    </div>
+</div>
+  {% endif %}
+  <div class="row">
   <div class="large-12 columns feed">
     <h4>Flux d'actualités</h4>
     {% with verbose=1 %}
