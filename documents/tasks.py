@@ -63,7 +63,7 @@ def process_document(self, document_id):
     else:
         raise DocumentProcessingError(document, "Wrong state : {}".format(document.state))
 
-    if document.file_type in ('.pdf', 'application/pdf'):
+    if document.is_pdf:
         document.pdf = document.original
         document.save()
         process_pdf.delay(document_id)

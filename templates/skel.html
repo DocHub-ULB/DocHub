@@ -64,12 +64,12 @@
   </head>
   <body>
     {% include "navbar.html" %}
+    {% block full-page %}
     <div class="row">
-      {% block full-page %}
           {% block content %}
           {% endblock %}
-      {% endblock %}
     </div>
+    {% endblock %}
     <footer class="text-center">
       <br>
       Made with love at
