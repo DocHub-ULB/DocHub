@@ -25,9 +25,13 @@
       {% endif %}
     </h1>
     <div >
-        <a href="{{ course.gehol_url }}" target="_blank" class="button radius tiny secondary">
+        <a href="{{ course.gehol_url }}" target="_blank" class="button radius tiny secondary right">
             <i class="fi-calendar"></i>
             Horaire sur GeHol
+        </a>
+        <a href="{% url 'document_put' course.slug %}" class="button radius tiny success">
+            <i class="fi-plus"></i>
+            Uploader un fichier
         </a>
         {% if request.user|is_following:course %}
           <a href="{% url 'leave_course' course.slug %}" class="button radius info tiny">
@@ -38,10 +42,7 @@
             <i class="fi-check"></i> S’abonner au cours
           </a>
         {% endif %}
-        <a href="{% url 'document_put' course.slug %}" class="button radius tiny success">
-            <i class="fi-plus"></i>
-            Uploader un fichier
-        </a>
+
     </div>
 
 

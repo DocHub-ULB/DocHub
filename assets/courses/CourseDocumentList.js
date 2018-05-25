@@ -115,6 +115,7 @@ class CourseDocumentList extends React.Component {
                     <input type="text" onChange={this.search_changed}/>
                 </div>
             </div>
+            <br/>
             {docs.length > 0 ? (docs) : (
                 <span>
                 {this.props.document_set.length == 0 ? (
