@@ -35,7 +35,7 @@
                       <span class="course-label success radius label fixed-label">
                         {{ course.slug }}
                     </span>
-                    {{ course.name }}
+                    {{ course.name|truncatechars:40 }}
                   </a>
                   </li>
               {% endfor %}

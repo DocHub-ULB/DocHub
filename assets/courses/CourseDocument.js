@@ -121,6 +121,9 @@ class CourseDocument extends React.Component{
         });
     }
     render() {
+        var tags = (
+            <span><i className="fi-pricetag-multiple"></i> {this.tags()}</span>
+        )
         return (<div className="row course-document">
             <div className="large-12 columns">
                 <div className="panel">
@@ -142,7 +145,7 @@ class CourseDocument extends React.Component{
                     <div className="course-content-last-line">
                         <i className="fi-page-filled"></i> {this.pages()}&nbsp;
                         <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;
-                        <i className="fi-pricetag-multiple"></i> {this.tags()}
+                        {this.props.tags.length > 0 ? tags : ''}
                     </div>
                 </div>
             </div>
