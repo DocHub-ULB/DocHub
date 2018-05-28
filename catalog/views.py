@@ -14,14 +14,13 @@ from django.views.generic.detail import DetailView
 from django.views.decorators.cache import cache_page
 from mptt.utils import get_cached_trees
 from django.utils import timezone
-from django.db.models import Q
-import re
 
 from actstream import actions
 
 from catalog.models import Category, Course
 from catalog.suggestions import suggest
 from catalog.forms import SearchForm
+import search.logic
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -120,18 +119,19 @@ def search_course(request):
 
         if form.is_valid():
             name = form.cleaned_data['name']
+            results = search.logic.search_course(name)
 
-            q = Q(slug__search=name) | Q(name__search=name) | Q(name__icontains=name)
-            extracted_slugs = re.findall(r'([A-Za-z]+)-([A-Za-z])(\d+)', name) + re.findall(r'([A-Za-z]+)-([A-Za-z])-(\d+)', name)
-            for fac, middle, digits in extracted_slugs:
-                q = q | Q(slug__search="%s-%s-%s" % (fac, middle, digits))
-            results = Course.objects.filter(q).annotate(Count('document')).order_by("-document__count")
         else:
             form = SearchForm()
-            results = None
+            results = []
     else:
         form = SearchForm()
-        results = None
+        results = []
+
+    if len(results) == 1:
+        # We have only one result, redirect immediately to the course
+        course = results[0]
+        return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
 
     return render(request, 'catalog/course_search.html', {
         'form': form,
