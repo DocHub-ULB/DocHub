@@ -16,6 +16,8 @@ from documents.models import Document, Vote
 
 class DocumentAccessPermission(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
+        if view.action == 'vote': # FIXME : hardcoded check is bad
+            return True
         if request.method in permissions.SAFE_METHODS:
             return True
 
