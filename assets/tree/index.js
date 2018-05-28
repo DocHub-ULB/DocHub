@@ -5,11 +5,7 @@ const SideTree = require('./sidetree.js');
 
 window.courseTreeRender = (data) => {
     ReactDOM.render(
-        <Menu {...data[0]}/>,
-        document.getElementById('course-tree-menu')
-    );
-    ReactDOM.render(
-        <SideTree content={data}/>,
+        <SideTree content={data[0].children}/>,
         document.getElementById('side-tree-menu')
     );
 };

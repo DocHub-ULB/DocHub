@@ -60,17 +60,24 @@
     {% endblock %}
   </head>
   <body>
-    {% include "navbar.html" %}
-    <div class="row">
-      {% block full-page %}
-        <div id="side-tree-menu" class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
-        </div>
-        <div class="large-10 medium-9 columns" data-equalizer-watch>
-          {% block content %}
-          {% endblock %}
-        </div>
-      {% endblock %}
+
+    <div class="off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+        {% include "navbar.html" %}
+
+        <!-- Off Canvas Menu -->
+        <aside class="left-off-canvas-menu">
+          <div id="side-tree-menu"></div>
+        </aside>
+
+        {% block content %}
+        {% endblock %}
+
+        <a class="exit-off-canvas"></a>
+      </div>
     </div>
+
     <footer class="text-center">
       <br>
       Made with love at
