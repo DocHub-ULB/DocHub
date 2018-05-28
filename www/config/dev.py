@@ -14,8 +14,13 @@ from www.config.default import *  # noqa
 
 DEBUG = True
 
+MIDDLEWARE += ( # noqa
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+)
+
 INSTALLED_APPS += ( # noqa
     'django_extensions',
+    'debug_toolbar',
 )
 
 BROKER_URL = 'redis://localhost:6379/0'

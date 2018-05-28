@@ -25,7 +25,9 @@ class DocumentAccessPermission(permissions.IsAuthenticated):
 class DocumentViewSet(VaryModelViewSet):
     permission_classes = (DocumentAccessPermission,)
 
-    queryset = Document.objects.filter(hidden=False)
+    queryset = Document.objects.filter(hidden=False)\
+        .select_related("course", 'user')\
+        .prefetch_related('tags', 'vote_set')
     serializer_class = DocumentSerializer
     create_serializer_class = UploadDocumentSerializer
     update_serializer_class = EditDocumentSerializer
