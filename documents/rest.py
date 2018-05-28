@@ -27,7 +27,8 @@ class DocumentViewSet(VaryModelViewSet):
 
     queryset = Document.objects.filter(hidden=False)\
         .select_related("course", 'user')\
-        .prefetch_related('tags', 'vote_set')
+        .prefetch_related('tags', 'vote_set')\
+        .order_by("-edited")
     serializer_class = DocumentSerializer
     create_serializer_class = UploadDocumentSerializer
     update_serializer_class = EditDocumentSerializer
