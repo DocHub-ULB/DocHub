@@ -63,6 +63,10 @@ class Document(models.Model):
         return self.import_source is not None
 
     @property
+    def is_pdf(self):
+        return self.file_type in ('.pdf', 'application/pdf')
+
+    @property
     def votes(self):
         upvotes, downvotes = 0, 0
         # We do the filtering in python as this method is called from REST with all the necessary

@@ -42,13 +42,12 @@ class VoteButton extends React.Component {
         return Cookies.get('csrftoken')
     }
     render() {
-        let res =  <div>
-            <span onClick={this.clicked}>
-                <i className={`${this.props.icon_class} ${this.props.isActive ? 'active' : ''}`}></i>
-            </span>
-            <span className={this.props.label_class}>{this.pretty_vote_num()}</span>
-        </div>;
-        return (this.props.description) ? <abbr title={this.props.description}>{res}</abbr> : res;
+        let res =  <a title={this.props.description} className={"label radius " + (this.props.isActive ? 'info' : 'secondary')} onClick={this.clicked}>
+            <i className={`${this.props.icon_class} ${this.props.isActive ? 'active' : ''}`}></i>
+            &nbsp;
+            {this.pretty_vote_num()}
+        </a>;
+        return res;
     }
 };
 

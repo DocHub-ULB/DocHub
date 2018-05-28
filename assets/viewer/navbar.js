@@ -1,41 +1,85 @@
 import React, { Component } from 'react';
 
+var menuIconStyle = {
+    paddingright: "1em"
+}
+
 export default class Navbar extends Component {
   render() {
     return (
-        <div className="sticky">
-            <nav className="top-bar" id="navbar">
-                <a className="button navbar-button left" href={window.Urls.course_show(this.props.course_name)}>
-                  <i className="fi-arrow-left"></i> {this.props.course_name}
-                </a>
+        <div className="sticky contain-to-grid">
+            <nav className="top-bar" id="navbar" data-topbar="">
 
-                <a className="button navbar-button left" href={window.Urls['document-pdf'](this.props.docid)}>
-                  <i className="fi-download"></i> Télécharger - PDF
-                </a>
+                <ul className="title-area">
+                    <li className="name">
+                       <h2><a href="#">{this.props.docname}</a></h2>
+                    </li>
 
-                {this.props.original != this.props.pdf?
-                    (<a className="button navbar-button left" href={window.Urls['document-original'](this.props.docid)}>
-                      <i className="fi-download"></i> Télécharger - Original
-                    </a>)
-                    :null}
+                    <li className="toggle-topbar menu-icon">
+                        <a href="#" style={menuIconStyle}>
+                            Menu <i className="fi-list"></i>
+                        </a>
+                    </li>
+                </ul>
 
-                <font color="white">{this.props.docname}</font>
+                <section className="top-bar-section">
+                <ul className="left">
+                    <li>
+                        <a className="" href={window.Urls.course_show(this.props.course_name)}>
+                          <i className="fi-arrow-left"></i> {this.props.course_name}
+                        </a>
+                    </li>
 
+                    {this.props.is_pdf == "True"?
+                        (<li>
+                            <a  href={window.Urls['document-pdf'](this.props.docid)}>
+                            <i className="fi-download"></i> Télécharger
+                            </a>
+                            </li>)
+                        :
+                        (<li className="has-dropdown">
+                            <a href="#">
+                            <i className="fi-download"></i> Télécharger
+                            </a>
+                            <ul className="dropdown">
+                            <li>
+                            <a href={window.Urls['document-original'](this.props.docid)}>
+                            Original
+                            </a>
+                            </li>
+
+                            <li>
+                            <a href={window.Urls['document-pdf'](this.props.docid)}>
+                            PDF
+                            </a>
+                            </li>
+                            </ul>
+                            </li>)
+                    }
+                </ul>
+                <ul className="right">
+        <li><ul className="button-group navbar-button">
                 {this.props.has_perm == "1"?
-                    (<a className="button navbar-button right" href={window.Urls.document_edit(this.props.docid)}>
-                      <i className="fi-pencil"></i> Editer
-                    </a>)
+                    (<li><a className="button navbar-button" href={window.Urls.document_edit(this.props.docid)}>
+                      <i className="fi-pencil"></i>
+                    </a></li>)
                     :null}
 
+                <li>
+                <a className="button navbar-button" href="#" onClick={this.props.zoomin}>
+                  <i className="fi-zoom-in"></i>
+                </a>
+                </li>
 
-                <button className="button navbar-button right" onClick={this.props.zoomin}>
-                  <i className="fi-zoom-in"></i> Zoom
-                </button>
-
-                <button className="button navbar-button right" onClick={this.props.zoomout}>
-                  <i className="fi-zoom-out"></i> De-zoom
-                </button>
-
+                <li>
+                <a className="button navbar-button" href="#" onClick={this.props.zoomout}>
+                  <i className="fi-zoom-out"></i>
+                </a>
+                </li>
+        </ul>
+        </li>
+                </ul>
+                </section>
             </nav>
         </div>
     );

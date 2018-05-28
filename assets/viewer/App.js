@@ -67,7 +67,9 @@ export default class App extends Component {
                 original={document_data.original}
                 pdf={document_data.pdf}
                 has_perm={document_data.hasperm}
+                is_pdf={document_data.ispdf}
         />
+        <div className="row">
         <Document
           className="viewer-document"
           file={document_data.url}
@@ -90,6 +92,7 @@ export default class App extends Component {
             )
             }
         </Document>
+        </div>
         {render_not_full}
       </div>
     );
