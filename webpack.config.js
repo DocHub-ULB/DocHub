@@ -9,18 +9,23 @@ module.exports = {
 
     entry: {
         tree: [
+            'babel-polyfill',
             './assets/tree/index.js',
         ],
         courses: [
+            'babel-polyfill',
             './assets/courses/index.js',
         ],
         viewer: [
+            'babel-polyfill',
             './assets/viewer/index.js',
         ],
         styles: [
+            'babel-polyfill',
             './assets/styles/index.js',
         ],
         search: [
+            'babel-polyfill',
             './assets/search/index.js',
         ],
     },
