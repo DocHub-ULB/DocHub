@@ -13,6 +13,7 @@ from documents.models import Document
 from users.models import User
 from users.authBackend import NetidBackend
 from catalog.forms import SearchForm
+from catalog.models import Category
 
 
 def index(request):
@@ -23,7 +24,8 @@ def index(request):
         context = {
             'search': SearchForm(),
             'stream': user_stream(request.user).exclude(verb="started following")[:10],
-            'recent_docs': docs
+            'recent_docs': docs,
+            'faculties': Category.objects.get(level=0).children.all()
         }
         return render(request, "home.html", context)
     else:

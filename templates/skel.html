@@ -56,27 +56,31 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
 
+    {% render_bundle 'search' %}
+
+
     {% block header %}
     {% endblock %}
   </head>
   <body>
+    {% block full-page %}
+        <div class="off-canvas-wrap" data-offcanvas>
+          <div class="inner-wrap">
 
-    <div class="off-canvas-wrap" data-offcanvas>
-      <div class="inner-wrap">
+            {% include "navbar.html" %}
 
-        {% include "navbar.html" %}
+            <!-- Off Canvas Menu -->
+            <aside class="left-off-canvas-menu">
+              <div id="side-tree-menu"></div>
+            </aside>
 
-        <!-- Off Canvas Menu -->
-        <aside class="left-off-canvas-menu">
-          <div id="side-tree-menu"></div>
-        </aside>
+            {% block content %}
+            {% endblock %}
 
-        {% block content %}
-        {% endblock %}
-
-        <a class="exit-off-canvas"></a>
-      </div>
-    </div>
+            <a class="exit-off-canvas"></a>
+          </div>
+        </div>
+    {% endblock %}
 
     <footer class="text-center">
       <br>

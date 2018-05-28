@@ -35,15 +35,15 @@ export default class Search extends React.Component {
   }
 
   renderOption (option) {
-      return (
-          <span>
-              <span className="course-label secondary radius label recent-blob fixed-label">
-                {option.slug}
-              </span>&nbsp;
-             {option.name}
-          </span>
-      );
-  }
+		return (
+			<span>
+                <span className="course-label secondary radius label recent-blob fixed-label">
+                  {option.slug}
+                </span>&nbsp;
+			   {option.name}
+			</span>
+		);
+	}
 
   render() {
     return (

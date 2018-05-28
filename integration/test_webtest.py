@@ -48,7 +48,13 @@ def tree():
     return root
 
 
-def test_full_name_in_page(app, user):
+def test_name_in_page(app, user):
+    root = Category.objects.create(
+        name="ULB",
+        slug="root",
+        parent=None,
+    )
+    
     index = app.get('/', user=user.netid)
     assert user.first_name in index
 

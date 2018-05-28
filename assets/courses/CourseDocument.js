@@ -29,7 +29,7 @@ class CourseDocument extends React.Component{
     url = () => window.Urls.document_show(this.props.id)
     icon = () => {
         if (this.ready()){
-            return (<a href={this.url()}>
+            return (<a href={this.url()} className="radius label tiny secondary">
                 <i className="fi-page-copy round-icon big"></i>
             </a>);
         } else if (this.props.is_processing) {
@@ -45,31 +45,41 @@ class CourseDocument extends React.Component{
             var url = window.Urls['document-original'](this.props.id)
         }
         return (
-            <a href={url} title="Télécharger">
+            <a href={url} title="Télécharger" className="radius label tiny secondary">
                 <i className="fi-download dark-grey"></i> Télécharger
             </a>
         )
     }
     edit_icon() {
         if (this.ready() && this.editable()){
-            return (<a href={this.edit_url()} title="Éditer">
+            return (<a href={this.edit_url()} title="Éditer" className="radius label tiny secondary">
                 <i className="fi-pencil dark-grey"></i> Editer
             </a>);
         }
     }
     reupload_icon() {
         if (this.ready() && this.editable()){
-            return (<a href={this.reupload_url()}>
-                <i className="fi-page-add dark-grey" title="Nouvelle version"></i> Ré-uploader
+            return (<a href={this.reupload_url()} className="radius label tiny secondary">
+                <i className="fi-page-add dark-grey" title="Ré-uploader"></i> Ré-uploader
             </a>);
         }
     }
     upvote_icon() {
-        return (<UpvoteButton doc_id={this.props.id} num={this.state.upvotes} isActive={this.state.upvote_active} vote_callback={this.vote_callback} />);
+        return (<UpvoteButton
+                doc_id={this.props.id}
+                num={this.state.upvotes}
+                isActive={this.state.upvote_active}
+                vote_callback={this.vote_callback}
+            />);
 
     }
     downvote_icon() {
-        return (<DownvoteButton doc_id={this.props.id} num={this.state.downvotes} isActive={this.state.downvote_active} vote_callback={this.vote_callback}/>);
+        return (<DownvoteButton
+            doc_id={this.props.id}
+            num={this.state.downvotes}
+            isActive={this.state.downvote_active}
+            vote_callback={this.vote_callback}
+        />);
     }
     vote_callback() {
         $.get(window.Urls.document_detail(this.props.id), function (data) {
@@ -83,7 +93,7 @@ class CourseDocument extends React.Component{
         var text = markdown.toHTML(this.props.description);
         if (text != ''){
             var wrap = {__html: text};
-            return <p dangerouslySetInnerHTML={wrap} />;
+            return <p dangerouslySetInnerHTML={wrap} className="document-description"/>;
         }
         return '';
     }
@@ -111,18 +121,32 @@ class CourseDocument extends React.Component{
         });
     }
     render() {
+        var tags = (
+            <span><i className="fi-pricetag-multiple"></i> {this.tags()}</span>
+        )
         return (<div className="row course-document">
             <div className="large-12 columns">
-                <h5>
-                    {this.title()}
-                    <small> par {this.props.user.name}</small><br/>
-                </h5>
-                {this.description()}
-                {this.download_icon()} {this.edit_icon()} {this.reupload_icon()}
-                <div className="course-content-last-line">
-                    <i className="fi-page-filled"></i> {this.pages()}&nbsp;
-                    <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;
-                    <i className="fi-pricetag-multiple"></i> {this.tags()}
+                <div className="panel">
+                    <div className="right">
+                        {this.download_icon()} {this.edit_icon()} {this.reupload_icon()}
+                    </div>
+                    <h5>
+                        {this.title()}
+                        <small> par {this.props.user.name}</small><br/>
+                    </h5>
+                    {this.description()}
+
+                    <div className="right">
+                            <i className="fi-star vote-color"></i> Votez :
+                        &nbsp;
+                        {this.upvote_icon()} {this.downvote_icon()}
+                    </div>
+
+                    <div className="course-content-last-line">
+                        <i className="fi-page-filled"></i> {this.pages()}&nbsp;
+                        <i className="fi-clock"></i> Uploadé le {this.date()}&nbsp;
+                        {this.props.tags.length > 0 ? tags : ''}
+                    </div>
                 </div>
             </div>
         </div>);

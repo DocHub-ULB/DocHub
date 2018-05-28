@@ -21,6 +21,7 @@ module.exports = {
             './assets/styles/index.js',
         ],
         search: [
+            'babel-polyfill',
             './assets/search/index.js',
         ],
     },
