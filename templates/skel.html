@@ -25,7 +25,7 @@
     {% render_bundle 'styles' %}
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
-
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet' type='text/css'>
     <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
 
     <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.js"></script>
@@ -60,69 +60,17 @@
     {% endblock %}
   </head>
   <body>
-    <div class="sticky">
-    <nav class="top-bar" data-topbar="">
-        <ul class="title-area">
-            <li class="name">
-               <h1><a href="/">DocHub</a></h1>
-            </li>
-
-            <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
-        </ul>
-
-        <section class="top-bar-section">
-            <ul class="left">
-              <li>
-                {% with count=request.user.notification_count %}
-                  <a href="{% url 'notifications' %}" id="notifications-button" class="{% if count == 0%}zero{% endif %}">
-                      <i class="fi-megaphone"></i>
-                      {{count}}
-                  </a>
-                {% endwith %}
-              </li>
-              <li>
-                <a href="{% url 'show_courses' %}">Mes cours</a>
-              </li>
-              <li class="divider"></li>
-            </ul>
-            <ul class="left" id="course-tree-menu">
-            </ul>
-            <ul class="right">
-              <li class="has-dropdown">
-                  <a href="#">
-                    <i class="fi-torso"></i>&nbsp; {{request.user.first_name|title}}
-                  </a>
-                  <ul class="dropdown">
-                      <li>
-                        <a href="{% url 'settings' %}"><i class="fi-torso"></i>&nbsp; Profil</a>
-                      </li>
-                      {% if request.user.is_staff %}
-                        <li>
-                          <a href="/admin"><i class="fi-widget"></i>&nbsp; Admin</a>
-                        </li>
-                      {% endif %}
-                      <li>
-                        <a href="{% url 'logout' %}"><i class="fi-power"></i>&nbsp; Déconnexion</a>
-                      </li>
-                  </ul>
-              </li>
-            </ul>
-
-        </section>
-    </nav>
-    </div>
-    <div class="row full-width collapse" data-equalizer>
+    {% include "navbar.html" %}
+    <div class="row">
       {% block full-page %}
         <div id="side-tree-menu" class="hide-for-small-only large-2 medium-3 columns sidebar" data-equalizer-watch>
         </div>
         <div class="large-10 medium-9 columns" data-equalizer-watch>
           {% block content %}
           {% endblock %}
-        </div>
       {% endblock %}
     </div>
     <footer class="text-center">
-      <hr>
       <br>
       Made with love at
       <a href="https://urlab.be">

@@ -4,7 +4,7 @@ import Navbar from './navbar';
 
 class Loader extends Component {
     render () {
-        return (<div className="viewer-loader">LOAD</div>)
+        return (<div className=""><br/>Chargement en cours...</div>)
     }
 }
 
@@ -22,11 +22,11 @@ export default class App extends Component {
 
   onDocumentFail() {
     return (
-    <div className="alert-box alert round viewer-error-message">Une erreur est survenue, souhaitez-vous &nbsp;
+    <div className="alert-box info radius viewer-error-message">
+        On dirait que ton browser n'arrive pas à afficher ce document... <br/>
+        Ce n'est pas grave, tu peux quand même le&nbsp;
         <a className="viewer-error-link small" href={window.Urls['document-original'](document.getElementById('document_data').dataset.id)}>
-            <i className="fi-download viewer-error-icon"></i> télécharger
-        </a>
-    &nbsp; le document ?</div>)
+            <i className="fi-download viewer-error-icon"></i>&nbsp;télécharger</a>.</div>)
   }
 
   view_more() {

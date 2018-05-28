@@ -36,7 +36,7 @@ def user_settings(request):
             request.user.photo = "png"
             request.user.save()
 
-            messages.success(request, 'Votre profil a été mis à jour.')
+            messages.success(request, 'Ton profil a été mis à jour.')
 
             return render(request, "users/settings.html", {'form': SettingsForm()})
     else:

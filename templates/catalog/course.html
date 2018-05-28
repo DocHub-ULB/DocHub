@@ -1,4 +1,4 @@
-{% extends "3col.html" %}
+{% extends "skel.html" %}
 {% load render_bundle from webpack_loader %}
 
 {% load humanize %}
@@ -12,87 +12,52 @@
 {% render_bundle 'courses' %}
 {% endblock %}
 
-{% block center-col %}
+{% block content %}
 <div class="row">
-  <div class="large-10 columns">
+  <div class="large-12 columns">
     <h1 >
-      {{ course.slug|upper }}
+      {{ course.slug|upper }} {{ course.name }}
       {% if request.user|is_following:course %}
         <i class="fi-check green"></i>
       {% endif %}
+      {% if followers_count > 1 %}
+        <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
+      {% endif %}
     </h1>
-    <h2>{{ course.name }}</h2>
-  </div>
-  <div class="large-2 columns">
-    <br/>
-    <a href="{{ course.gehol_url }}" class="button expand radius" target="_blank">Horaire sur GeHol</a>
+    <div >
+        <a href="{{ course.gehol_url }}" target="_blank" class="button radius tiny secondary">
+            <i class="fi-calendar"></i>
+            Horaire sur GeHol
+        </a>
+        {% if request.user|is_following:course %}
+          <a href="{% url 'leave_course' course.slug %}" class="button radius info tiny">
+            <i class="fi-x"></i> Se désabonner
+          </a>
+        {% else %}
+          <a href="{% url 'join_course' course.slug %}" class="button radius info tiny">
+            <i class="fi-check"></i> S’abonner au cours
+          </a>
+        {% endif %}
+        <a href="{% url 'document_put' course.slug %}" class="button radius tiny success">
+            <i class="fi-plus"></i>
+            Uploader un fichier
+        </a>
+    </div>
+
+
+
   </div>
 </div>
 <div class="row">
-  {% with documents=documents.all threads=threads.all %}
     <div class="large-12 medium-12 columns">
-      <ul class="tabs" data-tab>
-        <li class="tab-title active"><a href="#documents">Documents ({{documents.count}})</a></li>
-        <li class="tab-title"><a href="#threads">Discussions ({{threads.count}})</a></li>
-      </ul>
       <div class="tabs-content">
         <div class="content active" id="documents" data-id="{{ course.slug }}">
-            Loading...
+            Chargement en cours...
         </div>
-        <div class="content" id="threads">
-          {% for thread in threads %}
-            <div class="row course-row thread">
-              <a href="{% url 'thread_show' thread.id %}">
-                <i class="fi-comment round-icon big"></i>
-              </a>
-              <div class="course-row-content">
-                <h5>
-                  <a href="{% url 'thread_show' thread.id %}">{{ thread.name }} </a>
-                  <small>par {{ thread.user.name }}</small>
-                </h5>
-                <div class="course-content-last-line">
-                  <i class="fi-align-justify"></i>
-                  {{ thread.message__count }} message{{ thread.message__count|pluralize }}
-                  <i class="fi-clock"></i> Posté le {{ thread.created|date:"d F Y" }}
-                </div>
-              </div>
-            </div>
-          {% empty %}
-            <h3>Il n’y a encore rien dans ce cours…</h3>
-            <p>Personne n’est encore passé ici on dirait.<br>
-              Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
-          {% endfor %}
-        </div>
-      </div>
     </div>
-  {% endwith %}
 </div>
 {% endblock %}
 
-{% block right-col %}
-<div class="row">
-  <div class="large-12 columns">
-    <br>
-    <a class="button expand radius {% if READ_ONLY %}disabled{% endif %}" href="{% url 'document_put' course.slug %}">Uploader un fichier</a>
-    <a class="button expand radius" href="{% url 'thread_put' course.slug %}">Poser une question</a>
-    {% if request.user|is_following:course %}
-      <a class="button expand alert radius" href="{% url 'leave_course' course.slug %}">
-        <i class="fi-x"></i> Se désabonner
-      </a>
-    {% else %}
-      <a class="button expand success radius" href="{% url 'join_course' course.slug %}">
-        <i class="fi-check"></i> S’abonner
-      </a>
-    {% endif %}
-    {% if followers_count > 1 %}
-      <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
-    {% endif %}
-  </div>
-</div>
-
-
-
-{% endblock %}
 
 {% block script %}
 <script type="text/javascript">

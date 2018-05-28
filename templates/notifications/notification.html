@@ -25,9 +25,9 @@
         <a href="{% url "read_and_redirect" notification.id %}">
           {% if not notification.action.public %}
             {% if notification.action.verb == "upload success" %}
-              Votre upload a réussi :
+              Ton upload a réussi :
             {% elif notification.action.verb == "a uploadé un doublon de" %}
-              Vous avez uploadé un doublon de
+              Tu as uploadé un doublon de
             {% elif notification.action.verb == "upload failed" %}
               Il y a eu une erreur durant la conversion de
             {% endif %}
