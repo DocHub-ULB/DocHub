@@ -1,7 +1,6 @@
 import re
 
-# from django.db.models import Q
-from django.db.models import Count
+from django.db.models import Count, F
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 
 from catalog.models import Course
@@ -29,6 +28,8 @@ def search_course(string):
 
     return Course.objects.annotate(
         rank=SearchRank(vector, query),
-        similarity=TrigramSimilarity('name', string),
+        name_similarity=TrigramSimilarity('name', string),
+        slug_similarity=TrigramSimilarity('slug', string),
         document__count=Count('document'),
+        similarity=F('name_similarity') + F('slug_similarity')
     ).filter(similarity__gt=similarity).order_by('-rank', '-similarity', '-document__count')
