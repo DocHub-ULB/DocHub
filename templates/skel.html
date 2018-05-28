@@ -85,19 +85,12 @@
       <br><br>
     </footer>
 
-    {% render_bundle 'tree' %}
 
     {% block script %}{% endblock %}
 
     <script type="text/javascript">
       $(document).ready(function(){
         $(document).foundation();
-
-        // Rendering react.
-        $.get(Urls.course_tree(), function (data) {
-            courseTreeRender(data);
-            $(document).foundation('topbar', 'reflow');
-        });
       });
 
     </script>
