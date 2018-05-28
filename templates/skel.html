@@ -146,8 +146,16 @@
         $(document).foundation();
 
         // Rendering react.
-        $.get(Urls.course_tree(), function (data) {
-            courseTreeRender(data);
+        $.get(Urls.course_tree(), function (whole_tree) {
+            $.get(Urls.users_me_list(), function (data_me){
+                var my_courses = [{
+                    'children': [],
+                    'courses': data_me['followed_courses'],
+                    'id': 'u' + data_me['id'],
+                    'name': "Mes cours"
+                }];
+                courseTreeRender(my_courses.concat(whole_tree));
+            });
             $(document).foundation('topbar', 'reflow');
         });
       });

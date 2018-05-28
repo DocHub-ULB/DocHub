@@ -16,7 +16,7 @@ class TokenSerializer(serializers.ModelSerializer):
 class FollowedCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('slug', 'name')
+        fields = ('id', 'slug', 'name')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
