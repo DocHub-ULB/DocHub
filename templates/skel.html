@@ -89,18 +89,6 @@
 
     {% block script %}{% endblock %}
 
-    <script type="text/javascript">
-      $(document).ready(function(){
-        $(document).foundation();
-
-        // Rendering react.
-        $.get(Urls.course_tree(), function (data) {
-            courseTreeRender(data);
-            $(document).foundation('topbar', 'reflow');
-        });
-      });
-
-    </script>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       messageStyle: "none",
