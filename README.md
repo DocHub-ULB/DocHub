@@ -1,6 +1,7 @@
 # Beta402 - DocHub
 
-<!-- # No travis build, therefore hide status [![Build Status](https://travis-ci.org/UrLab/beta402.svg?branch=master)](https://travis-ci.org/UrLab/beta402) -->
+<!-- # No travis build, therefore hide status ![Build Status](https://travis-ci.org/UrLab/beta402.svg?branch=master)](https://travis-ci.org/UrLab/beta402) -->
+[![Build Status](https://travis-ci.org/UrLab/DocHub.svg?branch=master)](https://travis-ci.org/UrLab/DocHub)
 [![Coverage Status](https://coveralls.io/repos/UrLab/beta402/badge.svg?branch=master&service=github)](https://coveralls.io/github/UrLab/beta402?branch=master) [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/UrLab/beta402/blob/master/LICENSE)
 
 
