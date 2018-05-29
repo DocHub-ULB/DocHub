@@ -1,6 +1,7 @@
 # Beta402 - DocHub
 
-[![Build Status](https://travis-ci.org/UrLab/beta402.svg?branch=master)](https://travis-ci.org/UrLab/beta402) [![Coverage Status](https://coveralls.io/repos/UrLab/beta402/badge.svg?branch=master&service=github)](https://coveralls.io/github/UrLab/beta402?branch=master) [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/UrLab/beta402/blob/master/LICENSE)
+<!-- # No travis build, therefore hide status [![Build Status](https://travis-ci.org/UrLab/beta402.svg?branch=master)](https://travis-ci.org/UrLab/beta402) -->
+[![Coverage Status](https://coveralls.io/repos/UrLab/beta402/badge.svg?branch=master&service=github)](https://coveralls.io/github/UrLab/beta402?branch=master) [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/UrLab/beta402/blob/master/LICENSE)
 
 
 Beta402 or DocHub is a website, written in django. It's main goal is to provide a space for students (for now form the [ULB](https://ulb.ac.be) univeristy) to collaborate, help each other and distribute old exams and exercices.
