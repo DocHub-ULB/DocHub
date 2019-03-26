@@ -21,7 +21,7 @@ class FileForm(forms.Form):
         'placeholder': 'Titre (optionnel)'
     }))
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={
-        'placeholder': 'Description (optionnel)'
+        'placeholder': 'Description (optionnel)', 'style':'resize:none;'
     }))
 
     tags = forms.ModelMultipleChoiceField(
