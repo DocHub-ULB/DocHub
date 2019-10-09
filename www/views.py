@@ -31,9 +31,9 @@ def index(request):
     else:
         def floor(num, r=1):
             r = 10 ** r
-            return int((num // r) * r) if r!=0 else 0
+            return int((num // r) * r) if r != 0 else 0
 
-        if Document.objects.count()!=0:
+        if Document.objects.count():
             page_count = Document.objects.all().aggregate(Sum('pages'))['pages__sum']
         else:
             page_count = 0
