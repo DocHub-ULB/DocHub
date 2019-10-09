@@ -31,10 +31,13 @@ def index(request):
     else:
         def floor(num, r=1):
             r = 10 ** r
-            return int((num // r) * r)
+            return int((num // r) * r) if r!=0 else 0
 
-        page_count = Document.objects.all().aggregate(Sum('pages'))['pages__sum']
-
+        if Document.objects.count()!=0:
+            page_count = Document.objects.all().aggregate(Sum('pages'))['pages__sum']
+        else:
+            page_count = 0
+            
         context = {
             "login_url": NetidBackend.login_url(""),
             "debug": settings.DEBUG,
