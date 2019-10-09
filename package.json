@@ -45,7 +45,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-stage-0": "^6.24.1",
     "concurrently": "^3.5.1",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "js-cookie": "^2.2.0",
     "markdown": "^0.5.0",
     "moment": "^2.22.1",
