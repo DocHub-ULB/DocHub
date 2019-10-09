@@ -28,7 +28,7 @@ script:
 addons:
   apt:
     packages:
-    - libsass0
+    - libsass-dev
     - graphicsmagick
     - mupdf-tools
     - ghostscript
