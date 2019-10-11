@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.db.models import F
 
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework import permissions
 from www.rest import VaryModelViewSet
@@ -35,7 +35,7 @@ class DocumentViewSet(VaryModelViewSet):
     create_serializer_class = UploadDocumentSerializer
     update_serializer_class = EditDocumentSerializer
 
-    @detail_route()
+    @action(detail=True)
     def original(self, request, pk):
         document = self.get_object()
         body = document.original.read()
@@ -49,7 +49,7 @@ class DocumentViewSet(VaryModelViewSet):
         document.save(update_fields=['downloads'])
         return response
 
-    @detail_route()
+    @action(detail=True)
     def pdf(self, request, pk):
         document = self.get_object()
         body = document.pdf.read()
@@ -61,7 +61,7 @@ class DocumentViewSet(VaryModelViewSet):
         document.save(update_fields=['views'])
         return response
 
-    @detail_route(methods=['post'])
+    @action(detail=True, methods=['post'])
     def vote(self, request, pk):
         document = self.get_object()
 
