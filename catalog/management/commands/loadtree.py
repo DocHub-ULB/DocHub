@@ -7,11 +7,13 @@ from os import path
 import yaml
 from raven.contrib.django.raven_compat.models import client
 from django.db import transaction
+import requests
+from bs4 import BeautifulSoup
+from .slug import Slug
 
 
 from django.conf import settings
 from catalog.models import Category, Course
-from libulb.catalog.course import Course as ULBCourse
 
 
 class Command(BaseCommand):
@@ -74,8 +76,10 @@ class Command(BaseCommand):
                     name = self.LOCAL_CACHE.get(tree, "Unknown course in cache")
                 else:
                     try:
-                        ulb_course = ULBCourse.get_from_slug(tree, self.YEAR)
-                        name = ulb_course.name
+                        slug = Slug.from_dochub(tree)
+                        r = requests.get("https://www.ulb.be/fr/programme/{}".format(slug.catalog))
+                        soup = BeautifulSoup(r.text)
+                        name = soup.find("h1").text.strip()
                     except Exception:
                         print("Slug %s failed" % tree)
                         client.captureException()
