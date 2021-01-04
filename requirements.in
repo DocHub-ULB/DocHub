@@ -1,0 +1,47 @@
+Django>=2.0,<2.1
+django-multiupload
+markdown
+celery>=4.0, <5.0
+Pillow
+pygments
+pyPdf2
+requests
+xmltodict
+djangorestframework==3.8.2
+drf-extensions
+furl
+django-mptt
+# django-activity-stream>=0.6.6
+git+https://github.com/justquick/django-activity-stream.git
+git+https://github.com/C4ptainCrunch/libulb.git
+PyYaml
+jsonfield
+django-pipeline
+PyReact
+django-js-reverse
+django-webpack-loader
+
+# Dev
+django-extensions
+ipython
+honcho
+
+# Test
+mock
+pytest-django
+responses
+django-webtest
+pytest-cov
+coveralls
+
+
+# prod
+redis
+psycopg2-binary
+python-memcached
+django-debug-toolbar
+django-jsonfield
+django-jsonfield-compat
+gunicorn
+raven
+django-minio-storage
