@@ -45,3 +45,7 @@ django-jsonfield-compat
 gunicorn
 raven
 django-minio-storage
+
+
+# transitive deps
+traitlets<5 # py 3.6 compat
