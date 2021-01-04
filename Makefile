@@ -1,4 +1,4 @@
-ifeq ($(TRAVIS),true)
+ifeq ($(CI),true)
     PY=python
 else
 ifndef VIRTUAL_ENV
