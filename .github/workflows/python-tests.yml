@@ -29,6 +29,9 @@ jobs:
 
     - name: Django checks
       run: ./manage.py check
+    
+    - name: Check migrations
+      run: ./manage.py makemigrations --dry-run --check
 
     - name: Build js
       run: npm run build
