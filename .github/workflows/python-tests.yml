@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Install apt packages
+      run: apt install -y libsass-dev graphicsmagick mupdf-tools ghostscript unoconv python-dev
     - name: Set up Python 3.6
       uses: actions/setup-python@v2
       with:
@@ -21,15 +23,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
+
     - name: Django checks
       run: ./manage.py check
-    
+
     - name: Statics checks
       run: ./manage.py collectstatic --noinput -v 0
-    
+
     - name: pytest
       run: py.test -k "not unoconv" --cov=catalog --cov=documents --cov=notifications --cov=tags --cov=telepathy --cov=users --cov=www --cov-report=
-    
+
     - name: database checks
       run: make database
