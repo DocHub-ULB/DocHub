@@ -23,7 +23,7 @@ django-webpack-loader
 
 # Dev
 django-extensions
-ipython
+ipython<7.16 # https://ipython.readthedocs.io/en/stable/whatsnew/version7.html#nep29-last-version-to-support-python-3-6
 honcho
 
 # Test
@@ -45,3 +45,7 @@ django-jsonfield-compat
 gunicorn
 raven
 django-minio-storage
+
+
+# transitive deps
+traitlets<5 # py 3.6 compat
