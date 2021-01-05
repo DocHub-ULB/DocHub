@@ -52,22 +52,63 @@
 <div class="row">
     <div class="large-12 medium-12 columns">
       <div class="tabs-content">
-        <div class="content active" id="documents" data-id="{{ course.slug }}">
-            Chargement en cours...
+        <div class="content active" id="documents" data-controller="filter">
+          <div>
+             <div class="row course-top">
+                <div class="column small-7">
+                   <h4>Filtrer <small>par tag</small></h4>
+                   <span class="tag-bar"><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(168, 177, 9); background-color: rgb(168, 177, 9); color: white;"><i class="fi-stop"> </i>tp (3)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(181, 18, 163); background-color: rgb(181, 18, 163); color: white;"><i class="fi-stop"> </i>corrigé (2)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(28, 157, 185); background-color: rgb(28, 157, 185); color: white;"><i class="fi-stop"> </i>examen (18)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(151, 188, 37); background-color: rgb(151, 188, 37); color: white;"><i class="fi-stop"> </i>résumé (1)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(191, 46, 145); background-color: rgb(191, 46, 145); color: white;"><i class="fi-stop"> </i>officiel (7)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(55, 138, 194); background-color: rgb(55, 138, 194); color: white;"><i class="fi-stop"> </i>slides (5)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(131, 196, 64); background-color: rgb(131, 196, 64); color: white;"><i class="fi-stop"> </i>syllabus (2)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(82, 116, 199); background-color: rgb(82, 116, 199); color: white;"><i class="fi-stop"> </i>référence (2)</span>&nbsp;</span></span>
+                </div>
+                <div class="column small-5">
+                   <h4>Chercher <small>dans le titre</small></h4>
+                   <input data-target="filter.source"
+                      data-action="input->filter#filter"
+                      type="text"
+                      class="filter"
+                      placeholder="Filter Todos" />
+                </div>
+             </div>
+             <br>
+             {% for document in documents %}
+             <div class="row course-document"  data-target="filter.filterable" data-filter-key='{{document.name}}'>
+                <div class="large-12 columns">
+                   <div class="panel">
+                      <div class="right">
+                        <a href="/api/documents/62876/pdf/" title="Télécharger" class="radius label tiny secondary"><i class="fi-download dark-grey"></i> Télécharger</a>
+                        <a href="/documents/62876/edit" title="Éditer" class="radius label tiny secondary"><i class="fi-pencil dark-grey"></i> Editer</a>
+                        <a href="/documents/62876/reupload" class="radius label tiny secondary"><i class="fi-page-add dark-grey" title="Ré-uploader"></i> Ré-uploader</a></div>
+                      <h5><a href="/documents/62876">{{document.name}}</a><small> par {{ document.user.name }}</small><br></h5>
+                      {% if document.description %}
+                        <p class="document-description">{{ document.description|truncatechars:200 }}</p>
+                      {% endif %}
+                      <div class="right">
+                        <i class="fi-star vote-color"></i> Votez : &nbsp;
+                        <a title="Ce document est très utile et mérite plus d'attention" class="label radius secondary"><i class="fi-like round-icon medium upvote "></i>&nbsp;0</a>
+                        <a title="Ce document est décevant et/ou inintéressant pour le cours" class="label radius secondary"><i class="fi-dislike round-icon medium downvote "></i>&nbsp;0</a>
+                      </div>
+                      <div class="course-content-last-line">
+                        <i class="fi-page-filled"></i>  {{ document.pages }} page{{ document.pages|pluralize }}
+                        <i class="fi-clock"></i> Uploadé le {{ document.date|date:"d F Y" }}
+                        {% if document.tags.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
+                        {% for kw in document.tags.all%}
+                          <a data-id="{{kw.id}}" href="#"
+                             style="background-color: {{kw.color}}; border: solid 2px {{kw.color}};"
+                             class="radius label tag-item">
+                            {{kw}}
+                          </a>
+                        {% endfor %}
+                      </div>
+                   </div>
+                </div>
+             </div>
+             {% empty %}
+               <h3>Il n’y a encore rien dans ce cours…</h3>
+               <p>Personne n’est encore passé ici on dirait.<br>
+                 Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
+             {% endfor %}
+
+          </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-
-{% block script %}
-<script type="text/javascript">
-  $(document).ready(function () {
-    var dest = 'documents';
-    var doc_id = $('#' + dest).attr('data-id');
-    $.get(Urls['course-detail'](doc_id), function (data) {
-      loadCourseViewer(dest, data);
-    });
-  })
-</script>
 {% endblock %}
