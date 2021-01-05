@@ -40,10 +40,14 @@ class CourseDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         course = context['course']
 
-        context['documents'] = course.document_set\
+        documents = course.document_set\
             .exclude(state="ERROR", hidden=True)\
             .select_related('user')\
             .prefetch_related('tags')
+
+
+        context['tags'] = {tag for doc in documents for tag in doc.tags.all()}
+        context['documents'] = documents
         context['threads'] = course.thread_set.annotate(Count('message')).order_by('-id')
         context['followers_count'] = course.followers_count
 

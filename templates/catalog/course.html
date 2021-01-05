@@ -1,5 +1,4 @@
 {% extends "skel.html" %}
-{% load render_bundle from webpack_loader %}
 
 {% load humanize %}
 {% load custommardown %}
@@ -9,7 +8,6 @@
 {% block title %}{{ course.slug|upper }}{% endblock %}
 
 {% block header %}
-{% render_bundle 'courses' %}
 {% endblock %}
 
 {% block content %}
@@ -57,22 +55,20 @@
              <div class="row course-top">
                 <div class="column small-7">
                    <h4>Filtrer <small>par tag</small></h4>
-                    <span class="radius label tag-item selectionable" style="border: 2px solid rgb(168, 177, 9); background-color: rgb(168, 177, 9); color: white;">
-                      <input
-                        type="checkbox"
-                        data-tag-name="tp"
-                        data-action="input->course-filter#filter"
-                        data-course-filter-target="tag"
-                      > tp
-                    </span>
-                    <span class="radius label tag-item selectionable" style="border: 2px solid rgb(181, 18, 163); background-color: rgb(181, 18, 163); color: white;">
-                      <input
-                        type="checkbox"
-                        data-tag-name="examen"
-                        data-action="input->course-filter#filter"
-                        data-course-filter-target="tag"
-                      > examen
-                    </span>
+                    {% for tag in tags %}
+                      <label for="{{tag.name}}"
+                        class="radius label tag-item selectionable"
+                        style="border: 2px solid {{tag.color}}; background-color: {{tag.color}}; color: white;"
+                      >
+                        <input
+                          type="checkbox"
+                          id="{{tag.name}}"
+                          data-tag-name="{{tag.name}}"
+                          data-action="input->course-filter#filter"
+                          data-course-filter-target="tag"
+                        > {{tag.name}}
+                      </label>
+                    {% endfor %}
                 </div>
                 <div class="column small-5">
                    <h4>Chercher <small>dans le titre</small></h4>
