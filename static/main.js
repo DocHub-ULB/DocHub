@@ -4,7 +4,7 @@ import {Controller, Application} from 'https://cdn.skypack.dev/stimulus';
 const application = Application.start()
 
 
-class Filter extends Controller {
+class CourseFilter extends Controller {
     static targets = [ "source", "filterable" ]
 
     filter(event) {
@@ -17,4 +17,4 @@ class Filter extends Controller {
   }
 }
 
-application.register("filter", Filter);
+application.register("course-filter", CourseFilter);

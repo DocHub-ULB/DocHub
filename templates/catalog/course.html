@@ -52,7 +52,7 @@
 <div class="row">
     <div class="large-12 medium-12 columns">
       <div class="tabs-content">
-        <div class="content active" id="documents" data-controller="filter">
+        <div class="content active" id="documents" data-controller="course-filter">
           <div>
              <div class="row course-top">
                 <div class="column small-7">
@@ -61,16 +61,15 @@
                 </div>
                 <div class="column small-5">
                    <h4>Chercher <small>dans le titre</small></h4>
-                   <input data-target="filter.source"
-                      data-action="input->filter#filter"
+                   <input data-course-filter-target="source"
+                      data-action="input->course-filter#filter"
                       type="text"
-                      class="filter"
-                      placeholder="Filter Todos" />
+                    />
                 </div>
              </div>
              <br>
              {% for document in documents %}
-             <div class="row course-document"  data-target="filter.filterable" data-filter-key='{{document.name}}'>
+             <div class="row course-document"  data-course-filter-target="filterable" data-filter-key='{{document.name}}'>
                 <div class="large-12 columns">
                    <div class="panel">
                       <div class="right">
