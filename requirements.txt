@@ -7,8 +7,6 @@ celery==4.4.7
 certifi==2020.12.5
 chardet==4.0.0
 configparser==5.0.1
-coverage==5.3.1
-coveralls==2.2.0
 decorator==4.4.2
 Django==2.0.13
 django-activity-stream @ git+https://github.com/justquick/django-activity-stream.git@35f9a0ebb3cf5c34de84ad90fafa7b913b01b2cd

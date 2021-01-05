@@ -1,2 +1,0 @@
-[run]
-omit = */tests/*,*/migrations/*,www/wsgi.py,www/config/production.py
