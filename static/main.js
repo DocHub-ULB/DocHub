@@ -1,3 +1,5 @@
+import _ from 'https://cdn.skypack.dev/lodash';
+
 import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
 import {Controller, Application} from 'https://cdn.skypack.dev/stimulus';
 
@@ -5,14 +7,20 @@ const application = Application.start()
 
 
 class CourseFilter extends Controller {
-    static targets = [ "source", "filterable" ]
+    static targets = [ "query", "tag", "filterable" ]
 
     filter(event) {
-      let lowerCaseFilterTerm = this.sourceTarget.value.toLowerCase()
+      let lowerCaseFilterTerm = this.queryTarget.value.toLowerCase()
+      let selectedTags = this.tagTargets
+        .filter((el) => el.checked)
+        .map((el) => el.getAttribute("data-tag-name"));
 
       this.filterableTargets.forEach((el, i) => {
-        let filterableKey =  el.getAttribute("data-filter-key")
-        el.classList.toggle("filter--filtered", !filterableKey.toLowerCase().includes( lowerCaseFilterTerm ) )
+        let key =  el.getAttribute("data-filter-key");
+        let tags = el.getAttribute("data-tags").split(" ");
+        let containsText = key.toLowerCase().includes( lowerCaseFilterTerm );
+        let containsTags = _.difference(selectedTags, tags).length === 0;
+        el.classList.toggle("filter--filtered", !containsText || !containsTags)
     })
   }
 }

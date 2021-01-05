@@ -57,11 +57,26 @@
              <div class="row course-top">
                 <div class="column small-7">
                    <h4>Filtrer <small>par tag</small></h4>
-                   <span class="tag-bar"><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(168, 177, 9); background-color: rgb(168, 177, 9); color: white;"><i class="fi-stop"> </i>tp (3)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(181, 18, 163); background-color: rgb(181, 18, 163); color: white;"><i class="fi-stop"> </i>corrigé (2)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(28, 157, 185); background-color: rgb(28, 157, 185); color: white;"><i class="fi-stop"> </i>examen (18)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(151, 188, 37); background-color: rgb(151, 188, 37); color: white;"><i class="fi-stop"> </i>résumé (1)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(191, 46, 145); background-color: rgb(191, 46, 145); color: white;"><i class="fi-stop"> </i>officiel (7)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(55, 138, 194); background-color: rgb(55, 138, 194); color: white;"><i class="fi-stop"> </i>slides (5)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(131, 196, 64); background-color: rgb(131, 196, 64); color: white;"><i class="fi-stop"> </i>syllabus (2)</span>&nbsp;</span><span><span class="radius label tag-item selectionable" style="border: 2px solid rgb(82, 116, 199); background-color: rgb(82, 116, 199); color: white;"><i class="fi-stop"> </i>référence (2)</span>&nbsp;</span></span>
+                    <span class="radius label tag-item selectionable" style="border: 2px solid rgb(168, 177, 9); background-color: rgb(168, 177, 9); color: white;">
+                      <input
+                        type="checkbox"
+                        data-tag-name="tp"
+                        data-action="input->course-filter#filter"
+                        data-course-filter-target="tag"
+                      > tp
+                    </span>
+                    <span class="radius label tag-item selectionable" style="border: 2px solid rgb(181, 18, 163); background-color: rgb(181, 18, 163); color: white;">
+                      <input
+                        type="checkbox"
+                        data-tag-name="examen"
+                        data-action="input->course-filter#filter"
+                        data-course-filter-target="tag"
+                      > examen
+                    </span>
                 </div>
                 <div class="column small-5">
                    <h4>Chercher <small>dans le titre</small></h4>
-                   <input data-course-filter-target="source"
+                   <input data-course-filter-target="query"
                       data-action="input->course-filter#filter"
                       type="text"
                     />
@@ -69,7 +84,12 @@
              </div>
              <br>
              {% for document in documents %}
-             <div class="row course-document"  data-course-filter-target="filterable" data-filter-key='{{document.name}}'>
+             <div
+              class="row course-document"
+              data-course-filter-target="filterable"
+              data-filter-key='{{document.name}}'
+              data-tags="{{document.tags.all|join:' '}}"
+             >
                 <div class="large-12 columns">
                    <div class="panel">
                       <div class="right">
