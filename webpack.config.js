@@ -11,9 +11,6 @@ module.exports = {
         tree: [
             './assets/tree/index.js',
         ],
-        courses: [
-            './assets/courses/index.js',
-        ],
         viewer: [
             './assets/viewer/index.js',
         ],
