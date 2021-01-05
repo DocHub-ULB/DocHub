@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 import uuid
+import magic
+import mimetypes
 
 from tags.models import Tag
 
@@ -22,7 +24,10 @@ def cast_tag(tag):
 
 def add_file_to_course(file, name, extension, course, tags, user, import_source=None):
     if not extension.startswith("."):
-        raise ValueError("extension must start with a '.'")
+        with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
+            mime = m.id_buffer(file.read(4096))
+            extension = mimetypes.guess_extension(mime, strict=True)
+            file.seek(0)
     if import_source is not None:
         document, created = Document.objects.get_or_create(
             user=user,
