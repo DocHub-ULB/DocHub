@@ -42,7 +42,7 @@ class Command(BaseCommand):
             f = path.join(settings.BASE_DIR, 'catalog/management/localcache.json')
             self.LOCAL_CACHE = json.loads(open(f).read())
 
-        tree = yaml.load(open(options['tree_file']))
+        tree = yaml.safe_load(open(options['tree_file']))
 
         with transaction.atomic():
             Category.objects.all().delete()
@@ -77,7 +77,7 @@ class Command(BaseCommand):
                     try:
                         slug = Slug.from_dochub(tree)
                         r = requests.get("https://www.ulb.be/fr/programme/{}".format(slug.catalog))
-                        soup = BeautifulSoup(r.text)
+                        soup = BeautifulSoup(r.text, "html5lib")
                         name = soup.find("h1").text.strip()
                     except Exception:
                         print("Slug %s failed" % tree)
