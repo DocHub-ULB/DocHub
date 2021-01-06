@@ -111,30 +111,3 @@ def unfollow_all_courses(request):
     for course in request.user.following_courses():
         actions.unfollow(request.user, course)
     return redirect("show_courses")
-
-
-@login_required
-def search_course(request):
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            results = search.logic.search_course(name)
-
-        else:
-            form = SearchForm()
-            results = []
-    else:
-        form = SearchForm()
-        results = []
-
-    if len(results) == 1:
-        # We have only one result, redirect immediately to the course
-        course = results[0]
-        return HttpResponseRedirect(reverse('course_show', args=[course.slug]))
-
-    return render(request, 'catalog/course_search.html', {
-        'form': form,
-        'results': results,
-    })

@@ -8,17 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
 
-    {% if RAVEN_DSN %}
-        <script src="https://cdn.ravenjs.com/3.24.0/raven.min.js" crossorigin="anonymous"></script>
-        <script>
-            Raven.config('{{RAVEN_DSN}}').install()
-            Raven.setUserContext({
-                email: '{{request.user.email}}',
-                id: {{request.user.id}},
-                netid: '{{request.user.netid}}',
-            })
-        </script>
-    {% endif %}
     {% render_bundle 'commons' %}
     {% render_bundle 'styles' %}
 
@@ -56,9 +45,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
 
-    {% render_bundle 'search' %}
-
-
     {% block header %}
     {% endblock %}
   </head>
@@ -77,7 +63,7 @@
         <img src="/static/images/urlab.png" style="height: 1em;">
         UrLab
       </a>
-      - Code on <a href="https://github.com/UrLab/beta402">GitHub</a>
+      - Code on <a href="https://github.com/UrLab/dochub">GitHub</a>
       - <a href="https://cerkinfo.be">
           <img style="height: 1.0em;" src="/static/images/ci.png">
         </a>
