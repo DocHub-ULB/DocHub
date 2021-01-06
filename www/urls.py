@@ -20,6 +20,8 @@ sitemaps = {
 urlpatterns = [
     path("", www.views.index, name="index"),
 
+    path("search/", include("search.urls")),
+
     path("catalog/", include("catalog.urls")),
     path("documents/", include("documents.urls")),
     path("telepathy/", include("telepathy.urls")),

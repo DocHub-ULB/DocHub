@@ -25,4 +25,18 @@ class CourseFilter extends Controller {
   }
 }
 
+class Search extends Controller {
+    static targets = ["input", "output", "submit"]
+
+    initialize() {
+      this.search = _.debounce(this.search, 200, {trailing: true})
+    }
+
+    search(event) {
+      this.outputTarget.value = this.inputTarget.value
+      this.submitTarget.click();
+    }
+}
+
 application.register("course-filter", CourseFilter);
+application.register("search", Search);

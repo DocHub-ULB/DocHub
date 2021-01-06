@@ -23,8 +23,7 @@
                 {% endwith %}
               </li>
               <li class="has-form">
-                  <div id="react-search" data-turbo-permanent></div>
-                  <br>
+                  {% include "search/frames/search-box.html" with initial=True %}
               </li>
             </ul>
             <ul class="right">
