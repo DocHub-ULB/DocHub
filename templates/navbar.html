@@ -43,11 +43,11 @@
                       </li>
                       {% if request.user.is_staff %}
                         <li>
-                          <a href="/admin"><i class="fi-widget"></i>&nbsp; Admin</a>
+                          <a href="/admin" data-turbo="false"><i class="fi-widget"></i>&nbsp; Admin</a>
                         </li>
                       {% endif %}
                       <li>
-                        <a href="{% url 'logout' %}"><i class="fi-power"></i>&nbsp; Déconnexion</a>
+                        <a href="{% url 'logout' %}" data-turbo="false"><i class="fi-power"></i>&nbsp; Déconnexion</a>
                       </li>
                   </ul>
               </li>
