@@ -55,7 +55,11 @@ class DocumentViewSet(VaryModelViewSet):
         body = document.pdf.read()
 
         response = HttpResponse(body, content_type='application/pdf')
-        response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % document.safe_name).encode("ascii", "ignore")
+        content_disposition = 'filename="%s.pdf"' % document.safe_name
+        if "embed" not in self.request.query_params:
+            content_disposition = 'attachment; ' + content_disposition
+            
+        response['Content-Disposition'] = content_disposition.encode("ascii", "ignore")
 
         document.downloads = F('views') + 1
         document.save(update_fields=['views'])

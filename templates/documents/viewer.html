@@ -10,16 +10,6 @@
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
 
-<span id="document_data"
-        data-url="{% url 'document-pdf' document.pk %}"
-        data-name="{{document.name}}"
-        data-id="{{document.id}}"
-        data-coursename="{{document.course.slug}}"
-        data-original="{% url 'document-original' document.pk %}"
-        data-pdf="{% url 'document-pdf' document.pk %}"
-        data-hasperm="{% if request.user|has_perm_on:document %}1{% else %}0{% endif %}"
-        data-ispdf="{{document.is_pdf}}"
-></span>
-<div id="root"></div>
+<embed src="/api/documents/63485/pdf/?embed" type="application/pdf" width="100%" height="100%">
 
 {% endblock %}

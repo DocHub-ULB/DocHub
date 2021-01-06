@@ -8,18 +8,8 @@ module.exports = {
     devtool: "source-map",
 
     entry: {
-        tree: [
-            './assets/tree/index.js',
-        ],
-        viewer: [
-            './assets/viewer/index.js',
-        ],
         styles: [
             './assets/styles/index.js',
-        ],
-        search: [
-            'babel-polyfill',
-            './assets/search/index.js',
         ],
     },
 
