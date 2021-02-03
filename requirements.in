@@ -11,18 +11,19 @@ djangorestframework==3.8.2
 drf-extensions
 furl
 django-mptt
-# django-activity-stream>=0.6.6
-git+https://github.com/justquick/django-activity-stream.git
+django-activity-stream<0.8,>=0.7 # Need at least 0.7 but 0.8 is not compatible with our current django version
 PyYaml
 jsonfield
 django-pipeline
 PyReact
 django-js-reverse
 django-webpack-loader
+beautifulsoup4
+html5lib
 
 # Dev
 django-extensions
-ipython<7.16 # https://ipython.readthedocs.io/en/stable/whatsnew/version7.html#nep29-last-version-to-support-python-3-6
+ipython
 honcho
 
 # Test
@@ -30,20 +31,15 @@ mock
 pytest-django
 responses
 django-webtest
-pytest-cov
 
 
 # prod
 redis
 psycopg2-binary
 python-memcached
-django-debug-toolbar
+django-debug-toolbar==2.2 # blocked by django
 django-jsonfield
 django-jsonfield-compat
 gunicorn
 raven
 django-minio-storage
-
-
-# transitive deps
-traitlets<5 # py 3.6 compat
