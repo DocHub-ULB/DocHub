@@ -20,6 +20,7 @@ django-pipeline
 PyReact
 django-js-reverse
 django-webpack-loader
+filemagic
 
 # Dev
 django-extensions
