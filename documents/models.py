@@ -165,7 +165,7 @@ class Vote(models.Model):
 class DocumentError(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     task_id = models.CharField(max_length=255)
-    exception = models.CharField(max_length=1000)
+    exception = models.CharField(max_length=50000)
     traceback = models.TextField()
 
     def __str__(self):
