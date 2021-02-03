@@ -11,7 +11,7 @@ djangorestframework==3.8.2
 drf-extensions
 furl
 django-mptt
-django-activity-stream>=0.9
+django-activity-stream<0.8,>=0.7 # Need at least 0.7 but 0.8 is not compatible with our current django version 
 PyYaml
 jsonfield
 django-pipeline
