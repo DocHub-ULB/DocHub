@@ -18,7 +18,7 @@ REAL_TREE = os.path.join(fixtures, 'real_tree.yaml')
 
 
 def test_load_tree():
-    call_command('loadtree', tree_file=SIMPLE_TREE)
+    call_command('loadtree', SIMPLE_TREE)
 
     ulb = Category.objects.get(level=0)
     assert ulb.name == "ULB"
@@ -32,7 +32,7 @@ def test_load_tree():
 
 
 def test_load_multiple_tree():
-    call_command('loadtree', tree_file=MULTIPLE_TREE)
+    call_command('loadtree', MULTIPLE_TREE)
 
     info = Category.objects.get(name="Informatique")
     assert info.level == 1
@@ -52,7 +52,7 @@ def test_empty_tree():
 
     course.categories.add(category)
 
-    call_command('loadtree', tree_file=SIMPLE_TREE)
+    call_command('loadtree', SIMPLE_TREE)
 
     assert Category.objects.filter(slug="prout").count() == 0
 
@@ -61,24 +61,23 @@ def test_empty_tree():
 
 
 def test_fill_twice():
-    call_command('loadtree', tree_file=SIMPLE_TREE)
+    call_command('loadtree', SIMPLE_TREE)
 
     course = Course.objects.last()
     course.name = "Autre chose"
     course.save()
 
-    call_command('loadtree', tree_file=SIMPLE_TREE)
+    call_command('loadtree', SIMPLE_TREE)
 
     new_course = Course.objects.get(slug=course.slug)
     assert new_course.id == course.id
     assert course.name == new_course.name
 
 
-# TODO Fix the test when the Tree is fixed    
-# @pytest.mark.slow
-# @pytest.mark.network
-# def test_load_tree_hit_ulb():
-#     call_command('loadtree', hitulb=True, tree_file=REAL_TREE)
-#
-#     info = Course.objects.get(slug="info-f-101")
-#     assert info.name == "Programmation"
+@pytest.mark.slow
+@pytest.mark.network
+def test_load_tree_hit_ulb():
+    call_command('loadtree', REAL_TREE, hitulb=True)
+
+    info = Course.objects.get(slug="info-f-101")
+    assert info.name == "Programmation"

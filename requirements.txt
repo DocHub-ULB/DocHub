@@ -36,7 +36,6 @@ ipython-genutils==0.2.0
 jedi==0.18.0
 jsonfield==2.1.1
 kombu==4.6.11
-libulb @ git+https://github.com/C4ptainCrunch/libulb.git@919c89b10a1a0b450de900a4441add1129e03f9d
 Markdown==3.3.3
 minio==6.0.2
 mock==4.0.3

@@ -7,11 +7,13 @@ from os import path
 import yaml
 from raven.contrib.django.raven_compat.models import client
 from django.db import transaction
+import requests
+from bs4 import BeautifulSoup
+from catalog.slug import Slug
 
 
 from django.conf import settings
 from catalog.models import Category, Course
-from libulb.catalog.course import Course as ULBCourse
 
 
 class Command(BaseCommand):
@@ -26,13 +28,12 @@ class Command(BaseCommand):
             help='Hit ULB servers to get courses names from slugs'
         )
         parser.add_argument(
-            '--tree',
             dest='tree_file',
-            help='Path to the .yaml tree file'
+            help='Path to the .yaml tree file',
+            metavar="TREE_FILE"
         )
 
     LOCAL_CACHE = {}
-    YEAR = "201718"
 
     def handle(self, *args, **options):
         self.stdout.write('Loading tree ... ')
@@ -41,7 +42,7 @@ class Command(BaseCommand):
             f = path.join(settings.BASE_DIR, 'catalog/management/localcache.json')
             self.LOCAL_CACHE = json.loads(open(f).read())
 
-        tree = yaml.load(open(options['tree_file']))
+        tree = yaml.safe_load(open(options['tree_file']))
 
         with transaction.atomic():
             Category.objects.all().delete()
@@ -74,8 +75,10 @@ class Command(BaseCommand):
                     name = self.LOCAL_CACHE.get(tree, "Unknown course in cache")
                 else:
                     try:
-                        ulb_course = ULBCourse.get_from_slug(tree, self.YEAR)
-                        name = ulb_course.name
+                        slug = Slug.from_dochub(tree)
+                        r = requests.get("https://www.ulb.be/fr/programme/{}".format(slug.catalog))
+                        soup = BeautifulSoup(r.text, "html5lib")
+                        name = soup.find("h1").text.strip()
                     except Exception:
                         print("Slug %s failed" % tree)
                         client.captureException()
