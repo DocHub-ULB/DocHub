@@ -1,6 +1,12 @@
 import os
 from base64 import b64decode
 
+
+from PIL import Image, ImageOps
+from django.urls import reverse
+from django.shortcuts import render
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -18,33 +24,39 @@ from users.forms import SettingsForm
 
 @login_required
 def user_settings(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SettingsForm(request.POST, request.FILES)
 
         if form.is_valid():
-            im = Image.open(request.FILES['profile_pic'])
+            im = Image.open(request.FILES["profile_pic"])
             im = ImageOps.fit(im, (120, 120), Image.ANTIALIAS)
 
             if not os.path.exists(os.path.join(settings.MEDIA_ROOT, "profile")):
                 os.makedirs(os.path.join(settings.MEDIA_ROOT, "profile"))
 
-            im.save(os.path.join(settings.MEDIA_ROOT, f"profile/{request.user.netid}.png"))
+            im.save(
+                os.path.join(settings.MEDIA_ROOT, f"profile/{request.user.netid}.png")
+            )
             request.user.photo = "png"
             request.user.save()
 
-            messages.success(request, 'Ton profil a été mis à jour.')
+            messages.success(request, "Ton profil a été mis à jour.")
 
-            return render(request, "users/settings.html", {'form': SettingsForm()})
+            return redirect("/users/settings/")
     else:
         form = SettingsForm()
 
     token, created = Token.objects.get_or_create(user=request.user)
 
-    return render(request, 'users/settings.html', {
-        'form': form,
-        'stream': actor_stream(request.user)[:5],
-        'token': token,
-    })
+    return render(
+        request,
+        "users/settings.html",
+        {
+            "form": form,
+            "stream": actor_stream(request.user)[:5],
+            "token": token,
+        },
+    )
 
 
 @login_required
@@ -53,7 +65,7 @@ def reset_token(request):
     Token.objects.create(user=request.user)
     messages.success(request, "La clé d'API a été regénérée")
 
-    return HttpResponseRedirect(reverse('settings'))
+    return HttpResponseRedirect(reverse("settings"))
 
 
 @login_required
@@ -61,13 +73,13 @@ def panel_hide(request):
     request.user.welcome = False
     request.user.save()
 
-    return HttpResponseRedirect(reverse('index'))
+    return HttpResponseRedirect(reverse("index"))
 
 
 def auth(request):
     sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
-    next = request.GET.get('next', None)
-    next_64 = request.GET.get('next64', None)
+    next = request.GET.get("next", None)
+    next_64 = request.GET.get("next64", None)
 
     if next and next.startswith("/"):
         next_url = next
