@@ -23,7 +23,7 @@ django-pipeline==2.0.6
 django-webpack-loader==0.7.0
 django-webtest==1.9.7
 djangorestframework==3.8.2
-drf-extensions==0.6.0
+drf-extensions==0.4.0
 furl==2.1.0
 gunicorn==20.0.4
 honcho==1.0.1
@@ -33,7 +33,7 @@ iniconfig==1.1.1
 ipython==7.20.0
 ipython-genutils==0.2.0
 jedi==0.18.0
-jsonfield==3.1.0
+jsonfield==2.1.1
 kombu==4.6.11
 Markdown==3.3.3
 minio==6.0.2
