@@ -32,7 +32,6 @@ pytest-django
 responses
 django-webtest
 pytest-cov
-coveralls
 
 
 # prod
