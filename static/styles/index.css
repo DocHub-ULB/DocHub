@@ -1,0 +1,244 @@
+body {
+  font: normal 13px "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "Tahoma", "Verdana", sans-serif !important;
+  font-weight: 400;
+  background-color: white !important; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold; }
+
+h1 {
+  border-bottom: dotted 1px #aaaaaa; }
+
+h3 i, h2 i {
+  margin-right: 10px;
+  color: #008cba; }
+
+h3, h4, h5, h6 {
+  color: #333; }
+
+.green {
+  color: #368a55; }
+
+.dark-grey {
+  color: #666666; }
+  .dark-grey:hover {
+    color: #333; }
+
+.black {
+  color: #111; }
+  .black:hover {
+    color: #333; }
+
+.back-icon {
+  color: #AAA; }
+  .back-icon:hover {
+    color: #666; }
+
+.course-list {
+  padding-top: 10px;
+  clear: both;
+  margin-left: 0px;
+  list-style: none;
+  position: relative;
+  top: -3px;
+  margin-right: 5px; }
+
+.course-children {
+  color: #ccc; }
+
+.catalog-option {
+  padding-bottom: 10px !important; }
+
+.follow-all {
+  margin-bottom: 0px; }
+
+.tag-item {
+  transition: border-radius 0.5s; }
+  .tag-item.selectionable {
+    cursor: pointer; }
+    .tag-item.selectionable:hover {
+      border-radius: 10px; }
+  .tag-item.active {
+    font-weight: bold;
+    border-radius: 10px; }
+
+.course-document p {
+  font-size: 1.05em !important;
+  margin-bottom: 0.5rem;
+  font-style: italic; }
+
+.course-document span.radius.label.tag-item {
+  border: none !important;
+  opacity: 0.7; }
+
+.course-document .label.secondary:hover {
+  background-color: #cecece; }
+
+.course-document .label.info:hover {
+  background-color: #77c0de; }
+
+.course-document .panel {
+  background-color: #fbfbfb; }
+
+.course-document .vote-color {
+  color: #FFD700; }
+
+.select2-selection {
+  border-radius: 0 !important;
+  border: 1px solid #CCC !important;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1) inset; }
+
+.select2 {
+  margin-bottom: 1.2em; }
+
+.search-blob {
+  display: inline-block;
+  width: 8em; }
+
+.no-list {
+  margin-left: 0; }
+  .no-list li {
+    list-style-type: none; }
+
+.course-list .label {
+  width: 8em; }
+
+.fixed-label {
+  width: 8em; }
+
+.tag-bar {
+  line-height: 2.1em; }
+
+.course-top {
+  padding-bottom: .5em;
+  border-bottom: 1px dotted #aaaaaa; }
+
+.select2-selection.select2-selection--multiple {
+  height: 42px; }
+
+.filter--filtered {
+  display: none; }
+
+.viewer-loader {
+  margin: auto;
+  margin-top: 3em;
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite; }
+
+.viewer-error-message {
+  width: 40%;
+  margin: auto;
+  margin-top: 3em;
+  color: #000 !important; }
+
+.viewer-error-link {
+  color: #FFF;
+  font-weight: bold;
+  text-decoration: underline; }
+
+.viewer-error-icon {
+  text-decoration: underline; }
+
+.viewer-title {
+  background-color: #aaaaaa !important;
+  font-weight: bold !important;
+  padding-top: .2em !important; }
+
+.viewer-bar {
+  background-color: #aaaaaa !important; }
+  .viewer-bar section li a {
+    background-color: #aaaaaa !important;
+    color: #333 !important; }
+    .viewer-bar section li a:hover {
+      background-color: #333 !important;
+      color: #FFF !important; }
+
+.viewer {
+  text-align: center;
+  width: 100%; }
+
+.viewer-title {
+  background-color: #aaaaaa;
+  padding: 0px 15px;
+  line-height: 42px;
+  font-size: 0.8125rem;
+  font-weight: normal;
+  color: #333; }
+  .viewer-title.divider {
+    border-color: #999 !important; }
+
+.viewer-document {
+  align-content: right;
+  overflow: hidden;
+  margin: auto; }
+
+.viewer-show-more {
+  margin: auto;
+  width: 50vw; }
+
+.react-pdf__Page__canvas {
+  margin: auto;
+  border: 1px solid #CCC;
+  margin-top: 20px;
+  border-radius: 2px; }
+
+.menu-icon a {
+  padding-right: 1em !important; }
+
+.button.navbar-button {
+  background-color: #333 !important;
+  border-color: #404040 !important; }
+  .button.navbar-button:hover {
+    background-color: #222 !important; }
+
+.Select-input input {
+  background-color: white !important; }
+
+nav .Select {
+  padding-top: 0.35em;
+  width: 500px;
+  font-size: 0.9em; }
+
+nav .Select-control {
+  border-radius: 1px; }
+
+nav .Select-arrow {
+  display: none; }
+
+nav .Select-placeholder {
+  margin-left: 0.3em; }
+
+nav .is-open .Select-placeholder {
+  display: none; }
+
+nav .Select-menu-outer {
+  margin-top: 0px;
+  border-radius: 1px; }
+
+nav.top-bar h1 {
+  border-bottom: none; }
+
+.feed p {
+  font-size: 1em; }
+
+.feed-photo {
+  height: 2.5em;
+  width: 2.5em;
+  float: left;
+  margin-top: .3em;
+  margin-right: .5em;
+  border-radius: .25em;
+  border: none; }
+
+.feed-timesince {
+  color: #666666; }
+
+.feed-placeholder {
+  color: #666666;
+  opacity: 0.3; }
+
+/*# sourceMappingURL=index.css.map */

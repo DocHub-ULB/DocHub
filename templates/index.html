@@ -1,6 +1,6 @@
 {% load humanize %}
-{% load render_bundle from webpack_loader %}
 {% load login_url %}
+{% load sass_tags %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -17,8 +17,7 @@
     <meta property="og:description" content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. " />
     {% endblock opengraph %}
 
-    {% render_bundle 'commons' %}
-    {% render_bundle 'styles' %}
+     <link href="{% sass_src 'styles/index.sass' %}" rel="stylesheet" type="text/css" />
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 

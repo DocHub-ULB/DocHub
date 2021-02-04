@@ -1,5 +1,5 @@
 {%load humanize %}
-{% load render_bundle from webpack_loader %}
+{% load sass_tags %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -8,8 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}DocHub{% endblock %}</title>
 
-    {% render_bundle 'commons' %}
-    {% render_bundle 'styles' %}
+     <link href="{% sass_src 'styles/index.sass' %}" rel="stylesheet" type="text/css" />
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet' type='text/css'>

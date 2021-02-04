@@ -1,7 +1,5 @@
 {% extends "skel.html" %}
 
-{% load render_bundle from webpack_loader %}
-
 {% block content %}
 {% if request.user.welcome %}
   {% include "welcome.html" %}

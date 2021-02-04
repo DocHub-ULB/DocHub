@@ -1,11 +1,6 @@
 {% extends "skel.html" %}
 {% load cache %}
-{% load render_bundle from webpack_loader %}
 {% load has_perm_on %}
-
-{% block script %}
-{% render_bundle 'viewer' %}
-{% endblock %}
 
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}

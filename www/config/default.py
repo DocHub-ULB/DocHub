@@ -59,6 +59,7 @@ INSTALLED_APPS += (
     'webpack_loader',
     'rest_framework.authtoken',
     'django.contrib.postgres',
+    'sass_processor'
 )
 
 SITE_ID = 1
@@ -91,7 +92,10 @@ STATIC_ROOT = 'collected_static'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
 )
+
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR,'static')
 
 
 AUTHENTICATION_BACKENDS = (

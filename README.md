@@ -21,24 +21,23 @@ DocHub currently (Feb 2021) runs with Python 3.8, Node 10 and Postgresql 12.
 
 ```console
 # Ubuntu
-sudo apt-get install unoconv python3-dev nodejs ruby npm libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
+sudo apt-get install unoconv python3-dev nodejs ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
 # Fedora
-sudo dnf install unoconv python-devel nodejs ruby npm mupdf
+sudo dnf install unoconv python-devel nodejs ruby mupdf
 # Arch linux
-sudo pacman -S unoconv nodejs ruby python npm mupdf-tools
+sudo pacman -S unoconv nodejs ruby python mupdf-tools
 ```
 
 ### Installation
 
 ```console
 make install database
-npm install
 ```
 
 ### Run
 
 ```console
-npm run dev
+./manage.py runserver
 ```
 
 Then go http://localhost:8000/
