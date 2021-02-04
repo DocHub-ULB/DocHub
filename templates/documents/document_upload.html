@@ -31,7 +31,7 @@
     <div class="tabs-content">
       <div class="content active" id="upload-tab-1">
         <form action="{% url 'document_put' course.slug %}" method="post"
-                enctype="multipart/form-data" class="dropzone">
+                enctype="multipart/form-data" class="dropzone" id="document-upload">
             {% csrf_token %}
             {{ form.non_field_errors }}
                 <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png, doc(x), ppt(x), odt, et bien plus encore.</p>
