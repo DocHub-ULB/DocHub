@@ -2,7 +2,7 @@
   <input
     type="text"
     value="{{query}}"
-    placeholder="info-h-101"
+    placeholder="Cherche un cours, comme info-h-101 ou econ-s-423"
     data-search-target="input"
     data-action="input->search#search"
   />
@@ -14,8 +14,7 @@
           <input type="submit" data-search-target="submit">
         </form>
       </summary>
-      <div id="search-results" style="background-color: white; padding: 10px; border: 1px solid black; border-radius: 5px; width: 500px; max-height: 60vh; overflow-y: auto;
-  ">
+      <div id="search-results">
         {% for course in course_list %}
         <a href="{% url 'course_show' course.slug %}" style="display: block" target="_top">
           <span class="course-label secondary radius label recent-blob fixed-label">{{course.slug}}</span>

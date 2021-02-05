@@ -27,3 +27,25 @@ nav.top-bar
 //     background-color: $foundation-red
 //     &.zero
 //         background-color: $foundation-blue
+
+
+div[data-controller="search"]
+  input[data-search-target="input"]
+    width: 40em
+
+  details
+    margin-top: 1.3em
+
+    summary
+      list-style: none
+      &::-webkit-details-marker
+        display: none
+
+    #search-results
+      background-color: white; padding: 10px
+      border: 1px solid black
+      border-radius: 5px
+      width: 500px
+      max-height: 60vh
+      overflow-y: auto
+      padding-right: 5px
