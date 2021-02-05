@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import json
 from functools import partial
 
@@ -40,7 +37,7 @@ class CourseDetailView(DetailView):
             return "catalog/noauth/course.html"
 
     def get_context_data(self, **kwargs):
-        context = super(CourseDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         course = context['course']
 
         context['documents'] = course.document_set\

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from documents.models import Document
 from users.models import User
 from documents.tasks import process_document, mutool_get_pages

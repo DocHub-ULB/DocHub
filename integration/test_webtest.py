@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import django_webtest
 from webtest import Upload
 from users.models import User
@@ -8,7 +5,7 @@ from catalog.models import Category, Course
 from tags.models import Tag
 from documents.models import Document
 
-import mock
+from unittest import mock
 from django.urls import reverse
 import pytest
 

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.core.management.base import BaseCommand
 import json
 from os import path
@@ -76,7 +73,7 @@ class Command(BaseCommand):
                 else:
                     try:
                         slug = Slug.from_dochub(tree)
-                        r = requests.get("https://www.ulb.be/fr/programme/{}".format(slug.catalog))
+                        r = requests.get(f"https://www.ulb.be/fr/programme/{slug.catalog}")
                         soup = BeautifulSoup(r.text, "html5lib")
                         name = soup.find("h1").text.strip()
                     except Exception:

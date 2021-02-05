@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.http import HttpResponse
 from django.db.models import F
 
@@ -43,7 +40,7 @@ class DocumentViewSet(VaryModelViewSet):
         response = HttpResponse(body, content_type='application/octet-stream')
         response['Content-Description'] = 'File Transfer'
         response['Content-Transfer-Encoding'] = 'binary'
-        response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(document.safe_name, document.file_type).encode("ascii", "ignore")
+        response['Content-Disposition'] = f'attachment; filename="{document.safe_name}{document.file_type}"'.encode("ascii", "ignore")
 
         document.downloads = F('downloads') + 1
         document.save(update_fields=['downloads'])

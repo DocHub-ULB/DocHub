@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.urls import include, path
 from django.views.generic import TemplateView
 from django.contrib.auth.views import logout, login
@@ -46,7 +43,7 @@ urlpatterns = [
     ),
 
     path(
-        "sitemap\.xml", sitemap, {'sitemaps': sitemaps},
+        r"sitemap\.xml", sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'
     ),
 ]

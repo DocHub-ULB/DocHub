@@ -68,7 +68,7 @@ class Command(BaseCommand):
             if extension in settings.REJECTED_FILE_FORMATS:
                 if self.verbose:
                     self.stdout.write(self.style.WARNING(
-                        'REJECT: %s has a wrong format (%s)' % (doc['download_id'], extension)
+                        'REJECT: {} has a wrong format ({})'.format(doc['download_id'], extension)
                     ))
                 continue
 
@@ -86,7 +86,7 @@ class Command(BaseCommand):
             if document:
                 document.add_to_queue()
                 self.stdout.write(self.style.SUCCESS(
-                    'Enqueued "%s" (pk %s) for processing' % (document, document.id)
+                    f'Enqueued "{document}" (pk {document.id}) for processing'
                 ))
 
     def add_arguments(self, parser):
@@ -110,7 +110,7 @@ class Command(BaseCommand):
                 cur = conn.cursor()
 
                 # Never do this at home kids !!! https://xkcd.com/327/
-                q = "SELECT %s FROM %s" % (', '.join(columns), table)
+                q = "SELECT {} FROM {}".format(', '.join(columns), table)
                 if limit is not None:
                     q += ' LIMIT %d' % limit
                 cur.execute(q)

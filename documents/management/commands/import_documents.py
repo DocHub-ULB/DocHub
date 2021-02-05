@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import os
 import glob
 
@@ -39,7 +36,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         netid = options["username"]
-        self.stdout.write('Looking for user "{}"'.format(netid))
+        self.stdout.write(f'Looking for user "{netid}"')
 
         user = User.objects.filter(netid=netid).first()
         if user is None:
@@ -47,7 +44,7 @@ class Command(BaseCommand):
             return
 
         slug = options["course_slug"]
-        self.stdout.write('Looking for course "{}"'.format(slug))
+        self.stdout.write(f'Looking for course "{slug}"')
 
         course = Course.objects.filter(slug=slug).first()
         if course is None:
@@ -55,7 +52,7 @@ class Command(BaseCommand):
             return
 
         path = options['path']
-        self.stdout.write('Gathering documents in "{}"'.format(path))
+        self.stdout.write(f'Gathering documents in "{path}"')
         if not os.path.exists(path):
             self.stdout.write("Path does not exist")
             return

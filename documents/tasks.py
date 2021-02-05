@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from __future__ import absolute_import
-
 import subprocess
 import hashlib
 import uuid
@@ -26,7 +22,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
         return None
 
     doc_id = args[0]
-    print("Document {} failed.".format(doc_id))
+    print(f"Document {doc_id} failed.")
 
     document = Document.objects.get(id=doc_id)
     document.state = "ERROR"
@@ -61,7 +57,7 @@ def process_document(self, document_id):
         document.state = "PROCESSING"
         document.save()
     else:
-        raise DocumentProcessingError(document, "Wrong state : {}".format(document.state))
+        raise DocumentProcessingError(document, f"Wrong state : {document.state}")
 
     if document.is_pdf:
         document.pdf = document.original
@@ -102,7 +98,7 @@ def checksum(self, document_id):
             public=False
         )
         raise ExisingChecksum(
-            "Document {} had the same checksum as {}".format(document_id, duplicata.id)
+            f"Document {document_id} had the same checksum as {duplicata.id}"
         )
 
     document.md5 = hashed

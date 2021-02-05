@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import pytest
-import mock
+from unittest import mock
 import sys
 
 from django.core.files import File
@@ -44,25 +41,25 @@ def test_repr_with_accents(doc):
 
 
 def test_url(doc):
-    assert doc.get_absolute_url() == "/documents/{}".format(doc.id)
+    assert doc.get_absolute_url() == f"/documents/{doc.id}"
 
 
 def test_tag_from_name_exam(doc):
     doc.name = "Examen (corrigé)"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == set(['examen', 'corrigé'])
+    assert set(map(lambda x: x.name, doc.tags.all())) == {'examen', 'corrigé'}
 
 
 def test_tag_from_name_exam_month(doc):
     doc.name = "Mai 2012"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == set(['examen'])
+    assert set(map(lambda x: x.name, doc.tags.all())) == {'examen'}
 
 
 def test_tag_resume(doc):
     doc.name = "Résumé de Nicolas"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == set(['résumé'])
+    assert set(map(lambda x: x.name, doc.tags.all())) == {'résumé'}
 
 
 @mock.patch.object(Document, 'add_to_queue')
@@ -106,9 +103,9 @@ def test_document_file_cleanup():
 
     doc.delete()
     with pytest.raises(IOError) as errorinfo:
-        file = open(originalfilename, 'r')
+        file = open(originalfilename)
     assert 'No such file or directory' in str(errorinfo)
 
     with pytest.raises(IOError) as errorinfo:
-        file = open(pdffilename, 'r')
+        file = open(pdffilename)
     assert 'No such file or directory' in str(errorinfo)

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from celery import shared_task
 from actstream.models import followers, Action
 
@@ -32,7 +29,7 @@ def user_wants_notification(user, action):
         # Do not notify when another user starts following something
         return False
     else:
-        raise Exception("Unknown action verb: '{}'".format(action.verb))
+        raise Exception(f"Unknown action verb: '{action.verb}'")
 
 
 @shared_task

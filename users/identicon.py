@@ -85,7 +85,7 @@ class Matrix2D(list):
             kls.translate(*pivot)
 
 
-class IdenticonRendererBase(object):
+class IdenticonRendererBase:
     PATH_SET = []
 
     def __init__(self, code):

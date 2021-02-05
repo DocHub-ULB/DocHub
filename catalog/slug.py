@@ -23,15 +23,15 @@ class Slug:
 
     @property
     def gehol(self):
-        return "{}{}{}".format(self.domain, self.faculty, self.number).upper()
+        return f"{self.domain}{self.faculty}{self.number}".upper()
 
     @property
     def catalog(self):
-        return "{}-{}{}".format(self.domain, self.faculty, self.number).upper()
+        return f"{self.domain}-{self.faculty}{self.number}".upper()
 
     @property
     def dochub(self):
-        return "{}-{}-{}".format(self.domain, self.faculty, self.number).lower()
+        return f"{self.domain}-{self.faculty}-{self.number}".lower()
 
     @classmethod
     def from_gehol(cls, string):
@@ -68,7 +68,7 @@ class Slug:
         raise ValueError("Not valid slug found")
 
     def __repr__(self):
-        return "<Slug: {}>".format(self)
+        return f"<Slug: {self}>"
 
     def __str__(self):
         return self.dochub

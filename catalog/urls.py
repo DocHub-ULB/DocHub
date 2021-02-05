@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.conf.urls import url
 from catalog.views import CategoryDetailView, CourseDetailView, search_course
 import catalog.views
