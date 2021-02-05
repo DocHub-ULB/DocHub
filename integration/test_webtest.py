@@ -5,7 +5,6 @@ from catalog.models import Category, Course
 from tags.models import Tag
 from documents.models import Document
 
-from unittest import mock
 from django.urls import reverse
 import pytest
 
@@ -46,12 +45,12 @@ def tree():
 
 
 def test_name_in_page(app, user):
-    root = Category.objects.create(
+    Category.objects.create(
         name="ULB",
         slug="root",
         parent=None,
     )
-    
+
     index = app.get('/', user=user.netid)
     assert user.first_name in index
 

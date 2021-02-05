@@ -72,7 +72,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         elif users_vote.vote_type == Vote.DOWNVOTE:
             return -1
         else:
-            raise NotImplemented("Vote not of known type.")
+            raise NotImplementedError("Vote not of known type.")
 
     def get_has_perm(self, document):
         user = self.context['request'].user

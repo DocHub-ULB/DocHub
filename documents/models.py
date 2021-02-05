@@ -76,7 +76,7 @@ class Document(models.Model):
             elif vote_type == Vote.DOWNVOTE:
                 downvotes += 1
             else:
-                raise NotImplemented("Vote not of known type.")
+                raise NotImplementedError("Vote not of known type.")
 
         return {"upvotes": upvotes, "downvotes": downvotes}
 
