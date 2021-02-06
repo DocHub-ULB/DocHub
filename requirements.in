@@ -19,6 +19,7 @@ django-pipeline
 PyReact
 django-js-reverse
 django-webpack-loader
+filemagic
 beautifulsoup4
 html5lib
 

@@ -1,8 +1,11 @@
 from typing import Iterable, List, Optional, Set, Union
 
+import mimetypes
 import uuid
 
 from django.core.files import File
+
+import magic
 
 from catalog.models import Course
 from tags.models import Tag
@@ -25,7 +28,12 @@ def cast_tag(tag: Union[str, Tag]) -> Tag:
 
 def add_file_to_course(file: File, name: str, extension: str, course: Course, tags: List[Union[str, Tag]], user: User, import_source: Optional[str] = None) -> 'Optional[Document]':
     if not extension.startswith("."):
-        raise ValueError("extension must start with a '.'")
+        with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
+            mime = m.id_buffer(file.read(4096))
+            guessed_extension = mimetypes.guess_extension(mime, strict=True)
+            if guessed_extension:
+                extension = guessed_extension
+            file.seek(0)
     if import_source is not None:
         document, created = Document.objects.get_or_create(
             user=user,

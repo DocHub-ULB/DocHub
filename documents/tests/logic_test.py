@@ -1,5 +1,6 @@
+from io import BytesIO
+
 import pytest
-from six import StringIO
 
 from catalog.models import Course
 from documents import logic
@@ -24,8 +25,8 @@ def test_add_file_to_course(user, course):
     Tag.objects.create(name="tag one")
     tags = ["tag one", "tag two", Tag.objects.create(name="tag three")]
 
-    file = StringIO("mybinarydocumentcontent")
-    file.size = len("mybinarydocumentcontent")
+    file = BytesIO(b"mybinarydocumentcontent")
+    file.size = len(b"mybinarydocumentcontent")
 
     doc = logic.add_file_to_course(
         file,
@@ -42,3 +43,22 @@ def test_add_file_to_course(user, course):
     assert doc.state == Document.DocumentState.READY_TO_QUEUE
     assert Tag.objects.count() == 3
     assert doc.tags.count() == 3
+    assert doc.file_type == ".dll"
+
+
+def test_no_extension(user, course):
+    doc = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\n/\x00\x00\t\x81\x08\x06\x00\x00\x00'\x06\xfee\x00\x00\x00\tpHYs\x00\x00n\xba\x00\x00n\xba\x01\xd6\xde\xb1\x17\x00\x00\x00\x19tEXtSoftware\x00www.inkscape.org\x9b\xee<\x1a\x00\x00 \x00IDATx"
+    file = BytesIO(doc)
+    file.size = len(doc)
+
+    doc = logic.add_file_to_course(
+        file,
+        "My document",
+        "",
+        course,
+        [],
+        user
+    )
+
+    assert doc
+    assert doc.file_type == ".png"
