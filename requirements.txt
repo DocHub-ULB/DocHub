@@ -8,7 +8,7 @@ certifi==2020.12.5
 chardet==4.0.0
 configparser==5.0.1
 decorator==4.4.2
-Django==2.1.15
+Django==2.2.18
 django-activity-stream==0.7.0
 django-debug-toolbar==2.2
 django-extensions==3.1.0
