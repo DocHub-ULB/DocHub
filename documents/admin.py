@@ -26,7 +26,7 @@ autotag.short_description = "Auto-tag selected documents"
 def repair(modeladmin, request, queryset):
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
-        
+
     for doc in queryset:
         doc.repair()
 
@@ -61,6 +61,7 @@ class VoteAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5', 'state',)
     filter_horizontal = ('tags',)
+    date_hierarchy = 'created'
 
     list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type', 'imported')
     list_filter = ('state', 'created', 'edited', 'file_type',)
