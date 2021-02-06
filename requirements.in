@@ -33,7 +33,8 @@ pytest-django
 responses
 django-webtest
 mypy
-
+django-stubs
+djangorestframework-stubs
 
 # prod
 redis
