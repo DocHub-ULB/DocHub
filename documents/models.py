@@ -71,9 +71,9 @@ class Document(models.Model):
         #   to the database for each document. Thats bad.
         for vote in self.vote_set.all():
             vote_type = vote.vote_type
-            if vote_type == Vote.UPVOTE:
+            if vote_type == Vote.VoteType.UPVOTE:
                 upvotes += 1
-            elif vote_type == Vote.DOWNVOTE:
+            elif vote_type == Vote.VoteType.DOWNVOTE:
                 downvotes += 1
             else:
                 raise NotImplementedError("Vote not of known type.")
@@ -143,17 +143,15 @@ class Document(models.Model):
 
 
 class Vote(models.Model):
-    UPVOTE = "up"
-    DOWNVOTE = "down"
-    VOTE_TYPE_CHOICES = (
-        (UPVOTE, "Upvote"),
-        (DOWNVOTE, "Downvote")
-    )
+
+    class VoteType(models.TextChoices):
+        UPVOTE = 'up'
+        DOWNVOTE = 'down'
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     when = models.DateTimeField(auto_now=True)
-    vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
+    vote_type = models.CharField(max_length=10, choices=VoteType.choices)
 
     class Meta:
         unique_together = ("user", "document")

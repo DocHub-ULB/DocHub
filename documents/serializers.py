@@ -67,9 +67,9 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
 
         if users_vote is None:
             return 0
-        elif users_vote.vote_type == Vote.UPVOTE:
+        elif users_vote.vote_type == Vote.VoteType.UPVOTE:
             return 1
-        elif users_vote.vote_type == Vote.DOWNVOTE:
+        elif users_vote.vote_type == Vote.VoteType.DOWNVOTE:
             return -1
         else:
             raise NotImplementedError("Vote not of known type.")
