@@ -1,5 +1,6 @@
-Django>=2.0,<2.1
-django-multiupload
+Django>=2.1,<2.2
+#django-multiupload on Pypi is incompatible with Django >=2.1 it is fixed in the pined commit
+git+https://github.com/Chive/django-multiupload.git@ba52e161a68ce19062c3655e89544c2d377990a0
 markdown
 celery>=4.0, <5.0
 Pillow

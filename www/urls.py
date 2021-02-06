@@ -1,6 +1,7 @@
 from django.urls import include, path
 from django.views.generic import TemplateView
-from django.contrib.auth.views import logout, login
+from django.contrib.auth.views import LogoutView, LoginView
+
 from django.contrib import admin
 from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
@@ -30,9 +31,9 @@ urlpatterns = [
     path("api/", include("www.rest_urls")),
     path("jsreverse/", django_js_reverse.views.urls_js, name='js_reverse'),
 
-    path("syslogin", login, {"template_name": "syslogin.html"}, name="syslogin"),
+    path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
     path("auth", users.views.auth),
-    path("logout", logout, {"next_page": "/"}, name="logout"),
+    path("logout", LogoutView.as_view(next_page="/"), name="logout"),
 
     path("help/", www.views.HelpView.as_view(template_name='help.html'), name="help"),
     path(

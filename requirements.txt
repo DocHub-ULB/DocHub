@@ -8,7 +8,7 @@ certifi==2020.12.5
 chardet==4.0.0
 configparser==5.0.1
 decorator==4.4.2
-Django==2.0.13
+Django==2.1.15
 django-activity-stream==0.7.0
 django-debug-toolbar==2.2
 django-extensions==3.1.0
@@ -18,7 +18,7 @@ django-jsonfield==1.4.1
 django-jsonfield-compat==0.4.4
 django-minio-storage==0.3.10
 django-mptt==0.11.0
-django-multiupload==0.5.2
+django-multiupload @ git+https://github.com/Chive/django-multiupload.git@ba52e161a68ce19062c3655e89544c2d377990a0
 django-pipeline==2.0.6
 django-webpack-loader==0.7.0
 django-webtest==1.9.7
