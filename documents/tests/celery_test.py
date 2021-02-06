@@ -42,7 +42,7 @@ def create_doc(name, ext):
     doc = Document.objects.create(
         user=user,
         name=name,
-        state="IN_QUEUE",
+        state=Document.DocumentState.IN_QUEUE,
         file_type=ext
     )
 
@@ -62,7 +62,7 @@ def test_add_to_queue():
 
     doc = Document.objects.get(id=doc.id) # Get back the updated instance
 
-    assert doc.state == "DONE"
+    assert doc.state == Document.DocumentState.DONE
     assert doc.original.path == doc.pdf.path
 
 
@@ -99,7 +99,7 @@ def test_send_office():
 
     doc = Document.objects.get(id=doc.id) # Get back the updated instance
 
-    assert doc.state == "DONE"
+    assert doc.state == Document.DocumentState.DONE
     assert doc.original.path != doc.pdf.path
 
 
@@ -184,7 +184,7 @@ def test_finish_file():
     assert result.status == celery.states.SUCCESS, result.traceback
 
     doc = Document.objects.get(id=doc.id) # Get back the updated instance
-    assert doc.state == "DONE"
+    assert doc.state == Document.DocumentState.DONE
 
 
 def test_repair():
@@ -219,7 +219,7 @@ def test_repairs_original_too():
     with open('documents/tests/files/broken.pdf', 'rb') as fd:
         f = File(fd)
         doc.original.save("another-uuid-beef-yolo.pdf", f)
-        
+
     doc.pdf = doc.original
     doc.save()
 

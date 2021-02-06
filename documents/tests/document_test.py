@@ -64,7 +64,7 @@ def test_tag_resume(doc):
 
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess_done(mock_add_to_queue, doc):
-    doc.state = "DONE"
+    doc.state = Document.DocumentState.DONE
 
     with pytest.raises(Exception):
         doc.reprocess()
@@ -73,7 +73,7 @@ def test_reprocess_done(mock_add_to_queue, doc):
 
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess(mock_add_to_queue, doc):
-    doc.state = 'ERROR'
+    doc.state = Document.DocumentState.ERROR
     doc.reprocess()
 
     assert mock_add_to_queue.called == 1
@@ -85,7 +85,7 @@ def test_add_to_queue(mock_process_document, doc):
 
     doc.add_to_queue()
 
-    assert doc.state == "IN_QUEUE"
+    assert doc.state == Document.DocumentState.IN_QUEUE
     assert mock_process_document.called == 1
 
 

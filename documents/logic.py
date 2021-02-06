@@ -27,7 +27,7 @@ def add_file_to_course(file, name, extension, course, tags, user, import_source=
             course=course,
             import_source=import_source,
             file_type=extension.lower(),
-            defaults={'state': 'PREPARING'}
+            defaults={'state': Document.DocumentState.PREPARING}
         )
         if not created:
             return None
@@ -36,7 +36,7 @@ def add_file_to_course(file, name, extension, course, tags, user, import_source=
             user=user,
             name=name,
             course=course,
-            state="PREPARING",
+            state=Document.DocumentState.PREPARING,
             file_type=extension.lower()
         )
 
@@ -48,7 +48,7 @@ def add_file_to_course(file, name, extension, course, tags, user, import_source=
     document.tags.add(*tags)
 
     document.original.save(str(uuid.uuid4()) + extension, file)
-    document.state = 'READY_TO_QUEUE'
+    document.state = Document.DocumentState.READY_TO_QUEUE
 
     document.save()
 

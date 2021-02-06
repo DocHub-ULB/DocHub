@@ -25,7 +25,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     print(f"Document {doc_id} failed.")
 
     document = Document.objects.get(id=doc_id)
-    document.state = "ERROR"
+    document.state = Document.DocumentState.ERROR
     document.save()
     action.send(document.user, verb="upload failed", action_object=document, target=document.course, public=False)
 
@@ -53,8 +53,8 @@ def process_document(self, document_id):
 
     document = Document.objects.get(pk=document_id)
 
-    if document.state == "IN_QUEUE":
-        document.state = "PROCESSING"
+    if document.state == Document.DocumentState.IN_QUEUE:
+        document.state = Document.DocumentState.PROCESSING
         document.save()
     else:
         raise DocumentProcessingError(document, f"Wrong state : {document.state}")
@@ -154,7 +154,7 @@ def mesure_pdf_length(self, document_id):
 @doctask
 def finish_file(self, document_id):
     document = Document.objects.get(pk=document_id)
-    document.state = 'DONE'
+    document.state = Document.DocumentState.DONE
     document.save()
 
     action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
@@ -185,7 +185,7 @@ def repair(self, document_id):
     if pdf_is_original:
         document.original = document.pdf
 
-    document.state = 'REPAIRED'
+    document.state = Document.DocumentState.REPAIRED
     document.save()
 
     return document_id

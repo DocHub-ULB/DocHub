@@ -16,15 +16,14 @@ UNCONVERTIBLE_TYPES = [
 
 
 class Document(models.Model):
-    STATES = (
-        ('PREPARING', 'En préparation'),
-        ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery'),
-        ('IN_QUEUE', 'Envoyé à Celery'),
-        ('PROCESSING', 'En cours de traitement'),
-        ('DONE', 'Rendu fini'),
-        ('ERROR', 'Erreur'),
-        ('REPAIRED', 'Réparé'),
-    )
+    class DocumentState(models.TextChoices):
+        PREPARING = ('PREPARING', 'En préparation')
+        READY_TO_QUEUE = ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery')
+        IN_QUEUE = ('IN_QUEUE', 'Envoyé à Celery')
+        PROCESSING = ('PROCESSING', 'En cours de traitement')
+        DONE = ('DONE', 'Rendu fini')
+        ERROR = ('ERROR', 'Erreur')
+        REPAIRED = ('REPAIRED', 'Réparé')
 
     name = models.CharField(max_length=255, verbose_name='Titre')
     course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours', on_delete=models.CASCADE)
@@ -46,7 +45,7 @@ class Document(models.Model):
     original = models.FileField(upload_to='original_document')
     pdf = models.FileField(upload_to='pdf_document')
 
-    state = models.CharField(max_length=20, choices=STATES, default='PREPARING', db_index=True, verbose_name='État')
+    state = models.CharField(max_length=20, choices=DocumentState.choices, default=DocumentState.PREPARING, db_index=True, verbose_name='État')
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
     hidden = models.BooleanField(default=False, verbose_name='Est caché')
@@ -92,10 +91,10 @@ class Document(models.Model):
         return self.file_type in UNCONVERTIBLE_TYPES
 
     def is_ready(self):
-        return self.state in ('DONE', 'REPAIRED')
+        return self.state in (Document.DocumentState.DONE, Document.DocumentState.REPAIRED)
 
     def is_processing(self):
-        return self.state in ('PREPARING', 'IN_QUEUE', 'PROCESSING')
+        return self.state in (Document.DocumentState.PREPARING, Document.DocumentState.IN_QUEUE, Document.DocumentState.PROCESSING)
 
     @property
     def safe_name(self):
@@ -105,10 +104,10 @@ class Document(models.Model):
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
 
-        if self.state != "ERROR" and not force:
+        if self.state != Document.DocumentState.ERROR and not force:
             raise Exception("Document is not in error state it is " + self.state)
 
-        self.state = 'READY_TO_QUEUE'
+        self.state = Document.DocumentState.READY_TO_QUEUE
         self.md5 = ""
         self.add_to_queue()
 
@@ -116,12 +115,12 @@ class Document(models.Model):
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
 
-        self.state = "IN_QUEUE"
+        self.state = Document.DocumentState.IN_QUEUE
         self.save()
         try:
             process_document.delay(self.id)
         except Exception as e:
-            self.state = "READY_TO_QUEUE"
+            self.state = Document.DocumentState.READY_TO_QUEUE
             self.save()
             raise e
 
