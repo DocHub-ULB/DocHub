@@ -12,7 +12,7 @@ def reprocess(modeladmin, request, queryset):
         doc.reprocess(force=True)
 
 
-reprocess.short_description = "Reprocess selected documents"
+reprocess.short_description = "Reprocess selected documents" # type: ignore
 
 
 def autotag(modeladmin, request, queryset):
@@ -20,7 +20,7 @@ def autotag(modeladmin, request, queryset):
         doc.tag_from_name()
 
 
-autotag.short_description = "Auto-tag selected documents"
+autotag.short_description = "Auto-tag selected documents" # type: ignore
 
 
 def repair(modeladmin, request, queryset):
@@ -31,7 +31,7 @@ def repair(modeladmin, request, queryset):
         doc.repair()
 
 
-repair.short_description = "Repair selected documents"
+repair.short_description = "Repair selected documents" # type: ignore
 
 
 class VoteInline(admin.StackedInline):
@@ -66,11 +66,10 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type', 'imported')
     list_filter = ('state', 'created', 'edited', 'file_type',)
     search_fields = ('md5', 'name', 'imported', 'user')
-    raw_id_fields = ('user',)
+    raw_id_fields = ('user', 'course')
 
     inlines = [VoteInline]
 
-    raw_id_fields = ('user', 'course')
 
     actions = (reprocess, autotag, repair)
 

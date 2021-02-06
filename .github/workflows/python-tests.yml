@@ -32,6 +32,9 @@ jobs:
     - name: Check migrations
       run: ./manage.py makemigrations --dry-run --check
 
+    - name: mypy
+      run: mypy
+
     - name: Build js
       run: npm run build
 

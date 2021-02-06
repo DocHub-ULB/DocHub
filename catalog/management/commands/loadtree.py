@@ -7,6 +7,7 @@ from django.db import transaction
 import requests
 from bs4 import BeautifulSoup
 from catalog.slug import Slug
+from typing import Dict
 
 
 from django.conf import settings
@@ -30,7 +31,7 @@ class Command(BaseCommand):
             metavar="TREE_FILE"
         )
 
-    LOCAL_CACHE = {}
+    LOCAL_CACHE: Dict[str, str] = {}
 
     def handle(self, *args, **options):
         self.stdout.write('Loading tree ... ')
