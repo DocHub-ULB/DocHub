@@ -30,7 +30,9 @@ def add_file_to_course(file: File, name: str, extension: str, course: Course, ta
     if not extension.startswith("."):
         with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
             mime = m.id_buffer(file.read(4096))
-            extension = mimetypes.guess_extension(mime, strict=True)
+            guessed_extension = mimetypes.guess_extension(mime, strict=True)
+            if guessed_extension:
+                extension = guessed_extension
             file.seek(0)
     if import_source is not None:
         document, created = Document.objects.get_or_create(
