@@ -1,24 +1,22 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-import re
-import os
-from os.path import join
-import itertools
 import collections
+import itertools
+import os
+import re
+from os.path import join
 
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, UserManager
-from django.utils import timezone
 from django.conf import settings
-import actstream
-import users.identicon
+from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.db import models
+from django.utils import timezone
 
+import actstream
+
+import users.identicon
 from catalog.models import Course
 
 
 class CustomUserManager(UserManager):
-    PATTERN = re.compile('[\W_]+')
+    PATTERN = re.compile(r'[\W_]+')
 
     def _create_user(self, netid, email, password, **extra_fields):
         """
@@ -33,7 +31,7 @@ class CustomUserManager(UserManager):
             IDENTICON_SIZE = 120
             if not os.path.exists(join(settings.MEDIA_ROOT, "profile")):
                 os.makedirs(join(settings.MEDIA_ROOT, "profile"))
-            profile_path = join(settings.MEDIA_ROOT, "profile", "{}.png".format(netid))
+            profile_path = join(settings.MEDIA_ROOT, "profile", f"{netid}.png")
             alpha_netid = self.PATTERN.sub('', netid)
             users.identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
             user.photo = 'png'
@@ -83,7 +81,7 @@ class User(AbstractBaseUser):
     def __init__(self, *args, **kwargs):
         self._following_courses = None
         self._moderated_courses = None
-        super(User, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @property
     def get_photo(self):

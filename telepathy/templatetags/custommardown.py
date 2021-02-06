@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
-import markdown
 
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_text
-from django.utils.safestring import mark_safe, SafeText
+from django.utils.safestring import SafeText, mark_safe
+
+import markdown
 
 register = template.Library()
 youtube_url = re.compile(r'https://(?:www\.)?youtu(?:be\.com/watch/?\?v=|\.be/)([^/<&]+)(?:&.*)?')
@@ -52,13 +50,13 @@ class MarkdownDemoNode(template.Node):
         input_text = input_text.replace('>', '&gt;').replace('<', '&lt;')
         return """
         <dl class="tabs" data-tab>
-        <dd class="active"><a href="#%smd">Markdown</a></dd>
-        <dd><a href="#%srender">Aperçu</a></dd>
+        <dd class="active"><a href="#{}md">Markdown</a></dd>
+        <dd><a href="#{}render">Aperçu</a></dd>
         </dl>
         <div class="tabs-content">
-        <div class="content active" id="%smd"><pre class="codehilite">%s</pre></div>
-        <div class="content" id="%srender">%s</div>
-        </div>""" % (uid, uid, uid, input_text, uid, rendered)
+        <div class="content active" id="{}md"><pre class="codehilite">{}</pre></div>
+        <div class="content" id="{}render">{}</div>
+        </div>""".format(uid, uid, uid, input_text, uid, rendered)
 
 
 @register.tag(name='markdown_demo')

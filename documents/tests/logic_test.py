@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from io import BytesIO
 
-from users.models import User
-from catalog.models import Course
-from tags.models import Tag
 import pytest
+
+from catalog.models import Course
 from documents import logic
-from six import BytesIO
+from documents.models import Document
+from tags.models import Tag
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 
@@ -40,7 +40,7 @@ def test_add_file_to_course(user, course):
     assert doc
     assert doc in course.document_set.all()
     assert doc.name == "My document"
-    assert doc.state == 'READY_TO_QUEUE'
+    assert doc.state == Document.DocumentState.READY_TO_QUEUE
     assert Tag.objects.count() == 3
     assert doc.tags.count() == 3
     assert doc.file_type == ".dll"

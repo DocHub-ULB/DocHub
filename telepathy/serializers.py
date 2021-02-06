@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from rest_framework import serializers
 
-from telepathy.models import Thread, Message
+from telepathy.models import Message, Thread
 from users.serializers import SmallUserSerializer
 
 

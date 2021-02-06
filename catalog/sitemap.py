@@ -1,4 +1,5 @@
 from django.contrib.sitemaps import Sitemap
+
 from catalog.models import Course
 
 
@@ -10,7 +11,7 @@ class CourseSitemap(Sitemap):
     def items(self):
         return Course.objects.prefetch_related('document_set')
 
-    def lastmod(self, obj):
+    def lastmod(self, obj: Course):
         lastdoc = obj.document_set.order_by("-created").first()
         if lastdoc:
             return lastdoc.created

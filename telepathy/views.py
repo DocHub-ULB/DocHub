@@ -1,18 +1,16 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import json
 
-from django.urls import reverse
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+
 from actstream import action, actions
 
-from telepathy.forms import NewThreadForm, MessageForm
-from telepathy.models import Thread, Message
 from catalog.models import Course
 from documents.models import Document
+from telepathy.forms import MessageForm, NewThreadForm
+from telepathy.models import Message, Thread
 
 
 @login_required

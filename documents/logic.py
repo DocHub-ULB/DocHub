@@ -1,28 +1,32 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import Iterable, List, Optional, Set, Union
 
-import uuid
-import magic
 import mimetypes
+import uuid
 
+from django.core.files import File
+
+import magic
+
+from catalog.models import Course
 from tags.models import Tag
+from users.models import User
 
 
-def clean_filename(name):
+def clean_filename(name: str) -> str:
     if name.isupper():
         name = name.capitalize()
 
     return name.replace("_", " ")
 
 
-def cast_tag(tag):
+def cast_tag(tag: Union[str, Tag]) -> Tag:
     if isinstance(tag, Tag):
         return tag
     else:
         return Tag.objects.get_or_create(name=tag.lower())[0]
 
 
-def add_file_to_course(file, name, extension, course, tags, user, import_source=None):
+def add_file_to_course(file: File, name: str, extension: str, course: Course, tags: List[Union[str, Tag]], user: User, import_source: Optional[str] = None) -> 'Optional[Document]':
     if not extension.startswith("."):
         with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
             mime = m.id_buffer(file.read(4096))
@@ -35,7 +39,7 @@ def add_file_to_course(file, name, extension, course, tags, user, import_source=
             course=course,
             import_source=import_source,
             file_type=extension.lower(),
-            defaults={'state': 'PREPARING'}
+            defaults={'state': Document.DocumentState.PREPARING}
         )
         if not created:
             return None
@@ -44,26 +48,27 @@ def add_file_to_course(file, name, extension, course, tags, user, import_source=
             user=user,
             name=name,
             course=course,
-            state="PREPARING",
+            state=Document.DocumentState.PREPARING,
             file_type=extension.lower()
         )
 
+    cleaned_tags: Iterable[Tag]
     if len(tags) > 0:
-        tags = [cast_tag(tag) for tag in tags]
+        cleaned_tags = [cast_tag(tag) for tag in tags]
     else:
-        tags = tags_from_name(name)
+        cleaned_tags = tags_from_name(name)
 
-    document.tags.add(*tags)
+    document.tags.add(*cleaned_tags)
 
     document.original.save(str(uuid.uuid4()) + extension, file)
-    document.state = 'READY_TO_QUEUE'
+    document.state = Document.DocumentState.READY_TO_QUEUE
 
     document.save()
 
     return document
 
 
-def tags_from_name(name):
+def tags_from_name(name: str) -> Set[Tag]:
     translate = {
         'é': 'e',
         'è': 'e',
@@ -97,7 +102,7 @@ def tags_from_name(name):
             if key in name:
                 tags.add(val)
 
-    tags = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
-    return tags
+    tag_objs = {Tag.objects.get_or_create(name=tag)[0] for tag in tags}
+    return tag_objs
 
-from documents.models import Document # NOQA
+from documents.models import Document  # NOQA

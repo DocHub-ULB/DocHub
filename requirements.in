@@ -1,5 +1,6 @@
-Django>=2.0,<2.1
-django-multiupload
+Django>=3,<3.1
+#django-multiupload on Pypi is incompatible with Django >=2.1 it is fixed in the pined commit
+git+https://github.com/Chive/django-multiupload.git@ba52e161a68ce19062c3655e89544c2d377990a0
 markdown
 celery>=4.0, <5.0
 Pillow
@@ -7,13 +8,11 @@ pygments
 pyPdf2
 requests
 xmltodict
-djangorestframework==3.8.2
+djangorestframework
 drf-extensions
 furl
 django-mptt
-# django-activity-stream>=0.6.6
-git+https://github.com/justquick/django-activity-stream.git
-git+https://github.com/C4ptainCrunch/libulb.git
+django-activity-stream<0.10 # 0.10 breaks with Django<3.1
 PyYaml
 jsonfield
 django-pipeline
@@ -21,20 +20,24 @@ PyReact
 django-js-reverse
 django-webpack-loader
 filemagic
+beautifulsoup4
+html5lib
 
 # Dev
 django-extensions
-ipython<7.16 # https://ipython.readthedocs.io/en/stable/whatsnew/version7.html#nep29-last-version-to-support-python-3-6
+ipython
 honcho
+isort
+pre-commit
 
 # Test
 mock
 pytest-django
 responses
 django-webtest
-pytest-cov
-coveralls
-
+mypy
+django-stubs
+djangorestframework-stubs
 
 # prod
 redis
@@ -46,7 +49,3 @@ django-jsonfield-compat
 gunicorn
 raven
 django-minio-storage
-
-
-# transitive deps
-traitlets<5 # py 3.6 compat

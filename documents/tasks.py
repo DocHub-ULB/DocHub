@@ -1,24 +1,29 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from __future__ import absolute_import
+from typing import Optional
 
-import subprocess
-import hashlib
-import uuid
-import tempfile
-import os
 import contextlib
+import hashlib
+import os
 import re
+import subprocess
+import tempfile
+import uuid
 
-from celery import shared_task, chain
-from PyPDF2 import PdfFileReader
-from django.core.files.base import ContentFile, File
-from actstream import action
 from django.conf import settings
+from django.core.files.base import ContentFile, File
+
+from actstream import action
+from celery import chain, shared_task
 from celery.exceptions import SoftTimeLimitExceeded
+from PyPDF2 import PdfFileReader
 
 from documents.models import Document, DocumentError
-from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
+
+from .exceptions import (
+    DocumentProcessingError,
+    ExisingChecksum,
+    MissingBinary,
+    SkipException,
+)
 
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -26,10 +31,10 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
         return None
 
     doc_id = args[0]
-    print("Document {} failed.".format(doc_id))
+    print(f"Document {doc_id} failed.")
 
     document = Document.objects.get(id=doc_id)
-    document.state = "ERROR"
+    document.state = Document.DocumentState.ERROR
     document.save()
     action.send(document.user, verb="upload failed", action_object=document, target=document.course, public=False)
 
@@ -51,17 +56,17 @@ def short_doctask(*args, **kwargs):
 
 
 @doctask
-def process_document(self, document_id):
+def process_document(self, document_id: int) -> int:
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
 
     document = Document.objects.get(pk=document_id)
 
-    if document.state == "IN_QUEUE":
-        document.state = "PROCESSING"
+    if document.state == Document.DocumentState.IN_QUEUE:
+        document.state = Document.DocumentState.PROCESSING
         document.save()
     else:
-        raise DocumentProcessingError(document, "Wrong state : {}".format(document.state))
+        raise DocumentProcessingError(document, f"Wrong state : {document.state}")
 
     if document.is_pdf:
         document.pdf = document.original
@@ -72,9 +77,11 @@ def process_document(self, document_id):
     else:
         process_office.delay(document_id)
 
+    return document_id
+
 
 @doctask
-def checksum(self, document_id):
+def checksum(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
     contents = document.original.read()
@@ -102,7 +109,7 @@ def checksum(self, document_id):
             public=False
         )
         raise ExisingChecksum(
-            "Document {} had the same checksum as {}".format(document_id, duplicata.id)
+            f"Document {document_id} had the same checksum as {duplicata.id}"
         )
 
     document.md5 = hashed
@@ -115,7 +122,7 @@ checksum.throws = (ExisingChecksum,)
 
 
 @short_doctask
-def convert_office_to_pdf(self, document_id):
+def convert_office_to_pdf(self, document_id: int) -> int:
     try:
         document = Document.objects.get(pk=document_id)
 
@@ -141,7 +148,7 @@ def convert_office_to_pdf(self, document_id):
 
 
 @short_doctask
-def mesure_pdf_length(self, document_id):
+def mesure_pdf_length(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
     try:
@@ -156,9 +163,9 @@ def mesure_pdf_length(self, document_id):
 
 
 @doctask
-def finish_file(self, document_id):
+def finish_file(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
-    document.state = 'DONE'
+    document.state = Document.DocumentState.DONE
     document.save()
 
     action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
@@ -168,7 +175,7 @@ def finish_file(self, document_id):
 
 
 @short_doctask
-def repair(self, document_id):
+def repair(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
     pdf_is_original = document.pdf == document.original
@@ -189,7 +196,7 @@ def repair(self, document_id):
     if pdf_is_original:
         document.original = document.pdf
 
-    document.state = 'REPAIRED'
+    document.state = Document.DocumentState.REPAIRED
     document.save()
 
     return document_id
@@ -237,7 +244,7 @@ def temporary_file_path(prefix="", suffix=""):
         os.remove(path)
 
 
-def mutool_get_pages(document):
+def mutool_get_pages(document: Document) -> Optional[int]:
     with file_as_local(document.pdf, prefix="dochub_pdf_len_") as tmpfile:
         try:
             output = subprocess.check_output(["mutool", "info", tmpfile.name], stderr=subprocess.STDOUT)

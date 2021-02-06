@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from math import pi, sin
+
 from django.db import models
-from math import sin, pi
 
 
 class Tag(models.Model):

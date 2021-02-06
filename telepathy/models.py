@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-
 import json
+
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.conf import settings
 
 
 class Thread(models.Model):
@@ -66,7 +63,7 @@ class Message(models.Model):
         return "un message"
 
     def get_absolute_url(self):
-        return reverse('thread_show', args=(self.thread_id, )) + "#message-{}".format(self.id)
+        return reverse('thread_show', args=(self.thread_id, )) + f"#message-{self.id}"
 
     def write_perm(self, user, moderated_courses):
         if user.id == self.user_id:

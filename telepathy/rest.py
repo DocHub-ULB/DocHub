@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from rest_framework import viewsets
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
-from telepathy.serializers import ThreadSerializer, SmallThreadSerializer, MessageSerializer
-from telepathy.models import Thread, Message
+from telepathy.models import Message, Thread
+from telepathy.serializers import (
+    MessageSerializer,
+    SmallThreadSerializer,
+    ThreadSerializer,
+)
 
 
 class ThreadViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):

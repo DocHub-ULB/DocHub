@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from django.conf import settings
 
 import pytest
-from users.models import User
-from django.conf import settings
 from PIL import Image
+
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 

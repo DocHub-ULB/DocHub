@@ -1,16 +1,15 @@
-from rest_framework import viewsets
-from rest_framework_extensions.mixins import DetailSerializerMixin
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from mptt.utils import get_cached_trees
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework_extensions.mixins import DetailSerializerMixin
 
+from catalog.models import Category, Course
 from catalog.serializers import (
-    CourseSerializer,
-    ShortCourseSerializer,
     CategorySerializer,
+    CourseSerializer,
     ShortCategorySerializer,
+    ShortCourseSerializer,
 )
-from catalog.models import Course, Category
 
 
 class CourseViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
@@ -37,14 +36,14 @@ class Tree(viewsets.ViewSet):
     """
 
     def list(self, request, format=None):
-        def course(node):
+        def course(node: Course):
             return {
                 'name': node.name,
                 'id': node.id,
                 'slug': node.slug,
             }
 
-        def category(node):
+        def category(node: Category):
             return {
                 'name': node.name,
                 'id': node.id,

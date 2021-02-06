@@ -1,7 +1,6 @@
-from rest_framework import viewsets
+from actstream.models import actor_stream, user_stream
+from rest_framework import status, viewsets
 from rest_framework.response import Response
-from rest_framework import status
-from actstream.models import user_stream, actor_stream
 
 from www.serializers import FeedSerializer
 

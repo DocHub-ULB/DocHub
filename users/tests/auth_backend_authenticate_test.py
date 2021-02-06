@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import pytest
+import responses
+
 from users.authBackend import NetidBackend
 from users.models import User
-import responses
 
 pytestmark = pytest.mark.django_db
 
@@ -17,7 +15,7 @@ def test_auth():
 
     responses.add(
         responses.GET,
-        'https://www.ulb.ac.be/commons/check?_type=normal&_sid={}&_uid={}'.format(sid, uid),
+        f'https://www.ulb.ac.be/commons/check?_type=normal&_sid={sid}&_uid={uid}',
         body=xml, status=200,
         match_querystring=True
     )
@@ -28,5 +26,5 @@ def test_auth():
     assert isinstance(user, User)
     assert user.netid == 'nimarcha'
     assert User.objects.filter(netid='nimarcha').count() == 1
-    assert open("/tmp/netids/{}__{}".format(sid, uid)).read() == xml
+    assert open(f"/tmp/netids/{sid}__{uid}").read() == xml
     assert user.inscription_set.count() == 4

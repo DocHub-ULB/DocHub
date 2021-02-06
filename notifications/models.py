@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -26,4 +23,4 @@ def action_save_handler(sender, created, instance, **kwargs):
 
 
 # Import at the end to avoid cyclic imports
-from notifications.tasks import handle_action # NOQA
+from notifications.tasks import handle_action  # NOQA

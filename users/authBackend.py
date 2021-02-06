@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+import os
+import sys
+from base64 import b64encode
+from datetime import date
+
+from django.conf import settings
+from django.db import IntegrityError
 
 import requests
 import xmltodict
-from datetime import date
-import os
-from users.models import User, Inscription
-from django.db import IntegrityError
 from furl import furl
-from base64 import b64encode
-from django.conf import settings
-import sys
+
+from users.models import Inscription, User
 
 
 class IntranetError(Exception):
     pass
 
 
-class NetidBackend(object):
+class NetidBackend:
     ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid={}&_uid={}'
 
     def get_user(self, user_id):
@@ -36,7 +36,7 @@ class NetidBackend(object):
         try:
             if not os.path.exists("/tmp/netids/"):
                 os.mkdir("/tmp/netids/")
-            with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
+            with open(f"/tmp/netids/{sid}__{uid}", "w") as f:
                 if sys.version_info.major >= 3:
                     f.write(resp.text)
                 else:

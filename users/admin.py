@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.contrib import admin
-from .models import User, Inscription
+
+from .models import Inscription, User
 
 
 class InscriptionInline(admin.TabularInline):
@@ -15,6 +13,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('netid', 'name', 'is_staff', 'is_academic', 'is_representative', 'last_login', 'created', 'inferred_faculty', 'inscription_faculty')
     list_filter = ('is_staff', 'is_academic', 'is_representative', 'last_login', 'created', 'inferred_faculty', 'inscription_faculty')
     search_fields = ('netid', 'first_name', 'last_name')
+    date_hierarchy = 'created'
 
     readonly_fields = ('netid', 'last_login', 'registration', 'inferred_faculty', 'inscription_faculty')
     filter_horizontal = ('moderated_courses',)

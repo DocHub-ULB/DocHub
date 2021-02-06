@@ -1,17 +1,15 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from documents.models import Document
-from catalog.models import Course
-from users.models import User
-import pytest
-import mock
-import tempfile
 import os
-from django.conf import settings
+import tempfile
+from unittest import mock
 
+from django.conf import settings
 from django.core.management import call_command
 
+import pytest
+
+from catalog.models import Course
+from documents.models import Document
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 

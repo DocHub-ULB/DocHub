@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from django.http import HttpResponse
 from django.db.models import F
+from django.http import HttpResponse
 
-from rest_framework.response import Response
+from rest_framework import permissions, status
 from rest_framework.decorators import action
-from rest_framework import status
-from rest_framework import permissions
-from www.rest import VaryModelViewSet
+from rest_framework.response import Response
 
-from documents.serializers import DocumentSerializer, UploadDocumentSerializer, EditDocumentSerializer
 from documents.models import Document, Vote
+from documents.serializers import (
+    DocumentSerializer,
+    EditDocumentSerializer,
+    UploadDocumentSerializer,
+)
+from www.rest import VaryModelViewSet
 
 
 class DocumentAccessPermission(permissions.IsAuthenticated):
@@ -43,7 +43,7 @@ class DocumentViewSet(VaryModelViewSet):
         response = HttpResponse(body, content_type='application/octet-stream')
         response['Content-Description'] = 'File Transfer'
         response['Content-Transfer-Encoding'] = 'binary'
-        response['Content-Disposition'] = 'attachment; filename="{}{}"'.format(document.safe_name, document.file_type).encode("ascii", "ignore")
+        response['Content-Disposition'] = f'attachment; filename="{document.safe_name}{document.file_type}"'.encode("ascii", "ignore")
 
         document.downloads = F('downloads') + 1
         document.save(update_fields=['downloads'])

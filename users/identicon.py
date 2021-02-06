@@ -3,11 +3,7 @@ identicon.py
 identicon python implementation.
 by Shin Adachi <shn@glucose.jp>
 """
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImagePath
-from PIL import ImageColor
-
+from PIL import Image, ImageColor, ImageDraw, ImagePath
 
 __all__ = ['render_identicon', 'IdenticonRendererBase']
 
@@ -85,8 +81,8 @@ class Matrix2D(list):
             kls.translate(*pivot)
 
 
-class IdenticonRendererBase(object):
-    PATH_SET = []
+class IdenticonRendererBase:
+    PATH_SET = [] # type: ignore
 
     def __init__(self, code):
         """
@@ -192,7 +188,7 @@ class DonRenderer(IdenticonRendererBase):
     # modify path set
     for idx in range(len(PATH_SET)):
         if PATH_SET[idx]:
-            p = list(map(lambda vec: (vec[0] / 4.0, vec[1] / 4.0), PATH_SET[idx]))
+            p = list(map(lambda vec: (vec[0] / 4.0, vec[1] / 4.0), PATH_SET[idx])) # type: ignore
             PATH_SET[idx] = p + p[:1]
 
     def decode(self, code):

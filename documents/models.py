@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from django.db import models
-from django.urls import reverse
+import unicodedata
 
 from django.conf import settings
+from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-import unicodedata
+from django.urls import reverse
 
 UNCONVERTIBLE_TYPES = [
     '.zip',
@@ -19,15 +16,14 @@ UNCONVERTIBLE_TYPES = [
 
 
 class Document(models.Model):
-    STATES = (
-        ('PREPARING', 'En préparation'),
-        ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery'),
-        ('IN_QUEUE', 'Envoyé à Celery'),
-        ('PROCESSING', 'En cours de traitement'),
-        ('DONE', 'Rendu fini'),
-        ('ERROR', 'Erreur'),
-        ('REPAIRED', 'Réparé'),
-    )
+    class DocumentState(models.TextChoices):
+        PREPARING = ('PREPARING', 'En préparation')
+        READY_TO_QUEUE = ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery')
+        IN_QUEUE = ('IN_QUEUE', 'Envoyé à Celery')
+        PROCESSING = ('PROCESSING', 'En cours de traitement')
+        DONE = ('DONE', 'Rendu fini')
+        ERROR = ('ERROR', 'Erreur')
+        REPAIRED = ('REPAIRED', 'Réparé')
 
     name = models.CharField(max_length=255, verbose_name='Titre')
     course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours', on_delete=models.CASCADE)
@@ -49,23 +45,24 @@ class Document(models.Model):
     original = models.FileField(upload_to='original_document')
     pdf = models.FileField(upload_to='pdf_document')
 
-    state = models.CharField(max_length=20, choices=STATES, default='PREPARING', db_index=True, verbose_name='État')
+    state = models.CharField(max_length=20, choices=DocumentState.choices, default=DocumentState.PREPARING, db_index=True, verbose_name='État')
     md5 = models.CharField(max_length=32, default='', db_index=True)
 
     hidden = models.BooleanField(default=False, verbose_name='Est caché')
     import_source = models.CharField(max_length=1024, null=True, verbose_name="Importé depuis")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
-    def imported(self):
+    def imported(self) -> bool:
         return self.import_source is not None
 
     @property
-    def is_pdf(self):
+    def is_pdf(self) -> bool:
         return self.file_type in ('.pdf', 'application/pdf')
 
+    # TODO use typed dict
     @property
     def votes(self):
         upvotes, downvotes = 0, 0
@@ -74,64 +71,64 @@ class Document(models.Model):
         #   to the database for each document. Thats bad.
         for vote in self.vote_set.all():
             vote_type = vote.vote_type
-            if vote_type == Vote.UPVOTE:
+            if vote_type == Vote.VoteType.UPVOTE:
                 upvotes += 1
-            elif vote_type == Vote.DOWNVOTE:
+            elif vote_type == Vote.VoteType.DOWNVOTE:
                 downvotes += 1
             else:
-                raise NotImplemented("Vote not of known type.")
+                raise NotImplementedError("Vote not of known type.")
 
         return {"upvotes": upvotes, "downvotes": downvotes}
 
-    def fullname(self):
+    def fullname(self) -> str:
         return self.__str__()
 
-    def repair(self):
+    def repair(self) -> None:
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
         repair.delay(self.id)
 
-    def is_unconvertible(self):
+    def is_unconvertible(self) -> bool:
         return self.file_type in UNCONVERTIBLE_TYPES
 
-    def is_ready(self):
-        return self.state in ('DONE', 'REPAIRED')
+    def is_ready(self) -> bool:
+        return self.state in (Document.DocumentState.DONE, Document.DocumentState.REPAIRED)
 
     def is_processing(self):
-        return self.state in ('PREPARING', 'IN_QUEUE', 'PROCESSING')
+        return self.state in (Document.DocumentState.PREPARING, Document.DocumentState.IN_QUEUE, Document.DocumentState.PROCESSING)
 
     @property
-    def safe_name(self):
+    def safe_name(self) -> str:
         return unicodedata.normalize("NFKD", self.name)
 
-    def reprocess(self, force=False):
+    def reprocess(self, force=False) -> None:
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
 
-        if self.state != "ERROR" and not force:
+        if self.state != Document.DocumentState.ERROR and not force:
             raise Exception("Document is not in error state it is " + self.state)
 
-        self.state = 'READY_TO_QUEUE'
+        self.state = Document.DocumentState.READY_TO_QUEUE
         self.md5 = ""
         self.add_to_queue()
 
-    def add_to_queue(self):
+    def add_to_queue(self) -> None:
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
 
-        self.state = "IN_QUEUE"
+        self.state = Document.DocumentState.IN_QUEUE
         self.save()
         try:
             process_document.delay(self.id)
         except Exception as e:
-            self.state = "READY_TO_QUEUE"
+            self.state = Document.DocumentState.READY_TO_QUEUE
             self.save()
             raise e
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse('document_show', args=(self.id, ))
 
-    def write_perm(self, user, moderated_courses):
+    def write_perm(self, user, moderated_courses) -> bool:
         if user.id == self.user_id:
             return True
 
@@ -140,23 +137,21 @@ class Document(models.Model):
 
         return False
 
-    def tag_from_name(self):
+    def tag_from_name(self) -> None:
         tags = logic.tags_from_name(self.name)
         self.tags.add(*tags)
 
 
 class Vote(models.Model):
-    UPVOTE = "up"
-    DOWNVOTE = "down"
-    VOTE_TYPE_CHOICES = (
-        (UPVOTE, "Upvote"),
-        (DOWNVOTE, "Downvote")
-    )
+
+    class VoteType(models.TextChoices):
+        UPVOTE = 'up'
+        DOWNVOTE = 'down'
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     when = models.DateTimeField(auto_now=True)
-    vote_type = models.CharField(max_length=10, choices=VOTE_TYPE_CHOICES)
+    vote_type = models.CharField(max_length=10, choices=VoteType.choices)
 
     class Meta:
         unique_together = ("user", "document")
@@ -165,7 +160,7 @@ class Vote(models.Model):
 class DocumentError(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     task_id = models.CharField(max_length=255)
-    exception = models.CharField(max_length=1000)
+    exception = models.CharField(max_length=50000)
     traceback = models.TextField()
 
     def __str__(self):
@@ -173,7 +168,7 @@ class DocumentError(models.Model):
 
 
 @receiver(pre_delete, sender=Document)
-def cleanup_document_files(instance, **kwargs):
+def cleanup_document_files(instance: Document, **kwargs) -> None:
     """
     Deletes all files when the database object is deleted.
     Checks that the name is not empty as that is what is returned when there is
@@ -192,6 +187,7 @@ def cleanup_document_files(instance, **kwargs):
         instance.original.storage.delete(original_file_name)
 
 
+from documents import logic  # NOQA
+
 # Import at the end to avoid circular imports
-from documents.tasks import process_document, repair # NOQA
-from documents import logic # NOQA
+from documents.tasks import process_document, repair  # NOQA

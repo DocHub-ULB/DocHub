@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import pytest
-from users.models import User
+
 from catalog.models import Category, Course
 from documents.models import Document
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 

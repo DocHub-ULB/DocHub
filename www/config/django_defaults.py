@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 # Copyright 2014, Cercle Informatique ASBL. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -10,8 +7,8 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from os.path import dirname, join, normpath
 import re
+from os.path import dirname, join, normpath
 
 BASE_DIR = dirname(dirname(dirname(__file__)))
 
@@ -86,11 +83,11 @@ SECRET_FILE = normpath(join(BASE_DIR, 'www', 'secret_key.txt'))
 
 try:
     SECRET_KEY = open(SECRET_FILE).read().strip()
-except IOError:
+except OSError:
     try:
         with open(SECRET_FILE, 'w') as f:
             import random
             SECRET_KEY = ''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
             f.write(SECRET_KEY)
-    except IOError:
+    except OSError:
         raise Exception('Cannot open file `%s` for writing the secret_key' % SECRET_FILE)

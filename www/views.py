@@ -1,19 +1,17 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from django.shortcuts import render
-from actstream.models import user_stream
 from django.conf import settings
-from django.views.generic import TemplateView
-from django.template.loader import get_template
 from django.db.models import Sum
+from django.shortcuts import render
+from django.template.loader import get_template
+from django.views.generic import TemplateView
 
-from telepathy.models import Thread
-from documents.models import Document
-from users.models import User
-from users.authBackend import NetidBackend
+from actstream.models import user_stream
+
 from catalog.forms import SearchForm
 from catalog.models import Category
+from documents.models import Document
+from telepathy.models import Thread
+from users.authBackend import NetidBackend
+from users.models import User
 
 
 def index(request):
@@ -51,6 +49,6 @@ def index(request):
 
 class HelpView(TemplateView):
     def get_context_data(self):
-        r = super(HelpView, self).get_context_data()
+        r = super().get_context_data()
         r["faq_md"] = get_template("faq.md").render()
         return r

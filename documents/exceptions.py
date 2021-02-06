@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-
 class MissingBinary(EnvironmentError):
     def __repr__(self):
         message = self.args[0] if self.args else ""
@@ -20,9 +16,9 @@ class DocumentProcessingError(Exception):
 
     def __repr__(self):
         if not self.message:
-            return "DocumentProcessingError on document {0.id}".format(self.document)
+            return f"DocumentProcessingError on document {self.document.id}"
         else:
-            return "DocumentProcessingError('{0}'') on document {1.id}".format(self.message, self.document)
+            return f"DocumentProcessingError('{self.message}'') on document {self.document.id}"
 
     __str__ = __repr__
 
@@ -30,7 +26,7 @@ class DocumentProcessingError(Exception):
 class UploadError(DocumentProcessingError):
 
     def __repr__(self):
-        return "UploadError('Document {0.id} was not properly uploaded by django.')".format(self.document)
+        return f"UploadError('Document {self.document.id} was not properly uploaded by django.')"
 
 
 class DownloadError(DocumentProcessingError):

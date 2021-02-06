@@ -1,16 +1,13 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-import pytest
-import mock
 import sys
+from unittest import mock
 
 from django.core.files import File
 
-from users.models import User
-from documents.models import Document
-from documents.models import process_document
+import pytest
 from celery_test import create_doc
+
+from documents.models import Document, process_document
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 
@@ -44,30 +41,30 @@ def test_repr_with_accents(doc):
 
 
 def test_url(doc):
-    assert doc.get_absolute_url() == "/documents/{}".format(doc.id)
+    assert doc.get_absolute_url() == f"/documents/{doc.id}"
 
 
 def test_tag_from_name_exam(doc):
     doc.name = "Examen (corrigé)"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == set(['examen', 'corrigé'])
+    assert set(map(lambda x: x.name, doc.tags.all())) == {'examen', 'corrigé'}
 
 
 def test_tag_from_name_exam_month(doc):
     doc.name = "Mai 2012"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == set(['examen'])
+    assert set(map(lambda x: x.name, doc.tags.all())) == {'examen'}
 
 
 def test_tag_resume(doc):
     doc.name = "Résumé de Nicolas"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == set(['résumé'])
+    assert set(map(lambda x: x.name, doc.tags.all())) == {'résumé'}
 
 
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess_done(mock_add_to_queue, doc):
-    doc.state = "DONE"
+    doc.state = Document.DocumentState.DONE
 
     with pytest.raises(Exception):
         doc.reprocess()
@@ -76,7 +73,7 @@ def test_reprocess_done(mock_add_to_queue, doc):
 
 @mock.patch.object(Document, 'add_to_queue')
 def test_reprocess(mock_add_to_queue, doc):
-    doc.state = 'ERROR'
+    doc.state = Document.DocumentState.ERROR
     doc.reprocess()
 
     assert mock_add_to_queue.called == 1
@@ -88,7 +85,7 @@ def test_add_to_queue(mock_process_document, doc):
 
     doc.add_to_queue()
 
-    assert doc.state == "IN_QUEUE"
+    assert doc.state == Document.DocumentState.IN_QUEUE
     assert mock_process_document.called == 1
 
 
@@ -96,9 +93,10 @@ def test_document_file_cleanup():
     doc = create_doc('TestDocumentToDelete', '.pdf') # from celery tests
     doc.save()
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    doc.pdf.save('ThisPdfShouldGetDeleted.pdf', f)
-    doc.original.save("ThisOriginalShouldGetDeleted.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.pdf.save('ThisPdfShouldGetDeleted.pdf', f)
+        doc.original.save("ThisOriginalShouldGetDeleted.pdf", f)
 
     # Get file paths
     originalfilename = doc.original.file.name
@@ -106,9 +104,9 @@ def test_document_file_cleanup():
 
     doc.delete()
     with pytest.raises(IOError) as errorinfo:
-        file = open(originalfilename, 'r')
+        open(originalfilename)
     assert 'No such file or directory' in str(errorinfo)
 
     with pytest.raises(IOError) as errorinfo:
-        file = open(pdffilename, 'r')
+        open(pdffilename)
     assert 'No such file or directory' in str(errorinfo)

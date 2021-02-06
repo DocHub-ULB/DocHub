@@ -1,11 +1,10 @@
-from rest_framework import serializers
 from actstream.models import Action
+from rest_framework import serializers
 
-from users.serializers import SmallUserSerializer
-
-from documents.models import Document
 from catalog.models import Course
+from documents.models import Document
 from telepathy.models import Message, Thread
+from users.serializers import SmallUserSerializer
 
 
 class PolymorphicSerializer(serializers.ModelSerializer):

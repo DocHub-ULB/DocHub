@@ -1,15 +1,12 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-import os
 import glob
+import os
 
-from django.core.management.base import BaseCommand
 from django.core.files import File
+from django.core.management.base import BaseCommand
 
-from users.models import User
 from catalog.models import Course
 from documents import logic
+from users.models import User
 
 TAGS = {
     'off': 'officiel',
@@ -39,7 +36,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         netid = options["username"]
-        self.stdout.write('Looking for user "{}"'.format(netid))
+        self.stdout.write(f'Looking for user "{netid}"')
 
         user = User.objects.filter(netid=netid).first()
         if user is None:
@@ -47,7 +44,7 @@ class Command(BaseCommand):
             return
 
         slug = options["course_slug"]
-        self.stdout.write('Looking for course "{}"'.format(slug))
+        self.stdout.write(f'Looking for course "{slug}"')
 
         course = Course.objects.filter(slug=slug).first()
         if course is None:
@@ -55,7 +52,7 @@ class Command(BaseCommand):
             return
 
         path = options['path']
-        self.stdout.write('Gathering documents in "{}"'.format(path))
+        self.stdout.write(f'Gathering documents in "{path}"')
         if not os.path.exists(path):
             self.stdout.write("Path does not exist")
             return
@@ -75,14 +72,15 @@ def import_document_from_path(doc_path, course, user):
 
     name = logic.clean_filename(name)
 
-    document = logic.add_file_to_course(
-        file=File(open(doc_path, 'rb')),
-        name=name,
-        extension=extension,
-        course=course,
-        tags=tags,
-        user=user
-    )
+    with open(doc_path, 'rb') as fd:
+        document = logic.add_file_to_course(
+            file=File(fd),
+            name=name,
+            extension=extension,
+            course=course,
+            tags=tags,
+            user=user
+        )
 
     document.add_to_queue()
 

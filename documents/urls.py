@@ -1,27 +1,25 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from django.urls import path
 
-from django.conf.urls import url
 import documents.views
 
 urlpatterns = [
-    url(r"^upload/(?P<slug>[\w-]+)$",
+    path("upload/<slug:slug>",
         documents.views.upload_file,
         name="document_put"),
 
-    url(r"^multiple_upload/(?P<slug>[\w-]+)$",
+    path("multiple_upload/<slug:slug>",
         documents.views.upload_multiple_files,
         name="document_put_multiple"),
 
-    url(r"^(?P<pk>\d+)/edit$",
+    path("<int:pk>/edit",
         documents.views.document_edit,
         name="document_edit"),
 
-    url(r"^(?P<pk>\d+)/reupload$",
+    path("<int:pk>/reupload",
         documents.views.document_reupload,
         name="document_reupload"),
 
-    url(r"^(?P<pk>\d+)$",
+    path("<int:pk>",
         documents.views.document_show,
         name="document_show"),
 ]

@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models
 from django.urls import reverse
 
-
-from mptt.models import MPTTModel, TreeForeignKey
 import actstream
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Category(MPTTModel):
@@ -37,7 +33,7 @@ class Course(models.Model):
 
     def gehol_url(self):
         slug = self.slug.replace('-', '').upper()
-        return "https://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours=%s" % (slug,)
+        return f"https://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours={slug}"
 
     def get_absolute_url(self):
         return reverse('course_show', args=(self.slug, ))
@@ -46,7 +42,7 @@ class Course(models.Model):
         return self.slug.upper()
 
     def fullname(self):
-        return "{} ({})".format(self.name, self.slug.lower())
+        return f"{self.name} ({self.slug.lower()})"
 
     @property
     def followers_count(self):

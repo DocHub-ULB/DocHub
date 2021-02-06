@@ -1,16 +1,13 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from django.urls import reverse
 
 import django_webtest
-from webtest import Upload
-from users.models import User
-from catalog.models import Category, Course
-from tags.models import Tag
-from documents.models import Document
-
-import mock
-from django.urls import reverse
 import pytest
+from webtest import Upload
+
+from catalog.models import Category, Course
+from documents.models import Document
+from tags.models import Tag
+from users.models import User
 
 pytestmark = [pytest.mark.django_db, pytest.mark.webtest]
 
@@ -49,12 +46,12 @@ def tree():
 
 
 def test_name_in_page(app, user):
-    root = Category.objects.create(
+    Category.objects.create(
         name="ULB",
         slug="root",
         parent=None,
     )
-    
+
     index = app.get('/', user=user.netid)
     assert user.first_name in index
 

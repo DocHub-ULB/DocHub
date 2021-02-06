@@ -1,7 +1,12 @@
 import re
 
+from django.contrib.postgres.search import (
+    SearchQuery,
+    SearchRank,
+    SearchVector,
+    TrigramSimilarity,
+)
 from django.db.models import Count, F
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 
 from catalog.models import Course
 
@@ -12,7 +17,7 @@ def search_course(string):
 
     if slug_matches:
         fac, middle, digits = slug_matches[0]
-        slug = "%s-%s-%s" % (fac, middle, digits)
+        slug = f"{fac}-{middle}-{digits}"
         slug = slug.lower()
         exact_slug = Course.objects.filter(slug__iexact=slug).annotate(Count('document'))
         if len(exact_slug) > 0:

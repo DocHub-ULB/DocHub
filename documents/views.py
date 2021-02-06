@@ -1,24 +1,25 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import os
 import uuid
 
-from django.urls import reverse
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
-from django.conf import settings
-
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 
 from actstream import action
 
-from documents.models import Document
 from catalog.models import Course
-from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm, ReUploadForm
-from tags.models import Tag
 from documents import logic
+from documents.forms import (
+    FileForm,
+    MultipleUploadFileForm,
+    ReUploadForm,
+    UploadFileForm,
+)
+from documents.models import Document
+from tags.models import Tag
 
 
 @login_required
@@ -144,7 +145,7 @@ def document_reupload(request, pk):
     if not request.user.write_perm(obj=document):
         return HttpResponse('You may not edit this document.', status=403)
 
-    if document.state != "DONE":
+    if document.state != Document.DocumentState.DONE:
         return HttpResponse('You may not edit this document while it is processing.', status=403)
 
     if request.method == 'POST':
@@ -162,7 +163,7 @@ def document_reupload(request, pk):
 
             document.original.save(str(uuid.uuid4()) + extension, file)
 
-            document.state = "PREPARING"
+            document.state = Document.DocumentState.PREPARING
             document.save()
 
             document.reprocess(force=True)
@@ -188,7 +189,7 @@ def document_show(request, pk):
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
-    if document.state != "DONE":
+    if document.state != Document.DocumentState.DONE:
         return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))
 
     context = {

@@ -1,21 +1,17 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import os
 from base64 import b64decode
 
-
-from PIL import Image, ImageOps
-from django.urls import reverse
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.contrib.auth import authenticate, login
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
-from rest_framework.authtoken.models import Token
 from actstream.models import actor_stream
+from PIL import Image, ImageOps
+from rest_framework.authtoken.models import Token
 
 from users.forms import SettingsForm
 
@@ -32,7 +28,7 @@ def user_settings(request):
             if not os.path.exists(os.path.join(settings.MEDIA_ROOT, "profile")):
                 os.makedirs(os.path.join(settings.MEDIA_ROOT, "profile"))
 
-            im.save(os.path.join(settings.MEDIA_ROOT, "profile/{}.png".format(request.user.netid)))
+            im.save(os.path.join(settings.MEDIA_ROOT, f"profile/{request.user.netid}.png"))
             request.user.photo = "png"
             request.user.save()
 

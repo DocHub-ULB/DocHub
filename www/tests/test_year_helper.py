@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from datetime import datetime
+from unittest import mock
 
 from www import helpers
-from datetime import datetime
-import mock
 
 
 def mock_datetime(y, m, d, H, M, S):

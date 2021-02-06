@@ -1,17 +1,19 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import Dict
 
-from django.core.management.base import BaseCommand
 import json
 from os import path
-import yaml
-from raven.contrib.django.raven_compat.models import client
-from django.db import transaction
-
 
 from django.conf import settings
+from django.core.management.base import BaseCommand
+from django.db import transaction
+
+import requests
+import yaml
+from bs4 import BeautifulSoup
+from raven.contrib.django.raven_compat.models import client
+
 from catalog.models import Category, Course
-from libulb.catalog.course import Course as ULBCourse
+from catalog.slug import Slug
 
 
 class Command(BaseCommand):
@@ -26,22 +28,23 @@ class Command(BaseCommand):
             help='Hit ULB servers to get courses names from slugs'
         )
         parser.add_argument(
-            '--tree',
             dest='tree_file',
-            help='Path to the .yaml tree file'
+            help='Path to the .yaml tree file',
+            metavar="TREE_FILE"
         )
 
-    LOCAL_CACHE = {}
-    YEAR = "201718"
+    LOCAL_CACHE: Dict[str, str] = {}
 
     def handle(self, *args, **options):
         self.stdout.write('Loading tree ... ')
 
         if not options['hitulb']:
             f = path.join(settings.BASE_DIR, 'catalog/management/localcache.json')
-            self.LOCAL_CACHE = json.loads(open(f).read())
+            with open(f) as fd:
+                self.LOCAL_CACHE = json.loads(fd.read())
 
-        tree = yaml.load(open(options['tree_file']))
+        with open(options['tree_file']) as fd:
+            tree = yaml.safe_load(fd)
 
         with transaction.atomic():
             Category.objects.all().delete()
@@ -74,8 +77,10 @@ class Command(BaseCommand):
                     name = self.LOCAL_CACHE.get(tree, "Unknown course in cache")
                 else:
                     try:
-                        ulb_course = ULBCourse.get_from_slug(tree, self.YEAR)
-                        name = ulb_course.name
+                        slug = Slug.from_dochub(tree)
+                        r = requests.get(f"https://www.ulb.be/fr/programme/{slug.catalog}")
+                        soup = BeautifulSoup(r.text, "html5lib")
+                        name = soup.find("h1").text.strip()
                     except Exception:
                         print("Slug %s failed" % tree)
                         client.captureException()

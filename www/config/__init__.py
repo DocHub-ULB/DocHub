@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 # Copyright 2014, Cercle Informatique ASBL. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -10,7 +7,6 @@ from __future__ import unicode_literals
 #
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from __future__ import absolute_import
 
 try:
     from www.config.local import *

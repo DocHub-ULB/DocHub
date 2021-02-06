@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 # import pytest
 
-from users.authBackend import NetidBackend
 import datetime
+
+from users.authBackend import NetidBackend
 
 parse = NetidBackend()._parse_response
 
