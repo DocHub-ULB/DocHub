@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.conf import settings
-
+from django.db.models.query import QuerySet
 from .models import Document, DocumentError, Vote
 
 
-def reprocess(modeladmin, request, queryset):
+def reprocess(modeladmin, request, queryset: 'QuerySet[Document]'):
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
 
@@ -15,7 +15,7 @@ def reprocess(modeladmin, request, queryset):
 reprocess.short_description = "Reprocess selected documents" # type: ignore
 
 
-def autotag(modeladmin, request, queryset):
+def autotag(modeladmin, request, queryset: 'QuerySet[Document]'):
     for doc in queryset:
         doc.tag_from_name()
 
@@ -23,7 +23,7 @@ def autotag(modeladmin, request, queryset):
 autotag.short_description = "Auto-tag selected documents" # type: ignore
 
 
-def repair(modeladmin, request, queryset):
+def repair(modeladmin, request, queryset: 'QuerySet[Document]'):
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
 

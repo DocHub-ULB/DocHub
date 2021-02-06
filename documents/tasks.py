@@ -5,6 +5,7 @@ import tempfile
 import os
 import contextlib
 import re
+from typing import Optional
 
 from celery import shared_task, chain
 from PyPDF2 import PdfFileReader
@@ -47,7 +48,7 @@ def short_doctask(*args, **kwargs):
 
 
 @doctask
-def process_document(self, document_id):
+def process_document(self, document_id: int) -> int:
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
 
@@ -68,9 +69,11 @@ def process_document(self, document_id):
     else:
         process_office.delay(document_id)
 
+    return document_id
+
 
 @doctask
-def checksum(self, document_id):
+def checksum(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
     contents = document.original.read()
@@ -111,7 +114,7 @@ checksum.throws = (ExisingChecksum,)
 
 
 @short_doctask
-def convert_office_to_pdf(self, document_id):
+def convert_office_to_pdf(self, document_id: int) -> int:
     try:
         document = Document.objects.get(pk=document_id)
 
@@ -137,7 +140,7 @@ def convert_office_to_pdf(self, document_id):
 
 
 @short_doctask
-def mesure_pdf_length(self, document_id):
+def mesure_pdf_length(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
     try:
@@ -152,7 +155,7 @@ def mesure_pdf_length(self, document_id):
 
 
 @doctask
-def finish_file(self, document_id):
+def finish_file(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
     document.state = Document.DocumentState.DONE
     document.save()
@@ -164,7 +167,7 @@ def finish_file(self, document_id):
 
 
 @short_doctask
-def repair(self, document_id):
+def repair(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
     pdf_is_original = document.pdf == document.original
@@ -233,7 +236,7 @@ def temporary_file_path(prefix="", suffix=""):
         os.remove(path)
 
 
-def mutool_get_pages(document):
+def mutool_get_pages(document: Document) -> Optional[int]:
     with file_as_local(document.pdf, prefix="dochub_pdf_len_") as tmpfile:
         try:
             output = subprocess.check_output(["mutool", "info", tmpfile.name], stderr=subprocess.STDOUT)

@@ -51,17 +51,18 @@ class Document(models.Model):
     hidden = models.BooleanField(default=False, verbose_name='Est caché')
     import_source = models.CharField(max_length=1024, null=True, verbose_name="Importé depuis")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
-    def imported(self):
+    def imported(self) -> bool:
         return self.import_source is not None
 
     @property
-    def is_pdf(self):
+    def is_pdf(self) -> bool:
         return self.file_type in ('.pdf', 'application/pdf')
 
+    # TODO use typed dict
     @property
     def votes(self):
         upvotes, downvotes = 0, 0
@@ -79,28 +80,28 @@ class Document(models.Model):
 
         return {"upvotes": upvotes, "downvotes": downvotes}
 
-    def fullname(self):
+    def fullname(self) -> str:
         return self.__str__()
 
-    def repair(self):
+    def repair(self) -> None:
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
         repair.delay(self.id)
 
-    def is_unconvertible(self):
+    def is_unconvertible(self) -> bool:
         return self.file_type in UNCONVERTIBLE_TYPES
 
-    def is_ready(self):
+    def is_ready(self) -> bool:
         return self.state in (Document.DocumentState.DONE, Document.DocumentState.REPAIRED)
 
     def is_processing(self):
         return self.state in (Document.DocumentState.PREPARING, Document.DocumentState.IN_QUEUE, Document.DocumentState.PROCESSING)
 
     @property
-    def safe_name(self):
+    def safe_name(self) -> str:
         return unicodedata.normalize("NFKD", self.name)
 
-    def reprocess(self, force=False):
+    def reprocess(self, force=False) -> None:
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
 
@@ -111,7 +112,7 @@ class Document(models.Model):
         self.md5 = ""
         self.add_to_queue()
 
-    def add_to_queue(self):
+    def add_to_queue(self) -> None:
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
 
@@ -124,10 +125,10 @@ class Document(models.Model):
             self.save()
             raise e
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse('document_show', args=(self.id, ))
 
-    def write_perm(self, user, moderated_courses):
+    def write_perm(self, user, moderated_courses) -> bool:
         if user.id == self.user_id:
             return True
 
@@ -136,7 +137,7 @@ class Document(models.Model):
 
         return False
 
-    def tag_from_name(self):
+    def tag_from_name(self) -> None:
         tags = logic.tags_from_name(self.name)
         self.tags.add(*tags)
 
@@ -167,7 +168,7 @@ class DocumentError(models.Model):
 
 
 @receiver(pre_delete, sender=Document)
-def cleanup_document_files(instance, **kwargs):
+def cleanup_document_files(instance: Document, **kwargs) -> None:
     """
     Deletes all files when the database object is deleted.
     Checks that the name is not empty as that is what is returned when there is

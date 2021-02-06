@@ -36,14 +36,14 @@ class Tree(viewsets.ViewSet):
     """
 
     def list(self, request, format=None):
-        def course(node):
+        def course(node: Course):
             return {
                 'name': node.name,
                 'id': node.id,
                 'slug': node.slug,
             }
 
-        def category(node):
+        def category(node: Category):
             return {
                 'name': node.name,
                 'id': node.id,

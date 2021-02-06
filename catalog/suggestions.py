@@ -1,16 +1,18 @@
 from catalog.models import Course
 import collections
+from users.models import User
 from django.contrib.contenttypes.models import ContentType
 from actstream.models import Follow
+import typing
 
 
-def distance(v1, v2):
+def distance(v1: typing.List[bool], v2: typing.List[bool]) -> float:
     absolute_difference = [abs(c1 - c2) for c1, c2 in zip(v1, v2)]
     distance = sum(absolute_difference)
     return distance
 
 
-def get_users_following_dict():
+def get_users_following_dict() -> typing.Dict[int, typing.Set[int]]:
     course_type = ContentType.objects.get(app_label="catalog", model="course")
     follows = Follow.objects.filter(content_type=course_type).only('user_id', 'object_id')
 
@@ -21,7 +23,7 @@ def get_users_following_dict():
     return following_dict
 
 
-def suggest(target_user, K=15):
+def suggest(target_user: User, K: int = 15) -> typing.List[typing.Tuple[Course, int]]:
     courses = Course.objects.only('id')
     users_following = get_users_following_dict()
 
@@ -38,7 +40,7 @@ def suggest(target_user, K=15):
     get_score = lambda x: x[1]
     neighbors = sorted(non_null_distances.items(), key=get_score)[:K]
 
-    best_matches = collections.Counter()
+    best_matches: typing.Counter[int] = collections.Counter()
     target_set = users_following[target_user.id]
 
     for user_id, score in neighbors:
