@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from users.models import User
 from catalog.models import Course
+from documents.models import Document
 from tags.models import Tag
 import pytest
 from documents import logic
@@ -40,6 +38,6 @@ def test_add_file_to_course(user, course):
     assert doc
     assert doc in course.document_set.all()
     assert doc.name == "My document"
-    assert doc.state == 'READY_TO_QUEUE'
+    assert doc.state == Document.DocumentState.READY_TO_QUEUE
     assert Tag.objects.count() == 3
     assert doc.tags.count() == 3

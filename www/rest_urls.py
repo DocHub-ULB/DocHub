@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from rest_framework.routers import DefaultRouter, APIRootView
 
 import users.rest
@@ -45,11 +42,11 @@ router.register(r'categories', catalog.rest.CategoryViewSet)
 router.register(r'threads', telepathy.rest.ThreadViewSet)
 router.register(r'messages', telepathy.rest.MessageViewSet)
 router.register(r'documents', documents.rest.DocumentViewSet)
-router.register(r'search/courses', search.rest.CourseSearchViewSet, base_name="search-courses")
-router.register(r'feed', www.rest.FeedViewSet, base_name="feed")
-router.register(r'me', users.rest.Me, base_name="users-me")
-router.register(r'notifications', notifications.rest.NotificationsViewSet, base_name="notifications")
-router.register(r'me/actions', www.rest.SelfFeedViewSet, base_name="user-actions")
-router.register(r'tree', catalog.rest.Tree, base_name="catalog-tree")
+router.register(r'search/courses', search.rest.CourseSearchViewSet, basename="search-courses")
+router.register(r'feed', www.rest.FeedViewSet, basename="feed")
+router.register(r'me', users.rest.Me, basename="users-me")
+router.register(r'notifications', notifications.rest.NotificationsViewSet, basename="notifications")
+router.register(r'me/actions', www.rest.SelfFeedViewSet, basename="user-actions")
+router.register(r'tree', catalog.rest.Tree, basename="catalog-tree")
 
 urlpatterns = router.urls

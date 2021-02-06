@@ -12,7 +12,7 @@ def search_course(string):
 
     if slug_matches:
         fac, middle, digits = slug_matches[0]
-        slug = "%s-%s-%s" % (fac, middle, digits)
+        slug = f"{fac}-{middle}-{digits}"
         slug = slug.lower()
         exact_slug = Course.objects.filter(slug__iexact=slug).annotate(Count('document'))
         if len(exact_slug) > 0:

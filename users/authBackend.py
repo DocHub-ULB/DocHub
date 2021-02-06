@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import requests
 import xmltodict
 from datetime import date
@@ -17,7 +14,7 @@ class IntranetError(Exception):
     pass
 
 
-class NetidBackend(object):
+class NetidBackend:
     ULB_AUTH = 'https://www.ulb.ac.be/commons/check?_type=normal&_sid={}&_uid={}'
 
     def get_user(self, user_id):
@@ -36,7 +33,7 @@ class NetidBackend(object):
         try:
             if not os.path.exists("/tmp/netids/"):
                 os.mkdir("/tmp/netids/")
-            with open("/tmp/netids/{}__{}".format(sid, uid), "w") as f:
+            with open(f"/tmp/netids/{sid}__{uid}", "w") as f:
                 if sys.version_info.major >= 3:
                     f.write(resp.text)
                 else:

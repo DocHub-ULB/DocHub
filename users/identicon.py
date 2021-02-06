@@ -85,8 +85,8 @@ class Matrix2D(list):
             kls.translate(*pivot)
 
 
-class IdenticonRendererBase(object):
-    PATH_SET = []
+class IdenticonRendererBase:
+    PATH_SET = [] # type: ignore
 
     def __init__(self, code):
         """
@@ -192,7 +192,7 @@ class DonRenderer(IdenticonRendererBase):
     # modify path set
     for idx in range(len(PATH_SET)):
         if PATH_SET[idx]:
-            p = list(map(lambda vec: (vec[0] / 4.0, vec[1] / 4.0), PATH_SET[idx]))
+            p = list(map(lambda vec: (vec[0] / 4.0, vec[1] / 4.0), PATH_SET[idx])) # type: ignore
             PATH_SET[idx] = p + p[:1]
 
     def decode(self, code):

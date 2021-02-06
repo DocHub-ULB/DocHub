@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.core.management.base import BaseCommand
 import json
 from os import path
@@ -10,6 +7,7 @@ from django.db import transaction
 import requests
 from bs4 import BeautifulSoup
 from catalog.slug import Slug
+from typing import Dict
 
 
 from django.conf import settings
@@ -33,16 +31,18 @@ class Command(BaseCommand):
             metavar="TREE_FILE"
         )
 
-    LOCAL_CACHE = {}
+    LOCAL_CACHE: Dict[str, str] = {}
 
     def handle(self, *args, **options):
         self.stdout.write('Loading tree ... ')
 
         if not options['hitulb']:
             f = path.join(settings.BASE_DIR, 'catalog/management/localcache.json')
-            self.LOCAL_CACHE = json.loads(open(f).read())
+            with open(f) as fd:
+                self.LOCAL_CACHE = json.loads(fd.read())
 
-        tree = yaml.safe_load(open(options['tree_file']))
+        with open(options['tree_file']) as fd:
+            tree = yaml.safe_load(fd)
 
         with transaction.atomic():
             Category.objects.all().delete()
@@ -76,7 +76,7 @@ class Command(BaseCommand):
                 else:
                     try:
                         slug = Slug.from_dochub(tree)
-                        r = requests.get("https://www.ulb.be/fr/programme/{}".format(slug.catalog))
+                        r = requests.get(f"https://www.ulb.be/fr/programme/{slug.catalog}")
                         soup = BeautifulSoup(r.text, "html5lib")
                         name = soup.find("h1").text.strip()
                     except Exception:

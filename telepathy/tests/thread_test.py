@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import pytest
 from telepathy.models import Thread
 from users.models import User
@@ -26,4 +23,4 @@ def test_page_number_is_none():
 def test_page_number():
     thread = create_thread('coucou')
     thread.placement = json.dumps({'page-no': 100})
-    assert thread.page_no is 100
+    assert thread.page_no == 100

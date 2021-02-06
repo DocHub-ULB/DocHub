@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import os
 from base64 import b64decode
 
@@ -32,7 +29,7 @@ def user_settings(request):
             if not os.path.exists(os.path.join(settings.MEDIA_ROOT, "profile")):
                 os.makedirs(os.path.join(settings.MEDIA_ROOT, "profile"))
 
-            im.save(os.path.join(settings.MEDIA_ROOT, "profile/{}.png".format(request.user.netid)))
+            im.save(os.path.join(settings.MEDIA_ROOT, f"profile/{request.user.netid}.png"))
             request.user.photo = "png"
             request.user.save()
 

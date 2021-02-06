@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import os
 import uuid
 
@@ -144,7 +141,7 @@ def document_reupload(request, pk):
     if not request.user.write_perm(obj=document):
         return HttpResponse('You may not edit this document.', status=403)
 
-    if document.state != "DONE":
+    if document.state != Document.DocumentState.DONE:
         return HttpResponse('You may not edit this document while it is processing.', status=403)
 
     if request.method == 'POST':
@@ -162,7 +159,7 @@ def document_reupload(request, pk):
 
             document.original.save(str(uuid.uuid4()) + extension, file)
 
-            document.state = "PREPARING"
+            document.state = Document.DocumentState.PREPARING
             document.save()
 
             document.reprocess(force=True)
@@ -188,7 +185,7 @@ def document_show(request, pk):
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
-    if document.state != "DONE":
+    if document.state != Document.DocumentState.DONE:
         return HttpResponseRedirect(reverse('course_show', args=(document.course.slug,)))
 
     context = {

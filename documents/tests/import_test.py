@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from documents.models import Document
 from catalog.models import Course
 from users.models import User
 import pytest
-import mock
+from unittest import mock
 import tempfile
 import os
 from django.conf import settings

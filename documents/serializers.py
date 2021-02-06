@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 import os
 
 from rest_framework import serializers
@@ -12,6 +10,7 @@ except ImportError:
 from documents.models import Document, Vote
 from tags.serializers import TagSerializer
 from users.serializers import SmallUserSerializer
+from typing import Optional
 
 from documents import logic
 from catalog.models import Course
@@ -56,7 +55,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
             'course': {'lookup_field': 'slug'},
         }
 
-    def get_user_vote(self, document):
+    def get_user_vote(self, document: Document) -> int:
         user = self.context['request'].user
         # We do the filtering in python as this method is called from REST with all the necessary
         #   data already prefetched. Using self.vote_set.filter() would lead to another roundtrip
@@ -69,18 +68,18 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
 
         if users_vote is None:
             return 0
-        elif users_vote.vote_type == Vote.UPVOTE:
+        elif users_vote.vote_type == Vote.VoteType.UPVOTE:
             return 1
-        elif users_vote.vote_type == Vote.DOWNVOTE:
+        elif users_vote.vote_type == Vote.VoteType.DOWNVOTE:
             return -1
         else:
-            raise NotImplemented("Vote not of known type.")
+            raise NotImplementedError("Vote not of known type.")
 
-    def get_has_perm(self, document):
+    def get_has_perm(self, document: Document) -> bool:
         user = self.context['request'].user
         return user.write_perm(obj=document)
 
-    def get_file_size(self, document):
+    def get_file_size(self, document) -> Optional[int]:
         try:
             return document.original.size
         except (FileNotFoundError, NoSuchKey):
@@ -113,7 +112,7 @@ class UploadDocumentSerializer(serializers.ModelSerializer):
         model = Document
         fields = ('name', 'description', 'file', 'course', 'tags')
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> Optional[Document]:
         file = validated_data['file']
         name, extension = os.path.splitext(file.name)
         name = logic.clean_filename(name)
@@ -130,8 +129,10 @@ class UploadDocumentSerializer(serializers.ModelSerializer):
             user=self.context['request'].user
         )
 
-        document.description = validated_data['description']
-        document.save()
+        if document:
+            document.description = validated_data['description']
+            document.save()
 
-        document.add_to_queue()
+            document.add_to_queue()
+
         return document

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
 import markdown
 
@@ -52,13 +49,13 @@ class MarkdownDemoNode(template.Node):
         input_text = input_text.replace('>', '&gt;').replace('<', '&lt;')
         return """
         <dl class="tabs" data-tab>
-        <dd class="active"><a href="#%smd">Markdown</a></dd>
-        <dd><a href="#%srender">Aperçu</a></dd>
+        <dd class="active"><a href="#{}md">Markdown</a></dd>
+        <dd><a href="#{}render">Aperçu</a></dd>
         </dl>
         <div class="tabs-content">
-        <div class="content active" id="%smd"><pre class="codehilite">%s</pre></div>
-        <div class="content" id="%srender">%s</div>
-        </div>""" % (uid, uid, uid, input_text, uid, rendered)
+        <div class="content active" id="{}md"><pre class="codehilite">{}</pre></div>
+        <div class="content" id="{}render">{}</div>
+        </div>""".format(uid, uid, uid, input_text, uid, rendered)
 
 
 @register.tag(name='markdown_demo')

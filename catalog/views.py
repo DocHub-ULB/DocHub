@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import json
 from functools import partial
 
@@ -14,6 +11,7 @@ from django.views.generic.detail import DetailView
 from django.views.decorators.cache import cache_page
 from mptt.utils import get_cached_trees
 from django.utils import timezone
+from django.http import HttpRequest
 
 from actstream import actions
 
@@ -40,7 +38,7 @@ class CourseDetailView(DetailView):
             return "catalog/noauth/course.html"
 
     def get_context_data(self, **kwargs):
-        context = super(CourseDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         course = context['course']
 
         context['documents'] = course.document_set\
@@ -53,7 +51,7 @@ class CourseDetailView(DetailView):
         return context
 
 
-def set_follow_course(request, slug, action):
+def set_follow_course(request, slug: str, action):
     course = get_object_or_404(Course, slug=slug)
     action(request.user, course)
     request.user.update_inferred_faculty()
@@ -62,13 +60,13 @@ def set_follow_course(request, slug, action):
 
 
 @login_required
-def join_course(request, slug):
+def join_course(request: HttpRequest, slug: str):
     follow = partial(actions.follow, actor_only=False)
     return set_follow_course(request, slug, follow)
 
 
 @login_required
-def leave_course(request, slug):
+def leave_course(request: HttpRequest, slug: str):
     return set_follow_course(request, slug, actions.unfollow)
 
 
@@ -85,14 +83,14 @@ def show_courses(request):
 @cache_page(60 * 60)
 @login_required
 def course_tree(request):
-    def course(node):
+    def course(node: Course):
         return {
             'name': node.name,
             'id': node.id,
             'slug': node.slug,
         }
 
-    def category(node):
+    def category(node: Category):
         return {
             'name': node.name,
             'id': node.id,

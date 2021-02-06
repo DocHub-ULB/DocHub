@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.contrib import admin
 from django.conf import settings
-
+from django.db.models.query import QuerySet
 from .models import Document, DocumentError, Vote
 
 
-def reprocess(modeladmin, request, queryset):
+def reprocess(modeladmin, request, queryset: 'QuerySet[Document]'):
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
 
@@ -15,26 +12,26 @@ def reprocess(modeladmin, request, queryset):
         doc.reprocess(force=True)
 
 
-reprocess.short_description = "Reprocess selected documents"
+reprocess.short_description = "Reprocess selected documents" # type: ignore
 
 
-def autotag(modeladmin, request, queryset):
+def autotag(modeladmin, request, queryset: 'QuerySet[Document]'):
     for doc in queryset:
         doc.tag_from_name()
 
 
-autotag.short_description = "Auto-tag selected documents"
+autotag.short_description = "Auto-tag selected documents" # type: ignore
 
 
-def repair(modeladmin, request, queryset):
+def repair(modeladmin, request, queryset: 'QuerySet[Document]'):
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
-        
+
     for doc in queryset:
         doc.repair()
 
 
-repair.short_description = "Repair selected documents"
+repair.short_description = "Repair selected documents" # type: ignore
 
 
 class VoteInline(admin.StackedInline):
@@ -64,15 +61,15 @@ class VoteAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     readonly_fields = ('size', 'pages', 'original', 'pdf', 'md5', 'state',)
     filter_horizontal = ('tags',)
+    date_hierarchy = 'created'
 
     list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type', 'imported')
     list_filter = ('state', 'created', 'edited', 'file_type',)
     search_fields = ('md5', 'name', 'imported', 'user')
-    raw_id_fields = ('user',)
+    raw_id_fields = ('user', 'course')
 
     inlines = [VoteInline]
 
-    raw_id_fields = ('user', 'course')
 
     actions = (reprocess, autotag, repair)
 

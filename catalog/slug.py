@@ -2,7 +2,7 @@ import re
 
 class Slug:
 
-    def __init__(self, domain, faculty, number):
+    def __init__(self, domain: str, faculty: str, number: str):
         self.domain = domain.strip().lower()
         if len(self.domain) > 4:
             raise ValueError("domain may not be longer than 4 chars")
@@ -23,18 +23,18 @@ class Slug:
 
     @property
     def gehol(self):
-        return "{}{}{}".format(self.domain, self.faculty, self.number).upper()
+        return f"{self.domain}{self.faculty}{self.number}".upper()
 
     @property
     def catalog(self):
-        return "{}-{}{}".format(self.domain, self.faculty, self.number).upper()
+        return f"{self.domain}-{self.faculty}{self.number}".upper()
 
     @property
     def dochub(self):
-        return "{}-{}-{}".format(self.domain, self.faculty, self.number).lower()
+        return f"{self.domain}-{self.faculty}-{self.number}".lower()
 
     @classmethod
-    def from_gehol(cls, string):
+    def from_gehol(cls, string: str):
         match = re.match(r'([A-Za-z]+)([A-Za-z])(\d+)', string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFOF103'")
@@ -42,7 +42,7 @@ class Slug:
         return cls(domain, faculty, number)
 
     @classmethod
-    def from_catalog(cls, string):
+    def from_catalog(cls, string: str):
         match = re.match(r'([A-Za-z]+)-([A-Za-z])(\d+)', string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFO-F103'")
@@ -50,7 +50,7 @@ class Slug:
         return cls(domain, faculty, number)
 
     @classmethod
-    def from_dochub(cls, string):
+    def from_dochub(cls, string: str):
         match = re.match(r'([A-Za-z]+)-([A-Za-z])-(\d+)', string.upper())
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'info-f-103'")
@@ -58,7 +58,7 @@ class Slug:
         return cls(domain, faculty, number)
 
     @classmethod
-    def match_all(cls, string):
+    def match_all(cls, string: str):
         for method in [cls.from_catalog, cls.from_dochub, cls.from_gehol]:
             try:
                 return method(string)
@@ -68,12 +68,14 @@ class Slug:
         raise ValueError("Not valid slug found")
 
     def __repr__(self):
-        return "<Slug: {}>".format(self)
+        return f"<Slug: {self}>"
 
     def __str__(self):
         return self.dochub
 
     def __eq__(self, other):
+        if not isinstance(other, Slug):
+            return NotImplemented
         return (self.domain, self.faculty, self.number) == (other.domain, other.faculty, other.number)
 
     def __hash__(self):

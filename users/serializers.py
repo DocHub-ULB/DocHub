@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from users.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
