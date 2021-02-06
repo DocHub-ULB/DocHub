@@ -1,24 +1,23 @@
 import json
 from functools import partial
 
-from django.urls import reverse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
-from django.views.generic.detail import DetailView
-from django.views.decorators.cache import cache_page
-from mptt.utils import get_cached_trees
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
-from django.http import HttpRequest
+from django.views.decorators.cache import cache_page
+from django.views.generic.detail import DetailView
 
 from actstream import actions
+from mptt.utils import get_cached_trees
 
+import search.logic
+from catalog.forms import SearchForm
 from catalog.models import Category, Course
 from catalog.suggestions import suggest
-from catalog.forms import SearchForm
-import search.logic
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):

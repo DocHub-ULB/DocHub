@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from search.serializers import CourseSearchSerializer
 import search.logic
+from search.serializers import CourseSearchSerializer
 
 
 class CourseSearchViewSet(viewsets.ViewSet):

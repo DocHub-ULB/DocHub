@@ -1,9 +1,13 @@
-from catalog.models import Course
-import collections
-from users.models import User
-from django.contrib.contenttypes.models import ContentType
-from actstream.models import Follow
 import typing
+
+import collections
+
+from django.contrib.contenttypes.models import ContentType
+
+from actstream.models import Follow
+
+from catalog.models import Course
+from users.models import User
 
 
 def distance(v1: typing.List[bool], v2: typing.List[bool]) -> float:

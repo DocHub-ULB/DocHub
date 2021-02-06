@@ -1,5 +1,5 @@
+from actstream.models import Action, followers
 from celery import shared_task
-from actstream.models import followers, Action
 
 from notifications.models import Notification
 

@@ -1,7 +1,8 @@
 import pytest
+import responses
+
 from users.authBackend import NetidBackend
 from users.models import User
-import responses
 
 pytestmark = pytest.mark.django_db
 

@@ -1,17 +1,19 @@
-from django.core.management.base import BaseCommand
-import json
-from os import path
-import yaml
-from raven.contrib.django.raven_compat.models import client
-from django.db import transaction
-import requests
-from bs4 import BeautifulSoup
-from catalog.slug import Slug
 from typing import Dict
 
+import json
+from os import path
 
 from django.conf import settings
+from django.core.management.base import BaseCommand
+from django.db import transaction
+
+import requests
+import yaml
+from bs4 import BeautifulSoup
+from raven.contrib.django.raven_compat.models import client
+
 from catalog.models import Category, Course
+from catalog.slug import Slug
 
 
 class Command(BaseCommand):

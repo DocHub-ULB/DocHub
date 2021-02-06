@@ -1,13 +1,13 @@
-import pytest
-from unittest import mock
 import sys
+from unittest import mock
 
 from django.core.files import File
 
-from users.models import User
-from documents.models import Document
-from documents.models import process_document
+import pytest
 from celery_test import create_doc
+
+from documents.models import Document, process_document
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 

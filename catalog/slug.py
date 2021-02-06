@@ -1,5 +1,6 @@
 import re
 
+
 class Slug:
 
     def __init__(self, domain: str, faculty: str, number: str):

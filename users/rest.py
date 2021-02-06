@@ -1,10 +1,9 @@
 from rest_framework import viewsets
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
-
-from users.serializers import UserSerializer, SmallUserSerializer
 from users.models import User
-from rest_framework.authtoken.models import Token
+from users.serializers import SmallUserSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

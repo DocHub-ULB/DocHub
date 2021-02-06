@@ -1,11 +1,11 @@
 import os
 
-from django.core.management import call_command
-from catalog.models import Course, Category
 from django.conf import settings
+from django.core.management import call_command
 
 import pytest
 
+from catalog.models import Category, Course
 
 pytestmark = [pytest.mark.django_db]
 

@@ -1,21 +1,29 @@
-import subprocess
-import hashlib
-import uuid
-import tempfile
-import os
-import contextlib
-import re
 from typing import Optional
 
-from celery import shared_task, chain
-from PyPDF2 import PdfFileReader
-from django.core.files.base import ContentFile, File
-from actstream import action
+import contextlib
+import hashlib
+import os
+import re
+import subprocess
+import tempfile
+import uuid
+
 from django.conf import settings
+from django.core.files.base import ContentFile, File
+
+from actstream import action
+from celery import chain, shared_task
 from celery.exceptions import SoftTimeLimitExceeded
+from PyPDF2 import PdfFileReader
 
 from documents.models import Document, DocumentError
-from .exceptions import DocumentProcessingError, MissingBinary, SkipException, ExisingChecksum
+
+from .exceptions import (
+    DocumentProcessingError,
+    ExisingChecksum,
+    MissingBinary,
+    SkipException,
+)
 
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):

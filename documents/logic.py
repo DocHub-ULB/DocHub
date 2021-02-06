@@ -1,10 +1,13 @@
+from typing import Iterable, List, Optional, Set, Union
+
 import uuid
 
-from tags.models import Tag
-from typing import Union, List, Optional, Set, Iterable
 from django.core.files import File
+
 from catalog.models import Course
+from tags.models import Tag
 from users.models import User
+
 
 def clean_filename(name: str) -> str:
     if name.isupper():
@@ -96,4 +99,4 @@ def tags_from_name(name: str) -> Set[Tag]:
     tag_objs = {Tag.objects.get_or_create(name=tag)[0] for tag in tags}
     return tag_objs
 
-from documents.models import Document # NOQA
+from documents.models import Document  # NOQA

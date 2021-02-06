@@ -1,7 +1,8 @@
 # import pytest
 
-from users.authBackend import NetidBackend
 import datetime
+
+from users.authBackend import NetidBackend
 
 parse = NetidBackend()._parse_response
 

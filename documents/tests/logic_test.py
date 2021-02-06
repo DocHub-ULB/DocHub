@@ -1,10 +1,11 @@
-from users.models import User
+import pytest
+from six import StringIO
+
 from catalog.models import Course
+from documents import logic
 from documents.models import Document
 from tags.models import Tag
-import pytest
-from documents import logic
-from six import StringIO
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 

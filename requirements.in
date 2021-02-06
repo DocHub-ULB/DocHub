@@ -26,6 +26,8 @@ html5lib
 django-extensions
 ipython
 honcho
+isort
+pre-commit
 
 # Test
 mock

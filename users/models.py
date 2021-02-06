@@ -1,16 +1,17 @@
-import re
-import os
-from os.path import join
-import itertools
 import collections
+import itertools
+import os
+import re
+from os.path import join
 
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, UserManager
-from django.utils import timezone
 from django.conf import settings
-import actstream
-import users.identicon
+from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.db import models
+from django.utils import timezone
 
+import actstream
+
+import users.identicon
 from catalog.models import Course
 
 

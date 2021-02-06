@@ -1,12 +1,12 @@
-from rest_framework.routers import DefaultRouter, APIRootView
+from rest_framework.routers import APIRootView, DefaultRouter
 
-import users.rest
-import documents.rest
 import catalog.rest
-import telepathy.rest
-import search.rest
-import www.rest
+import documents.rest
 import notifications.rest
+import search.rest
+import telepathy.rest
+import users.rest
+import www.rest
 
 
 class DochubAPI(APIRootView):

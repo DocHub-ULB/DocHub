@@ -1,18 +1,17 @@
 import os
 from base64 import b64decode
 
-
-from PIL import Image, ImageOps
-from django.urls import reverse
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.contrib.auth import authenticate, login
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
-from rest_framework.authtoken.models import Token
 from actstream.models import actor_stream
+from PIL import Image, ImageOps
+from rest_framework.authtoken.models import Token
 
 from users.forms import SettingsForm
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, Inscription
+
+from .models import Inscription, User
 
 
 class InscriptionInline(admin.TabularInline):

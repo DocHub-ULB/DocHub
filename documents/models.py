@@ -1,10 +1,10 @@
-from django.db import models
-from django.urls import reverse
+import unicodedata
 
 from django.conf import settings
+from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-import unicodedata
+from django.urls import reverse
 
 UNCONVERTIBLE_TYPES = [
     '.zip',
@@ -187,6 +187,7 @@ def cleanup_document_files(instance: Document, **kwargs) -> None:
         instance.original.storage.delete(original_file_name)
 
 
+from documents import logic  # NOQA
+
 # Import at the end to avoid circular imports
-from documents.tasks import process_document, repair # NOQA
-from documents import logic # NOQA
+from documents.tasks import process_document, repair  # NOQA

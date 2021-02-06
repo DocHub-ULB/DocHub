@@ -1,13 +1,16 @@
+import os
+import sys
+from base64 import b64encode
+from datetime import date
+
+from django.conf import settings
+from django.db import IntegrityError
+
 import requests
 import xmltodict
-from datetime import date
-import os
-from users.models import User, Inscription
-from django.db import IntegrityError
 from furl import furl
-from base64 import b64encode
-from django.conf import settings
-import sys
+
+from users.models import Inscription, User
 
 
 class IntranetError(Exception):

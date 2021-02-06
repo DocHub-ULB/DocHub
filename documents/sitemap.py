@@ -1,4 +1,5 @@
 from django.contrib.sitemaps import Sitemap
+
 from documents.models import Document
 
 

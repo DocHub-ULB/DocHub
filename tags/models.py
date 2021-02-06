@@ -1,5 +1,6 @@
+from math import pi, sin
+
 from django.db import models
-from math import sin, pi
 
 
 class Tag(models.Model):

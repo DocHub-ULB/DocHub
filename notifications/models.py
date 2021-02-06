@@ -23,4 +23,4 @@ def action_save_handler(sender, created, instance, **kwargs):
 
 
 # Import at the end to avoid cyclic imports
-from notifications.tasks import handle_action # NOQA
+from notifications.tasks import handle_action  # NOQA

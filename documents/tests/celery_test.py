@@ -1,14 +1,15 @@
-from documents.models import Document
-from users.models import User
-from documents.tasks import process_document, mutool_get_pages
-from documents import tasks
-from django.core.files import File
-import celery
-from subprocess import call
 import signal
+from subprocess import call
 
+from django.core.files import File
+
+import celery
 import pytest
 
+from documents import tasks
+from documents.models import Document
+from documents.tasks import mutool_get_pages, process_document
+from users.models import User
 
 pytestmark = [pytest.mark.django_db, pytest.mark.celery]
 

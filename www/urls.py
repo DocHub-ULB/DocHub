@@ -1,18 +1,16 @@
+from django.conf import settings
+from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic import TemplateView
-from django.contrib.auth.views import LogoutView, LoginView
 
-from django.contrib import admin
-from django.conf import settings
-from django.contrib.sitemaps.views import sitemap
 import django_js_reverse.views
 
 import users.views
 import www.views
-
-from documents.sitemap import DocumentSitemap
 from catalog.sitemap import CourseSitemap
-
+from documents.sitemap import DocumentSitemap
 
 sitemaps = {
     'course': CourseSitemap,

@@ -1,6 +1,7 @@
-from django.contrib import admin
 from django.conf import settings
+from django.contrib import admin
 from django.db.models.query import QuerySet
+
 from .models import Document, DocumentError, Vote
 
 

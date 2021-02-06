@@ -1,21 +1,25 @@
 import os
 import uuid
 
-from django.urls import reverse
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
-from django.conf import settings
-
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 
 from actstream import action
 
-from documents.models import Document
 from catalog.models import Course
-from documents.forms import UploadFileForm, FileForm, MultipleUploadFileForm, ReUploadForm
-from tags.models import Tag
 from documents import logic
+from documents.forms import (
+    FileForm,
+    MultipleUploadFileForm,
+    ReUploadForm,
+    UploadFileForm,
+)
+from documents.models import Document
+from tags.models import Tag
 
 
 @login_required
