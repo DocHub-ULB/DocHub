@@ -1,4 +1,4 @@
-Django>=2.2,<3
+Django>=3,<3.1
 #django-multiupload on Pypi is incompatible with Django >=2.1 it is fixed in the pined commit
 git+https://github.com/Chive/django-multiupload.git@ba52e161a68ce19062c3655e89544c2d377990a0
 markdown
@@ -12,7 +12,7 @@ djangorestframework
 drf-extensions
 furl
 django-mptt
-django-activity-stream<0.8,>=0.7 # Need at least 0.7 but 0.8 is not compatible with our current django version
+django-activity-stream<0.10 # 0.10 breaks with Django<3.1
 PyYaml
 jsonfield
 django-pipeline
