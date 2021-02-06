@@ -8,7 +8,7 @@ pygments
 pyPdf2
 requests
 xmltodict
-djangorestframework>=3.11,<3.12 # 3.12 needs a more recent Django
+djangorestframework
 drf-extensions
 furl
 django-mptt
@@ -38,7 +38,7 @@ django-webtest
 redis
 psycopg2-binary
 python-memcached
-django-debug-toolbar==2.2 # blocked by django
+django-debug-toolbar
 django-jsonfield
 django-jsonfield-compat
 gunicorn

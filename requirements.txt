@@ -10,7 +10,7 @@ configparser==5.0.1
 decorator==4.4.2
 Django==2.2.18
 django-activity-stream==0.7.0
-django-debug-toolbar==2.2
+django-debug-toolbar==3.2
 django-extensions==3.1.0
 django-js-asset==1.2.2
 django-js-reverse==0.9.1
@@ -22,7 +22,7 @@ django-multiupload @ git+https://github.com/Chive/django-multiupload.git@ba52e16
 django-pipeline==2.0.6
 django-webpack-loader==0.7.0
 django-webtest==1.9.7
-djangorestframework==3.11.2
+djangorestframework==3.12.2
 drf-extensions==0.6.0
 furl==2.1.0
 gunicorn==20.0.4
@@ -33,7 +33,7 @@ iniconfig==1.1.1
 ipython==7.20.0
 ipython-genutils==0.2.0
 jedi==0.18.0
-jsonfield==2.1.1
+jsonfield==3.1.0
 kombu==4.6.11
 Markdown==3.3.3
 minio==6.0.2
