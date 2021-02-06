@@ -1,10 +1,11 @@
 import re
-import markdown
 
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_text
-from django.utils.safestring import mark_safe, SafeText
+from django.utils.safestring import SafeText, mark_safe
+
+import markdown
 
 register = template.Library()
 youtube_url = re.compile(r'https://(?:www\.)?youtu(?:be\.com/watch/?\?v=|\.be/)([^/<&]+)(?:&.*)?')

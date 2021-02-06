@@ -3,11 +3,7 @@ identicon.py
 identicon python implementation.
 by Shin Adachi <shn@glucose.jp>
 """
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImagePath
-from PIL import ImageColor
-
+from PIL import Image, ImageColor, ImageDraw, ImagePath
 
 __all__ = ['render_identicon', 'IdenticonRendererBase']
 

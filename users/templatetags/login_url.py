@@ -8,6 +8,7 @@
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django import template
+
 from users.authBackend import NetidBackend
 
 register = template.Library()

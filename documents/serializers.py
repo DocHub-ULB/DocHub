@@ -7,14 +7,14 @@ try:
 except ImportError:
     pass
 
-from documents.models import Document, Vote
-from tags.serializers import TagSerializer
-from users.serializers import SmallUserSerializer
 from typing import Optional
 
-from documents import logic
 from catalog.models import Course
+from documents import logic
+from documents.models import Document, Vote
 from tags.models import Tag
+from tags.serializers import TagSerializer
+from users.serializers import SmallUserSerializer
 
 
 class DocumentSerializer(serializers.HyperlinkedModelSerializer):

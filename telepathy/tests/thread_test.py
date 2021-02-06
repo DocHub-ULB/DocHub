@@ -1,8 +1,10 @@
+import json
+
 import pytest
+
+from catalog.models import Course
 from telepathy.models import Thread
 from users.models import User
-from catalog.models import Course
-import json
 
 pytestmark = pytest.mark.django_db
 

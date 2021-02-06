@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from catalog.models import Course, Category
+from catalog.models import Category, Course
 from documents.serializers import DocumentSerializer
 from telepathy.serializers import SmallThreadSerializer
 

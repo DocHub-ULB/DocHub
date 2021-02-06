@@ -1,14 +1,17 @@
-from django.http import HttpResponse
 from django.db.models import F
+from django.http import HttpResponse
 
-from rest_framework.response import Response
+from rest_framework import permissions, status
 from rest_framework.decorators import action
-from rest_framework import status
-from rest_framework import permissions
-from www.rest import VaryModelViewSet
+from rest_framework.response import Response
 
-from documents.serializers import DocumentSerializer, UploadDocumentSerializer, EditDocumentSerializer
 from documents.models import Document, Vote
+from documents.serializers import (
+    DocumentSerializer,
+    EditDocumentSerializer,
+    UploadDocumentSerializer,
+)
+from www.rest import VaryModelViewSet
 
 
 class DocumentAccessPermission(permissions.IsAuthenticated):

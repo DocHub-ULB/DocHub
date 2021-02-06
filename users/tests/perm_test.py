@@ -1,7 +1,8 @@
 import pytest
-from users.models import User
+
 from catalog.models import Category, Course
 from documents.models import Document
+from users.models import User
 
 pytestmark = pytest.mark.django_db
 

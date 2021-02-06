@@ -8,4 +8,5 @@ CELERY_ALWAYS_EAGER = True # Skip the Celery daemon
 # except the result is already evaluated.
 
 import tempfile
+
 UPLOAD_DIR = tempfile.mkdtemp()

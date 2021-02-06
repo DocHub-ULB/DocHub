@@ -1,5 +1,7 @@
 import os
 
+from www.config.django_defaults import *
+
 # Copyright 2014, Cercle Informatique ASBL. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it
@@ -9,7 +11,6 @@ import os
 #
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from www.config.django_defaults import *
 
 EMAIL_SUBJECT_PREFIX = "[DocHub] "
 

@@ -1,7 +1,12 @@
 import re
 
+from django.contrib.postgres.search import (
+    SearchQuery,
+    SearchRank,
+    SearchVector,
+    TrigramSimilarity,
+)
 from django.db.models import Count, F
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 
 from catalog.models import Course
 

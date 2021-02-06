@@ -7,8 +7,8 @@
 #
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
-from os.path import dirname, join, normpath
 import re
+from os.path import dirname, join, normpath
 
 BASE_DIR = dirname(dirname(dirname(__file__)))
 
