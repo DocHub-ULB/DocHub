@@ -37,9 +37,11 @@ class Command(BaseCommand):
 
         if not options['hitulb']:
             f = path.join(settings.BASE_DIR, 'catalog/management/localcache.json')
-            self.LOCAL_CACHE = json.loads(open(f).read())
+            with open(f) as fd:
+                self.LOCAL_CACHE = json.loads(fd.read())
 
-        tree = yaml.safe_load(open(options['tree_file']))
+        with open(options['tree_file']) as fd:
+            tree = yaml.safe_load(fd)
 
         with transaction.atomic():
             Category.objects.all().delete()

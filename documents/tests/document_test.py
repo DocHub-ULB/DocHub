@@ -93,9 +93,10 @@ def test_document_file_cleanup():
     doc = create_doc('TestDocumentToDelete', '.pdf') # from celery tests
     doc.save()
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    doc.pdf.save('ThisPdfShouldGetDeleted.pdf', f)
-    doc.original.save("ThisOriginalShouldGetDeleted.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.pdf.save('ThisPdfShouldGetDeleted.pdf', f)
+        doc.original.save("ThisOriginalShouldGetDeleted.pdf", f)
 
     # Get file paths
     originalfilename = doc.original.file.name
@@ -103,9 +104,9 @@ def test_document_file_cleanup():
 
     doc.delete()
     with pytest.raises(IOError) as errorinfo:
-        file = open(originalfilename)
+        open(originalfilename)
     assert 'No such file or directory' in str(errorinfo)
 
     with pytest.raises(IOError) as errorinfo:
-        file = open(pdffilename)
+        open(pdffilename)
     assert 'No such file or directory' in str(errorinfo)

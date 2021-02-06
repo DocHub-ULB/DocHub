@@ -1,5 +1,5 @@
 """
-ASGI config for replaceme project.
+ASGI config for the DocHub project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

@@ -53,8 +53,9 @@ def create_doc(name, ext):
 def test_add_to_queue():
 
     doc = create_doc("Document name", ".pdf")
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    doc.original.save("silly-unique-deadbeef-file.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.original.save("silly-unique-deadbeef-file.pdf", f)
 
     result = process_document.delay(doc.id)
     assert result.status == celery.states.SUCCESS, result.traceback
@@ -71,8 +72,9 @@ def test_send_duplicate():
 
     doc = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    doc.original.save("another-uuid-beef-dead.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.original.save("another-uuid-beef-dead.pdf", f)
 
     result = process_document.delay(doc.id)
     assert result.status == celery.states.FAILURE
@@ -86,8 +88,9 @@ def test_send_duplicate():
 def test_send_office():
     doc = create_doc("My office doc", ".docx")
 
-    f = File(open('documents/tests/files/2pages.docx', 'rb'))
-    doc.original.save("silly-unique-deadbeef-file.docx", f)
+    with open('documents/tests/files/2pages.docx', 'rb') as fd:
+        f = File(fd)
+        doc.original.save("silly-unique-deadbeef-file.docx", f)
 
     start_unoconv()
 
@@ -103,8 +106,9 @@ def test_send_office():
 def test_correct_checksum():
     doc = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    doc.original.save("another-uuid-beef-dead.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.original.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.checksum.delay(doc.id)
     assert result.status == celery.states.SUCCESS, result.traceback
@@ -120,8 +124,9 @@ def test_duplicate_checksum():
 
     duplicate = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    duplicate.original.save("another-uuid-beef-dead.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        duplicate.original.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.checksum.delay(duplicate.id)
     assert result.status == celery.states.FAILURE
@@ -137,8 +142,9 @@ def test_duplicate_hidden_checksum():
 
     duplicate = create_doc("Document name2", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    duplicate.original.save("another-uuid-beef-dead.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        duplicate.original.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.checksum.delay(duplicate.id)
     assert result.status == celery.states.SUCCESS, result.traceback
@@ -150,8 +156,9 @@ def test_duplicate_hidden_checksum():
 def test_correct_mutool_length():
     doc = create_doc("Document name", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    doc.pdf.save("another-uuid-beef-dead.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.pdf.save("another-uuid-beef-dead.pdf", f)
 
     assert mutool_get_pages(doc) == 3
 
@@ -159,8 +166,9 @@ def test_correct_mutool_length():
 def test_correct_length():
     doc = create_doc("Document name", ".pdf")
 
-    f = File(open('documents/tests/files/3pages.pdf', 'rb'))
-    doc.pdf.save("another-uuid-beef-dead.pdf", f)
+    with open('documents/tests/files/3pages.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.pdf.save("another-uuid-beef-dead.pdf", f)
 
     result = tasks.mesure_pdf_length.delay(doc.id)
     assert result.status == celery.states.SUCCESS, result.traceback
@@ -182,15 +190,16 @@ def test_finish_file():
 def test_repair():
     doc = create_doc("Document name", ".pdf")
 
-    f = File(open('documents/tests/files/broken.pdf', 'rb'))
-    doc.pdf.save("another-uuid-beef-yolo.pdf", f)
+    with open('documents/tests/files/broken.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.pdf.save("another-uuid-beef-yolo.pdf", f)
+
     old_path = doc.pdf.path
 
     # Magic number of a PDF should be "%PDF" but the broken pdf has "PDF"
     # (missing "%")
-    doc.pdf.open()
-    assert doc.pdf.read(3) == b"PDF"
-    doc.pdf.close()
+    with doc.pdf.open() as fd:
+        assert fd.read(3) == b"PDF"
 
     result = tasks.repair.delay(doc.id)
     assert result.status == celery.states.SUCCESS, result.traceback
@@ -198,9 +207,8 @@ def test_repair():
     doc = Document.objects.get(pk=doc.id)
 
     # File should be repaired
-    doc.pdf.open()
-    assert doc.pdf.read(4) == b"%PDF"
-    doc.pdf.close()
+    with doc.pdf.open() as fd:
+        assert fd.read(4) == b"%PDF"
 
     assert old_path != doc.pdf.path
 
@@ -208,16 +216,17 @@ def test_repair():
 def test_repairs_original_too():
     doc = create_doc("Document name", ".pdf")
 
-    f = File(open('documents/tests/files/broken.pdf', 'rb'))
-    doc.original.save("another-uuid-beef-yolo.pdf", f)
+    with open('documents/tests/files/broken.pdf', 'rb') as fd:
+        f = File(fd)
+        doc.original.save("another-uuid-beef-yolo.pdf", f)
+        
     doc.pdf = doc.original
     doc.save()
 
     # Magic number of a PDF should be "%PDF" but the broken pdf has "PDF"
     # (missing "%")
-    doc.pdf.open()
-    assert doc.pdf.read(3) == b"PDF"
-    doc.pdf.close()
+    with doc.pdf.open() as fd:
+        assert fd.read(3) == b"PDF"
 
     result = tasks.repair.delay(doc.id)
     assert result.status == celery.states.SUCCESS, result.traceback
@@ -225,10 +234,8 @@ def test_repairs_original_too():
     doc = Document.objects.get(pk=doc.id)
 
     # File should be repaired
-    doc.pdf.open()
-    assert doc.pdf.read(4) == b"%PDF"
-    doc.pdf.close()
+    with doc.pdf.open() as fd:
+        assert fd.read(4) == b"%PDF"
 
-    doc.original.open()
-    assert doc.original.read(4) == b"%PDF"
-    doc.original.close()
+    with doc.original.open() as fd:
+        assert fd.read(4) == b"%PDF"
