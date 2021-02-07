@@ -1,14 +1,18 @@
-amqp==2.6.1
+amqp==5.0.5
 appdirs==1.4.4
 asgiref==3.3.1
 attrs==20.3.0
 backcall==0.2.0
 beautifulsoup4==4.9.3
 billiard==3.6.3.0
-celery==4.4.7
+celery==5.0.5
 certifi==2020.12.5
 cfgv==3.2.0
 chardet==4.0.0
+click==7.1.2
+click-didyoumean==0.0.3
+click-plugins==1.1.1
+click-repl==0.1.6
 configparser==5.0.1
 coreapi==2.3.3
 coreschema==0.0.4
@@ -48,7 +52,7 @@ itypes==1.2.0
 jedi==0.18.0
 Jinja2==2.11.3
 jsonfield==3.1.0
-kombu==4.6.11
+kombu==5.0.2
 Markdown==3.3.3
 MarkupSafe==1.1.1
 minio==6.0.2
@@ -63,7 +67,7 @@ pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==8.1.0
 pluggy==0.13.1
-pre-commit==2.10.0
+pre-commit==2.10.1
 prompt-toolkit==3.0.14
 psycopg2-binary==2.8.6
 ptyprocess==0.7.0
@@ -92,7 +96,7 @@ typed-ast==1.4.2
 typing-extensions==3.7.4.3
 uritemplate==3.0.1
 urllib3==1.26.3
-vine==1.3.0
+vine==5.0.0
 virtualenv==20.4.2
 waitress==1.4.4
 wcwidth==0.2.5
