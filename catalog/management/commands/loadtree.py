@@ -10,7 +10,7 @@ from django.db import transaction
 import requests
 import yaml
 from bs4 import BeautifulSoup
-from raven.contrib.django.raven_compat.models import client
+from sentry_sdk import capture_exception
 
 from catalog.models import Category, Course
 from catalog.slug import Slug
@@ -81,9 +81,9 @@ class Command(BaseCommand):
                         r = requests.get(f"https://www.ulb.be/fr/programme/{slug.catalog}")
                         soup = BeautifulSoup(r.text, "html5lib")
                         name = soup.find("h1").text.strip()
-                    except Exception:
+                    except Exception as e:
                         print("Slug %s failed" % tree)
-                        client.captureException()
+                        capture_exception(e)
                         name = "Unknown course in cache"
                 course = Course.objects.create(name=name, slug=tree)
             course.categories.add(father)
