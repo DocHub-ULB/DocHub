@@ -1,8 +1,8 @@
+import logging
 import os
 import sys
 from base64 import b64encode
 from datetime import date
-import logging
 
 from django.conf import settings
 from django.db import IntegrityError
@@ -12,7 +12,6 @@ import xmltodict
 from furl import furl
 
 from users.models import Inscription, User
-
 
 logger = logging.getLogger(__name__)
 
