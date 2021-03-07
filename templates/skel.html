@@ -16,8 +16,6 @@
                 email: '{{request.user.email}}',
                 id: {{request.user.id}},
                 netid: '{{request.user.netid}}',
-                inferred_faculty: '{{request.user.inferred_faculty}}',
-                inscription_faculty: '{{request.user.inscription_faculty}}',
             })
         </script>
     {% endif %}
@@ -104,28 +102,7 @@
       src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89986937-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      {% if request.user.is_authenticated %}
-          gtag('config', 'UA-89986937-2', {
-            'user_id': '{{ request.user.id }}',
-            'custom_map': {
-                'dimension1': 'inscription_faculty',
-                'dimension2': 'inferred_faculty',
-            },
-          });
-          gtag('event', 'page_view', {
-              'inscription_faculty': '{{request.user.inscription_faculty}}',
-              'inferred_faculty': '{{request.user.inferred_faculty}}',
-          });
-      {% else %}
-          gtag('config', 'UA-89986937-2');
-      {% endif %}
-    </script>
+    <script async defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
     <!-- Start of Async Drift Code -->
     <script>
     !function() {
