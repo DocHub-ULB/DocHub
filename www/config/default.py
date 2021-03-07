@@ -130,3 +130,5 @@ MAX_RENDER_PAGES = 100
 READ_ONLY = False
 
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
