@@ -2,6 +2,7 @@ import os
 import sys
 from base64 import b64encode
 from datetime import date
+import logging
 
 from django.conf import settings
 from django.db import IntegrityError
@@ -11,6 +12,9 @@ import xmltodict
 from furl import furl
 
 from users.models import Inscription, User
+
+
+logger = logging.getLogger(__name__)
 
 
 class IntranetError(Exception):
@@ -26,7 +30,7 @@ class NetidBackend:
         except User.DoesNotExist:
             return None
 
-    def authenticate(self, sid=None, uid=None):
+    def authenticate(self, request, sid=None, uid=None):
         if not (sid and uid):
             return None
 
@@ -37,21 +41,18 @@ class NetidBackend:
             if not os.path.exists("/tmp/netids/"):
                 os.mkdir("/tmp/netids/")
             with open(f"/tmp/netids/{sid}__{uid}", "w") as f:
-                if sys.version_info.major >= 3:
-                    f.write(resp.text)
-                else:
-                    f.write(resp.text.encode('utf-8'))
-        except OSError:
-            pass
-        except UnicodeEncodeError:
-            pass
+                f.write(resp.text)
+        except (OSError, UnicodeEncodeError) as e:
+            logger.exception("Writing to netid debug file")
 
         if not resp.ok:
+            logger.error(f"ULB bakcend responded with error {resp.status_code}: %s", resp)
             return None
 
         try:
             user_dict = self._parse_response(resp.text)
         except:
+            logger.exception("Error while parsing ULB response")
             return None
 
         try:

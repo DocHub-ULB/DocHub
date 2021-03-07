@@ -75,7 +75,6 @@ def auth(request):
         next_url = b64decode(next_64).decode()
     else:
         next_url = "/"
-    print(next_url)
 
     if sid and uid:
         user = authenticate(sid=sid, uid=uid)
@@ -84,4 +83,4 @@ def auth(request):
             login(request, user)
             return HttpResponseRedirect(next_url)
 
-    HttpResponseForbidden()
+    return HttpResponseForbidden("Error while authenticating with NetID")
