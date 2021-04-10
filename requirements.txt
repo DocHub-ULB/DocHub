@@ -56,7 +56,7 @@ decorator==5.0.6
     # via ipython
 distlib==0.3.1
     # via virtualenv
-django-activity-stream==0.9.0
+django-activity-stream==0.10.0
     # via -r requirements.in
 django-debug-toolbar==3.2
     # via -r requirements.in
@@ -200,7 +200,7 @@ pypdf2==1.26.0
     # via -r requirements.in
 pyreact==0.6.0
     # via -r requirements.in
-pytest-django==4.1.0
+pytest-django==4.2.0
     # via -r requirements.in
 pytest==6.2.3
     # via pytest-django
