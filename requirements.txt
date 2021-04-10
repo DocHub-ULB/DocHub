@@ -86,7 +86,7 @@ django-webpack-loader==0.7.0
     # via -r requirements.in
 django-webtest==1.9.7
     # via -r requirements.in
-django==3.0.14
+django==3.2
     # via
     #   -r requirements.in
     #   django-debug-toolbar
