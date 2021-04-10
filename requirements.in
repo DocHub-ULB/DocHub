@@ -29,6 +29,7 @@ ipython
 honcho
 isort
 pre-commit
+pip-tools
 
 # Test
 mock
