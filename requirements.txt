@@ -4,13 +4,13 @@
 #
 #    pip-compile
 #
-amqp==5.0.5
+amqp==5.0.6
     # via kombu
 appdirs==1.4.4
     # via virtualenv
 appnope==0.1.2
     # via ipython
-asgiref==3.3.1
+asgiref==3.3.4
     # via django
 attrs==20.3.0
     # via pytest
@@ -20,7 +20,7 @@ beautifulsoup4==4.9.3
     # via
     #   -r requirements.in
     #   webtest
-billiard==3.6.3.0
+billiard==3.6.4.0
     # via celery
 celery==5.0.5
     # via -r requirements.in
@@ -46,13 +46,13 @@ click==7.1.2
     #   click-plugins
     #   click-repl
     #   pip-tools
-configparser==5.0.1
+configparser==5.0.2
     # via minio
 coreapi==2.3.3
     # via djangorestframework-stubs
 coreschema==0.0.4
     # via coreapi
-decorator==4.4.2
+decorator==5.0.6
     # via ipython
 distlib==0.3.1
     # via virtualenv
@@ -60,7 +60,7 @@ django-activity-stream==0.9.0
     # via -r requirements.in
 django-debug-toolbar==3.2
     # via -r requirements.in
-django-extensions==3.1.0
+django-extensions==3.1.2
     # via -r requirements.in
 django-js-asset==1.2.2
     # via django-mptt
@@ -72,7 +72,7 @@ django-jsonfield==1.4.1
     # via -r requirements.in
 django-minio-storage==0.3.10
     # via -r requirements.in
-django-mptt==0.11.0
+django-mptt==0.12.0
     # via -r requirements.in
 git+https://github.com/Chive/django-multiupload.git@ba52e161a68ce19062c3655e89544c2d377990a0
     # via -r requirements.in
@@ -86,10 +86,11 @@ django-webpack-loader==0.7.0
     # via -r requirements.in
 django-webtest==1.9.7
     # via -r requirements.in
-django==3.0.12
+django==3.0.14
     # via
     #   -r requirements.in
     #   django-debug-toolbar
+    #   django-extensions
     #   django-js-reverse
     #   django-jsonfield
     #   django-minio-storage
@@ -100,25 +101,25 @@ django==3.0.12
     #   jsonfield
 djangorestframework-stubs==1.4.0
     # via -r requirements.in
-djangorestframework==3.12.2
+djangorestframework==3.12.4
     # via
     #   -r requirements.in
     #   drf-extensions
-drf-extensions==0.6.0
+drf-extensions==0.7.0
     # via -r requirements.in
 filelock==3.0.12
     # via virtualenv
 filemagic==1.6
     # via -r requirements.in
-furl==2.1.0
+furl==2.1.1
     # via -r requirements.in
-gunicorn==20.0.4
+gunicorn==20.1.0
     # via -r requirements.in
 honcho==1.0.1
     # via -r requirements.in
 html5lib==1.1
     # via -r requirements.in
-identify==1.5.13
+identify==2.2.3
     # via pre-commit
 idna==2.10
     # via requests
@@ -126,9 +127,9 @@ iniconfig==1.1.1
     # via pytest
 ipython-genutils==0.2.0
     # via traitlets
-ipython==7.20.0
+ipython==7.22.0
     # via -r requirements.in
-isort==5.7.0
+isort==5.8.0
     # via -r requirements.in
 itypes==1.2.0
     # via coreapi
@@ -140,7 +141,7 @@ jsonfield==3.1.0
     # via -r requirements.in
 kombu==5.0.2
     # via celery
-markdown==3.3.3
+markdown==3.3.4
     # via -r requirements.in
 markupsafe==1.1.1
     # via jinja2
@@ -150,18 +151,18 @@ mock==4.0.3
     # via -r requirements.in
 mypy-extensions==0.4.3
     # via mypy
-mypy==0.800
+mypy==0.812
     # via
     #   -r requirements.in
     #   django-stubs
     #   djangorestframework-stubs
-nodeenv==1.5.0
+nodeenv==1.6.0
     # via pre-commit
 orderedmultidict==1.0.1
     # via furl
 packaging==20.9
     # via pytest
-parso==0.8.1
+parso==0.8.2
     # via jedi
 pep517==0.10.0
     # via pip-tools
@@ -169,15 +170,15 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==8.1.0
+pillow==8.2.0
     # via -r requirements.in
 pip-tools==6.0.1
     # via -r requirements.in
 pluggy==0.13.1
     # via pytest
-pre-commit==2.10.1
+pre-commit==2.12.0
     # via -r requirements.in
-prompt-toolkit==3.0.14
+prompt-toolkit==3.0.18
     # via
     #   click-repl
     #   ipython
@@ -189,7 +190,7 @@ py==1.10.0
     # via pytest
 pyexecjs==1.5.1
     # via pyreact
-pygments==2.7.4
+pygments==2.8.1
     # via
     #   -r requirements.in
     #   ipython
@@ -201,7 +202,7 @@ pyreact==0.6.0
     # via -r requirements.in
 pytest-django==4.1.0
     # via -r requirements.in
-pytest==6.2.2
+pytest==6.2.3
     # via pytest-django
 python-dateutil==2.8.1
     # via minio
@@ -224,7 +225,7 @@ requests==2.25.1
     #   coreapi
     #   djangorestframework-stubs
     #   responses
-responses==0.12.1
+responses==0.13.2
     # via -r requirements.in
 sentry-sdk==1.0.0
     # via -r requirements.in
@@ -241,7 +242,7 @@ six==1.15.0
     #   responses
     #   virtualenv
     #   webtest
-soupsieve==2.1
+soupsieve==2.2.1
     # via beautifulsoup4
 sqlparse==0.4.1
     # via
@@ -263,7 +264,7 @@ typing-extensions==3.7.4.3
     #   mypy
 uritemplate==3.0.1
     # via coreapi
-urllib3==1.26.3
+urllib3==1.26.4
     # via
     #   minio
     #   requests
@@ -273,15 +274,15 @@ vine==5.0.0
     # via
     #   amqp
     #   celery
-virtualenv==20.4.2
+virtualenv==20.4.3
     # via pre-commit
-waitress==1.4.4
+waitress==2.0.0
     # via webtest
 wcwidth==0.2.5
     # via prompt-toolkit
 webencodings==0.5.1
     # via html5lib
-webob==1.8.6
+webob==1.8.7
     # via webtest
 webtest==2.0.35
     # via django-webtest
