@@ -71,6 +71,7 @@ IGNORABLE_404_URLS = (
     re.compile(r'^/robots\.txt$'),
 )
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
