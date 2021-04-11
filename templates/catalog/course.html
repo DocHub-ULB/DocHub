@@ -89,10 +89,10 @@
                 <div class="large-12 columns">
                    <div class="panel">
                       <div class="right">
-                        <a href="/api/documents/62876/pdf/" title="Télécharger" class="radius label tiny secondary"><i class="fi-download dark-grey"></i> Télécharger</a>
-                        <a href="/documents/62876/edit" title="Éditer" class="radius label tiny secondary"><i class="fi-pencil dark-grey"></i> Editer</a>
-                        <a href="/documents/62876/reupload" class="radius label tiny secondary"><i class="fi-page-add dark-grey" title="Ré-uploader"></i> Ré-uploader</a></div>
-                      <h5><a href="/documents/62876">{{document.name}}</a><small> par {{ document.user.name }}</small><br></h5>
+                        <a href="/api/documents/{{document.pk}}/pdf/" title="Télécharger" class="radius label tiny secondary"><i class="fi-download dark-grey"></i> Télécharger</a>
+                        <a href="/documents/{{document.pk}}/edit" title="Éditer" class="radius label tiny secondary"><i class="fi-pencil dark-grey"></i> Editer</a>
+                        <a href="/documents/{{document.pk}}/reupload" class="radius label tiny secondary"><i class="fi-page-add dark-grey" title="Ré-uploader"></i> Ré-uploader</a></div>
+                      <h5><a href="/documents/{{document.pk}}">{{document.name}}</a><small> par {{ document.user.name }}</small><br></h5>
                       {% if document.description %}
                         <p class="document-description">{{ document.description|truncatechars:200 }}</p>
                       {% endif %}
