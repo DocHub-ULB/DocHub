@@ -3,7 +3,7 @@
 {% load sass_tags %}
 
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,29 +21,6 @@
 
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/fastclick.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/jquery.cookie.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/modernizr.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/vendor/placeholder.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.abide.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.accordion.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.alert.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.clearing.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.dropdown.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.equalizer.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.interchange.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.joyride.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.magellan.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.offcanvas.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.orbit.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.reveal.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.slider.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tab.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.tooltip.js"></script>
-    <script src="https://cdn.jsdelivr.net/foundation/5.5.3/js/foundation/foundation.topbar.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
@@ -101,7 +78,7 @@
           </p>
           <p class="text-center">
             Tu n'as pas besoin de créer un compte, il suffit d'employer ton netid.<br><br>
-            <a href="{% login_url %}" id="login_link" class="button success expand">Connexion</a></strong><br>
+            <a href="{% login_url %}" id="login_link" class="button success expand">Connexion</a><br>
             {% if debug %}
             <small>Developpers could also <a href="/syslogin">syslogin</a></small>
             {% endif %}
