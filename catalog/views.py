@@ -3,7 +3,7 @@ from functools import partial
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -14,10 +14,9 @@ from django.views.generic.detail import DetailView
 from actstream import actions
 from mptt.utils import get_cached_trees
 
-import search.logic
-from catalog.forms import SearchForm
 from catalog.models import Category, Course
 from catalog.suggestions import suggest
+from documents.models import Vote
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -38,18 +37,29 @@ class CourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        course = context['course']
+        course = context["course"]
 
-        documents = course.document_set\
-            .exclude(state="ERROR", hidden=True)\
-            .select_related('user')\
-            .prefetch_related('tags')
+        documents = (
+            course.document_set.exclude(state="ERROR", hidden=True)
+            .select_related("course", "user")
+            .prefetch_related("tags", "vote_set")
+            .annotate(
+                upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
+            )
+            .annotate(
+                downvotes=Count(
+                    "vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)
+                )
+            )
+            .order_by("-edited")
+        )
 
-
-        context['tags'] = {tag for doc in documents for tag in doc.tags.all()}
-        context['documents'] = documents
-        context['threads'] = course.thread_set.annotate(Count('message')).order_by('-id')
-        context['followers_count'] = course.followers_count
+        context["tags"] = {tag for doc in documents for tag in doc.tags.all()}
+        context["documents"] = documents
+        context["threads"] = course.thread_set.annotate(Count("message")).order_by(
+            "-id"
+        )
+        context["followers_count"] = course.followers_count
 
         return context
 
@@ -58,7 +68,7 @@ def set_follow_course(request, slug: str, action):
     course = get_object_or_404(Course, slug=slug)
     action(request.user, course)
     request.user.update_inferred_faculty()
-    nextpage = request.GET.get('next', reverse('course_show', args=[slug]))
+    nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
     return HttpResponseRedirect(nextpage)
 
 
@@ -76,11 +86,15 @@ def leave_course(request: HttpRequest, slug: str):
 @login_required
 def show_courses(request):
     end_of_year = timezone.now().month in [7, 8, 9, 10]
-    return render(request, "catalog/my_courses.html", {
-        "faculties": Category.objects.get(level=0).children.all(),
-        "suggestions": suggest(request.user),
-        "show_unfollow_all_button": end_of_year
-    })
+    return render(
+        request,
+        "catalog/my_courses.html",
+        {
+            "faculties": Category.objects.get(level=0).children.all(),
+            "suggestions": suggest(request.user),
+            "show_unfollow_all_button": end_of_year,
+        },
+    )
 
 
 @cache_page(60 * 60)
@@ -88,22 +102,26 @@ def show_courses(request):
 def course_tree(request):
     def course(node: Course):
         return {
-            'name': node.name,
-            'id': node.id,
-            'slug': node.slug,
+            "name": node.name,
+            "id": node.id,
+            "slug": node.slug,
         }
 
     def category(node: Category):
         return {
-            'name': node.name,
-            'id': node.id,
-            'children': list(map(category, node.get_children())),
-            'courses': list(map(course, node.course_set.all())),
+            "name": node.name,
+            "id": node.id,
+            "children": list(map(category, node.get_children())),
+            "courses": list(map(course, node.course_set.all())),
         }
 
-    categories = list(map(category, get_cached_trees(Category.objects.prefetch_related('course_set').all())))
-    return HttpResponse(json.dumps(categories),
-                        content_type="application/json")
+    categories = list(
+        map(
+            category,
+            get_cached_trees(Category.objects.prefetch_related("course_set").all()),
+        )
+    )
+    return HttpResponse(json.dumps(categories), content_type="application/json")
 
 
 @login_required

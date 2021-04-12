@@ -90,27 +90,36 @@
                    <div class="panel">
                       <div class="right">
                         <a href="/api/documents/{{document.pk}}/pdf/" title="Télécharger" class="radius label tiny secondary"><i class="fi-download dark-grey"></i> Télécharger</a>
-                        <a href="/documents/{{document.pk}}/edit" title="Éditer" class="radius label tiny secondary"><i class="fi-pencil dark-grey"></i> Editer</a>
-                        <a href="/documents/{{document.pk}}/reupload" class="radius label tiny secondary"><i class="fi-page-add dark-grey" title="Ré-uploader"></i> Ré-uploader</a></div>
-                      <h5><a href="/documents/{{document.pk}}">{{document.name}}</a><small> par {{ document.user.name }}</small><br></h5>
+                        <a href="{% url 'document_edit' document.pk %}" title="Éditer" class="radius label tiny secondary"><i class="fi-pencil dark-grey"></i> Editer</a>
+                        <a href="{% url 'document_reupload' document.pk %}" class="radius label tiny secondary"><i class="fi-page-add dark-grey" title="Ré-uploader"></i> Ré-uploader</a></div>
+                      <h5><a href="{% url 'document_show' document.pk %}">{{document.name}}</a><small> par {{ document.user.name }}</small><br></h5>
                       {% if document.description %}
                         <p class="document-description">{{ document.description|truncatechars:200 }}</p>
                       {% endif %}
-                      <div class="right">
-                        <i class="fi-star vote-color"></i> Votez : &nbsp;
-                        <a title="Ce document est très utile et mérite plus d'attention" class="label radius secondary"><i class="fi-like round-icon medium upvote "></i>&nbsp;0</a>
-                        <a title="Ce document est décevant et/ou inintéressant pour le cours" class="label radius secondary"><i class="fi-dislike round-icon medium downvote "></i>&nbsp;0</a>
-                      </div>
+                      <turbo-frame id="document-{{document.pk}}-vote">
+                        <form action="{% url 'document_vote' document.pk %}" method="POST">
+                          {% csrf_token %}
+                          <div class="right">
+                            <i class="fi-star vote-color"></i> Votez : &nbsp;
+                            <button type="submit" name="vote_type" value="up" title="Ce document est très utile et mérite plus d'attention" class="label radius secondary">
+                              <i class="fi-like round-icon medium upvote "></i>&nbsp;{{document.upvotes}}
+                            </button>
+                            <button type="submit" name="vote_type" value="down" title="Ce document est décevant et/ou inintéressant pour le cours" class="label radius secondary">
+                              <i class="fi-dislike round-icon medium downvote "></i>&nbsp;{{document.downvotes}}
+                            </button>
+                          </div>
+                          </form>
+                      </turbo-frame>
                       <div class="course-content-last-line">
                         <i class="fi-page-filled"></i>  {{ document.pages }} page{{ document.pages|pluralize }}
                         <i class="fi-clock"></i> Uploadé le {{ document.date|date:"d F Y" }}
                         {% if document.tags.all %}<i class="fi-pricetag-multiple"></i> {% endif %}
                         {% for kw in document.tags.all%}
-                          <a data-id="{{kw.id}}" href="#"
+                          <span data-id="{{kw.id}}"
                              style="background-color: {{kw.color}}; border: solid 2px {{kw.color}};"
                              class="radius label tag-item">
                             {{kw}}
-                          </a>
+                          </span>
                         {% endfor %}
                       </div>
                    </div>
