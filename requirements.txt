@@ -68,8 +68,6 @@ django-extensions==3.1.2
     # via -r requirements.in
 django-js-asset==1.2.2
     # via django-mptt
-django-js-reverse==0.9.1
-    # via -r requirements.in
 django-jsonfield-compat==0.4.4
     # via -r requirements.in
 django-jsonfield==1.4.1
@@ -88,8 +86,6 @@ django-stubs==1.7.0
     # via
     #   -r requirements.in
     #   djangorestframework-stubs
-django-webpack-loader==0.7.0
-    # via -r requirements.in
 django-webtest==1.9.7
     # via -r requirements.in
 django==3.2
@@ -98,7 +94,6 @@ django==3.2
     #   django-appconf
     #   django-debug-toolbar
     #   django-extensions
-    #   django-js-reverse
     #   django-jsonfield
     #   django-minio-storage
     #   django-mptt
@@ -197,8 +192,6 @@ ptyprocess==0.7.0
     # via pexpect
 py==1.10.0
     # via pytest
-pyexecjs==1.5.1
-    # via pyreact
 pygments==2.8.1
     # via
     #   -r requirements.in
@@ -206,8 +199,6 @@ pygments==2.8.1
 pyparsing==2.4.7
     # via packaging
 pypdf2==1.26.0
-    # via -r requirements.in
-pyreact==0.6.0
     # via -r requirements.in
 pytest-django==4.2.0
     # via -r requirements.in
@@ -251,7 +242,6 @@ six==1.15.0
     #   html5lib
     #   libsass
     #   orderedmultidict
-    #   pyexecjs
     #   python-dateutil
     #   python-memcached
     #   responses
