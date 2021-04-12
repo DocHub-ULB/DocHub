@@ -22,6 +22,7 @@ html5lib
 libsass
 django-compressor
 django-sass-processor
+whitenoise[brotli]
 
 # Dev
 django-extensions

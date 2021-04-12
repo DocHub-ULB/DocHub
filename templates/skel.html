@@ -1,5 +1,7 @@
 {% load humanize %}
 {% load sass_tags %}
+{% load static %}
+
 
 <!doctype html>
 <html lang="fr">
@@ -12,7 +14,7 @@
     <link rel="icon" type="image/png" href="/static/images/favicon.png" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet' type='text/css'>
 
-    <script type="module" src="/static/main.js"></script>
+    <script type="module" src="{% static "main.js" %}"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
@@ -37,12 +39,12 @@
       <br>
       Made with love at
       <a href="https://urlab.be">
-        <img src="/static/images/urlab.png" style="height: 1em;">
+        <img src="{% static "images/urlab.png" %}" style="height: 1em;">
         UrLab
       </a>
       - Code on <a href="https://github.com/UrLab/dochub">GitHub</a>
       - <a href="https://cerkinfo.be">
-          <img style="height: 1.0em;" src="/static/images/ci.png">
+          <img style="height: 1.0em;" src="{% static "images/ci.png" %}">
         </a>
       - <a href="/api">API</a>
       <br><br>

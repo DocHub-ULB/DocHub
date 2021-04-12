@@ -11,28 +11,28 @@ from www.config.default import *  # noqa
 
 DEBUG = True
 
-MIDDLEWARE += ( # noqa
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+MIDDLEWARE += (  # noqa
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-INSTALLED_APPS += ( # noqa
-    'django_extensions',
-    'debug_toolbar',
+INSTALLED_APPS += (  # noqa
+    "django_extensions",
+    "debug_toolbar",
 )
 
-BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = "redis://localhost:6379/0"
 task_always_eager = False
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(BASE_DIR, 'db.sqlite'),  # noqa
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": join(BASE_DIR, "db.sqlite"),  # noqa
     }
 }
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
 

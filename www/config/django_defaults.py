@@ -13,82 +13,94 @@ from os.path import dirname, join, normpath
 BASE_DIR = dirname(dirname(dirname(__file__)))
 
 MIDDLEWARE = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
+    "django.contrib.staticfiles",
 )
 
-STATICFILES_DIRS = (
-    join(BASE_DIR, "static"),
-)
+STATICFILES_DIRS = (join(BASE_DIR, "static"),)
 
 INTERNAL_IPS = ["127.0.0.1", "localhost", "0.0.0.0"]
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
             join(BASE_DIR, "templates"),
         ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.contrib.auth.context_processors.auth',
-                'django.template.context_processors.debug',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-ROOT_URLCONF = 'www.urls'
-LANGUAGE_CODE = 'fr-be'
-TIME_ZONE = 'UTC'
+ROOT_URLCONF = "www.urls"
+LANGUAGE_CODE = "fr-be"
+TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
 IGNORABLE_404_URLS = (
-    re.compile(r'\.(php|cgi)$'),
-    re.compile(r'^/phpmyadmin/'),
-    re.compile(r'^/apple-touch-icon.*\.png$'),
-    re.compile(r'^/favicon\.ico$'),
-    re.compile(r'^/robots\.txt$'),
+    re.compile(r"\.(php|cgi)$"),
+    re.compile(r"^/phpmyadmin/"),
+    re.compile(r"^/apple-touch-icon.*\.png$"),
+    re.compile(r"^/favicon\.ico$"),
+    re.compile(r"^/robots\.txt$"),
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 
-STATIC_ROOT = ''
+STATIC_ROOT = ""
 MEDIA_ROOT = join(BASE_DIR, "media")
 
 # SECRET_KEY configuration
-SECRET_FILE = normpath(join(BASE_DIR, 'www', 'secret_key.txt'))
+SECRET_FILE = normpath(join(BASE_DIR, "www", "secret_key.txt"))
 
 try:
     SECRET_KEY = open(SECRET_FILE).read().strip()
 except OSError:
     try:
-        with open(SECRET_FILE, 'w') as f:
+        with open(SECRET_FILE, "w") as f:
             import random
-            SECRET_KEY = ''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
+
+            SECRET_KEY = "".join(
+                [
+                    random.SystemRandom().choice(
+                        "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)"
+                    )
+                    for i in range(50)
+                ]
+            )
             f.write(SECRET_KEY)
     except OSError:
-        raise Exception('Cannot open file `%s` for writing the secret_key' % SECRET_FILE)
+        raise Exception(
+            "Cannot open file `%s` for writing the secret_key" % SECRET_FILE
+        )

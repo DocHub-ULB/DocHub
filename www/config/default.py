@@ -76,7 +76,7 @@ TEMPLATES[0]["OPTIONS"]["context_processors"] += (  # NOQA
     "www.context_processors.read_only",
 )
 
-STATIC_ROOT = "collected_static"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
