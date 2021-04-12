@@ -1,7 +1,8 @@
 from django.views.generic.list import ListView
 
-from catalog.models import Course
 import search.logic
+from catalog.models import Course
+
 
 class CourseSearchView(ListView):
 

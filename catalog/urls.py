@@ -1,7 +1,7 @@
 from django.urls import path
 
-from catalog.views import CategoryDetailView, CourseDetailView
 import catalog.views
+from catalog.views import CategoryDetailView, CourseDetailView
 
 urlpatterns = [
     path("course/<slug:slug>", CourseDetailView.as_view(), name="course_show"),
