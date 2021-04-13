@@ -22,6 +22,7 @@
         {% elif notification.action.verb == "a uploadé un doublon de" %}
           <i class="fi-x" style="color: #cf2a0e"></i>
         {% endif %}
+        </strong>
         <a href="{% url "read_and_redirect" notification.id %}">
           {% if not notification.action.public %}
             {% if notification.action.verb == "upload success" %}
@@ -37,7 +38,7 @@
 
             {{ notification.action.verb }}
           {% endif %}
-        </strong>
+
           {% if notification.action.action_object %}
                 {{ notification.action.action_object.fullname }}
           {% endif %}

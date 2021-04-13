@@ -78,21 +78,7 @@
     <h2>Code</h2>
     <p>Pour nos amis informaticiens qui voudraient discuter sur du code, il est aussi possible d'insérer des bouts de codes qui seront mis en forme. Il suffit de le mettre en forme avec l'annotation <code>```LANGAGE ```</code>, où <code>LANGAGE</code> est le nom du langage dans lequel le code est écrit.</p>
     {% markdown_demo %}
-    ```python
-    print("1 + 1 = ", 1+1)
-    ```
-
-    ```c
-    #include <stdlib.h>
-    #include <unistd.h>
-    /* Petit programme qui teste si un arduino est branché */
-    int main(int argc, const char **argv){
-        int fd = open("/dev/ttyUSB0", O_RDWR);
-        if (fd < 0) return EXIT_FAILURE;
-        close(fd);
-        return EXIT_SUCCESS;
-    }
-    ```
+      {% include "telepathy/markdown_demo.md" %}
     {% end_markdown_demo %}
 
     <h1 id="memory">Aide-mémoire</h1>

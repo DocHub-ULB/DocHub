@@ -16,11 +16,7 @@
       </div>
     </div>
     <div class="row user-message-content">
-      {% if edit %}
-      <form id="response-form" class="message-form" action="" method="post">
-      {% else %}
-      <form id="response-form" class="message-form" action="{% url 'thread_reply' thread.id %}" method="post">
-      {% endif %}
+      <form id="response-form" class="message-form" {% if not edit %} action="{% url 'thread_reply' thread.id %}" {% endif %} method="post">
         {% csrf_token %}
         {% for field in form %}
           {% include "simple_input.html" %}
