@@ -32,7 +32,7 @@ urlpatterns = [
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
 
     path("login", users.views.login_view),
-    path("auth-ulb", users.views.auth_ulb),
+    path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),
     path("logout", LogoutView.as_view(next_page="/"), name="logout"),
 
     path("help/", www.views.HelpView.as_view(template_name='help.html'), name="help"),

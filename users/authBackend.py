@@ -4,6 +4,8 @@ import sys
 from base64 import b64encode
 from datetime import date
 
+from django.urls import reverse
+
 from django.conf import settings
 from django.db import IntegrityError
 
@@ -21,7 +23,7 @@ class IntranetError(Exception):
 
 
 class NetidBackend:
-    ULB_AUTH = "https://auth-pp.ulb.be/proxyValidate?ticket={}&service=http://localhost:8001/auth-ulb"
+    ULB_AUTH = "https://auth-pp.ulb.be/proxyValidate?ticket={}&service={}}/{}"
 
     def get_user(self, user_id):
         try:
@@ -33,7 +35,7 @@ class NetidBackend:
         if not ticket:
             return None
 
-        resp = requests.get(self.ULB_AUTH.format(ticket))
+        resp = requests.get(self.ULB_AUTH.format(ticket, settings.BASE_URL, reverse('auth-ulb')))
         resp.encoding = (
             "utf-8"  # force utf-8 because ulb does not send the right header
         )
@@ -81,7 +83,7 @@ class NetidBackend:
     @classmethod
     def login_url(cls):
         return_url = furl(settings.BASE_URL)
-        return_url.path = "auth-ulb"
+        return_url.path = reverse("auth-ulb")
 
         ulb_url = furl("https://auth-pp.ulb.be/login")
         ulb_url.args["service"] = return_url
