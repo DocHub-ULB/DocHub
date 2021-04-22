@@ -21,7 +21,7 @@ class IntranetError(Exception):
 
 
 class NetidBackend:
-    ULB_AUTH = "https://auth-pp.ulb.be/proxyValidate?ticket={}&service=http://localhost:8001/auth"
+    ULB_AUTH = "https://auth-pp.ulb.be/proxyValidate?ticket={}&service=http://localhost:8001/auth-ulb"
 
     def get_user(self, user_id):
         try:
@@ -79,11 +79,9 @@ class NetidBackend:
         return user
 
     @classmethod
-    def login_url(cls, next_url=""):
+    def login_url(cls):
         return_url = furl(settings.BASE_URL)
-        return_url.path = "auth"
-        if next_url:
-            return_url.args["next64"] = b64encode(next_url.encode()).decode()
+        return_url.path = "auth-ulb"
 
         ulb_url = furl("https://auth-pp.ulb.be/login")
         ulb_url.args["service"] = return_url

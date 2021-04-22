@@ -16,4 +16,4 @@ register = template.Library()
 
 @register.simple_tag(name='login_url')
 def login_url(next=""):
-    return NetidBackend.login_url(next)
+    return NetidBackend.login_url()
