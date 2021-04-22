@@ -1,5 +1,4 @@
 import os
-from base64 import b64decode
 
 from django.conf import settings
 from django.contrib import messages
@@ -13,6 +12,7 @@ from actstream.models import actor_stream
 from PIL import Image, ImageOps
 from rest_framework.authtoken.models import Token
 
+from users.authBackend import NetidBackend
 from users.forms import SettingsForm
 
 
@@ -64,15 +64,27 @@ def panel_hide(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-def auth(request):
-    print(request.GET)
+def login_view(request):
+    next = request.GET.get('next')
+    return_url = NetidBackend.login_url().url
+    resp = HttpResponseRedirect(return_url)
+    if next:
+        resp.set_cookie('next_url', next, max_age=10 * 60) # 10 minutes
+    return resp
+
+
+def auth_ulb(request):
     ticket = request.GET.get("ticket", False)
 
     if ticket:
         user = authenticate(ticket=ticket)
         if user is not None:
-            user.update_inscription_faculty()
             login(request, user)
+            next_url = request.COOKIES.get("next_url")
+            if next_url and next_url.startswith("/"):
+                resp = HttpResponseRedirect(next_url)
+                resp.set_cookie('next_url', "", max_age=-100000)
+                return resp
             return HttpResponseRedirect("/")
 
     return HttpResponseForbidden("Error while authenticating with NetID")
