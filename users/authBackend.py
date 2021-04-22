@@ -4,10 +4,9 @@ import sys
 from base64 import b64encode
 from datetime import date
 
-from django.urls import reverse
-
 from django.conf import settings
 from django.db import IntegrityError
+from django.urls import reverse
 
 import requests
 import xmltodict
