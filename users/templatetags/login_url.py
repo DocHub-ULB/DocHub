@@ -8,12 +8,18 @@
 # This software was made by hast, C4, ititou and rom1 at UrLab (http://urlab.be): ULB's hackerspace
 
 from django import template
-
-from users.authBackend import NetidBackend
+from django.urls import reverse
+from django.utils.http import urlencode
 
 register = template.Library()
 
 
 @register.simple_tag(name='login_url')
-def login_url(next=""):
-    return NetidBackend.login_url()
+def login_url(next=None):
+    base = reverse("login")
+
+    if next:
+        qs = urlencode({"next": next})
+        return f"{base}?{qs}"
+    else:
+        return base
