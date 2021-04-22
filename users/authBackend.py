@@ -22,7 +22,7 @@ class IntranetError(Exception):
 
 
 class NetidBackend:
-    ULB_AUTH = "https://auth-pp.ulb.be/proxyValidate?ticket={}&service={}}/{}"
+    ULB_AUTH = "https://auth-pp.ulb.be/proxyValidate?ticket={}&service={}/{}"
 
     def get_user(self, user_id):
         try:
