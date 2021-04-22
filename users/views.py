@@ -65,22 +65,14 @@ def panel_hide(request):
 
 
 def auth(request):
-    sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
-    next = request.GET.get('next', None)
-    next_64 = request.GET.get('next64', None)
+    print(request.GET)
+    ticket = request.GET.get("ticket", False)
 
-    if next and next.startswith("/"):
-        next_url = next
-    elif next_64 and b64decode(next_64).decode().startswith("/"):
-        next_url = b64decode(next_64).decode()
-    else:
-        next_url = "/"
-
-    if sid and uid:
-        user = authenticate(sid=sid, uid=uid)
+    if ticket:
+        user = authenticate(ticket=ticket)
         if user is not None:
             user.update_inscription_faculty()
             login(request, user)
-            return HttpResponseRedirect(next_url)
+            return HttpResponseRedirect("/")
 
     return HttpResponseForbidden("Error while authenticating with NetID")
