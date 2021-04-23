@@ -54,10 +54,11 @@ class NetidBackend:
         except User.DoesNotExist:
             user = User.objects.create_user(
                 netid=user_dict["netid"],
-                email=user_dict["mail"],
-                first_name=user_dict["first_name"],
-                last_name=user_dict["last_name"],
-                registration=user_dict["raw_matricule"],
+
+                email=user_dict["netid"] + "@ulb.ac.be", # TODO real
+                first_name=user_dict["netid"], # TODO real
+                last_name=user_dict["netid"], # TODO real
+
                 register_method=self.LOGIN_METHOD,
             )
         user.last_login_method = self.LOGIN_METHOD
@@ -66,6 +67,7 @@ class NetidBackend:
         return user
 
     def _parse_response(self, xml):
+        print(xml) # TODO remove
         if xml.strip() == "":
             raise IntranetError("Empty response")
         if "errMsgFr" in xml:
