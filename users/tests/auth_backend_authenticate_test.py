@@ -1,5 +1,3 @@
-from django.test.client import RequestFactory
-
 import pytest
 import responses
 
@@ -27,8 +25,7 @@ def test_auth(fake_base_url):
         match_querystring=True,
     )
 
-    rf = RequestFactory()
-    user = UlbCasBackend().authenticate(rf.get("/this-is-a-fake-django-request"), ticket=ticket)
+    user = UlbCasBackend().authenticate(None, ticket=ticket)
 
     assert len(responses.calls) == 1
     assert isinstance(user, User)
