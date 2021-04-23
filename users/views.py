@@ -12,7 +12,7 @@ from actstream.models import actor_stream
 from PIL import Image, ImageOps
 from rest_framework.authtoken.models import Token
 
-from users.authBackend import NetidBackend
+from users.authBackend import UlbCasBackend
 from users.forms import SettingsForm
 
 
@@ -66,7 +66,7 @@ def panel_hide(request):
 
 def login_view(request):
     next = request.GET.get('next')
-    return_url = NetidBackend.get_login_url()
+    return_url = UlbCasBackend.get_login_url()
     resp = HttpResponseRedirect(return_url)
     if next:
         resp.set_cookie('next_url', next, max_age=10 * 60) # 10 minutes

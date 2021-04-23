@@ -3,7 +3,7 @@ from django.test.client import RequestFactory
 import pytest
 import responses
 
-from users.authBackend import NetidBackend
+from users.authBackend import UlbCasBackend
 from users.models import User
 
 pytestmark = pytest.mark.django_db
@@ -28,7 +28,7 @@ def test_auth(fake_base_url):
     )
 
     rf = RequestFactory()
-    user = NetidBackend().authenticate(rf.get("/this-is-a-fake-django-request"), ticket=ticket)
+    user = UlbCasBackend().authenticate(rf.get("/this-is-a-fake-django-request"), ticket=ticket)
 
     assert len(responses.calls) == 1
     assert isinstance(user, User)

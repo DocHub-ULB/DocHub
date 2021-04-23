@@ -16,7 +16,7 @@ class IntranetError(Exception):
     pass
 
 
-class NetidBackend:
+class UlbCasBackend:
     CAS_ENDPOINT = "https://auth-pp.ulb.be/"
     LOGIN_METHOD = 'ulb-cas'
 
@@ -68,10 +68,6 @@ class NetidBackend:
 
     def _parse_response(self, xml):
         print(xml) # TODO remove
-        if xml.strip() == "":
-            raise IntranetError("Empty response")
-        if "errMsgFr" in xml:
-            raise IntranetError("Response was an error")
 
         doc = xmltodict.parse(xml)
         user = {}
