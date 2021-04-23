@@ -2,9 +2,9 @@
 
 import datetime
 
-from users.authBackend import NetidBackend
+from users.authBackend import UlbCasBackend
 
-parse = NetidBackend()._parse_response
+parse = UlbCasBackend()._parse_response
 
 
 nimarcha = {

@@ -95,7 +95,7 @@ STATICFILES_FINDERS = (
 
 
 AUTHENTICATION_BACKENDS = (
-    'users.authBackend.NetidBackend',
+    'users.authBackend.UlbCasBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

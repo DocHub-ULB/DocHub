@@ -10,7 +10,7 @@ from catalog.forms import SearchForm
 from catalog.models import Category
 from documents.models import Document
 from telepathy.models import Thread
-from users.authBackend import NetidBackend
+from users.authBackend import UlbCasBackend
 from users.models import User
 
 

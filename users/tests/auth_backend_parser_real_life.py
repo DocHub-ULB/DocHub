@@ -4,9 +4,9 @@ import glob
 
 import pytest
 
-from users.authBackend import IntranetError, NetidBackend
+from users.authBackend import IntranetError, UlbCasBackend
 
-parse = NetidBackend()._parse_response
+parse = UlbCasBackend()._parse_response
 
 
 @pytest.mark.parametrize("fpath", glob.glob("users/tests/xml-private-data/*.xml") + glob.glob("users/tests/xml-anonymized-data/*.xml"))
