@@ -1,10 +1,10 @@
 import logging
+import xml.etree.ElementTree as ET
 
 from django.conf import settings
 from django.urls import reverse
 
 import requests
-import xmltodict
 from furl import furl
 
 from users.models import User
@@ -19,6 +19,9 @@ class IntranetError(Exception):
 class UlbCasBackend:
     CAS_ENDPOINT = "https://auth-pp.ulb.be/"
     LOGIN_METHOD = 'ulb-cas'
+    NAMESPACES = {
+        'cas': 'http://www.yale.edu/tp/cas',
+    }
 
     def get_user(self, user_id):
         try:
@@ -38,16 +41,12 @@ class UlbCasBackend:
         resp = requests.get(cas_ticket_url.url)
 
         if not resp.ok:
-            logger.error(
-                f"ULB bakcend responded with error {resp.status_code}: %s", resp
-            )
-            return None
+            raise # TODO : show error to user
 
         try:
             user_dict = self._parse_response(resp.text)
         except:
-            logger.exception("Error while parsing ULB response")
-            return None
+            raise # TODO : show error to user
 
         try:
             user = User.objects.get(netid=user_dict["netid"])
@@ -69,14 +68,20 @@ class UlbCasBackend:
     def _parse_response(self, xml):
         print(xml) # TODO remove
 
-        doc = xmltodict.parse(xml)
-        user = {}
-
-        user["netid"] = doc["cas:serviceResponse"]["cas:authenticationSuccess"][
-            "cas:user"
-        ]
+        doc = ET.fromstring(xml)
+        user = {
+            'netid': self._get_tag(doc, './cas:authenticationSuccess/cas:user'),
+            'email': self._get_tag(doc, './cas:authenticationSuccess/cas:mail'),
+        }
 
         return user
+
+    def _get_tag(self, tree, xpath):
+        node = tree.find(xpath, namespaces=self.NAMESPACES)
+        if node is not None:
+            return node.text
+        else:
+            return None
 
     @classmethod
     def get_login_url(cls):
