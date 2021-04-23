@@ -1,19 +1,13 @@
-# import pytest
-
-import datetime
-
 from users.authBackend import UlbCasBackend
-
-parse = UlbCasBackend()._parse_response
-
 
 nimarcha = {
     'netid': 'nmar0003',
+    'email': 'nmar0003@ulb.ac.be'
 }
 
 
 def test_parser():
     xml = open("users/tests/xml-fixtures/minimal.xml").read()
-    ret = parse(xml)
+    ret = UlbCasBackend()._parse_response(xml)
 
     assert ret == nimarcha

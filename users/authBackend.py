@@ -33,21 +33,21 @@ class UlbCasBackend:
         if not ticket:
             return None
 
+        # Craft request to the CAS provider
         cas_ticket_url = furl(self.CAS_ENDPOINT)
         cas_ticket_url.path = "/proxyValidate"
         cas_ticket_url.args['ticket'] = ticket
         cas_ticket_url.args['service'] = self.get_service_url()
 
+        # Send the request
         resp = requests.get(cas_ticket_url.url)
 
         if not resp.ok:
             raise # TODO : show error to user
 
-        try:
-            user_dict = self._parse_response(resp.text)
-        except:
-            raise # TODO : show error to user
+        user_dict = self._parse_response(resp.text)
 
+        # Get or create a user from the parsed user_dict
         try:
             user = User.objects.get(netid=user_dict["netid"])
         except User.DoesNotExist:
@@ -66,22 +66,42 @@ class UlbCasBackend:
         return user
 
     def _parse_response(self, xml):
-        print(xml) # TODO remove
+        # Try to parse the response from the CAS provider
+        try:
+            tree = ET.fromstring(xml)
+        except ET.ParseError:
+            raise # TODO print failure to user
 
-        doc = ET.fromstring(xml)
-        user = {
-            'netid': self._get_tag(doc, './cas:authenticationSuccess/cas:user'),
-            'email': self._get_tag(doc, './cas:authenticationSuccess/cas:mail'),
-        }
+        success = tree.find(
+            './cas:authenticationSuccess',
+            namespaces=self.NAMESPACES
+        )
+        if not success:
+            failure = tree.find(
+                './cas:authenticationFailure',
+                namespaces=self.NAMESPACES
+            )
+            if failure:
+                raise # TODO print failure to user
+            else:
+                raise # TODO could not find a known structure
 
-        return user
-
-    def _get_tag(self, tree, xpath):
-        node = tree.find(xpath, namespaces=self.NAMESPACES)
-        if node is not None:
-            return node.text
+        netid_node = success.find("cas:user", namespaces=self.NAMESPACES)
+        if netid_node is not None:
+            netid = netid_node.text
         else:
-            return None
+            raise # TODO could not find a known structure
+
+        email_node = success.find("./cas:attributes/cas:mail", namespaces=self.NAMESPACES)
+        if email_node is not None:
+            email = email_node.text
+        else:
+            email = f'{netid}@ulb.ac.be'
+
+        return {
+            'netid': netid,
+            'email': email,
+        }
 
     @classmethod
     def get_login_url(cls):

@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
+from django.template.response import TemplateResponse
 from django.urls import reverse
 
 from actstream.models import actor_stream
@@ -76,15 +77,18 @@ def login_view(request):
 def auth_ulb(request):
     ticket = request.GET.get("ticket", False)
 
-    if ticket:
-        user = authenticate(ticket=ticket)
-        if user is not None:
-            login(request, user)
-            next_url = request.COOKIES.get("next_url")
-            if next_url and next_url.startswith("/"):
-                resp = HttpResponseRedirect(next_url)
-                resp.set_cookie('next_url', "", max_age=-100000)
-                return resp
-            return HttpResponseRedirect("/")
+    if not ticket:
+        return TemplateResponse(request, 'users/no-ticket.html', {})
 
-    return HttpResponseForbidden("Error while authenticating with NetID")
+    user = authenticate(ticket=ticket)
+    if user is None:
+        return TemplateResponse(request, 'users/auth-failed.html', {})
+
+    login(request, user)
+
+    next_url = request.COOKIES.get("next_url")
+    if next_url and next_url.startswith("/"):
+        resp = HttpResponseRedirect(next_url)
+        resp.set_cookie('next_url', "", max_age=-100000)
+        return resp
+    return HttpResponseRedirect("/")
