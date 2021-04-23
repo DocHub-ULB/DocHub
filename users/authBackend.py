@@ -1,18 +1,13 @@
 import logging
-import os
-import sys
-from base64 import b64encode
-from datetime import date
 
 from django.conf import settings
-from django.db import IntegrityError
 from django.urls import reverse
 
 import requests
 import xmltodict
 from furl import furl
 
-from users.models import Inscription, User
+from users.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +17,8 @@ class IntranetError(Exception):
 
 
 class NetidBackend:
-    ULB_AUTH = "https://auth-pp.ulb.be/proxyValidate?ticket={}&service={}/{}"
+    CAS_ENDPOINT = "https://auth-pp.ulb.be/"
+    LOGIN_METHOD = 'ulb-cas'
 
     def get_user(self, user_id):
         try:
@@ -34,10 +30,12 @@ class NetidBackend:
         if not ticket:
             return None
 
-        resp = requests.get(self.ULB_AUTH.format(ticket, settings.BASE_URL, reverse('auth-ulb')))
-        resp.encoding = (
-            "utf-8"  # force utf-8 because ulb does not send the right header
-        )
+        cas_ticket_url = furl(self.CAS_ENDPOINT)
+        cas_ticket_url.path = "/proxyValidate"
+        cas_ticket_url.args['ticket'] = ticket
+        cas_ticket_url.args['service'] = self.get_service_url()
+
+        resp = requests.get(cas_ticket_url.url)
 
         if not resp.ok:
             logger.error(
@@ -60,7 +58,10 @@ class NetidBackend:
                 first_name=user_dict["first_name"],
                 last_name=user_dict["last_name"],
                 registration=user_dict["raw_matricule"],
+                register_method=self.LOGIN_METHOD,
             )
+        user.last_login_method = self.LOGIN_METHOD
+        user.save()
 
         return user
 
@@ -80,11 +81,14 @@ class NetidBackend:
         return user
 
     @classmethod
-    def login_url(cls):
-        return_url = furl(settings.BASE_URL)
-        return_url.path = reverse("auth-ulb")
+    def get_login_url(cls):
+        url = furl("https://auth-pp.ulb.be/login")
+        url.args["service"] = cls.get_service_url()
 
-        ulb_url = furl("https://auth-pp.ulb.be/login")
-        ulb_url.args["service"] = return_url
+        return url.url
 
-        return ulb_url
+    @classmethod
+    def get_service_url(cls):
+        url = furl(settings.BASE_URL)
+        url.path = reverse('auth-ulb')
+        return url.url
