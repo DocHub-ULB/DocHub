@@ -1,0 +1,16 @@
+<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+    <cas:authenticationSuccess>
+        <cas:user>tcruise</cas:user>
+        <cas:attributes>
+            <cas:credentialType>UsernamePasswordCredential</cas:credentialType>
+            <cas:samlAuthenticationStatementAuthMethod>urn:oasis:names:tc:SAML:1.0:am:password</cas:samlAuthenticationStatementAuthMethod>
+            <cas:uid>tcruise</cas:uid>
+            <cas:isFromNewLogin>true</cas:isFromNewLogin>
+            <cas:mail>_tom.cruise@ulb.ac.be</cas:mail>
+            <cas:authenticationDate>2021-04-23T06:05:04.083722571Z</cas:authenticationDate>
+            <cas:authenticationMethod>LdapAuthenticationHandler</cas:authenticationMethod>
+            <cas:successfulAuthenticationHandlers>LdapAuthenticationHandler</cas:successfulAuthenticationHandlers>
+            <cas:longTermAuthenticationRequestTokenUsed>false</cas:longTermAuthenticationRequestTokenUsed>
+            </cas:attributes>
+    </cas:authenticationSuccess>
+</cas:serviceResponse>
