@@ -37,7 +37,6 @@ def index(request):
             page_count = 0
 
         context = {
-            "login_url": "/login",
             "debug": settings.DEBUG,
             "documents": floor(Document.objects.count()),
             "pages": floor(page_count, 2),
