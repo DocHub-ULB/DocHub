@@ -66,7 +66,7 @@ def panel_hide(request):
 
 def login_view(request):
     next = request.GET.get('next')
-    return_url = NetidBackend.login_url().url
+    return_url = NetidBackend.get_login_url()
     resp = HttpResponseRedirect(return_url)
     if next:
         resp.set_cookie('next_url', next, max_age=10 * 60) # 10 minutes

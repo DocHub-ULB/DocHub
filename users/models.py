@@ -64,6 +64,9 @@ class User(AbstractBaseUser):
     welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default='')
 
+    register_method = models.CharField(max_length=32)
+    last_login_method = models.CharField(max_length=32)
+
     inferred_faculty = models.TextField(blank=True)
     inscription_faculty = models.TextField(blank=True)
 
