@@ -1,11 +1,9 @@
 <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
     <cas:authenticationSuccess>
-        <cas:user>nmar0003</cas:user>
         <cas:attributes>
             <cas:credentialType>UsernamePasswordCredential</cas:credentialType>
             <cas:samlAuthenticationStatementAuthMethod>urn:oasis:names:tc:SAML:1.0:am:password</cas:samlAuthenticationStatementAuthMethod>
             <cas:uid>nmar0003</cas:uid>
-            <cas:mail>this.is.an.email@ulb.ac.be</cas:mail>
             <cas:isFromNewLogin>false</cas:isFromNewLogin>
             <cas:authenticationDate>2021-04-23T11:20:54.105001421Z</cas:authenticationDate>
             <cas:authenticationMethod>LdapAuthenticationHandler</cas:authenticationMethod>

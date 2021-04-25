@@ -12,14 +12,10 @@ from users.models import User
 logger = logging.getLogger(__name__)
 
 
-class IntranetError(Exception):
-    pass
-
-
 class UlbCasBackend:
     CAS_ENDPOINT = "https://auth-pp.ulb.be/"
     LOGIN_METHOD = 'ulb-cas'
-    NAMESPACES = {
+    XML_NAMESPACES = {
         'cas': 'http://www.yale.edu/tp/cas',
     }
 
@@ -43,7 +39,7 @@ class UlbCasBackend:
         resp = requests.get(cas_ticket_url.url)
 
         if not resp.ok:
-            raise # TODO : show error to user
+            raise CasRequestError(resp)
 
         user_dict = self._parse_response(resp.text)
 
@@ -70,29 +66,29 @@ class UlbCasBackend:
         try:
             tree = ET.fromstring(xml)
         except ET.ParseError:
-            raise # TODO print failure to user
+            raise CasParseError("invalid-xml", xml)
 
         success = tree.find(
             './cas:authenticationSuccess',
-            namespaces=self.NAMESPACES
+            namespaces=self.XML_NAMESPACES
         )
         if not success:
             failure = tree.find(
                 './cas:authenticationFailure',
-                namespaces=self.NAMESPACES
+                namespaces=self.XML_NAMESPACES
             )
-            if failure:
-                raise # TODO print failure to user
+            if failure is not None:
+                raise CasRejectError(failure.attrib.get('code'), failure.text)
             else:
-                raise # TODO could not find a known structure
+                raise CasParseError("unknown-structure", xml)
 
-        netid_node = success.find("cas:user", namespaces=self.NAMESPACES)
+        netid_node = success.find("cas:user", namespaces=self.XML_NAMESPACES)
         if netid_node is not None:
             netid = netid_node.text
         else:
-            raise # TODO could not find a known structure
+            raise CasParseError("unknown-structure", xml)
 
-        email_node = success.find("./cas:attributes/cas:mail", namespaces=self.NAMESPACES)
+        email_node = success.find("./cas:attributes/cas:mail", namespaces=self.XML_NAMESPACES)
         if email_node is not None:
             email = email_node.text
         else:
@@ -115,3 +111,19 @@ class UlbCasBackend:
         url = furl(settings.BASE_URL)
         url.path = reverse('auth-ulb')
         return url.url
+
+
+class CasError(Exception):
+    pass
+
+
+class CasRequestError(CasError):
+    pass
+
+
+class CasParseError(CasError):
+    pass
+
+
+class CasRejectError(CasError):
+    pass
