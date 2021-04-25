@@ -13,7 +13,12 @@ from actstream.models import actor_stream
 from PIL import Image, ImageOps
 from rest_framework.authtoken.models import Token
 
-from users.authBackend import UlbCasBackend
+from users.authBackend import (
+    CasParseError,
+    CasRejectError,
+    CasRequestError,
+    UlbCasBackend,
+)
 from users.forms import SettingsForm
 
 
@@ -78,17 +83,23 @@ def auth_ulb(request):
     ticket = request.GET.get("ticket", False)
 
     if not ticket:
-        return TemplateResponse(request, 'users/no-ticket.html', {})
+        return TemplateResponse(request, 'users/auth-no-ticket.html', {})
 
-    user = authenticate(ticket=ticket)
+    try:
+        user = authenticate(ticket=ticket)
+    except (CasRequestError, CasParseError, CasRejectError):
+        return TemplateResponse(request, 'users/auth-error.html', {})
+
     if user is None:
-        return TemplateResponse(request, 'users/auth-failed.html', {})
+        return TemplateResponse(request, 'users/auth-unknown-error.html', {})
 
     login(request, user)
 
     next_url = request.COOKIES.get("next_url")
+
     if next_url and next_url.startswith("/"):
         resp = HttpResponseRedirect(next_url)
+        # remove cookie with negative expiration date
         resp.set_cookie('next_url', "", max_age=-100000)
         return resp
     return HttpResponseRedirect("/")
