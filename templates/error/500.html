@@ -2,8 +2,16 @@
 {% load humanize %}
 
 {% block title %}Erreur 500{% endblock %}
+
+{% block heading %}
+Erreur serveur
+{% endblock %}
+
 {% block expl %}
-<h3>Erreur 500 : erreur serveur</h3>
-<p>Il semblerait que notre serveur se soit trompé quelque part et ne sache pas répondre à votre requête.<br>
-Ne vous inquiêtez pas, le problème vient de notre côté.</p>
+Il semblerait que notre serveur se soit trompé quelque part et ne sache pas répondre à votre requête.<br>
+Ne vous inquiêtez pas, le problème vient de notre côté.
+{% endblock %}
+
+{% block errcode %}
+HTTP_500
 {% endblock %}

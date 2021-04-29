@@ -12,14 +12,10 @@ from users.models import User
 logger = logging.getLogger(__name__)
 
 
-class IntranetError(Exception):
-    pass
-
-
 class UlbCasBackend:
     CAS_ENDPOINT = "https://auth-pp.ulb.be/"
     LOGIN_METHOD = 'ulb-cas'
-    NAMESPACES = {
+    XML_NAMESPACES = {
         'cas': 'http://www.yale.edu/tp/cas',
     }
 
@@ -33,21 +29,21 @@ class UlbCasBackend:
         if not ticket:
             return None
 
+        # Craft request to the CAS provider
         cas_ticket_url = furl(self.CAS_ENDPOINT)
         cas_ticket_url.path = "/proxyValidate"
         cas_ticket_url.args['ticket'] = ticket
         cas_ticket_url.args['service'] = self.get_service_url()
 
+        # Send the request
         resp = requests.get(cas_ticket_url.url)
 
         if not resp.ok:
-            raise # TODO : show error to user
+            raise CasRequestError(resp)
 
-        try:
-            user_dict = self._parse_response(resp.text)
-        except:
-            raise # TODO : show error to user
+        user_dict = self._parse_response(resp.text)
 
+        # Get or create a user from the parsed user_dict
         try:
             user = User.objects.get(netid=user_dict["netid"])
         except User.DoesNotExist:
@@ -66,22 +62,42 @@ class UlbCasBackend:
         return user
 
     def _parse_response(self, xml):
-        print(xml) # TODO remove
+        # Try to parse the response from the CAS provider
+        try:
+            tree = ET.fromstring(xml)
+        except ET.ParseError:
+            raise CasParseError("INVALID_XML", xml)
 
-        doc = ET.fromstring(xml)
-        user = {
-            'netid': self._get_tag(doc, './cas:authenticationSuccess/cas:user'),
-            'email': self._get_tag(doc, './cas:authenticationSuccess/cas:mail'),
-        }
+        success = tree.find(
+            './cas:authenticationSuccess',
+            namespaces=self.XML_NAMESPACES
+        )
+        if not success:
+            failure = tree.find(
+                './cas:authenticationFailure',
+                namespaces=self.XML_NAMESPACES
+            )
+            if failure is not None:
+                raise CasRejectError(failure.attrib.get('code'), failure.text)
+            else:
+                raise CasParseError("UNKNOWN_STRUCTURE", xml)
 
-        return user
-
-    def _get_tag(self, tree, xpath):
-        node = tree.find(xpath, namespaces=self.NAMESPACES)
-        if node is not None:
-            return node.text
+        netid_node = success.find("cas:user", namespaces=self.XML_NAMESPACES)
+        if netid_node is not None:
+            netid = netid_node.text
         else:
-            return None
+            raise CasParseError("UNKNOWN_STRUCTURE", xml)
+
+        email_node = success.find("./cas:attributes/cas:mail", namespaces=self.XML_NAMESPACES)
+        if email_node is not None:
+            email = email_node.text
+        else:
+            email = f'{netid}@ulb.ac.be'
+
+        return {
+            'netid': netid,
+            'email': email,
+        }
 
     @classmethod
     def get_login_url(cls):
@@ -95,3 +111,19 @@ class UlbCasBackend:
         url = furl(settings.BASE_URL)
         url.path = reverse('auth-ulb')
         return url.url
+
+
+class CasError(Exception):
+    pass
+
+
+class CasRequestError(CasError):
+    pass
+
+
+class CasParseError(CasError):
+    pass
+
+
+class CasRejectError(CasError):
+    pass
