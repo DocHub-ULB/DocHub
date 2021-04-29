@@ -83,15 +83,38 @@ def auth_ulb(request):
     ticket = request.GET.get("ticket", False)
 
     if not ticket:
-        return TemplateResponse(request, 'users/auth-no-ticket.html', {})
+        return TemplateResponse(request, "users/auth/no-ticket.html", {'args': request.GET})
 
     try:
         user = authenticate(ticket=ticket)
-    except (CasRequestError, CasParseError, CasRejectError):
-        return TemplateResponse(request, 'users/auth-error.html', {})
+    except CasRejectError as e:
+        return TemplateResponse(
+            request,
+            "users/auth/error.html",
+            {"code": e.args[0], "debug": e.args[1]}
+        )
+    except CasRequestError as e:
+        cas_request = e.args[0]
+        return TemplateResponse(
+            request,
+            "users/auth/error.html",
+            {
+                "code": f"REQUEST_{cas_request.status_code}",
+                "debug": f"{cas_request.url}\n{cas_request.text[:1000]}"
+            }
+        )
+    except CasParseError as e:
+        return TemplateResponse(
+            request,
+            "users/auth/error.html",
+            {
+                "code": e.args[0],
+                "debug": e.args[1]
+            }
+        )
 
     if user is None:
-        return TemplateResponse(request, 'users/auth-unknown-error.html', {})
+        return TemplateResponse(request, "users/auth/unknown-error.html", {})
 
     login(request, user)
 

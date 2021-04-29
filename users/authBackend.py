@@ -66,7 +66,7 @@ class UlbCasBackend:
         try:
             tree = ET.fromstring(xml)
         except ET.ParseError:
-            raise CasParseError("invalid-xml", xml)
+            raise CasParseError("INVALID_XML", xml)
 
         success = tree.find(
             './cas:authenticationSuccess',
@@ -80,13 +80,13 @@ class UlbCasBackend:
             if failure is not None:
                 raise CasRejectError(failure.attrib.get('code'), failure.text)
             else:
-                raise CasParseError("unknown-structure", xml)
+                raise CasParseError("UNKNOWN_STRUCTURE", xml)
 
         netid_node = success.find("cas:user", namespaces=self.XML_NAMESPACES)
         if netid_node is not None:
             netid = netid_node.text
         else:
-            raise CasParseError("unknown-structure", xml)
+            raise CasParseError("UNKNOWN_STRUCTURE", xml)
 
         email_node = success.find("./cas:attributes/cas:mail", namespaces=self.XML_NAMESPACES)
         if email_node is not None:

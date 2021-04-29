@@ -1,14 +1,26 @@
-{% extends "skel.html" %}
+{% extends "index.html" %}
 
 {% block content %}
   <div class="row">
-    <div class="large-12 columns">
-      <h1>Oh non ! Une erreur est apparue :/</h1>
-      {% block expl %}
-      {% endblock %}
+    <div class="large-8 small-12 columns small-centered">
+      <h1>
+        {% block heading %}
+          Erreur
+        {% endblock %}
+      </h1>
+      <p>
+        {% block expl %}
+          Une erreur est apparue
+        {% endblock %}
+      </p>
 
-      <h3>Ce n'est pas grave</h3>
-      <p>Nos administrateurs et développeurs ont été prévenus du problème et vont essayer de le réparer au plus vite !</p>
+      <small style="color: grey;">Code d'erreur: {% block errcode %}ERR_UNKNOWN{% endblock %}</small>
+
+      <pre style="color: grey; font-size: .5em">
+        {% block debug %}
+        {% endblock %}
+      <pre>
+
     </div>
   </div>
 {% endblock %}

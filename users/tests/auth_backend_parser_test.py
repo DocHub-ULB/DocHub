@@ -31,7 +31,7 @@ def test_invalid_xml():
 
     with pytest.raises(CasParseError) as e:
         UlbCasBackend()._parse_response(xml)
-    assert e.value.args[0] == 'invalid-xml'
+    assert e.value.args[0] == 'INVALID_XML'
 
 
 @pytest.mark.parametrize(
@@ -46,7 +46,7 @@ def test_unknown_structure(path):
 
     with pytest.raises(CasParseError) as e:
         UlbCasBackend()._parse_response(xml)
-    assert e.value.args[0] == 'unknown-structure'
+    assert e.value.args[0] == 'UNKNOWN_STRUCTURE'
 
 
 @pytest.mark.parametrize(
