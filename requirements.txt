@@ -8,6 +8,8 @@ amqp==5.0.6
     # via kombu
 appdirs==1.4.4
     # via virtualenv
+appnope==0.1.2
+    # via ipython
 asgiref==3.3.4
     # via django
 attrs==20.3.0
@@ -84,7 +86,7 @@ django-webpack-loader==0.7.0
     # via -r requirements.in
 django-webtest==1.9.7
     # via -r requirements.in
-django==3.2
+django==3.2.1
     # via
     #   -r requirements.in
     #   django-debug-toolbar
