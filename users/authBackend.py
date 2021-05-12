@@ -49,10 +49,9 @@ class UlbCasBackend:
         except User.DoesNotExist:
             user = User.objects.create_user(
                 netid=user_dict["netid"],
-
-                email=user_dict["netid"] + "@ulb.ac.be", # TODO real
-                first_name=user_dict["netid"], # TODO real
-                last_name=user_dict["netid"], # TODO real
+                email=user_dict["email"],
+                first_name=user_dict["first_name"],
+                last_name=user_dict["last_name"],
 
                 register_method=self.LOGIN_METHOD,
             )
@@ -94,9 +93,14 @@ class UlbCasBackend:
         else:
             email = f'{netid}@ulb.ac.be'
 
+        first_name_node = success.find("./cas:attributes/cas:givenName", namespaces=self.XML_NAMESPACES)
+        last_name_node = success.find("./cas:attributes/cas:sn", namespaces=self.XML_NAMESPACES)
+
         return {
             'netid': netid,
             'email': email,
+            'first_name': first_name_node.text if first_name_node is not None else None,
+            'last_name': last_name_node.text if last_name_node is not None else None
         }
 
     @classmethod
