@@ -11,6 +11,8 @@
             <cas:authenticationMethod>LdapAuthenticationHandler</cas:authenticationMethod>
             <cas:successfulAuthenticationHandlers>LdapAuthenticationHandler</cas:successfulAuthenticationHandlers>
             <cas:longTermAuthenticationRequestTokenUsed>false</cas:longTermAuthenticationRequestTokenUsed>
+            <cas:sn>Marchant</cas:sn>
+            <cas:givenName>Nikita</cas:givenName>
             </cas:attributes>
     </cas:authenticationSuccess>
 </cas:serviceResponse>

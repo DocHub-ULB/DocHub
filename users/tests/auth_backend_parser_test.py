@@ -10,7 +10,9 @@ def test_parser():
 
     assert ret == {
         'netid': 'nmar0003',
-        'email': 'this.is.an.email@ulb.ac.be'
+        'email': 'this.is.an.email@ulb.ac.be',
+        'first_name': 'Nikita',
+        'last_name': 'Marchant',
     }
 
 
@@ -20,7 +22,9 @@ def test_wihout_email():
 
     assert ret == {
         'netid': 'nmar0003',
-        'email': 'nmar0003@ulb.ac.be'
+        'email': 'nmar0003@ulb.ac.be',
+        'first_name': 'nmar0003',
+        'last_name': 'nmar0003',
     }
 
 
