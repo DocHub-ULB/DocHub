@@ -19,7 +19,7 @@ def test_auth(fake_base_url):
 
     responses.add(
         responses.GET,
-        f"https://auth-pp.ulb.be/proxyValidate?ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb",
+        f"https://auth.ulb.be/proxyValidate?ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb",
         body=xml,
         status=200,
         match_querystring=True,
@@ -50,7 +50,7 @@ def test_server_error(fake_base_url):
 
     responses.add(
         responses.GET,
-        f"https://auth-pp.ulb.be/proxyValidate?ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb",
+        f"https://auth.ulb.be/proxyValidate?ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb",
         body="<xml>server error</xml>",
         status=500,
         match_querystring=True,

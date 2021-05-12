@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class UlbCasBackend:
-    CAS_ENDPOINT = "https://auth-pp.ulb.be/"
+    CAS_ENDPOINT = "https://auth.ulb.be/"
     LOGIN_METHOD = 'ulb-cas'
     XML_NAMESPACES = {
         'cas': 'http://www.yale.edu/tp/cas',
@@ -105,7 +105,8 @@ class UlbCasBackend:
 
     @classmethod
     def get_login_url(cls):
-        url = furl("https://auth-pp.ulb.be/login")
+        url = furl(cls.CAS_ENDPOINT)
+        url.path = '/login'
         url.args["service"] = cls.get_service_url()
 
         return url.url
