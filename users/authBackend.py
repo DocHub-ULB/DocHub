@@ -99,8 +99,8 @@ class UlbCasBackend:
         return {
             'netid': netid,
             'email': email,
-            'first_name': first_name_node.text if first_name_node is not None else None,
-            'last_name': last_name_node.text if last_name_node is not None else None
+            'first_name': first_name_node.text if first_name_node is not None else netid,
+            'last_name': last_name_node.text if last_name_node is not None else netid
         }
 
     @classmethod
