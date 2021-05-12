@@ -5,14 +5,11 @@
             <cas:credentialType>UsernamePasswordCredential</cas:credentialType>
             <cas:samlAuthenticationStatementAuthMethod>urn:oasis:names:tc:SAML:1.0:am:password</cas:samlAuthenticationStatementAuthMethod>
             <cas:uid>nmar0003</cas:uid>
-            <cas:mail>this.is.an.email@ulb.ac.be</cas:mail>
             <cas:isFromNewLogin>false</cas:isFromNewLogin>
             <cas:authenticationDate>2021-04-23T11:20:54.105001421Z</cas:authenticationDate>
             <cas:authenticationMethod>LdapAuthenticationHandler</cas:authenticationMethod>
             <cas:successfulAuthenticationHandlers>LdapAuthenticationHandler</cas:successfulAuthenticationHandlers>
             <cas:longTermAuthenticationRequestTokenUsed>false</cas:longTermAuthenticationRequestTokenUsed>
-            <cas:sn>Marchant</cas:sn>
-            <cas:givenName>Nikita</cas:givenName>
             </cas:attributes>
     </cas:authenticationSuccess>
 </cas:serviceResponse>

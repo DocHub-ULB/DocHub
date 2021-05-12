@@ -10,7 +10,7 @@ from catalog.forms import SearchForm
 from catalog.models import Category
 from documents.models import Document
 from telepathy.models import Thread
-from users.authBackend import NetidBackend
+from users.authBackend import UlbCasBackend
 from users.models import User
 
 
@@ -35,9 +35,8 @@ def index(request):
             page_count = Document.objects.all().aggregate(Sum('pages'))['pages__sum']
         else:
             page_count = 0
-            
+
         context = {
-            "login_url": NetidBackend.login_url(""),
             "debug": settings.DEBUG,
             "documents": floor(Document.objects.count()),
             "pages": floor(page_count, 2),

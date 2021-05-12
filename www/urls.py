@@ -30,7 +30,9 @@ urlpatterns = [
     path("jsreverse/", django_js_reverse.views.urls_js, name='js_reverse'),
 
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
-    path("auth", users.views.auth),
+
+    path("login", users.views.login_view, name="login"),
+    path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),
     path("logout", LogoutView.as_view(next_page="/"), name="logout"),
 
     path("help/", www.views.HelpView.as_view(template_name='help.html'), name="help"),

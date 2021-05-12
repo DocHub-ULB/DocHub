@@ -1,0 +1,3 @@
+<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+    <cas:authenticationFailure code="INVALID_SERVICE">Ticket &#39;ST-350-2BMQQGOTxNTodzXAyEbz-Mj--WE-cas-4-czvrs&#39; does not match supplied service. The original service was &#39;http://localhost:8001/auth-ulb&#39; and the supplied service was &#39;invalid-service-invalid&#39;.</cas:authenticationFailure>
+</cas:serviceResponse>

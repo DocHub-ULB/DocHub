@@ -1,0 +1,22 @@
+{% extends "error/error.html" %}
+{% load humanize %}
+
+{% block title %}
+Erreur lors de la connexion
+{% endblock %}
+
+{% block heading %}
+Nous n'avons pas pu t'authentifier
+{% endblock %}
+
+{% block expl %}
+Une erreur est apparue pendant ta connexion via l'ULB.
+{% endblock %}
+
+{% block errcode %}
+CAS_{{code}}
+{% endblock %}
+
+{% block debug %}
+{{debug}}
+{% endblock %}
