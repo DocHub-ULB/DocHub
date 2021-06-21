@@ -59,7 +59,11 @@ INSTALLED_APPS += (
     'webpack_loader',
     'rest_framework.authtoken',
     'django.contrib.postgres',
+    'tailwind',
+    'dochub',
 )
+
+TAILWIND_APP_NAME = 'dochub'
 
 SITE_ID = 1
 
