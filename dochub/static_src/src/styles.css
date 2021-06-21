@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.nav {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    top: 0px;
+}
+
+
+.logo {
+    position: absolute;
+    left: 16px;
+    top: 12px;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+
+    color: #000000;
+}
+
+
+.dropdown {
+    position: absolute;
+    left: 90%;
+    top: 15px;
+    display: block;
+    width: 120px;
+    text-align: center;
+}
+
+.dropdown span {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.2em;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    z-index: 1;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.dropdown-content a {
+    font-family: Roboto;
+    font-size: 1em;
+    text-align: center;
+    display: inline-block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
