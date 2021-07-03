@@ -25,7 +25,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("www.rest_urls")),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
-    path("auth", users.views.auth),
+
+    path("login", users.views.login_view, name="login"),
+    path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),
     path("logout", LogoutView.as_view(next_page="/"), name="logout"),
     path(
         "sitemap.xml",

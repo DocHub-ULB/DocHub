@@ -1,5 +1,4 @@
 import os
-from base64 import b64decode
 
 from django.conf import settings
 from django.contrib import messages
@@ -7,12 +6,19 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.template.response import TemplateResponse
 from django.urls import reverse
 
 from actstream.models import actor_stream
 from PIL import Image, ImageOps
 from rest_framework.authtoken.models import Token
 
+from users.authBackend import (
+    CasParseError,
+    CasRejectError,
+    CasRequestError,
+    UlbCasBackend,
+)
 from users.forms import SettingsForm
 
 
@@ -70,23 +76,54 @@ def panel_hide(request):
     return HttpResponseRedirect(reverse("index"))
 
 
-def auth(request):
-    sid, uid = request.GET.get("_sid", False), request.GET.get("_uid", False)
-    next = request.GET.get("next", None)
-    next_64 = request.GET.get("next64", None)
+def login_view(request):
+    next = request.GET.get("next")
+    return_url = UlbCasBackend.get_login_url()
+    resp = HttpResponseRedirect(return_url)
+    if next:
+        resp.set_cookie("next_url", next, max_age=10 * 60)  # 10 minutes
+    return resp
 
-    if next and next.startswith("/"):
-        next_url = next
-    elif next_64 and b64decode(next_64).decode().startswith("/"):
-        next_url = b64decode(next_64).decode()
-    else:
-        next_url = "/"
 
-    if sid and uid:
-        user = authenticate(sid=sid, uid=uid)
-        if user is not None:
-            user.update_inscription_faculty()
-            login(request, user)
-            return HttpResponseRedirect(next_url)
+def auth_ulb(request):
+    ticket = request.GET.get("ticket", False)
 
-    return HttpResponseForbidden("Error while authenticating with NetID")
+    if not ticket:
+        return TemplateResponse(
+            request, "users/auth/no-ticket.html", {"args": request.GET}
+        )
+
+    try:
+        user = authenticate(ticket=ticket)
+    except CasRejectError as e:
+        return TemplateResponse(
+            request, "users/auth/error.html", {"code": e.args[0], "debug": e.args[1]}
+        )
+    except CasRequestError as e:
+        cas_request = e.args[0]
+        return TemplateResponse(
+            request,
+            "users/auth/error.html",
+            {
+                "code": f"REQUEST_{cas_request.status_code}",
+                "debug": f"{cas_request.url}\n{cas_request.text[:1000]}",
+            },
+        )
+    except CasParseError as e:
+        return TemplateResponse(
+            request, "users/auth/error.html", {"code": e.args[0], "debug": e.args[1]}
+        )
+
+    if user is None:
+        return TemplateResponse(request, "users/auth/unknown-error.html", {})
+
+    login(request, user)
+
+    next_url = request.COOKIES.get("next_url")
+
+    if next_url and next_url.startswith("/"):
+        resp = HttpResponseRedirect(next_url)
+        # remove cookie with negative expiration date
+        resp.set_cookie("next_url", "", max_age=-100000)
+        return resp
+    return HttpResponseRedirect("/")

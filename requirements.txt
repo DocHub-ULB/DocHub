@@ -8,8 +8,6 @@ amqp==5.0.6
     # via kombu
 appdirs==1.4.4
     # via virtualenv
-appnope==0.1.2
-    # via ipython
 asgiref==3.3.4
     # via django
 attrs==20.3.0
@@ -64,7 +62,7 @@ django-appconf==1.0.4
     # via django-compressor
 django-compressor==2.4
     # via -r requirements.in
-django-debug-toolbar==3.2
+django-debug-toolbar==3.2.1
     # via -r requirements.in
 django-extensions==3.1.2
     # via -r requirements.in
@@ -90,7 +88,7 @@ django-stubs==1.7.0
     #   djangorestframework-stubs
 django-webtest==1.9.7
     # via -r requirements.in
-django==3.2
+django==3.2.4
     # via
     #   -r requirements.in
     #   django-appconf
@@ -271,7 +269,7 @@ typing-extensions==3.7.4.3
     #   mypy
 uritemplate==3.0.1
     # via coreapi
-urllib3==1.26.4
+urllib3==1.26.5
     # via
     #   minio
     #   requests
@@ -294,8 +292,6 @@ webob==1.8.7
 webtest==2.0.35
     # via django-webtest
 whitenoise[brotli]==5.2.0
-    # via -r requirements.in
-xmltodict==0.12.0
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:

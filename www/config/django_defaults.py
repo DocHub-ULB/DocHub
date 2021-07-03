@@ -12,6 +12,8 @@ from os.path import dirname, join, normpath
 
 BASE_DIR = dirname(dirname(dirname(__file__)))
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",

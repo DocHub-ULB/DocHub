@@ -77,8 +77,8 @@
             DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore.
           </p>
           <p class="text-center">
-            Tu n'as pas besoin de créer un compte, il suffit d'employer ton netid.<br><br>
-            <a href="{% login_url %}" id="login_link" class="button success expand">Connexion</a><br>
+            Tu n'as pas besoin de créer un compte, il suffit d'employer ton compte ULB.<br><br>
+            <a href="{% login_url %}" id="login_link" class="button success expand">Connexion avec l'ULB</a><br>
             {% if debug %}
             <small>Developpers could also <a href="/syslogin">syslogin</a></small>
             {% endif %}
@@ -87,13 +87,10 @@
           <i class="fi-page-copy"></i>
           DocHub, c'est actuellement plus de {{documents|intcomma}} documents contenant
           plus de {{pages|intcomma}} pages ajoutées par plus de {{users|intcomma}} utilisateurs.<br>
-          <i class="fi-comment"></i>
-          Sur DocHub, vous pouvez poser des questions et les autres étudiants peuvent y répondre.
-          {% if threads >= 100 %}
-            Il y a déjà eu plus de {{threads}} questions posées.
-          {% endif %}
           </p>
+          {% include "fragments/sondage.html" %}
         </div>
+
       {% endblock %}
     </div>
 

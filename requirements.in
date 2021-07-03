@@ -7,7 +7,6 @@ Pillow
 pygments
 pyPdf2
 requests
-xmltodict
 djangorestframework
 drf-extensions
 furl

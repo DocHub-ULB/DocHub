@@ -6,7 +6,7 @@ DocHub est une plateforme permettant aux étudiants de l'ULB de mettre en commun
 
 ## Qu'ai-je le droit de poster ?
 
-Tous les documents qui pourraient être utiles aux étudiants de ton année et des suivantes. 
+Tous les documents qui pourraient être utiles aux étudiants de ton année et des suivantes.
 
 ## Qui contacter si ça ne marche pas ?
 
@@ -21,7 +21,7 @@ Le développement de DocHub est assuré par des étudiants, et continue d'être 
 
 Nous ne couvrons qu'une partie des cours de l'ULB, principalement dans les facultés des Sciences et Polytechniques. Si les cours de ta filières ne sont pas encore sur le site, et que tu peux nous renseigner sur ton programme de cours, il est possible de rajouter ta section ! Idéalement, décris les programmes de cours dans le même format que [notre catalogue actuel](https://github.com/UrLab/catalog-ulb/blob/master/tree.yaml), et nous pourrons l'ajouter très facilement.
 
-## Pourquoi mon netid ?
+## Pourquoi mon compte ULB ?
 
 Ceci nous permet de nous assurer que tu es bien étudiant à l'ULB, condition requise par certains professeurs pour diffuser leur notes et syllabus.
 

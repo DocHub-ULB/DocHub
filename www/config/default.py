@@ -21,7 +21,7 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "index"
 
 # url to internal login
-LOGIN_URL = "/"
+LOGIN_URL = "/login"
 
 UPLOAD_DIR = join(MEDIA_ROOT, "documents")
 
@@ -88,7 +88,7 @@ SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "static")
 
 
 AUTHENTICATION_BACKENDS = (
-    "users.authBackend.NetidBackend",
+    "users.authBackend.UlbCasBackend",
     "django.contrib.auth.backends.ModelBackend",
 )
 

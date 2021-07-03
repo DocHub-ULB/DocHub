@@ -1,71 +1,69 @@
-# import pytest
+import pytest
 
-import datetime
+from users.authBackend import CasParseError, CasRejectError, UlbCasBackend
 
-from users.authBackend import NetidBackend
-
-parse = NetidBackend()._parse_response
-
-
-nimarcha = {
-    'netid': 'nimarcha',
-    'last_name': 'Marchant',
-    'first_name': 'Nikita',
-    'mail': 'nikita.marchant@ulb.ac.be',
-    'biblio': '3186696',
-    'birthday': datetime.date(1993, 5, 24),
-    'raw_matricule': 'ulb:etudiants:000362588',
-    'matricule': '000362588',
-}
-
-inscription = {
-    'year': '2013',
-    'slug': 'DEV-SCIE',
-    'fac': 'sciences',
-}
-
+# Parse valid cases
 
 def test_parser():
-    xml = open("users/tests/xml-fixtures/nimarcha.xml").read()
-    ret = parse(xml)
-
-    ret.pop('inscriptions')
-    assert ret == nimarcha
-
-
-def test_parser_inscriptions():
-    xml = open("users/tests/xml-fixtures/nimarcha.xml").read()
-    ret = parse(xml)
-
-    inscriptions = ret['inscriptions']
-    assert type(inscriptions) is list
-    assert len(inscriptions) == 4
-    assert inscriptions[0] == inscription
-
-
-def test_parser_single_inscription():
-    xml = open("users/tests/xml-fixtures/nimarcha_single.xml").read()
-    ret = parse(xml)
-
-    inscriptions = ret['inscriptions']
-    assert type(inscriptions) is list
-    assert len(inscriptions) == 1
-    assert inscriptions[0] == inscription
-
-
-def test_parser_minimal():
     xml = open("users/tests/xml-fixtures/minimal.xml").read()
-    ret = parse(xml)
+    ret = UlbCasBackend()._parse_response(xml)
 
-    ret.pop('inscriptions')
-    assert ret == nimarcha
+    assert ret == {
+        'netid': 'nmar0003',
+        'email': 'this.is.an.email@ulb.ac.be',
+        'first_name': 'Nikita',
+        'last_name': 'Marchant',
+    }
 
 
-def test_parser_vub():
-    xml = open("users/tests/xml-fixtures/vub.xml").read()
-    ret = parse(xml)
+def test_wihout_email():
+    xml = open("users/tests/xml-fixtures/no-email.xml").read()
+    ret = UlbCasBackend()._parse_response(xml)
 
-    assert ret['last_name'] == "Doe"
-    assert ret['first_name'] == "John"
-    assert ret['mail'] == "testnetid@ulb.ac.be"
-    assert 'inscriptions' not in ret.keys()
+    assert ret == {
+        'netid': 'nmar0003',
+        'email': 'nmar0003@ulb.ac.be',
+        'first_name': 'nmar0003',
+        'last_name': 'nmar0003',
+    }
+
+
+# Parse invalid responses
+
+def test_invalid_xml():
+    xml = open("users/tests/xml-fixtures/invalid-xml.xml").read()
+
+    with pytest.raises(CasParseError) as e:
+        UlbCasBackend()._parse_response(xml)
+    assert e.value.args[0] == 'INVALID_XML'
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "users/tests/xml-fixtures/unknown-structure.xml",
+        "users/tests/xml-fixtures/missing-user.xml",
+    ]
+)
+def test_unknown_structure(path):
+    xml = open(path).read()
+
+    with pytest.raises(CasParseError) as e:
+        UlbCasBackend()._parse_response(xml)
+    assert e.value.args[0] == 'UNKNOWN_STRUCTURE'
+
+
+@pytest.mark.parametrize(
+    "path,expected_error,expected_text",
+    [
+        ("users/tests/xml-fixtures/invalid-service.xml", 'INVALID_SERVICE', 'does not match supplied service'),
+        ("users/tests/xml-fixtures/invalid-ticket.xml", 'INVALID_TICKET', 'not recognized'),
+    ]
+)
+def test_invalid_service(path, expected_error, expected_text):
+    xml = open(path).read()
+
+    with pytest.raises(CasRejectError) as e:
+        UlbCasBackend()._parse_response(xml)
+    assert e.value.args[0] == expected_error
+    assert expected_text in e.value.args[1]
