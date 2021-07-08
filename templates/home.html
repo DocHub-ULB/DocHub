@@ -6,8 +6,6 @@
 {% if request.user.welcome %}
   {% include "welcome.html" %}
 {% endif %}
-<br>
-{% include "fragments/sondage.html" %}
 
 <br>
     {% if request.user.following_courses|length > 0 %}

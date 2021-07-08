@@ -6,7 +6,6 @@
 .nav {
     display: grid;
 
-    position: absolute;
     width: 100%;
     height: 50px;
     top: 0px;
@@ -70,4 +69,45 @@
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.button {
+    padding: 0.5em;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.green{
+    background-color: #43AC6A;
+    color: white;
+}
+
+.blue{
+    background-color: #50BEEC;
+    color: white;
+}
+
+.card-footers span{
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 11px;
+    line-height: 17px;
+}
+
+.labels {
+    margin-left: 6em; 
+    display: inline-block
+}
+
+.labels span {
+    display:block; 
+    width: 4em; 
+    text-align:center; 
+    border-radius: 5px; 
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
 }
