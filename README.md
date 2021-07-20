@@ -14,17 +14,17 @@ There is a [live instance of DocHub](https://dochub.be) hosted by [UrLab](https:
 
 ## Tech
 
-DocHub currently (Feb 2021) runs with Python 3.8, Node 10 and Postgresql 12.
+DocHub currently (Feb 2021) runs with Python 3.8, ~~Node 10~~ and Postgresql 12.
 
 ### Dependencies
 
 ```console
 # Ubuntu
-sudo apt-get install unoconv python3-dev nodejs ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
+sudo apt-get install unoconv python3-dev ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
 # Fedora
-sudo dnf install unoconv python-devel nodejs ruby mupdf
+sudo dnf install unoconv python-devel ruby mupdf
 # Arch linux
-sudo pacman -S unoconv nodejs ruby python mupdf-tools
+sudo pacman -S unoconv ruby python mupdf-tools
 ```
 
 ### Installation
