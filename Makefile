@@ -13,7 +13,7 @@ init: database
 install: packages
 
 ve:
-	virtualenv ve
+	python -m venv ve
 
 packages: ve
 	ve/bin/pip install -r requirements.txt
