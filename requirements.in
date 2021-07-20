@@ -38,7 +38,6 @@ django-webtest
 mypy
 django-stubs
 djangorestframework-stubs
-django-tailwind
 
 # prod
 redis

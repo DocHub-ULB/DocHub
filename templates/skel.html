@@ -1,5 +1,4 @@
 {% load static %}
-{% load static tailwind_tags %}
 <!doctype html>
 
 <html lang="en">
@@ -8,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% tailwind_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}">
     <title>{% block title %}DocHub - ULB{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
@@ -20,10 +19,10 @@
 <body>
     <div class="nav">
         <div class="logo">DocHub</div>
-        <div class="justify-center content-center col-start-2 inline-grid">
-            <div class="border border-black	rounded-lg justify-center content-center" style="width: 50vw">
-                <i class="fas fa-search m-2"></i>
-                <input class="text-center w-11/12" type="text" name="cours" placeholder="Chercher un cours (exemple: info-f-101 ou Microeconomie)" style="border: none;">
+        <div style="justify-content: center;align-content: center;grid-column-start: 2;display: inline-grid;">
+            <div style="width: 50vw;border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
+                <i class="fas fa-search" style="margin: 0.5rem;"></i>
+                <input type="text" name="cours" placeholder="Chercher un cours (exemple: info-f-101 ou Microeconomie)" style="border: none;text-align: center;width: 91.666667%;">
             </div>
         </div>
         <div class="dropdown">

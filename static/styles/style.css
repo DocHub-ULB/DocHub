@@ -1,8 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
 .nav {
     display: grid;
 
@@ -75,6 +70,11 @@
     padding: 0.5em;
     border-radius: 5px;
     margin: 5px;
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
 }
 
 .green{
@@ -110,4 +110,31 @@
     font-weight: normal;
     font-size: 14px;
     line-height: 21px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-size:inherit;
+    font-weight:inherit;
+}
+
+blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre {
+    margin:0;
+}
+
+button,select,a {
+    text-transform: none;
+    text-decoration: none;
+}
+
+.button-search {
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    width: max-content;
 }
