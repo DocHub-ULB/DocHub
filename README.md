@@ -48,10 +48,18 @@ There will already be 2 users in the database, both with `test` as a password:
 
 ### Misc
 
-Add another user to the db
+#### Add another user to the db
 
 ```console
 ./manage.py createuser
+```
+
+#### Requirements
+
+To add a requirement, write it in `requirements.in` file, and generate the requirements.txt file with the following command
+
+```console
+pip-compile
 ```
 
 ## Testing
