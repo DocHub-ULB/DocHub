@@ -296,21 +296,45 @@
         </div>
     </div>
 
-    <div style="margin-left: auto;margin-right: auto;grid-column-start: 4;margin-top: .5em;">
-        <a href="{% url 'document_put' course.slug %}" class="button green">
-            <i class="fas fa-plus"></i>
-            Uploader un fichier
-        </a>
-        {% if request.user|is_following:course %}
-        <a href="{% url 'leave_course' course.slug %}" class="button radius info tiny">
-            <i class="fas fa-x"></i> Se désabonner
-        </a>
-        {% else %}
-        <a href="{% url 'join_course' course.slug %}" class="button blue">
-            <i class="fas fa-check"></i> S’abonner au cours
-        </a>
-        {% endif %}
-
+    <div class="aside">
+        <div style="grid-row-start:1;text-align: center">
+            <a href="{% url 'document_put' course.slug %}" class="button green">
+                <i class="fas fa-plus"></i>
+                Uploader un fichier
+            </a>
+            {% if request.user|is_following:course %}
+            <a href="{% url 'leave_course' course.slug %}" class="button radius info tiny">
+                <i class="fas fa-x"></i> Se désabonner
+            </a>
+            {% else %}
+            <a href="{% url 'join_course' course.slug %}" class="button blue">
+                <i class="fas fa-check"></i> S’abonner au cours
+            </a>
+            {% endif %}
+        </div>
+        <div style="grid-row-start:2">
+            <div style="border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
+                <i class="fas fa-search" style="margin: 0.5rem;"></i>
+                <input type="text" name="cours" placeholder="Chercher avec le titre du fichier" style="border: none;text-align: center;outline: none;width:80%">
+            </div>
+        </div>
+        <div style="grid-row-start:3">
+            <h1 style="font-weight: normal;">Filtres:</h1>
+            <div style="margin:auto;padding-left: 1em;padding-right: 1em;text-align:center">
+                <div class="ck-button">
+                    <input type="checkbox" value="1" id="1">
+                    <label for="1" style="background-color:#7BB109;"><span>green</span></label>
+                </div>
+                <div class="ck-button">
+                    <input type="checkbox" value="1" id="2">
+                    <label for="2" style="background-color:#B10927;"><span>red</span></label>
+                </div>
+                <div class="ck-button">
+                    <input type="checkbox" value="1" id="3">
+                    <label for="3" style="background-color:#EB84C8;"><span>pink</span></label>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
