@@ -10,7 +10,7 @@
 
 .logo {
     display: inline-grid;
-    grid-area: 1;
+    grid-column-start: 1;
 
     justify-content: center;
     align-items: center;
@@ -113,8 +113,7 @@
 }
 
 h1,h2,h3,h4,h5,h6 {
-    font-size:inherit;
-    font-weight:inherit;
+    font-family: Titillium Web;
 }
 
 blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre {
