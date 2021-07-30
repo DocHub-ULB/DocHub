@@ -4,7 +4,6 @@ import catalog.rest
 import documents.rest
 import notifications.rest
 import search.rest
-import telepathy.rest
 import users.rest
 import www.rest
 
@@ -39,8 +38,6 @@ router = Router()
 router.register(r'users', users.rest.UserViewSet)
 router.register(r'courses', catalog.rest.CourseViewSet)
 router.register(r'categories', catalog.rest.CategoryViewSet)
-router.register(r'threads', telepathy.rest.ThreadViewSet)
-router.register(r'messages', telepathy.rest.MessageViewSet)
 router.register(r'documents', documents.rest.DocumentViewSet)
 router.register(r'search/courses', search.rest.CourseSearchViewSet, basename="search-courses")
 router.register(r'feed', www.rest.FeedViewSet, basename="feed")

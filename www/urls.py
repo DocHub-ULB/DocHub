@@ -22,7 +22,6 @@ urlpatterns = [
 
     path("catalog/", include("catalog.urls")),
     path("documents/", include("documents.urls")),
-    path("telepathy/", include("telepathy.urls")),
     path("users/", include("users.urls")),
     path("notifications/", include("notifications.urls")),
     path("admin/", admin.site.urls),

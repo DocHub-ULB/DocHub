@@ -67,7 +67,6 @@ SITE_ID = 1
 INSTALLED_APPS += (
     'www',
     'documents',
-    'telepathy',
     'users',
     'catalog',
     'tags',

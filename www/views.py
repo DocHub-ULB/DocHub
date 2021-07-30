@@ -9,7 +9,6 @@ from actstream.models import user_stream
 from catalog.forms import SearchForm
 from catalog.models import Category
 from documents.models import Document
-from telepathy.models import Thread
 from users.authBackend import UlbCasBackend
 from users.models import User
 
@@ -40,8 +39,7 @@ def index(request):
             "debug": settings.DEBUG,
             "documents": floor(Document.objects.count()),
             "pages": floor(page_count, 2),
-            "users": floor(User.objects.count()),
-            "threads": floor(Thread.objects.count()),
+            "users": floor(User.objects.count())
         }
         return render(request, "index.html", context)
 
