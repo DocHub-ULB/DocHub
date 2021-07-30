@@ -2,6 +2,7 @@ from django.urls import path
 
 import catalog.views
 from catalog.views import CategoryDetailView, CourseDetailView, search_course
+from catalog.autocomplete import course_autocomplete
 
 urlpatterns = [
     path("course/<slug:slug>", CourseDetailView.as_view(), name="course_show"),
@@ -14,4 +15,6 @@ urlpatterns = [
     path("unfollow_all_courses/", catalog.views.unfollow_all_courses, name="unfollow_all_courses"),
 
     path("course_tree.json", catalog.views.course_tree, name="course_tree"),
+
+    path("search/autocomplete", course_autocomplete, name='course-autocomplete'),
 ]
