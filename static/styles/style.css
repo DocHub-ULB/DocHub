@@ -1,3 +1,19 @@
+/* General css */
+h1,h2,h3,h4,h5,h6 {
+    font-family: Titillium Web;
+}
+
+blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre {
+    margin:0;
+}
+
+button,select,a {
+    text-transform: none;
+    text-decoration: none;
+}
+
+
+/* Navbar  */
 .nav {
     display: grid;
 
@@ -10,7 +26,7 @@
 
 .logo {
     display: inline-grid;
-    grid-area: 1;
+    grid-column-start: 1;
 
     justify-content: center;
     align-items: center;
@@ -66,6 +82,8 @@
     display: block;
 }
 
+
+/* Course filter */
 .button {
     padding: 0.5em;
     border-radius: 5px;
@@ -87,45 +105,90 @@
     color: white;
 }
 
-.card-footers span{
+
+/* Course content */
+.deck{
+    margin-left: 5vw;
+    display: grid; 
+    grid-auto-rows: auto;
+    row-gap: 20px;
+    height:89vh;
+    overflow-y: scroll;
+}
+
+.card{
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 1em;
     font-family: Titillium Web;
     font-style: normal;
+    font-weight: normal;
+}
+
+.card-like{
+    grid-column-start: 1;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.card-like i{
+    font-size: 24px;
+    margin: auto;
+}
+
+.card-content{
+    grid-column-start: 2;
+}
+
+.card-title a{
+    color: #008CBA;
+    font-size: 22px;
+    line-height: 33px;
+}
+
+.card-comment span{
+    margin-left: 1rem;
+    font-style: italic;
     font-weight: 300;
-    font-size: 11px;
+    font-size: 16px;
+    line-height: 21px;
+}
+
+.card-footers span{
+    font-weight: 300;
+    font-size: 14px;
     line-height: 17px;
 }
 
-.labels {
-    margin-left: 6em; 
-    display: inline-block
+.card-footers i{
+    font-size: 16px;
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
 }
 
-.labels span {
+.tags {
+    margin-left: 6em; 
+    display: inline-block;
+}
+
+.tags span {
     display:block; 
     width: 4em; 
     text-align:center; 
     border-radius: 5px; 
-    font-family: Titillium Web;
-    font-style: normal;
-    font-weight: normal;
     font-size: 14px;
     line-height: 21px;
 }
 
-h1,h2,h3,h4,h5,h6 {
-    font-size:inherit;
-    font-weight:inherit;
+.delimiter { 
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    width: 75%;
+    margin: auto;
 }
 
-blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre {
-    margin:0;
-}
 
-button,select,a {
-    text-transform: none;
-    text-decoration: none;
-}
-
+/* Home page */
 .button-search {
     border: 1px solid black;
     border-radius: 0.5rem;
