@@ -35,11 +35,6 @@ urlpatterns = [
     path("logout", LogoutView.as_view(next_page="/"), name="logout"),
 
     path("help/", www.views.HelpView.as_view(template_name='help.html'), name="help"),
-    path(
-        "help/markdown/",
-        TemplateView.as_view(template_name='telepathy/markdown.html'),
-        name="markdown_help"
-    ),
 
     path(
         "sitemap.xml", sitemap, {'sitemaps': sitemaps},
