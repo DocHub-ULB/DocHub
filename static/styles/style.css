@@ -108,11 +108,12 @@ button,select,a {
 
 /* Course content */
 .deck{
+    margin-top: 1em;
     margin-left: 5vw;
     display: grid; 
     grid-auto-rows: auto;
     row-gap: 20px;
-    height:89vh;
+    height:87vh;
     overflow-y: scroll;
 }
 
@@ -185,6 +186,49 @@ button,select,a {
     border: 1px solid rgba(0, 0, 0, 0.4);
     width: 75%;
     margin: auto;
+}
+
+.aside {
+    display:grid;
+    grid-auto-rows: max-content max-content 1fr;
+    row-gap: 20px;
+    grid-column-start: 4;
+    margin-top: .5em;
+}
+
+.ck-button {
+    border-radius:5px;
+    overflow:auto;
+    display: inline-block;
+}
+
+.ck-button label {
+    display: block;
+    width:4.0em;
+    filter: brightness(50%);
+}
+
+.ck-button label span {
+    text-align:center;
+    display:block;
+    color: white;
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.ck-button input {
+    position:absolute;
+    top:-20px;
+}
+
+.ck-button input:checked + label {
+    filter: brightness(100%);
+}
+
+.ck-button input:hover + label {
+    filter: brightness(90%);
 }
 
 
