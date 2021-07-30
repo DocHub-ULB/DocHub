@@ -1,40 +1,19 @@
+{% extends "skel.html" %}
+
 {% load static %}
-<!doctype html>
 
-<html lang="en">
+{# hide the search bar on the home page #}
+{% block navbar %}
+    {% with hide_search=True %}
+        {% include "navbar.html" %}
+    {% endwith %}
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}">
-    <title>{% block title %}DocHub - ULB{% endblock %}</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-
-<body>
-    <div class="nav">
-        <div class="logo">DocHub</div>
-        <div class="dropdown">
-            <span>Morti</span>
-            <div class="dropdown-content">
-                <a class="m-3" href="#profil">Profil</a>
-                <a class="m-3" href="#mes_cours">Mes cours</a>
-                <a class="m-3" href="#deco">Deconnexion</a>
-            </div>
-        </div>
-    </div>
-    <!--
-    {% if request.user.welcome %}
+{% block content %}
+    {% comment %} {% if request.user.welcome %}
         {% include "welcome.html" %}
-    {% endif %}
-    -->
+    {% endif %} {% endcomment %}
+
     <!-- Research bar -->
     <div style="position:absolute; width: 50vw;margin-right: -50%;transform: translate(-50%, 0%);left: 50%;top: 33.33%">
         <div
@@ -88,6 +67,4 @@
         </div>
     </div>
     {% endif %}
-</body>
-
-</html>
+{% endblock %}
