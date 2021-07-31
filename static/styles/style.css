@@ -10,6 +10,7 @@ blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre {
 button,select,a {
     text-transform: none;
     text-decoration: none;
+    color: black;
 }
 
 
@@ -115,7 +116,7 @@ button,select,a {
     margin-top: 1em;
     margin-left: 5vw;
     display: grid; 
-    grid-auto-rows: auto;
+    grid-auto-rows: max-content;
     row-gap: 20px;
     height:87vh;
     overflow-y: scroll;
@@ -123,11 +124,12 @@ button,select,a {
 
 .card{
     display: grid;
-    grid-template-columns: max-content 1fr;
+    grid-template-columns: 5% 1fr;
     column-gap: 1em;
     font-family: Titillium Web;
     font-style: normal;
     font-weight: normal;
+    height: max-content;
 }
 
 .card-like{
@@ -139,7 +141,23 @@ button,select,a {
 
 .card-like i{
     font-size: 24px;
+}
+
+.card-like a{
     margin: auto;
+}
+
+.like:hover i {
+    color: #43AC6A;
+}
+
+.dislike:hover i{
+    color: #9e1d1d;
+}
+
+.like:active i,.dislike:active i {
+    margin: auto;
+    transform: scale(1.2);
 }
 
 .card-content{
@@ -189,7 +207,9 @@ button,select,a {
 .delimiter { 
     border: 1px solid rgba(0, 0, 0, 0.4);
     width: 75%;
-    margin: auto;
+    margin-right: auto;
+    margin-left: auto;
+    height: max-content;
 }
 
 .aside {
