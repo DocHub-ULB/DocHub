@@ -40,9 +40,6 @@ INTERNAL_IPS = ["127.0.0.1", "localhost", "0.0.0.0"]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            join(BASE_DIR, "templates"),
-        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
