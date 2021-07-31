@@ -31,7 +31,7 @@ button,select,a {
 
     justify-content: center;
     align-items: center;
-        
+
     font-family: Roboto;
     font-style: normal;
     font-weight: bold;
@@ -115,7 +115,7 @@ button,select,a {
 .deck{
     margin-top: 1em;
     margin-left: 5vw;
-    display: grid; 
+    display: grid;
     grid-auto-rows: max-content;
     row-gap: 20px;
     height:87vh;
@@ -191,20 +191,20 @@ button,select,a {
 }
 
 .tags {
-    margin-left: 6em; 
+    margin-left: 6em;
     display: inline-block;
 }
 
 .tags span {
-    display:block; 
-    width: 4em; 
-    text-align:center; 
-    border-radius: 5px; 
+    display:block;
+    width: 4em;
+    text-align:center;
+    border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
 }
 
-.delimiter { 
+.delimiter {
     border: 1px solid rgba(0, 0, 0, 0.4);
     width: 75%;
     margin-right: auto;
@@ -268,4 +268,10 @@ button,select,a {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     width: max-content;
+}
+
+/* Stimulus */
+
+.filter--filtered {
+  display: none;
 }
