@@ -8,7 +8,7 @@
 
 {% block content %}
 
-<div style="display: grid; grid-template-columns: 1fr 65% 1fr 25% 1fr;margin-top: 1.5em;">
+<div data-controller="course-filter" style="display: grid; grid-template-columns: 1fr 65% 1fr 25% 1fr;margin-top: 1.5em;">
     <div style="grid-column-start: 2;">
         <h1 style="margin-left: 2rem;font-family: Titillium Web; font-style: normal; font-weight: normal; font-size: 32px; line-height: 49px;">
             {{ course.slug|upper }} {{ course.name }}
@@ -93,7 +93,13 @@
         <div style="grid-row-start:2">
             <div style="border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
                 <i class="fas fa-search" style="margin: 0.5rem;"></i>
-                <input type="text" name="cours" placeholder="Chercher avec le titre du fichier" style="border: none;text-align: center;outline: none;width:80%">
+                <input
+                  type="text" name="cours"
+                  placeholder="Chercher avec le titre du fichier"
+                  data-course-filter-target="query"
+                  data-action="input->course-filter#filter"
+                  style="border: none;text-align: center;outline: none;width:80%"
+                >
             </div>
         </div>
         <div style="grid-row-start:3">
