@@ -1,5 +1,7 @@
 import json
 
+from django.shortcuts import reverse
+from django.utils.html import format_html
 from django.http import HttpResponse
 from django.db.models import Q
 
@@ -16,7 +18,11 @@ def course_autocomplete(request):
         )
         results = []
         for course in qs:
-            results.append(f"{course.slug} {course.name}")
+            results.append({
+                "name": course.name,
+                "slug": course.slug,
+                "url": reverse("course_show", kwargs={"slug": course.slug}),
+            })
 
         data = json.dumps(results)
     mimetype = "application/json"
