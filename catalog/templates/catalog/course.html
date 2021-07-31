@@ -4,17 +4,11 @@
 {% load activity_tags %}
 {% load has_perm_on %}
 
-{% block title %}{{ course.slug|upper }}{% endblock %}
-
-{% block header %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet">
-{% endblock %}
+{% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
 {% block content %}
 
-<div style="display: grid; grid-template-columns: 1fr 65% 1fr 25% 1fr;margin-top: 1.5em;">
+<div data-controller="course-filter" style="display: grid; grid-template-columns: 1fr 65% 1fr 25% 1fr;margin-top: 1.5em;">
     <div style="grid-column-start: 2;">
         <h1 style="margin-left: 2rem;font-family: Titillium Web; font-style: normal; font-weight: normal; font-size: 32px; line-height: 49px;">
             {{ course.slug|upper }} {{ course.name }}
@@ -25,273 +19,58 @@
             <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
             {% endif %}
         </h1>
-        {% comment %} <h2 style="margin-left: 3rem;grid-row-start: 2;">Chargement en cours...</h2> {% endcomment %}
-
         <div class="deck">
-            <div class="card">
+            {% for document in documents %}
+            <div
+              class="card"
+              data-course-filter-target="filterable"
+              data-filter-key='{{document.name}}'
+              data-tags="{{document.tags.all|join:' '}}"
+            >
                 <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
+                  <a class="like" href="#like">
+                      <i class="fas fa-thumbs-up" style="grid-row-start:1"></i>
+                      <span style="font-size: 24px;font-family: Titillium Web;font-weight: normal;margin-left:0.25em">{{document.upvotes}}</span>
+                  </a>
+                  <a class="dislike" href="#dislike">
+                      <i class="fas fa-thumbs-down" style="grid-row-start:2"></i>
+                      <span style="font-size: 24px;font-family: Titillium Web;font-weight: normal;margin-left:0.25em">{{document.downvotes}}</span>
+                  </a>
                 </div>
                 <div class="card-content">
                     <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
+                        <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
+                        <span>{{ document.user.name }}</span>
                     </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
+                    {% if document.description %}
+                        <div class="card-comment">
+                          {{ document.description|truncatechars:200 }}
+                        </div>
+                    {% endif %}
                     <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
+                        <span><i class="far fa-file"></i>{{ document.pages }} page{{ document.pages|pluralize }}</span>
+                        <span><i class="far fa-clock"></i>{{ document.date|date:"d F Y" }}</span>
                         <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
+                          {% for kw in document.tags.all%}
+                            <span
+                               data-id="{{kw.id}}"
+                               style="background-color: {{kw.color}}; color:white;"
+                            >
+                              {{kw}}
+                            </span>
+                          {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="delimiter">
             </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
-            <div class="card">
-                <div class="card-like">
-                    <i class="fas fa-thumbs-up" style="grid-row-start:1"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">0</span></i>
-                    <i class="fas fa-thumbs-down" style="grid-row-start:2"><span style="font-family: Titillium Web;font-weight: normal;margin-left:0.25em">1</span></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <a>Projet 2017 — Satisfactions de Contraintes et Utilisation de l’Outil Choco solve</a>
-                        <span>Olivier Pirson</span>
-                    </div>
-                    <div class="card-comment">
-                        <span>Toutes les sources sur Bitbucket : https://bitbucket.org/OPiMedia/chocochess/</span>
-                    </div>
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>8 pages</span>
-                        <span><i class="far fa-clock"></i>31 May 2016</span>
-                        <div class="tags">
-                            <span style="background: #7BB109; color:white;">tp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="delimiter">
-            </div>
+            {% empty %}
+              <h3>Il n’y a encore rien dans ce cours…</h3>
+              <p>Personne n’est encore passé ici on dirait.<br>
+                Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
+            {% endfor %}
+
         </div>
     </div>
 
@@ -314,39 +93,34 @@
         <div style="grid-row-start:2">
             <div style="border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
                 <i class="fas fa-search" style="margin: 0.5rem;"></i>
-                <input type="text" name="cours" placeholder="Chercher avec le titre du fichier" style="border: none;text-align: center;outline: none;width:80%">
+                <input
+                  type="text" name="cours"
+                  placeholder="Chercher avec le titre du fichier"
+                  data-course-filter-target="query"
+                  data-action="input->course-filter#filter"
+                  style="border: none;text-align: center;outline: none;width:80%"
+                >
             </div>
         </div>
         <div style="grid-row-start:3">
             <h1 style="font-weight: normal;">Filtres:</h1>
             <div style="margin:auto;padding-left: 1em;padding-right: 1em;text-align:center">
-                <div class="ck-button">
-                    <input type="checkbox" value="1" id="1">
-                    <label for="1" style="background-color:#7BB109;"><span>green</span></label>
-                </div>
-                <div class="ck-button">
-                    <input type="checkbox" value="1" id="2">
-                    <label for="2" style="background-color:#B10927;"><span>red</span></label>
-                </div>
-                <div class="ck-button">
-                    <input type="checkbox" value="1" id="3">
-                    <label for="3" style="background-color:#EB84C8;"><span>pink</span></label>
-                </div>
+            {% for tag in tags %}
+              <div class="ck-button">
+                  <input
+                    type="checkbox"
+                    id="tag-{{tag.name}}"
+                    data-tag-name="{{tag.name}}"
+                    data-action="input->course-filter#filter"
+                    data-course-filter-target="tag"
+                  >
+                  <label for="tag-{{tag.name}}" style="background-color:{{tag.color}};">
+                    <span>{{tag.name}}</span>
+                  </label>
+              </div>
+            {% endfor %}
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-
-{% block script %}
-<script type="text/javascript">
-    $(document).ready(function () {
-        var dest = 'documents';
-        var doc_id = $('#' + dest).attr('data-id');
-        $.get(Urls['course-detail'](doc_id), function (data) {
-            loadCourseViewer(dest, data);
-        });
-    })
-</script>
 {% endblock %}

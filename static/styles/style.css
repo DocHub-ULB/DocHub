@@ -10,6 +10,7 @@ blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre {
 button,select,a {
     text-transform: none;
     text-decoration: none;
+    color: black;
 }
 
 
@@ -30,7 +31,7 @@ button,select,a {
 
     justify-content: center;
     align-items: center;
-        
+
     font-family: Roboto;
     font-style: normal;
     font-weight: bold;
@@ -114,8 +115,8 @@ button,select,a {
 .deck{
     margin-top: 1em;
     margin-left: 5vw;
-    display: grid; 
-    grid-auto-rows: auto;
+    display: grid;
+    grid-auto-rows: max-content;
     row-gap: 20px;
     height:87vh;
     overflow-y: scroll;
@@ -123,11 +124,12 @@ button,select,a {
 
 .card{
     display: grid;
-    grid-template-columns: max-content 1fr;
+    grid-template-columns: 5% 1fr;
     column-gap: 1em;
     font-family: Titillium Web;
     font-style: normal;
     font-weight: normal;
+    height: max-content;
 }
 
 .card-like{
@@ -139,7 +141,23 @@ button,select,a {
 
 .card-like i{
     font-size: 24px;
+}
+
+.card-like a{
     margin: auto;
+}
+
+.like:hover i {
+    color: #43AC6A;
+}
+
+.dislike:hover i{
+    color: #9e1d1d;
+}
+
+.like:active i,.dislike:active i {
+    margin: auto;
+    transform: scale(1.2);
 }
 
 .card-content{
@@ -173,23 +191,25 @@ button,select,a {
 }
 
 .tags {
-    margin-left: 6em; 
+    margin-left: 6em;
     display: inline-block;
 }
 
 .tags span {
-    display:block; 
-    width: 4em; 
-    text-align:center; 
-    border-radius: 5px; 
+    display:block;
+    width: 4em;
+    text-align:center;
+    border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
 }
 
-.delimiter { 
+.delimiter {
     border: 1px solid rgba(0, 0, 0, 0.4);
     width: 75%;
-    margin: auto;
+    margin-right: auto;
+    margin-left: auto;
+    height: max-content;
 }
 
 .aside {
@@ -248,4 +268,35 @@ button,select,a {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     width: max-content;
+}
+
+
+/* Course upload */
+.content {
+    display: grid;
+    grid-template-columns: 1fr 75% 1fr;
+}
+
+.content p {
+    font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: 1.6;
+    margin-bottom: 1em;
+    text-rendering: optimizeLegibility;
+}
+
+.form-input {
+    width: 100%;
+    padding: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 5px;
+    font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+    border-width: 1px;
+}
+/* Stimulus */
+
+.filter--filtered {
+  display: none;
 }
