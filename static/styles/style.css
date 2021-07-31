@@ -105,6 +105,10 @@ button,select,a {
     color: white;
 }
 
+.red {
+    background-color: #9e1d1d;
+    color: white;
+}
 
 /* Course content */
 .deck{

@@ -303,8 +303,8 @@
                 Uploader un fichier
             </a>
             {% if request.user|is_following:course %}
-            <a href="{% url 'leave_course' course.slug %}" class="button radius info tiny">
-                <i class="fas fa-x"></i> Se désabonner
+            <a href="{% url 'leave_course' course.slug %}" class="button red">
+                <i class="fas fa-times"></i> Se désabonner
             </a>
             {% else %}
             <a href="{% url 'join_course' course.slug %}" class="button blue">
