@@ -1,6 +1,6 @@
 import tempfile
 
-from www.config import *
+from www.settings import *
 
 CELERY_ALWAYS_EAGER = True  # Skip the Celery daemon
 
