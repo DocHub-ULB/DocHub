@@ -15,12 +15,12 @@ django-activity-stream
 PyYaml
 jsonfield
 django-pipeline
-PyReact
-django-js-reverse
-django-webpack-loader
 filemagic
 beautifulsoup4
 html5lib
+django-compressor
+django-sass-processor
+whitenoise[brotli]
 
 # Dev
 django-extensions

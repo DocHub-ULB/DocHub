@@ -93,7 +93,7 @@ def test_follow_from_category(app, user, tree):
 def test_simple_upload(app, user, tree, tags):
     course = app.get(reverse('course_show', args=("swag-h-042",)), user=user.netid)
     put = course.click(description="Uploader un fichier")
-    form = put.forms[0]
+    form = [x for x in put.forms.values() if x.id == 'document-upload'][0]
     form['file'] = Upload('documents/tests/files/3pages.pdf')
     form['tags'].select_multiple(texts=['my tag'])
     response = form.submit()

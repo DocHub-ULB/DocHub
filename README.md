@@ -35,7 +35,7 @@ make install database
 
 ### Run
 
-```
+```console
 ./manage.py runserver
 ```
 

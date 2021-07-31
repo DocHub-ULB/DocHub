@@ -17,21 +17,24 @@ def index(request):
     if request.user.is_authenticated:
         following = request.user.following_courses()
         ndocs = max(5, len(following))
-        docs = Document.objects.filter(course__in=following).order_by("-created")[:ndocs]
+        docs = Document.objects.filter(course__in=following).order_by("-created")[
+            :ndocs
+        ]
         context = {
-            'search': SearchForm(),
-            'stream': user_stream(request.user).exclude(verb="started following")[:10],
-            'recent_docs': docs,
-            'faculties': Category.objects.get(level=0).children.all()
+            "search": SearchForm(),
+            "stream": user_stream(request.user).exclude(verb="started following")[:10],
+            "recent_docs": docs,
+            "faculties": Category.objects.get(level=0).children.all(),
         }
         return render(request, "home.html", context)
     else:
+
         def floor(num, r=1):
             r = 10 ** r
             return int((num // r) * r) if r != 0 else 0
 
         if Document.objects.count():
-            page_count = Document.objects.all().aggregate(Sum('pages'))['pages__sum']
+            page_count = Document.objects.all().aggregate(Sum("pages"))["pages__sum"]
         else:
             page_count = 0
 
