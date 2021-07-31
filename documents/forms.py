@@ -15,9 +15,11 @@ def validate_uploaded_file(file):
 
 class FileForm(forms.Form):
     name = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-input',
         'placeholder': 'Titre (optionnel)'
     }))
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        'class': 'form-input',
         'placeholder': 'Description (optionnel)'
     }))
 
@@ -26,7 +28,7 @@ class FileForm(forms.Form):
         queryset=Tag.objects.all(),
         widget=forms.SelectMultiple(
             attrs={
-                'class': 'chosen-select',
+                'class': 'chosen-select form-input',
                 'data-placeholder': 'Tags (optionnel)',
             }
         )
