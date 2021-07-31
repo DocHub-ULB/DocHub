@@ -1,0 +1,29 @@
+<div data-controller="search">
+  <input
+    type="text"
+    value="{{query}}"
+    placeholder="Cherche un cours, comme info-h-101 ou Microéconomie"
+    data-search-target="input"
+    data-action="input->search#search"
+  />
+  <turbo-frame id="search-box">
+    <details {%if open %}open{% endif %} style=" z-index: 1; position: relative;" >
+      <summary>
+        <form action="/search/courses/" method="get" style="display: none">
+          <input type="hidden" name="query" data-search-target="output" />
+          <input type="submit" data-search-target="submit">
+        </form>
+      </summary>
+      <div id="search-results">
+        {% for course in course_list %}
+        <a href="{% url 'course_show' course.slug %}" style="display: block" target="_top">
+          <span class="course-label secondary radius label recent-blob fixed-label">{{course.slug}}</span>
+          {{course.name}}
+        </a>
+        {% empty %}
+          {% if initial %} Tapez pour chercher {% else %} Aucun résultat{% endif %}
+        {% endfor %}
+      </div>
+    </details>
+  </turbo-frame>
+</div>

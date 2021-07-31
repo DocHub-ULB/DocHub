@@ -1,25 +1,10 @@
-{% extends "skel.html" %}
+{% extends "base.html" %}
 {% load cache %}
-{% load render_bundle from webpack_loader %}
 {% load has_perm_on %}
-
-{% block script %}
-{% render_bundle 'viewer' %}
-{% endblock %}
 
 {% block title %}{{ document.name }}{% endblock %}
 {% block full-page %}
-
-<span id="document_data"
-        data-url="{% url 'document-pdf' document.pk %}"
-        data-name="{{document.name}}"
-        data-id="{{document.id}}"
-        data-coursename="{{document.course.slug}}"
-        data-original="{% url 'document-original' document.pk %}"
-        data-pdf="{% url 'document-pdf' document.pk %}"
-        data-hasperm="{% if request.user|has_perm_on:document %}1{% else %}0{% endif %}"
-        data-ispdf="{{document.is_pdf}}"
-></span>
-<div id="root"></div>
+<!-- FIXME: do not hardcode url -->
+<embed src="/api/documents/{{ document.pk }}/pdf/?embed" type="application/pdf" width="100%" height="100%">
 
 {% endblock %}

@@ -30,9 +30,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Install npm packages
-      run: npm install
-
     - name: Django checks
       run: ./manage.py check
 
@@ -41,9 +38,6 @@ jobs:
 
     - name: mypy
       run: mypy
-
-    - name: Build js
-      run: npm run build
 
     - name: Statics checks
       run: ./manage.py collectstatic --noinput -v 0

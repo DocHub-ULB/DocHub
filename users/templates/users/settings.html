@@ -1,4 +1,4 @@
-{% extends "skel.html" %}
+{% extends "base.html" %}
 {% block title %}Profil{% endblock %}
 {% block content %}
 <div class="row">
@@ -78,6 +78,7 @@ headers = {'Authorization': 'Token {{token.key}}'}
 response = request.get("https://dochub.be/api/", headers=headers)
 print(response.json())
           </pre>
+      </p>
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>
 

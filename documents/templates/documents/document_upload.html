@@ -1,4 +1,4 @@
-{% extends "skel.html" %}
+{% extends "base.html" %}
 {% block title %}Uploader{% endblock %}
 {% block content %}
 <div class="row">
@@ -14,24 +14,9 @@
     {% endif %}
 
     <h1>Uploader <small>{{course.name}}</small></h1>
-    <ul class="tabs" data-tab>
-      <li class="tab-title active">
-        <a href="#upload-tab-1" >
-          <i class="fi-page-filled"></i>
-          Un seul fichier
-        </a>
-      </li>
-      <li class="tab-title">
-        <a href="#upload-tab-n">
-          <i class="fi-page-multiple"></i>
-          Plusieurs fichiers
-        </a>
-      </li>
-    </ul>
-    <div class="tabs-content">
-      <div class="content active" id="upload-tab-1">
+
         <form action="{% url 'document_put' course.slug %}" method="post"
-                enctype="multipart/form-data" class="dropzone">
+                enctype="multipart/form-data" class="dropzone" id="document-upload">
             {% csrf_token %}
             {{ form.non_field_errors }}
                 <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png, doc(x), ppt(x), odt, et bien plus encore.</p>
@@ -41,7 +26,7 @@
                 {% if field.errors %}
                   <small class="error">
                     {% for error in field.errors %}
-                      {{error}}</br>
+                      {{error}}<br />
                     {% endfor %}
                   </small>
                 {% endif %}
@@ -73,41 +58,8 @@
               <input type="submit" class="button success radius {% if READ_ONLY %}disabled{% endif %}" value="Upload" />
             </p>
         </form>
-      </div>
 
-      <div class="content" id="upload-tab-n">
-        <form action="{% url 'document_put_multiple' course.slug %}" method="post"
-                enctype="multipart/form-data" class="dropzone">
-          {% csrf_token %}
-          {{ form.non_field_errors }}
-              <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png, doc(x), ppt(x), odt, et bien plus encore.</p>
-              <p>Vous pourrez éditer la description et les tags de chaque document individuellement par après</p>
-
-          {% with multiform.files as field %}
-            {% if field.errors %}
-              <small class="error">
-                {% for error in field.errors %}
-                  {{error}}</br>
-                {% endfor %}
-              </small>
-            {% endif %}
-            <div class="panel callout drop-panel">
-                <br>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{field}}
-                    </div>
-                    <div  class="small-6 columns">
-                    </div>
-                </div>
-            </div>
-          {% endwith %}
-          <p class="text-right">
-            <input type="submit" class="button success radius {% if READ_ONLY %}disabled{% endif %}" value="Upload" />
-          </p>
-        </form>
-      </div>
-    </div>
+    
   </div>
 </div>
 {% endblock %}
