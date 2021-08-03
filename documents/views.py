@@ -8,8 +8,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from actstream import action
-
 from catalog.models import Course
 from documents import logic
 from documents.forms import (
@@ -125,9 +123,10 @@ def document_edit(request, pk):
 
             doc.save()
 
-            action.send(
-                request.user, verb="a édité", action_object=doc, target=doc.course
-            )
+            # TODO Log edit
+            # action.send(
+            #     request.user, verb="a édité", action_object=doc, target=doc.course
+            # )
 
             return HttpResponseRedirect(reverse("document_show", args=[doc.id]))
 
@@ -178,12 +177,13 @@ def document_reupload(request, pk):
 
             document.reprocess(force=True)
 
-            action.send(
-                request.user,
-                verb="a uploadé une nouvelle version de",
-                action_object=document,
-                target=document.course,
-            )
+            # TODO Log new version upload
+            # action.send(
+            #     request.user,
+            #     verb="a uploadé une nouvelle version de",
+            #     action_object=document,
+            #     target=document.course,
+            # )
 
             return HttpResponseRedirect(
                 reverse("course_show", args=(document.course.slug,))

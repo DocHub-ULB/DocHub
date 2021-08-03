@@ -20,7 +20,6 @@ urlpatterns = [
     path("catalog/", include("catalog.urls")),
     path("documents/", include("documents.urls")),
     path("users/", include("users.urls")),
-    path("notifications/", include("notifications.urls")),
     path("admin/", admin.site.urls),
     path("api/", include("www.rest_urls")),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),

@@ -4,8 +4,6 @@ import collections
 
 from django.contrib.contenttypes.models import ContentType
 
-from actstream.models import Follow
-
 from catalog.models import Course
 from users.models import User
 
@@ -17,14 +15,10 @@ def distance(v1: typing.List[bool], v2: typing.List[bool]) -> float:
 
 
 def get_users_following_dict() -> typing.Dict[int, typing.Set[int]]:
+    # TODO Fill this
     course_type = ContentType.objects.get(app_label="catalog", model="course")
-    follows = Follow.objects.filter(content_type=course_type).only('user_id', 'object_id')
 
-    following_dict = collections.defaultdict(set)
-    for follow in follows:
-        following_dict[follow.user_id].add(int(follow.object_id))
-
-    return following_dict
+    return {}
 
 
 def suggest(target_user: User, K: int = 15) -> typing.List[typing.Tuple[Course, int]]:

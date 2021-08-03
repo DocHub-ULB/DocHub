@@ -9,8 +9,6 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
 from django.utils import timezone
 
-import actstream
-
 import users.identicon
 from catalog.models import Course
 
@@ -102,11 +100,14 @@ class User(AbstractBaseUser):
         return self.notification_set.filter(read=False).count()
 
     def following(self):
-        return actstream.models.following(self)
+        # TODO return user's followed courses
+        return []
 
     def following_courses(self):
         if self._following_courses is None:
-            self._following_courses = actstream.models.following(self, Course)
+            # TODO Load following courses
+            # self._following_courses = actstream.models.following(self, Course)
+            self._following_courses = []
         return [x for x in self._following_courses if x]
 
     def has_module_perms(self, *args, **kwargs):

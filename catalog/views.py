@@ -11,7 +11,6 @@ from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
 
-from actstream import actions
 from mptt.utils import get_cached_trees
 
 from catalog.models import Category, Course
@@ -71,13 +70,17 @@ def set_follow_course(request, slug: str, action):
 
 @login_required
 def join_course(request: HttpRequest, slug: str):
-    follow = partial(actions.follow, actor_only=False)
-    return set_follow_course(request, slug, follow)
+    # TODO Make the user follow a course
+    nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
+    return HttpResponseRedirect(nextpage)
+    # return set_follow_course(request, slug, follow)
 
 
 @login_required
 def leave_course(request: HttpRequest, slug: str):
-    return set_follow_course(request, slug, actions.unfollow)
+    # TODO Make user unfollow course
+    nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
+    return HttpResponseRedirect(nextpage)
 
 
 @login_required
@@ -123,6 +126,5 @@ def course_tree(request):
 
 @login_required
 def unfollow_all_courses(request):
-    for course in request.user.following_courses():
-        actions.unfollow(request.user, course)
+    # TODO Unfollow all courses
     return redirect("show_courses")

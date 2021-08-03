@@ -1,7 +1,6 @@
 from django.db import models
 from django.urls import reverse
 
-import actstream
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -45,5 +44,6 @@ class Course(models.Model):
         return f"{self.name} ({self.slug.lower()})"
 
     @property
-    def followers_count(self):
-        return len(actstream.models.followers(self))
+    def followers_count(self) -> int:
+        # TODO Calculate real count
+        return 0

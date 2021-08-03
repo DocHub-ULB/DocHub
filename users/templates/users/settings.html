@@ -39,11 +39,7 @@
   <div class="medium-6 columns">
     <h2><i class="fi-list"></i> Activité</h2>
     {% with verbose=0 %}
-      {% for action in stream %}
-        {% include "feed_entry.html" %}
-      {% empty %}
       <p>Vous n'avez encore effectué aucune action</p>
-      {% endfor %}
     {% endwith %}
   </div>
 </div>
