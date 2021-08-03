@@ -15,7 +15,7 @@
         <h1 style="font-weight: normal;">Uploader <small style="font-size: 60%;font-weight:200;">{{course.name}}</small></h1>
         {% comment %} <div class="delimiter" style="width: 100%"></div> {% endcomment %}
 
-        <form action="{% url 'document_put' course.slug %}" method="post" enctype="multipart/form-data" class="dropzone" id="document-upload" style="margin: 1em">
+        <form action="{% url 'document_put' course.slug %}" method="post" enctype="multipart/form-data" id="document-upload" style="margin: 1em">
             {% csrf_token %}
             {{ form.non_field_errors }}
             <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png,
@@ -31,9 +31,7 @@
                 {% endfor %}
             </small>
             {% endif %}
-            <div class="panel callout drop-panel">
                 {{field}}
-            </div>
             {% endwith %}
 
             <div style="display:grid;grid-template-rows: max-content;">
@@ -48,7 +46,7 @@
                 {% endwith %}
             </div>
 
-            <p class="text-right">
+            <p style="text-align:right">
                 <br>
                 <input type="submit" class="button green {% if READ_ONLY %}disabled{% endif %}"
                     value="Upload" />
