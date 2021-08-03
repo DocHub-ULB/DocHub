@@ -7,9 +7,8 @@ from os.path import join
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
-
-import actstream
 
 import users.identicon
 from catalog.models import Course
@@ -98,16 +97,11 @@ class User(AbstractBaseUser):
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
-    def notification_count(self):
-        return self.notification_set.filter(read=False).count()
-
-    def following(self):
-        return actstream.models.following(self)
-
     def following_courses(self):
-        if self._following_courses is None:
-            self._following_courses = actstream.models.following(self, Course)
-        return [x for x in self._following_courses if x]
+        return self.courses_set.all()
+
+    def is_following(self, course: Course):
+        return self.courses_set.filter(slug=course.slug).exists()
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?

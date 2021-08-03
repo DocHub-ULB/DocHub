@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% load humanize %}
-{% load activity_tags %}
+{% load follow_tags %}
 {% load has_perm_on %}
 
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
@@ -12,13 +12,15 @@
     <div style="grid-column-start: 2;">
         <h1 style="margin-left: 2rem;font-family: Titillium Web; font-style: normal; font-weight: normal; font-size: 32px; line-height: 49px;">
             {{ course.slug|upper }} {{ course.name }}
-            {% if request.user|is_following:course %}
-            <i class="fi-check green"></i>
+            {% is_following request.user course as following %}
+            {% if following %}
+            <i class="fas fa-check" style="color: #43AC6A;"></i>
             {% endif %}
-            {% if followers_count > 1 %}
-            <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
+            {% if course.followers_count > 1 %}
+            <small>{{ course.followers_count }} personnes sont abonnées à ce cours.</small>
             {% endif %}
         </h1>
+
         <div class="deck">
             {% for document in documents %}
             <div
@@ -80,7 +82,7 @@
                 <i class="fas fa-plus"></i>
                 Uploader un fichier
             </a>
-            {% if request.user|is_following:course %}
+            {% if following %}
             <a href="{% url 'leave_course' course.slug %}" class="button red">
                 <i class="fas fa-times"></i> Se désabonner
             </a>

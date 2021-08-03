@@ -10,10 +10,12 @@
     {% endif %}
     <div class="dropdown">
         <span>{{user.name}}</span>
-        <div class="dropdown-content">
-            <a class="m-3" href="{% url "settings" %}">Profil</a>
-            <a class="m-3" href="{% url "show_courses" %}">Mes cours</a>
-            <a class="m-3" href="{% url "logout" %}">Deconnexion</a>
+        <div style="position: relative">
+            <div class="dropdown-content">
+                <a class="m-3" href="{% url "settings" %}">Profil</a>
+                <a class="m-3" href="{% url "show_courses" %}">Mes cours</a>
+                <a class="m-3" href="{% url "logout" %}">Deconnexion</a>
+            </div>
         </div>
     </div>
 </div>

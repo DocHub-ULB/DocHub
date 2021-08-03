@@ -9,7 +9,6 @@ from django.shortcuts import redirect, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
-from actstream.models import actor_stream
 from PIL import Image, ImageOps
 from rest_framework.authtoken.models import Token
 
@@ -53,7 +52,6 @@ def user_settings(request):
         "users/settings.html",
         {
             "form": form,
-            "stream": actor_stream(request.user)[:5],
             "token": token,
         },
     )
