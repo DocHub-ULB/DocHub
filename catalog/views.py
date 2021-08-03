@@ -55,7 +55,6 @@ class CourseDetailView(DetailView):
 
         context["tags"] = {tag for doc in documents for tag in doc.tags.all()}
         context["documents"] = documents
-        context["followers_count"] = course.followers_count
 
         return context
 
