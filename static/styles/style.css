@@ -141,7 +141,7 @@ html {
     grid-auto-rows: max-content;
     row-gap: 20px;
     height:82vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .card{
@@ -291,8 +291,27 @@ html {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     width: max-content;
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: normal;
 }
 
+.finder-col {
+    margin-left: 0.5em;
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: normal;
+    overflow-y: auto;
+    border-right: 1px solid black;
+}
+
+.finder-col a{
+    width: 100%;
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+}
 
 /* Course upload */
 .content {

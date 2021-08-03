@@ -27,8 +27,29 @@
     </div>
 
     <!-- Cours -->
-    <div
-        style="position:absolute;top: 50%;left: 50%;border: 2px solid black;border-radius: 0.5rem;width: 50vw;height: 40vh;margin-right: -50%;transform: translate(-50%, 0%);">
+    <div style="position:absolute;top: 50%;left: 50%;width: 50vw;height: 40vh;margin-right: -50%;transform: translate(-50%, 0%);display: grid;grid-template-columns:1fr 1fr 1fr 1fr;">
+        <div class="finder-col">
+            <a style="color: #0099cc"><i class="fas fa-folder"></i> Philosophie et Sciences sociales</a>
+            <a style="color: #a11f7d"><i class="fas fa-folder-open"></i> Droit et de Criminologie</a>
+            <a style="color: #90be45"><i class="fas fa-folder"></i> Architecture La Cambre Horta</a>
+            <a style="color:#6c5098"><i class="fas fa-folder"></i> Sciences</a>
+        </div>
+        <div class="finder-col">
+            <a><i class="fas fa-folder-open"></i> Bachelier en droit</a>
+            <a><i class="fas fa-folder"></i> Master en criminologie</a>
+            <a><i class="fas fa-folder"></i> Master en droit</a>
+            <a><i class="fas fa-folder"></i> Master de spécialisation en droit social</a>
+        </div>
+        <div class="finder-col">
+            <a><i class="fas fa-folder"></i> Bloc 1 <i class="fas fa-plus-circle" style="color: #43AC6A"></i></a>
+            <a><i class="fas fa-folder"></i> Bloc 2 <i class="fas fa-plus-circle" style="color: #43AC6A"></i></a>
+            <a><i class="fas fa-folder-open"></i> Bloc 3 <i class="fas fa-minus-circle" style="color: #F34040"></i></a>
+        </div>
+        <div class="finder-col" style="border: none">
+            <a>Inleiding tot de criminologie <i class="fas fa-plus-circle" style="color: #43AC6A"></i></a>
+            <a>Comparative law <i class="fas fa-minus-circle" style="color: #F34040"></i></a>
+            <a>Droit administratif <i class="fas fa-plus-circle" style="color: #43AC6A"></i></a>
+        </div>
     </div>
     <br>
     {% comment %} {% if request.user.following_courses|length > 0 %}
