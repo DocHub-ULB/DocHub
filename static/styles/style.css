@@ -307,13 +307,17 @@ html {
 
 .form-input {
     width: 100%;
-    padding: 1em;
+    padding: 5px;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     border-radius: 5px;
     font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
     border-width: 1px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
 }
+
 /* Stimulus */
 
 .filter--filtered {
