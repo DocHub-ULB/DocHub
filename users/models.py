@@ -111,9 +111,8 @@ class User(AbstractBaseUser):
             self._following_courses = []
         return [x for x in self._following_courses if x]
 
-    def is_following(self, course_slug: str):
-        course = get_object_or_404(Course, slug=course_slug)
-        return course in self.courses_set
+    def is_following(self, course: Course):
+        return self.courses_set.filter(slug=course.slug).exists()
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?

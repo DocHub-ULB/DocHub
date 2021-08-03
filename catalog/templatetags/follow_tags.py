@@ -1,8 +1,11 @@
 from django import template
 
+from users.models import User
+from catalog.models import Course
+
 register = template.Library()
 
 
-@register.filter(name='is_following')
-def is_following(user, course_slug):
-    return user.is_following(course_slug)
+@register.simple_tag
+def is_following(user: User, course: Course):
+    return user.is_following(course)
