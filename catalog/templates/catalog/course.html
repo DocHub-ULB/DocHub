@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load humanize %}
+{% load follow_tags %}
 {% load has_perm_on %}
 
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
@@ -11,14 +12,15 @@
     <div style="grid-column-start: 2;">
         <h1 style="margin-left: 2rem;font-family: Titillium Web; font-style: normal; font-weight: normal; font-size: 32px; line-height: 49px;">
             {{ course.slug|upper }} {{ course.name }}
-            {# TODO conditionnal green check #}
-            {# if request.user.is_following course #}
-            <i class="fi-check green"></i>
-            {# endif #}
-            {% if followers_count > 1 %}
-            <small>{{followers_count}} personnes sont abonnées à ce cours.</small>
+            {% is_following request.user course as following %}
+            {% if following %}
+            <i class="fas fa-check" style="color: #43AC6A;"></i>
+            {% endif %}
+            {% if course.followers_count > 1 %}
+            <small>{{ course.followers_count }} personnes sont abonnées à ce cours.</small>
             {% endif %}
         </h1>
+
         <div class="deck">
             {% for document in documents %}
             <div
@@ -80,16 +82,15 @@
                 <i class="fas fa-plus"></i>
                 Uploader un fichier
             </a>
-            {# TODO conditional button #}
-            {# if request.user.is_following:course #}
+            {% if following %}
             <a href="{% url 'leave_course' course.slug %}" class="button red">
                 <i class="fas fa-times"></i> Se désabonner
             </a>
-            {# else #}
+            {% else %}
             <a href="{% url 'join_course' course.slug %}" class="button blue">
                 <i class="fas fa-check"></i> S’abonner au cours
             </a>
-            {# endif #}
+            {% endif %}
         </div>
         <div style="grid-row-start:2">
             <div style="border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
