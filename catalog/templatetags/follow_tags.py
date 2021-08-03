@@ -1,7 +1,7 @@
 from django import template
 
-from users.models import User
 from catalog.models import Course
+from users.models import User
 
 register = template.Library()
 

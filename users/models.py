@@ -7,8 +7,8 @@ from os.path import join
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
-from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 import users.identicon
 from catalog.models import Course

@@ -1,5 +1,6 @@
-import os
 from typing import Optional
+
+import os
 
 
 def get_env(secret_name: str, default: Optional[str] = None):
