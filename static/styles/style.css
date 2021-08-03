@@ -98,6 +98,10 @@ html {
     font-weight: normal;
 }
 
+.footer a{
+    color: #008CBA;
+}
+
 /* Course filter */
 .button {
     padding: 0.5em;
