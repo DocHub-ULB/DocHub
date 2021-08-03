@@ -31,24 +31,8 @@
         style="position:absolute;top: 50%;left: 50%;border: 2px solid black;border-radius: 0.5rem;width: 50vw;height: 40vh;margin-right: -50%;transform: translate(-50%, 0%);">
     </div>
     <br>
-    {% if request.user.following_courses|length > 0 %}
+    {% comment %} {% if request.user.following_courses|length > 0 %}
     <div class="row">
-        <div class="large-6 columns">
-            <h3>Documents récents</h3>
-            <ul class="no-list">
-                {% for doc in recent_docs %}
-                <li>
-                    <a href="{% url 'document_show' doc.id %}">
-                        <span class="course-label secondary radius label recent-blob fixed-label">
-                            {{ doc.course.slug }}
-                        </span>
-                        {{ doc.name|truncatechars:40 }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-
-        </div>
         <div class="large-6 columns">
             <h3>Mes cours</h3>
             <ul class="no-list">
@@ -65,6 +49,6 @@
             </ul>
         </div>
     </div>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
 {% endblock %}

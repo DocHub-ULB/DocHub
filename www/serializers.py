@@ -1,4 +1,3 @@
-from actstream.models import Action
 from rest_framework import serializers
 
 from catalog.models import Course
@@ -35,13 +34,3 @@ class GenericRelatedField(serializers.Field):
         else:
             raise Exception("Neither a Dcoument nor Course instance! %s" % type(value))
         return serializer.data
-
-
-class FeedSerializer(serializers.ModelSerializer):
-    actor = SmallUserSerializer(read_only=True)
-    action_object = GenericRelatedField(read_only=True)
-    target = GenericRelatedField(read_only=True)
-
-    class Meta:
-        model = Action
-        fields = ('actor', 'verb', 'action_object', 'target')

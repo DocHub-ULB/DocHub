@@ -11,7 +11,6 @@ import uuid
 from django.conf import settings
 from django.core.files.base import ContentFile, File
 
-from actstream import action
 from celery import chain, shared_task
 from celery.exceptions import SoftTimeLimitExceeded
 from PyPDF2 import PdfFileReader
@@ -36,7 +35,8 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
     document = Document.objects.get(id=doc_id)
     document.state = Document.DocumentState.ERROR
     document.save()
-    action.send(document.user, verb="upload failed", action_object=document, target=document.course, public=False)
+    # TODO Log failed upload
+    # action.send(document.user, verb="upload failed", action_object=document, target=document.course, public=False)
 
     # Warn the admins
     DocumentError.objects.create(
@@ -100,14 +100,14 @@ def checksum(self, document_id: int) -> int:
         # and break the task chain in celery
         self.request.callbacks = None
 
-        # Warn the user
-        action.send(
-            document.user,
-            verb="a uploadé un doublon de",
-            action_object=duplicata,
-            target=document.course,
-            public=False
-        )
+        # TODO Warn the user
+        # action.send(
+        #     document.user,
+        #     verb="a uploadé un doublon de",
+        #     action_object=duplicata,
+        #     target=document.course,
+        #     public=False
+        # )
         raise ExisingChecksum(
             f"Document {document_id} had the same checksum as {duplicata.id}"
         )
@@ -168,8 +168,9 @@ def finish_file(self, document_id: int) -> int:
     document.state = Document.DocumentState.DONE
     document.save()
 
-    action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
-    action.send(document.user, verb="upload success", action_object=document, target=document.course, public=False)
+    # TODO Log following events
+    # action.send(document.user, verb="a uploadé", action_object=document, target=document.course)
+    # action.send(document.user, verb="upload success", action_object=document, target=document.course, public=False)
 
     return document_id
 

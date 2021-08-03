@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Profil{% endblock %}
 {% block content %}
+
 <div class="content">
     <div style="grid-column-start: 2;margin-top:1em">
         <h1>Préférences</h1>
@@ -41,17 +42,17 @@
                 <p class="lead">Utilisation avec CURL</p>
                 <p>
                     <pre>
-curl -X GET https://dochub.be/api/ -H 'Authorization: Token {{token.key}}'
-        </pre>
+                      curl -X GET https://dochub.be/api/ -H 'Authorization: Token {{token.key}}'
+                    </pre>
                 </p>
                 <p class="lead">Ou requests</p>
                 <p>
-                    <pre>
-import requests
-headers = {'Authorization': 'Token {{token.key}}'}
-response = request.get("https://dochub.be/api/", headers=headers)
-print(response.json())
-        </pre>
+                  <pre>
+                    import requests
+                    headers = {'Authorization': 'Token {{token.key}}'}
+                    response = request.get("https://dochub.be/api/", headers=headers)
+                    print(response.json())
+                  </pre>
                 </p>
                 <a class="close-reveal-modal" aria-label="Close">&#215;</a>
             </div>

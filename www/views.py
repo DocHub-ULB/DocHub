@@ -4,8 +4,6 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.views.generic import TemplateView
 
-from actstream.models import user_stream
-
 from catalog.forms import SearchForm
 from catalog.models import Category
 from documents.models import Document
@@ -22,7 +20,6 @@ def index(request):
         ]
         context = {
             "search": SearchForm(),
-            "stream": user_stream(request.user).exclude(verb="started following")[:10],
             "recent_docs": docs,
             "faculties": Category.objects.get(level=0).children.all(),
         }

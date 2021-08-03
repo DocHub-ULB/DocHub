@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "users",
     "catalog",
     "tags",
-    "notifications",
     "search",
 ]
 
@@ -167,6 +166,11 @@ if DEBUG:
     MIDDLEWARE.extend([
         "debug_toolbar.middleware.DebugToolbarMiddleware"
     ])
+    INTERNAL_IPS = [
+        '127.0.0.1',
+        'localhost',
+        '0.0.0.0',
+    ]
 else:
     INSTALLED_APPS.extend([
         "gunicorn",
@@ -209,8 +213,3 @@ else:
 
 READ_ONLY = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
-
-# Must be last
-INSTALLED_APPS.extend([
-    "actstream"
-])

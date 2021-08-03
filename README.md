@@ -8,9 +8,9 @@ There is a [live instance of DocHub](https://dochub.be) hosted by [UrLab](https:
 
 ## Screenshots
 
-![](https://github.com/urlab/dochub/blob/master/.meta/screen-1.png)
-![](https://github.com/urlab/dochub/blob/master/.meta/screen-2.png)
-![](https://github.com/urlab/dochub/blob/master/.meta/screen-3.png)
+![](.meta/screen-1.png)
+![](.meta/screen-2.png)
+![](.meta/screen-3.png)
 
 ## Tech
 

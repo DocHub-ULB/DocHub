@@ -11,7 +11,6 @@ from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
 
-from actstream import actions
 from mptt.utils import get_cached_trees
 
 from catalog.models import Category, Course
@@ -56,28 +55,30 @@ class CourseDetailView(DetailView):
 
         context["tags"] = {tag for doc in documents for tag in doc.tags.all()}
         context["documents"] = documents
-        context["followers_count"] = course.followers_count
 
         return context
 
 
-def set_follow_course(request, slug: str, action):
+def set_follow_course(request, slug: str, action: str) -> HttpResponse:
+    """Makes a user either follow or unfollow a course"""
     course = get_object_or_404(Course, slug=slug)
-    action(request.user, course)
-    request.user.update_inferred_faculty()
+    if action == "follow":
+        course.followed_by.add(request.user)
+    else:
+        course.followed_by.remove(request.user)
+    course.save()
     nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
     return HttpResponseRedirect(nextpage)
 
 
 @login_required
 def join_course(request: HttpRequest, slug: str):
-    follow = partial(actions.follow, actor_only=False)
-    return set_follow_course(request, slug, follow)
+    return set_follow_course(request, slug, "follow")
 
 
 @login_required
 def leave_course(request: HttpRequest, slug: str):
-    return set_follow_course(request, slug, actions.unfollow)
+    return set_follow_course(request, slug, "leave")
 
 
 @login_required
@@ -123,6 +124,6 @@ def course_tree(request):
 
 @login_required
 def unfollow_all_courses(request):
-    for course in request.user.following_courses():
-        actions.unfollow(request.user, course)
+    for course in request.user.courses_set.all():
+        course.followed_by.remove(request.user)
     return redirect("show_courses")
