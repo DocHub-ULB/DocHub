@@ -36,7 +36,7 @@ class FileForm(forms.Form):
 
 
 class UploadFileForm(FileForm):
-    file = forms.FileField(validators=[validate_uploaded_file])
+    file = forms.FileField(validators=[validate_uploaded_file], widget=forms.FileInput(attrs={'class': 'file-upload',}))
 
 
 class ReUploadForm(forms.Form):

@@ -311,11 +311,29 @@ html {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     border-radius: 5px;
+    border: 1px solid #aaa;
     font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
     border-width: 1px;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+.file-upload::file-selector-button {
+    border: 1px solid #0d6efd;
+    font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+    font-size: 1.5em;
+    padding: .2em .4em;
+    border-radius: .2em;
+    color: #0d6efd;
+    background-color: white;
+    transition: 0.5s;
+}
+
+.file-upload::file-selector-button:hover {
+    border: 1px solid #0d6efd;
+    background-color: #0d6efd;
+    color: white;
 }
 
 /* Stimulus */
