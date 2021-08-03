@@ -100,16 +100,8 @@ class User(AbstractBaseUser):
     def notification_count(self):
         return self.notification_set.filter(read=False).count()
 
-    def following(self):
-        # TODO return user's followed courses
-        return self.courses_set.all()
-
     def following_courses(self):
-        if self._following_courses is None:
-            # TODO Load following courses
-            # self._following_courses = actstream.models.following(self, Course)
-            self._following_courses = []
-        return [x for x in self._following_courses if x]
+        return self.courses_set.all()
 
     def is_following(self, course: Course):
         return self.courses_set.filter(slug=course.slug).exists()
