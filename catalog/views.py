@@ -62,8 +62,11 @@ class CourseDetailView(DetailView):
 
 def set_follow_course(request, slug: str, action):
     course = get_object_or_404(Course, slug=slug)
-    action(request.user, course)
-    request.user.update_inferred_faculty()
+    if action == "follow":
+        course.followed_by.add(request.user)
+    else:
+        course.followed_by.remove(request.user)
+    course.save()
     nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
     return HttpResponseRedirect(nextpage)
 
@@ -71,16 +74,13 @@ def set_follow_course(request, slug: str, action):
 @login_required
 def join_course(request: HttpRequest, slug: str):
     # TODO Make the user follow a course
-    nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
-    return HttpResponseRedirect(nextpage)
-    # return set_follow_course(request, slug, follow)
+    return set_follow_course(request, slug, "follow")
 
 
 @login_required
 def leave_course(request: HttpRequest, slug: str):
     # TODO Make user unfollow course
-    nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
-    return HttpResponseRedirect(nextpage)
+    return set_follow_course(request, slug, "leave")
 
 
 @login_required
