@@ -15,10 +15,11 @@ def distance(v1: typing.List[bool], v2: typing.List[bool]) -> float:
 
 
 def get_users_following_dict() -> typing.Dict[int, typing.Set[int]]:
-    # TODO Fill this
-    course_type = ContentType.objects.get(app_label="catalog", model="course")
+    user_following_dict = {}
+    for user in User.objects.all():
+        user_following_dict[user.id] = set([course.id for course in user.following_courses()])
 
-    return {}
+    return user_following_dict
 
 
 def suggest(target_user: User, K: int = 15) -> typing.List[typing.Tuple[Course, int]]:
