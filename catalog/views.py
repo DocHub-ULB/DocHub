@@ -60,7 +60,8 @@ class CourseDetailView(DetailView):
         return context
 
 
-def set_follow_course(request, slug: str, action):
+def set_follow_course(request, slug: str, action: str) -> HttpResponse:
+    """Makes a user either follow or unfollow a course"""
     course = get_object_or_404(Course, slug=slug)
     if action == "follow":
         course.followed_by.add(request.user)
@@ -73,13 +74,11 @@ def set_follow_course(request, slug: str, action):
 
 @login_required
 def join_course(request: HttpRequest, slug: str):
-    # TODO Make the user follow a course
     return set_follow_course(request, slug, "follow")
 
 
 @login_required
 def leave_course(request: HttpRequest, slug: str):
-    # TODO Make user unfollow course
     return set_follow_course(request, slug, "leave")
 
 
@@ -126,5 +125,6 @@ def course_tree(request):
 
 @login_required
 def unfollow_all_courses(request):
-    # TODO Unfollow all courses
+    for course in request.user.courses_set:
+        course.followed_by.remove(request.user)
     return redirect("show_courses")
