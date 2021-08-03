@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 import users.identicon
 from catalog.models import Course
@@ -101,7 +102,7 @@ class User(AbstractBaseUser):
 
     def following(self):
         # TODO return user's followed courses
-        return []
+        return self.courses_set.all()
 
     def following_courses(self):
         if self._following_courses is None:
@@ -109,6 +110,10 @@ class User(AbstractBaseUser):
             # self._following_courses = actstream.models.following(self, Course)
             self._following_courses = []
         return [x for x in self._following_courses if x]
+
+    def is_following(self, course_slug: str):
+        course = get_object_or_404(Course, slug=course_slug)
+        return course in self.courses_set
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
