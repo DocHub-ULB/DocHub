@@ -27,6 +27,8 @@ class Course(models.Model):
     categories = models.ManyToManyField(Category)
     description = models.TextField(default="")
 
+    followed_by = models.ManyToManyField('users.User', related_name="courses_set")
+
     class Meta:
         ordering = ['slug']
 
@@ -45,5 +47,4 @@ class Course(models.Model):
 
     @property
     def followers_count(self) -> int:
-        # TODO Calculate real count
-        return 0
+        return self.followed_by.count()
