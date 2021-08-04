@@ -1,11 +1,11 @@
 from django.conf import settings
 from django.db.models import Sum
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
 from django.views.generic import TemplateView
 
 from catalog.forms import SearchForm
-from catalog.models import Category
+from catalog.models import Category, Course
 from documents.models import Document
 from users.authBackend import UlbCasBackend
 from users.models import User
@@ -42,6 +42,40 @@ def index(request):
             "users": floor(User.objects.count())
         }
         return render(request, "index.html", context)
+
+
+def finder_turbo(request, id: str, category_slug: str):
+    if id == "course":
+        category = get_object_or_404(Category, slug=category_slug)
+        courses = Course.objects.filter(categories=category)
+        print(courses)
+        return render(
+            request,
+            "finder/course.html",
+            context={
+                "type": "program",
+                "courses": courses
+            }
+        )
+    else:
+        if category_slug != "empty":
+            category = get_object_or_404(Category, slug=category_slug)
+            target = category.get_level() + 1 if category.get_level() + 1 < 3 else "course"
+            children = category.children.all()
+        else:
+            children = Category.objects.none()
+            target = "None"
+
+        return render(
+            request,
+            "finder/category.html",
+            context={
+                "type": "program",
+                "id": id,
+                "target": target,
+                "children": children
+            }
+        )
 
 
 class HelpView(TemplateView):
