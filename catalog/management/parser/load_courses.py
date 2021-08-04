@@ -5,7 +5,7 @@ from catalog.models import Category, Course
 from django.utils.text import slugify
 
 
-with open("../parser/tree.json") as tree_file:
+with open("catalog/management/parser/data/tree.json") as tree_file:
     tree = json.load(tree_file)
 
 a = 0
@@ -30,7 +30,7 @@ for fac_name, fac_info in tree["ULB"].items():
 
             for course_mnemo, course_info in bloc_info['courses'].items():
                 a += 1
-                print(str(a).zfill(3), " ", course_info["title"])
+                print(str(a).zfill(4), course_info["title"])
                 course_obj, _created = Course.objects.get_or_create(
                     slug=course_mnemo
                 )
