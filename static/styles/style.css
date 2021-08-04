@@ -301,8 +301,11 @@ html {
     font-family: Titillium Web;
     font-style: normal;
     font-weight: normal;
+    height: inherit;
     overflow-y: auto;
     border-right: 1px solid black;
+    scrollbar-width: thin;
+    scrollbar-color: black white
 }
 
 .finder-col a{
@@ -311,6 +314,24 @@ html {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     font-size: 1.2em;
+}
+
+.turbo-overflow {
+    height: inherit;
+}
+
+.finder-col::-webkit-scrollbar {
+    width: 5px;
+}
+ 
+.finder-col::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 5px;
+}
+ 
+.finder-col::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 5px;
 }
 
 /* Course upload */
