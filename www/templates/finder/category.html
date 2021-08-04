@@ -1,0 +1,15 @@
+<turbo-frame id="{{ id }}">
+    <div class="finder-col">
+    {% for child in children %}
+        <a
+            href="{% url "finder_turbo" target child.slug %}"
+            data-turbo-frame={{ target }}
+            {% if target == "1" %}
+                style="color: {{ child.description }}"
+            {% endif %}
+        >
+            <i class="fas fa-folder"></i> {{ child.name }}
+        </a>
+    {% endfor %}
+    </div>
+</turbo-frame>
