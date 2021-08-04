@@ -38,13 +38,15 @@ for span in soup.find_all("span", {"class": "search-result__mnemonique"}):
             }
         )
 
+failed = []
+
 print("parsing courses")
 for index, course in enumerate(all_courses):
-    print(f"({index+1}/{limit_to}) requesting", course['MNEMO'].upper())
+    print(f"({index+1}/{len(all_courses)}) requesting", course['MNEMO'].upper())
     start = time.time()
     programme = None
     while programme is None:
-        URL = f"https://www.ulb.be/api/formation?path=%2Fws%2Fksup%2Fprogramme%3Fgen%3Dprod%26anet%3D{course['MNEMO'].upper()}%26lang%3Dfr%26&_=1623514050845"
+        URL = f"https://www.ulb.be/api/formation?path=%2Fws%2Fksup%2Fprogramme%3Fgen%3Dprod%26anet%3D{course['MNEMO'].upper()}%26lang%3Dfr%26"
         try:
             programme = requests.get(URL)
         except Exception:
@@ -57,6 +59,9 @@ for index, course in enumerate(all_courses):
     try:
         programme_json = json.loads(programme.json()['json'])
         all_courses[index]["courses"] = {}
+        if len(programme_json['blocs']) == 0:
+            continue
+
         for course in programme_json['blocs'][-1]['progCourses']:
             if course['id'] not in ['TEMP-0000', 'HULB-0000']:
                 all_courses[index]["courses"][course['id']] = {
@@ -68,6 +73,7 @@ for index, course in enumerate(all_courses):
                     "quadri": course['quadri'],
                 }
     except Exception as e:
+        failed.append(course['MNEMO'])
         print("Error", e)
 
 
@@ -75,3 +81,4 @@ with open("catalog/management/parser/data/courses.json", "w+") as all_courses_js
     json.dump(all_courses, all_courses_json, indent=2)
 
 print("Avg. duration:", sum(times) / len(times))
+print("failed", failed)
