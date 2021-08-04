@@ -38903,7 +38903,221 @@
         "MA-LORIE": {
           "name": "Master en langues et lettres modernes, orientation Orientales",
           "mnemo": "MA-LORIE",
-          "blocs": {}
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "MEMO-B432": {
+                  "mnemo": "MEMO-B432",
+                  "title": "Travail d'initiation \u00e0 la recherche",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "ORIE-B441": {
+                  "mnemo": "ORIE-B441",
+                  "title": "Langue chinoise perfectionnement I",
+                  "mandatory": true,
+                  "lecturers": "et Chun Zi WANG (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "ORIE-B442": {
+                  "mnemo": "ORIE-B442",
+                  "title": "Etude de textes chinois 1",
+                  "mandatory": true,
+                  "lecturers": "et Chun Zi WANG (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "ORIE-B443": {
+                  "mnemo": "ORIE-B443",
+                  "title": "Expression orale (Chinois)",
+                  "mandatory": true,
+                  "lecturers": "et Chun Zi WANG (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "ORIE-B450": {
+                  "mnemo": "ORIE-B450",
+                  "title": "Culture et soci\u00e9t\u00e9 du monde chinois",
+                  "mandatory": true,
+                  "lecturers": "et Vanessa FRANGVILLE (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "ORIE-B460": {
+                  "mnemo": "ORIE-B460",
+                  "title": "Litt\u00e9ratures chinoises",
+                  "mandatory": true,
+                  "lecturers": "et Vanessa FRANGVILLE (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "ORIE-B471": {
+                  "mnemo": "ORIE-B471",
+                  "title": "Langue chinoise perfectionnement II",
+                  "mandatory": true,
+                  "lecturers": "et Chun Zi WANG (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "ORIE-B472": {
+                  "mnemo": "ORIE-B472",
+                  "title": "Initiation au Chinois classique I",
+                  "mandatory": true,
+                  "lecturers": "et Jin Sun (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "POLI-D539": {
+                  "mnemo": "POLI-D539",
+                  "title": "La Chine et le monde : la politique \u00e9trang\u00e8re chinoise depuis 1949",
+                  "mandatory": true,
+                  "lecturers": "et Thierry KELLNER (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "POLI-D552": {
+                  "mnemo": "POLI-D552",
+                  "title": "Questions politiques d'actualit\u00e9 en Chine",
+                  "mandatory": true,
+                  "lecturers": "et Thierry KELLNER (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "SOCA-D491": {
+                  "mnemo": "SOCA-D491",
+                  "title": "Anthropologie des soci\u00e9t\u00e9s de l'Asie Orientale",
+                  "mandatory": true,
+                  "lecturers": "Pierre PETIT (Coordonnateur) et Vanessa FRANGVILLE",
+                  "quadri": "q2"
+                },
+                "ORIE-B250": {
+                  "mnemo": "ORIE-B250",
+                  "title": "Japonais I",
+                  "mandatory": false,
+                  "lecturers": "et Shizuka WATANABE",
+                  "quadri": "q1"
+                },
+                "SOCA-D408": {
+                  "mnemo": "SOCA-D408",
+                  "title": "Ethnicit\u00e9 et nationalisme",
+                  "mandatory": false,
+                  "lecturers": "et Pierre PETIT (Coordonnateur)",
+                  "quadri": "q1"
+                }
+              }
+            },
+            "2": {
+              "val": "2",
+              "courses": {
+                "ORIE-B350": {
+                  "mnemo": "ORIE-B350",
+                  "title": "Japonais II",
+                  "mandatory": false,
+                  "lecturers": "et Shizuka WATANABE",
+                  "quadri": "q2"
+                },
+                "MEMO-B532": {
+                  "mnemo": "MEMO-B532",
+                  "title": "M\u00e9moire",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "ARTC-B400": {
+                  "mnemo": "ARTC-B400",
+                  "title": "Histoire du spectacle",
+                  "mandatory": false,
+                  "lecturers": "et Karel VANHAESEBROUCK (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "COMM-B400": {
+                  "mnemo": "COMM-B400",
+                  "title": "Histoire de la communication de masse",
+                  "mandatory": false,
+                  "lecturers": "et Irene DI JORIO (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "COMM-B470": {
+                  "mnemo": "COMM-B470",
+                  "title": "Multilinguisme et soci\u00e9t\u00e9",
+                  "mandatory": false,
+                  "lecturers": "et Laura Marina CALABRESE (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "FRAN-B401": {
+                  "mnemo": "FRAN-B401",
+                  "title": "Francophonie : enjeux et perspectives",
+                  "mandatory": false,
+                  "lecturers": "et Anne-Rosine DELBART (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "FRAN-B545": {
+                  "mnemo": "FRAN-B545",
+                  "title": "Interm\u00e9dialit\u00e9s",
+                  "mandatory": false,
+                  "lecturers": "Fabrice PREYAT (Coordonnateur) et Laurence BROGNIEZ",
+                  "quadri": "q2"
+                },
+                "LANG-B405": {
+                  "mnemo": "LANG-B405",
+                  "title": "Racines grecques en fran\u00e7ais - cours d'\u00e9tymologie",
+                  "mandatory": false,
+                  "lecturers": "et Nikolaos STOGIOS (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "LITT-B400": {
+                  "mnemo": "LITT-B400",
+                  "title": "Th\u00e9orie de la litt\u00e9rature",
+                  "mandatory": false,
+                  "lecturers": "et Christophe DEN TANDT (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "ORIE-B150": {
+                  "mnemo": "ORIE-B150",
+                  "title": "Histoire et culture japonaises I",
+                  "mandatory": false,
+                  "lecturers": "Shizuka WATANABE (Coordonnateur) et Aur\u00e9lien ALLARD",
+                  "quadri": "aa"
+                },
+                "ORIE-B455": {
+                  "mnemo": "ORIE-B455",
+                  "title": "Aspects interculturels du spectacle vivant: pratiques artistiques de l'Asie",
+                  "mandatory": true,
+                  "lecturers": "et Vanessa FRANGVILLE (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "ORIE-B542": {
+                  "mnemo": "ORIE-B542",
+                  "title": "Etude de textes chinois 2",
+                  "mandatory": true,
+                  "lecturers": "et Jin Sun (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "ORIE-B555": {
+                  "mnemo": "ORIE-B555",
+                  "title": "Langue chinoise perfectionnement III",
+                  "mandatory": true,
+                  "lecturers": "et Chun Zi WANG (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "ORIE-B560": {
+                  "mnemo": "ORIE-B560",
+                  "title": "Cin\u00e9ma de l\u2019Asie",
+                  "mandatory": true,
+                  "lecturers": "et Vanessa FRANGVILLE (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "ORIE-B565": {
+                  "mnemo": "ORIE-B565",
+                  "title": "Langue chinoise perfectionnement IV",
+                  "mandatory": true,
+                  "lecturers": "et Chun Zi WANG (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "ORIE-B572": {
+                  "mnemo": "ORIE-B572",
+                  "title": "initiation au chinois classique II",
+                  "mandatory": true,
+                  "lecturers": "et Jin Sun (Coordonnateur)",
+                  "quadri": "q2"
+                }
+              }
+            }
+          }
         },
         "MA-STIC": {
           "name": "Master en sciences et technologies de l'information et de la communication",
@@ -66374,6 +66588,247 @@
             }
           }
         },
+        "MS-NEUR": {
+          "name": "Master de sp\u00e9cialisation en neurologie",
+          "mnemo": "MS-NEUR",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "MSPE-G1024": {
+                  "mnemo": "MSPE-G1024",
+                  "title": "Neurologie 1-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G1025": {
+                  "mnemo": "MSPE-G1025",
+                  "title": "Neurologie 1-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G1026": {
+                  "mnemo": "MSPE-G1026",
+                  "title": "Neurologie 1-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G1124": {
+                  "mnemo": "MSPE-G1124",
+                  "title": "Recherche NEUR 1-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G1125": {
+                  "mnemo": "MSPE-G1125",
+                  "title": "Recherche NEUR 1-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G1126": {
+                  "mnemo": "MSPE-G1126",
+                  "title": "Recherche NEUR 1-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                }
+              }
+            },
+            "2": {
+              "val": "2",
+              "courses": {
+                "MSPE-G2024": {
+                  "mnemo": "MSPE-G2024",
+                  "title": "Neurologie 2-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G2025": {
+                  "mnemo": "MSPE-G2025",
+                  "title": "Neurologie 2-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G2026": {
+                  "mnemo": "MSPE-G2026",
+                  "title": "Neurologie 2-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G2124": {
+                  "mnemo": "MSPE-G2124",
+                  "title": "Recherche NEUR 2-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G2125": {
+                  "mnemo": "MSPE-G2125",
+                  "title": "Recherche NEUR 2-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G2126": {
+                  "mnemo": "MSPE-G2126",
+                  "title": "Recherche NEUR 2-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                }
+              }
+            },
+            "3": {
+              "val": "3",
+              "courses": {
+                "MSPE-G3024": {
+                  "mnemo": "MSPE-G3024",
+                  "title": "Neurologie 3-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G3025": {
+                  "mnemo": "MSPE-G3025",
+                  "title": "Neurologie 3-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G3026": {
+                  "mnemo": "MSPE-G3026",
+                  "title": "Neurologie 3-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G3124": {
+                  "mnemo": "MSPE-G3124",
+                  "title": "Recherche NEUR 3-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G3125": {
+                  "mnemo": "MSPE-G3125",
+                  "title": "Recherche NEUR 3-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G3126": {
+                  "mnemo": "MSPE-G3126",
+                  "title": "Recherche NEUR 3-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                }
+              }
+            },
+            "4": {
+              "val": "4",
+              "courses": {
+                "MSPE-G4024": {
+                  "mnemo": "MSPE-G4024",
+                  "title": "Neurologie 4-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G4025": {
+                  "mnemo": "MSPE-G4025",
+                  "title": "Neurologie 4-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G4026": {
+                  "mnemo": "MSPE-G4026",
+                  "title": "Neurologie 4-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G4124": {
+                  "mnemo": "MSPE-G4124",
+                  "title": "Recherche NEUR 4-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G4125": {
+                  "mnemo": "MSPE-G4125",
+                  "title": "Recherche NEUR 4-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G4126": {
+                  "mnemo": "MSPE-G4126",
+                  "title": "Recherche NEUR 4-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                }
+              }
+            },
+            "5": {
+              "val": "5",
+              "courses": {
+                "MSPE-G5024": {
+                  "mnemo": "MSPE-G5024",
+                  "title": "Neurologie 5-TFE",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G5025": {
+                  "mnemo": "MSPE-G5025",
+                  "title": "Neurologie 5-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G5026": {
+                  "mnemo": "MSPE-G5026",
+                  "title": "Neurologie 5-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G5124": {
+                  "mnemo": "MSPE-G5124",
+                  "title": "Recherche NEUR 5-Th\u00e9orie",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G5125": {
+                  "mnemo": "MSPE-G5125",
+                  "title": "Recherche NEUR 5-S\u00e9minaires et exercices pratqiues",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "MSPE-G5126": {
+                  "mnemo": "MSPE-G5126",
+                  "title": "Recherche NEUR 5-Stages",
+                  "mandatory": false,
+                  "lecturers": "",
+                  "quadri": "q12"
+                }
+              }
+            }
+          }
+        },
         "AG-BIME": {
           "name": "Agr\u00e9gation de l'enseignement secondaire sup\u00e9rieur - Sciences biom\u00e9dicales",
           "mnemo": "AG-BIME",
@@ -66461,15 +66916,911 @@
         }
       }
     },
+    "Facult\u00e9 de Pharmacie": {
+      "name": "Facult\u00e9 de Pharmacie",
+      "color": "#008751",
+      "programs": {
+        "BA-PHAR": {
+          "name": "Bachelier en sciences pharmaceutiques",
+          "mnemo": "BA-PHAR",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "BIOL-J101": {
+                  "mnemo": "BIOL-J101",
+                  "title": "Biologie animale",
+                  "mandatory": true,
+                  "lecturers": "et Hassan JIJAKLI (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "BIOL-J102": {
+                  "mnemo": "BIOL-J102",
+                  "title": "Biologie v\u00e9g\u00e9tale",
+                  "mandatory": true,
+                  "lecturers": "et Nausicaa NORET (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "CHIM-J101": {
+                  "mnemo": "CHIM-J101",
+                  "title": "Chimie g\u00e9n\u00e9rale",
+                  "mandatory": true,
+                  "lecturers": "et V\u00e9ronique CABIAUX (Coordonnateur)",
+                  "quadri": "q12"
+                },
+                "CHIM-J102": {
+                  "mnemo": "CHIM-J102",
+                  "title": "Chimie organique",
+                  "mandatory": true,
+                  "lecturers": "et Franck MEYER (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "CHIM-J103": {
+                  "mnemo": "CHIM-J103",
+                  "title": "Chimie exp\u00e9rimentale",
+                  "mandatory": true,
+                  "lecturers": "Franck MEYER (Coordonnateur) et V\u00e9ronique CABIAUX",
+                  "quadri": "q12"
+                },
+                "MATH-F113": {
+                  "mnemo": "MATH-F113",
+                  "title": "Math\u00e9matiques",
+                  "mandatory": true,
+                  "lecturers": "Jennifer ALONSO GARCIA (Coordonnateur) et Cl\u00e9ment Cerovecki",
+                  "quadri": "q1"
+                },
+                "MEDI-J100": {
+                  "mnemo": "MEDI-J100",
+                  "title": "El\u00e9ments d'anatomie et d'embryologie humaine",
+                  "mandatory": true,
+                  "lecturers": "V\u00e9ronique FEIPEL (Coordonnateur), Hassan JIJAKLI et Olivier Snoeck",
+                  "quadri": "q1"
+                },
+                "PHYS-F104": {
+                  "mnemo": "PHYS-F104",
+                  "title": "Physique 1",
+                  "mandatory": true,
+                  "lecturers": "Barbara CLERBAUX (Coordonnateur), St\u00e9phane DETOURNAY et Michele SFERRAZZA",
+                  "quadri": "aa"
+                },
+                "TRAN-J103": {
+                  "mnemo": "TRAN-J103",
+                  "title": "Pharmacie et soci\u00e9t\u00e9, projets transdisciplinaires",
+                  "mandatory": true,
+                  "lecturers": "Franck MEYER (Coordonnateur), Fran\u00e7ois DUFRASNE, Kris De Braekeleer, C\u00e9dric Delporte, V\u00e9ronique FONTAINE, Kelsey HULL, Hassan JIJAKLI et Pierre VAN ANTWERPEN",
+                  "quadri": "q2"
+                },
+                "TRAN-J111": {
+                  "mnemo": "TRAN-J111",
+                  "title": "Accueil et initiation \u00e0 la m\u00e9thodologie universitaire",
+                  "mandatory": true,
+                  "lecturers": "et Nathalie WAUTHOZ (Coordonnateur)",
+                  "quadri": "q1"
+                }
+              }
+            },
+            "2": {
+              "val": "2",
+              "courses": {
+                "BIOL-J201": {
+                  "mnemo": "BIOL-J201",
+                  "title": "Introduction \u00e0 l'\u00e9tude des plantes m\u00e9dicinales",
+                  "mandatory": true,
+                  "lecturers": "et Caroline STEVIGNY (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "BMOL-J201": {
+                  "mnemo": "BMOL-J201",
+                  "title": "Biologie mol\u00e9culaire",
+                  "mandatory": true,
+                  "lecturers": "et David VERMIJLEN (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "CHIM-F202": {
+                  "mnemo": "CHIM-F202",
+                  "title": "Biochimie m\u00e9tabolique et structurale",
+                  "mandatory": true,
+                  "lecturers": "V\u00e9ronique KRUYS (Coordonnateur) et Vincent RAUSSENS",
+                  "quadri": "q1"
+                },
+                "CHIM-J201": {
+                  "mnemo": "CHIM-J201",
+                  "title": "Chimie organique pharmaceutique",
+                  "mandatory": true,
+                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "CHIM-J202": {
+                  "mnemo": "CHIM-J202",
+                  "title": "Spectroscopies mol\u00e9culaires et spectrom\u00e9trie de masse",
+                  "mandatory": true,
+                  "lecturers": "Pierre VAN ANTWERPEN (Coordonnateur), C\u00e9dric Delporte et Michel LUHMER",
+                  "quadri": "q2"
+                },
+                "MEDI-J201": {
+                  "mnemo": "MEDI-J201",
+                  "title": "Physiologie humaine",
+                  "mandatory": true,
+                  "lecturers": "et St\u00e9phanie POCHET (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "PHAR-J210": {
+                  "mnemo": "PHAR-J210",
+                  "title": "Analyse Pharmaceutique, m\u00e9thodes volum\u00e9triques",
+                  "mandatory": true,
+                  "lecturers": "C\u00e9dric Delporte (Coordonnateur), Jacques DUBOIS et Kris De Braekeleer",
+                  "quadri": "q1"
+                },
+                "PHAR-J230": {
+                  "mnemo": "PHAR-J230",
+                  "title": "Analyse Pharmaceutique, m\u00e9thodes Physicochimiques",
+                  "mandatory": true,
+                  "lecturers": "et Jacques DUBOIS (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "STAT-J201": {
+                  "mnemo": "STAT-J201",
+                  "title": "Statistiques appliqu\u00e9es aux sciences pharmaceutiques",
+                  "mandatory": true,
+                  "lecturers": "et Kris De Braekeleer (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "TRAN-J201": {
+                  "mnemo": "TRAN-J201",
+                  "title": "Scientific English",
+                  "mandatory": true,
+                  "lecturers": "St\u00e9phanie POCHET (Coordonnateur), Kelsey HULL et David VERMIJLEN",
+                  "quadri": "q12"
+                },
+                "TRAN-J211": {
+                  "mnemo": "TRAN-J211",
+                  "title": "Approche pratique des sciences du vivant",
+                  "mandatory": true,
+                  "lecturers": "David VERMIJLEN (Coordonnateur), C\u00e9dric Delporte et St\u00e9phanie POCHET",
+                  "quadri": "aa"
+                }
+              }
+            },
+            "3": {
+              "val": "3",
+              "courses": {
+                "BIOL-J301": {
+                  "mnemo": "BIOL-J301",
+                  "title": "Microbiologie g\u00e9n\u00e9rale, Hygi\u00e8ne, Immunologie",
+                  "mandatory": true,
+                  "lecturers": "V\u00e9ronique FONTAINE (Coordonnateur) et David VERMIJLEN",
+                  "quadri": "q1"
+                },
+                "BIOL-J302": {
+                  "mnemo": "BIOL-J302",
+                  "title": "Microbiologie m\u00e9dicale",
+                  "mandatory": true,
+                  "lecturers": "et V\u00e9ronique FONTAINE (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "MEDI-J301": {
+                  "mnemo": "MEDI-J301",
+                  "title": "Physiopathologie, \u00e9l\u00e9ments de pathologie humaine et \u00e9pid\u00e9miologie",
+                  "mandatory": true,
+                  "lecturers": "V\u00e9ronique MATHIEU (Coordonnateur) et Kris De Braekeleer",
+                  "quadri": "q1"
+                },
+                "PHAR-J301": {
+                  "mnemo": "PHAR-J301",
+                  "title": "Pharmacologie g\u00e9n\u00e9rale et \u00e9l\u00e9ments de pharmacocin\u00e9tique",
+                  "mandatory": true,
+                  "lecturers": "et St\u00e9phanie POCHET (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "PHAR-J302": {
+                  "mnemo": "PHAR-J302",
+                  "title": "Analyse pharmaceutique : m\u00e9thodes instrumentales et contr\u00f4le de qualit\u00e9",
+                  "mandatory": true,
+                  "lecturers": "C\u00e9dric Delporte (Coordonnateur) et Kris De Braekeleer",
+                  "quadri": "q2"
+                },
+                "PHAR-J303": {
+                  "mnemo": "PHAR-J303",
+                  "title": "Etude des m\u00e9dicaments : Pharmacognosie et m\u00e9dicaments d'origine naturelle",
+                  "mandatory": true,
+                  "lecturers": "et Caroline STEVIGNY (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "PHAR-J304": {
+                  "mnemo": "PHAR-J304",
+                  "title": "Etude des m\u00e9dicaments : m\u00e9dicaments inorganiques et radiopharmacie",
+                  "mandatory": true,
+                  "lecturers": "Jacques DUBOIS (Coordonnateur), Pierre VAN ANTWERPEN et Z\u00e9na WIMANA",
+                  "quadri": "q2"
+                },
+                "PHAR-J305": {
+                  "mnemo": "PHAR-J305",
+                  "title": "Etude des m\u00e9dicaments : m\u00e9dicaments organiques 1 et biologiques",
+                  "mandatory": true,
+                  "lecturers": "Fran\u00e7ois DUFRASNE (Coordonnateur) et C\u00e9dric Delporte",
+                  "quadri": "q2"
+                },
+                "TRAN-J311": {
+                  "mnemo": "TRAN-J311",
+                  "title": "Projet transdisciplinaire en analyse des m\u00e9dicaments",
+                  "mandatory": true,
+                  "lecturers": "Fran\u00e7ois DUFRASNE (Coordonnateur), Jacques DUBOIS, Kris De Braekeleer, C\u00e9dric Delporte et Caroline STEVIGNY",
+                  "quadri": "aa"
+                },
+                "TRAN-J312": {
+                  "mnemo": "TRAN-J312",
+                  "title": "Pratique officinale",
+                  "mandatory": true,
+                  "lecturers": "Caroline STEVIGNY (Coordonnateur), Fran\u00e7ois DUFRASNE, C\u00e9dric Delporte, Pierre VAN ANTWERPEN, Florence Souard, Florence Souard, Florence Souard et Florence Souard",
+                  "quadri": "q12"
+                }
+              }
+            }
+          }
+        },
+        "MA-PHAR": {
+          "name": "Master en sciences pharmaceutiques",
+          "mnemo": "MA-PHAR",
+          "blocs": {}
+        },
+        "M-PHARW": {
+          "name": "Master en sciences pharmaceutiques \u00e0 finalit\u00e9 Sp\u00e9cialis\u00e9e (Site de Mons)",
+          "mnemo": "M-PHARW",
+          "blocs": {}
+        },
+        "M-PHARS": {
+          "name": "Master en sciences pharmaceutiques \u00e0 finalit\u00e9 Sp\u00e9cialis\u00e9e",
+          "mnemo": "M-PHARS",
+          "blocs": {}
+        },
+        "MS-PHAP": {
+          "name": "Master de sp\u00e9cialisation en pharmacie hospitali\u00e8re",
+          "mnemo": "MS-PHAP",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "PHAR-J600": {
+                  "mnemo": "PHAR-J600",
+                  "title": "El\u00e9ments d'organisation et gestion hospitali\u00e8re",
+                  "mandatory": true,
+                  "lecturers": "Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Nabil Hayef, Viviane Li\u00e9vin, Magalie Pirson et Didier Van Caillie",
+                  "quadri": "q12"
+                },
+                "PHAR-J601": {
+                  "mnemo": "PHAR-J601",
+                  "title": "El\u00e9ments de pharmacie hospitali\u00e8re",
+                  "mandatory": true,
+                  "lecturers": "Marc Demoulin, Didier Maesen et Serge Van Praet",
+                  "quadri": "q1"
+                },
+                "PHAR-J606": {
+                  "mnemo": "PHAR-J606",
+                  "title": "Essais cliniques",
+                  "mandatory": true,
+                  "lecturers": "Fati Kirakoya et R\u00e9gis Radermecker",
+                  "quadri": "q12"
+                },
+                "PHAR-J608": {
+                  "mnemo": "PHAR-J608",
+                  "title": "Technologie pharmaceutique hospitali\u00e8re",
+                  "mandatory": true,
+                  "lecturers": "Isabelle Roland et Bernard Van Gansbeke",
+                  "quadri": "q1"
+                },
+                "PHAR-J609": {
+                  "mnemo": "PHAR-J609",
+                  "title": "Dispositifs m\u00e9dicaux y compris l\u00e9gislation de pharmaco-mat\u00e9riovigilance",
+                  "mandatory": true,
+                  "lecturers": "Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Fr\u00e9d\u00e9ric Lecomte, Muriel Mons et Serge Van Praet",
+                  "quadri": "q1"
+                },
+                "PHAR-J610": {
+                  "mnemo": "PHAR-J610",
+                  "title": "Th\u00e9rapeutiques parent\u00e9rales, techniques, m\u00e9dicales et chirurgicales et th\u00e9rapie g\u00e9nique et cellulair",
+                  "mandatory": true,
+                  "lecturers": "et Camille Hoornaert",
+                  "quadri": "q2"
+                },
+                "PHAR-J612": {
+                  "mnemo": "PHAR-J612",
+                  "title": "Aspects th\u00e9oriques, applications th\u00e9rapeutiques et diagnostiques",
+                  "mandatory": true,
+                  "lecturers": "et Z\u00e9na WIMANA (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "STAG-J600": {
+                  "mnemo": "STAG-J600",
+                  "title": "Stages hospitaliers",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "STAG-J610": {
+                  "mnemo": "STAG-J610",
+                  "title": "Stages hospitaliers",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q12"
+                }
+              }
+            },
+            "2": {
+              "val": "2",
+              "courses": {
+                "PHAR-J602": {
+                  "mnemo": "PHAR-J602",
+                  "title": "Lutte contre les infections et pr\u00e9vention",
+                  "mandatory": true,
+                  "lecturers": "et Baudouin Byl",
+                  "quadri": "q1"
+                },
+                "PHAR-J603": {
+                  "mnemo": "PHAR-J603",
+                  "title": "Physiopathologie et Pharmacoth\u00e9rapie avanc\u00e9e",
+                  "mandatory": true,
+                  "lecturers": "et Camille Hoornaert",
+                  "quadri": "q1"
+                },
+                "PHAR-J604": {
+                  "mnemo": "PHAR-J604",
+                  "title": "Pharmacocin\u00e9tique avanc\u00e9e et monitoring th\u00e9rapeutique des m\u00e9dicaments",
+                  "mandatory": true,
+                  "lecturers": "et Corinne Charlier",
+                  "quadri": "q1"
+                },
+                "PHAR-J607": {
+                  "mnemo": "PHAR-J607",
+                  "title": "Pharmacie clinique",
+                  "mandatory": true,
+                  "lecturers": "et Camille Hoornaert",
+                  "quadri": "q2"
+                },
+                "PHAR-J611": {
+                  "mnemo": "PHAR-J611",
+                  "title": "Techniques de diagnostic et produits de contraste",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q2"
+                },
+                "PHAR-J613": {
+                  "mnemo": "PHAR-J613",
+                  "title": "Introduction \u00e0 la recherche clinique et en milieu hospitalier",
+                  "mandatory": true,
+                  "lecturers": "et Sophie Lorent",
+                  "quadri": "q2"
+                },
+                "PHAR-J614": {
+                  "mnemo": "PHAR-J614",
+                  "title": "Dossier d'apprentissage",
+                  "mandatory": true,
+                  "lecturers": "et Sophie Lorent",
+                  "quadri": "q12"
+                },
+                "STAG-J601": {
+                  "mnemo": "STAG-J601",
+                  "title": "Stages hospitaliers",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "STAG-J620": {
+                  "mnemo": "STAG-J620",
+                  "title": "Stages hospitaliers",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q12"
+                }
+              }
+            },
+            "3": {
+              "val": "3",
+              "courses": {
+                "MEMO-J600": {
+                  "mnemo": "MEMO-J600",
+                  "title": "R\u00e9daction et d\u00e9fense du m\u00e9moire",
+                  "mandatory": true,
+                  "lecturers": "et Sophie Lorent",
+                  "quadri": "q2"
+                },
+                "PHAR-J615": {
+                  "mnemo": "PHAR-J615",
+                  "title": "Cours th\u00e9matiques et s\u00e9minaires",
+                  "mandatory": true,
+                  "lecturers": "et Camille Hoornaert",
+                  "quadri": "q2"
+                },
+                "PHAR-J616": {
+                  "mnemo": "PHAR-J616",
+                  "title": "R\u00e9daction du protocole",
+                  "mandatory": true,
+                  "lecturers": "Blaise Delhauteur, Christine Ernes, Sophie Lorent, Hugues Malonne et Serge Van Praet",
+                  "quadri": "q1"
+                },
+                "STAG-J602": {
+                  "mnemo": "STAG-J602",
+                  "title": "R\u00e9alisation du projet",
+                  "mandatory": true,
+                  "lecturers": "et Camille Hoornaert",
+                  "quadri": "q12"
+                }
+              }
+            }
+          }
+        },
+        "MS-BIOP": {
+          "name": "Master de sp\u00e9cialisation en biologie clinique (pour pharmaciens)",
+          "mnemo": "MS-BIOP",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "BIOL-J600": {
+                  "mnemo": "BIOL-J600",
+                  "title": "Biosenseurs et biopuces",
+                  "mandatory": true,
+                  "lecturers": "et C\u00e9dric Delporte (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "BIOL-J601": {
+                  "mnemo": "BIOL-J601",
+                  "title": "Compl\u00e9ments de microbiologie (1\u00e8re partie)",
+                  "mandatory": true,
+                  "lecturers": "et V\u00e9ronique FONTAINE (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "BIOL-J602": {
+                  "mnemo": "BIOL-J602",
+                  "title": "Compl\u00e9ments de microbiologie (2\u00e8me partie)",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q1"
+                },
+                "BIOL-J603": {
+                  "mnemo": "BIOL-J603",
+                  "title": "Compl\u00e9ments de biochimie m\u00e9dicale (1\u00e8re partie)",
+                  "mandatory": true,
+                  "lecturers": "et Fr\u00e9d\u00e9ric COTTON (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "BIOL-J604": {
+                  "mnemo": "BIOL-J604",
+                  "title": "Programme interuniversitaire de biologie clinique (1\u00e8re partie)",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q1"
+                },
+                "CHIM-J600": {
+                  "mnemo": "CHIM-J600",
+                  "title": "Immunodosages et suivi th\u00e9rapeutique pharmacologique",
+                  "mandatory": true,
+                  "lecturers": "et Fr\u00e9d\u00e9ric COTTON (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "MEDI-G3310": {
+                  "mnemo": "MEDI-G3310",
+                  "title": "S\u00e9miologie",
+                  "mandatory": true,
+                  "lecturers": "Anne-Pascale MEERT (Coordonnateur), Antoine BONDUE, Jean-Christophe GOFFARD et Fr\u00e9d\u00e9ric-Alain Vandergheynst",
+                  "quadri": "q1"
+                },
+                "MORF-G2210": {
+                  "mnemo": "MORF-G2210",
+                  "title": "Anatomie pathologique g\u00e9n\u00e9rale et h\u00e9matologie",
+                  "mandatory": true,
+                  "lecturers": "Basile STAMATOPOULOS (Coordonnateur) et Myriam REMMELINK",
+                  "quadri": "q2"
+                },
+                "STAG-J604": {
+                  "mnemo": "STAG-J604",
+                  "title": "Stage 1",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q12"
+                },
+                "STAG-J605": {
+                  "mnemo": "STAG-J605",
+                  "title": "Stage 2",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "STAT-J600": {
+                  "mnemo": "STAT-J600",
+                  "title": "Statistiques appliqu\u00e9es",
+                  "mandatory": true,
+                  "lecturers": "et ALAIN VAN MUYLEM (Coordonnateur)",
+                  "quadri": "q1"
+                }
+              }
+            },
+            "2": {
+              "val": "2",
+              "courses": {
+                "BIOL-J700": {
+                  "mnemo": "BIOL-J700",
+                  "title": "Compl\u00e9ments de biochimie m\u00e9dicale (2e partie)",
+                  "mandatory": true,
+                  "lecturers": "et Fr\u00e9d\u00e9ric COTTON (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "BIOL-J701": {
+                  "mnemo": "BIOL-J701",
+                  "title": "Programme interuniversitaire de biologie clinique (2\u00e8me partie)",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q1"
+                },
+                "MEDI-J700": {
+                  "mnemo": "MEDI-J700",
+                  "title": "Compl\u00e9ments d'immunologie : immunopathologie",
+                  "mandatory": true,
+                  "lecturers": "et Francis CORAZZA (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "MEDI-J702": {
+                  "mnemo": "MEDI-J702",
+                  "title": "Immuno-h\u00e9matologie / transfusion",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "q1"
+                },
+                "MORF-G3203": {
+                  "mnemo": "MORF-G3203",
+                  "title": "H\u00e9matologie",
+                  "mandatory": true,
+                  "lecturers": "Anne DEMULDER (Coordonnateur), Nathalie MEULEMAN et Basile STAMATOPOULOS",
+                  "quadri": "q1"
+                },
+                "STAG-J700": {
+                  "mnemo": "STAG-J700",
+                  "title": "Stage 3",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "STAG-J701": {
+                  "mnemo": "STAG-J701",
+                  "title": "Stage 4",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                }
+              }
+            },
+            "3": {
+              "val": "3",
+              "courses": {
+                "MEDI-G3311": {
+                  "mnemo": "MEDI-G3311",
+                  "title": "Microbiologie et immunologie",
+                  "mandatory": true,
+                  "lecturers": "Carine TRUYENS (Coordonnateur), V\u00e9ronique FLAMAND, Marie HALLIN, Fr\u00e9d\u00e9rique JACOBS, Alain LE MOINE, Anne OP DE BEECK et Robert SNOECK",
+                  "quadri": "q1"
+                },
+                "MEDI-J800": {
+                  "mnemo": "MEDI-J800",
+                  "title": "Compl\u00e9ments d'h\u00e9matologie et d'h\u00e9mostase",
+                  "mandatory": true,
+                  "lecturers": "Anne DEMULDER (Coordonnateur) et Francis CORAZZA",
+                  "quadri": "q1"
+                },
+                "STAG-J800": {
+                  "mnemo": "STAG-J800",
+                  "title": "Stage 5",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "STAG-J801": {
+                  "mnemo": "STAG-J801",
+                  "title": "Stage 6",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                }
+              }
+            },
+            "4": {
+              "val": "4",
+              "courses": {
+                "STAG-J900": {
+                  "mnemo": "STAG-J900",
+                  "title": "Stage 7",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "STAG-J901": {
+                  "mnemo": "STAG-J901",
+                  "title": "Stage 8",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                }
+              }
+            },
+            "5": {
+              "val": "5",
+              "courses": {
+                "MEMO-J1000": {
+                  "mnemo": "MEMO-J1000",
+                  "title": "Travail de fin d'\u00e9tudes",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "STAG-J1000": {
+                  "mnemo": "STAG-J1000",
+                  "title": "Stage 9",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "STAG-J1001": {
+                  "mnemo": "STAG-J1001",
+                  "title": "Stage 10",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                }
+              }
+            }
+          }
+        },
+        "MS-COSM": {
+          "name": "Master  de sp\u00e9cialisation en Dermopharmacie et cosm\u00e9tologie",
+          "mnemo": "MS-COSM",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "BIOL-J650": {
+                  "mnemo": "BIOL-J650",
+                  "title": "Unit\u00e9 d\u2019enseignement 1 : Biologie de la peau et des muqueuses et dermatologie clinique",
+                  "mandatory": true,
+                  "lecturers": "et V\u00e9ronique FONTAINE (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "MEMO-J650": {
+                  "mnemo": "MEMO-J650",
+                  "title": "Unit\u00e9 d'enseignement 6 : Stage (4 mois) et m\u00e9moire de fin d'\u00e9tudes",
+                  "mandatory": true,
+                  "lecturers": "et Karim AMIGHI (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "PHAR-J650": {
+                  "mnemo": "PHAR-J650",
+                  "title": "Unit\u00e9 d'enseignement 2 : Technologie des formes cosm\u00e9tiques",
+                  "mandatory": true,
+                  "lecturers": "Karim AMIGHI (Coordonnateur), V\u00e9ronique FONTAINE et Jonathan GOOLE",
+                  "quadri": "q12"
+                },
+                "PHAR-J651": {
+                  "mnemo": "PHAR-J651",
+                  "title": "Unit\u00e9 d'enseignement 3 : Connaissances des mati\u00e8res premi\u00e8res et m\u00e9thodes de contr\u00f4le",
+                  "mandatory": true,
+                  "lecturers": "Caroline STEVIGNY (Coordonnateur) et H\u00e9l\u00e8ne MAVAR",
+                  "quadri": "q1"
+                },
+                "PHAR-J652": {
+                  "mnemo": "PHAR-J652",
+                  "title": "Unit\u00e9 d'enseignement 4 : Aspects r\u00e9glementaires, \u00e9thiques et commerciaux",
+                  "mandatory": true,
+                  "lecturers": "et Jo\u00eblle MEUNIER (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "PHAR-J653": {
+                  "mnemo": "PHAR-J653",
+                  "title": "Unit\u00e9 d\u2019enseignement 5 : Effets ind\u00e9sirables et risques toxiques",
+                  "mandatory": true,
+                  "lecturers": "et V\u00e9ronique MATHIEU (Coordonnateur)",
+                  "quadri": "q1"
+                }
+              }
+            }
+          }
+        },
+        "MS-PHAI": {
+          "name": "Master de sp\u00e9cialisation en pharmacie d'industrie",
+          "mnemo": "MS-PHAI",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "MEMO-J700": {
+                  "mnemo": "MEMO-J700",
+                  "title": "Unit\u00e9 d'enseignement : Travail de fin d'\u00e9tudes.",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "PHAR-J702": {
+                  "mnemo": "PHAR-J702",
+                  "title": "Unit\u00e9 d'enseignement A : Substances actives",
+                  "mandatory": true,
+                  "lecturers": "Fran\u00e7ois Dufrasne, Fran\u00e7ois Dufrasne et Jo\u00eblle Leclercq",
+                  "quadri": "aa"
+                },
+                "PHAR-J703": {
+                  "mnemo": "PHAR-J703",
+                  "title": "Unit\u00e9 d'enseignement B : Aspects cliniques",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "PHAR-J704": {
+                  "mnemo": "PHAR-J704",
+                  "title": "Unit\u00e9 d'enseignement C : Assurance de qualit\u00e9 et management pharmaceutique",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "PHAR-J705": {
+                  "mnemo": "PHAR-J705",
+                  "title": "Unit\u00e9 d'enseignement D : Technologie pharmaceutique",
+                  "mandatory": true,
+                  "lecturers": "et Jonathan GOOLE (Coordonnateur)",
+                  "quadri": "aa"
+                },
+                "PHAR-J706": {
+                  "mnemo": "PHAR-J706",
+                  "title": "Unit\u00e9 d'enseignement E : Analyse des m\u00e9dicaments",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "PHAR-J707": {
+                  "mnemo": "PHAR-J707",
+                  "title": "Unit\u00e9 d'enseignement F : Affaires r\u00e9glementaires et environnement m\u00e9dico-social",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "PHAR-J708": {
+                  "mnemo": "PHAR-J708",
+                  "title": "Unit\u00e9 d'enseignement G : Visites et s\u00e9minaires organis\u00e9s dans les industries pharmaceutiques",
+                  "mandatory": true,
+                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
+                  "quadri": "aa"
+                },
+                "PHAR-J709": {
+                  "mnemo": "PHAR-J709",
+                  "title": "Unit\u00e9 d\u2019enseignement G : Biotechnologies",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                }
+              }
+            }
+          }
+        },
+        "AG-PHAR": {
+          "name": "Agr\u00e9gation de l'enseignement secondaire sup\u00e9rieur - sciences pharmaceutiques",
+          "mnemo": "AG-PHAR",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "EDUC-E520": {
+                  "mnemo": "EDUC-E520",
+                  "title": "Aspects socio-historiques, psychologiques, culturels, \u00e9thiques et de neutralit\u00e9 de l'enseignement",
+                  "mandatory": true,
+                  "lecturers": "Jose-Luis WOLFS (Coordonnateur), Alain COLSOUL, Philippe VIENNE et Pascal VREBOS",
+                  "quadri": "aa"
+                },
+                "PEDA-E510": {
+                  "mnemo": "PEDA-E510",
+                  "title": "P\u00e9dagogie et didactique, aspects g\u00e9n\u00e9raux",
+                  "mandatory": true,
+                  "lecturers": "Thomas BARRIER (Coordonnateur) et Nathana\u00ebl FRIANT",
+                  "quadri": "q1"
+                },
+                "CHIM-F451": {
+                  "mnemo": "CHIM-F451",
+                  "title": "Didactique de la chimie",
+                  "mandatory": true,
+                  "lecturers": "et C\u00e9cile MOUCHERON (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "PEDA-J400": {
+                  "mnemo": "PEDA-J400",
+                  "title": "Didactique sp\u00e9ciale des sciences pharmaceutiques",
+                  "mandatory": true,
+                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
+                  "quadri": "q1"
+                },
+                "PEDA-J405": {
+                  "mnemo": "PEDA-J405",
+                  "title": "Pratique r\u00e9flexive - Partie 1",
+                  "mandatory": true,
+                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
+                  "quadri": "aa"
+                },
+                "PEDA-J406": {
+                  "mnemo": "PEDA-J406",
+                  "title": "Pratique r\u00e9flexive - Partie 2",
+                  "mandatory": true,
+                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
+                  "quadri": "aa"
+                },
+                "PHAR-J700": {
+                  "mnemo": "PHAR-J700",
+                  "title": "Stage - Partie 1",
+                  "mandatory": true,
+                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "PHAR-J701": {
+                  "mnemo": "PHAR-J701",
+                  "title": "Stage - Partie 2",
+                  "mandatory": true,
+                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
+                  "quadri": "aa"
+                }
+              }
+            }
+          }
+        },
+        "CAPAES-PHAR": {
+          "name": "Certificat d'aptitude p\u00e9dagogique appropri\u00e9 \u00e0 l'enseignement sup\u00e9rieur - pharmacie",
+          "mnemo": "CAPAES-PHAR",
+          "blocs": {
+            "1": {
+              "val": "1",
+              "courses": {
+                "EDUC-E520": {
+                  "mnemo": "EDUC-E520",
+                  "title": "Aspects socio-historiques, psychologiques, culturels, \u00e9thiques et de neutralit\u00e9 de l'enseignement",
+                  "mandatory": true,
+                  "lecturers": "Jose-Luis WOLFS (Coordonnateur), Alain COLSOUL, Philippe VIENNE et Pascal VREBOS",
+                  "quadri": "aa"
+                },
+                "EDUC-E609": {
+                  "mnemo": "EDUC-E609",
+                  "title": "Pratiques p\u00e9dagogiques dans l\u2019enseignement sup\u00e9rieur",
+                  "mandatory": true,
+                  "lecturers": "et Nadine POSTIAUX (Coordonnateur)",
+                  "quadri": "q2"
+                },
+                "PEDA-E504": {
+                  "mnemo": "PEDA-E504",
+                  "title": "Didactique g\u00e9n\u00e9rale (partie ens. sup\u00e9rieur) - Nature des savoirs et conceptions de l'apprentissage",
+                  "mandatory": true,
+                  "lecturers": "Thomas BARRIER (Coordonnateur) et Nathana\u00ebl FRIANT",
+                  "quadri": "aa"
+                },
+                "PHAR-J536": {
+                  "mnemo": "PHAR-J536",
+                  "title": "",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "PHAR-J537": {
+                  "mnemo": "PHAR-J537",
+                  "title": "Accompagnement",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                },
+                "PHAR-J538": {
+                  "mnemo": "PHAR-J538",
+                  "title": "Analyse de la pratique et pratique r\u00e9flexive",
+                  "mandatory": true,
+                  "lecturers": "",
+                  "quadri": "aa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Facult\u00e9 des Sciences de la motricit\u00e9": {
       "name": "Facult\u00e9 des Sciences de la motricit\u00e9",
       "color": "#e32119",
       "programs": {
-        "FC-716": {
-          "name": "Master de sp\u00e9cialisation en neurologie",
-          "mnemo": "FC-716",
-          "blocs": {}
-        },
         "BA-MOTR": {
           "name": "Bachelier en sciences de la motricit\u00e9, orientation g\u00e9n\u00e9rale",
           "mnemo": "BA-MOTR",
@@ -67540,918 +68891,6 @@
                   "mandatory": true,
                   "lecturers": "Nathalie GUISSARD (Coordonnateur) et Ga\u00ebl DEBOECK",
                   "quadri": "q12"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "Centre de Formation Continue en Sant\u00e9 et Sciences de la vie": {
-      "name": "Centre de Formation Continue en Sant\u00e9 et Sciences de la vie",
-      "color": "#489da7",
-      "programs": {
-        "FC-716": {
-          "name": "Master de sp\u00e9cialisation en neurologie",
-          "mnemo": "FC-716",
-          "blocs": {}
-        }
-      }
-    },
-    "Facult\u00e9 de Pharmacie": {
-      "name": "Facult\u00e9 de Pharmacie",
-      "color": "#008751",
-      "programs": {
-        "BA-PHAR": {
-          "name": "Bachelier en sciences pharmaceutiques",
-          "mnemo": "BA-PHAR",
-          "blocs": {
-            "1": {
-              "val": "1",
-              "courses": {
-                "BIOL-J101": {
-                  "mnemo": "BIOL-J101",
-                  "title": "Biologie animale",
-                  "mandatory": true,
-                  "lecturers": "et Hassan JIJAKLI (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "BIOL-J102": {
-                  "mnemo": "BIOL-J102",
-                  "title": "Biologie v\u00e9g\u00e9tale",
-                  "mandatory": true,
-                  "lecturers": "et Nausicaa NORET (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "CHIM-J101": {
-                  "mnemo": "CHIM-J101",
-                  "title": "Chimie g\u00e9n\u00e9rale",
-                  "mandatory": true,
-                  "lecturers": "et V\u00e9ronique CABIAUX (Coordonnateur)",
-                  "quadri": "q12"
-                },
-                "CHIM-J102": {
-                  "mnemo": "CHIM-J102",
-                  "title": "Chimie organique",
-                  "mandatory": true,
-                  "lecturers": "et Franck MEYER (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "CHIM-J103": {
-                  "mnemo": "CHIM-J103",
-                  "title": "Chimie exp\u00e9rimentale",
-                  "mandatory": true,
-                  "lecturers": "Franck MEYER (Coordonnateur) et V\u00e9ronique CABIAUX",
-                  "quadri": "q12"
-                },
-                "MATH-F113": {
-                  "mnemo": "MATH-F113",
-                  "title": "Math\u00e9matiques",
-                  "mandatory": true,
-                  "lecturers": "Jennifer ALONSO GARCIA (Coordonnateur) et Cl\u00e9ment Cerovecki",
-                  "quadri": "q1"
-                },
-                "MEDI-J100": {
-                  "mnemo": "MEDI-J100",
-                  "title": "El\u00e9ments d'anatomie et d'embryologie humaine",
-                  "mandatory": true,
-                  "lecturers": "V\u00e9ronique FEIPEL (Coordonnateur), Hassan JIJAKLI et Olivier Snoeck",
-                  "quadri": "q1"
-                },
-                "PHYS-F104": {
-                  "mnemo": "PHYS-F104",
-                  "title": "Physique 1",
-                  "mandatory": true,
-                  "lecturers": "Barbara CLERBAUX (Coordonnateur), St\u00e9phane DETOURNAY et Michele SFERRAZZA",
-                  "quadri": "aa"
-                },
-                "TRAN-J103": {
-                  "mnemo": "TRAN-J103",
-                  "title": "Pharmacie et soci\u00e9t\u00e9, projets transdisciplinaires",
-                  "mandatory": true,
-                  "lecturers": "Franck MEYER (Coordonnateur), Fran\u00e7ois DUFRASNE, Kris De Braekeleer, C\u00e9dric Delporte, V\u00e9ronique FONTAINE, Kelsey HULL, Hassan JIJAKLI et Pierre VAN ANTWERPEN",
-                  "quadri": "q2"
-                },
-                "TRAN-J111": {
-                  "mnemo": "TRAN-J111",
-                  "title": "Accueil et initiation \u00e0 la m\u00e9thodologie universitaire",
-                  "mandatory": true,
-                  "lecturers": "et Nathalie WAUTHOZ (Coordonnateur)",
-                  "quadri": "q1"
-                }
-              }
-            },
-            "2": {
-              "val": "2",
-              "courses": {
-                "BIOL-J201": {
-                  "mnemo": "BIOL-J201",
-                  "title": "Introduction \u00e0 l'\u00e9tude des plantes m\u00e9dicinales",
-                  "mandatory": true,
-                  "lecturers": "et Caroline STEVIGNY (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "BMOL-J201": {
-                  "mnemo": "BMOL-J201",
-                  "title": "Biologie mol\u00e9culaire",
-                  "mandatory": true,
-                  "lecturers": "et David VERMIJLEN (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "CHIM-F202": {
-                  "mnemo": "CHIM-F202",
-                  "title": "Biochimie m\u00e9tabolique et structurale",
-                  "mandatory": true,
-                  "lecturers": "V\u00e9ronique KRUYS (Coordonnateur) et Vincent RAUSSENS",
-                  "quadri": "q1"
-                },
-                "CHIM-J201": {
-                  "mnemo": "CHIM-J201",
-                  "title": "Chimie organique pharmaceutique",
-                  "mandatory": true,
-                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "CHIM-J202": {
-                  "mnemo": "CHIM-J202",
-                  "title": "Spectroscopies mol\u00e9culaires et spectrom\u00e9trie de masse",
-                  "mandatory": true,
-                  "lecturers": "Pierre VAN ANTWERPEN (Coordonnateur), C\u00e9dric Delporte et Michel LUHMER",
-                  "quadri": "q2"
-                },
-                "MEDI-J201": {
-                  "mnemo": "MEDI-J201",
-                  "title": "Physiologie humaine",
-                  "mandatory": true,
-                  "lecturers": "et St\u00e9phanie POCHET (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "PHAR-J210": {
-                  "mnemo": "PHAR-J210",
-                  "title": "Analyse Pharmaceutique, m\u00e9thodes volum\u00e9triques",
-                  "mandatory": true,
-                  "lecturers": "C\u00e9dric Delporte (Coordonnateur), Jacques DUBOIS et Kris De Braekeleer",
-                  "quadri": "q1"
-                },
-                "PHAR-J230": {
-                  "mnemo": "PHAR-J230",
-                  "title": "Analyse Pharmaceutique, m\u00e9thodes Physicochimiques",
-                  "mandatory": true,
-                  "lecturers": "et Jacques DUBOIS (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "STAT-J201": {
-                  "mnemo": "STAT-J201",
-                  "title": "Statistiques appliqu\u00e9es aux sciences pharmaceutiques",
-                  "mandatory": true,
-                  "lecturers": "et Kris De Braekeleer (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "TRAN-J201": {
-                  "mnemo": "TRAN-J201",
-                  "title": "Scientific English",
-                  "mandatory": true,
-                  "lecturers": "St\u00e9phanie POCHET (Coordonnateur), Kelsey HULL et David VERMIJLEN",
-                  "quadri": "q12"
-                },
-                "TRAN-J211": {
-                  "mnemo": "TRAN-J211",
-                  "title": "Approche pratique des sciences du vivant",
-                  "mandatory": true,
-                  "lecturers": "David VERMIJLEN (Coordonnateur), C\u00e9dric Delporte et St\u00e9phanie POCHET",
-                  "quadri": "aa"
-                }
-              }
-            },
-            "3": {
-              "val": "3",
-              "courses": {
-                "BIOL-J301": {
-                  "mnemo": "BIOL-J301",
-                  "title": "Microbiologie g\u00e9n\u00e9rale, Hygi\u00e8ne, Immunologie",
-                  "mandatory": true,
-                  "lecturers": "V\u00e9ronique FONTAINE (Coordonnateur) et David VERMIJLEN",
-                  "quadri": "q1"
-                },
-                "BIOL-J302": {
-                  "mnemo": "BIOL-J302",
-                  "title": "Microbiologie m\u00e9dicale",
-                  "mandatory": true,
-                  "lecturers": "et V\u00e9ronique FONTAINE (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "MEDI-J301": {
-                  "mnemo": "MEDI-J301",
-                  "title": "Physiopathologie, \u00e9l\u00e9ments de pathologie humaine et \u00e9pid\u00e9miologie",
-                  "mandatory": true,
-                  "lecturers": "V\u00e9ronique MATHIEU (Coordonnateur) et Kris De Braekeleer",
-                  "quadri": "q1"
-                },
-                "PHAR-J301": {
-                  "mnemo": "PHAR-J301",
-                  "title": "Pharmacologie g\u00e9n\u00e9rale et \u00e9l\u00e9ments de pharmacocin\u00e9tique",
-                  "mandatory": true,
-                  "lecturers": "et St\u00e9phanie POCHET (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "PHAR-J302": {
-                  "mnemo": "PHAR-J302",
-                  "title": "Analyse pharmaceutique : m\u00e9thodes instrumentales et contr\u00f4le de qualit\u00e9",
-                  "mandatory": true,
-                  "lecturers": "C\u00e9dric Delporte (Coordonnateur) et Kris De Braekeleer",
-                  "quadri": "q2"
-                },
-                "PHAR-J303": {
-                  "mnemo": "PHAR-J303",
-                  "title": "Etude des m\u00e9dicaments : Pharmacognosie et m\u00e9dicaments d'origine naturelle",
-                  "mandatory": true,
-                  "lecturers": "et Caroline STEVIGNY (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "PHAR-J304": {
-                  "mnemo": "PHAR-J304",
-                  "title": "Etude des m\u00e9dicaments : m\u00e9dicaments inorganiques et radiopharmacie",
-                  "mandatory": true,
-                  "lecturers": "Jacques DUBOIS (Coordonnateur), Pierre VAN ANTWERPEN et Z\u00e9na WIMANA",
-                  "quadri": "q2"
-                },
-                "PHAR-J305": {
-                  "mnemo": "PHAR-J305",
-                  "title": "Etude des m\u00e9dicaments : m\u00e9dicaments organiques 1 et biologiques",
-                  "mandatory": true,
-                  "lecturers": "Fran\u00e7ois DUFRASNE (Coordonnateur) et C\u00e9dric Delporte",
-                  "quadri": "q2"
-                },
-                "TRAN-J311": {
-                  "mnemo": "TRAN-J311",
-                  "title": "Projet transdisciplinaire en analyse des m\u00e9dicaments",
-                  "mandatory": true,
-                  "lecturers": "Fran\u00e7ois DUFRASNE (Coordonnateur), Jacques DUBOIS, Kris De Braekeleer, C\u00e9dric Delporte et Caroline STEVIGNY",
-                  "quadri": "aa"
-                },
-                "TRAN-J312": {
-                  "mnemo": "TRAN-J312",
-                  "title": "Pratique officinale",
-                  "mandatory": true,
-                  "lecturers": "Caroline STEVIGNY (Coordonnateur), Fran\u00e7ois DUFRASNE, C\u00e9dric Delporte, Pierre VAN ANTWERPEN, Florence Souard, Florence Souard, Florence Souard et Florence Souard",
-                  "quadri": "q12"
-                }
-              }
-            }
-          }
-        },
-        "MA-PHAR": {
-          "name": "Master en sciences pharmaceutiques",
-          "mnemo": "MA-PHAR",
-          "blocs": {}
-        },
-        "M-PHARW": {
-          "name": "Master en sciences pharmaceutiques \u00e0 finalit\u00e9 Sp\u00e9cialis\u00e9e (Site de Mons)",
-          "mnemo": "M-PHARW",
-          "blocs": {}
-        },
-        "M-PHARS": {
-          "name": "Master en sciences pharmaceutiques \u00e0 finalit\u00e9 Sp\u00e9cialis\u00e9e",
-          "mnemo": "M-PHARS",
-          "blocs": {}
-        },
-        "MS-PHAP": {
-          "name": "Master de sp\u00e9cialisation en pharmacie hospitali\u00e8re",
-          "mnemo": "MS-PHAP",
-          "blocs": {
-            "1": {
-              "val": "1",
-              "courses": {
-                "PHAR-J600": {
-                  "mnemo": "PHAR-J600",
-                  "title": "El\u00e9ments d'organisation et gestion hospitali\u00e8re",
-                  "mandatory": true,
-                  "lecturers": "Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Nabil Hayef, Viviane Li\u00e9vin, Magalie Pirson et Didier Van Caillie",
-                  "quadri": "q12"
-                },
-                "PHAR-J601": {
-                  "mnemo": "PHAR-J601",
-                  "title": "El\u00e9ments de pharmacie hospitali\u00e8re",
-                  "mandatory": true,
-                  "lecturers": "Marc Demoulin, Didier Maesen et Serge Van Praet",
-                  "quadri": "q1"
-                },
-                "PHAR-J606": {
-                  "mnemo": "PHAR-J606",
-                  "title": "Essais cliniques",
-                  "mandatory": true,
-                  "lecturers": "Fati Kirakoya et R\u00e9gis Radermecker",
-                  "quadri": "q12"
-                },
-                "PHAR-J608": {
-                  "mnemo": "PHAR-J608",
-                  "title": "Technologie pharmaceutique hospitali\u00e8re",
-                  "mandatory": true,
-                  "lecturers": "Isabelle Roland et Bernard Van Gansbeke",
-                  "quadri": "q1"
-                },
-                "PHAR-J609": {
-                  "mnemo": "PHAR-J609",
-                  "title": "Dispositifs m\u00e9dicaux y compris l\u00e9gislation de pharmaco-mat\u00e9riovigilance",
-                  "mandatory": true,
-                  "lecturers": "Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Hugues MALONNE (Coordonnateur), Fr\u00e9d\u00e9ric Lecomte, Muriel Mons et Serge Van Praet",
-                  "quadri": "q1"
-                },
-                "PHAR-J610": {
-                  "mnemo": "PHAR-J610",
-                  "title": "Th\u00e9rapeutiques parent\u00e9rales, techniques, m\u00e9dicales et chirurgicales et th\u00e9rapie g\u00e9nique et cellulair",
-                  "mandatory": true,
-                  "lecturers": "et Camille Hoornaert",
-                  "quadri": "q2"
-                },
-                "PHAR-J612": {
-                  "mnemo": "PHAR-J612",
-                  "title": "Aspects th\u00e9oriques, applications th\u00e9rapeutiques et diagnostiques",
-                  "mandatory": true,
-                  "lecturers": "et Z\u00e9na WIMANA (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "STAG-J600": {
-                  "mnemo": "STAG-J600",
-                  "title": "Stages hospitaliers",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q12"
-                },
-                "STAG-J610": {
-                  "mnemo": "STAG-J610",
-                  "title": "Stages hospitaliers",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q12"
-                }
-              }
-            },
-            "2": {
-              "val": "2",
-              "courses": {
-                "PHAR-J602": {
-                  "mnemo": "PHAR-J602",
-                  "title": "Lutte contre les infections et pr\u00e9vention",
-                  "mandatory": true,
-                  "lecturers": "et Baudouin Byl",
-                  "quadri": "q1"
-                },
-                "PHAR-J603": {
-                  "mnemo": "PHAR-J603",
-                  "title": "Physiopathologie et Pharmacoth\u00e9rapie avanc\u00e9e",
-                  "mandatory": true,
-                  "lecturers": "et Camille Hoornaert",
-                  "quadri": "q1"
-                },
-                "PHAR-J604": {
-                  "mnemo": "PHAR-J604",
-                  "title": "Pharmacocin\u00e9tique avanc\u00e9e et monitoring th\u00e9rapeutique des m\u00e9dicaments",
-                  "mandatory": true,
-                  "lecturers": "et Corinne Charlier",
-                  "quadri": "q1"
-                },
-                "PHAR-J607": {
-                  "mnemo": "PHAR-J607",
-                  "title": "Pharmacie clinique",
-                  "mandatory": true,
-                  "lecturers": "et Camille Hoornaert",
-                  "quadri": "q2"
-                },
-                "PHAR-J611": {
-                  "mnemo": "PHAR-J611",
-                  "title": "Techniques de diagnostic et produits de contraste",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q2"
-                },
-                "PHAR-J613": {
-                  "mnemo": "PHAR-J613",
-                  "title": "Introduction \u00e0 la recherche clinique et en milieu hospitalier",
-                  "mandatory": true,
-                  "lecturers": "et Sophie Lorent",
-                  "quadri": "q2"
-                },
-                "PHAR-J614": {
-                  "mnemo": "PHAR-J614",
-                  "title": "Dossier d'apprentissage",
-                  "mandatory": true,
-                  "lecturers": "et Sophie Lorent",
-                  "quadri": "q12"
-                },
-                "STAG-J601": {
-                  "mnemo": "STAG-J601",
-                  "title": "Stages hospitaliers",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q12"
-                },
-                "STAG-J620": {
-                  "mnemo": "STAG-J620",
-                  "title": "Stages hospitaliers",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q12"
-                }
-              }
-            },
-            "3": {
-              "val": "3",
-              "courses": {
-                "MEMO-J600": {
-                  "mnemo": "MEMO-J600",
-                  "title": "R\u00e9daction et d\u00e9fense du m\u00e9moire",
-                  "mandatory": true,
-                  "lecturers": "et Sophie Lorent",
-                  "quadri": "q2"
-                },
-                "PHAR-J615": {
-                  "mnemo": "PHAR-J615",
-                  "title": "Cours th\u00e9matiques et s\u00e9minaires",
-                  "mandatory": true,
-                  "lecturers": "et Camille Hoornaert",
-                  "quadri": "q2"
-                },
-                "PHAR-J616": {
-                  "mnemo": "PHAR-J616",
-                  "title": "R\u00e9daction du protocole",
-                  "mandatory": true,
-                  "lecturers": "Blaise Delhauteur, Christine Ernes, Sophie Lorent, Hugues Malonne et Serge Van Praet",
-                  "quadri": "q1"
-                },
-                "STAG-J602": {
-                  "mnemo": "STAG-J602",
-                  "title": "R\u00e9alisation du projet",
-                  "mandatory": true,
-                  "lecturers": "et Camille Hoornaert",
-                  "quadri": "q12"
-                }
-              }
-            }
-          }
-        },
-        "MS-BIOP": {
-          "name": "Master de sp\u00e9cialisation en biologie clinique (pour pharmaciens)",
-          "mnemo": "MS-BIOP",
-          "blocs": {
-            "1": {
-              "val": "1",
-              "courses": {
-                "BIOL-J600": {
-                  "mnemo": "BIOL-J600",
-                  "title": "Biosenseurs et biopuces",
-                  "mandatory": true,
-                  "lecturers": "et C\u00e9dric Delporte (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "BIOL-J601": {
-                  "mnemo": "BIOL-J601",
-                  "title": "Compl\u00e9ments de microbiologie (1\u00e8re partie)",
-                  "mandatory": true,
-                  "lecturers": "et V\u00e9ronique FONTAINE (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "BIOL-J602": {
-                  "mnemo": "BIOL-J602",
-                  "title": "Compl\u00e9ments de microbiologie (2\u00e8me partie)",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q1"
-                },
-                "BIOL-J603": {
-                  "mnemo": "BIOL-J603",
-                  "title": "Compl\u00e9ments de biochimie m\u00e9dicale (1\u00e8re partie)",
-                  "mandatory": true,
-                  "lecturers": "et Fr\u00e9d\u00e9ric COTTON (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "BIOL-J604": {
-                  "mnemo": "BIOL-J604",
-                  "title": "Programme interuniversitaire de biologie clinique (1\u00e8re partie)",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q1"
-                },
-                "CHIM-J600": {
-                  "mnemo": "CHIM-J600",
-                  "title": "Immunodosages et suivi th\u00e9rapeutique pharmacologique",
-                  "mandatory": true,
-                  "lecturers": "et Fr\u00e9d\u00e9ric COTTON (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "MEDI-G3310": {
-                  "mnemo": "MEDI-G3310",
-                  "title": "S\u00e9miologie",
-                  "mandatory": true,
-                  "lecturers": "Anne-Pascale MEERT (Coordonnateur), Antoine BONDUE, Jean-Christophe GOFFARD et Fr\u00e9d\u00e9ric-Alain Vandergheynst",
-                  "quadri": "q1"
-                },
-                "MORF-G2210": {
-                  "mnemo": "MORF-G2210",
-                  "title": "Anatomie pathologique g\u00e9n\u00e9rale et h\u00e9matologie",
-                  "mandatory": true,
-                  "lecturers": "Basile STAMATOPOULOS (Coordonnateur) et Myriam REMMELINK",
-                  "quadri": "q2"
-                },
-                "STAG-J604": {
-                  "mnemo": "STAG-J604",
-                  "title": "Stage 1",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q12"
-                },
-                "STAG-J605": {
-                  "mnemo": "STAG-J605",
-                  "title": "Stage 2",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "STAT-J600": {
-                  "mnemo": "STAT-J600",
-                  "title": "Statistiques appliqu\u00e9es",
-                  "mandatory": true,
-                  "lecturers": "et ALAIN VAN MUYLEM (Coordonnateur)",
-                  "quadri": "q1"
-                }
-              }
-            },
-            "2": {
-              "val": "2",
-              "courses": {
-                "BIOL-J700": {
-                  "mnemo": "BIOL-J700",
-                  "title": "Compl\u00e9ments de biochimie m\u00e9dicale (2e partie)",
-                  "mandatory": true,
-                  "lecturers": "et Fr\u00e9d\u00e9ric COTTON (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "BIOL-J701": {
-                  "mnemo": "BIOL-J701",
-                  "title": "Programme interuniversitaire de biologie clinique (2\u00e8me partie)",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q1"
-                },
-                "MEDI-J700": {
-                  "mnemo": "MEDI-J700",
-                  "title": "Compl\u00e9ments d'immunologie : immunopathologie",
-                  "mandatory": true,
-                  "lecturers": "et Francis CORAZZA (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "MEDI-J702": {
-                  "mnemo": "MEDI-J702",
-                  "title": "Immuno-h\u00e9matologie / transfusion",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "q1"
-                },
-                "MORF-G3203": {
-                  "mnemo": "MORF-G3203",
-                  "title": "H\u00e9matologie",
-                  "mandatory": true,
-                  "lecturers": "Anne DEMULDER (Coordonnateur), Nathalie MEULEMAN et Basile STAMATOPOULOS",
-                  "quadri": "q1"
-                },
-                "STAG-J700": {
-                  "mnemo": "STAG-J700",
-                  "title": "Stage 3",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "STAG-J701": {
-                  "mnemo": "STAG-J701",
-                  "title": "Stage 4",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                }
-              }
-            },
-            "3": {
-              "val": "3",
-              "courses": {
-                "MEDI-G3311": {
-                  "mnemo": "MEDI-G3311",
-                  "title": "Microbiologie et immunologie",
-                  "mandatory": true,
-                  "lecturers": "Carine TRUYENS (Coordonnateur), V\u00e9ronique FLAMAND, Marie HALLIN, Fr\u00e9d\u00e9rique JACOBS, Alain LE MOINE, Anne OP DE BEECK et Robert SNOECK",
-                  "quadri": "q1"
-                },
-                "MEDI-J800": {
-                  "mnemo": "MEDI-J800",
-                  "title": "Compl\u00e9ments d'h\u00e9matologie et d'h\u00e9mostase",
-                  "mandatory": true,
-                  "lecturers": "Anne DEMULDER (Coordonnateur) et Francis CORAZZA",
-                  "quadri": "q1"
-                },
-                "STAG-J800": {
-                  "mnemo": "STAG-J800",
-                  "title": "Stage 5",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "STAG-J801": {
-                  "mnemo": "STAG-J801",
-                  "title": "Stage 6",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                }
-              }
-            },
-            "4": {
-              "val": "4",
-              "courses": {
-                "STAG-J900": {
-                  "mnemo": "STAG-J900",
-                  "title": "Stage 7",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "STAG-J901": {
-                  "mnemo": "STAG-J901",
-                  "title": "Stage 8",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                }
-              }
-            },
-            "5": {
-              "val": "5",
-              "courses": {
-                "MEMO-J1000": {
-                  "mnemo": "MEMO-J1000",
-                  "title": "Travail de fin d'\u00e9tudes",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "STAG-J1000": {
-                  "mnemo": "STAG-J1000",
-                  "title": "Stage 9",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "STAG-J1001": {
-                  "mnemo": "STAG-J1001",
-                  "title": "Stage 10",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                }
-              }
-            }
-          }
-        },
-        "MS-COSM": {
-          "name": "Master  de sp\u00e9cialisation en Dermopharmacie et cosm\u00e9tologie",
-          "mnemo": "MS-COSM",
-          "blocs": {
-            "1": {
-              "val": "1",
-              "courses": {
-                "BIOL-J650": {
-                  "mnemo": "BIOL-J650",
-                  "title": "Unit\u00e9 d\u2019enseignement 1 : Biologie de la peau et des muqueuses et dermatologie clinique",
-                  "mandatory": true,
-                  "lecturers": "et V\u00e9ronique FONTAINE (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "MEMO-J650": {
-                  "mnemo": "MEMO-J650",
-                  "title": "Unit\u00e9 d'enseignement 6 : Stage (4 mois) et m\u00e9moire de fin d'\u00e9tudes",
-                  "mandatory": true,
-                  "lecturers": "et Karim AMIGHI (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "PHAR-J650": {
-                  "mnemo": "PHAR-J650",
-                  "title": "Unit\u00e9 d'enseignement 2 : Technologie des formes cosm\u00e9tiques",
-                  "mandatory": true,
-                  "lecturers": "Karim AMIGHI (Coordonnateur), V\u00e9ronique FONTAINE et Jonathan GOOLE",
-                  "quadri": "q12"
-                },
-                "PHAR-J651": {
-                  "mnemo": "PHAR-J651",
-                  "title": "Unit\u00e9 d'enseignement 3 : Connaissances des mati\u00e8res premi\u00e8res et m\u00e9thodes de contr\u00f4le",
-                  "mandatory": true,
-                  "lecturers": "Caroline STEVIGNY (Coordonnateur) et H\u00e9l\u00e8ne MAVAR",
-                  "quadri": "q1"
-                },
-                "PHAR-J652": {
-                  "mnemo": "PHAR-J652",
-                  "title": "Unit\u00e9 d'enseignement 4 : Aspects r\u00e9glementaires, \u00e9thiques et commerciaux",
-                  "mandatory": true,
-                  "lecturers": "et Jo\u00eblle MEUNIER (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "PHAR-J653": {
-                  "mnemo": "PHAR-J653",
-                  "title": "Unit\u00e9 d\u2019enseignement 5 : Effets ind\u00e9sirables et risques toxiques",
-                  "mandatory": true,
-                  "lecturers": "et V\u00e9ronique MATHIEU (Coordonnateur)",
-                  "quadri": "q1"
-                }
-              }
-            }
-          }
-        },
-        "MS-PHAI": {
-          "name": "Master de sp\u00e9cialisation en pharmacie d'industrie",
-          "mnemo": "MS-PHAI",
-          "blocs": {
-            "1": {
-              "val": "1",
-              "courses": {
-                "MEMO-J700": {
-                  "mnemo": "MEMO-J700",
-                  "title": "Unit\u00e9 d'enseignement : Travail de fin d'\u00e9tudes.",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "PHAR-J702": {
-                  "mnemo": "PHAR-J702",
-                  "title": "Unit\u00e9 d'enseignement A : Substances actives",
-                  "mandatory": true,
-                  "lecturers": "Fran\u00e7ois Dufrasne, Fran\u00e7ois Dufrasne et Jo\u00eblle Leclercq",
-                  "quadri": "aa"
-                },
-                "PHAR-J703": {
-                  "mnemo": "PHAR-J703",
-                  "title": "Unit\u00e9 d'enseignement B : Aspects cliniques",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "PHAR-J704": {
-                  "mnemo": "PHAR-J704",
-                  "title": "Unit\u00e9 d'enseignement C : Assurance de qualit\u00e9 et management pharmaceutique",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "PHAR-J705": {
-                  "mnemo": "PHAR-J705",
-                  "title": "Unit\u00e9 d'enseignement D : Technologie pharmaceutique",
-                  "mandatory": true,
-                  "lecturers": "et Jonathan GOOLE (Coordonnateur)",
-                  "quadri": "aa"
-                },
-                "PHAR-J706": {
-                  "mnemo": "PHAR-J706",
-                  "title": "Unit\u00e9 d'enseignement E : Analyse des m\u00e9dicaments",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "PHAR-J707": {
-                  "mnemo": "PHAR-J707",
-                  "title": "Unit\u00e9 d'enseignement F : Affaires r\u00e9glementaires et environnement m\u00e9dico-social",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "PHAR-J708": {
-                  "mnemo": "PHAR-J708",
-                  "title": "Unit\u00e9 d'enseignement G : Visites et s\u00e9minaires organis\u00e9s dans les industries pharmaceutiques",
-                  "mandatory": true,
-                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
-                  "quadri": "aa"
-                },
-                "PHAR-J709": {
-                  "mnemo": "PHAR-J709",
-                  "title": "Unit\u00e9 d\u2019enseignement G : Biotechnologies",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                }
-              }
-            }
-          }
-        },
-        "AG-PHAR": {
-          "name": "Agr\u00e9gation de l'enseignement secondaire sup\u00e9rieur - sciences pharmaceutiques",
-          "mnemo": "AG-PHAR",
-          "blocs": {
-            "1": {
-              "val": "1",
-              "courses": {
-                "EDUC-E520": {
-                  "mnemo": "EDUC-E520",
-                  "title": "Aspects socio-historiques, psychologiques, culturels, \u00e9thiques et de neutralit\u00e9 de l'enseignement",
-                  "mandatory": true,
-                  "lecturers": "Jose-Luis WOLFS (Coordonnateur), Alain COLSOUL, Philippe VIENNE et Pascal VREBOS",
-                  "quadri": "aa"
-                },
-                "PEDA-E510": {
-                  "mnemo": "PEDA-E510",
-                  "title": "P\u00e9dagogie et didactique, aspects g\u00e9n\u00e9raux",
-                  "mandatory": true,
-                  "lecturers": "Thomas BARRIER (Coordonnateur) et Nathana\u00ebl FRIANT",
-                  "quadri": "q1"
-                },
-                "CHIM-F451": {
-                  "mnemo": "CHIM-F451",
-                  "title": "Didactique de la chimie",
-                  "mandatory": true,
-                  "lecturers": "et C\u00e9cile MOUCHERON (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "PEDA-J400": {
-                  "mnemo": "PEDA-J400",
-                  "title": "Didactique sp\u00e9ciale des sciences pharmaceutiques",
-                  "mandatory": true,
-                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
-                  "quadri": "q1"
-                },
-                "PEDA-J405": {
-                  "mnemo": "PEDA-J405",
-                  "title": "Pratique r\u00e9flexive - Partie 1",
-                  "mandatory": true,
-                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
-                  "quadri": "aa"
-                },
-                "PEDA-J406": {
-                  "mnemo": "PEDA-J406",
-                  "title": "Pratique r\u00e9flexive - Partie 2",
-                  "mandatory": true,
-                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
-                  "quadri": "aa"
-                },
-                "PHAR-J700": {
-                  "mnemo": "PHAR-J700",
-                  "title": "Stage - Partie 1",
-                  "mandatory": true,
-                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "PHAR-J701": {
-                  "mnemo": "PHAR-J701",
-                  "title": "Stage - Partie 2",
-                  "mandatory": true,
-                  "lecturers": "et Fran\u00e7ois DUFRASNE (Coordonnateur)",
-                  "quadri": "aa"
-                }
-              }
-            }
-          }
-        },
-        "CAPAES-PHAR": {
-          "name": "Certificat d'aptitude p\u00e9dagogique appropri\u00e9 \u00e0 l'enseignement sup\u00e9rieur - pharmacie",
-          "mnemo": "CAPAES-PHAR",
-          "blocs": {
-            "1": {
-              "val": "1",
-              "courses": {
-                "EDUC-E520": {
-                  "mnemo": "EDUC-E520",
-                  "title": "Aspects socio-historiques, psychologiques, culturels, \u00e9thiques et de neutralit\u00e9 de l'enseignement",
-                  "mandatory": true,
-                  "lecturers": "Jose-Luis WOLFS (Coordonnateur), Alain COLSOUL, Philippe VIENNE et Pascal VREBOS",
-                  "quadri": "aa"
-                },
-                "EDUC-E609": {
-                  "mnemo": "EDUC-E609",
-                  "title": "Pratiques p\u00e9dagogiques dans l\u2019enseignement sup\u00e9rieur",
-                  "mandatory": true,
-                  "lecturers": "et Nadine POSTIAUX (Coordonnateur)",
-                  "quadri": "q2"
-                },
-                "PEDA-E504": {
-                  "mnemo": "PEDA-E504",
-                  "title": "Didactique g\u00e9n\u00e9rale (partie ens. sup\u00e9rieur) - Nature des savoirs et conceptions de l'apprentissage",
-                  "mandatory": true,
-                  "lecturers": "Thomas BARRIER (Coordonnateur) et Nathana\u00ebl FRIANT",
-                  "quadri": "aa"
-                },
-                "PHAR-J536": {
-                  "mnemo": "PHAR-J536",
-                  "title": "",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "PHAR-J537": {
-                  "mnemo": "PHAR-J537",
-                  "title": "Accompagnement",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
-                },
-                "PHAR-J538": {
-                  "mnemo": "PHAR-J538",
-                  "title": "Analyse de la pratique et pratique r\u00e9flexive",
-                  "mandatory": true,
-                  "lecturers": "",
-                  "quadri": "aa"
                 }
               }
             }
