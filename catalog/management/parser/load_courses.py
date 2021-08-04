@@ -39,5 +39,5 @@ for fac_name, fac_info in tree["ULB"].items():
                     course_obj.description = f"lecturer(s): {course_info['lecturers']}, quadri: {course_info['quadri']}, mandatory: {course_info['mandatory']}"
                 else:
                     course_obj.description += f"\n\nlecturer(s): {course_info['lecturers']}, quadri: {course_info['quadri']}, mandatory: {course_info['mandatory']}"
-                course_obj.categories.add(bloc_name)
+                course_obj.categories.add(bloc_obj)
                 course_obj.save()
