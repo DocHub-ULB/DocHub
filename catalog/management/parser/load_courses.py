@@ -23,7 +23,7 @@ for fac_name, fac_info in tree["ULB"].items():
         for bloc_name, bloc_info in program_info['blocs'].items():
             print("   ", bloc_name)
             bloc_obj, _created = Category.objects.get_or_create(
-                name=f"{program_info['name']} Bloc {bloc_name}",
+                name=f"Bloc {bloc_name}",
                 slug=f"{program_slug}-bloc-{bloc_name}",
                 parent=program_obj
             )
