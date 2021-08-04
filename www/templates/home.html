@@ -29,10 +29,13 @@
     <!-- Cours -->
     <div style="position:absolute;top: 50%;left: 50%;width: 50vw;height: 40vh;margin-right: -50%;transform: translate(-50%, 0%);display: grid;grid-template-columns:1fr 1fr 1fr 1fr;">
         <div class="finder-col">
-            <a style="color: #0099cc"><i class="fas fa-folder"></i> Philosophie et Sciences sociales</a>
+            {% comment %} <a style="color: #0099cc"><i class="fas fa-folder"></i> Philosophie et Sciences sociales</a>
             <a style="color: #a11f7d"><i class="fas fa-folder-open"></i> Droit et de Criminologie</a>
             <a style="color: #90be45"><i class="fas fa-folder"></i> Architecture La Cambre Horta</a>
-            <a style="color:#6c5098"><i class="fas fa-folder"></i> Sciences</a>
+            <a style="color:#6c5098"><i class="fas fa-folder"></i> Sciences</a> {% endcomment %}
+            {% for fac in faculties %}
+                <a style="color: {{ fac.description }}"><i class="fas fa-folder"></i> {{ fac.name }}</a>
+            {% endfor %}
         </div>
         <div class="finder-col">
             <a><i class="fas fa-folder-open"></i> Bachelier en droit</a>
