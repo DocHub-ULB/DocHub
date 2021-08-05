@@ -71,12 +71,22 @@
         }
 
         function toggleModal(modal){
-            if($("#" + modal).css("maxHeight") != "1000px"){
-                $("#" + modal).css("maxHeight", "1000px");
+            if($("#" + modal).css("maxHeight") != "max-content"){
+                // This is some kind of moldave trick to make a beautiful animation 👀
+                $("#" + modal).css("display", "block");
+                $("#" + modal).css("maxHeight", "max-content");
+                var size = $("#" + modal).outerHeight();
+                $("#" + modal).css("maxHeight", "0");
+                console.log(size);
+                $("#" + modal).css("maxHeight", size);
+
+                // Switch category arrow
                 $("#" + modal + "-arrow").addClass("fa-angle-down");
                 $("#" + modal + "-arrow").removeClass("fa-angle-left");
             } else {
                 $("#" + modal).css("maxHeight", "0");
+
+                // Switch category arrow
                 $("#" + modal + "-arrow").addClass("fa-angle-left");
                 $("#" + modal + "-arrow").removeClass("fa-angle-down");
             }

@@ -358,6 +358,7 @@ html {
     -o-transition: max-height 1s ease-in-out;
     transition: max-height 1s ease-in-out;
 }
+
 /* Course upload */
 .content {
     display: grid;
