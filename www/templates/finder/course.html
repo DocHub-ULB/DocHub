@@ -1,7 +1,17 @@
+{% load follow_tags %}
+
 <turbo-frame id="course">
     <div class="finder-col">
     {% for course in courses %}
-        <a>{{ course.name }} <i class="fas fa-plus-circle" style="color: #43AC6A"></i></a>
+        <div class="inner-finder-col">
+            {{ course.name }}
+            {% is_following request.user course as following %}
+            {% if following %}
+                <i class="fas fa-minus-circle" style="color: #F34040"></i>
+            {% else %}
+                <i class="fas fa-plus-circle" style="color: #43AC6A"></i>
+            {% endif %}
+        </div>
     {% endfor %}
     </div>
 </turbo-frame>
