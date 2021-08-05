@@ -4,7 +4,7 @@
         <a
             href="{% url "finder_turbo" target child.slug %}"
             data-turbo-frame={{ target }}
-            {% if target == "1" %}
+            {% if target == 1 %}
                 style="color: {{ child.description }}"
             {% endif %}
         >

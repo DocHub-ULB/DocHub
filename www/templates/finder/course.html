@@ -1,7 +1,7 @@
 <turbo-frame id="course">
     <div class="finder-col">
     {% for course in courses %}
-        <i class="fas fa-folder"></i> {{ course.name }}
+        <a>{{ course.name }} <i class="fas fa-plus-circle" style="color: #43AC6A"></i></a>
     {% endfor %}
     </div>
 </turbo-frame>
