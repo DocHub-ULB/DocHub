@@ -32,7 +32,7 @@ def programType(program) -> str:
         return "Autre"
 
 
-def buildProgramDict(programs) -> list:
+def buildOrderedProgramList(programs) -> list:
     """Builds a list of program types (Bachelier, Master, CAP) with the corresping programs in it"""
     program_dict: dict = {}
 

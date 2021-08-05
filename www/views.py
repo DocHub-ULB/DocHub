@@ -1,3 +1,4 @@
+from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404
@@ -9,6 +10,8 @@ from catalog.models import Category, Course
 from documents.models import Document
 from users.authBackend import UlbCasBackend
 from users.models import User
+
+from www.utils import buildOrderedProgramList
 
 
 def index(request):
@@ -44,37 +47,83 @@ def index(request):
         return render(request, "index.html", context)
 
 
-def finder_turbo(request, id: str, category_slug: str):
-    if id == "course" and category_slug != "empty":
-        category = get_object_or_404(Category, slug=category_slug)
-        courses = Course.objects.filter(categories=category)
+def getEmptyFrame(request, id: str) -> HttpResponse:
+    return render(
+        request,
+        "finder/empty.html",
+        context={
+            "id": id,
+        }
+    )
+
+
+def getFacFrame(request) -> HttpResponse:
+        root = get_object_or_404(Category, slug="root")
+        facs = root.children.all().order_by("name")
+
+        return render(
+            request,
+            "finder/fac.html",
+            context={
+                "facs": facs
+            }
+        )
+
+
+def getProgramFrame(request, fac_slug: str) -> HttpResponse:
+        fac = get_object_or_404(Category, slug=fac_slug)
+        programs = fac.children.all().order_by("name")
+
+        programs = buildOrderedProgramList(programs)
+
+        return render(
+            request,
+            "finder/programs.html",
+            context={
+                "program_types": programs
+            }
+        )
+
+
+def getBlocFrame(request, program_slug: str) -> HttpResponse:
+    program = get_object_or_404(Category, slug=program_slug)
+    blocs = program.children.all().order_by("name")
+
+    return render(
+        request,
+        "finder/bloc.html",
+        context={
+            "blocs": blocs
+        }
+    )
+
+
+def getCourseFrame(request, bloc_slug: str) -> HttpResponse:
+        bloc = get_object_or_404(Category, slug=bloc_slug)
+        courses = Course.objects.filter(categories=bloc).order_by("name")
+
         return render(
             request,
             "finder/course.html",
             context={
-                "type": "program",
                 "courses": courses
             }
         )
-    else:
-        if category_slug != "empty":
-            category = get_object_or_404(Category, slug=category_slug)
-            target = category.get_level() + 1 if category.get_level() + 1 < 3 else "course"
-            children = category.children.all().order_by("name")
-        else:
-            children = Category.objects.none()
-            target = "None"
 
-        return render(
-            request,
-            "finder/category.html",
-            context={
-                "type": "program",
-                "id": id,
-                "target": target,
-                "children": children
-            }
-        )
+
+def finder_turbo(request, id: str, category_slug: str):
+    if category_slug == "empty":
+        return getEmptyFrame(request, id)
+    if id == "facs":
+        return getFacFrame(request)
+    if id == "programs":
+        return getProgramFrame(request, category_slug)
+    if id == "blocs":
+        return getBlocFrame(request, category_slug)
+    if id == "courses":
+        return getCourseFrame(request, category_slug)
+    else:
+        raise Http404("l'ID recherché est introuvable")
 
 
 class HelpView(TemplateView):
