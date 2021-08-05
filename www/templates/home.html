@@ -59,3 +59,15 @@
     {% endif %} {% endcomment %}
 
 {% endblock %}
+
+{% block script %}
+    <script>
+        function emptySubCat(underTarget){
+            for(var target=Number(underTarget);target < 3;target += 1){
+                console.log(target)
+                $('#' + target).attr('src', "/finder/" + target + "/empty")
+            }
+            $("#course").attr('src', "{% url "finder_turbo" "course" "empty" %}")
+        }
+    </script>
+{% endblock %}
