@@ -48,7 +48,6 @@ def finder_turbo(request, id: str, category_slug: str):
     if id == "course":
         category = get_object_or_404(Category, slug=category_slug)
         courses = Course.objects.filter(categories=category)
-        print(courses)
         return render(
             request,
             "finder/course.html",
@@ -61,7 +60,7 @@ def finder_turbo(request, id: str, category_slug: str):
         if category_slug != "empty":
             category = get_object_or_404(Category, slug=category_slug)
             target = category.get_level() + 1 if category.get_level() + 1 < 3 else "course"
-            children = category.children.all()
+            children = category.children.all().order_by("name")
         else:
             children = Category.objects.none()
             target = "None"
