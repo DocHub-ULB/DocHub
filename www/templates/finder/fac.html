@@ -1,0 +1,15 @@
+<turbo-frame id="facs">
+    <div class="finder-col" style="border: none;">
+    {% for fac in facs %}
+        <a
+            onclick="emptySubCat('bloc', 'course')"
+            class="inner-finder-col"
+            href="{% url "finder_turbo" "programs" fac.slug %}"
+            data-turbo-frame="programs"
+            style="color: {{ fac.description }}"
+        >
+            <i class="fas fa-folder"></i> {{ fac.name }}
+        </a>
+    {% endfor %}
+    </div>
+</turbo-frame>

@@ -28,13 +28,13 @@
 
     <!-- Cours -->
     <div class="finder">
-        <turbo-frame id="0" class="turbo-overflow" src="{% url "finder_turbo" "0" "root" %}">
+        <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" %}">
         </turbo-frame>
-        <turbo-frame id="1" class="turbo-overflow" src="{% url "finder_turbo" "1" "empty" %}">
+        <turbo-frame id="programs" class="turbo-overflow">
         </turbo-frame>
-        <turbo-frame id="2" class="turbo-overflow" src="{% url "finder_turbo" "2" "empty" %}">
+        <turbo-frame id="blocs" class="turbo-overflow">
         </turbo-frame>
-        <turbo-frame id="course" class="turbo-overflow" src="{% url "finder_turbo" "course" "empty" %}">
+        <turbo-frame id="courses" class="turbo-overflow">
         </turbo-frame>
     </div>
     <br>
@@ -69,5 +69,9 @@
             }
             $("#course").attr('src', "{% url "finder_turbo" "course" "empty" %}")
         }
+        function toggleModal(modal){
+			document.getElementById(modal).style.maxHeight = "100%";
+            document.getElementById(modal).style.overflow = "auto";
+		};
     </script>
 {% endblock %}

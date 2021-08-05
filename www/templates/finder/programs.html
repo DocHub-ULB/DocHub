@@ -1,0 +1,12 @@
+<turbo-frame id="programs" class="turbo-overflow" src="{% url "finder_turbo" "program" "empty" %}">
+    {% for program_type in program_types %}
+        <a class="inner-finder-col" onclick="toggleModal('lamodal')">{{ program_type.name }}</a>
+        <div class="modal" style="max-height:0;transition: max-height 0.5s;overflow:hidden" id="lamodal">
+        {% for program in program_type.programs %}
+            <a onclick="emptySubCat('course')" class="inner-finder-col" href="{% url "finder_turbo" "blocs" program.slug %}" data-turbo-frame="bloc">
+                <i class="fas fa-folder"></i> {{ program.name }}
+            </a>
+        {% endfor %}
+        </div>
+    {% endfor %}
+</turbo-frame>
