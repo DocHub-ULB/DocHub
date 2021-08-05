@@ -29,7 +29,7 @@ html {
 
 
 .logo {
-    display: inline-grid;
+    display: inline-flex;
     grid-column-start: 1;
 
     justify-content: center;
@@ -297,18 +297,18 @@ html {
 }
 
 .finder-col {
-    margin-left: 0.5em;
+    padding-left: 0.5em;
     font-family: Titillium Web;
     font-style: normal;
     font-weight: normal;
     height: inherit;
     overflow-y: auto;
-    border-right: 1px solid black;
+    border-left: 1px solid black;
     scrollbar-width: thin;
-    scrollbar-color: black white
+    scrollbar-color: rgba(0, 111, 148, 0.75) white;     /* Opera/IE 8+ */
 }
 
-.finder-col a{
+.inner-finder-col {
     width: 100%;
     display: block;
     margin-top: 0.5em;
@@ -330,7 +330,7 @@ html {
 }
  
 .finder-col::-webkit-scrollbar-thumb {
-    background-color: black;
+    background-color: #007095;
     border-radius: 5px;
 }
 
