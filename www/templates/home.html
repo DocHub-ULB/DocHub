@@ -62,16 +62,24 @@
 
 {% block script %}
     <script>
-        function emptySubCat(underTarget){
-            for(var target=Number(underTarget);target < 3;target += 1){
-                console.log(target)
-                $('#' + target).attr('src', "/finder/" + target + "/empty")
+        function emptySubCat(){
+            var args = arguments;
+            for(var i=0; i<args.length; i++){
+                $('#' + args[i]).attr('src', "/finder/" + args[i] + "/empty")
             }
-            $("#course").attr('src', "{% url "finder_turbo" "course" "empty" %}")
+            $("#courses").attr('src', "{% url "finder_turbo" "courses" "empty" %}")
         }
+
         function toggleModal(modal){
-			document.getElementById(modal).style.maxHeight = "100%";
-            document.getElementById(modal).style.overflow = "auto";
-		};
+            if($("#" + modal).css("maxHeight") != "1000px"){
+                $("#" + modal).css("maxHeight", "1000px");
+                $("#" + modal + "-arrow").addClass("fa-angle-down");
+                $("#" + modal + "-arrow").removeClass("fa-angle-left");
+            } else {
+                $("#" + modal).css("maxHeight", "0");
+                $("#" + modal + "-arrow").addClass("fa-angle-left");
+                $("#" + modal + "-arrow").removeClass("fa-angle-down");
+            }
+        };
     </script>
 {% endblock %}
