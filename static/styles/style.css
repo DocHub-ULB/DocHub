@@ -317,10 +317,10 @@ html {
     font-style: normal;
     font-weight: normal;
     height: inherit;
-    overflow-y: auto;
+    overflow-y: scroll;
     border-left: 1px solid rgba(0, 0, 0, 0.25);
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 111, 148, 0.75) white;     /* Opera/IE 8+ */
+    scrollbar-color: rgba(0, 111, 148, 0.75) transparent;     /* Opera/IE 8+ */
 }
 
 .inner-finder-col {
@@ -331,24 +331,33 @@ html {
     font-size: 1.2em;
 }
 
-.turbo-overflow {
-    height: inherit;
+.finder-col::-webkit-scrollbar {
+    width: 2px;
 }
 
-.finder-col::-webkit-scrollbar {
-    width: 5px;
-}
- 
 .finder-col::-webkit-scrollbar-track {
-    background-color: white;
+    background-color: transparent;
     border-radius: 5px;
 }
- 
+
 .finder-col::-webkit-scrollbar-thumb {
     background-color: #007095;
     border-radius: 5px;
 }
 
+.turbo-overflow {
+    height: inherit;
+}
+
+.modal{
+    margin-left: 0.5em;
+    max-height:0;
+    overflow: hidden;
+    -webkit-transition: max-height 1s ease-in-out;
+    -moz-transition: max-height 1s ease-in-out;
+    -o-transition: max-height 1s ease-in-out;
+    transition: max-height 1s ease-in-out;
+}
 /* Course upload */
 .content {
     display: grid;
