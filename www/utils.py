@@ -15,21 +15,21 @@ def get_env(secret_name: str, default: Optional[str] = None):
     return result
 
 
-def programType(program) -> str:
+def programTypeAndSlug(program) -> tuple:
     """Returns the type of the program (Bachelier, Master, CAP, ...)"""
     # FIXME : Maybe find a more elegant solution to define a program's type ?
     if "bachelier" in program.name.lower():
-        return "Bachelier"
+        return "Bachelier", "ba"
     if "master de spécialisation" in program.name.lower():
-        return "Master de spécialisation"
+        return "Master de spécialisation", "mas"
     if "master" in program.name.lower():
-        return "Master"
+        return "Master", "ma"
     if "certificat" in program.name.lower():
-        return "Certificat"
+        return "Certificat", "cap"
     if "agrégation" in program.name.lower():
-        return "Agrégation"
+        return "Agrégation", "aess"
     else:
-        return "Autre"
+        return "Autre", "aut"
 
 
 def buildOrderedProgramList(programs) -> list:
@@ -37,10 +37,11 @@ def buildOrderedProgramList(programs) -> list:
     program_dict: dict = {}
 
     for program in programs:
-        program_type = programType(program)
+        program_type, type_slug = programTypeAndSlug(program)
         if program_type not in program_dict.keys():
             program_dict[program_type] = {
                 "name": program_type,
+                "slug": type_slug,
                 "programs": [program]
             }
         else:
