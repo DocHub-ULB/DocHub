@@ -7,9 +7,9 @@
             {{ course.name }}
             {% is_following request.user course as following %}
             {% if following %}
-                <i class="fas fa-minus-circle" style="color: #F34040"></i>
+                <a title="Unfollow the course"><i class="fas fa-minus-circle" style="color: #F34040"></i></a>
             {% else %}
-                <i class="fas fa-plus-circle" style="color: #43AC6A"></i>
+                <a title="Follow the course"><i class="fas fa-plus-circle" style="color: #43AC6A"></i></a>
             {% endif %}
         </div>
     {% endfor %}
