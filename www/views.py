@@ -45,7 +45,7 @@ def index(request):
 
 
 def finder_turbo(request, id: str, category_slug: str):
-    if id == "course":
+    if id == "course" and category_slug != "empty":
         category = get_object_or_404(Category, slug=category_slug)
         courses = Course.objects.filter(categories=category)
         return render(
