@@ -1,8 +1,8 @@
+import json
 import time
 
-from bs4 import BeautifulSoup
 import requests
-import json
+from bs4 import BeautifulSoup
 
 start = time.time()
 times = []

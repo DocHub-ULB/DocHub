@@ -1,7 +1,7 @@
-from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.db.models import Sum
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
 from django.views.generic import TemplateView
 
@@ -10,7 +10,6 @@ from catalog.models import Category, Course
 from documents.models import Document
 from users.authBackend import UlbCasBackend
 from users.models import User
-
 from www.utils import buildOrderedProgramList
 
 

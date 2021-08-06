@@ -1,9 +1,9 @@
-import os
 import json
+import os
 
-from catalog.models import Category, Course
 from django.utils.text import slugify
 
+from catalog.models import Category, Course
 
 with open("catalog/management/parser/data/tree.json") as tree_file:
     tree = json.load(tree_file)
