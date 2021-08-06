@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 start = time.time()
-times = []
+times: list = []
 limit_to = 350
 
 URL = f"https://www.ulb.be/servlet/search?l=0&beanKey=beanKeyRechercheFormation&&types=formation&natureFormation=ulb&RH=1571625036018525&s=FACULTE_ASC&limit={limit_to}"
@@ -38,7 +38,7 @@ for span in soup.find_all("span", {"class": "search-result__mnemonique"}):
             }
         )
 
-failed = []
+failed: list = []
 
 print("parsing courses")
 for index, course in enumerate(all_courses):

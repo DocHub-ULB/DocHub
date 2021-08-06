@@ -5,7 +5,7 @@ tree["ULB"] = {}
 ULB = tree["ULB"]
 
 
-def get_or_create_fac(fac: {}) -> {}:
+def get_or_create_fac(fac: dict) -> dict:
     fac_name = fac["name"]
     if fac_name not in ULB.keys():
         ULB[fac_name] = {
@@ -16,7 +16,7 @@ def get_or_create_fac(fac: {}) -> {}:
     return ULB[fac_name]
 
 
-def get_or_create_program(fac: {}, program: {}) -> {}:
+def get_or_create_program(fac: dict, program: dict) -> dict:
     fac = get_or_create_fac(fac)
     program_mnemo = program['mnemo']
     if program_mnemo not in fac['programs'].keys():
@@ -28,7 +28,7 @@ def get_or_create_program(fac: {}, program: {}) -> {}:
     return fac['programs'][program_mnemo]
 
 
-def get_or_create_bloc(fac: {}, program: {}, bloc: {}) -> {}:
+def get_or_create_bloc(fac: dict, program: dict, bloc: dict) -> dict:
     fac = get_or_create_fac(fac)
     program = get_or_create_program(fac, program)
 
@@ -41,7 +41,7 @@ def get_or_create_bloc(fac: {}, program: {}, bloc: {}) -> {}:
     return program['blocs'][bloc]
 
 
-def get_or_create_course(fac: {}, program: {}, bloc: {}, course: {}) -> {}:
+def get_or_create_course(fac: dict, program: dict, bloc: dict, course: dict) -> dict:
     fac = get_or_create_fac(fac)
     program = get_or_create_program(fac, program)
     bloc = get_or_create_bloc(fac, program, bloc)
