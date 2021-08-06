@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db.models import Sum
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
 from django.views.generic import TemplateView
@@ -105,7 +105,8 @@ def getCourseFrame(request, bloc_slug: str) -> HttpResponse:
             request,
             "finder/course.html",
             context={
-                "courses": courses
+                "courses": courses,
+                "bloc_slug": bloc.slug
             }
         )
 
@@ -124,6 +125,17 @@ def finder_turbo(request, id: str, category_slug: str):
     else:
         raise Http404("l'ID recherché est introuvable")
 
+
+def set_follow_course(request, action: str, course_slug: str, bloc_slug: str):
+    course = get_object_or_404(Course, slug=course_slug)
+    if action == "follow":
+        course.followed_by.add(request.user)
+    else:
+        course.followed_by.remove(request.user)
+    course.save()
+    return JsonResponse({
+        "status": "success"
+    })
 
 class HelpView(TemplateView):
     def get_context_data(self):
