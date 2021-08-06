@@ -10,6 +10,38 @@ function emptySubCat(){
     }
 }
 
+/**
+ * Follows or unfollow the course
+ * FIXME: Could use some turbo but couldn't make it work :/
+ * Adds a loading gif to show people an action is being executed
+ * @param {*} div_id the id of the div in which to place the spinner gif
+ */
+function follow(course_slug){
+    spinnerUrl = $("#courses-finder-col").attr("spinner-url");
+    $("#follow-" + course_slug).html("<img src='" + spinnerUrl + "' style='height: 1.2em' alt='loading' />");
+    if($("#" + course_slug).attr("following") == 1){
+        var url = $("#" + course_slug).attr("leave-course-url");
+    } else {
+        var url = $("#" + course_slug).attr("join-course-url");
+    }
+
+    $.get(
+        url
+    ).done((data) => {
+        if(data.status == "success"){
+            $("#" + course_slug).attr("following", (Number($("#" + course_slug).attr("following")) + 1) % 2);
+            if($("#" + course_slug).attr("following") == 1){
+                $("#follow-" + course_slug).html('<i class="fas fa-minus-circle" style="color: #F34040"></i>');
+                $("#follow-" + course_slug).attr("title", "Leave the course");
+            } else {
+                $("#follow-" + course_slug).html('<i class="fas fa-plus-circle" style="color: #43AC6A"></i>');
+                $("#follow-" + course_slug).attr("title", "Join the course");
+            }
+        } else {
+            console.log(data);
+        }
+    })
+}
 
 /**
  * Toggles a program type modal

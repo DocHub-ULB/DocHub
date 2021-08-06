@@ -1,6 +1,6 @@
 <turbo-frame id="blocs">
     {% if blocs|length > 0 %}
-        <div class="finder-col">
+        <div id="bloc-finder-col" class="finder-col" empty-bloc-url="{% url "finder_turbo" "bloc" "empty" %}">
         {% for bloc in blocs %}
             <a
                 class="inner-finder-col"
