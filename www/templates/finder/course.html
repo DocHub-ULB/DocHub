@@ -12,7 +12,7 @@
             join-course-url="{% url "set_course_follow" "follow" course.slug bloc_slug %}"
             following={% if following %}1{% else %}0{% endif %}
         >
-            {{ course.name }}
+            <a href="{% url 'course_show' course.slug %}" target="_top">{{ course.name }}</a>
             {% if following %}
                 <a
                     title="Leave the course"
