@@ -2,7 +2,7 @@
 {% load static %}
 
 <turbo-frame id="courses">
-    <div id="courses-finder-col" class="finder-col" spinner-url="{% static "images/loading.gif" %}" empty-course-url="{% url "finder_turbo" "courses" "empty" %}">
+    <div id="courses-finder-col" class="finder-col" spinner-url="{% static "images/loading.gif" %}" empty-courses-url="{% url "finder_turbo" "courses" "empty" %}">
     {% for course in courses %}
         {% is_following request.user course as following %}
         <div
