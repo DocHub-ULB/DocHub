@@ -309,6 +309,7 @@ html {
     border: 3px solid #3d3d3d;
     border-radius: 15px;
     overflow: hidden;
+    z-index: -1;
 }
 
 .finder-col {
@@ -409,4 +410,26 @@ html {
 
 .filter--filtered {
   display: none;
+}
+
+/* Search-box */
+
+.results {
+    position:absolute;
+    background-color: white;
+    border: 2px solid black;
+    width:100%;
+    border-top: none;
+    border-radius: 5px;
+    font-family: Titillium Web;
+    height: 25vh;
+    overflow-y:auto;
+}
+
+.results a{
+    padding-left: 0.5em;
+}
+
+.results a:hover{
+    background-color: rgba(0, 139, 186, 0.25);
 }

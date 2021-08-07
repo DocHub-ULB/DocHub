@@ -15,12 +15,8 @@
     {% endif %} {% endcomment %}
 
     <!-- Research bar -->
-    <div style="position:absolute; width: 50vw;margin-right: -50%;transform: translate(-50%, 0%);left: 50%;top: 33.33%">
-        <div
-            style="border: 2px solid black;border-radius: 0.5rem;with: 100%;max-width: 900px;margin-left: auto;margin-right: auto;">
-            <i class="fas fa-search" style="margin: 0.5rem;"></i>
-            {% include "autocomplete/search.html" %}
-        </div>
+    <div style="position:absolute; width: 40vw;margin-right: -50%;transform: translate(-50%, 0%);left: 50%;top: 33.33%">
+            {% include "search/frames/search-box.html" with initial=True %}
         <div class="button-search">
             Chercher
         </div>
