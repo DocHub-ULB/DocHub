@@ -45,8 +45,6 @@ INSTALLED_APPS = [
 
 DOCUMENT_STORAGE = "django.core.files.storage.FileSystemStorage"
 BASE_URL = "https://dochub.be/"
-IDENTICON = True
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
