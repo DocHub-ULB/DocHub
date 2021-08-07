@@ -10,7 +10,6 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-import users.identicon
 from catalog.models import Course
 
 
@@ -26,14 +25,7 @@ class CustomUserManager(UserManager):
             raise ValueError('The given netid must be set')
         email = self.normalize_email(email)
         user = self.model(netid=netid, email=email, last_login=now, **extra_fields)
-        if settings.IDENTICON:
-            IDENTICON_SIZE = 120
-            if not os.path.exists(join(settings.MEDIA_ROOT, "profile")):
-                os.makedirs(join(settings.MEDIA_ROOT, "profile"))
-            profile_path = join(settings.MEDIA_ROOT, "profile", f"{netid}.png")
-            alpha_netid = self.PATTERN.sub('', netid)
-            users.identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
-            user.photo = 'png'
+
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -59,7 +51,6 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=127)
     email = models.CharField(max_length=255, unique=True)
     registration = models.CharField(max_length=80, blank=True)
-    photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default='')
 
@@ -84,14 +75,6 @@ class User(AbstractBaseUser):
         self._following_courses = None
         self._moderated_courses = None
         super().__init__(*args, **kwargs)
-
-    @property
-    def get_photo(self):
-        photo = self.DEFAULT_PHOTO
-        if self.photo != "":
-            photo = join(settings.MEDIA_URL, "profile/{0.netid}.{0.photo}".format(self))
-
-        return photo
 
     @property
     def name(self):
