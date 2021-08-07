@@ -10,7 +10,7 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from catalog.models import Course
+from catalog.models import Course, Category
 
 
 class CustomUserManager(UserManager):
@@ -72,13 +72,31 @@ class User(AbstractBaseUser):
     notify_on_upload = True
 
     def __init__(self, *args, **kwargs):
-        self._following_courses = None
         self._moderated_courses = None
         super().__init__(*args, **kwargs)
 
     @property
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
+
+    def getPrograms(self):
+        """Returns a QS of the programs in which a course is followed by the user"""
+        blocs = Category.objects.filter(course__in=self.following_courses).select_related('parent')
+        programs = [bloc.parent.slug for bloc in blocs.all()]
+        return Category.objects.filter(level=2, slug__in=programs).annotate(
+            slug_=models.functions.Cast(
+                models.functions.Concat(
+                    models.Value("mycourses-"), 'slug'
+                ), output_field=models.SlugField()
+            ),
+        )
+
+    def getBlocs(self, program_slug):
+        """Returns a QS of blocs that contain a course the user follows"""
+        return set(Category.objects.filter(
+            level=3, parent__slug=program_slug,
+            course__in=self.following_courses
+        ))
 
     @property
     def following_courses(self):

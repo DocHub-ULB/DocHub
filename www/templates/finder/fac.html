@@ -1,5 +1,17 @@
 <turbo-frame id="facs">
     <div class="finder-col" style="border: none;">
+
+    {% if request.user.following_courses.count > 0 %}
+        <a
+        onclick="emptySubCat('blocs', 'courses')"
+        class="inner-finder-col"
+        href="{% url 'finder_turbo' 'programs' 'mycourses' %}"
+        data-turbo-frame="programs"
+        style="color: #f00"
+        >
+            <i class="fas fa-folder"></i> Mes cours
+        </a>
+    {% endif %}
     {% for fac in facs %}
         <a
             onclick="emptySubCat('blocs', 'courses')"

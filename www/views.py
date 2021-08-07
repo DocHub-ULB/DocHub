@@ -57,39 +57,43 @@ def getEmptyFrame(request, id: str) -> HttpResponse:
 
 
 def getFacFrame(request) -> HttpResponse:
-        root = get_object_or_404(Category, slug="root")
-        facs = root.children.all().order_by("name")
+    root = get_object_or_404(Category, slug="root")
+    facs = root.children.all().order_by("name")
 
-        return render(
-            request,
-            "finder/fac.html",
-            context={
-                "facs": facs
-            }
-        )
+    return render(
+        request,
+        "finder/fac.html",
+        context={
+            "facs": facs
+        }
+    )
 
 
 def getProgramFrame(request, fac_slug: str) -> HttpResponse:
+    if fac_slug == "mycourses":
+        programs = request.user.getPrograms()
+    else:
         fac = get_object_or_404(Category, slug=fac_slug)
-        if fac_slug == "my-courses":
+        programs = fac.children.all().order_by("name")
 
-        else:
-            programs = fac.children.all().order_by("name")
+    programs = buildOrderedProgramList(programs)
 
-        programs = buildOrderedProgramList(programs)
-
-        return render(
-            request,
-            "finder/programs.html",
-            context={
-                "program_types": programs
-            }
-        )
+    return render(
+        request,
+        "finder/programs.html",
+        context={
+            "program_types": programs
+        }
+    )
 
 
 def getBlocFrame(request, program_slug: str) -> HttpResponse:
-    program = get_object_or_404(Category, slug=program_slug)
-    blocs = program.children.all().order_by("name")
+    if program_slug.split('-')[0] == "mycourses":
+        _, program_slug = program_slug.split('-', 1)
+        blocs = request.user.getBlocs(program_slug)
+    else:
+        program = get_object_or_404(Category, slug=program_slug)
+        blocs = program.children.all().order_by("name")
 
     return render(
         request,
@@ -101,17 +105,17 @@ def getBlocFrame(request, program_slug: str) -> HttpResponse:
 
 
 def getCourseFrame(request, bloc_slug: str) -> HttpResponse:
-        bloc = get_object_or_404(Category, slug=bloc_slug)
-        courses = Course.objects.filter(categories=bloc).order_by("name")
+    bloc = get_object_or_404(Category, slug=bloc_slug)
+    courses = Course.objects.filter(categories=bloc).order_by("name")
 
-        return render(
-            request,
-            "finder/course.html",
-            context={
-                "courses": courses,
-                "bloc_slug": bloc.slug
-            }
-        )
+    return render(
+        request,
+        "finder/course.html",
+        context={
+            "courses": courses,
+            "bloc_slug": bloc.slug
+        }
+    )
 
 
 def finder_turbo(request, id: str, category_slug: str):
