@@ -6,7 +6,7 @@
 function emptySubCat(){
     var args = arguments;
     for(var i=0; i<args.length; i++){
-        $('#' + args[i]).attr('src', $(args[i] + "-finder-col").attr("empty-" + args[i] + "-url"))
+        $('#' + args[i]).attr('src', $("#" + args[i] + "-finder-col").attr("empty-" + args[i] + "-url"))
     }
 }
 
