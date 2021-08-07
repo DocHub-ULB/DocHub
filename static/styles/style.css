@@ -360,6 +360,19 @@ html {
     transition: max-height 1s ease-in-out;
 }
 
+/* My courses */
+.big-finder {
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    height: 80vh;
+    display: grid;
+    border: 3px solid #3d3d3d;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 4vh;
+    margin-right:5vw;
+    margin-left:5vw
+}
+
 /* Course upload */
 .content {
     display: grid;
