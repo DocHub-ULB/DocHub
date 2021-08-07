@@ -10,7 +10,7 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from catalog.models import Course, Category
+from catalog.models import Category, Course
 
 
 class CustomUserManager(UserManager):
