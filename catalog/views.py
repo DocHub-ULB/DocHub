@@ -83,15 +83,10 @@ def leave_course(request: HttpRequest, slug: str):
 
 @login_required
 def show_courses(request):
-    end_of_year = timezone.now().month in [7, 8, 9, 10]
+    # "suggestions": suggest(request.user),
     return render(
         request,
         "catalog/my_courses.html",
-        {
-            "faculties": Category.objects.get(level=0).children.all(),
-            "suggestions": suggest(request.user),
-            "show_unfollow_all_button": end_of_year,
-        },
     )
 
 
