@@ -15,7 +15,7 @@ from www.utils import buildOrderedProgramList
 
 def index(request):
     if request.user.is_authenticated:
-        following = request.user.following_courses()
+        following = request.user.following_courses
         ndocs = max(5, len(following))
         docs = Document.objects.filter(course__in=following).order_by("-created")[
             :ndocs
@@ -71,7 +71,10 @@ def getFacFrame(request) -> HttpResponse:
 
 def getProgramFrame(request, fac_slug: str) -> HttpResponse:
         fac = get_object_or_404(Category, slug=fac_slug)
-        programs = fac.children.all().order_by("name")
+        if fac_slug == "my-courses":
+
+        else:
+            programs = fac.children.all().order_by("name")
 
         programs = buildOrderedProgramList(programs)
 

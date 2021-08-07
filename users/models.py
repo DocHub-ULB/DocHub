@@ -80,6 +80,7 @@ class User(AbstractBaseUser):
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
+    @property
     def following_courses(self):
         return self.courses_set.all()
 
@@ -118,7 +119,7 @@ class User(AbstractBaseUser):
             self.save()
 
     def update_inferred_faculty(self):
-        courses = self.following_courses()
+        courses = self.following_courses
         categories = [x.categories.all() for x in courses]
         categories = list(itertools.chain.from_iterable(categories))
 
