@@ -58,6 +58,7 @@ html {
     font-style: normal;
     font-weight: normal;
     font-size: 1.2em;
+    line-height: 50px;
 }
 
 .dropdown-content {
@@ -94,9 +95,6 @@ html {
 .footer {
     width: 100%;
     text-align: center;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     font-family: Titillium Web;
     font-style: normal;
     font-weight: normal;
@@ -297,13 +295,9 @@ html {
 }
 
 .finder {
-    position:absolute;
-    top: 50%;
-    left: 50%;
-    width: 50vw;
+    grid-column-start: 2;
+    grid-row-start: 2;
     height: 40vh;
-    margin-right: -50%;
-    transform: translate(-50%, 0%);
     display: grid;
     grid-template-columns:1fr 1fr 1fr 1fr;
     border: 3px solid #3d3d3d;

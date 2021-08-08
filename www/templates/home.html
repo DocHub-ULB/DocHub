@@ -14,23 +14,23 @@
         {% include "welcome.html" %}
     {% endif %} {% endcomment %}
 
-    <!-- Research bar -->
-    <div style="position:absolute; width: 40vw;margin-right: -50%;transform: translate(-50%, 0%);left: 50%;top: 33.33%">
-        {% include "search/frames/search-box.html" with initial=True %}
+    <div style="height:85vh;display: grid;grid-template: 1fr 40vh/ 1fr 50vw 1fr;margin-bottom:1em">
+        <div style="grid-column-start: 2;margin-top:25vh">
+            {% include "search/frames/search-box.html" with initial=True %}
+        </div>
+        <div class="finder">
+            <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" %}">
+            </turbo-frame>
+            <turbo-frame id="programs" class="turbo-overflow">
+            </turbo-frame>
+            <turbo-frame id="blocs" class="turbo-overflow">
+            </turbo-frame>
+            <turbo-frame id="courses" class="turbo-overflow">
+            </turbo-frame>
+        </div>
     </div>
 
     <!-- Cours -->
-    <div class="finder">
-        <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" %}">
-        </turbo-frame>
-        <turbo-frame id="programs" class="turbo-overflow">
-        </turbo-frame>
-        <turbo-frame id="blocs" class="turbo-overflow">
-        </turbo-frame>
-        <turbo-frame id="courses" class="turbo-overflow">
-        </turbo-frame>
-    </div>
-    <br>
     {% comment %} {% if request.user.following_courses|length > 0 %}
     <div class="row">
         <div class="large-6 columns">
