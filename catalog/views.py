@@ -119,6 +119,5 @@ def course_tree(request):
 
 @login_required
 def unfollow_all_courses(request):
-    for course in request.user.courses_set.all():
-        course.followed_by.remove(request.user)
+    request.user.courses_set.clear()
     return redirect("show_courses")

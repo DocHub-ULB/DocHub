@@ -4,6 +4,9 @@
 {% block title %}Liste des cours{% endblock %}
 
 {% block content %}
+<a href="{% url 'unfollow_all_courses' %}" class="button red" style="position: absolute;right: 2em">
+    Me désabonner de tous les cours
+</a>
 <div class="big-finder">
     <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" %}">
     </turbo-frame>
