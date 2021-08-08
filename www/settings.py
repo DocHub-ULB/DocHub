@@ -79,16 +79,26 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    "default": {
-        "ENGINE": get_env("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": get_env("SQL_DATABASE", str(BASE_DIR / "db.sqlite")),
-        "USER": get_env("SQL_USER", "user"),
-        "PASSWORD": get_env("SQL_PASSWORD", "password"),
-        "HOST": get_env("SQL_HOST", "localhost"),
-        "PORT": get_env("SQL_PORT", "5432"),
+
+if get_env("USE_POSTGRES", False):
+    DATABASES = {
+        "default": {
+            "ENGINE": get_env("SQL_ENGINE", "django.db.backends.postgresql"),
+            "NAME": get_env("SQL_DATABASE", 'dochub'),
+            "HOST": get_env("SQL_HOST", "localhost"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": get_env("SQL_ENGINE", "django.db.backends.sqlite3"),
+            "NAME": get_env("SQL_DATABASE", str(BASE_DIR / "db.sqlite")),
+            "USER": get_env("SQL_USER", "user"),
+            "PASSWORD": get_env("SQL_PASSWORD", "password"),
+            "HOST": get_env("SQL_HOST", "localhost"),
+            "PORT": get_env("SQL_PORT", "5432"),
+        }
+    }
 
 
 # Password validation
