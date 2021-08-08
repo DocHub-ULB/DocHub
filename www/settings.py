@@ -80,7 +80,7 @@ TEMPLATES = [
 ]
 
 
-if get_env("USE_POSTGRES", 'False'):
+if get_env("USE_POSTGRES", '0'):
     DATABASES = {
         "default": {
             "ENGINE": get_env("SQL_ENGINE", "django.db.backends.postgresql"),
