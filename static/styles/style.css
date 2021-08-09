@@ -137,14 +137,14 @@ html {
     margin-left: 5vw;
     display: grid;
     grid-auto-rows: max-content;
-    row-gap: 20px;
-    height:82vh;
+    row-gap: 0.5em;
+    height: calc(100vh - 186px - 3em);
     overflow-y: auto;
 }
 
 .card{
     display: grid;
-    grid-template-columns: 5% 1fr;
+    grid-template-columns: 8% 1fr;
     column-gap: 1em;
     font-family: Titillium Web;
     font-style: normal;
@@ -519,6 +519,7 @@ html {
         margin-left: 0;
         row-gap: 0.5em;
         overflow-y: visible;
+        height: 100%;
     }
 
     .page-title {
