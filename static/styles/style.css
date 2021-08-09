@@ -403,6 +403,20 @@ html {
     transition: max-height 1s ease-in-out;
 }
 
+.home-grid{
+    height:85vh;
+    display: grid;
+    grid-template: 1fr 40vh/ 1fr 50vw 1fr;
+    margin-bottom:1em
+}
+
+.home-search-container {
+    grid-column-start: 2;
+    position:relative;
+    width:40vw;
+    margin: 25vh auto 0;
+}
+
 /* My courses */
 .big-finder {
     grid-template-columns:1fr 1fr 1fr 1fr;
@@ -606,5 +620,16 @@ html {
     
     .middle-section-nav:focus-within > .search-box-container {
         width: 100%;
+    }
+
+    .home-grid{
+        height:74vh;
+        display: grid;
+        grid-template: 1fr 40vh/ 1fr 90vw 1fr;
+        margin-bottom:1em
+    }
+
+    .home-search-container {
+        width: 85vw;
     }
 }
