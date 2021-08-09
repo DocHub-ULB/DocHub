@@ -29,16 +29,7 @@
               data-filter-key='{{document.name}}'
               data-tags="{{document.tags.all|join:' '}}"
             >
-                <div class="card-like">
-                  <a class="like" href="#like">
-                      <i class="fas fa-thumbs-up" style="grid-row-start:1"></i>
-                      <span>{{document.upvotes}}</span>
-                  </a>
-                  <a class="dislike" href="#dislike">
-                      <i class="fas fa-thumbs-down" style="grid-row-start:2"></i>
-                      <span>{{document.downvotes}}</span>
-                  </a>
-                </div>
+                {% include "catalog/like-dislike.html" %}
                 <div class="card-content">
                     <div class="card-title">
                         <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
