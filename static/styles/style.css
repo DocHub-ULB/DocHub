@@ -91,6 +91,20 @@ html {
     display: block;
 }
 
+.middle-section-nav {
+    justify-content: center;
+    align-content: center;
+    grid-column-start: 2;
+    display: inline-grid;
+}
+
+.search-box-container {
+    width: 40vw;
+    justify-content: center;
+    align-content: center;
+    position:relative
+}
+
 /* footer */
 .footer {
     width: 100%;
@@ -558,6 +572,18 @@ html {
 
     .results a span {
         font-size:1rem;
-        width:22%;
+        width:30%;
+    }
+
+    .middle-section-nav:focus-within {
+        display: block;
+        width: 95vw;
+        position: absolute;
+        top: 0.5em;
+        left: 0.5em;
+    }
+    
+    .middle-section-nav:focus-within > .search-box-container {
+        width: 100%;
     }
 }
