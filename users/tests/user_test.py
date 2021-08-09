@@ -32,17 +32,3 @@ def test_create_superuser():
 def test_name():
     u = User.objects.create_user(netid="jeanduj", first_name="Jean", last_name="DuJardin")
     assert u.name == "Jean DuJardin"
-
-
-def test_photo():
-    u = User.objects.create_user(netid="glagaffe", email="a@dupis.be")
-    assert u.photo == 'png'
-    assert u.get_photo == settings.MEDIA_URL + "profile/glagaffe.png"
-
-
-def test_identicons():
-    gaston = User.objects.create_user(netid="glagaffe", email="a@dupis.be")
-    labevue = User.objects.create_user(netid="blabevue", email="b@dupis.be")
-
-    assert gaston.get_photo != labevue.get_photo
-    assert Image.open('media/profile/glagaffe.png') != Image.open('media/profile/blabevue.png')

@@ -8,9 +8,9 @@
 
 {% block content %}
 
-<div data-controller="course-filter" style="display: grid; grid-template-columns: 1fr 65% 1fr 25% 1fr;margin-top: 1.5em;">
+<div class="course-grid" data-controller="course-filter">
     <div style="grid-column-start: 2;">
-        <h1 style="margin-left: 2rem;font-family: Titillium Web; font-style: normal; font-weight: normal; font-size: 32px; line-height: 49px;">
+        <h1 class="page-title">
             {{ course.slug|upper }} {{ course.name }}
             {% is_following request.user course as following %}
             {% if following %}
@@ -29,16 +29,7 @@
               data-filter-key='{{document.name}}'
               data-tags="{{document.tags.all|join:' '}}"
             >
-                <div class="card-like">
-                  <a class="like" href="#like">
-                      <i class="fas fa-thumbs-up" style="grid-row-start:1"></i>
-                      <span style="font-size: 24px;font-family: Titillium Web;font-weight: normal;margin-left:0.25em">{{document.upvotes}}</span>
-                  </a>
-                  <a class="dislike" href="#dislike">
-                      <i class="fas fa-thumbs-down" style="grid-row-start:2"></i>
-                      <span style="font-size: 24px;font-family: Titillium Web;font-weight: normal;margin-left:0.25em">{{document.downvotes}}</span>
-                  </a>
-                </div>
+                {% include "catalog/like-dislike.html" %}
                 <div class="card-content">
                     <div class="card-title">
                         <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
@@ -124,5 +115,9 @@
             </div>
         </div>
     </div>
+
+    <a class="show-aside">
+        <i class="fas fa-bars"></i>
+    </a>
 </div>
 {% endblock %}

@@ -10,8 +10,7 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-import users.identicon
-from catalog.models import Course
+from catalog.models import Category, Course
 
 
 class CustomUserManager(UserManager):
@@ -26,14 +25,7 @@ class CustomUserManager(UserManager):
             raise ValueError('The given netid must be set')
         email = self.normalize_email(email)
         user = self.model(netid=netid, email=email, last_login=now, **extra_fields)
-        if settings.IDENTICON:
-            IDENTICON_SIZE = 120
-            if not os.path.exists(join(settings.MEDIA_ROOT, "profile")):
-                os.makedirs(join(settings.MEDIA_ROOT, "profile"))
-            profile_path = join(settings.MEDIA_ROOT, "profile", f"{netid}.png")
-            alpha_netid = self.PATTERN.sub('', netid)
-            users.identicon.render_identicon(int(alpha_netid, 36), IDENTICON_SIZE / 3).save(profile_path)
-            user.photo = 'png'
+
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -59,7 +51,6 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=127)
     email = models.CharField(max_length=255, unique=True)
     registration = models.CharField(max_length=80, blank=True)
-    photo = models.CharField(max_length=10, default="")
     welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default='')
 
@@ -81,22 +72,33 @@ class User(AbstractBaseUser):
     notify_on_upload = True
 
     def __init__(self, *args, **kwargs):
-        self._following_courses = None
         self._moderated_courses = None
         super().__init__(*args, **kwargs)
-
-    @property
-    def get_photo(self):
-        photo = self.DEFAULT_PHOTO
-        if self.photo != "":
-            photo = join(settings.MEDIA_URL, "profile/{0.netid}.{0.photo}".format(self))
-
-        return photo
 
     @property
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
 
+    def getPrograms(self):
+        """Returns a QS of the programs in which a course is followed by the user"""
+        blocs = Category.objects.filter(course__in=self.following_courses).select_related('parent')
+        programs = [bloc.parent.slug for bloc in blocs.all()]
+        return Category.objects.filter(level=2, slug__in=programs).annotate(
+            slug_=models.functions.Cast(
+                models.functions.Concat(
+                    models.Value("mycourses-"), 'slug'
+                ), output_field=models.SlugField()
+            ),
+        )
+
+    def getBlocs(self, program_slug):
+        """Returns a QS of blocs that contain a course the user follows"""
+        return set(Category.objects.filter(
+            level=3, parent__slug=program_slug,
+            course__in=self.following_courses
+        ))
+
+    @property
     def following_courses(self):
         return self.courses_set.all()
 
@@ -135,7 +137,7 @@ class User(AbstractBaseUser):
             self.save()
 
     def update_inferred_faculty(self):
-        courses = self.following_courses()
+        courses = self.following_courses
         categories = [x.categories.all() for x in courses]
         categories = list(itertools.chain.from_iterable(categories))
 

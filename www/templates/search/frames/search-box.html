@@ -1,29 +1,46 @@
 <div data-controller="search">
-  <input
-    type="text"
-    value="{{query}}"
-    placeholder="Cherche un cours, comme info-h-101 ou Microéconomie"
-    data-search-target="input"
-    data-action="input->search#search"
-  />
+  <div style="border: 2px solid black;border-radius: 0.5rem;width: 100%;margin-left: auto;margin-right: auto;display:flex;overflow: hidden">
+      <i class="fas fa-search" style="margin: 0.5rem;"></i>
+      <input
+        id="search-zone"
+        type="text"
+        value="{{query}}"
+        data-search-target="input"
+        data-action="input->search#search"
+        placeholder="Chercher un cours (exemple: info-f-101 ou Microeconomie)"
+        style="border: none;text-align: center;outline: none;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;flex: 1;"
+      />
+  </div>
   <turbo-frame id="search-box">
-    <details {%if open %}open{% endif %} style=" z-index: 1; position: relative;" >
-      <summary>
-        <form action="/search/courses/" method="get" style="display: none">
-          <input type="hidden" name="query" data-search-target="output" />
-          <input type="submit" data-search-target="submit">
+        <form action="/search/courses/" method="get" style="display: none" id="search-courses">
+        <input type="hidden" name="query" data-search-target="output" />
+        <input type="submit" data-search-target="submit">
         </form>
-      </summary>
-      <div id="search-results">
-        {% for course in course_list %}
-        <a href="{% url 'course_show' course.slug %}" style="display: block" target="_top">
-          <span class="course-label secondary radius label recent-blob fixed-label">{{course.slug}}</span>
-          {{course.name}}
-        </a>
-        {% empty %}
-          {% if initial %} Tapez pour chercher {% else %} Aucun résultat{% endif %}
-        {% endfor %}
-      </div>
-    </details>
+      {% if not initial %}
+       <div id="search-results" class="results">
+           {% for course in course_list %}
+           <a title="{{course.name}}" href="{% url 'course_show' course.slug %}" style="display: block;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;" target="_top">
+           <span>{{course.slug}}</span>
+           {{course.name}}
+           </a>
+           {% empty %}
+           Aucun résultat
+           {% endfor %}
+       </div>
+       {% endif %}
   </turbo-frame>
 </div>
+
+<script>
+
+  $('#search-zone').blur(function() {
+    // Moldav shenanigance because javascript hides the links before DOM Event
+    setTimeout(function () {
+        $('#search-box').hide();
+    }, 250);
+  });
+
+  $('#search-zone').focus(function() {
+    $('#search-box').show();
+  });
+</script>

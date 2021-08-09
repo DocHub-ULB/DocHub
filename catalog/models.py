@@ -6,7 +6,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(db_index=True)
+    slug = models.SlugField(max_length=255, db_index=True)
     description = models.TextField(blank=True, default='')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=models.CASCADE)
 

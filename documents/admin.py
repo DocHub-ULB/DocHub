@@ -66,11 +66,10 @@ class DocumentAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'name', 'pages', 'views', 'downloads', 'hidden', 'state', 'created', 'user', 'file_type', 'imported')
     list_filter = ('state', 'created', 'edited', 'file_type',)
-    search_fields = ('md5', 'name', 'imported', 'user')
+    search_fields = ('md5', 'name', 'user__netid')
     raw_id_fields = ('user', 'course')
 
     inlines = [VoteInline]
-
 
     actions = (reprocess, autotag, repair)
 

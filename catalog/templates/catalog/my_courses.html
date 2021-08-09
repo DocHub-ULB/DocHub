@@ -1,71 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Liste des cours{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="{% if request.user.following_courses|length == 0 %}large-12{% else %}large-8{% endif %} medium-12 columns">
-    {% if request.user.following_courses|length == 0 %}
-    <h1>Mes cours</h1>
-      <p>On dirait que tu n'es abonné à aucun cours pour le moment.<br>
-      Tu pourrais parcourir le catalogue de DocHub et
-      <span data-tooltip aria-haspopup="true" class="has-tip" title="En vous abonnant à un cours, vous recevrez une notification quand quelqu'un ajoute un document ou pose une question.">t'abonner</span>
-      aux cours qui t'intéressent.</p>
-      <div class="alert-box radius secondary medium-8">
-        <i class="fi-info"></i> En t'abonnant à un cours, tu recevras une notification quand quelqu'un ajoute un document ou pose une question.
-      </div>
-    {% else %}
-    <h1>Cours
-      {% if show_unfollow_all_button %}
-        <a href="{% url 'unfollow_all_courses' %}" class="button alert right">Me désabonner de tous les cours</a>
-      {% endif %}
-    </h1>
-      <ul class="course-list">
-        {% for course in request.user.following_courses %}
-          <li>
-              <a href="{% url 'course_show' course.slug %}">
-                  <span class="course-label radius success label">
-                    {{ course.slug }}
-                </span>
-                  {{ course.name }}
-              </a>
-          </li>
-        {% endfor %}
-      </ul>
-
-      {% if suggestions %}
-        <h3>Suggestions</h3>
-        Ces cours-ci semblent similaires aux tiens, tu pourrais t'y abonner.
-        <ul class="course-list">
-          {% for course, rank in suggestions %}
-            <li>
-                  <a href="{% url 'course_show' course.slug %}">
-                      <span class="course-label radius info label">
-                        {{ course.slug }}
-                      </span>
-                      {{ course.name }}
-                  </a>
-              </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endif %}
-  </div>
-
-  <div class="{% if request.user.following_courses|length == 0 %}large-12{% else %}large-4{% endif %} medium-12 columns">
-    <h1>Catalogue</h1>
-    Tu peux aussi aller voir tous les autre cours de l'ULB.
-    Ils sont classés par faculté, section et année.<br><br>
-    <ul class="small-block-grid-1">
-    {% for fac in faculties %}
-        <li class="catalog-option">
-            <a href="{% url 'category_show' fac.id %}">
-              <i class="fi-folder round-icon small"></i>
-              {{ fac.name }}
-            </a>
-        </li>
-      {% endfor %}
-      </ul>
-  </div>
+<a href="{% url 'unfollow_all_courses' %}" class="button red" style="position: absolute;right: 2em">
+    Me désabonner de tous les cours
+</a>
+<div class="big-finder">
+    <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" %}">
+    </turbo-frame>
+    <turbo-frame id="programs" class="turbo-overflow">
+    </turbo-frame>
+    <turbo-frame id="blocs" class="turbo-overflow">
+    </turbo-frame>
+    <turbo-frame id="courses" class="turbo-overflow">
+    </turbo-frame>
 </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "home.js" %}"></script>
 {% endblock %}

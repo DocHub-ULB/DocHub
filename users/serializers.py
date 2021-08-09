@@ -23,7 +23,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     followed_courses = serializers.SerializerMethodField()
 
     def get_followed_courses(self, obj):
-        courses = obj.following_courses()
+        courses = obj.following_courses
         return FollowedCourseSerializer(courses, many=True).data
 
     class Meta:

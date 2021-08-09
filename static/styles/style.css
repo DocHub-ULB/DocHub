@@ -29,7 +29,7 @@ html {
 
 
 .logo {
-    display: inline-grid;
+    display: inline-flex;
     grid-column-start: 1;
 
     justify-content: center;
@@ -58,6 +58,7 @@ html {
     font-style: normal;
     font-weight: normal;
     font-size: 1.2em;
+    line-height: 50px;
 }
 
 .dropdown-content {
@@ -94,9 +95,6 @@ html {
 .footer {
     width: 100%;
     text-align: center;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     font-family: Titillium Web;
     font-style: normal;
     font-weight: normal;
@@ -139,14 +137,14 @@ html {
     margin-left: 5vw;
     display: grid;
     grid-auto-rows: max-content;
-    row-gap: 20px;
-    height:82vh;
-    overflow-y: scroll;
+    row-gap: 0.5em;
+    height: calc(100vh - 186px - 3em);
+    overflow-y: auto;
 }
 
 .card{
     display: grid;
-    grid-template-columns: 5% 1fr;
+    grid-template-columns: 8% 1fr;
     column-gap: 1em;
     font-family: Titillium Web;
     font-style: normal;
@@ -167,6 +165,13 @@ html {
 
 .card-like a{
     margin: auto;
+}
+
+.card-like span {
+    font-size: 24px;
+    font-family: Titillium Web;
+    font-weight: normal;
+    margin-left:0.25em
 }
 
 .like:hover i {
@@ -243,6 +248,21 @@ html {
     margin-top: .5em;
 }
 
+.course-grid {
+    display: grid;
+    grid-template-columns: 1fr 65% 1fr 25% 1fr;
+    margin-top: 1.5em;
+}
+
+.page-title {
+    margin-left: 2rem;
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 2em;
+    line-height: 49px;
+}
+
 .ck-button {
     border-radius:5px;
     overflow:auto;
@@ -278,6 +298,20 @@ html {
     filter: brightness(85%);
 }
 
+.show-aside {
+    display: none;
+    visibility: hidden;
+    position:fixed;
+    bottom:1em;
+    right:1em;
+    background: rgba(0,0,0,0.25);
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
+.show-aside i {
+    font-size: 2em;
+}
 
 /* Home page */
 .button-search {
@@ -291,8 +325,82 @@ html {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     width: max-content;
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: normal;
 }
 
+.finder {
+    grid-column-start: 2;
+    grid-row-start: 2;
+    height: 40vh;
+    display: grid;
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    border: 3px solid #3d3d3d;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.finder-col {
+    padding-left: 0.5em;
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: normal;
+    height: inherit;
+    overflow-y: scroll;
+    border-left: 1px solid rgba(0, 0, 0, 0.25);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 111, 148, 0.75) transparent;     /* Opera/IE 8+ */
+}
+
+.inner-finder-col {
+    width: 100%;
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+}
+
+.finder-col::-webkit-scrollbar {
+    width: 2px;
+}
+
+.finder-col::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.finder-col::-webkit-scrollbar-thumb {
+    background-color: #007095;
+    border-radius: 5px;
+}
+
+.turbo-overflow {
+    height: inherit;
+}
+
+.modal{
+    margin-left: 0.5em;
+    max-height:0;
+    overflow: hidden;
+    -webkit-transition: max-height 1s ease-in-out;
+    -moz-transition: max-height 1s ease-in-out;
+    -o-transition: max-height 1s ease-in-out;
+    transition: max-height 1s ease-in-out;
+}
+
+/* My courses */
+.big-finder {
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    height: 80vh;
+    display: grid;
+    border: 3px solid #3d3d3d;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 4vh;
+    margin-right:5vw;
+    margin-left:5vw
+}
 
 /* Course upload */
 .content {
@@ -344,4 +452,112 @@ html {
 
 .filter--filtered {
   display: none;
+}
+
+/* Search-box */
+
+.results {
+    position:absolute;
+    background-color: white;
+    border: 2px solid black;
+    width:100%;
+    border-top: none;
+    border-radius: 5px;
+    font-family: Titillium Web;
+    height: 25vh;
+    overflow-y:auto;
+}
+
+.results a {
+    padding-left: 0.5em;
+}
+
+.results a:hover {
+    background-color: rgba(0, 139, 186, 0.25);
+}
+
+.results a span {
+    font-weight: 500;
+    font-size:1.2rem;
+    width:22%;
+    display:inline-block;
+    text-align: center
+}
+
+/* Mobile view */
+
+@media screen and (max-width: 900px) {
+    body {
+        margin: 0;
+    }
+
+    .nav {
+        grid-template-columns: none;
+    }
+
+    .aside {
+        display: none;
+        visibility: hidden;
+        grid-auto-rows: max-content max-content 1fr;
+        row-gap: 20px;
+        grid-column-start: 4;
+        position: absolute;
+        top: 0;
+        background-color: rgba(255,2555,255, 0.95);
+        height: 100vh;
+        padding-top: 2em;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+
+    .course-grid {
+        grid-template-columns: 1fr 90% 1fr;
+        margin-top: 0;
+    }
+
+    .deck {
+        margin-left: 0;
+        row-gap: 0.5em;
+        overflow-y: visible;
+        height: 100%;
+    }
+
+    .page-title {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .dropdown-content {
+        right: 0;
+    }
+
+    .card {
+        grid-template-columns: 15% 1fr;
+    }
+
+    .card-like {
+        height: 4.5em;
+    }
+
+    .card-like a{
+        margin: 0;
+    }
+
+    .card-like i {
+        font-size: 1.3em;
+    }
+
+    .tags {
+        margin: 0;
+    }
+
+    .show-aside {
+        display: block;
+        visibility: visible;
+    }
+
+    .results a span {
+        font-size:1rem;
+        width:22%;
+    }
 }

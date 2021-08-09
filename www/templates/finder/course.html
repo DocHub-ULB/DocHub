@@ -1,0 +1,36 @@
+{% load follow_tags %}
+{% load static %}
+
+<turbo-frame id="courses">
+    <div id="courses-finder-col" class="finder-col" spinner-url="{% static "images/loading.gif" %}" empty-courses-url="{% url "finder_turbo" "courses" "empty" %}">
+    {% for course in courses %}
+        {% is_following request.user course as following %}
+        <div
+            id="{{ course.slug }}"
+            class="inner-finder-col"
+            leave-course-url="{% url "set_course_follow" "leave" course.slug bloc_slug %}"
+            join-course-url="{% url "set_course_follow" "follow" course.slug bloc_slug %}"
+            following={% if following %}1{% else %}0{% endif %}
+        >
+            <a href="{% url 'course_show' course.slug %}" target="_top">{{ course.name }}</a>
+            {% if following %}
+                <a
+                    title="Leave the course"
+                    id="follow-{{ course.slug }}"
+                    onclick="follow('{{ course.slug }}')"
+                >
+                    <i class="fas fa-minus-circle" style="color: #F34040"></i>
+                </a>
+            {% else %}
+                <a
+                    title="Join the course"
+                    id="follow-{{ course.slug }}"
+                    onclick="follow('{{ course.slug }}')"
+                >
+                    <i class="fas fa-plus-circle" style="color: #43AC6A"></i>
+                </a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+</turbo-frame>
