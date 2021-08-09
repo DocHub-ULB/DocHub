@@ -225,8 +225,7 @@ def document_vote(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
     vote, created = Vote.objects.get_or_create(document=document, user=request.user)
-    vote.vote_type = request.POST["vote_type"]
-    print(vote, vote.vote_type)
+    vote.vote_type = request.GET.get("vote_type")
     vote.save()
 
-    return redirect(document.course)
+    return render(request, "catalog/like-dislike.html", context={"document": document})
