@@ -20,7 +20,7 @@
        <div id="search-results" class="results">
            {% for course in course_list %}
            <a title="{{course.name}}" href="{% url 'course_show' course.slug %}" style="display: block;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;" target="_top">
-           <span style="font-weight: 500;font-size:1.2rem;width:22%;display:inline-block;text-align: center">{{course.slug}}</span>
+           <span>{{course.slug}}</span>
            {{course.name}}
            </a>
            {% empty %}

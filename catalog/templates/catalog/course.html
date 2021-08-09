@@ -8,9 +8,9 @@
 
 {% block content %}
 
-<div data-controller="course-filter" style="display: grid; grid-template-columns: 1fr 65% 1fr 25% 1fr;margin-top: 1.5em;">
+<div class="course-grid" data-controller="course-filter">
     <div style="grid-column-start: 2;">
-        <h1 style="margin-left: 2rem;font-family: Titillium Web; font-style: normal; font-weight: normal; font-size: 32px; line-height: 49px;">
+        <h1 class="page-title">
             {{ course.slug|upper }} {{ course.name }}
             {% is_following request.user course as following %}
             {% if following %}
@@ -115,5 +115,9 @@
             </div>
         </div>
     </div>
+
+    <a class="show-aside">
+        <i class="fas fa-bars"></i>
+    </a>
 </div>
 {% endblock %}
