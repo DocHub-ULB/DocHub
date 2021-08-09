@@ -3,11 +3,11 @@
 <turbo-frame id="like-dislike-{{ document.pk }}" class="card-like">
     {% user_liked request.user document as liked %}
     <a class="like" href="{% url "document_vote" document.pk %}?vote_type=up">
-        <i class="fas fa-thumbs-up" style="grid-row-start:1;{% if liked %}color: #43AC6A;{% endif %}"></i>
+        <i class="fas fa-thumbs-up" style="grid-row-start:1;{% if liked == "up" %}color: #43AC6A;{% endif %}"></i>
         <span>{{ document.votes.upvotes }}</span>
     </a>
     <a class="dislike" href="{% url "document_vote" document.pk %}?vote_type=down">
-        <i class="fas fa-thumbs-down" style="grid-row-start:2;{% if not liked %}color: #9e1d1d;{% endif %}"></i>
+        <i class="fas fa-thumbs-down" style="grid-row-start:2;{% if liked == "down" %}color: #9e1d1d;{% endif %}"></i>
         <span>{{ document.votes.downvotes }}</span>
     </a>
 </turbo-frame>
