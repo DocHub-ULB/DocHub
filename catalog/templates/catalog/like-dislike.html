@@ -4,10 +4,10 @@
     {% user_liked request.user document as liked %}
     <a class="like" href="{% url "document_vote" document.pk %}?vote_type=up">
         <i class="fas fa-thumbs-up" style="grid-row-start:1;{% if liked %}color: #43AC6A;{% endif %}"></i>
-        <span style="font-size: 24px;font-family: Titillium Web;font-weight: normal;margin-left:0.25em">{{ document.votes.upvotes }}</span>
+        <span>{{ document.votes.upvotes }}</span>
     </a>
     <a class="dislike" href="{% url "document_vote" document.pk %}?vote_type=down">
         <i class="fas fa-thumbs-down" style="grid-row-start:2;{% if not liked %}color: #9e1d1d;{% endif %}"></i>
-        <span style="font-size: 24px;font-family: Titillium Web;font-weight: normal;margin-left:0.25em">{{ document.votes.downvotes }}</span>
+        <span>{{ document.votes.downvotes }}</span>
     </a>
 </turbo-frame>
