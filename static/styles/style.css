@@ -498,6 +498,27 @@ html {
     text-align: center
 }
 
+.search-box {
+    border: 2px solid black;
+    border-radius: 0.5rem;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display:flex;
+    overflow: hidden;
+    background: white;
+}
+
+.search-box input {
+    border: none;
+    text-align: center;
+    outline: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 1;
+}
+
 /* Mobile view */
 
 @media screen and (max-width: 900px) {

@@ -1,5 +1,5 @@
 <div data-controller="search">
-  <div style="border: 2px solid black;border-radius: 0.5rem;width: 100%;margin-left: auto;margin-right: auto;display:flex;overflow: hidden">
+  <div class="search-box">
       <i class="fas fa-search" style="margin: 0.5rem;"></i>
       <input
         id="search-zone"
@@ -8,7 +8,6 @@
         data-search-target="input"
         data-action="input->search#search"
         placeholder="Chercher un cours (exemple: info-f-101 ou Microeconomie)"
-        style="border: none;text-align: center;outline: none;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;flex: 1;"
       />
   </div>
   <turbo-frame id="search-box">
