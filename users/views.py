@@ -22,19 +22,6 @@ from users.forms import SettingsForm
 
 
 @login_required
-def user_settings(request):
-    token, created = Token.objects.get_or_create(user=request.user)
-
-    return render(
-        request,
-        "users/settings.html",
-        {
-            "token": token,
-        },
-    )
-
-
-@login_required
 def reset_token(request):
     Token.objects.filter(user=request.user).delete()
     Token.objects.create(user=request.user)
