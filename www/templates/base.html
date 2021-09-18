@@ -18,6 +18,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script type="module" src="{% static "main.js" %}"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
     {% block header %}
     {% endblock %}
 </head>
@@ -30,19 +32,21 @@
     {% block content %}
     {% endblock %}
 
+    {% include "api_modal.html" %}
+
     <footer class="footer">
-      <br>
-      Made with love at
-      <a href="https://urlab.be">
-        <img src="{% static "images/urlab.png" %}" style="height: 1em;">
-        UrLab
-      </a>
-      - Code on <a href="https://github.com/UrLab/beta402">GitHub</a>
-      - <a href="https://cerkinfo.be">
-          <img style="height: 1.0em;" src="{% static "images/ci.png" %}">
+        <br>
+        Made with love at
+        <a href="https://urlab.be">
+          <img src="{% static "images/urlab.png" %}" style="height: 1em;">
+          UrLab
         </a>
-      - <a href="/api">API</a>
-      <br><br>
+        - Code on <a href="https://github.com/UrLab/dochub">GitHub</a>
+        - <a href="https://cerkinfo.be">
+            <img style="height: 1.0em;" src="{% static "images/ci.png" %}">
+          </a>
+        - <button onClick="toggleAPIModal()" style="border:none;background:none;font-weight;font-family: Titillium Web;font-style: normal;font-weight: normal;font-color:#008CBA">API</button>
+        <br><br>
     </footer>
 </body>
 

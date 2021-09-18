@@ -1,0 +1,60 @@
+<div id="api_modal" style="display: none;position: absolute;width: 100%;height: 100%;background-color: rgba(0,0,0,0.7);top:0;left:0">
+    <div id="inner_modal" style="background:#fff;border: 1px solid black; border-radius:5px ;position: relative;width: 60vw;margin:auto;top:35%;transform: translateY(-50%)">
+        <div style="margin-left:1em">
+            <h1 style="margin-bottom:0.2em">API</h1>
+            <div style="margin-left:0.2em">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+                <h3><i class="fas fa-key"></i> Token d'accès à l'API</h3>
+                <input type="text" id="foo" disabled value="{{user.api_token.key}}" style="margin-bottom:0.2em">
+                <br>
+                <a href="{% url "reset_token" %}" style="color: blue">
+                    <small>
+                        <i class="fas fa-sync"></i>
+                        Supprimer cette clé et générer une nouvelle
+                    </small>
+                </a>
+
+                <div>
+                    <h2 id="modalTitle">Utilisation de l'API</h2>
+                    <p class="lead">Utilisation avec CURL</p>
+                    <p>
+                        <pre><code class="language-bash">curl -X GET https://dochub.be/api/ -H 'Authorization: Token {{user.token.key}}'</code></pre>
+                    </p>
+                    <p class="lead">Ou requests</p>
+                    <p>
+                        <pre><code class="language-python">import requests
+headers = {'Authorization': 'Token {{user.token.key}}'}
+response = request.get("https://dochub.be/api/", headers=headers)
+print(response.json())
+                        </code></pre>
+                    </p>
+                    <p>Cliquez <a href="/api" style="color: blue;">ici</a> pour accéder à l'index de l'API</p>
+
+                    <button class="red" onClick="toggleAPIModal()" style="position:absolute;top:1em;right:1em;font-size:1.5em;height:1.5em;width:1.5em;border-radius: 5px;">&#215;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  function toggleAPIModal(){
+    if($('#api_modal').css('display') == "none"){
+      $('#api_modal').css("display", "block");
+    } else {
+      $('#api_modal').css("display", "none")
+    }
+    event.stopPropagation();
+  }
+
+  $(document).click(function() {
+    // Must close the modal if opened
+    $('#api_modal').css("display", "none");
+  });
+
+  $("#inner_modal").click(function(event) {
+      // Must stop event propagation to the document
+      event.stopPropagation();
+  });
+  hljs.highlightAll();
+</script>
