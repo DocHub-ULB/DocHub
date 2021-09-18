@@ -10,6 +10,8 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
+from rest_framework.authtoken.models import Token
+
 from catalog.models import Category, Course
 
 
@@ -78,6 +80,12 @@ class User(AbstractBaseUser):
     @property
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
+
+    @property
+    def api_token(self):
+        token, _created = Token.objects.get_or_create(user=self)
+
+        return token
 
     def getPrograms(self):
         """Returns a QS of the programs in which a course is followed by the user"""
