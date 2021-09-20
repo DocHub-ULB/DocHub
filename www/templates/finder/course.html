@@ -1,16 +1,16 @@
 {% load follow_tags %}
 {% load static %}
 
-<turbo-frame id="courses">
-    <div id="courses-finder-col" class="finder-col" spinner-url="{% static "images/loading.gif" %}" empty-courses-url="{% url "finder_turbo" "courses" "empty" %}">
+<turbo-frame id="{{ turbo_id }}">
+    <div id="courses-finder-col" class="finder-col" spinner-url="{% static "images/loading.gif" %}" empty-courses-url="{% url "finder_turbo" "courses" "empty" mobile %}">
     {% for course in courses %}
         {% is_following request.user course as following %}
         <div
             id="{{ course.slug }}"
             class="inner-finder-col"
             style="grid-template-columns: 90% 1fr;display:grid;"
-            leave-course-url="{% url "set_course_follow" "leave" course.slug bloc_slug %}"
-            join-course-url="{% url "set_course_follow" "follow" course.slug bloc_slug %}"
+            leave-course-url="{% url "set_course_follow" "leave" course.slug %}"
+            join-course-url="{% url "set_course_follow" "follow" course.slug %}"
             following={% if following %}1{% else %}0{% endif %}
         >
             <a href="{% url 'course_show' course.slug %}" target="_top" style="grid-column-start: 1;">{{ course.name }}</a>

@@ -1,12 +1,12 @@
-<turbo-frame id="facs">
+<turbo-frame id="{{ turbo_id }}">
     <div class="finder-col" style="border: none;">
 
     {% if request.user.following_courses.count > 0 %}
         <a
         onclick="emptySubCat('blocs', 'courses')"
         class="inner-finder-col"
-        href="{% url 'finder_turbo' 'programs' 'mycourses' %}"
-        data-turbo-frame="programs"
+        href="{% url 'finder_turbo' 'courses' 'mycourses' mobile %}"
+        data-turbo-frame="{{ futur_turbo_id }}"
         style="color: #f00"
         >
             <i class="fas fa-folder"></i> Mes cours
@@ -16,8 +16,8 @@
         <a
             onclick="emptySubCat('blocs', 'courses')"
             class="inner-finder-col"
-            href="{% url "finder_turbo" "programs" fac.slug %}"
-            data-turbo-frame="programs"
+            href="{% url "finder_turbo" "programs" fac.slug mobile %}"
+            data-turbo-frame="{{ futur_turbo_id }}"
             style="color: {{ fac.description }}"
         >
             <i class="fas fa-folder"></i> {{ fac.name }}

@@ -566,6 +566,11 @@ html {
 
 /* Mobile view */
 
+.visible-on-mobile {
+    display: none;
+    visibility: hidden;
+}
+
 @media screen and (max-width: 900px) {
     body {
         margin: 0;
@@ -588,6 +593,8 @@ html {
         padding-top: 2em;
         padding-left: 0.5em;
         padding-right: 0.5em;
+        margin-top: 0;
+        width: 95vw;
     }
 
     .course-grid {
@@ -662,5 +669,15 @@ html {
 
     .home-search-container {
         width: 85vw;
+    }
+
+    .hide-on-mobile {
+        display: none;
+        visibility: hidden;
+    }
+
+    .visible-on-mobile {
+        display: block;
+        visibility: visible;
     }
 }

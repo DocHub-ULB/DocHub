@@ -1,4 +1,4 @@
-<turbo-frame id="programs" class="turbo-overflow" src="{% url "finder_turbo" "program" "empty" %}">
+<turbo-frame id="{{ turbo_id }}" class="turbo-overflow" src="{% url "finder_turbo" "program" "empty" mobile %}">
     <div class="finder-col">
     {% for program_type in program_types %}
         <a class="inner-finder-col" onclick="toggleModal('{{ program_type.slug }}')" style="font-weight: bold;">
@@ -10,11 +10,11 @@
                 onclick="emptySubCat('courses')"
                 class="inner-finder-col" 
                 {% if program.slug_ %}
-                    href="{% url "finder_turbo" "blocs" program.slug_ %}"
+                    href="{% url "finder_turbo" "blocs" program.slug_ mobile %}"
                 {% else %}
-                    href="{% url "finder_turbo" "blocs" program.slug %}"
+                    href="{% url "finder_turbo" "blocs" program.slug mobile %}"
                 {% endif %}
-                data-turbo-frame="blocs"
+                data-turbo-frame="{{ futur_turbo_id }}"
             >
                 <i class="fas fa-folder"></i> {{ program.name }}
             </a>

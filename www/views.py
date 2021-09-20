@@ -56,84 +56,117 @@ def getEmptyFrame(request, id: str) -> HttpResponse:
     )
 
 
-def getFacFrame(request) -> HttpResponse:
+def getFacFrame(request, mobile: str) -> HttpResponse:
     root = get_object_or_404(Category, slug="root")
     facs = root.children.all().order_by("name")
+
+    if mobile == "true":
+        turbo_id = "mobile"
+        futur_turbo_id = "mobile"
+    else :
+        turbo_id = "facs"
+        futur_turbo_id = "programs"
 
     return render(
         request,
         "finder/fac.html",
         context={
-            "facs": facs
+            "facs": facs,
+            "turbo_id": turbo_id,
+            "futur_turbo_id": futur_turbo_id,
+            "mobile": mobile
         }
     )
 
 
-def getProgramFrame(request, fac_slug: str) -> HttpResponse:
-    if fac_slug == "mycourses":
-        programs = request.user.getPrograms()
-    else:
-        fac = get_object_or_404(Category, slug=fac_slug)
-        programs = fac.children.all().order_by("name")
+def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
+    fac = get_object_or_404(Category, slug=fac_slug)
+    programs = fac.children.all().order_by("name")
 
     programs = buildOrderedProgramList(programs)
+
+    if mobile == "true":
+        turbo_id = "mobile"
+        futur_turbo_id = "mobile"
+    else :
+        turbo_id = "programs"
+        futur_turbo_id = "blocs"
 
     return render(
         request,
         "finder/programs.html",
         context={
-            "program_types": programs
+            "program_types": programs,
+            "turbo_id": turbo_id,
+            "futur_turbo_id": futur_turbo_id,
+            "mobile": mobile
         }
     )
 
 
-def getBlocFrame(request, program_slug: str) -> HttpResponse:
-    if program_slug.split('-')[0] == "mycourses":
-        _, program_slug = program_slug.split('-', 1)
-        blocs = request.user.getBlocs(program_slug)
-    else:
-        program = get_object_or_404(Category, slug=program_slug)
-        blocs = program.children.all().order_by("name")
+def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
+    program = get_object_or_404(Category, slug=program_slug)
+    blocs = program.children.all().order_by("name")
+
+    if mobile == "true":
+        turbo_id = "mobile"
+        futur_turbo_id = "mobile"
+    else :
+        turbo_id = "blocs"
+        futur_turbo_id = "courses"
 
     return render(
         request,
         "finder/bloc.html",
         context={
-            "blocs": blocs
+            "blocs": blocs,
+            "turbo_id": turbo_id,
+            "futur_turbo_id": futur_turbo_id,
+            "mobile": mobile
         }
     )
 
 
-def getCourseFrame(request, bloc_slug: str) -> HttpResponse:
-    bloc = get_object_or_404(Category, slug=bloc_slug)
-    courses = Course.objects.filter(categories=bloc).order_by("name")
+def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
+    turbo_id = "courses"
 
+    if bloc_slug == "mycourses":
+        courses = request.user.following_courses
+        turbo_id = "programs"
+    else:
+        bloc = get_object_or_404(Category, slug=bloc_slug)
+        courses = Course.objects.filter(categories=bloc).order_by("name")
+
+    if mobile == "true":
+        turbo_id = "mobile"
+    
     return render(
         request,
         "finder/course.html",
         context={
             "courses": courses,
-            "bloc_slug": bloc.slug
+            "turbo_id": turbo_id,
+            "mobile": mobile
         }
     )
 
 
-def finder_turbo(request, id: str, category_slug: str):
+def finder_turbo(request, id: str, category_slug: str, mobile: str):
     if category_slug == "empty":
         return getEmptyFrame(request, id)
     if id == "facs":
-        return getFacFrame(request)
+        return getFacFrame(request, mobile)
     if id == "programs":
-        return getProgramFrame(request, category_slug)
+        return getProgramFrame(request, category_slug, mobile)
     if id == "blocs":
-        return getBlocFrame(request, category_slug)
+        return getBlocFrame(request, category_slug, mobile)
     if id == "courses":
-        return getCourseFrame(request, category_slug)
+        return getCourseFrame(request, category_slug, mobile)
     else:
         raise Http404("l'ID recherché est introuvable")
 
 
-def set_follow_course(request, action: str, course_slug: str, bloc_slug: str):
+def set_follow_course(request, action: str, course_slug: str):
     course = get_object_or_404(Course, slug=course_slug)
     if action == "follow":
         course.followed_by.add(request.user)

@@ -1,11 +1,11 @@
-<turbo-frame id="blocs">
+<turbo-frame id="{{ turbo_id }}">
     {% if blocs|length > 0 %}
-        <div id="blocs-finder-col" class="finder-col" empty-blocs-url="{% url "finder_turbo" "bloc" "empty" %}">
+        <div id="blocs-finder-col" class="finder-col" empty-blocs-url="{% url "finder_turbo" "bloc" "empty" mobile %}">
         {% for bloc in blocs %}
             <a
                 class="inner-finder-col"
-                href="{% url "finder_turbo" "courses" bloc.slug %}"
-                data-turbo-frame="courses"
+                href="{% url "finder_turbo" "courses" bloc.slug mobile %}"
+                data-turbo-frame="{{ futur_turbo_id }}"
             >
                 <i class="fas fa-folder"></i> {{ bloc.name }}
             </a>
