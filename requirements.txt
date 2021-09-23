@@ -31,12 +31,6 @@ cfgv==3.2.0
     # via pre-commit
 chardet==4.0.0
     # via requests
-click-didyoumean==0.0.3
-    # via celery
-click-plugins==1.1.1
-    # via celery
-click-repl==0.1.6
-    # via celery
 click==7.1.2
     # via
     #   celery
@@ -44,6 +38,12 @@ click==7.1.2
     #   click-plugins
     #   click-repl
     #   pip-tools
+click-didyoumean==0.0.3
+    # via celery
+click-plugins==1.1.1
+    # via celery
+click-repl==0.1.6
+    # via celery
 configparser==5.0.2
     # via minio
 coreapi==2.3.3
@@ -54,6 +54,19 @@ decorator==5.0.6
     # via ipython
 distlib==0.3.1
     # via virtualenv
+django==3.2.5
+    # via
+    #   -r requirements.in
+    #   django-debug-toolbar
+    #   django-extensions
+    #   django-js-reverse
+    #   django-jsonfield
+    #   django-minio-storage
+    #   django-mptt
+    #   django-multiupload
+    #   django-stubs
+    #   djangorestframework
+    #   jsonfield
 django-activity-stream==0.10.0
     # via -r requirements.in
 django-debug-toolbar==3.2.1
@@ -64,9 +77,9 @@ django-js-asset==1.2.2
     # via django-mptt
 django-js-reverse==0.9.1
     # via -r requirements.in
-django-jsonfield-compat==0.4.4
-    # via -r requirements.in
 django-jsonfield==1.4.1
+    # via -r requirements.in
+django-jsonfield-compat==0.4.4
     # via -r requirements.in
 django-minio-storage==0.3.10
     # via -r requirements.in
@@ -84,25 +97,12 @@ django-webpack-loader==0.7.0
     # via -r requirements.in
 django-webtest==1.9.7
     # via -r requirements.in
-django==3.2.4
-    # via
-    #   -r requirements.in
-    #   django-debug-toolbar
-    #   django-extensions
-    #   django-js-reverse
-    #   django-jsonfield
-    #   django-minio-storage
-    #   django-mptt
-    #   django-multiupload
-    #   django-stubs
-    #   djangorestframework
-    #   jsonfield
-djangorestframework-stubs==1.4.0
-    # via -r requirements.in
 djangorestframework==3.12.4
     # via
     #   -r requirements.in
     #   drf-extensions
+djangorestframework-stubs==1.4.0
+    # via -r requirements.in
 drf-extensions==0.7.0
     # via -r requirements.in
 filelock==3.0.12
@@ -123,10 +123,10 @@ idna==2.10
     # via requests
 iniconfig==1.1.1
     # via pytest
-ipython-genutils==0.2.0
-    # via traitlets
 ipython==7.22.0
     # via -r requirements.in
+ipython-genutils==0.2.0
+    # via traitlets
 isort==5.8.0
     # via -r requirements.in
 itypes==1.2.0
@@ -147,13 +147,13 @@ minio==6.0.2
     # via django-minio-storage
 mock==4.0.3
     # via -r requirements.in
-mypy-extensions==0.4.3
-    # via mypy
 mypy==0.812
     # via
     #   -r requirements.in
     #   django-stubs
     #   djangorestframework-stubs
+mypy-extensions==0.4.3
+    # via mypy
 nodeenv==1.6.0
     # via pre-commit
 orderedmultidict==1.0.1
@@ -198,10 +198,10 @@ pypdf2==1.26.0
     # via -r requirements.in
 pyreact==0.6.0
     # via -r requirements.in
-pytest-django==4.2.0
-    # via -r requirements.in
 pytest==6.2.3
     # via pytest-django
+pytest-django==4.2.0
+    # via -r requirements.in
 python-dateutil==2.8.1
     # via minio
 python-memcached==1.59
