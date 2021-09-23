@@ -168,7 +168,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==8.2.0
+pillow==8.3.2
     # via -r requirements.in
 pip-tools==6.0.1
     # via -r requirements.in
