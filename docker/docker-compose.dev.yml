@@ -12,7 +12,7 @@ services:
     expose:
       - 8000
     env_file:
-      - ./docker/.env.dev
+      - ./.env.dev
     depends_on:
       - db
     networks:
@@ -25,7 +25,7 @@ services:
     volumes:
       - media_volume:/home/app/web/media
     env_file:
-      - ./docker/.env.celery.dev
+      - ./.env.celery.dev
     depends_on:
       - web
     networks:
