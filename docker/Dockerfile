@@ -15,5 +15,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["./docker/entrypoint.sh"]
 CMD ["gunicorn", "incubator.wsgi:application", "--bind", "0.0.0.0:8000"]
