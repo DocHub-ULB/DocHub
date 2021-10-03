@@ -8,7 +8,6 @@ else
     COMPOSE_FILE=docker/docker-compose.yml
 fi
 
-docker-compose -f $COMPOSE_FILE pull
 docker-compose -f $COMPOSE_FILE up -d --build
 docker-compose -f $COMPOSE_FILE exec web python manage.py migrate --noinput
 docker-compose -f $COMPOSE_FILE exec web python manage.py collectstatic --no-input --clear
