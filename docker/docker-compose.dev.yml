@@ -21,7 +21,7 @@ services:
 
   celery:
     image: docker_web
-    command: /srv/dochub/ve/bin/celery multi start ${CELERYD_NODES} -A ${CELERY_APP} --pidfile=${CELERYD_PID_FILE} --logfile=${CELERYD_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL} ${CELERYD_OPTS}
+    command: /srv/dochub/ve/bin/celery multi start $${CELERYD_NODES} -A $${CELERY_APP} --pidfile=$${CELERYD_PID_FILE} --logfile=$${CELERYD_LOG_FILE} --loglevel=$${CELERYD_LOG_LEVEL} $${CELERYD_OPTS}
     volumes:
       - media_volume:/home/app/web/media
     env_file:
@@ -37,7 +37,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./docker/.env.dev.db
+      - ./.env.dev.db
     networks:
       - private
     restart: unless-stopped
