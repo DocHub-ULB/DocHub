@@ -36,15 +36,15 @@ services:
       - media_volume:/home/app/web/media
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web_dochub.entrypoints=http"
-      - "traefik.http.routers.web_dochub.rule=Host(`beta.dochub.be`)"
-      - "traefik.http.middlewares.web_dochub-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.web_dochub.middlewares=web_dochub-https-redirect"
-      - "traefik.http.routers.web_dochub-secure.entrypoints=https"
-      - "traefik.http.routers.web_dochub-secure.rule=Host(`beta.dochub.be`)"
-      - "traefik.http.routers.web_dochub-secure.tls=true"
-      - "traefik.http.routers.web_dochub-secure.tls.certresolver=http"
-      - "traefik.http.routers.web_dochub-secure.service=nginx-dochub-dev@docker"
+      - "traefik.http.routers.web_dochub-dev.entrypoints=http"
+      - "traefik.http.routers.web_dochub-dev.rule=Host(`beta.dochub.be`)"
+      - "traefik.http.middlewares.web_dochub-dev-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.web_dochub-dev.middlewares=web_dochub-dev-https-redirect"
+      - "traefik.http.routers.web_dochub-dev-secure.entrypoints=https"
+      - "traefik.http.routers.web_dochub-dev-secure.rule=Host(`beta.dochub.be`)"
+      - "traefik.http.routers.web_dochub-dev-secure.tls=true"
+      - "traefik.http.routers.web_dochub-dev-secure.tls.certresolver=http"
+      - "traefik.http.routers.web_dochub-dev-secure.service=nginx-dochub-dev@docker"
       - "traefik.docker.network=traefik-proxy"
     depends_on:
       - web
