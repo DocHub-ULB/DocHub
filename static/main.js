@@ -1,7 +1,7 @@
 import _ from 'https://cdn.skypack.dev/lodash';
 
 import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
-import {Controller, Application} from 'https://cdn.skypack.dev/stimulus';
+import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
 
 const application = Application.start()
 
