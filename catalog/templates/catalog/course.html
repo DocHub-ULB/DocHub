@@ -121,3 +121,15 @@
     </a>
 </div>
 {% endblock %}
+
+{% block script %}
+<script>
+$(".show-aside").click(function(){
+    if($(".aside").css("visibility") == "visible"){
+        $(".aside").css("visibility", "hidden");
+    } else {
+        $(".aside").css("visibility", "visible");
+    }
+})
+</script>
+{% endblock %}

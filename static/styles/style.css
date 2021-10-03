@@ -50,8 +50,7 @@ html {
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
-    line-height: 28px;
-
+    line-height: 28px;visibility
     color: #000000;
 }
 
@@ -596,7 +595,6 @@ html {
     }
 
     .aside {
-        display: none;
         visibility: hidden;
         grid-auto-rows: max-content max-content 1fr;
         row-gap: 20px;
