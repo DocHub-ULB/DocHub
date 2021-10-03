@@ -12,7 +12,7 @@ services:
     expose:
       - 8000
     env_file:
-      - ./.env.dev
+      - ./docker/.env.dev
     depends_on:
       - db
     networks:
@@ -37,7 +37,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.dev.db
+      - ./docker/.env.dev.db
     networks:
       - private
     restart: unless-stopped
