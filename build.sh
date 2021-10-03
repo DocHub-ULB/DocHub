@@ -1,3 +1,5 @@
+git pull
+
 if [[ "$1" == "dev" ]]; then
     export COMPOSE_PROJECT_NAME=dochub-dev
 
