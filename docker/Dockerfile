@@ -13,9 +13,6 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY ./requirements-prod.txt .
-RUN pip install -r requirements-prod.txt
-
 COPY . .
 
 ENTRYPOINT ["./entrypoint.sh"]
