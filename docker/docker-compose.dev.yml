@@ -50,11 +50,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web_dochub-dev.entrypoints=http"
-      - "traefik.http.routers.web_dochub-dev.rule=Host(`beta.dochub.be`)"
+      - "traefik.http.routers.web_dochub-dev.rule=Host(`dochub.teamna.me`)"
       - "traefik.http.middlewares.web_dochub-dev-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.web_dochub-dev.middlewares=web_dochub-dev-https-redirect"
       - "traefik.http.routers.web_dochub-dev-secure.entrypoints=https"
-      - "traefik.http.routers.web_dochub-dev-secure.rule=Host(`beta.dochub.be`)"
+      - "traefik.http.routers.web_dochub-dev-secure.rule=Host(`dochub.teamna.me`)"
       - "traefik.http.routers.web_dochub-dev-secure.tls=true"
       - "traefik.http.routers.web_dochub-dev-secure.tls.certresolver=http"
       - "traefik.http.routers.web_dochub-dev-secure.service=nginx-dochub-dev@docker"
