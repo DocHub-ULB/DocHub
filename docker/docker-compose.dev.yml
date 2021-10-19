@@ -19,18 +19,18 @@ services:
       - private
     restart: unless-stopped
 
-  # celery:
-  #   image: dochub-dev_web
-  #   command: /usr/local/bin/celery multi start $${CELERYD_NODES} -A $${CELERY_APP} --pidfile=$${CELERYD_PID_FILE} --logfile=$${CELERYD_LOG_FILE} --loglevel=$${CELERYD_LOG_LEVEL} $${CELERYD_OPTS}
-  #   volumes:
-  #     - media_volume:/home/app/web/media
-  #   env_file:
-  #     - ./.env.celery.dev
-  #   depends_on:
-  #     - web
-  #   networks:
-  #     - private
-  #   restart: unless-stopped
+  celery:
+    image: dochub-dev_web
+    command: /usr/local/bin/celery -A $${CELERY_APP} worker --pidfile=$${CELERYD_PID_FILE} --logfile=$${CELERYD_LOG_FILE} --loglevel=$${CELERYD_LOG_LEVEL} $${CELERYD_OPTS}
+    volumes:
+      - media_volume:/home/app/web/media
+    env_file:
+      - ./.env.celery.dev
+    depends_on:
+      - web
+    networks:
+      - private
+    restart: unless-stopped
 
   db:
     image: postgres:12.0-alpine
