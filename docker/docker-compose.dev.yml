@@ -21,9 +21,10 @@ services:
 
   celery:
     image: dochub-dev_web
-    command: celery.sh
+    command: docker/celery.sh
     volumes:
-      - media_volume:/home/app/web/media
+      - media_volume:/srv/media
+      - log_volume:/srv/celery
     env_file:
       - ./.env.celery.dev
     depends_on:
@@ -79,3 +80,4 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+  log_volume:
