@@ -24,39 +24,40 @@
         <div class="deck">
             {% for document in documents %}
             <div
-              class="card"
-              data-course-filter-target="filterable"
-              data-filter-key='{{document.name}}'
-              data-tags="{{document.tags.all|join:' '}}"
+                data-course-filter-target="filterable"
+                data-filter-key='{{document.name}}'
+                data-tags="{{document.tags.all|join:' '}}"
             >
-                {% include "catalog/like-dislike.html" %}
-                <div class="card-content">
-                    <div class="card-title">
-                        <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
-                        <span>{{ document.user.name }}</span>
-                    </div>
-                    {% if document.description %}
-                        <div class="card-comment">
-                          {{ document.description|truncatechars:200 }}
+                <div class="card">
+                    {% include "catalog/like-dislike.html" %}
+                    <div class="card-content">
+                        <div class="card-title">
+                            <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
+                            <span>{{ document.user.name }}</span>
                         </div>
-                    {% endif %}
-                    <div class="card-footers">
-                        <span><i class="far fa-file"></i>{{ document.pages }} page{{ document.pages|pluralize }}</span>
-                        <span><i class="far fa-clock"></i>{{ document.date|date:"d F Y" }}</span>
-                        <div class="tags">
-                          {% for kw in document.tags.all%}
-                            <span
-                               data-id="{{kw.id}}"
-                               style="background-color: {{kw.color}}; color:white;"
-                            >
-                              {{kw}}
-                            </span>
-                          {% endfor %}
+                        {% if document.description %}
+                            <div class="card-comment">
+                            {{ document.description|truncatechars:200 }}
+                            </div>
+                        {% endif %}
+                        <div class="card-footers">
+                            <span><i class="far fa-file"></i>{{ document.pages }} page{{ document.pages|pluralize }}</span>
+                            <span><i class="far fa-clock"></i>{{ document.date|date:"d F Y" }}</span>
+                            <div class="tags">
+                            {% for kw in document.tags.all%}
+                                <span
+                                data-id="{{kw.id}}"
+                                style="background-color: {{kw.color}}; color:white;"
+                                >
+                                {{kw}}
+                                </span>
+                            {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="delimiter">
+                <div class="delimiter">
+                </div>
             </div>
             {% empty %}
               <h3>Il n’y a encore rien dans ce cours…</h3>
@@ -96,7 +97,7 @@
             </div>
         </div>
         <div style="grid-row-start:3">
-            <h1 style="font-weight: normal;">Filtres:</h1>
+            <h1 style="font-weight: normal;">Filtrer <small style="font-size: 0.5em;">par tag</small>:</h1>
             <div style="margin:auto;padding-left: 1em;padding-right: 1em;text-align:center">
             {% for tag in tags %}
               <div class="ck-button">
