@@ -16,17 +16,32 @@
 
     <div class="home-grid">
         <div class="home-search-container">
+            <div style="margin-bottom: 1em;text-align: center;">
+                <span style="font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Doc</span><span style="color:#007095;font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Hub</span>
+            </div>
             {% include "search/frames/search-box.html" with initial=True %}
         </div>
-        <div class="finder hide-on-mobile">
-            <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
+        <div style="grid-column-start: 2;grid-row-start: 2;text-align: center;height: 20vh">
+            <h1>Mes Cours</h1>
+            {% if following_course %}
+                <div style="height: 100%;display: grid;grid-template-columns:1fr 1fr 1fr 1fr;grid-gap: 1px;text-align: center;font-family: Roboto;font-style: normal;font-weight: bold;font-size: 1.2em;margin-bottom: 1em;background-color: black;">
+                    {% for course in following_course %}
+                        <div style="padding-left: 0.5em;padding-right: 0.5em;background-color: white;display: flex;align-items: center;justify-content: center;">
+                            <a href="{% url 'course_show' course.slug %}" target="_top" style="grid-column-start: 1;">{{ course.name }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <span style="font-family: Roboto;font-style: normal;font-weight: bold;"> Vous pouvez parcourir les differents cours <a href="{% url "show_courses" %}" style="color: -webkit-link;text-decoration: underline;">ici</a><span>
+            {% endif %}
+            {% comment %} <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
             </turbo-frame>
             <turbo-frame id="programs" class="turbo-overflow">
             </turbo-frame>
             <turbo-frame id="blocs" class="turbo-overflow">
             </turbo-frame>
             <turbo-frame id="courses" class="turbo-overflow">
-            </turbo-frame>
+            </turbo-frame> {% endcomment %}
         </div>
         <div class="finder visible-on-mobile">
             <turbo-frame id="mobile" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "true" %}">
