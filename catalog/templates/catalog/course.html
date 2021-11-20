@@ -4,15 +4,86 @@
 {% load follow_tags %}
 {% load has_perm_on %}
 
+{% block header %}
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+{% endblock %}
+
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
 {% block content %}
-
 <div class="course-grid" data-controller="course-filter">
+    {% is_following request.user course as following %}
+    <div class="aside">
+        <div style="grid-row-start:1;text-align: center;white-space: nowrap">
+            <button onclick="location='{% url 'document_put' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #087f23;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                <span class="mdc-button__ripple"></span>
+                <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
+                <span class="mdc-button__label">Uploader un fichier</span>
+            </button>
+            {% if following %}
+                <button onclick="location='{% url 'leave_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #9b0000;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">clear</i>
+                    <span class="mdc-button__label">Se désabonner</span>
+                </button>
+            {% else %}
+                <button onclick="location='{% url 'join_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">done</i>
+                    <span class="mdc-button__label">S’abonner au cours</span>
+                </button>
+            {% endif %}
+        </div>
+        <div style="grid-row-start:2">
+            <div style="border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
+                <i class="fas fa-search" style="margin: 0.5rem;"></i>
+                <input
+                  type="text" name="cours"
+                  placeholder="Chercher avec le titre du fichier"
+                  data-course-filter-target="query"
+                  data-action="input->course-filter#filter"
+                  style="border: none;text-align: center;outline: none;width:80%"
+                >
+            </div>
+        </div>
+        <div style="grid-row-start:3">
+            <h1 style="font-weight: normal;">Filtres:</h1>
+            <ul class="mdc-list" role="group">
+                {% for tag in tags %}
+                    <li class="mdc-list-item" role="checkbox" aria-checked="false">
+                        <span class="mdc-list-item__ripple"></span>
+                        <span class="mdc-list-item__graphic">
+                        <div class="mdc-checkbox">
+                            <input type="checkbox"
+                                    class="mdc-checkbox__native-control"
+                                    id="tag-{{tag.name}}"
+                                    data-tag-name="{{tag.name}}"
+                                    data-action="input->course-filter#filter"
+                                    data-course-filter-target="tag"  />
+                            <div class="mdc-checkbox__background">
+                            <svg class="mdc-checkbox__checkmark"
+                                    viewBox="0 0 24 24">
+                                <path class="mdc-checkbox__checkmark-path"
+                                    fill="none"
+                                    d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                            </svg>
+                            <div class="mdc-checkbox__mixedmark"></div>
+                            </div>
+                        </div>
+                        </span>
+                        <label class="mdc-list-item__text" for="tag-{{tag.name}}" style="color:{{tag.color}};">{{tag.name}}</label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div style="margin:auto;padding-left: 1em;padding-right: 1em;text-align:center">
+            </div>
+        </div>
+    </div>
     <div style="grid-column-start: 2;">
         <h1 class="page-title">
             {{ course.slug|upper }} {{ course.name }}
-            {% is_following request.user course as following %}
             {% if following %}
             <i class="fas fa-check" style="color: #43AC6A;"></i>
             {% endif %}
@@ -20,10 +91,9 @@
             <small>{{ course.followers_count }} personnes sont abonnées à ce cours.</small>
             {% endif %}
         </h1>
-
-        <div class="deck">
+        <ul class="deck" style="list-style-type: none;padding-left:0px">
             {% for document in documents %}
-            <div
+            <li
               class="card"
               data-course-filter-target="filterable"
               data-filter-key='{{document.name}}'
@@ -55,69 +125,32 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="delimiter">
-            </div>
+            </li>
+            <li role="separator" class="mdc-list-divider"></li>
             {% empty %}
               <h3>Il n’y a encore rien dans ce cours…</h3>
               <p>Personne n’est encore passé ici on dirait.<br>
                 Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
             {% endfor %}
 
-        </div>
-    </div>
-
-    <div class="aside">
-        <div style="grid-row-start:1;text-align: center;white-space: nowrap">
-            <a href="{% url 'document_put' course.slug %}" class="button green">
-                <i class="fas fa-plus"></i>
-                Uploader un fichier
-            </a>
-            {% if following %}
-            <a href="{% url 'leave_course' course.slug %}" class="button red">
-                <i class="fas fa-times"></i> Se désabonner
-            </a>
-            {% else %}
-            <a href="{% url 'join_course' course.slug %}" class="button blue">
-                <i class="fas fa-check"></i> S’abonner au cours
-            </a>
-            {% endif %}
-        </div>
-        <div style="grid-row-start:2">
-            <div style="border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
-                <i class="fas fa-search" style="margin: 0.5rem;"></i>
-                <input
-                  type="text" name="cours"
-                  placeholder="Chercher avec le titre du fichier"
-                  data-course-filter-target="query"
-                  data-action="input->course-filter#filter"
-                  style="border: none;text-align: center;outline: none;width:80%"
-                >
-            </div>
-        </div>
-        <div style="grid-row-start:3">
-            <h1 style="font-weight: normal;">Filtres:</h1>
-            <div style="margin:auto;padding-left: 1em;padding-right: 1em;text-align:center">
-            {% for tag in tags %}
-              <div class="ck-button">
-                  <input
-                    type="checkbox"
-                    id="tag-{{tag.name}}"
-                    data-tag-name="{{tag.name}}"
-                    data-action="input->course-filter#filter"
-                    data-course-filter-target="tag"
-                  >
-                  <label for="tag-{{tag.name}}" style="background-color:{{tag.color}};">
-                    <span>{{tag.name}}</span>
-                  </label>
-              </div>
-            {% endfor %}
-            </div>
-        </div>
+        </ul>
     </div>
 
     <a class="show-aside">
         <i class="fas fa-bars"></i>
     </a>
 </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    const buttons = document.querySelectorAll('.mdc-button');
+    for (const button of buttons) {
+      mdc.ripple.MDCRipple.attachTo(button);
+    }
+    const list = new mdc.list.MDCList(document.querySelector('.mdc-list'));
+    for (const listItemEl of list.listElements) {
+      mdc.ripple.MDCRipple.attachTo(listItemEl);
+    }
+  </script>
 {% endblock %}

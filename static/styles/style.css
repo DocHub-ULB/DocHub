@@ -144,11 +144,10 @@ html {
 /* Course content */
 .deck{
     margin-top: 1em;
-    margin-left: 5vw;
     display: grid;
     grid-auto-rows: max-content;
     row-gap: 0.5em;
-    height: calc(100vh - 186px - 3em);
+    height: calc(100vh - 230px - 3em);
     overflow-y: auto;
 }
 
@@ -254,13 +253,16 @@ html {
     display:grid;
     grid-auto-rows: max-content max-content 1fr;
     row-gap: 20px;
-    grid-column-start: 4;
+    grid-column-start: 1;
     margin-top: .5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 .course-grid {
     display: grid;
-    grid-template-columns: 1fr 65% 1fr 25% 1fr;
+    grid-template-columns: 20% 80%;
     margin-top: 1.5em;
 }
 
