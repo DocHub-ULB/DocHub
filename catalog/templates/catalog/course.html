@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% load humanize %}
 {% load follow_tags %}
 {% load has_perm_on %}
@@ -13,6 +14,12 @@
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
 {% block content %}
+<style>
+    body {
+        height: 100vh;
+        overflow: hidden;
+    }
+</style>
 <div class="course-grid" data-controller="course-filter">
     {% is_following request.user course as following %}
     <div class="aside">
@@ -44,7 +51,7 @@
                   placeholder="Chercher avec le titre du fichier"
                   data-course-filter-target="query"
                   data-action="input->course-filter#filter"
-                  style="border: none;text-align: center;outline: none;width:80%"
+                  style="border: none;text-align: center;outline: none;width:80%;background:transparent"
                 >
             </div>
         </div>
@@ -52,7 +59,7 @@
             <h1 style="font-weight: normal;">Filtres:</h1>
             <ul class="mdc-list" role="group">
                 {% for tag in tags %}
-                    <li class="mdc-list-item" role="checkbox" aria-checked="false">
+                    <li class="mdc-list-item" role="checkbox" aria-checked="false" style="align-items: center">
                         <span class="mdc-list-item__ripple"></span>
                         <span class="mdc-list-item__graphic">
                             <div class="mdc-checkbox">
@@ -136,6 +143,20 @@
             {% endfor %}
 
         </ul>
+        <footer class="footer">
+            <br>
+            Made with love at
+            <a href="https://urlab.be">
+            <img src="{% static "images/urlab.png" %}" style="height: 1em;">
+            UrLab
+            </a>
+            - Code on <a href="https://github.com/UrLab/dochub">GitHub</a>
+            - <a href="https://cerkinfo.be">
+                <img style="height: 1.0em;" src="{% static "images/ci.png" %}">
+            </a>
+            - <button onClick="toggleAPIModal()" class="api-button">API</button>
+            <br><br>
+        </footer>
     </div>
 
     <a class="show-aside">
