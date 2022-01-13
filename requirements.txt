@@ -85,7 +85,7 @@ django-minio-storage==0.3.10
     # via -r requirements.in
 django-mptt==0.12.0
     # via -r requirements.in
-git+https://github.com/Chive/django-multiupload.git@ba52e161a68ce19062c3655e89544c2d377990a0
+django-multiupload @ git+https://github.com/Chive/django-multiupload.git@ba52e161a68ce19062c3655e89544c2d377990a0
     # via -r requirements.in
 django-pipeline==2.0.6
     # via -r requirements.in
@@ -168,7 +168,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==8.3.2
+pillow==9.0.0
     # via -r requirements.in
 pip-tools==6.0.1
     # via -r requirements.in
