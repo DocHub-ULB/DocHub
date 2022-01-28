@@ -47,4 +47,4 @@ django-jsonfield
 django-jsonfield-compat
 gunicorn
 sentry-sdk
-django-minio-storage
+django-storages

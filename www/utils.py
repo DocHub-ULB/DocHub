@@ -3,14 +3,13 @@ from typing import Optional
 import os
 
 
-def get_env(secret_name: str, default: Optional[str] = None):
+def get_env(secret_name: str, default: Optional[str] = None, required: bool = False):
     """Gathers secrets and envvars from secret provider and environment"""
-    if secret_name.startswith("SDC_"):
-        # Get secret from a secret provider (portainer ?)
-        return ""
 
     result = os.environ.get(secret_name)
     if result is None:
+        if required:
+            raise Exception("Configuration error")
         return default
     return result
 

@@ -16,9 +16,10 @@ from www.utils import get_env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = get_env("SECRET_KEY", "zisisverysecraite")
 DEBUG = get_env("DEBUG", "1") == "1"
-ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+
+SECRET_KEY = get_env("SECRET_KEY", "zisisverysecraite", required=not DEBUG)
+ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", "127.0.0.1,localhost", required=not DEBUG).split(",")
 
 
 INSTALLED_APPS = [
@@ -85,9 +86,9 @@ if get_env("USE_POSTGRES", '0') == '1':
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": get_env("SQL_DATABASE", 'dochub'),
-            "HOST": get_env("SQL_HOST", "localhost"),
-            "USER": get_env("SQL_USER", "user"),
-            "PASSWORD": get_env("SQL_PASSWORD", "password"),
+            "HOST": get_env("SQL_HOST"),
+            "USER": get_env("SQL_USER"),
+            "PASSWORD": get_env("SQL_PASSWORD"),
         }
     }
 else:
@@ -177,7 +178,6 @@ if DEBUG:
 else:
     INSTALLED_APPS.extend([
         "gunicorn",
-        "minio_storage"
     ])
 
     sentry_dsn = get_env("SENTRY_SDK")
@@ -193,18 +193,18 @@ else:
             send_default_pii=True
         )
 
+    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-    MINIO_STORAGE_ENDPOINT = get_env("MINIO_STORAGE_ENDPOINT", "minio.xyz")
-    MINIO_STORAGE_ACCESS_KEY = get_env("MINIO_STORAGE_ACCESS_KEY", "lalala")
-    MINIO_STORAGE_SECRET_KEY = get_env("MINIO_STORAGE_SECRET_KEY", "lalala")
-    MINIO_STORAGE_USE_HTTPS = True
-    MINIO_STORAGE_MEDIA_BUCKET_NAME = get_env("MINIO_STORAGE_MEDIA_BUCKET_NAME", "lalala")
-    MINIO_STORAGE_MEDIA_USE_PRESIGNED = True
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-    SESSION_ENGINE = get_env("SESSION_ENGINE", "django.contrib.sessions.backends.cached_db")
+    # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+    AWS_S3_ENDPOINT_URL = get_env("STORAGE_ENDPOINT")
+    AWS_S3_ACCESS_KEY_ID = get_env("STORAGE_ACCESS_KEY")
+    AWS_S3_SECRET_ACCESS_KEY = get_env("STORAGE_SECRET_KEY")
+    AWS_STORAGE_BUCKET_NAME = get_env("STORAGE_MEDIA_BUCKET_NAME")
 
-    DEFAULT_FILE_STORAGE = get_env("FILE_STORAGE", "minio_storage.storage.MinioMediaStorage")
 
 READ_ONLY = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")

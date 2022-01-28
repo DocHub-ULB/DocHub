@@ -1,13 +1,8 @@
+from typing import Optional
+
 import os
 
 from rest_framework import serializers
-
-try:
-    from minio.error import NoSuchKey
-except ImportError:
-    pass
-
-from typing import Optional
 
 from catalog.models import Course
 from documents import logic
@@ -82,7 +77,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     def get_file_size(self, document) -> Optional[int]:
         try:
             return document.original.size
-        except (FileNotFoundError, NoSuchKey):
+        except FileNotFoundError:
             return None
 
 
