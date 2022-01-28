@@ -8,8 +8,8 @@ register = template.Library()
 
 @register.simple_tag
 def user_liked(user: User, document: Document):
-    votes = Vote.objects.filter(user=user, document=document)
-    if votes.count() == 0:
+    vote = Vote.objects.filter(user=user, document=document).first()
+    if not vote:
         return "not voted"
     else:
-        return votes.first().vote_type
+        return vote.vote_type
