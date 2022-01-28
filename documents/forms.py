@@ -2,8 +2,6 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from multiupload.fields import MultiFileField
-
 from tags.models import Tag
 
 
@@ -36,13 +34,12 @@ class FileForm(forms.Form):
 
 
 class UploadFileForm(FileForm):
-    file = forms.FileField(validators=[validate_uploaded_file], widget=forms.FileInput(attrs={'class': 'file-upload',}))
+    file = forms.FileField(validators=[validate_uploaded_file], widget=forms.FileInput(attrs={'class': 'file-upload', }))
 
 
 class ReUploadForm(forms.Form):
     file = forms.FileField(validators=[validate_uploaded_file])
 
 
-class MultipleUploadFileForm(forms.Form):
-    Mo = 1 << 20
-    files = MultiFileField(min_num=1, max_num=25, max_file_size=40 * Mo)
+class MultipleUploadFileForm(UploadFileForm):
+    pass

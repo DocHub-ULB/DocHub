@@ -80,23 +80,21 @@ TEMPLATES = [
 ]
 
 
-if get_env("USE_POSTGRES", '0'):
+if get_env("USE_POSTGRES", '0') == '1':
     DATABASES = {
         "default": {
-            "ENGINE": get_env("SQL_ENGINE", "django.db.backends.postgresql"),
+            "ENGINE": "django.db.backends.postgresql",
             "NAME": get_env("SQL_DATABASE", 'dochub'),
             "HOST": get_env("SQL_HOST", "localhost"),
+            "USER": get_env("SQL_USER", "user"),
+            "PASSWORD": get_env("SQL_PASSWORD", "password"),
         }
     }
 else:
     DATABASES = {
         "default": {
-            "ENGINE": get_env("SQL_ENGINE", "django.db.backends.sqlite3"),
+            "ENGINE": "django.db.backends.sqlite3",
             "NAME": get_env("SQL_DATABASE", str(BASE_DIR / "db.sqlite")),
-            "USER": get_env("SQL_USER", "user"),
-            "PASSWORD": get_env("SQL_PASSWORD", "password"),
-            "HOST": get_env("SQL_HOST", "localhost"),
-            "PORT": get_env("SQL_PORT", "5432"),
         }
     }
 
@@ -133,7 +131,6 @@ SITE_ID = 1
 LANGUAGE_CODE = 'fr-be'
 TIME_ZONE = 'Europe/Brussels'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 
@@ -141,7 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATICFILES_DIRS = [
-  BASE_DIR / "static",
+    BASE_DIR / "static",
 ]
 
 STATIC_URL = "/static/"
