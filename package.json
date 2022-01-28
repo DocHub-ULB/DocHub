@@ -31,7 +31,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.11",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.1",
     "optimize-css-assets-webpack-plugin": "^4.0.3",
     "sass-loader": "^10.0.5",
     "style-loader": "^0.21.0",
