@@ -17,7 +17,7 @@ from www.utils import get_env
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = get_env("SECRET_KEY", "zisisverysecraite")
-DEBUG = get_env("DEBUG", "0") == "1"
+DEBUG = get_env("DEBUG", "1") == "1"
 ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", "127.0.0.1").split()
 
 
@@ -160,8 +160,6 @@ CACHES = {
     }
 }
 
-ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", "127.0.0.1").split()
-
 
 if DEBUG:
     INSTALLED_APPS.extend([
@@ -182,17 +180,9 @@ else:
         "minio_storage"
     ])
 
-    ADMINS = list(
-        zip(
-            get_env("ADMIN_NAME", "Théodore Verhaegen").split(","),
-            get_env("ADMIN_EMAIL", "tverhaeg@ulb.be").split(","),
-        )
-    )
-    MANAGERS = ADMINS
-
     sentry_dsn = get_env("SENTRY_SDK")
 
-    if sentry_dsn is None:
+    if sentry_dsn is not None:
         import sentry_sdk
         from sentry_sdk.integrations.django import DjangoIntegration
 
