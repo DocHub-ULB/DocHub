@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = get_env("SECRET_KEY", "zisisverysecraite")
 DEBUG = get_env("DEBUG", "1") == "1"
-ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", "127.0.0.1").split()
+ALLOWED_HOSTS = get_env("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 INSTALLED_APPS = [
