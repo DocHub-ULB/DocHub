@@ -14,7 +14,7 @@ There is a [live instance of DocHub](https://dochub.be) hosted by [UrLab](https:
 
 ## Tech
 
-DocHub currently (Feb 2021) runs with Python 3.8, ~~Node 10~~ and Postgresql 12.
+DocHub currently (Feb 2022) runs with Python 3.10 and Postgresql 14.
 
 ### Dependencies
 
