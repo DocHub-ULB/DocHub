@@ -1,5 +1,3 @@
-from typing import Optional
-
 import contextlib
 import hashlib
 import os
@@ -245,7 +243,7 @@ def temporary_file_path(prefix="", suffix=""):
         os.remove(path)
 
 
-def mutool_get_pages(document: Document) -> Optional[int]:
+def mutool_get_pages(document: Document) -> int | None:
     with file_as_local(document.pdf, prefix="dochub_pdf_len_") as tmpfile:
         try:
             output = subprocess.check_output(["mutool", "info", tmpfile.name], stderr=subprocess.STDOUT)

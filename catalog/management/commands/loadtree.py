@@ -1,5 +1,3 @@
-from typing import Dict
-
 import json
 from os import path
 
@@ -33,7 +31,7 @@ class Command(BaseCommand):
             metavar="TREE_FILE"
         )
 
-    LOCAL_CACHE: Dict[str, str] = {}
+    LOCAL_CACHE: dict[str, str] = {}
 
     def handle(self, *args, **options):
         self.stdout.write('Loading tree ... ')

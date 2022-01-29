@@ -1,5 +1,3 @@
-from typing import Optional
-
 import os
 
 from rest_framework import serializers
@@ -74,7 +72,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
         user = self.context['request'].user
         return user.write_perm(obj=document)
 
-    def get_file_size(self, document) -> Optional[int]:
+    def get_file_size(self, document) -> int | None:
         try:
             return document.original.size
         except FileNotFoundError:
@@ -107,7 +105,7 @@ class UploadDocumentSerializer(serializers.ModelSerializer):
         model = Document
         fields = ('name', 'description', 'file', 'course', 'tags')
 
-    def create(self, validated_data) -> Optional[Document]:
+    def create(self, validated_data) -> Document | None:
         file = validated_data['file']
         name, extension = os.path.splitext(file.name)
         name = logic.clean_filename(name)

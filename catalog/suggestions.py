@@ -8,21 +8,21 @@ from catalog.models import Course
 from users.models import User
 
 
-def distance(v1: typing.List[bool], v2: typing.List[bool]) -> float:
+def distance(v1: list[bool], v2: list[bool]) -> float:
     absolute_difference = [abs(c1 - c2) for c1, c2 in zip(v1, v2)]
     distance = sum(absolute_difference)
     return distance
 
 
-def get_users_following_dict() -> typing.Dict[int, typing.Set[int]]:
+def get_users_following_dict() -> dict[int, set[int]]:
     user_following_dict = {}
     for user in User.objects.all():
-        user_following_dict[user.id] = set([course.id for course in user.following_courses()])
+        user_following_dict[user.id] = {course.id for course in user.following_courses()}
 
     return user_following_dict
 
 
-def suggest(target_user: User, K: int = 15) -> typing.List[typing.Tuple[Course, int]]:
+def suggest(target_user: User, K: int = 15) -> list[tuple[Course, int]]:
     courses = Course.objects.only('id')
     users_following = get_users_following_dict()
 

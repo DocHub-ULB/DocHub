@@ -3,7 +3,7 @@ from typing import Optional
 import os
 
 
-def get_env(secret_name: str, default: Optional[str] = None, required: bool = False):
+def get_env(secret_name: str, default: str | None = None, required: bool = False):
     """Gathers secrets and envvars from secret provider and environment"""
 
     result = os.environ.get(secret_name)
@@ -46,4 +46,4 @@ def buildOrderedProgramList(programs) -> list:
         else:
             program_dict[type_slug]['programs'].append(program)
 
-    return sorted([program for _, program in program_dict.items()], key=lambda x: x['slug'])
+    return sorted((program for _, program in program_dict.items()), key=lambda x: x['slug'])

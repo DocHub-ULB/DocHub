@@ -77,7 +77,7 @@ def build_tree(all_courses):
                 }
                 course = get_or_create_course(fac, program, bloc, course)
 
-with open("catalog/management/parser/data/courses.json", "r") as all_courses_json:
+with open("catalog/management/parser/data/courses.json") as all_courses_json:
     all_courses = json.load(all_courses_json)
     build_tree(all_courses)
 

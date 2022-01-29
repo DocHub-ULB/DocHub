@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional, Set, Union
+from typing import Iterable, Optional
 
 import mimetypes
 import uuid
@@ -29,14 +29,14 @@ def clean_filename(name: str) -> str:
     return name.replace("_", " ")
 
 
-def cast_tag(tag: Union[str, Tag]) -> Tag:
+def cast_tag(tag: str | Tag) -> Tag:
     if isinstance(tag, Tag):
         return tag
     else:
         return Tag.objects.get_or_create(name=tag.lower())[0]
 
 
-def add_file_to_course(file: File, name: str, extension: str, course: Course, tags: List[Union[str, Tag]], user: User, import_source: Optional[str] = None) -> 'Optional[Document]':
+def add_file_to_course(file: File, name: str, extension: str, course: Course, tags: list[str | Tag], user: User, import_source: str | None = None) -> 'Optional[Document]':
     if not extension.startswith("."):
         with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
             mime = m.id_buffer(file.read(4096))
@@ -80,7 +80,7 @@ def add_file_to_course(file: File, name: str, extension: str, course: Course, ta
     return document
 
 
-def tags_from_name(name: str) -> Set[Tag]:
+def tags_from_name(name: str) -> set[Tag]:
     translate = {
         'é': 'e',
         'è': 'e',
