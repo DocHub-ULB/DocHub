@@ -17,13 +17,15 @@ def distance(v1: list[bool], v2: list[bool]) -> float:
 def get_users_following_dict() -> dict[int, set[int]]:
     user_following_dict = {}
     for user in User.objects.all():
-        user_following_dict[user.id] = {course.id for course in user.following_courses()}
+        user_following_dict[user.id] = {
+            course.id for course in user.following_courses()
+        }
 
     return user_following_dict
 
 
 def suggest(target_user: User, K: int = 15) -> list[tuple[Course, int]]:
-    courses = Course.objects.only('id')
+    courses = Course.objects.only("id")
     users_following = get_users_following_dict()
 
     vectors = {}
@@ -33,8 +35,12 @@ def suggest(target_user: User, K: int = 15) -> list[tuple[Course, int]]:
     # If the users is not following any courses, he is not in 'vectors'
     target_vector = vectors.get(target_user.id, [False] * len(courses))
 
-    distances = {user_id: distance(target_vector, vector) for user_id, vector in vectors.items()}
-    non_null_distances = {user_id: distance for user_id, distance in distances.items() if distance > 0}
+    distances = {
+        user_id: distance(target_vector, vector) for user_id, vector in vectors.items()
+    }
+    non_null_distances = {
+        user_id: distance for user_id, distance in distances.items() if distance > 0
+    }
 
     get_score = lambda x: x[1]
     neighbors = sorted(non_null_distances.items(), key=get_score)[:K]
@@ -47,7 +53,10 @@ def suggest(target_user: User, K: int = 15) -> list[tuple[Course, int]]:
         best_matches.update(differences)
 
     try:
-        return [(Course.objects.get(id=course_id), hits) for course_id, hits in best_matches.most_common()]
+        return [
+            (Course.objects.get(id=course_id), hits)
+            for course_id, hits in best_matches.most_common()
+        ]
     except:
         # Ugly fix to avoid crashing the page if we don't compute the courses
         # TODO log the error (DoesNotExist: Course matching query does not exist.)

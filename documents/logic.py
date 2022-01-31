@@ -36,7 +36,15 @@ def cast_tag(tag: str | Tag) -> Tag:
         return Tag.objects.get_or_create(name=tag.lower())[0]
 
 
-def add_file_to_course(file: File, name: str, extension: str, course: Course, tags: list[str | Tag], user: User, import_source: str | None = None) -> 'Optional[Document]':
+def add_file_to_course(
+    file: File,
+    name: str,
+    extension: str,
+    course: Course,
+    tags: list[str | Tag],
+    user: User,
+    import_source: str | None = None,
+) -> "Optional[Document]":
     if not extension.startswith("."):
         with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
             mime = m.id_buffer(file.read(4096))
@@ -51,7 +59,7 @@ def add_file_to_course(file: File, name: str, extension: str, course: Course, ta
             course=course,
             import_source=import_source,
             file_type=extension.lower(),
-            defaults={'state': Document.DocumentState.PREPARING}
+            defaults={"state": Document.DocumentState.PREPARING},
         )
         if not created:
             return None
@@ -61,7 +69,7 @@ def add_file_to_course(file: File, name: str, extension: str, course: Course, ta
             name=name,
             course=course,
             state=Document.DocumentState.PREPARING,
-            file_type=extension.lower()
+            file_type=extension.lower(),
         )
 
     cleaned_tags: Iterable[Tag]
@@ -81,15 +89,7 @@ def add_file_to_course(file: File, name: str, extension: str, course: Course, ta
 
 
 def tags_from_name(name: str) -> set[Tag]:
-    translate = {
-        'é': 'e',
-        'è': 'e',
-        'ê': 'e',
-        '-': ' ',
-        '_': ' ',
-        'û': 'u',
-        'ô': 'o'
-    }
+    translate = {"é": "e", "è": "e", "ê": "e", "-": " ", "_": " ", "û": "u", "ô": "o"}
     name = name.lower()
     for k, v in translate.items():
         name = name.replace(k, v)
@@ -99,11 +99,31 @@ def tags_from_name(name: str) -> set[Tag]:
     mapping = {
         ("aout", "sept", "juin", "mai", "exam", "questions", "oral"): "examen",
         ("corr", "reponse", "rponse"): "corrigé",
-        ("tp", "pratique", "exo", "exercice", "seance", "enonce",): "tp",
-        ("resum", "r?sum", "rsum", "synthese", "synthse", ): "résumé",
-        ("slide", "transparent",): "slides",
+        (
+            "tp",
+            "pratique",
+            "exo",
+            "exercice",
+            "seance",
+            "enonce",
+        ): "tp",
+        (
+            "resum",
+            "r?sum",
+            "rsum",
+            "synthese",
+            "synthse",
+        ): "résumé",
+        (
+            "slide",
+            "transparent",
+        ): "slides",
         ("formul",): "formulaire",
-        ("rapport", "labo", "cahier",): "laboratoire",
+        (
+            "rapport",
+            "labo",
+            "cahier",
+        ): "laboratoire",
         ("note",): "notes",
         ("sylabus", "syllabus"): "syllabus",
         ("officiel", "oficiel"): "officiel",
@@ -116,5 +136,6 @@ def tags_from_name(name: str) -> set[Tag]:
 
     tag_objs = {Tag.objects.get_or_create(name=tag)[0] for tag in tags}
     return tag_objs
+
 
 from documents.models import Document  # NOQA

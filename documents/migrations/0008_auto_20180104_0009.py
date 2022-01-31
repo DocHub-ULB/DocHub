@@ -6,13 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('documents', '0007_auto_20160115_1212'),
+        ("documents", "0007_auto_20160115_1212"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='document',
-            name='state',
-            field=models.CharField(choices=[('PREPARING', 'En préparation'), ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery'), ('IN_QUEUE', 'Envoyé à Celery'), ('PROCESSING', 'En cours de traitement'), ('DONE', 'Rendu fini'), ('ERROR', 'Erreur'), ('REPAIRED', 'Réparé')], db_index=True, default='PREPARING', max_length=20, verbose_name='État'),
+            model_name="document",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("PREPARING", "En préparation"),
+                    ("READY_TO_QUEUE", "Prêt à être ajouté à Celery"),
+                    ("IN_QUEUE", "Envoyé à Celery"),
+                    ("PROCESSING", "En cours de traitement"),
+                    ("DONE", "Rendu fini"),
+                    ("ERROR", "Erreur"),
+                    ("REPAIRED", "Réparé"),
+                ],
+                db_index=True,
+                default="PREPARING",
+                max_length=20,
+                verbose_name="État",
+            ),
         ),
     ]

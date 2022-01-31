@@ -4,15 +4,16 @@ from users.authBackend import CasParseError, CasRejectError, UlbCasBackend
 
 # Parse valid cases
 
+
 def test_parser():
     xml = open("users/tests/xml-fixtures/minimal.xml").read()
     ret = UlbCasBackend()._parse_response(xml)
 
     assert ret == {
-        'netid': 'nmar0003',
-        'email': 'this.is.an.email@ulb.ac.be',
-        'first_name': 'Nikita',
-        'last_name': 'Marchant',
+        "netid": "nmar0003",
+        "email": "this.is.an.email@ulb.ac.be",
+        "first_name": "Nikita",
+        "last_name": "Marchant",
     }
 
 
@@ -21,21 +22,22 @@ def test_wihout_email():
     ret = UlbCasBackend()._parse_response(xml)
 
     assert ret == {
-        'netid': 'nmar0003',
-        'email': 'nmar0003@ulb.ac.be',
-        'first_name': 'nmar0003',
-        'last_name': 'nmar0003',
+        "netid": "nmar0003",
+        "email": "nmar0003@ulb.ac.be",
+        "first_name": "nmar0003",
+        "last_name": "nmar0003",
     }
 
 
 # Parse invalid responses
+
 
 def test_invalid_xml():
     xml = open("users/tests/xml-fixtures/invalid-xml.xml").read()
 
     with pytest.raises(CasParseError) as e:
         UlbCasBackend()._parse_response(xml)
-    assert e.value.args[0] == 'INVALID_XML'
+    assert e.value.args[0] == "INVALID_XML"
 
 
 @pytest.mark.parametrize(
@@ -43,22 +45,30 @@ def test_invalid_xml():
     [
         "users/tests/xml-fixtures/unknown-structure.xml",
         "users/tests/xml-fixtures/missing-user.xml",
-    ]
+    ],
 )
 def test_unknown_structure(path):
     xml = open(path).read()
 
     with pytest.raises(CasParseError) as e:
         UlbCasBackend()._parse_response(xml)
-    assert e.value.args[0] == 'UNKNOWN_STRUCTURE'
+    assert e.value.args[0] == "UNKNOWN_STRUCTURE"
 
 
 @pytest.mark.parametrize(
     "path,expected_error,expected_text",
     [
-        ("users/tests/xml-fixtures/invalid-service.xml", 'INVALID_SERVICE', 'does not match supplied service'),
-        ("users/tests/xml-fixtures/invalid-ticket.xml", 'INVALID_TICKET', 'not recognized'),
-    ]
+        (
+            "users/tests/xml-fixtures/invalid-service.xml",
+            "INVALID_SERVICE",
+            "does not match supplied service",
+        ),
+        (
+            "users/tests/xml-fixtures/invalid-ticket.xml",
+            "INVALID_TICKET",
+            "not recognized",
+        ),
+    ],
 )
 def test_invalid_service(path, expected_error, expected_text):
     xml = open(path).read()

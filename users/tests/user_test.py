@@ -9,7 +9,9 @@ pytestmark = pytest.mark.django_db
 
 
 def test_create():
-    u = User.objects.create_user(netid="glagaffe", email="a@dupis.be", comment="trop nul")
+    u = User.objects.create_user(
+        netid="glagaffe", email="a@dupis.be", comment="trop nul"
+    )
     assert u.netid == "glagaffe"
     assert u.email == "a@dupis.be"
     assert u.comment == "trop nul"
@@ -18,10 +20,7 @@ def test_create():
 
 def test_create_superuser():
     u = User.objects.create_superuser(
-        netid="glagaffe",
-        email="a@dupis.be",
-        password="azerty",
-        comment="trop nul"
+        netid="glagaffe", email="a@dupis.be", password="azerty", comment="trop nul"
     )
     assert u.netid == "glagaffe"
     assert u.email == "a@dupis.be"
@@ -30,5 +29,7 @@ def test_create_superuser():
 
 
 def test_name():
-    u = User.objects.create_user(netid="jeanduj", first_name="Jean", last_name="DuJardin")
+    u = User.objects.create_user(
+        netid="jeanduj", first_name="Jean", last_name="DuJardin"
+    )
     assert u.name == "Jean DuJardin"

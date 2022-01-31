@@ -41,9 +41,11 @@ def buildOrderedProgramList(programs) -> list:
             program_dict[type_slug] = {
                 "name": program_type,
                 "slug": type_slug,
-                "programs": [program]
+                "programs": [program],
             }
         else:
-            program_dict[type_slug]['programs'].append(program)
+            program_dict[type_slug]["programs"].append(program)
 
-    return sorted((program for _, program in program_dict.items()), key=lambda x: x['slug'])
+    return sorted(
+        (program for _, program in program_dict.items()), key=lambda x: x["slug"]
+    )

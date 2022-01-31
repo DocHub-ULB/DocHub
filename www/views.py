@@ -40,7 +40,7 @@ def index(request):
             "debug": settings.DEBUG,
             "documents": floor(Document.objects.count()),
             "pages": floor(page_count, 2),
-            "users": floor(User.objects.count())
+            "users": floor(User.objects.count()),
         }
         return render(request, "index.html", context)
 
@@ -51,7 +51,7 @@ def getEmptyFrame(request, id: str) -> HttpResponse:
         "finder/empty.html",
         context={
             "id": id,
-        }
+        },
     )
 
 
@@ -62,7 +62,7 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
     if mobile == "true":
         turbo_id = "mobile"
         futur_turbo_id = "mobile"
-    else :
+    else:
         turbo_id = "facs"
         futur_turbo_id = "programs"
 
@@ -73,8 +73,8 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
             "facs": facs,
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
-            "mobile": mobile
-        }
+            "mobile": mobile,
+        },
     )
 
 
@@ -87,7 +87,7 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
     if mobile == "true":
         turbo_id = "mobile"
         futur_turbo_id = "mobile"
-    else :
+    else:
         turbo_id = "programs"
         futur_turbo_id = "blocs"
 
@@ -98,8 +98,8 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
             "program_types": programs,
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
-            "mobile": mobile
-        }
+            "mobile": mobile,
+        },
     )
 
 
@@ -110,7 +110,7 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
     if mobile == "true":
         turbo_id = "mobile"
         futur_turbo_id = "mobile"
-    else :
+    else:
         turbo_id = "blocs"
         futur_turbo_id = "courses"
 
@@ -121,8 +121,8 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
             "blocs": blocs,
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
-            "mobile": mobile
-        }
+            "mobile": mobile,
+        },
     )
 
 
@@ -142,11 +142,7 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
     return render(
         request,
         "finder/course.html",
-        context={
-            "courses": courses,
-            "turbo_id": turbo_id,
-            "mobile": mobile
-        }
+        context={"courses": courses, "turbo_id": turbo_id, "mobile": mobile},
     )
 
 
@@ -172,9 +168,8 @@ def set_follow_course(request, action: str, course_slug: str):
     else:
         course.followed_by.remove(request.user)
     course.save()
-    return JsonResponse({
-        "status": "success"
-    })
+    return JsonResponse({"status": "success"})
+
 
 class HelpView(TemplateView):
     def get_context_data(self):

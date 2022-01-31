@@ -15,33 +15,31 @@ from catalog.slug import Slug
 
 
 class Command(BaseCommand):
-    help = 'Loads a new courses tree into the database'
+    help = "Loads a new courses tree into the database"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--hit-ulb',
-            action='store_true',
-            dest='hitulb',
+            "--hit-ulb",
+            action="store_true",
+            dest="hitulb",
             default=False,
-            help='Hit ULB servers to get courses names from slugs'
+            help="Hit ULB servers to get courses names from slugs",
         )
         parser.add_argument(
-            dest='tree_file',
-            help='Path to the .yaml tree file',
-            metavar="TREE_FILE"
+            dest="tree_file", help="Path to the .yaml tree file", metavar="TREE_FILE"
         )
 
     LOCAL_CACHE: dict[str, str] = {}
 
     def handle(self, *args, **options):
-        self.stdout.write('Loading tree ... ')
+        self.stdout.write("Loading tree ... ")
 
-        if not options['hitulb']:
-            f = path.join(settings.BASE_DIR, 'catalog/management/localcache.json')
+        if not options["hitulb"]:
+            f = path.join(settings.BASE_DIR, "catalog/management/localcache.json")
             with open(f) as fd:
                 self.LOCAL_CACHE = json.loads(fd.read())
 
-        with open(options['tree_file']) as fd:
+        with open(options["tree_file"]) as fd:
             tree = yaml.safe_load(fd)
 
         with transaction.atomic():
@@ -55,16 +53,12 @@ class Command(BaseCommand):
 
             self.create_tree(root, tree)
 
-        self.stdout.write('Done \n')
+        self.stdout.write("Done \n")
 
     def create_tree(self, father, tree):
         if isinstance(tree, dict):
             for key, value in tree.items():
-                cat = Category.objects.create(
-                    name=key,
-                    slug="",
-                    parent=father
-                )
+                cat = Category.objects.create(name=key, slug="", parent=father)
                 self.create_tree(cat, value)
 
         if isinstance(tree, str):
@@ -76,7 +70,9 @@ class Command(BaseCommand):
                 else:
                     try:
                         slug = Slug.from_dochub(tree)
-                        r = requests.get(f"https://www.ulb.be/fr/programme/{slug.catalog}")
+                        r = requests.get(
+                            f"https://www.ulb.be/fr/programme/{slug.catalog}"
+                        )
                         soup = BeautifulSoup(r.text, "html5lib")
                         name = soup.find("h1").text.strip()
                     except Exception as e:

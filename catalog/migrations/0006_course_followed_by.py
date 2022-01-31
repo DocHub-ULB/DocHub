@@ -8,13 +8,15 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('catalog', '0005_auto_20210104_2213'),
+        ("catalog", "0005_auto_20210104_2213"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='followed_by',
-            field=models.ManyToManyField(related_name='courses_set', to=settings.AUTH_USER_MODEL),
+            model_name="course",
+            name="followed_by",
+            field=models.ManyToManyField(
+                related_name="courses_set", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

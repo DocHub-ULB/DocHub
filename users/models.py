@@ -16,7 +16,7 @@ from catalog.models import Category, Course
 
 
 class CustomUserManager(UserManager):
-    PATTERN = re.compile(r'[\W_]+')
+    PATTERN = re.compile(r"[\W_]+")
 
     def _create_user(self, netid, email, password, **extra_fields):
         """
@@ -24,7 +24,7 @@ class CustomUserManager(UserManager):
         """
         now = timezone.now()
         if not netid:
-            raise ValueError('The given netid must be set')
+            raise ValueError("The given netid must be set")
         email = self.normalize_email(email)
         user = self.model(netid=netid, email=email, last_login=now, **extra_fields)
 
@@ -41,8 +41,8 @@ class CustomUserManager(UserManager):
 
 class User(AbstractBaseUser):
 
-    USERNAME_FIELD = 'netid'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    USERNAME_FIELD = "netid"
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
     DEFAULT_PHOTO = join(settings.STATIC_URL, "images/default.jpg")
     objects = CustomUserManager()
 
@@ -54,7 +54,7 @@ class User(AbstractBaseUser):
     email = models.CharField(max_length=255, unique=True)
     registration = models.CharField(max_length=80, blank=True)
     welcome = models.BooleanField(default=True)
-    comment = models.TextField(blank=True, default='')
+    comment = models.TextField(blank=True, default="")
 
     register_method = models.CharField(max_length=32)
     last_login_method = models.CharField(max_length=32)
@@ -66,7 +66,7 @@ class User(AbstractBaseUser):
     is_academic = models.BooleanField(default=False)
     is_representative = models.BooleanField(default=False)
 
-    moderated_courses = models.ManyToManyField('catalog.Course', blank=True)
+    moderated_courses = models.ManyToManyField("catalog.Course", blank=True)
 
     notify_on_response = models.BooleanField(default=True)
     notify_on_new_doc = models.BooleanField(default=True)
@@ -114,7 +114,7 @@ class User(AbstractBaseUser):
         return self.courses_set.filter(slug=course.slug).exists()
 
     def has_module_perms(self, *args, **kwargs):
-        return True # TODO : is this a good idea ?
+        return True  # TODO : is this a good idea ?
 
     def has_perm(self, perm_list, obj=None):
         return self.is_staff
@@ -127,7 +127,7 @@ class User(AbstractBaseUser):
             return False
 
         if self._moderated_courses is None:
-            ids = [course.id for course in self.moderated_courses.only('id')]
+            ids = [course.id for course in self.moderated_courses.only("id")]
             self._moderated_courses = ids
 
         return obj.write_perm(self, self._moderated_courses)
@@ -161,12 +161,12 @@ class User(AbstractBaseUser):
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    faculty = models.CharField(max_length=80, blank=True, default='')
-    section = models.CharField(max_length=80, blank=True, default='')
+    faculty = models.CharField(max_length=80, blank=True, default="")
+    section = models.CharField(max_length=80, blank=True, default="")
     year = models.PositiveIntegerField(blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('user', 'section', 'faculty', 'year')
+        unique_together = ("user", "section", "faculty", "year")

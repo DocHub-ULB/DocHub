@@ -20,36 +20,50 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     file_size = serializers.SerializerMethodField(read_only=True)
 
     original_url = serializers.HyperlinkedIdentityField(
-        view_name='document-original',
+        view_name="document-original",
     )
 
     pdf_url = serializers.HyperlinkedIdentityField(
-        view_name='document-pdf',
+        view_name="document-pdf",
     )
 
     class Meta:
         model = Document
 
         read_only_fields = (
-            'course', 'date', 'downloads', 'file_size',
-            'file_type', 'has_perm', 'id', 'is_processing',
-            'is_ready', 'is_unconvertible', 'md5', 'pages', 'state',
-            'url', 'user', 'user_vote', 'views', 'votes',
-            'original_url', 'pdf_url', 'imported',
+            "course",
+            "date",
+            "downloads",
+            "file_size",
+            "file_type",
+            "has_perm",
+            "id",
+            "is_processing",
+            "is_ready",
+            "is_unconvertible",
+            "md5",
+            "pages",
+            "state",
+            "url",
+            "user",
+            "user_vote",
+            "views",
+            "votes",
+            "original_url",
+            "pdf_url",
+            "imported",
         )
-        writable_fields = (
-            'description', 'name', 'tags'
-        )
+        writable_fields = ("description", "name", "tags")
 
         fields = writable_fields + read_only_fields
 
         extra_kwargs = {
-            'user': {'lookup_field': 'netid'},
-            'course': {'lookup_field': 'slug'},
+            "user": {"lookup_field": "netid"},
+            "course": {"lookup_field": "slug"},
         }
 
     def get_user_vote(self, document: Document) -> int:
-        user = self.context['request'].user
+        user = self.context["request"].user
         # We do the filtering in python as this method is called from REST with all the necessary
         #   data already prefetched. Using self.vote_set.filter() would lead to another roundtrip
         #   to the database for each document. Thats bad.
@@ -69,7 +83,7 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
             raise NotImplementedError("Vote not of known type.")
 
     def get_has_perm(self, document: Document) -> bool:
-        user = self.context['request'].user
+        user = self.context["request"].user
         return user.write_perm(obj=document)
 
     def get_file_size(self, document) -> int | None:
@@ -82,48 +96,50 @@ class DocumentSerializer(serializers.HyperlinkedModelSerializer):
 class ShortDocumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Document
-        fields = ('id', 'url', 'course')
+        fields = ("id", "url", "course")
 
 
 class EditDocumentSerializer(serializers.HyperlinkedModelSerializer):
-    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
+    tags = serializers.SlugRelatedField(
+        slug_field="name", queryset=Tag.objects, many=True
+    )
 
     class Meta:
         model = Document
 
-        fields = (
-            'description', 'name', 'tags'
-        )
+        fields = ("description", "name", "tags")
 
 
 class UploadDocumentSerializer(serializers.ModelSerializer):
     file = serializers.FileField()
-    course = serializers.SlugRelatedField(slug_field='slug', queryset=Course.objects)
-    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects, many=True)
+    course = serializers.SlugRelatedField(slug_field="slug", queryset=Course.objects)
+    tags = serializers.SlugRelatedField(
+        slug_field="name", queryset=Tag.objects, many=True
+    )
 
     class Meta:
         model = Document
-        fields = ('name', 'description', 'file', 'course', 'tags')
+        fields = ("name", "description", "file", "course", "tags")
 
     def create(self, validated_data) -> Document | None:
-        file = validated_data['file']
+        file = validated_data["file"]
         name, extension = os.path.splitext(file.name)
         name = logic.clean_filename(name)
 
-        if validated_data['name']:
-            name = validated_data['name']
+        if validated_data["name"]:
+            name = validated_data["name"]
 
         document = logic.add_file_to_course(
             file=file,
             name=name,
             extension=extension,
-            course=validated_data['course'],
-            tags=validated_data['tags'],
-            user=self.context['request'].user
+            course=validated_data["course"],
+            tags=validated_data["tags"],
+            user=self.context["request"].user,
         )
 
         if document:
-            document.description = validated_data['description']
+            document.description = validated_data["description"]
             document.save()
 
             document.add_to_queue()

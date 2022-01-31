@@ -11,10 +11,10 @@ class CourseSearchView(ListView):
     template_name = "search/course_list.html"
 
     def get_queryset(self):
-        query = self.request.GET.get('query', "")
+        query = self.request.GET.get("query", "")
         return search.logic.search_course(query)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['query'] = self.request.GET.get('query', "")
+        context["query"] = self.request.GET.get("query", "")
         return context

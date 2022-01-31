@@ -13,16 +13,16 @@ def course_autocomplete(request):
         query = request.GET.get("term", "")
         qs = Course.objects.filter(name__icontains=query)
 
-        qs = qs.filter(
-            Q(name__icontains=query) | Q(slug__icontains=query)
-        )
+        qs = qs.filter(Q(name__icontains=query) | Q(slug__icontains=query))
         results = []
         for course in qs:
-            results.append({
-                "name": course.name,
-                "slug": course.slug,
-                "url": reverse("course_show", kwargs={"slug": course.slug}),
-            })
+            results.append(
+                {
+                    "name": course.name,
+                    "slug": course.slug,
+                    "url": reverse("course_show", kwargs={"slug": course.slug}),
+                }
+            )
 
         data = json.dumps(results)
     mimetype = "application/json"

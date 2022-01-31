@@ -14,7 +14,7 @@ from django.utils.http import urlencode
 register = template.Library()
 
 
-@register.simple_tag(name='login_url')
+@register.simple_tag(name="login_url")
 def login_url(next=None):
     base = reverse("login")
 

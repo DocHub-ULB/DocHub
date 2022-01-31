@@ -7,12 +7,14 @@ from users.models import User
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def tree():
     root = Category.objects.create(name="ULB")
     science = Category.objects.create(name="science", parent=root)
 
-    swag = Course.objects.create(name="Optimization of algorithmical SWAG", slug="swag-h-042")
+    swag = Course.objects.create(
+        name="Optimization of algorithmical SWAG", slug="swag-h-042"
+    )
     swag.categories.add(science)
 
     yolo = Course.objects.create(name="Yolo as new life manager", slug="yolo-f-101")
@@ -21,23 +23,20 @@ def tree():
     return root
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def user():
     return User.objects.create_user(
-        netid='myuser',
-        email="myuser@lol.be",
-        first_name="My",
-        last_name="User"
+        netid="myuser", email="myuser@lol.be", first_name="My", last_name="User"
     )
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def other_user():
     return User.objects.create_user(
-        netid='otheruser',
+        netid="otheruser",
         email="otheruser@lol.be",
         first_name="OtherU",
-        last_name="ser"
+        last_name="ser",
     )
 
 

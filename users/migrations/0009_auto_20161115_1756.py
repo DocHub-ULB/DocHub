@@ -8,14 +8,14 @@ import users.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0008_auto_20151204_1329'),
+        ("users", "0008_auto_20151204_1329"),
     ]
 
     operations = [
         migrations.AlterModelManagers(
-            name='user',
+            name="user",
             managers=[
-                ('objects', users.models.CustomUserManager()),
+                ("objects", users.models.CustomUserManager()),
             ],
         ),
     ]
