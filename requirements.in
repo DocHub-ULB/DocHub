@@ -19,6 +19,7 @@ django-compressor
 whitenoise[brotli]
 types-requests
 types-PyYAML
+django-environ
 
 # Dev
 django-extensions

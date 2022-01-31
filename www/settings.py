@@ -1,16 +1,26 @@
 from pathlib import Path
 
-from www.utils import get_env
+import environ
 
+# First checks if the secrets are not stored in tmpfs by Docker
+# https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
+env = environ.FileAwareEnv()
+
+# Set the project base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = get_env("DEBUG", "1") == "1"
+# Take environment variables from .env file
+environ.Env.read_env(BASE_DIR / ".env")
 
-SECRET_KEY = get_env("SECRET_KEY", "zisisverysecraite", required=not DEBUG)
-ALLOWED_HOSTS = get_env(
-    "ALLOWED_HOSTS", "127.0.0.1,localhost", required=not DEBUG
-).split(",")
+DEBUG = env.bool("DEBUG", default=True)
 
+# Require the secret key if we are not in debug mode
+if DEBUG:
+    SECRET_KEY = env("SECRET_KEY", default="zisisverysecraite")
+else:
+    SECRET_KEY = env("SECRET_KEY")
+
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -69,25 +79,9 @@ TEMPLATES = [
     },
 ]
 
-
-if get_env("USE_POSTGRES", "0") == "1":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": get_env("SQL_DATABASE", "dochub"),
-            "HOST": get_env("SQL_HOST"),
-            "USER": get_env("SQL_USER"),
-            "PASSWORD": get_env("SQL_PASSWORD"),
-        }
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": get_env("SQL_DATABASE", str(BASE_DIR / "db.sqlite")),
-        }
-    }
-
+DATABASES = {
+    "default": env.db_url("DB_URL", default=f'sqlite:///{BASE_DIR / "db.sqlite"}')
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -134,23 +128,15 @@ STATICFILES_DIRS = [
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
-STATIC_ROOT = get_env("STATIC_ROOT", str(BASE_DIR / "collected_static"))
-MEDIA_ROOT = get_env("MEDIA_ROOT", str(BASE_DIR / "media"))
+STATIC_ROOT = env("STATIC_ROOT", default=BASE_DIR / "collected_static")
+MEDIA_ROOT = env("MEDIA_ROOT", default=BASE_DIR / "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
-BROKER_URL = get_env("REDIS_BROKER", "redis://localhost:6379/0")
+BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 
-CACHES = {
-    "default": {
-        "BACKEND": get_env(
-            "CACHE_BACKEND", "django.core.cache.backends.dummy.DummyCache"
-        ),
-        "LOCATION": get_env("CACHE_LOCATION", "127.0.0.1:11211"),
-        "TIMEOUT": int(get_env("CACHE_TIMEOUT", "300")),
-    }
-}
+CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 
 
 if DEBUG:
@@ -173,7 +159,7 @@ else:
         ]
     )
 
-    sentry_dsn = get_env("SENTRY_SDK")
+    sentry_dsn = env("SENTRY_SDK")
 
     if sentry_dsn is not None:
         import sentry_sdk
@@ -193,11 +179,20 @@ else:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
     # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
-    AWS_S3_ENDPOINT_URL = get_env("STORAGE_ENDPOINT")
-    AWS_S3_ACCESS_KEY_ID = get_env("STORAGE_ACCESS_KEY")
-    AWS_S3_SECRET_ACCESS_KEY = get_env("STORAGE_SECRET_KEY")
-    AWS_STORAGE_BUCKET_NAME = get_env("STORAGE_MEDIA_BUCKET_NAME")
+    AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
+    AWS_S3_ACCESS_KEY_ID = env("STORAGE_ACCESS_KEY")
+    AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 
 
 READ_ONLY = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
+
+
+# Add an escape hatch if we really need to customise something
+# special at the end in production or elsewhere
+# PS: you should try with environment variables first.
+try:
+    from .local_settings import *
+except ImportError:
+    pass

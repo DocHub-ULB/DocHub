@@ -1,19 +1,3 @@
-from typing import Optional
-
-import os
-
-
-def get_env(secret_name: str, default: str | None = None, required: bool = False):
-    """Gathers secrets and envvars from secret provider and environment"""
-
-    result = os.environ.get(secret_name)
-    if result is None:
-        if required:
-            raise Exception("Configuration error")
-        return default
-    return result
-
-
 # TODO: this should go into catalog/
 def programTypeAndSlug(program) -> tuple:
     """Returns the type of the program (Bachelier, Master, CAP, ...)"""
