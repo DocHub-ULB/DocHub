@@ -1,5 +1,6 @@
 from django.db.models import F
 from django.http import HttpResponse
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from rest_framework import permissions, status
 from rest_framework.decorators import action
@@ -55,6 +56,7 @@ class DocumentViewSet(VaryModelViewSet):
         document.save(update_fields=["downloads"])
         return response
 
+    @xframe_options_sameorigin
     @action(detail=True)
     def pdf(self, request, pk):
         document = self.get_object()

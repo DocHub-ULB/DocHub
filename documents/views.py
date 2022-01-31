@@ -205,11 +205,6 @@ def document_show(request, pk):
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
-    if document.state != Document.DocumentState.DONE:
-        return HttpResponseRedirect(
-            reverse("course_show", args=(document.course.slug,))
-        )
-
     context = {
         "document": document,
     }
