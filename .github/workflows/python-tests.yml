@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install apt packages
-      run: sudo apt install -y libsass-dev graphicsmagick mupdf-tools ghostscript unoconv python3-dev
+      run: sudo apt install -y graphicsmagick mupdf-tools ghostscript unoconv python3-dev
     - name: Set up Python
       uses: actions/setup-python@v2
       with:

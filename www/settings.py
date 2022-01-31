@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     "mptt",
     "rest_framework.authtoken",
     "django.contrib.postgres",
-    "sass_processor",
     "www",
     "documents",
     "users",

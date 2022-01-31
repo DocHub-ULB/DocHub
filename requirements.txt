@@ -78,8 +78,6 @@ django-mptt==0.13.4
     # via -r requirements.in
 django-pipeline==2.0.8
     # via -r requirements.in
-django-sass-processor==1.1
-    # via -r requirements.in
 django-storages==1.12.3
     # via -r requirements.in
 django-stubs-ext==0.3.1

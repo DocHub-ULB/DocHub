@@ -16,7 +16,6 @@ filemagic
 beautifulsoup4
 html5lib
 django-compressor
-django-sass-processor
 whitenoise[brotli]
 types-requests
 types-PyYAML
