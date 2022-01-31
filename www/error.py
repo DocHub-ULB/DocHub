@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+# TODO: is this still required ?
+
 
 def error400(request, exception=None):
     return render(request, "error/400.html", status=400)

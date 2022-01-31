@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from catalog.models import Course
 from documents.models import Document
-from users.serializers import SmallUserSerializer
 
 
 class PolymorphicSerializer(serializers.ModelSerializer):

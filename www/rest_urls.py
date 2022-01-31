@@ -4,7 +4,6 @@ import catalog.rest
 import documents.rest
 import search.rest
 import users.rest
-import www.rest
 
 
 class DochubAPI(APIRootView):

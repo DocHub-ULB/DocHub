@@ -8,7 +8,6 @@ from django.views.generic import TemplateView
 from catalog.forms import SearchForm
 from catalog.models import Category, Course
 from documents.models import Document
-from users.authBackend import UlbCasBackend
 from users.models import User
 from www.utils import buildOrderedProgramList
 
@@ -139,7 +138,7 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
 
     if mobile == "true":
         turbo_id = "mobile"
-    
+
     return render(
         request,
         "finder/course.html",
