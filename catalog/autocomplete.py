@@ -1,9 +1,9 @@
+# TODO: is this dead code ?
 import json
 
 from django.db.models import Q
 from django.http import HttpResponse
 from django.urls import reverse
-from django.utils.html import format_html
 
 from catalog.models import Course
 

@@ -1,15 +1,10 @@
-import os
-
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
-from PIL import Image, ImageOps
 from rest_framework.authtoken.models import Token
 
 from users.authBackend import (
@@ -18,7 +13,6 @@ from users.authBackend import (
     CasRequestError,
     UlbCasBackend,
 )
-from users.forms import SettingsForm
 
 
 @login_required

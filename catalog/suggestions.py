@@ -1,8 +1,7 @@
+# TODO: is this dead code ?
 import typing
 
 import collections
-
-from django.contrib.contenttypes.models import ContentType
 
 from catalog.models import Course
 from users.models import User
@@ -42,7 +41,9 @@ def suggest(target_user: User, K: int = 15) -> list[tuple[Course, int]]:
         user_id: distance for user_id, distance in distances.items() if distance > 0
     }
 
-    get_score = lambda x: x[1]
+    def get_score(x):
+        return x[1]
+
     neighbors = sorted(non_null_distances.items(), key=get_score)[:K]
 
     best_matches: typing.Counter[int] = collections.Counter()
@@ -57,8 +58,8 @@ def suggest(target_user: User, K: int = 15) -> list[tuple[Course, int]]:
             (Course.objects.get(id=course_id), hits)
             for course_id, hits in best_matches.most_common()
         ]
-    except:
+    except Exception:
         # Ugly fix to avoid crashing the page if we don't compute the courses
-        # TODO log the error (DoesNotExist: Course matching query does not exist.)
-        # TODO Scope the except
+        # TODO: log the error (DoesNotExist: Course matching query does not exist.)
+        # TODO: Scope the except
         return []

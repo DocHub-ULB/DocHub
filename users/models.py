@@ -87,6 +87,7 @@ class User(AbstractBaseUser):
 
         return token
 
+    # TODO: is this dead code ?
     # def getPrograms(self):
     #     """Returns a QS of the programs in which a course is followed by the user"""
     #     blocs = Category.objects.filter(course__in=self.following_courses).select_related('parent')
@@ -99,6 +100,7 @@ class User(AbstractBaseUser):
     #         ),
     #     )
 
+    # TODO: is this dead code ?
     # def getBlocs(self, program_slug):
     #     """Returns a QS of blocs that contain a course the user follows"""
     #     return set(Category.objects.filter(
@@ -138,12 +140,14 @@ class User(AbstractBaseUser):
     def get_short_name(self):
         return self.netid
 
+    # TODO: is this dead code ?
     def update_inscription_faculty(self):
         inscription = self.inscription_set.order_by("-year").first()
         if inscription:
             self.inscription_faculty = inscription.faculty
             self.save()
 
+    # TODO: is this dead code ?
     def update_inferred_faculty(self):
         courses = self.following_courses
         categories = [x.categories.all() for x in courses]

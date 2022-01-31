@@ -1,6 +1,8 @@
+// TODO: move this to stimulus
+
 /**
  * Empties the categories given in arguments (By id)
- * 
+ *
  * Used when clicking in the upper tree to hide the lower branches that become irrelevant
  */
 function emptySubCat(){
@@ -46,7 +48,7 @@ function follow(course_slug){
 /**
  * Toggles a program type modal
  * @param {*} modal The id of the modal to toggle
- * 
+ *
  * This function contains a lot of so called "moldavian shenanigance". The original modal is clone somewhere the user can't see,
  * It is then opened to its max-content height, and the height is saved in a variable. The newly found height is then assigned
  * to the original modal, action that triggers the css animation. Doing it any other way prevents the animation from working

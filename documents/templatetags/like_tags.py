@@ -1,3 +1,5 @@
+# TODO: is this dead code ?
+
 from django import template
 
 from documents.models import Document, Vote

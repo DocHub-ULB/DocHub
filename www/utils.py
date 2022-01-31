@@ -14,6 +14,7 @@ def get_env(secret_name: str, default: str | None = None, required: bool = False
     return result
 
 
+# TODO: this should go into catalog/
 def programTypeAndSlug(program) -> tuple:
     """Returns the type of the program (Bachelier, Master, CAP, ...)"""
     # FIXME : Maybe find a more elegant solution to define a program's type ?
@@ -31,6 +32,7 @@ def programTypeAndSlug(program) -> tuple:
         return "Autre", "zaut"
 
 
+# TODO: this should go into catalog/
 def buildOrderedProgramList(programs) -> list:
     """Builds a list of program types (Bachelier, Master, CAP) with the corresping programs in it"""
     program_dict: dict = {}

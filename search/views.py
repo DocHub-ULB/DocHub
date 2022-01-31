@@ -1,3 +1,4 @@
+# TODO: is this dead code ?
 from django.views.generic.list import ListView
 
 import search.logic

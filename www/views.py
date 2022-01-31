@@ -45,6 +45,7 @@ def index(request):
         return render(request, "index.html", context)
 
 
+# TODO: this should go into catalog/ or a new finder/ app
 def getEmptyFrame(request, id: str) -> HttpResponse:
     return render(
         request,
@@ -55,6 +56,7 @@ def getEmptyFrame(request, id: str) -> HttpResponse:
     )
 
 
+# TODO: this should go into catalog/ or a new finder/ app
 def getFacFrame(request, mobile: str) -> HttpResponse:
     root = get_object_or_404(Category, slug="root")
     facs = root.children.all().order_by("name")
@@ -78,6 +80,7 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
     )
 
 
+# TODO: this should go into catalog/ or a new finder/ app
 def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
     fac = get_object_or_404(Category, slug=fac_slug)
     programs = fac.children.all().order_by("name")
@@ -103,6 +106,7 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
     )
 
 
+# TODO: this should go into catalog/ or a new finder/ app
 def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
     program = get_object_or_404(Category, slug=program_slug)
     blocs = program.children.all().order_by("name")
@@ -126,6 +130,7 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
     )
 
 
+# TODO: this should go into catalog/ or a new finder/ app
 def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
     turbo_id = "courses"
 
@@ -146,6 +151,7 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
     )
 
 
+# TODO: this should go into catalog/ or a new finder/ app
 def finder_turbo(request, id: str, category_slug: str, mobile: str):
     if category_slug == "empty":
         return getEmptyFrame(request, id)
@@ -161,6 +167,7 @@ def finder_turbo(request, id: str, category_slug: str, mobile: str):
         raise Http404("l'ID recherché est introuvable")
 
 
+# TODO: this should go into catalog/
 def set_follow_course(request, action: str, course_slug: str):
     course = get_object_or_404(Course, slug=course_slug)
     if action == "follow":
@@ -171,6 +178,7 @@ def set_follow_course(request, action: str, course_slug: str):
     return JsonResponse({"status": "success"})
 
 
+# TODO: is this dead code ?
 class HelpView(TemplateView):
     def get_context_data(self):
         r = super().get_context_data()
