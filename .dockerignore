@@ -1,5 +1,6 @@
 ve/
 .pytest_cache/
 .vscode/
+__pycache__/
 
 db.sqlite
