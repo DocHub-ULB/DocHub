@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{# hide the search bar on the home page #}
+{% block navbar %}
+    {% with hide_search=True %}
+        {% include "navbar.html" %}
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+    {% comment %} {% if request.user.welcome %}
+        {% include "welcome.html" %}
+    {% endif %} {% endcomment %}
+
+    <div class="home-grid">
+        <div class="home-search-container">
+            {% include "search/frames/search-box.html" with initial=True %}
+        </div>
+        <div class="finder hide-on-mobile">
+            <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
+            </turbo-frame>
+            <turbo-frame id="programs" class="turbo-overflow">
+            </turbo-frame>
+            <turbo-frame id="blocs" class="turbo-overflow">
+            </turbo-frame>
+            <turbo-frame id="courses" class="turbo-overflow">
+            </turbo-frame>
+        </div>
+        <div class="finder visible-on-mobile">
+            <turbo-frame id="mobile" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "true" %}">
+            </turbo-frame>
+        </div>
+    </div>
+
+    <!-- Cours -->
+    {% comment %} {% if request.user.following_courses|length > 0 %}
+    <div class="row">
+        <div class="large-6 columns">
+            <h3>Mes cours</h3>
+            <ul class="no-list">
+                {% for course in request.user.following_courses %}
+                <li class="nav-link">
+                    <a href="{% url 'course_show' course.slug %}">
+                        <span class="course-label success radius label fixed-label">
+                            {{ course.slug }}
+                        </span>
+                        {{ course.name|truncatechars:40 }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %} {% endcomment %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "home.js" %}"></script>
+{% endblock %}

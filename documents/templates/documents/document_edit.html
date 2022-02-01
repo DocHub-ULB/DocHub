@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Éditer {{doc.name}}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="large-7 columns">
+      {% if READ_ONLY %}
+          <br>
+          <div data-alert class="alert-box warning radius">
+            DocHub est en maintenance, vous ne pouvez pas uploader de documents pour l'instant.
+            Cela devrait être résolu dans quelques heures, renvenez bientôt ! :)
+            <a href="#" class="close">&times;</a>
+          </div>
+      {% endif %}
+    <h1>Modifier un document</h1>
+    <h3>{{doc.name}}</h3>
+    <form action="{% url 'document_edit' doc.id %}" method="post"
+            enctype="multipart/form-data" class="dropzone">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% with form.name as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+        {% with form.tags as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+        {% with form.description as field %}
+            {% include "simple_input.html" %}
+        {% endwith %}
+
+        <p class="text-right"><input type="submit" class="button success radius {% if READ_ONLY %}disabled{% endif %}" value="Editer" /></p>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function() { $(".chosen-select").select2(); });
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+{% endblock %}

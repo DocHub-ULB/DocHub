@@ -1,5 +1,6 @@
 from django.db.models import F
 from django.http import HttpResponse
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from rest_framework import permissions, status
 from rest_framework.decorators import action
@@ -16,7 +17,7 @@ from www.rest import VaryModelViewSet
 
 class DocumentAccessPermission(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
-        if view.action == 'vote': # FIXME : hardcoded check is bad
+        if view.action == "vote":  # FIXME : hardcoded check is bad
             return True
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -27,10 +28,12 @@ class DocumentAccessPermission(permissions.IsAuthenticated):
 class DocumentViewSet(VaryModelViewSet):
     permission_classes = (DocumentAccessPermission,)
 
-    queryset = Document.objects.filter(hidden=False)\
-        .select_related("course", 'user')\
-        .prefetch_related('tags', 'vote_set')\
+    queryset = (
+        Document.objects.filter(hidden=False)
+        .select_related("course", "user")
+        .prefetch_related("tags", "vote_set")
         .order_by("-edited")
+    )
     serializer_class = DocumentSerializer
     create_serializer_class = UploadDocumentSerializer
     update_serializer_class = EditDocumentSerializer
@@ -40,36 +43,35 @@ class DocumentViewSet(VaryModelViewSet):
         document = self.get_object()
         body = document.original.read()
 
-        response = HttpResponse(body, content_type='application/octet-stream')
-        response['Content-Description'] = 'File Transfer'
-        response['Content-Transfer-Encoding'] = 'binary'
-        response['Content-Disposition'] = f'attachment; filename="{document.safe_name}{document.file_type}"'.encode("ascii", "ignore")
+        response = HttpResponse(body, content_type="application/octet-stream")
+        response["Content-Description"] = "File Transfer"
+        response["Content-Transfer-Encoding"] = "binary"
+        response[
+            "Content-Disposition"
+        ] = f'attachment; filename="{document.safe_name}{document.file_type}"'.encode(
+            "ascii", "ignore"
+        )
 
-        document.downloads = F('downloads') + 1
-        document.save(update_fields=['downloads'])
+        document.downloads = F("downloads") + 1
+        document.save(update_fields=["downloads"])
         return response
 
+    @xframe_options_sameorigin
     @action(detail=True)
     def pdf(self, request, pk):
         document = self.get_object()
         body = document.pdf.read()
 
-        response = HttpResponse(body, content_type='application/pdf')
-        response['Content-Disposition'] = ('attachment; filename="%s.pdf"' % document.safe_name).encode("ascii", "ignore")
+        response = HttpResponse(body, content_type="application/pdf")
+        content_disposition = 'filename="%s.pdf"' % document.safe_name
+        if "embed" not in self.request.query_params:
+            content_disposition = "attachment; " + content_disposition
 
-        document.downloads = F('views') + 1
-        document.save(update_fields=['views'])
+        response["Content-Disposition"] = content_disposition.encode("ascii", "ignore")
+
+        document.downloads = F("views") + 1
+        document.save(update_fields=["views"])
         return response
-
-    @action(detail=True, methods=['post'])
-    def vote(self, request, pk):
-        document = self.get_object()
-
-        vote, created = Vote.objects.get_or_create(document=document, user=request.user)
-        vote.vote_type = request.data["vote_type"]
-        vote.save()
-
-        return Response({"status": "ok"})
 
     def destroy(self, request, pk=None):
         document = self.get_object()

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Aide - FAQ{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="large-8 medium-12 columns">
+    {{ faq_md|markdown }}
+  </div>
+</div>
+
+<br><br><br><br><br><br><br><br>
+<div class="row">
+  <div class="large-8 medium-12 columns">
+    <h1 id="jobs">DocHub cherche des développeurs et des modérateurs</h1>
+    <p>
+        Dochub est développé, modéré et maintenu par des étudiants.
+        La plus part d'entre eux sont à la fin de leurs études et vont bientôt quitter l'ULB.<br>
+        Tu aimes développer ? Tu sais faire du Python, du JS ou, encore mieux du Django et du React ?<br>
+        C'est parfait, on cherche une relève ! Tu peux déjà aller voir le
+        <a href="https://github.com/urlab/dochub">code source</a>, il est Open Source sur GitHub.<br>
+        Ensuite, n'hésite pas à <a href="mailto:nikita.marchant@ulb.ac.be">nous contacter</a>
+        on se fera un plaisir de t'expliquer comment marche le site et comment commencer à développer dessus !
+    </p>
+
+    <h2>Tu es délégué et/ou tu veux devenir modérateur ?</h2>
+    <p>
+        Trier/Renommer/Modérer/... tout le contenu que les étudiants mettent en ligne n'est pas toujours rapide à faire.<br>
+        DocHub cherche des étudiants motivés pour compléter sont équipe de modération.
+        <a href="mailto:nikita.marchant@ulb.ac.be">Contacte nous</a> si ça t'intéresse !<br>
+        DocHub donne aussi un accès privilégié aux délégués ;)
+    </p>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,22 +1,28 @@
 from django.db import models
 from django.urls import reverse
 
-import actstream
 from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(db_index=True)
-    description = models.TextField(blank=True, default='')
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=255, db_index=True)
+    description = models.TextField(blank=True, default="")
+    parent = TreeForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        related_name="children",
+        db_index=True,
+        on_delete=models.CASCADE,
+    )
 
     class MPTTMeta:
-        order_insertion_by = ['name']
+        order_insertion_by = ["name"]
 
     class Meta:
         verbose_name_plural = "categories"
-        ordering = ['id']
+        ordering = ["id"]
 
     def __str__(self):
         return self.name
@@ -28,15 +34,17 @@ class Course(models.Model):
     categories = models.ManyToManyField(Category)
     description = models.TextField(default="")
 
+    followed_by = models.ManyToManyField("users.User", related_name="courses_set")
+
     class Meta:
-        ordering = ['slug']
+        ordering = ["slug"]
 
     def gehol_url(self):
-        slug = self.slug.replace('-', '').upper()
+        slug = self.slug.replace("-", "").upper()
         return f"https://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours={slug}"
 
     def get_absolute_url(self):
-        return reverse('course_show', args=(self.slug, ))
+        return reverse("course_show", args=(self.slug,))
 
     def __str__(self):
         return self.slug.upper()
@@ -45,5 +53,5 @@ class Course(models.Model):
         return f"{self.name} ({self.slug.lower()})"
 
     @property
-    def followers_count(self):
-        return len(actstream.models.followers(self))
+    def followers_count(self) -> int:
+        return self.followed_by.count()

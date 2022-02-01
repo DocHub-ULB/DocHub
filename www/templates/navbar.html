@@ -1,0 +1,19 @@
+<div class="nav">
+    <a href="/" class="logo">Doc<span style="color:#007095;">Hub</span></a>
+    {% if not hide_search %}
+        <div class="middle-section-nav">
+            <div class="search-box-container">
+                {% include "search/frames/search-box.html" with initial=True %}
+            </div>
+        </div>
+    {% endif %}
+    <div class="dropdown">
+        <span>{{user.name}}</span>
+        <div style="position: relative">
+            <div class="dropdown-content">
+                <a class="m-3" href="{% url "show_courses" %}">Mes cours</a>
+                <a class="m-3" href="{% url "logout" %}">Deconnexion</a>
+            </div>
+        </div>
+    </div>
+</div>

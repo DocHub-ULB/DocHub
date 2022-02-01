@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Liste des cours{% endblock %}
+
+{% block content %}
+{% if user.following_courses|length > 0 %}
+<a href="{% url 'unfollow_all_courses' %}" class="button red hide-on-mobile" style="position: absolute;right: 2em">
+    Me désabonner de tous les cours
+</a>
+{% endif %}
+
+<div class="big-finder hide-on-mobile">
+    <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
+    </turbo-frame>
+    <turbo-frame id="programs" class="turbo-overflow">
+    </turbo-frame>
+    <turbo-frame id="blocs" class="turbo-overflow">
+    </turbo-frame>
+    <turbo-frame id="courses" class="turbo-overflow">
+    </turbo-frame>
+</div>
+<div class="big-finder visible-on-mobile">
+    <turbo-frame id="mobile" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "true" %}">
+    </turbo-frame>
+</div>
+<div style="display: grid">
+    <p style="margin:auto;margin-top:0.5em">Ton nom ou prénom est incorrect ? Envoie-nous un <a href="mailto:admin@dochub.be" style="color: blue">mail</a>, on corrige ça tout de suite !</p>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "home.js" %}"></script>
+{% endblock %}

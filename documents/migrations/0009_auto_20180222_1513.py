@@ -9,22 +9,47 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('documents', '0008_auto_20180104_0009'),
+        ("documents", "0008_auto_20180104_0009"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Vote',
+            name="Vote",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('when', models.DateTimeField(auto_now=True)),
-                ('vote_type', models.CharField(choices=[('up', 'Upvote'), ('down', 'Downvote')], max_length=10)),
-                ('document', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='documents.Document')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("when", models.DateTimeField(auto_now=True)),
+                (
+                    "vote_type",
+                    models.CharField(
+                        choices=[("up", "Upvote"), ("down", "Downvote")], max_length=10
+                    ),
+                ),
+                (
+                    "document",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="documents.Document",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AlterUniqueTogether(
-            name='vote',
-            unique_together={('user', 'document')},
+            name="vote",
+            unique_together={("user", "document")},
         ),
     ]

@@ -14,9 +14,9 @@ logger = logging.getLogger(__name__)
 
 class UlbCasBackend:
     CAS_ENDPOINT = "https://auth.ulb.be/"
-    LOGIN_METHOD = 'ulb-cas'
+    LOGIN_METHOD = "ulb-cas"
     XML_NAMESPACES = {
-        'cas': 'http://www.yale.edu/tp/cas',
+        "cas": "http://www.yale.edu/tp/cas",
     }
 
     def get_user(self, user_id):
@@ -32,8 +32,8 @@ class UlbCasBackend:
         # Craft request to the CAS provider
         cas_ticket_url = furl(self.CAS_ENDPOINT)
         cas_ticket_url.path = "/proxyValidate"
-        cas_ticket_url.args['ticket'] = ticket
-        cas_ticket_url.args['service'] = self.get_service_url()
+        cas_ticket_url.args["ticket"] = ticket
+        cas_ticket_url.args["service"] = self.get_service_url()
 
         # Send the request
         resp = requests.get(cas_ticket_url.url)
@@ -52,7 +52,6 @@ class UlbCasBackend:
                 email=user_dict["email"],
                 first_name=user_dict["first_name"],
                 last_name=user_dict["last_name"],
-
                 register_method=self.LOGIN_METHOD,
             )
         user.last_login_method = self.LOGIN_METHOD
@@ -68,16 +67,14 @@ class UlbCasBackend:
             raise CasParseError("INVALID_XML", xml)
 
         success = tree.find(
-            './cas:authenticationSuccess',
-            namespaces=self.XML_NAMESPACES
+            "./cas:authenticationSuccess", namespaces=self.XML_NAMESPACES
         )
         if not success:
             failure = tree.find(
-                './cas:authenticationFailure',
-                namespaces=self.XML_NAMESPACES
+                "./cas:authenticationFailure", namespaces=self.XML_NAMESPACES
             )
             if failure is not None:
-                raise CasRejectError(failure.attrib.get('code'), failure.text)
+                raise CasRejectError(failure.attrib.get("code"), failure.text)
             else:
                 raise CasParseError("UNKNOWN_STRUCTURE", xml)
 
@@ -87,26 +84,34 @@ class UlbCasBackend:
         else:
             raise CasParseError("UNKNOWN_STRUCTURE", xml)
 
-        email_node = success.find("./cas:attributes/cas:mail", namespaces=self.XML_NAMESPACES)
+        email_node = success.find(
+            "./cas:attributes/cas:mail", namespaces=self.XML_NAMESPACES
+        )
         if email_node is not None:
             email = email_node.text
         else:
-            email = f'{netid}@ulb.ac.be'
+            email = f"{netid}@ulb.ac.be"
 
-        first_name_node = success.find("./cas:attributes/cas:givenName", namespaces=self.XML_NAMESPACES)
-        last_name_node = success.find("./cas:attributes/cas:sn", namespaces=self.XML_NAMESPACES)
+        first_name_node = success.find(
+            "./cas:attributes/cas:givenName", namespaces=self.XML_NAMESPACES
+        )
+        last_name_node = success.find(
+            "./cas:attributes/cas:sn", namespaces=self.XML_NAMESPACES
+        )
 
         return {
-            'netid': netid,
-            'email': email,
-            'first_name': first_name_node.text if first_name_node is not None else netid,
-            'last_name': last_name_node.text if last_name_node is not None else netid
+            "netid": netid,
+            "email": email,
+            "first_name": first_name_node.text
+            if first_name_node is not None
+            else netid,
+            "last_name": last_name_node.text if last_name_node is not None else netid,
         }
 
     @classmethod
     def get_login_url(cls):
         url = furl(cls.CAS_ENDPOINT)
-        url.path = '/login'
+        url.path = "/login"
         url.args["service"] = cls.get_service_url()
 
         return url.url
@@ -114,7 +119,7 @@ class UlbCasBackend:
     @classmethod
     def get_service_url(cls):
         url = furl(settings.BASE_URL)
-        url.path = reverse('auth-ulb')
+        url.path = reverse("auth-ulb")
         return url.url
 
 

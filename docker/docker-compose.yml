@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    command: gunicorn www.wsgi:application --bind 0.0.0.0:8000 --timeout 300
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    expose:
+      - 8000
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+    networks:
+      - private
+    restart: unless-stopped
+
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.prod.db
+    networks:
+      - private
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web_dochub.entrypoints=http"
+      - "traefik.http.routers.web_dochub.rule=Host(`dochub.be`)"
+      - "traefik.http.middlewares.web_dochub-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.web_dochub.middlewares=web_dochub-https-redirect"
+      - "traefik.http.routers.web_dochub-secure.entrypoints=https"
+      - "traefik.http.routers.web_dochub-secure.rule=Host(`dochub.be`)"
+      - "traefik.http.routers.web_dochub-secure.tls=true"
+      - "traefik.http.routers.web_dochub-secure.tls.certresolver=http"
+      - "traefik.http.routers.web_dochub-secure.service=nginx-dochub@docker"
+      - "traefik.docker.network=traefik-proxy"
+    depends_on:
+      - web
+    networks:
+      - private
+      - public
+      - traefik-proxy
+    restart: unless-stopped
+
+networks:
+  private:
+    driver: overlay
+  public:
+    external: true
+  traefik-proxy:
+    external: true
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

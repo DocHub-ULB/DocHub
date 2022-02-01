@@ -13,11 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install apt packages
-      run: sudo apt install -y libsass-dev graphicsmagick mupdf-tools ghostscript unoconv python3-dev
+      run: sudo apt install -y graphicsmagick mupdf-tools ghostscript unoconv python3-dev
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: "3.10"
 
     - name: Install pre-commit
       run: pip install pre-commit
@@ -30,9 +30,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Install npm packages
-      run: npm install
-
     - name: Django checks
       run: ./manage.py check
 
@@ -41,9 +38,6 @@ jobs:
 
     - name: mypy
       run: mypy
-
-    - name: Build js
-      run: npm run build
 
     - name: Statics checks
       run: ./manage.py collectstatic --noinput -v 0

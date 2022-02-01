@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+{% load follow_tags %}
+{% load has_perm_on %}
+
+{% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
+
+{% block content %}
+
+<div class="course-grid" data-controller="course-filter">
+    <div style="grid-column-start: 2;">
+        <h1 class="page-title">
+            {{ course.slug|upper }} {{ course.name }}
+            {% is_following request.user course as following %}
+            {% if following %}
+            <i class="fas fa-check" style="color: #43AC6A;"></i>
+            {% endif %}
+            {% if course.followers_count > 1 %}
+            <small>{{ course.followers_count }} personnes sont abonnées à ce cours.</small>
+            {% endif %}
+        </h1>
+
+        <div class="deck">
+            {% for document in documents %}
+            <div
+                data-course-filter-target="filterable"
+                data-filter-key='{{document.name}}'
+                data-tags="{{document.tags.all|join:' '}}"
+            >
+                <div class="card">
+                    {% include "catalog/like-dislike.html" %}
+                    <div class="card-content">
+                        <div class="card-title">
+                            <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
+                            <span>{{ document.user.name }}</span>
+                        </div>
+                        {% if document.description %}
+                            <div class="card-comment">
+                            {{ document.description|truncatechars:200 }}
+                            </div>
+                        {% endif %}
+                        <div class="card-footers">
+                            <span><i class="far fa-file"></i>{{ document.pages }} page{{ document.pages|pluralize }}</span>
+                            <span><i class="far fa-clock"></i>{{ document.date|date:"d F Y" }}</span>
+                            <div class="tags">
+                            {% for kw in document.tags.all%}
+                                <span
+                                data-id="{{kw.id}}"
+                                style="background-color: {{kw.color}}; color:white;"
+                                >
+                                {{kw}}
+                                </span>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="delimiter">
+                </div>
+            </div>
+            {% empty %}
+              <h3>Il n’y a encore rien dans ce cours…</h3>
+              <p>Personne n’est encore passé ici on dirait.<br>
+                Vous pourriez poser une question ou encore uploader un document en cliquant sur les boutons ci-dessus. </p>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="aside">
+        <div style="grid-row-start:1;text-align: center;white-space: nowrap">
+            <a href="{% url 'document_put' course.slug %}" class="button green">
+                <i class="fas fa-plus"></i>
+                Uploader un fichier
+            </a>
+            {% if following %}
+            <a href="{% url 'leave_course' course.slug %}" class="button red">
+                <i class="fas fa-times"></i> Se désabonner
+            </a>
+            {% else %}
+            <a href="{% url 'join_course' course.slug %}" class="button blue">
+                <i class="fas fa-check"></i> S’abonner au cours
+            </a>
+            {% endif %}
+        </div>
+        <div style="grid-row-start:2">
+            <div style="border: 2px solid black;border-radius: 0.5rem;justify-content: center;align-content: center;">
+                <i class="fas fa-search" style="margin: 0.5rem;"></i>
+                <input
+                  type="text" name="cours"
+                  placeholder="Chercher avec le titre du fichier"
+                  data-course-filter-target="query"
+                  data-action="input->course-filter#filter"
+                  style="border: none;text-align: center;outline: none;width:80%"
+                >
+            </div>
+        </div>
+        <div style="grid-row-start:3">
+            <h1 style="font-weight: normal;">Filtrer <small style="font-size: 0.5em;">par tag</small></h1>
+            <div style="margin:auto;padding-left: 1em;padding-right: 1em;text-align:center">
+            {% for tag in tags %}
+              <div class="ck-button">
+                  <input
+                    type="checkbox"
+                    id="tag-{{tag.name}}"
+                    data-tag-name="{{tag.name}}"
+                    data-action="input->course-filter#filter"
+                    data-course-filter-target="tag"
+                  >
+                  <label for="tag-{{tag.name}}" style="background-color:{{tag.color}};">
+                    <span>{{tag.name}}</span>
+                  </label>
+              </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <a class="show-aside">
+        <i class="fas fa-bars"></i>
+    </a>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(".show-aside").click(function(){
+    if($(".aside").css("visibility") == "visible"){
+        $(".aside").css("visibility", "hidden");
+    } else {
+        $(".aside").css("visibility", "visible");
+    }
+})
+</script>
+{% endblock %}

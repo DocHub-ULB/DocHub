@@ -1,0 +1,94 @@
+{% load humanize %}
+{% load login_url %}
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}DocHub - ULB{% endblock %}</title>
+
+    {% block opengraph %}
+    <meta property="og:title" content="DocHub" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://dochub.be/static/images/facebook_cover.png" />
+    <meta property="og:url" content="https://dochub.be" />
+    <meta property="og:description" content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. " />
+    {% endblock opengraph %}
+
+    <link rel="icon" type="image/png" href="/static/images/favicon.png" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
+
+    <!-- Start of Async Drift Code -->
+    <script>
+    !function() {
+      var t;
+      if (t = window.driftt = window.drift = window.driftt || [], !t.init) return t.invoked ? void (window.console && console.error && console.error("Drift snippet included twice.")) : (t.invoked = !0,
+      t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ],
+      t.factory = function(e) {
+        return function() {
+          var n;
+          return n = Array.prototype.slice.call(arguments), n.unshift(e), t.push(n), t;
+        };
+      }, t.methods.forEach(function(e) {
+        t[e] = t.factory(e);
+      }), t.load = function(t) {
+        var e, n, o, i;
+        e = 3e5, i = Math.ceil(new Date() / e) * e, o = document.createElement("script"),
+        o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + i + "/" + t + ".js",
+        n = document.getElementsByTagName("script")[0], n.parentNode.insertBefore(o, n);
+      });
+    }();
+    drift.SNIPPET_VERSION = '0.3.1';
+    drift.load('dzkrmavg2zw3');
+    </script>
+    <!-- End of Async Drift Code -->
+
+  </head>
+  <body>
+    <div class="sticky">
+    <nav class="top-bar" data-topbar="">
+        <ul class="title-area text-center">
+            <li class="name">
+               <h1><a href="/">DocHub</a></h1>
+            </li>
+        </ul>
+
+        <section class="top-bar-section">
+            <ul class="left">
+              <li class="divider"></li>
+            </ul>
+        </section>
+    </nav>
+    </div>
+    <div class="row">
+      {% block content %}
+        <div class="medium-6 small-12 columns small-centered">
+          <h1>DocHub</h1>
+          <p>
+            Bienvenue sur DocHub, le site de partage de documents et d’entraide étudiante à l’ULB.<br>
+            DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore.
+          </p>
+          <p class="text-center">
+            Tu n'as pas besoin de créer un compte, il suffit d'employer ton compte ULB.<br><br>
+            <a href="{% login_url %}" id="login_link" class="button success expand">Connexion avec l'ULB</a><br>
+            {% if debug %}
+            <small>Developpers could also <a href="/syslogin">syslogin</a></small>
+            {% endif %}
+          </p>
+          <p>
+          <i class="fi-page-copy"></i>
+          DocHub, c'est actuellement plus de {{documents|intcomma}} documents contenant
+          plus de {{pages|intcomma}} pages ajoutées par plus de {{users|intcomma}} utilisateurs.<br>
+          </p>
+        </div>
+      {% endblock %}
+    </div>
+
+    <script async defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
+  </body>
+</html>

@@ -2,7 +2,6 @@ import re
 
 
 class Slug:
-
     def __init__(self, domain: str, faculty: str, number: str):
         self.domain = domain.strip().lower()
         if len(self.domain) > 4:
@@ -36,7 +35,7 @@ class Slug:
 
     @classmethod
     def from_gehol(cls, string: str):
-        match = re.match(r'([A-Za-z]+)([A-Za-z])(\d+)', string)
+        match = re.match(r"([A-Za-z]+)([A-Za-z])(\d+)", string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFOF103'")
         domain, faculty, number = match.groups()
@@ -44,7 +43,7 @@ class Slug:
 
     @classmethod
     def from_catalog(cls, string: str):
-        match = re.match(r'([A-Za-z]+)-([A-Za-z])(\d+)', string)
+        match = re.match(r"([A-Za-z]+)-([A-Za-z])(\d+)", string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFO-F103'")
         domain, faculty, number = match.groups()
@@ -52,7 +51,7 @@ class Slug:
 
     @classmethod
     def from_dochub(cls, string: str):
-        match = re.match(r'([A-Za-z]+)-([A-Za-z])-(\d+)', string.upper())
+        match = re.match(r"([A-Za-z]+)-([A-Za-z])-(\d+)", string.upper())
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'info-f-103'")
         domain, faculty, number = match.groups()
@@ -77,7 +76,11 @@ class Slug:
     def __eq__(self, other):
         if not isinstance(other, Slug):
             return NotImplemented
-        return (self.domain, self.faculty, self.number) == (other.domain, other.faculty, other.number)
+        return (self.domain, self.faculty, self.number) == (
+            other.domain,
+            other.faculty,
+            other.number,
+        )
 
     def __hash__(self):
         return hash((self.domain, self.faculty, self.number))

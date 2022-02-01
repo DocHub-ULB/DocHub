@@ -1,15 +1,12 @@
-from actstream.models import actor_stream, user_stream
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-
-from www.serializers import FeedSerializer
 
 
 class VaryModelViewSet(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
-        method = kwargs.pop('method', None)
+        method = kwargs.pop("method", None)
         serializer_class = self.get_serializer_class(method=method)
-        kwargs['context'] = self.get_serializer_context()
+        kwargs["context"] = self.get_serializer_context()
         return serializer_class(*args, **kwargs)
 
     def get_serializer_class(self, method=None):
@@ -30,36 +27,23 @@ class VaryModelViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         view_serializer = self.get_serializer(serializer.instance)
         headers = self.get_success_headers(view_serializer.data)
-        return Response(view_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            view_serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial, method="PUT")
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial, method="PUT"
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         view_serializer = self.get_serializer(serializer.instance)
 
-        if getattr(instance, '_prefetched_objects_cache', None):
+        if getattr(instance, "_prefetched_objects_cache", None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
         return Response(view_serializer.data)
-
-
-class FeedViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = FeedSerializer
-
-    def get_queryset(self):
-        return user_stream(self.request.user)\
-            .exclude(verb="started following")\
-            .select_related('actor_content_type', 'target_content_type', 'action_object_content_type')
-
-
-class SelfFeedViewSet(viewsets.ReadOnlyModelViewSet):
-    """List of the actions the user"""
-    serializer_class = FeedSerializer
-
-    def get_queryset(self):
-        return actor_stream(self.request.user)

@@ -7,30 +7,34 @@ from django.dispatch import receiver
 from django.urls import reverse
 
 UNCONVERTIBLE_TYPES = [
-    '.zip',
-    '.rar',
-    '.tex',
-    '.djvu',
-    '.pages',
+    ".zip",
+    ".rar",
+    ".tex",
+    ".djvu",
+    ".pages",
 ]
 
 
 class Document(models.Model):
     class DocumentState(models.TextChoices):
-        PREPARING = ('PREPARING', 'En préparation')
-        READY_TO_QUEUE = ('READY_TO_QUEUE', 'Prêt à être ajouté à Celery')
-        IN_QUEUE = ('IN_QUEUE', 'Envoyé à Celery')
-        PROCESSING = ('PROCESSING', 'En cours de traitement')
-        DONE = ('DONE', 'Rendu fini')
-        ERROR = ('ERROR', 'Erreur')
-        REPAIRED = ('REPAIRED', 'Réparé')
+        PREPARING = ("PREPARING", "En préparation")
+        READY_TO_QUEUE = ("READY_TO_QUEUE", "Prêt à être ajouté à Celery")
+        IN_QUEUE = ("IN_QUEUE", "Envoyé à Celery")
+        PROCESSING = ("PROCESSING", "En cours de traitement")
+        DONE = ("DONE", "Rendu fini")
+        ERROR = ("ERROR", "Erreur")
+        REPAIRED = ("REPAIRED", "Réparé")
 
-    name = models.CharField(max_length=255, verbose_name='Titre')
-    course = models.ForeignKey('catalog.Course', null=True, verbose_name='Cours', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, verbose_name="Titre")
+    course = models.ForeignKey(
+        "catalog.Course", null=True, verbose_name="Cours", on_delete=models.CASCADE
+    )
 
     description = models.TextField(blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
-    tags = models.ManyToManyField('tags.Tag', blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, verbose_name="Utilisateur", on_delete=models.CASCADE
+    )
+    tags = models.ManyToManyField("tags.Tag", blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
@@ -41,15 +45,23 @@ class Document(models.Model):
     views = models.PositiveIntegerField(default=0)
     downloads = models.PositiveIntegerField(default=0)
 
-    file_type = models.CharField(max_length=255, default='')
-    original = models.FileField(upload_to='original_document')
-    pdf = models.FileField(upload_to='pdf_document')
+    file_type = models.CharField(max_length=255, default="")
+    original = models.FileField(upload_to="original_document")
+    pdf = models.FileField(upload_to="pdf_document")
 
-    state = models.CharField(max_length=20, choices=DocumentState.choices, default=DocumentState.PREPARING, db_index=True, verbose_name='État')
-    md5 = models.CharField(max_length=32, default='', db_index=True)
+    state = models.CharField(
+        max_length=20,
+        choices=DocumentState.choices,
+        default=DocumentState.PREPARING,
+        db_index=True,
+        verbose_name="État",
+    )
+    md5 = models.CharField(max_length=32, default="", db_index=True)
 
-    hidden = models.BooleanField(default=False, verbose_name='Est caché')
-    import_source = models.CharField(max_length=1024, null=True, verbose_name="Importé depuis")
+    hidden = models.BooleanField(default=False, verbose_name="Est caché")
+    import_source = models.CharField(
+        max_length=1024, null=True, verbose_name="Importé depuis"
+    )
 
     def __str__(self) -> str:
         return self.name
@@ -60,7 +72,7 @@ class Document(models.Model):
 
     @property
     def is_pdf(self) -> bool:
-        return self.file_type in ('.pdf', 'application/pdf')
+        return self.file_type in (".pdf", "application/pdf")
 
     # TODO use typed dict
     @property
@@ -92,10 +104,17 @@ class Document(models.Model):
         return self.file_type in UNCONVERTIBLE_TYPES
 
     def is_ready(self) -> bool:
-        return self.state in (Document.DocumentState.DONE, Document.DocumentState.REPAIRED)
+        return self.state in (
+            Document.DocumentState.DONE,
+            Document.DocumentState.REPAIRED,
+        )
 
     def is_processing(self):
-        return self.state in (Document.DocumentState.PREPARING, Document.DocumentState.IN_QUEUE, Document.DocumentState.PROCESSING)
+        return self.state in (
+            Document.DocumentState.PREPARING,
+            Document.DocumentState.IN_QUEUE,
+            Document.DocumentState.PROCESSING,
+        )
 
     @property
     def safe_name(self) -> str:
@@ -126,7 +145,7 @@ class Document(models.Model):
             raise e
 
     def get_absolute_url(self) -> str:
-        return reverse('document_show', args=(self.id, ))
+        return reverse("document_show", args=(self.id,))
 
     def write_perm(self, user, moderated_courses) -> bool:
         if user.id == self.user_id:
@@ -143,10 +162,9 @@ class Document(models.Model):
 
 
 class Vote(models.Model):
-
     class VoteType(models.TextChoices):
-        UPVOTE = 'up'
-        DOWNVOTE = 'down'
+        UPVOTE = "up"
+        DOWNVOTE = "down"
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
@@ -179,11 +197,13 @@ def cleanup_document_files(instance: Document, **kwargs) -> None:
         raise Exception("Documents are read-only.")
 
     pdf_file_name = instance.pdf.name
-    if pdf_file_name != '' and instance.pdf.storage.exists(pdf_file_name):
+    if pdf_file_name != "" and instance.pdf.storage.exists(pdf_file_name):
         instance.pdf.storage.delete(pdf_file_name)
 
     original_file_name = instance.original.name
-    if original_file_name != '' and instance.original.storage.exists(original_file_name):
+    if original_file_name != "" and instance.original.storage.exists(
+        original_file_name
+    ):
         instance.original.storage.delete(original_file_name)
 
 

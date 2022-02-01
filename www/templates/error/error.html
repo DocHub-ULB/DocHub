@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+
+{% block content %}
+  <div class="row">
+    <div class="large-8 small-12 columns small-centered">
+      <h1>
+        {% block heading %}
+          Erreur
+        {% endblock %}
+      </h1>
+      <p>
+        {% block expl %}
+          Une erreur est apparue
+        {% endblock %}
+      </p>
+
+      <a href="/" class="button tiny">Retour</a><br>
+
+      <small style="color: grey;">Code d'erreur: {% block errcode %}ERR_UNKNOWN{% endblock %}</small>
+
+      <pre style="color: grey; font-size: .5em">
+        {% block debug %}
+        {% endblock %}
+      </pre>
+
+    </div>
+  </div>
+{% endblock %}
