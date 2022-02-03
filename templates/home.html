@@ -1,0 +1,117 @@
+{% extends "skel.html" %}
+
+{% load render_bundle from webpack_loader %}
+
+{% block content %}
+{% if request.user.welcome %}
+  {% include "welcome.html" %}
+{% endif %}
+
+
+<br>
+    {% if request.user.following_courses|length > 0 %}
+    <div class="row">
+      <div class="large-6 columns">
+          <h3>Documents récents</h3>
+          <ul class="no-list">
+            {% for doc in recent_docs %}
+              <li>
+                <a href="{% url 'document_show' doc.id %}">
+                  <span class="course-label secondary radius label recent-blob fixed-label">
+                    {{ doc.course.slug }}
+                  </span>
+                 {{ doc.name|truncatechars:40 }}
+                </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+      </div>
+      <div class="large-6 columns">
+          <h3>Mes cours</h3>
+                <ul class="no-list">
+                  {% for course in request.user.following_courses %}
+                    <li class="nav-link">
+                      <a href="{% url 'course_show' course.slug %}">
+                          <span class="course-label success radius label fixed-label">
+                            {{ course.slug }}
+                        </span>
+                        {{ course.name|truncatechars:40 }}
+                      </a>
+                      </li>
+                  {% endfor %}
+              </ul>
+      </div>
+  </div>
+  {% endif %}
+  {% if request.user.following_courses|length < 3 %}
+  <div class="row">
+    <div class="large-6 columns">
+        <h3>Abonne toi à des cours</h3>
+        <p>
+            Sur DocHub, tu peux mettre des cours en favoris.
+            Ca te permet de voir directement dans ton flux d'actualités,
+            de recevoir des notifications dans la barre du haut et tout simplement
+            d'y accéder facilement.<br>
+            Les cours de DocHub sont classés par faculté ici à droite ou via le menu dans
+            <span class="label secondary radius">
+                <i class="fi-torso"></i>
+                {{request.user.first_name}}
+                <i class="fi-play"></i>
+                Mes cours
+            </span>.<br>
+            Tu peux aussi directement chercher ton cours dans la barre de recherche.
+        </p>
+    </div>
+    <div class="large-6 columns">
+        <h3>Facultés</h3>
+        <ul class="small-block-grid-1">
+        {% for fac in faculties %}
+            <li class="catalog-option">
+                <a href="{% url 'category_show' fac.id %}">
+                  <i class="fi-folder round-icon small"></i>
+                  {{ fac.name }}
+                </a>
+            </li>
+          {% endfor %}
+          </ul>
+    </div>
+</div>
+  {% endif %}
+  <div class="row">
+  <div class="large-12 columns feed">
+    <h4>Flux d'actualités</h4>
+    {% with verbose=1 %}
+      {% for action in stream %}
+        {% include "feed_entry.html" %}
+      {% empty %}
+        {% if request.user.following_courses|length > 0 %}
+          <p>Il n'y a encore rien dans ton flux d'actualités, attends un peu, ça arrivera&nbsp;!</p>
+        {% else %}
+          <p>Il n'y a encore rien dans ton flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
+          <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
+        {% endif %}
+        <span id="joy-flux"></span>
+        {% for i in "xxxx" %}
+          <div class="row feed-placeholder">
+            <div class="large-12 columns">
+              <p>
+                <strong>
+                    <i class="fi-cloud"></i>
+                  <img src="//placehold.it/40x40" class="feed-photo"> John Doe a commenté
+                </strong>
+                 "Question pour l'examen" dans Bases Fondamentales (base-f-100)
+                <br>
+                <span class="feed-timesince">
+                  Il y a 10 minutes
+                </span>
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    {% endwith %}
+  </div>
+</div>
+
+{% endblock %}
