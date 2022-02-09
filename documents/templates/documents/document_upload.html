@@ -15,7 +15,12 @@
         <h1 style="font-weight: normal;">Uploader <small style="font-size: 60%;font-weight:200;">{{course.name}}</small></h1>
         {% comment %} <div class="delimiter" style="width: 100%"></div> {% endcomment %}
 
-        <form action="{% url 'document_put' course.slug %}" method="post" enctype="multipart/form-data" id="document-upload" style="margin: 1em">
+        <form
+                action="{% url 'document_put' course.slug %}"
+                method="post" enctype="multipart/form-data"
+                id="document-upload" style="margin: 1em"
+                data-controller="upload"
+        >
             {% csrf_token %}
             {{ form.non_field_errors }}
             <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png,
@@ -31,13 +36,28 @@
                 {% endfor %}
             </small>
             {% endif %}
-                {{field}}
+                <div
+                        data-action="dragenter->upload#enter dragleave->upload#leave"
+                >
+                    <input
+                            type="file" name="file" class="file-upload" required id="id_file"
+                            data-upload-target="input"
+                            data-action="change->upload#input"
+                    />
+                </div>
+
             {% endwith %}
 
-            <div style="display:grid;grid-template-rows: max-content;">
-                {% with form.name as field %}
-                {% include "simple_input.html" %}
-                {% endwith %}
+            <div
+                    class="upload--hide"
+                    data-upload-target="form"
+            >
+                <div data-upload-target="size" ></div>
+                <input
+                        type="text" name="name"
+                        class="form-input" id="id_name"
+                        data-upload-target="name"
+                >
                 {% with form.tags as field %}
                 {% include "simple_input.html" %}
                 {% endwith %}

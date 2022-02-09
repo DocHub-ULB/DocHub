@@ -1,3 +1,25 @@
+input[type=file]::file-selector-button {
+    display: none;
+}
+
+input[type=file] {
+    width: 400px; height: 200px; border: 5px dashed black; border-radius: 20px
+}
+
+input[type=file][active] {
+    border: 5px dashed red;
+}
+
+input[type=file][filled] {
+    border: 5px dashed blue;
+}
+
+.upload--hide {
+    display: none;
+}
+
+
+
 /*
 
 Stick footer to the bottom

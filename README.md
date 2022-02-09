@@ -1,6 +1,6 @@
 # DocHub
 
-[![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/UrLab/beta402/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](https://github.com/UrLab/dochub/blob/master/LICENSE)
 
 DocHub is a website, written in django. It's main goal is to provide a space for students (for now form the [ULB](https://ulb.ac.be) university) to collaborate, help each other and distribute old exams and exercices.
 
