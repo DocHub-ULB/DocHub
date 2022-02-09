@@ -20,6 +20,32 @@ function normalize(s){
     return r;
 };
 
+function humanFileSize(bytes, dp=1) {
+    const thresh = 1000;
+
+    if (Math.abs(bytes) < thresh) {
+        return bytes + ' B';
+    }
+
+    const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    let u = -1;
+    const r = 10**dp;
+
+    do {
+        bytes /= thresh;
+        ++u;
+    } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+    return bytes.toFixed(dp) + ' ' + units[u];
+}
+
+function cleanName(name) {
+    // Returns the name withtout dashes, underscores and removes the extension
+    return name.replace(/[-_]/g, ' ').replace(/\.[^.]+$/, '');
+
+}
+
 
 class CourseFilter extends Controller {
     static targets = [ "query", "tag", "filterable" ]
@@ -169,6 +195,35 @@ class Viewer extends Controller {
         let canvas = wrapper.getElementsByTagName("canvas")[0]
         if(canvas !== undefined) canvas.remove();
         wrapper.removeAttribute("data-viewer-ready")
+
+class Upload extends Controller {
+    static targets = ["input", "name", "size", "form"]
+
+    input(event) {
+        console.log("File upload", event);
+        let files = this.inputTarget.files;
+        if (files.length > 0) {
+            this.inputTarget.setAttribute("filled", "")
+            let file = files[0];
+            this.nameTarget.value = cleanName(file.name)
+            this.sizeTarget.textContent = humanFileSize(file.size);
+
+            this.formTarget.classList.remove("upload--hide")
+        } else {
+            this.inputTarget.removeAttribute("filled")
+            this.formTarget.classList.add("upload--hide")
+        }
+        this.leave(null);
+    }
+
+    enter(event) {
+        event.preventDefault()
+        this.inputTarget.setAttribute("active" , "")
+    }
+
+    leave(event) {
+        if(event !== null) { event.preventDefault() }
+        this.inputTarget.removeAttribute("active")
     }
 
 }
@@ -178,4 +233,6 @@ const application = Application.start()
 application.register("course-filter", CourseFilter);
 application.register("search", Search);
 application.register("viewer", Viewer);
+application.register("upload", Upload);
+
 application.debug = true;
