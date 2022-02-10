@@ -16,6 +16,5 @@ urlpatterns = [
         name="unfollow_all_courses",
     ),
     path("course_tree.json", catalog.views.course_tree, name="course_tree"),
-
     path("search/autocomplete", course_autocomplete, name='course-autocomplete'),
 ]

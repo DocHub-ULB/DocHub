@@ -30,13 +30,13 @@
                 <span class="mdc-button__label">Uploader un fichier</span>
             </button>
             {% if following %}
-                <button onclick="location='{% url 'leave_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #9b0000;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                <button onclick="location='{% url 'catalog:leave_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #9b0000;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
                     <span class="mdc-button__ripple"></span>
                     <i class="material-icons mdc-button__icon" aria-hidden="true">clear</i>
                     <span class="mdc-button__label">Se désabonner</span>
                 </button>
             {% else %}
-                <button onclick="location='{% url 'join_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                <button onclick="location='{% url 'catalog:join_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
                     <span class="mdc-button__ripple"></span>
                     <i class="material-icons mdc-button__icon" aria-hidden="true">done</i>
                     <span class="mdc-button__label">S’abonner au cours</span>

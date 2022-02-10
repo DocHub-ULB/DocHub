@@ -32,7 +32,7 @@
                 <ul class="no-list">
                   {% for course in request.user.following_courses %}
                     <li class="nav-link">
-                      <a href="{% url 'course_show' course.slug %}">
+                      <a href="{% url 'catalog:course_show' course.slug %}">
                           <span class="course-label success radius label fixed-label">
                             {{ course.slug }}
                         </span>
@@ -68,7 +68,7 @@
         <ul class="small-block-grid-1">
         {% for fac in faculties %}
             <li class="catalog-option">
-                <a href="{% url 'category_show' fac.id %}">
+                <a href="{% url 'catalog:category_show' fac.id %}">
                   <i class="fi-folder round-icon small"></i>
                   {{ fac.name }}
                 </a>
@@ -88,7 +88,7 @@
         {% if request.user.following_courses|length > 0 %}
           <p>Il n'y a encore rien dans ton flux d'actualités, attends un peu, ça arrivera&nbsp;!</p>
         {% else %}
-          <p>Il n'y a encore rien dans ton flux d'actualités, il faudrait peut-être <a href="{% url 'show_courses' %}">s’abonner à un cours</a> ?</p>
+          <p>Il n'y a encore rien dans ton flux d'actualités, il faudrait peut-être <a href="{% url 'catalog:show_courses' %}">s’abonner à un cours</a> ?</p>
           <p>En vous abonnant à un cours, il apparait dans le menu de gauche sur toutes les pages du site, et vous recevez une notification à chaque nouveau document ou sujet de discussion ajouté dans ce cours.</p>
         {% endif %}
         <span id="joy-flux"></span>
