@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    margin: 8px 0px;
+    margin: 0px 0px;
 }
 
 /* Navbar  */
@@ -26,6 +26,8 @@ body {
     top: 0px;
     grid-template-columns: 20% 60% 20%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    background: #007095;
+    color: white;
     
 }
 
@@ -43,7 +45,7 @@ body {
     font-size: 24px;
     line-height: 28px;
 
-    color: #000000;
+    color: white;
 }
 
 
@@ -411,7 +413,7 @@ body {
 .home-grid{
     height:85vh;
     display: grid;
-    grid-template: 1fr 25vh/ 1fr 50vw 1fr;
+    grid-template: 1fr 35vh/ 1fr 50vw 1fr;
     margin-bottom:1em
 }
 
