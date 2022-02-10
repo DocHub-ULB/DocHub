@@ -39,11 +39,13 @@
             {% if following_course %}
                 <div style="height: 100%;display: grid;grid-template-columns:1fr 1fr 1fr;grid-gap: 0.75em;font-family: Roboto;font-style: normal;">
                     {% for course in following_course %}
-                        <div style="padding-left: 0.5em;padding-right: 0.5em">
-                            <div style="padding:0.75em;background-color: #00445A20;border-radius: 1em;">
-                                <i class="fas fa-folder" style="margin-right: 5px;color: #009ACD;"></i> {{ course.name }}
+                        <a href="{% url "catalog:course_show" course.slug %}">
+                            <div style="padding-left: 0.5em;padding-right: 0.5em">
+                                <div style="padding:0.75em;background-color: #00445A20;border-radius: 1em;">
+                                    <i class="fas fa-folder" style="margin-right: 5px;color: #009ACD;"></i> {{ course.name }}
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     {% endfor %}
                 </div>
             {% else %}
