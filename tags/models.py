@@ -9,7 +9,8 @@ class Tag(models.Model):
     @property
     def color(self):
         return "#%02x%02x%02x" % tuple(
-            abs(int(200 * sin(self.id + x * pi / 3))) for x in range(3))
+            abs(int(200 * sin(self.id + x * pi / 3))) for x in range(3)
+        )
 
     def __str__(self):
         return self.name

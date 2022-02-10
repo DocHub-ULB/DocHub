@@ -1,3 +1,18 @@
+/*
+
+Stick footer to the bottom
+https://dev.to/nehalahmadkhan/how-to-make-footer-stick-to-bottom-of-web-page-3i14
+
+*/
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.footer{
+    margin-top: auto;
+}
+
 /* General css */
 h1,h2,h3,h4,h5,h6,p {
     font-family: Titillium Web;
@@ -592,7 +607,6 @@ body {
     }
 
     .aside {
-        display: none;
         visibility: hidden;
         grid-auto-rows: max-content max-content 1fr;
         row-gap: 20px;
@@ -666,7 +680,7 @@ body {
         top: 0.5em;
         left: 0.5em;
     }
-    
+
     .middle-section-nav:focus-within > .search-box-container {
         width: 100%;
     }

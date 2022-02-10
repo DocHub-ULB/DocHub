@@ -1,5 +1,6 @@
 import pytest
 import responses
+from responses import matchers
 
 from users.authBackend import CasRequestError, UlbCasBackend
 from users.models import User
@@ -19,10 +20,14 @@ def test_auth(fake_base_url):
 
     responses.add(
         responses.GET,
-        f"https://auth.ulb.be/proxyValidate?ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb",
+        "https://auth.ulb.be/proxyValidate",
         body=xml,
         status=200,
-        match_querystring=True,
+        match=[
+            matchers.query_string_matcher(
+                f"ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb"
+            )
+        ],
     )
 
     # Log the user for the first time
@@ -50,10 +55,14 @@ def test_server_error(fake_base_url):
 
     responses.add(
         responses.GET,
-        f"https://auth.ulb.be/proxyValidate?ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb",
+        "https://auth.ulb.be/proxyValidate",
         body="<xml>server error</xml>",
         status=500,
-        match_querystring=True,
+        match=[
+            matchers.query_string_matcher(
+                f"ticket={ticket}&service=http%3A%2F%2Fexample.com%2Fauth-ulb"
+            )
+        ],
     )
 
     with pytest.raises(CasRequestError) as e:

@@ -3,19 +3,21 @@
 
     {% if request.user.following_courses.count > 0 %}
         <a
-        onclick="emptySubCat('blocs', 'courses')"
-        class="inner-finder-col"
-        href="{% url 'finder_turbo' 'courses' 'mycourses' mobile %}"
-        data-turbo-frame="{{ futur_turbo_id }}"
-        style="color: #f00"
+            onclick="emptySubCat('blocs', 'courses', 'mycourses', 'fac_link')"
+            class="inner-finder-col fac_link"
+            id="mycourses"
+            href="{% url 'finder_turbo' 'courses' 'mycourses' mobile %}"
+            data-turbo-frame="{{ futur_turbo_id }}"
+            style="color: #f00"
         >
             <i class="fas fa-folder"></i> Mes cours
         </a>
     {% endif %}
     {% for fac in facs %}
         <a
-            onclick="emptySubCat('blocs', 'courses')"
-            class="inner-finder-col"
+            onclick="emptySubCat('blocs', 'courses', '{{ fac.slug }}', 'fac_link')"
+            class="inner-finder-col fac_link"
+            id="{{ fac.slug }}"
             href="{% url "finder_turbo" "programs" fac.slug mobile %}"
             data-turbo-frame="{{ futur_turbo_id }}"
             style="color: {{ fac.description }}"

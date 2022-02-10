@@ -7,7 +7,6 @@ class MissingBinary(EnvironmentError):
 
 
 class DocumentProcessingError(Exception):
-
     def __init__(self, document, exc=None, message=None):
         super(Exception, self).__init__()
         self.document = document
@@ -24,15 +23,15 @@ class DocumentProcessingError(Exception):
 
 
 class UploadError(DocumentProcessingError):
-
     def __repr__(self):
         return f"UploadError('Document {self.document.id} was not properly uploaded by django.')"
 
 
 class DownloadError(DocumentProcessingError):
-
     def __repr__(self):
-        return "UploadError('Downloading doc {0.id} from {0.original} failed')".format(self.document)
+        return "UploadError('Downloading doc {0.id} from {0.original} failed')".format(
+            self.document
+        )
 
 
 class SkipException(Exception):

@@ -14,35 +14,26 @@ print("Getting page")
 page = requests.get(URL)
 print("done, parsing", round(time.time() - start, 2))
 
-soup = BeautifulSoup(page.content, 'html.parser')
+soup = BeautifulSoup(page.content, "html.parser")
 all_courses: list = []
 
 for span in soup.find_all("span", {"class": "search-result__mnemonique"}):
     if span.text not in [course["MNEMO"] for course in all_courses]:
         fac = span.find_previous_siblings("a")
-        program_name = span.find_previous("strong", "search-result__structure-intitule").text
+        program_name = span.find_previous(
+            "strong", "search-result__structure-intitule"
+        ).text
         facs: list = []
         for elem in fac:
             children = elem.findChildren()
-            facs.append(
-                {
-                    "color": children[0]["style"][-7:],
-                    "name": children[1].text
-                }
-            )
-        all_courses.append(
-            {
-                "MNEMO": span.text,
-                "name": program_name,
-                "FAC": facs
-            }
-        )
+            facs.append({"color": children[0]["style"][-7:], "name": children[1].text})
+        all_courses.append({"MNEMO": span.text, "name": program_name, "FAC": facs})
 
 failed: list = []
 
 print("parsing courses")
 for index, course in enumerate(all_courses):
-    print(f"({index+1}/{len(all_courses)}) requesting", course['MNEMO'].upper())
+    print(f"({index+1}/{len(all_courses)}) requesting", course["MNEMO"].upper())
     start = time.time()
     programme = None
     while programme is None:
@@ -57,23 +48,23 @@ for index, course in enumerate(all_courses):
     print("Got, treating", round(time.time() - start, 2))
 
     try:
-        programme_json = json.loads(programme.json()['json'])
+        programme_json = json.loads(programme.json()["json"])
         all_courses[index]["courses"] = {}
-        if len(programme_json['blocs']) == 0:
+        if len(programme_json["blocs"]) == 0:
             continue
 
-        for course in programme_json['blocs'][-1]['progCourses']:
-            if course['id'] not in ['TEMP-0000', 'HULB-0000']:
-                all_courses[index]["courses"][course['id']] = {
-                    "id": course['id'],
-                    "title": course['title'],
-                    "mandatory": course['mandatory'],
-                    "bloc": course['bloc'],
-                    "lecturers": course['lecturers'],
-                    "quadri": course['quadri'],
+        for course in programme_json["blocs"][-1]["progCourses"]:
+            if course["id"] not in ["TEMP-0000", "HULB-0000"]:
+                all_courses[index]["courses"][course["id"]] = {
+                    "id": course["id"],
+                    "title": course["title"],
+                    "mandatory": course["mandatory"],
+                    "bloc": course["bloc"],
+                    "lecturers": course["lecturers"],
+                    "quadri": course["quadri"],
                 }
     except Exception as e:
-        failed.append(course['MNEMO'])
+        failed.append(course["MNEMO"])
         print("Error", e)
 
 

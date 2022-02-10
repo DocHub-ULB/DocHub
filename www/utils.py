@@ -1,20 +1,4 @@
-from typing import Optional
-
-import os
-
-
-def get_env(secret_name: str, default: Optional[str] = None):
-    """Gathers secrets and envvars from secret provider and environment"""
-    if secret_name.startswith("SDC_"):
-        # Get secret from a secret provider (portainer ?)
-        return ""
-
-    result = os.environ.get(secret_name)
-    if result is None:
-        return default
-    return result
-
-
+# TODO: this should go into catalog/
 def programTypeAndSlug(program) -> tuple:
     """Returns the type of the program (Bachelier, Master, CAP, ...)"""
     # FIXME : Maybe find a more elegant solution to define a program's type ?
@@ -32,6 +16,7 @@ def programTypeAndSlug(program) -> tuple:
         return "Autre", "zaut"
 
 
+# TODO: this should go into catalog/
 def buildOrderedProgramList(programs) -> list:
     """Builds a list of program types (Bachelier, Master, CAP) with the corresping programs in it"""
     program_dict: dict = {}
@@ -42,9 +27,11 @@ def buildOrderedProgramList(programs) -> list:
             program_dict[type_slug] = {
                 "name": program_type,
                 "slug": type_slug,
-                "programs": [program]
+                "programs": [program],
             }
         else:
-            program_dict[type_slug]['programs'].append(program)
+            program_dict[type_slug]["programs"].append(program)
 
-    return sorted([program for _, program in program_dict.items()], key=lambda x: x['slug'])
+    return sorted(
+        (program for _, program in program_dict.items()), key=lambda x: x["slug"]
+    )

@@ -3,8 +3,21 @@
 {% load has_perm_on %}
 
 {% block title %}{{ document.name }}{% endblock %}
-{% block full-page %}
+{% block content %}
+<!-- FIXME: check for other states (error) -->
+{% if document.state != "DONE" %}
+<p>
+Ce document est en cours de traitement par DocHub et il n'est donc pas encore
+possible d'en avoir un aperçu.
+<!-- FIXME: do not hardcode url -->
+Mais tu peux <a href="/api/documents/{{ document.pk }}/original">télécharger
+la version originale </a> si tu le désires.
+</p>
+{% else %}
 <!-- FIXME: do not hardcode url -->
 <embed src="/api/documents/{{ document.pk }}/pdf/?embed" type="application/pdf" width="100%" height="100%">
+{%endif%}
+
+
 
 {% endblock %}

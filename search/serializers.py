@@ -10,4 +10,4 @@ class CourseSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('name', 'slug', 'document_count', 'rank', 'similarity')
+        fields = ("name", "slug", "document_count", "rank", "similarity")

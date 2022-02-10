@@ -1,13 +1,21 @@
+// TODO: move this to stimulus
+
 /**
  * Empties the categories given in arguments (By id)
- * 
+ *
  * Used when clicking in the upper tree to hide the lower branches that become irrelevant
  */
 function emptySubCat(){
     var args = arguments;
-    for(var i=0; i<args.length; i++){
+
+    // Clean the corresponding category (fac/programs/blocs)
+    $("." + args[args.length - 2]).css("background-color", "white");
+    for(var i=0; i<args.length - 2; i++){
         $('#' + args[i]).attr('src', $("#" + args[i] + "-finder-col").attr("empty-" + args[i] + "-url"))
     }
+
+    // Change the background of the category (fac/programs/blocs)
+    $('#' + args[args.length - 2]).css("background-color", "green");
 }
 
 /**
@@ -46,7 +54,7 @@ function follow(course_slug){
 /**
  * Toggles a program type modal
  * @param {*} modal The id of the modal to toggle
- * 
+ *
  * This function contains a lot of so called "moldavian shenanigance". The original modal is clone somewhere the user can't see,
  * It is then opened to its max-content height, and the height is saved in a variable. The newly found height is then assigned
  * to the original modal, action that triggers the css animation. Doing it any other way prevents the animation from working

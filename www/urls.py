@@ -16,8 +16,16 @@ sitemaps = {
 
 urlpatterns = [
     path("", www.views.index, name="index"),
-    path("finder/<slug:id>/<slug:category_slug>/<str:mobile>", www.views.finder_turbo, name="finder_turbo"),
-    path("finder/<slug:action>/<slug:course_slug>", www.views.set_follow_course, name="set_course_follow"),
+    path(
+        "finder/<slug:id>/<slug:category_slug>/<str:mobile>",
+        www.views.finder_turbo,
+        name="finder_turbo",
+    ),
+    path(
+        "finder/<slug:action>/<slug:course_slug>",
+        www.views.set_follow_course,
+        name="set_course_follow",
+    ),
     path("search/", include("search.urls")),
     path("catalog/", include(("catalog.urls", "catalog"), namespace="catalog")),
     path("documents/", include("documents.urls")),
@@ -25,7 +33,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("www.rest_urls")),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
-
     path("login", users.views.login_view, name="login"),
     path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),
     path("logout", LogoutView.as_view(next_page="/"), name="logout"),
@@ -50,6 +57,8 @@ if settings.DEBUG:
 
     import debug_toolbar
 
-    urlpatterns.extend([
-        path("__debug__/", include(debug_toolbar.urls)),
-    ])
+    urlpatterns.extend(
+        [
+            path("__debug__/", include(debug_toolbar.urls)),
+        ]
+    )

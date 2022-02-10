@@ -1,5 +1,3 @@
-from typing import Optional
-
 import contextlib
 import hashlib
 import os
@@ -52,7 +50,14 @@ def doctask(*args, **kwargs):
 
 
 def short_doctask(*args, **kwargs):
-    return shared_task(*args, bind=True, on_failure=on_failure, soft_time_limit=60, hard_time_limit=90, **kwargs)
+    return shared_task(
+        *args,
+        bind=True,
+        on_failure=on_failure,
+        soft_time_limit=60,
+        hard_time_limit=90,
+        **kwargs,
+    )
 
 
 @doctask
@@ -86,7 +91,7 @@ def checksum(self, document_id: int) -> int:
 
     contents = document.original.read()
     hashed = hashlib.md5(contents).hexdigest()
-    duplicata = Document.objects.filter(md5=hashed).exclude(md5='').first()
+    duplicata = Document.objects.filter(md5=hashed).exclude(md5="").first()
 
     if duplicata and duplicata.hidden:
         # If there exists a document with the same checksum
@@ -126,13 +131,19 @@ def convert_office_to_pdf(self, document_id: int) -> int:
     try:
         document = Document.objects.get(pk=document_id)
 
-        with file_as_local(document.original, prefix="dochub_unoconv_input_") as tmpfile:
+        with file_as_local(
+            document.original, prefix="dochub_unoconv_input_"
+        ) as tmpfile:
             try:
-                sub = subprocess.check_output(['unoconv', '-f', 'pdf', '--stdout', tmpfile.name])
+                sub = subprocess.check_output(
+                    ["unoconv", "-f", "pdf", "--stdout", tmpfile.name]
+                )
             except OSError:
                 raise MissingBinary("unoconv")
             except subprocess.CalledProcessError as e:
-                raise DocumentProcessingError(document, exc=e, message='"unoconv" has failed: %s' % e.output[:800])
+                raise DocumentProcessingError(
+                    document, exc=e, message='"unoconv" has failed: %s' % e.output[:800]
+                )
 
         document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
@@ -181,16 +192,27 @@ def repair(self, document_id: int) -> int:
 
     pdf_is_original = document.pdf == document.original
 
-    with file_as_local(document.pdf, prefix="dochub_pdf_repair_", suffix=".broken.pdf") as tmpfile:
-        with temporary_file_path(prefix="dochub_pdf_repair_", suffix=".repaired.pdf") as output_path:
+    with file_as_local(
+        document.pdf, prefix="dochub_pdf_repair_", suffix=".broken.pdf"
+    ) as tmpfile:
+        with temporary_file_path(
+            prefix="dochub_pdf_repair_", suffix=".repaired.pdf"
+        ) as output_path:
             try:
-                subprocess.check_output(["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path], stderr=subprocess.STDOUT)
+                subprocess.check_output(
+                    ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
+                    stderr=subprocess.STDOUT,
+                )
             except OSError:
                 raise MissingBinary("mutool")
             except subprocess.CalledProcessError as e:
-                raise DocumentProcessingError(document, exc=e, message='mutool clean has failed : %s' % e.output[:900])
+                raise DocumentProcessingError(
+                    document,
+                    exc=e,
+                    message="mutool clean has failed : %s" % e.output[:900],
+                )
 
-            with open(output_path, 'rb') as fd:
+            with open(output_path, "rb") as fd:
                 document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
                 document.pdf.close()
 
@@ -203,23 +225,13 @@ def repair(self, document_id: int) -> int:
     return document_id
 
 
-process_pdf = chain(
-    checksum.s(),
-    mesure_pdf_length.s(),
-    finish_file.s()
-)
+process_pdf = chain(checksum.s(), mesure_pdf_length.s(), finish_file.s())
 
 process_office = chain(
-    checksum.s(),
-    convert_office_to_pdf.s(),
-    mesure_pdf_length.s(),
-    finish_file.s()
+    checksum.s(), convert_office_to_pdf.s(), mesure_pdf_length.s(), finish_file.s()
 )
 
-process_unconvertible = chain(
-    checksum.s(),
-    finish_file.s()
-)
+process_unconvertible = chain(checksum.s(), finish_file.s())
 
 
 @contextlib.contextmanager
@@ -245,18 +257,22 @@ def temporary_file_path(prefix="", suffix=""):
         os.remove(path)
 
 
-def mutool_get_pages(document: Document) -> Optional[int]:
+def mutool_get_pages(document: Document) -> int | None:
     with file_as_local(document.pdf, prefix="dochub_pdf_len_") as tmpfile:
         try:
-            output = subprocess.check_output(["mutool", "info", tmpfile.name], stderr=subprocess.STDOUT)
+            output = subprocess.check_output(
+                ["mutool", "info", tmpfile.name], stderr=subprocess.STDOUT
+            )
         except OSError:
             raise MissingBinary("mutool")
         except subprocess.CalledProcessError as e:
-            raise DocumentProcessingError(document, exc=e, message='mutool info has failed : %s' % e.output)
+            raise DocumentProcessingError(
+                document, exc=e, message="mutool info has failed : %s" % e.output
+            )
 
-    lines = output.split(b'\n')
+    lines = output.split(b"\n")
     for line in lines:
-        match = re.match(rb'Pages: (\d+)', line)
+        match = re.match(rb"Pages: (\d+)", line)
         if match:
             return int(match.group(1))
 

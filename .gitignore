@@ -23,3 +23,4 @@ static/scripts/
 __pycache__
 .vscode/
 .env.dev
+docker/.*

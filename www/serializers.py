@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from catalog.models import Course
 from documents.models import Document
-from users.serializers import SmallUserSerializer
 
 
 class PolymorphicSerializer(serializers.ModelSerializer):
@@ -15,14 +14,13 @@ class PolymorphicSerializer(serializers.ModelSerializer):
 class VeryShortDocumentSerializer(PolymorphicSerializer):
     class Meta:
         model = Document
-        fields = ('name', 'pages', 'obj_type', 'id')
+        fields = ("name", "pages", "obj_type", "id")
 
 
 class VeryShortCourseSerializer(PolymorphicSerializer):
-
     class Meta:
         model = Course
-        fields = ('slug', 'name', 'obj_type')
+        fields = ("slug", "name", "obj_type")
 
 
 class GenericRelatedField(serializers.Field):

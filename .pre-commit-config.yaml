@@ -1,17 +1,23 @@
 repos:
-# -   repo: https://github.com/psf/black
-#     rev: 19.10b0
-#     hooks:
-#     -   id: black
+-   repo: https://github.com/psf/black
+    rev: 21.12b0
+    hooks:
+    -   id: black
 
 -   repo: https://github.com/pre-commit/mirrors-isort
-    rev: 'v5.8.0'
+    rev: 'v5.10.1'
     hooks:
     -   id: isort
 
-- repo: https://github.com/thibaudcolas/curlylint
-  rev: "v0.12.2"
-  hooks:
-    - id: curlylint
-      types: [file]
-      files: \.html$
+-   repo: https://github.com/thibaudcolas/curlylint
+    rev: "v0.13.0"
+    hooks:
+    -   id: curlylint
+        types: [file]
+        files: \.html$
+
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v2.31.0
+    hooks:
+    -   id: pyupgrade
+        args: ["--py310-plus"]

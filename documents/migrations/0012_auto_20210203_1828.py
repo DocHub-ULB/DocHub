@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('documents', '0011_document_import_source'),
+        ("documents", "0011_document_import_source"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='documenterror',
-            name='exception',
+            model_name="documenterror",
+            name="exception",
             field=models.CharField(max_length=50000),
         ),
     ]

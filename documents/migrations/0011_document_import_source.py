@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('documents', '0010_merge'),
+        ("documents", "0010_merge"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='document',
-            name='import_source',
-            field=models.CharField(max_length=1024, null=True, verbose_name='Importé depuis'),
+            model_name="document",
+            name="import_source",
+            field=models.CharField(
+                max_length=1024, null=True, verbose_name="Importé depuis"
+            ),
         ),
     ]
