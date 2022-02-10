@@ -11,7 +11,7 @@ from django.views.generic.detail import DetailView
 
 from mptt.utils import get_cached_trees
 
-from catalog.models import Category, Course
+from catalog.models import Category, Course, CourseUserView
 from documents.models import Vote
 
 
@@ -21,39 +21,32 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "category"
 
 
-class CourseDetailView(DetailView):
-    model = Course
-    context_object_name = "course"
+def view_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
 
-    def get_template_names(self, **kwargs):
-        if self.request.user.is_authenticated:
-            return "catalog/course.html"
-        else:
-            return "catalog/noauth/course.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        course = context["course"]
-
-        documents = (
-            course.document_set.exclude(state="ERROR", hidden=True)
-            .select_related("course", "user")
-            .prefetch_related("tags", "vote_set")
-            .annotate(
-                upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
-            )
-            .annotate(
-                downvotes=Count(
-                    "vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)
-                )
-            )
-            .order_by("-edited")
+    documents = (
+        course.document_set.exclude(state="ERROR", hidden=True)
+        .select_related("course", "user")
+        .prefetch_related("tags", "vote_set")
+        .annotate(upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))
+        .annotate(
+            downvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE))
         )
+        .order_by("-edited")
+    )
 
-        context["tags"] = {tag for doc in documents for tag in doc.tags.all()}
-        context["documents"] = documents
+    tags = {tag for doc in documents for tag in doc.tags.all()}
+    documents = documents
 
-        return context
+    if request.user.is_authenticated:
+        template = "catalog/course.html"
+        CourseUserView.visit(request.user, course)
+    else:
+        template = "catalog/noauth/course.html"
+
+    return render(
+        request, template, {"tags": tags, "course": course, "documents": documents}
+    )
 
 
 def set_follow_course(request, slug: str, action: str) -> HttpResponse:

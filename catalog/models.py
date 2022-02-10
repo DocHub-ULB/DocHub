@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -55,3 +58,23 @@ class Course(models.Model):
     @property
     def followers_count(self) -> int:
         return self.followed_by.count()
+
+
+class CourseUserView(models.Model):
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    views = models.IntegerField(default=1)
+    last_view = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "course")
+
+    @classmethod
+    def visit(cls, user, course: Course):
+        obj, created = cls.objects.get_or_create(user=user, course=course)
+        if not created and (timezone.now() - obj.last_view) > timedelta(minutes=5):
+            # Do not use F("views") + 1 here as we DO want a race condition to happen.
+            # Indeed, if the user loads 2 pages at the same instant, we want to count only
+            # one of them (as we count a new page view every 5 min only)
+            obj.views = obj.views + 1
+            obj.save()
