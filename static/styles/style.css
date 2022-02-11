@@ -17,13 +17,47 @@ div[data-viewer-target="renderer"] canvas {
                 0 16px 32px rgba(0,0,0,0.07),
                 0 32px 64px rgba(0,0,0,0.07);
     transition-property: opacity;
-    transition-duration: .5s;
-    transition-delay: 0.2s;
+    transition-duration: 0.5s;
+    transition-delay: .2s;
+    transition-timing-function: ease-in;
+    opacity: 0;
+    z-index: 2;
+}
+
+div[data-viewer-target="renderer"] canvas[data-viewer-ready] {
     opacity: 1;
 }
 
-div[data-viewer-target="renderer"] canvas[data-viewer-loading] {
+div[data-controller="viewer"] .loader {
+    margin-top: 30vh;
+    font-size: 3em;
+    animation: breathing 2s ease-out infinite normal;
+    position: absolute;
+}
+
+div[data-controller="viewer"][data-viewer-has-page-value] .loader {
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
     opacity: 0;
+}
+
+@keyframes breathing {
+    0% {
+        transform: scale(0.9);
+    }
+
+    25% {
+        transform: scale(1);
+    }
+
+    60% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
 }
 
 div[data-viewer-target="toolbar"] {

@@ -42,17 +42,21 @@ pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2
 
 class Viewer extends Controller {
     static targets = ["renderer"]
-    static values = {src: String}
+    static values = {src: String, hasPage: Boolean}
 
     async connect() {
         this.pdf = await pdfjs.getDocument(this.srcValue).promise;
-        // sleep
-        //await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        // FIXME: REMOVE ME sleep to see the animation
+        //await new Promise((resolve) => setTimeout(resolve, 1000));
 
         for (let i = 1; i <= this.pdf.numPages; i++) {
             let canvas = document.createElement("canvas")
             this.rendererTarget.appendChild(canvas);
             await this.loadPage(i, canvas);
+            if(i === 1) {
+              this.hasPageValue = true
+            }
             if(i > 10) {
                 // load slower after 10 pages to relieve the CPU
                 await new Promise(resolve => setTimeout(resolve, 50))
@@ -63,8 +67,6 @@ class Viewer extends Controller {
     }
 
     async loadPage(i, canvas) {
-        canvas.setAttribute("data-viewer-loading", "")
-
         let page = await this.pdf.getPage(i);
         let viewport = page.getViewport({scale: 1,});
 
@@ -92,7 +94,14 @@ class Viewer extends Controller {
         };
         await page.render(renderContext);
 
-        canvas.removeAttribute("data-viewer-loading")
+        if(i < 2) {
+            // The page might be loading while being visible in the viewport
+            // se we want to make sure that the browser has rendered the canvas
+            // before starting the reveal animation
+            await new Promise((resolve) => setTimeout(resolve, 10));
+        }
+
+        canvas.setAttribute("data-viewer-ready", "")
     }
 
 }
