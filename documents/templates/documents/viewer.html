@@ -3,28 +3,23 @@
 {% load has_perm_on %}
 
 {% block title %}{{ document.name }}{% endblock %}
-{% block content %}
+
 <!-- FIXME: check for other states (error) -->
 {% if document.state != "DONE" %}
-<p>
-Ce document est en cours de traitement par DocHub et il n'est donc pas encore
-possible d'en avoir un aperçu.
-<!-- FIXME: do not hardcode url -->
-Mais tu peux <a href="/api/documents/{{ document.pk }}/original">télécharger
-la version originale </a> si tu le désires.
-</p>
+    {% block content %}
+        <p>
+            Ce document est en cours de traitement par DocHub et il n'est donc pas encore
+            possible d'en avoir un aperçu.
+            <!-- FIXME: do not hardcode url -->
+            Mais tu peux <a href="/api/documents/{{ document.pk }}/original">télécharger
+            la version originale </a> si tu le désires.
+        </p>
+    {% endblock %}
 {% else %}
-<div style="display: flex; align-items: stretch">
-    <div style="background-color:blue; flex-basis: 300px;">SIDEBAR</div>
-    <div style="background-color:red; flex-grow: 1;">PDF</div>
-    <!-- FIXME: do not hardcode url -->
-    <!-- <div data-controller="viewer" data-viewer-src-value="/api/documents/{{ document.pk }}/pdf/?embed">
-        <div data-viewer-target="renderer"></div>
-        <div data-viewer-target="toolbar">TOOLS</div>
-    </div> -->
-</div>
-{%endif%}
-
-
-
-{% endblock %}
+    {% block fullpage %}
+        <!-- FIXME: do not hardcode url -->
+        <div data-controller="viewer" data-viewer-src-value="/api/documents/{{ document.pk }}/pdf/?embed">
+            <div data-viewer-target="renderer"></div>
+        </div>
+    {% endblock %}
+{% endif %}

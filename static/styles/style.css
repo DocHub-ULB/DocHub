@@ -1,6 +1,5 @@
 div[data-viewer-target="renderer"] {
     background-color: rgb(242, 243, 245);
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -31,25 +30,26 @@ div[data-viewer-target="toolbar"] {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: red;
+    background: deeppink;
     text-align: center;
     margin: 30px;
 }
 
 /*
-
 Stick footer to the bottom
-https://dev.to/nehalahmadkhan/how-to-make-footer-stick-to-bottom-of-web-page-3i14
-
 */
 body{
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
-.footer{
-    margin-top: auto;
+
+main {
+    flex-grow: 1;
 }
+
+footer {}
 
 /* General css */
 h1,h2,h3,h4,h5,h6,p {

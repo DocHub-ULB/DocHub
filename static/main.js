@@ -46,18 +46,21 @@ class Viewer extends Controller {
 
     async connect() {
         this.pdf = await pdfjs.getDocument(this.srcValue).promise;
-        console.log(this.pdf);
 
         for (let i = 1; i <= this.pdf.numPages; i++) {
             let canvas = document.createElement("canvas")
             this.rendererTarget.appendChild(canvas);
             await this.loadPage(i, canvas);
+            if(i > 10) {
+                // load slower after 10 pages to relieve the CPU
+                await new Promise(resolve => setTimeout(resolve, 50))
+            }
+
         }
 
     }
 
     async loadPage(i, canvas) {
-        console.log(`Loading page ${i}`)
         canvas.setAttribute("data-viewer-loading", "")
 
         var page = await this.pdf.getPage(i);
@@ -88,7 +91,6 @@ class Viewer extends Controller {
         await page.render(renderContext);
 
         canvas.removeAttribute("data-viewer-loading")
-        console.log(`Page ${i} loaded`);
     }
 
 }
