@@ -46,16 +46,28 @@ class Viewer extends Controller {
 
     async connect() {
         this.pdf = await pdfjs.getDocument(this.srcValue).promise;
+        console.log(this.pdf);
 
-        var page = await this.pdf.getPage(1);
-        var scale = 0.9;
+        for (let i = 1; i <= this.pdf.numPages; i++) {
+            let canvas = document.createElement("canvas")
+            this.rendererTarget.appendChild(canvas);
+            await this.loadPage(i, canvas);
+        }
+
+    }
+
+    async loadPage(i, canvas) {
+        console.log(`Loading page ${i}`)
+        canvas.setAttribute("data-viewer-loading", "")
+
+        var page = await this.pdf.getPage(i);
+        var scale = 1;
         var viewport = page.getViewport({scale: scale,});
-        
+
         // Support HiDPI-screens.
         var outputScale = window.devicePixelRatio || 1;
 
         // Prepare canvas using PDF page dimensions.
-        var canvas = this.rendererTarget;
         var context = canvas.getContext('2d');
 
         canvas.width = Math.floor(viewport.width * outputScale);
@@ -73,17 +85,13 @@ class Viewer extends Controller {
             transform,
             viewport,
         };
-        page.render(renderContext);
+        await page.render(renderContext);
 
+        canvas.removeAttribute("data-viewer-loading")
+        console.log(`Page ${i} loaded`);
     }
 
 }
-
-
-
-
-
-
 
 const application = Application.start()
 

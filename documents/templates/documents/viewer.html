@@ -14,8 +14,15 @@ Mais tu peux <a href="/api/documents/{{ document.pk }}/original">télécharger
 la version originale </a> si tu le désires.
 </p>
 {% else %}
-<!-- FIXME: do not hardcode url -->
-<embed src="/api/documents/{{ document.pk }}/pdf/?embed" type="application/pdf" width="100%" height="100%">
+<div style="display: flex; align-items: stretch">
+    <div style="background-color:blue; flex-basis: 300px;">SIDEBAR</div>
+    <div style="background-color:red; flex-grow: 1;">PDF</div>
+    <!-- FIXME: do not hardcode url -->
+    <!-- <div data-controller="viewer" data-viewer-src-value="/api/documents/{{ document.pk }}/pdf/?embed">
+        <div data-viewer-target="renderer"></div>
+        <div data-viewer-target="toolbar">TOOLS</div>
+    </div> -->
+</div>
 {%endif%}
 
 

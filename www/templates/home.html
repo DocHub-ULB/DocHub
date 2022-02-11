@@ -13,9 +13,6 @@
     {% comment %} {% if request.user.welcome %}
         {% include "welcome.html" %}
     {% endif %} {% endcomment %}
-    <div data-controller="viewer" data-viewer-src-value="/api/documents/4/pdf/?embed">
-        <canvas data-viewer-target="renderer"></canvas>
-    </div>
     <div class="home-grid">
         <div class="home-search-container">
             {% include "search/frames/search-box.html" with initial=True %}

@@ -1,3 +1,41 @@
+div[data-viewer-target="renderer"] {
+    background-color: rgb(242, 243, 245);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+div[data-viewer-target="renderer"] canvas {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07),
+                0 2px 4px rgba(0,0,0,0.07),
+                0 4px 8px rgba(0,0,0,0.07),
+                0 8px 16px rgba(0,0,0,0.07),
+                0 16px 32px rgba(0,0,0,0.07),
+                0 32px 64px rgba(0,0,0,0.07);
+    transition-property: opacity;
+    transition-duration: .5s;
+    transition-delay: 0.2s;
+    opacity: 1;
+}
+
+div[data-viewer-target="renderer"] canvas[data-viewer-loading] {
+    opacity: 0;
+}
+
+div[data-viewer-target="toolbar"] {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: red;
+    text-align: center;
+    margin: 30px;
+}
+
 /*
 
 Stick footer to the bottom
