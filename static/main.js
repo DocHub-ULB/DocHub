@@ -46,6 +46,8 @@ class Viewer extends Controller {
 
     async connect() {
         this.pdf = await pdfjs.getDocument(this.srcValue).promise;
+        // sleep
+        //await new Promise((resolve) => setTimeout(resolve, 3000));
 
         for (let i = 1; i <= this.pdf.numPages; i++) {
             let canvas = document.createElement("canvas")
@@ -63,27 +65,27 @@ class Viewer extends Controller {
     async loadPage(i, canvas) {
         canvas.setAttribute("data-viewer-loading", "")
 
-        var page = await this.pdf.getPage(i);
-        var scale = 1;
-        var viewport = page.getViewport({scale: scale,});
+        let page = await this.pdf.getPage(i);
+        let viewport = page.getViewport({scale: 1,});
 
-        // Support HiDPI-screens.
-        var outputScale = window.devicePixelRatio || 1;
 
         // Prepare canvas using PDF page dimensions.
-        var context = canvas.getContext('2d');
+        let context = canvas.getContext('2d');
+        // retina support
+        let screenRatio = window.devicePixelRatio || 1
 
-        canvas.width = Math.floor(viewport.width * outputScale);
-        canvas.height = Math.floor(viewport.height * outputScale);
-        canvas.style.width = Math.floor(viewport.width) + "px";
-        canvas.style.height = Math.floor(viewport.height) + "px";
+        let scale = screenRatio * Math.max(window.innerWidth / viewport.width, window.innerHeight / viewport.height)
 
-        var transform = outputScale !== 1
-            ? [outputScale, 0, 0, outputScale, 0, 0]
+        canvas.width = Math.floor(viewport.width * scale);
+        canvas.height = Math.floor(viewport.height * scale);
+        canvas.style.width = "90vw";
+
+        let transform = scale !== 1
+            ? [scale, 0, 0, scale, 0, 0]
             : null;
 
         // Render PDF page into canvas context.
-        var renderContext = {
+        let renderContext = {
             canvasContext: context,
             transform,
             viewport,

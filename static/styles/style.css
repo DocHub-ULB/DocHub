@@ -6,6 +6,7 @@ div[data-viewer-target="renderer"] {
     align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
+    min-height: 100vh;
 }
 
 div[data-viewer-target="renderer"] canvas {
