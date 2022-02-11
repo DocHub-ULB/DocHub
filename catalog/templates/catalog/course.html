@@ -105,37 +105,35 @@
               data-course-filter-target="filterable"
               data-filter-key='{{document.name}}'
               data-tags="{{document.tags.all|join:' '}}"
+              style="border-bottom: 1px solid rgba(0, 0, 0, 0.12); padding-bottom: 0.5em;"
             >
-                <div class="card">
-                    {% include "catalog/like-dislike.html" %}
-                    <div class="card-content">
-                        <div class="card-title">
-                            <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
-                            <span>{{ document.user.name }}</span>
+                {% include "catalog/like-dislike.html" %}
+                <div class="card-content">
+                    <div class="card-title">
+                        <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
+                        <span>{{ document.user.name }}</span>
+                    </div>
+                    {% if document.description %}
+                        <div class="card-comment">
+                        {{ document.description|truncatechars:200 }}
                         </div>
-                        {% if document.description %}
-                            <div class="card-comment">
-                            {{ document.description|truncatechars:200 }}
-                            </div>
-                        {% endif %}
-                        <div class="card-footers">
-                            <span><i class="far fa-file"></i>{{ document.pages }} page{{ document.pages|pluralize }}</span>
-                            <span><i class="far fa-clock"></i>{{ document.date|date:"d F Y" }}</span>
-                            <div class="tags">
-                            {% for kw in document.tags.all%}
-                                <span
-                                data-id="{{kw.id}}"
-                                style="background-color: {{kw.color}}; color:white;"
-                                >
-                                {{kw}}
-                                </span>
-                            {% endfor %}
-                            </div>
+                    {% endif %}
+                    <div class="card-footers">
+                        <span><i class="far fa-file"></i>{{ document.pages }} page{{ document.pages|pluralize }}</span>
+                        <span><i class="far fa-clock"></i>{{ document.date|date:"d F Y" }}</span>
+                        <div class="tags">
+                        {% for kw in document.tags.all%}
+                            <span
+                            data-id="{{kw.id}}"
+                            style="background-color: {{kw.color}}; color:white;"
+                            >
+                            {{kw}}
+                            </span>
+                        {% endfor %}
                         </div>
                     </div>
                 </div>
             </li>
-            <li role="separator" class="mdc-list-divider"></li>
             {% empty %}
                 <div style="margin-left: 5vw;">
                     <h3>Il n’y a encore rien dans ce cours…</h3>
