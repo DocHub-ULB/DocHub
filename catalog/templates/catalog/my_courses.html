@@ -5,7 +5,7 @@
 
 {% block content %}
 {% if user.following_courses|length > 0 %}
-<a href="{% url 'catalog:unfollow_all_courses' %}" class="button red hide-on-mobile" style="position: absolute;right: 2em">
+<a href="{% url 'catalog:unfollow_all_courses' %}" class="button red hide-on-mobile" style="position: absolute;right: 2em;top: 3em;">
     Me désabonner de tous les cours
 </a>
 {% endif %}
