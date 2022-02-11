@@ -28,6 +28,7 @@ honcho
 isort
 pre-commit
 pip-tools
+coolname
 
 # Test
 mock
