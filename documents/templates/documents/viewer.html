@@ -20,14 +20,13 @@
         <!-- FIXME: do not hardcode url -->
         <div data-controller="viewer" data-viewer-src-value="/api/documents/{{ document.pk }}/pdf/?embed">
             <div data-viewer-target="sidebar">S</div>
-            <div class="right">
+
                 <div data-viewer-target="renderer">
                     <!-- <div class="loader" >
                         LOADING<br>
                         <progress data-viewer-target="loader" max="100" value="0"></progress>
                     </div> -->
                 </div>
-            </div>
         </div>
     {% endblock %}
 {% endif %}
