@@ -11,7 +11,7 @@
 {% endif %}
 
 <div class="big-finder hide-on-mobile">
-    <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
+    <turbo-frame id="facs" class="turbo-overflow" src="{% url "catalog:finder_turbo" "facs" "root" "false" %}">
     </turbo-frame>
     <turbo-frame id="programs" class="turbo-overflow">
     </turbo-frame>
@@ -21,7 +21,7 @@
     </turbo-frame>
 </div>
 <div class="big-finder visible-on-mobile">
-    <turbo-frame id="mobile" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "true" %}">
+    <turbo-frame id="mobile" class="turbo-overflow" src="{% url "catalog:finder_turbo" "facs" "root" "true" %}">
     </turbo-frame>
 </div>
 <div style="display: grid">

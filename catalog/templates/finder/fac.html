@@ -6,7 +6,7 @@
             onclick="emptySubCat('blocs', 'courses', 'mycourses', 'fac_link')"
             class="inner-finder-col fac_link"
             id="mycourses"
-            href="{% url 'finder_turbo' 'courses' 'mycourses' mobile %}"
+            href="{% url "catalog:finder_turbo" "courses" "mycourses" mobile %}"
             data-turbo-frame="{{ futur_turbo_id }}"
             style="color: #f00"
         >
@@ -18,7 +18,7 @@
             onclick="emptySubCat('blocs', 'courses', '{{ fac.slug }}', 'fac_link')"
             class="inner-finder-col fac_link"
             id="{{ fac.slug }}"
-            href="{% url "finder_turbo" "programs" fac.slug mobile %}"
+            href="{% url "catalog:finder_turbo" "programs" fac.slug mobile %}"
             data-turbo-frame="{{ futur_turbo_id }}"
             style="color: {{ fac.description }}"
         >
