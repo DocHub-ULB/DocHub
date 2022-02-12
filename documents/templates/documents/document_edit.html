@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load moderated_tags %}
 {% block title %}Éditer {{doc.name}}{% endblock %}
 {% block content %}
 <div class="content">
@@ -19,7 +20,23 @@
             {{ form.non_field_errors }}
             
             <div style="display:grid;grid-template-rows: max-content;">
-                {{form}}
+                {% with form.name as field %}
+                    {% include "simple_input.html" %}
+                {% endwith %}
+                {% with form.tags as field %}
+                    {% include "simple_input.html" %}
+                {% endwith %}
+                {% with form.description as field %}
+                    {% include "simple_input.html" %}
+                {% endwith %}
+                {% is_moderated request.user doc.course as moderated %}
+                {% if request.user.is_staff or moderated %}
+                    {{ form.is_certified.errors }}
+                    {{ form.is_certified.label_tag }} {{ form.is_certified }}
+                    {% if form.is_certified.help_text %}
+                    <p class="help">{{ form.is_certified.help_text|safe }}</p>
+                    {% endif %}
+                {% endif %}
             </div>
             <p class="text-right"><input type="submit" class="button success radius {% if READ_ONLY %}disabled{% endif %}" value="Editer" /></p>
         </form>
