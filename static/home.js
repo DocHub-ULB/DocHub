@@ -12,6 +12,13 @@ function emptySubCat(){
     for(var i=0; i<args.length - 2; i++){
         $('#' + args[i]).attr('src', $("#" + args[i] + "-finder-col").attr("empty-" + args[i] + "-url"))
     }
+
+    var url = new URL(window.location);
+    var key = args[args.length-1];
+    var value = args[args.length-2];
+
+    url.searchParams.set(key, value);
+    history.pushState(history.state, history.title, url);
 }
 
 /**
@@ -90,3 +97,29 @@ function toggleModal(modal){
         $("#" + modal + "-arrow").removeClass("fa-angle-down");
     }
 };
+
+function setFac(facName){
+    if(facName == "") return;
+
+    $("#programs").attr("src", "/catalog/finder/programs/" + facName + "/false");
+}
+
+function setProgram(programSlug){
+    if(programSlug == "") return;
+
+    $("#blocs").attr("src", "/catalog/finder/blocs/" + programSlug + "/false");
+}
+
+function setBloc(blocId){
+    if(blocId == "") return;
+
+    $("#courses").attr("src", "/catalog/finder/courses/" + blocId + "/false");
+}
+
+function load_initial_state(){
+    var url = new URL(window.location);
+
+    setFac(url.searchParams.get("fac_link"));
+    setProgram(url.searchParams.get("program_link"));
+    setBloc(url.searchParams.get("bloc_link"));
+}

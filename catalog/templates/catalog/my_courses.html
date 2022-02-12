@@ -31,4 +31,9 @@
 
 {% block script %}
     <script src="{% static "home.js" %}"></script>
+    <script>
+        $(document).ready(function(){
+            load_initial_state();
+        });
+    </script>
 {% endblock %}
