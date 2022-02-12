@@ -98,7 +98,7 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
-            "fac_name": fac.name
+            "fac_name": fac.name,
         },
     )
 
@@ -123,7 +123,7 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
-            "program_name": program.name
+            "program_name": program.name,
         },
     )
 
@@ -150,6 +150,6 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
             "courses": courses,
             "turbo_id": turbo_id,
             "mobile": mobile,
-            "bloc_name": bloc_name
+            "bloc_name": bloc_name,
         },
     )
