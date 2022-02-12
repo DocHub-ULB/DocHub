@@ -1,17 +1,22 @@
 <turbo-frame id="{{ turbo_id }}">
-    {% if blocs|length > 0 %}
-        <div id="blocs-finder-col" class="finder-col" empty-blocs-url="{% url "catalog:finder_turbo" "bloc" "empty" mobile %}">
-        {% for bloc in blocs %}
-            <a
-                onclick="emptySubCat('{{ bloc.id }}', 'bloc_link')"
-                class="inner-finder-col bloc_link"
-                href="{% url "catalog:finder_turbo" "courses" bloc.slug mobile %}"
-                data-turbo-frame="{{ futur_turbo_id }}"
-                id="{{ bloc.id }}"
-            >
-                <i class="fas fa-folder"></i> {{ bloc.name }}
-            </a>
-        {% endfor %}
-        </div>
-    {% endif %}
+    <div id="blocs-finder-col" class="finder-col" empty-blocs-url="{% url "catalog:finder_turbo" "bloc" "empty" mobile %}">
+        <h3>{{ program_name }}</h3>
+        {% if blocs|length > 0 %}
+            {% for bloc in blocs %}
+                <a
+                    onclick="emptySubCat('{{ bloc.slug }}', 'bloc_link')"
+                    class="inner-finder-col bloc_link"
+                    href="{% url "catalog:finder_turbo" "courses" bloc.slug mobile %}"
+                    data-turbo-frame="{{ futur_turbo_id }}"
+                    id="{{ bloc.slug }}"
+                >
+                    <i class="fas fa-circle"></i> {{ bloc.name }}
+                </a>
+            {% endfor %}
+        {% else %}
+            <p>
+                Il semble ne rien y avoir ici
+            </p>
+        {% endif %}
+    </div>
 </turbo-frame>

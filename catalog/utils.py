@@ -98,6 +98,7 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
+            "fac_name": fac.name
         },
     )
 
@@ -122,6 +123,7 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
+            "program_name": program.name
         },
     )
 
@@ -132,9 +134,11 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
     if bloc_slug == "mycourses":
         courses = request.user.following_courses
         turbo_id = "programs"
+        bloc_name = "Mes cours"
     else:
         bloc = get_object_or_404(Category, slug=bloc_slug)
         courses = Course.objects.filter(categories=bloc).order_by("name")
+        bloc_name = bloc.name
 
     if mobile == "true":
         turbo_id = "mobile"
@@ -142,5 +146,10 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
     return render(
         request,
         "finder/course.html",
-        context={"courses": courses, "turbo_id": turbo_id, "mobile": mobile},
+        context={
+            "courses": courses,
+            "turbo_id": turbo_id,
+            "mobile": mobile,
+            "bloc_name": bloc_name
+        },
     )
