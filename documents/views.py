@@ -125,6 +125,8 @@ def document_edit(request, pk):
             for tag in form.cleaned_data["tags"]:
                 doc.tags.add(Tag.objects.get(name=tag))
 
+            doc.is_certified = form.cleaned_data["is_certified"]
+
             doc.save()
 
             # TODO Log edit
@@ -136,7 +138,12 @@ def document_edit(request, pk):
 
     else:
         form = FileForm(
-            {"name": doc.name, "description": doc.description, "tags": doc.tags.all()}
+            {
+                "name": doc.name,
+                "description": doc.description,
+                "tags": doc.tags.all(),
+                "is_certified": doc.is_certified,
+            }
         )
 
     return render(

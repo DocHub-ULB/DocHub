@@ -114,6 +114,7 @@
                     <div class="card-title">
                         <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
                         <span>{{ document.user.name }}</span>
+                        {% if document.is_certified %}<i class="material-icons" style="vertical-align: text-top;">recommend</i>{% endif %}
                     </div>
                     {% if document.description %}
                         <div class="card-comment">
@@ -148,6 +149,7 @@
                             </a>
                         {% endif %}
                     </div>
+
                 </div>
             </li>
             {% empty %}
