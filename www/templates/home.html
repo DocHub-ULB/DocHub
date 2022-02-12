@@ -49,7 +49,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <span style="font-family: Roboto;font-style: normal;font-weight: bold;"> Vous pouvez parcourir les differents cours <a href="{% url 'catalog:show_courses' %}" style="color: -webkit-link;text-decoration: underline;">ici</a><span>
+                <span style="font-family: Roboto;font-style: normal;font-weight: bold;"> Vous pouvez parcourir les differents cours <a href="{% url 'catalog:show_courses' %}" style="color: -webkit-link;text-decoration: underline;">ici</a></span>
             {% endif %}
             {% comment %} 
             <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
