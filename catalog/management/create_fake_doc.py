@@ -1,9 +1,11 @@
 import random
+
 from coolname import generate
+
 from catalog.models import Course
 from documents.models import Document
-from users.models import User
 from tags.models import Tag
+from users.models import User
 
 Tag.objects.create(name="officiel")
 Tag.objects.create(name="examen")
@@ -15,7 +17,7 @@ Tag.objects.create(name="notes")
 for course in Course.objects.all():
     for i in range(16):
         doc = Document.objects.create(
-            name=' '.join(generate()),
+            name=" ".join(generate()),
             course=course,
             user=User.objects.first(),
         )

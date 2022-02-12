@@ -53,7 +53,9 @@ def upload_file(request, slug):
 
             document.add_to_queue()
 
-            return HttpResponseRedirect(reverse("catalog:course_show", args=[course.slug]))
+            return HttpResponseRedirect(
+                reverse("catalog:course_show", args=[course.slug])
+            )
 
     else:
         form = UploadFileForm()
@@ -96,7 +98,9 @@ def upload_multiple_files(request, slug):
                 )
                 document.add_to_queue()
 
-            return HttpResponseRedirect(reverse("catalog:course_show", args=[course.slug]))
+            return HttpResponseRedirect(
+                reverse("catalog:course_show", args=[course.slug])
+            )
     return HttpResponseRedirect(reverse("document_put", args=(course.slug,)))
 
 

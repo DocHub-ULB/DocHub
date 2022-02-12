@@ -44,7 +44,7 @@ class Course(models.Model):
         return f"https://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours={slug}"
 
     def get_absolute_url(self):
-        return reverse('catalog:course_show', args=(self.slug, ))
+        return reverse("catalog:course_show", args=(self.slug,))
 
     def __str__(self):
         return self.slug.upper()

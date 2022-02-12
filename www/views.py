@@ -24,7 +24,7 @@ def index(request):
             "search": SearchForm(),
             "recent_docs": docs,
             "faculties": Category.objects.get(level=0).children.all(),
-            "following_course": following_course
+            "following_course": following_course,
         }
         return render(request, "home.html", context)
     else:
