@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Moderated course{% endblock %}
+
+{% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h1 style="margin:auto;margin-top: 5vh;margin-bottom: 5vh;">Moderated course</h1>
+<form method="POST" action='{% url "add_moderated_course" %}' target="_top">
+    {% csrf_token %}
+    <div style="margin-top: 1em;margin-bottom: 1em;text-align: center;">
+        {{ form.user.errors }}
+        {{ form.user.label_tag }} {{ form.user }}
+        {% if form.user.help_text %}
+        <p class="help">{{ form.user.help_text|safe }}</p>
+        {% endif %}
+    </div>
+
+    <div class="finder hide-on-mobile" style="margin-right:15vw;margin-left:15vw">
+        <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
+        </turbo-frame>
+        <turbo-frame id="programs" class="turbo-overflow">
+        </turbo-frame>
+        <turbo-frame id="blocs" class="turbo-overflow">
+        </turbo-frame>
+        <turbo-frame id="courses" class="turbo-overflow">
+        </turbo-frame>
+    </div>
+
+    <input type="submit" value="Submit" style="width: 100%;height: 25vh;margin-top: 1em;" target="_top">
+</form>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "home.js" %}"></script>
+{% endblock %}

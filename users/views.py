@@ -1,18 +1,22 @@
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
 
+from catalog.models import Course
 from users.authBackend import (
     CasParseError,
     CasRejectError,
     CasRequestError,
     UlbCasBackend,
 )
+from users.forms import UserModeratedCourseForm
 
 
 @login_required
@@ -30,6 +34,36 @@ def panel_hide(request):
     request.user.save()
 
     return HttpResponseRedirect(reverse("index"))
+
+
+@staff_member_required
+def add_moderated_course(request):
+    if request.method == "GET":
+        form = UserModeratedCourseForm()
+        context = {
+            "form": form,
+        }
+
+        return render(request, "moderated_course.html", context)
+    elif request.method == "POST":
+        form = UserModeratedCourseForm(request.POST)
+        form.is_valid()
+        user = form.cleaned_data["user"]
+        if user.is_representative:
+            for item in request.POST:
+                if item.startswith("Course_"):
+                    course = Course.objects.get(slug=item.split("_")[1])
+                    user.moderated_courses.add(course)
+            messages.success(
+                request, "Les cours ont été ajouté à la liste des cours modérés"
+            )
+            return HttpResponseRedirect(reverse("add_moderated_course"))
+        else:
+            messages.warning(request, "L'utilisateur n'est pas un représentant")
+            context = {
+                "form": form,
+            }
+            return render(request, "moderated_course.html", context)
 
 
 def login_view(request):
