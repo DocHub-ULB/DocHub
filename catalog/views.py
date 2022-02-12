@@ -3,7 +3,13 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, Http404, JsonResponse
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import cache_page
@@ -12,12 +18,14 @@ from django.views.generic.detail import DetailView
 from mptt.utils import get_cached_trees
 
 from catalog.models import Category, Course
-from documents.models import Vote
-
 from catalog.utils import (
-    buildOrderedProgramList, getEmptyFrame, getFacFrame,
-    getProgramFrame, getBlocFrame, getCourseFrame
+    getBlocFrame,
+    getCourseFrame,
+    getEmptyFrame,
+    getFacFrame,
+    getProgramFrame,
 )
+from documents.models import Vote
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -125,9 +133,8 @@ def unfollow_all_courses(request):
     return redirect("catalog:show_courses")
 
 
-
-
 def finder_turbo(request, id: str, category_slug: str, mobile: str):
+    """Allows the finder to load a frame"""
     if category_slug == "empty":
         return getEmptyFrame(request, id)
     if id == "facs":
@@ -150,4 +157,3 @@ def finder_follow_course(request, action: str, course_slug: str):
         course.followed_by.remove(request.user)
     course.save()
     return JsonResponse({"status": "success"})
-
