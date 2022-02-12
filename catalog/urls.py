@@ -17,4 +17,14 @@ urlpatterns = [
     ),
     path("course_tree.json", catalog.views.course_tree, name="course_tree"),
     path("search/autocomplete", course_autocomplete, name="course-autocomplete"),
+    path(
+        "finder/<slug:id>/<slug:category_slug>/<str:mobile>",
+        catalog.views.finder_turbo,
+        name="finder_turbo",
+    ),
+    path(
+        "finder/<slug:action>/<slug:course_slug>",
+        catalog.views.set_follow_course,
+        name="set_course_follow",
+    ),
 ]

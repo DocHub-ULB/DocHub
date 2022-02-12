@@ -16,16 +16,6 @@ sitemaps = {
 
 urlpatterns = [
     path("", www.views.index, name="index"),
-    path(
-        "finder/<slug:id>/<slug:category_slug>/<str:mobile>",
-        www.views.finder_turbo,
-        name="finder_turbo",
-    ),
-    path(
-        "finder/<slug:action>/<slug:course_slug>",
-        www.views.set_follow_course,
-        name="set_course_follow",
-    ),
     path("search/", include("search.urls")),
     path("catalog/", include(("catalog.urls", "catalog"), namespace="catalog")),
     path("documents/", include("documents.urls")),
