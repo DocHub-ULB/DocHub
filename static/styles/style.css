@@ -49,6 +49,7 @@ div[data-controller="viewer"] .loader {
     font-size: 3em;
     animation: breathing 2s ease-out infinite normal;
     position: absolute;
+    z-index:1;
 }
 
 div[data-controller="viewer"][data-viewer-has-page-value] .loader {

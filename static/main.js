@@ -50,19 +50,6 @@ class Viewer extends Controller {
     }
 
     async connect() {
-        //useIntersection(this, this.options)
-
-        let options = {
-            root: this.element,
-            rootMargin: '0px',
-            threshold: 0
-        }
-        let callback = (e) => {
-            console.log("OBS", e)
-        }
-
-        this.observer = new IntersectionObserver(callback, options);
-
         let loadingTask = pdfjs.getDocument(this.srcValue);
 
         loadingTask.onProgress = (data) => {
@@ -70,7 +57,32 @@ class Viewer extends Controller {
         }
 
         this.pdf = await loadingTask.promise;
+        console.log("PDF loaded")
         this.pages = {};
+
+        let options = {
+            root: this.element,
+            rootMargin: '0px',
+            threshold: 0
+        }
+        let callback = (event) => {
+            event.map(entry => {
+                let wrapper = entry.target
+                let pageNumber = parseInt(wrapper.getAttribute("data-viewer-page-param"))
+                let isRendered = wrapper.getElementsByTagName("canvas")[0] !== undefined;
+
+                if(!isRendered && entry.isIntersecting) {
+                    console.log("rendering page", pageNumber)
+                    this.renderPage(pageNumber, wrapper);
+                }
+                if(isRendered && !entry.isIntersecting) {
+                    console.log("Removing page", pageNumber)
+                    this.removePage(wrapper);
+                }
+            })
+        }
+
+        this.observer = new IntersectionObserver(callback, options);
 
         for (let i = 1; i <= this.pdf.numPages; i++) {
             this.pages[i] = await this.pdf.getPage(i);
@@ -78,34 +90,16 @@ class Viewer extends Controller {
             let wrapper = document.createElement("div");
             wrapper.classList.add("page-wrapper");
             wrapper.style['aspectRatio'] = this.getPageRatio(i);
-            wrapper.setAttribute("data-action", "appear@window->viewer#appear")
             wrapper.setAttribute("data-viewer-page-param", i)
-            //this.observer.observe(wrapper)
+            this.observer.observe(wrapper)
 
             this.rendererTarget.appendChild(wrapper);
-
-            // let canvas = document.createElement("canvas")
-            // this.rendererTarget.appendChild(canvas);
-            // await this.loadPage(i, canvas);
-            // if(i === 1) {
-            //   this.hasPageValue = true
-            // }
-            // if(i > 10) {
-            //     // load slower after 10 pages to relieve the CPU
-            //     await new Promise(resolve => setTimeout(resolve, 50))
-            // }
 
         }
 
     }
 
-    appear(entry) {
-        console.log("Appear", entry);
-    }
-
-    disappear(entry) {
-        // ...
-    }
+    getPageSize(i) {}
 
     getPageRatio(i) {
         let page = this.pages[i];
@@ -113,7 +107,11 @@ class Viewer extends Controller {
         return `${viewport.width} / ${viewport.height}`;
     }
 
-    async loadPage(i) {
+    async renderPage(i, wrapper) {
+
+        let canvas = document.createElement("canvas")
+        wrapper.appendChild(canvas);
+
         let page = await this.pdf.getPage(i);
         let viewport = page.getViewport({scale: 1,});
 
@@ -124,7 +122,7 @@ class Viewer extends Controller {
 
         canvas.width = Math.floor(viewport.width * scale);
         canvas.height = Math.floor(viewport.height * scale);
-        canvas.style.width = "90vw";
+        canvas.style.width = "100%";
 
         let transform = scale !== 1
             ? [scale, 0, 0, scale, 0, 0]
@@ -146,6 +144,11 @@ class Viewer extends Controller {
         }
 
         canvas.setAttribute("data-viewer-ready", "")
+    }
+
+    removePage(wrapper) {
+        let canvas = wrapper.getElementsByTagName("canvas")[0]
+            if(canvas !== undefined) canvas.remove();
     }
 
 }
