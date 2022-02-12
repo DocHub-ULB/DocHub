@@ -24,7 +24,7 @@ urlpatterns = [
     ),
     path(
         "finder/<slug:action>/<slug:course_slug>",
-        catalog.views.set_follow_course,
+        catalog.views.finder_follow_course,
         name="set_course_follow",
     ),
 ]
