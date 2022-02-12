@@ -1,4 +1,27 @@
+div[data-controller="viewer"] {
+    flex-grow: 1;
+    background-color: #43AC6A;
+    display: grid;
+    grid-template-rows: 0 100%;
+    grid-template-columns: 20vh auto;
+    grid-template-areas: "sidebar empty"
+                         "sidebar renderer";
+}
+
+
+div[data-viewer-target="sidebar"] {
+    background-color: #50BEEC;
+    grid-area: sidebar;
+}
+.right{
+    background-color: purple;
+    padding: 5px;
+    overflow-y: scroll;
+    grid-area: renderer;
+}
+
 div[data-viewer-target="renderer"] {
+    height: 100%;
     background-color: rgb(242, 243, 245);
     display: flex;
     flex-direction: column;
@@ -6,26 +29,28 @@ div[data-viewer-target="renderer"] {
     align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
-    min-height: 100vh;
 }
 
-div[data-viewer-target="renderer"] canvas {
+div[data-viewer-target="renderer"] .page-wrapper {
     box-shadow: 0 1px 2px rgba(0,0,0,0.07),
                 0 2px 4px rgba(0,0,0,0.07),
                 0 4px 8px rgba(0,0,0,0.07),
                 0 8px 16px rgba(0,0,0,0.07),
                 0 16px 32px rgba(0,0,0,0.07),
                 0 32px 64px rgba(0,0,0,0.07);
-    transition-property: opacity;
+    transition-property: opacity, background-color;
     transition-duration: 0.5s;
     transition-delay: .2s;
     transition-timing-function: ease-in;
-    opacity: 0;
+    //opacity: 0;
     z-index: 2;
+    width: 90vw;
+    background-color: red;
 }
 
-div[data-viewer-target="renderer"] canvas[data-viewer-ready] {
+div[data-viewer-target="renderer"] .page-wrapper.page-loaded {
     opacity: 1;
+    background-color: blue;
 }
 
 div[data-controller="viewer"] .loader {

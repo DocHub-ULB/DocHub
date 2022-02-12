@@ -2,6 +2,7 @@ import _ from 'https://cdn.skypack.dev/lodash';
 
 import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
+import { useIntersection } from 'https://cdn.skypack.dev/stimulus-use'
 
 class CourseFilter extends Controller {
     static targets = [ "query", "tag", "filterable" ]
@@ -41,38 +42,78 @@ pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2
 
 
 class Viewer extends Controller {
-    static targets = ["renderer", "loader"]
+    static targets = ["renderer"]
     static values = {src: String, hasPage: Boolean}
 
+    static options = {
+        threshold: 0, // default
+    }
+
     async connect() {
+        //useIntersection(this, this.options)
+
+        let options = {
+            root: this.element,
+            rootMargin: '0px',
+            threshold: 0
+        }
+        let callback = (e) => {
+            console.log("OBS", e)
+        }
+
+        this.observer = new IntersectionObserver(callback, options);
+
         let loadingTask = pdfjs.getDocument(this.srcValue);
 
         loadingTask.onProgress = (data) => {
-            this.loaderTarget.setAttribute("value", 100 * data.loaded / data.total);
+            //this.loaderTarget.setAttribute("value", 100 * data.loaded / data.total);
         }
 
         this.pdf = await loadingTask.promise;
-
-        // FIXME: REMOVE ME sleep to see the animation
-        //await new Promise((resolve) => setTimeout(resolve, 1000));
+        this.pages = {};
 
         for (let i = 1; i <= this.pdf.numPages; i++) {
-            let canvas = document.createElement("canvas")
-            this.rendererTarget.appendChild(canvas);
-            await this.loadPage(i, canvas);
-            if(i === 1) {
-              this.hasPageValue = true
-            }
-            if(i > 10) {
-                // load slower after 10 pages to relieve the CPU
-                await new Promise(resolve => setTimeout(resolve, 50))
-            }
+            this.pages[i] = await this.pdf.getPage(i);
+
+            let wrapper = document.createElement("div");
+            wrapper.classList.add("page-wrapper");
+            wrapper.style['aspectRatio'] = this.getPageRatio(i);
+            wrapper.setAttribute("data-action", "appear@window->viewer#appear")
+            wrapper.setAttribute("data-viewer-page-param", i)
+            //this.observer.observe(wrapper)
+
+            this.rendererTarget.appendChild(wrapper);
+
+            // let canvas = document.createElement("canvas")
+            // this.rendererTarget.appendChild(canvas);
+            // await this.loadPage(i, canvas);
+            // if(i === 1) {
+            //   this.hasPageValue = true
+            // }
+            // if(i > 10) {
+            //     // load slower after 10 pages to relieve the CPU
+            //     await new Promise(resolve => setTimeout(resolve, 50))
+            // }
 
         }
 
     }
 
-    async loadPage(i, canvas) {
+    appear(entry) {
+        console.log("Appear", entry);
+    }
+
+    disappear(entry) {
+        // ...
+    }
+
+    getPageRatio(i) {
+        let page = this.pages[i];
+        let viewport = page.getViewport({scale: 1,});
+        return `${viewport.width} / ${viewport.height}`;
+    }
+
+    async loadPage(i) {
         let page = await this.pdf.getPage(i);
         let viewport = page.getViewport({scale: 1,});
 
