@@ -41,11 +41,17 @@ pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2
 
 
 class Viewer extends Controller {
-    static targets = ["renderer"]
+    static targets = ["renderer", "loader"]
     static values = {src: String, hasPage: Boolean}
 
     async connect() {
-        this.pdf = await pdfjs.getDocument(this.srcValue).promise;
+        let loadingTask = pdfjs.getDocument(this.srcValue);
+
+        loadingTask.onProgress = (data) => {
+            this.loaderTarget.setAttribute("value", 100 * data.loaded / data.total);
+        }
+
+        this.pdf = await loadingTask.promise;
 
         // FIXME: REMOVE ME sleep to see the animation
         //await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -70,9 +76,6 @@ class Viewer extends Controller {
         let page = await this.pdf.getPage(i);
         let viewport = page.getViewport({scale: 1,});
 
-
-        // Prepare canvas using PDF page dimensions.
-        let context = canvas.getContext('2d');
         // retina support
         let screenRatio = window.devicePixelRatio || 1
 
@@ -88,7 +91,7 @@ class Viewer extends Controller {
 
         // Render PDF page into canvas context.
         let renderContext = {
-            canvasContext: context,
+            canvasContext: canvas.getContext('2d'),
             transform,
             viewport,
         };
