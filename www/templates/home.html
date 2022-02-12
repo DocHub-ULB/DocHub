@@ -2,6 +2,12 @@
 
 {% load static %}
 
+{% block header %}
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+{% endblock %}
+
 {# hide the search bar on the home page #}
 {% block navbar %}
     {% with hide_search=True %}
@@ -16,9 +22,36 @@
 
     <div class="home-grid">
         <div class="home-search-container">
+            <div style="margin-bottom: 1em;text-align: center;">
+                <span style="font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Doc</span><span style="color:#007095;font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Hub</span>
+            </div>
             {% include "search/frames/search-box.html" with initial=True %}
+            <div style="width: 100%;text-align:center;margin-top: 2em;">
+                <button onclick="location='#'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #009ACD;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                    <span class="mdc-button__ripple"></span>
+                    <span class="mdc-button__label">Chercher</span>
+                </button>
+            </div>
         </div>
-        <div class="finder hide-on-mobile">
+        <div style="grid-column-start: 2;grid-row-start: 2;text-align: center;height: 30vh">
+            <hr style="color: #eee;width: 50%;">
+            <h1>Mes Cours</h1>
+            {% if following_course %}
+                <div style="height: 100%;display: grid;grid-template-columns:1fr 1fr 1fr;grid-gap: 0.75em;font-family: Roboto;font-style: normal;">
+                    {% for course in following_course %}
+                        <a href="{% url "catalog:course_show" course.slug %}">
+                            <div style="padding-left: 0.5em;padding-right: 0.5em">
+                                <div style="padding:0.75em;background-color: #00445A20;border-radius: 1em;">
+                                    <i class="fas fa-folder" style="margin-right: 5px;color: #009ACD;"></i> {{ course.name }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <span style="font-family: Roboto;font-style: normal;font-weight: bold;"> Vous pouvez parcourir les differents cours <a href="{% url 'catalog:show_courses' %}" style="color: -webkit-link;text-decoration: underline;">ici</a></span>
+            {% endif %}
+            {% comment %} 
             <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
             </turbo-frame>
             <turbo-frame id="programs" class="turbo-overflow">
@@ -26,7 +59,7 @@
             <turbo-frame id="blocs" class="turbo-overflow">
             </turbo-frame>
             <turbo-frame id="courses" class="turbo-overflow">
-            </turbo-frame>
+            </turbo-frame> {% endcomment %}
         </div>
         <div class="finder visible-on-mobile">
             <turbo-frame id="mobile" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "true" %}">
@@ -59,4 +92,10 @@
 
 {% block script %}
     <script src="{% static "home.js" %}"></script>
+    <script>
+    const buttons = document.querySelectorAll('.mdc-button');
+    for (const button of buttons) {
+        mdc.ripple.MDCRipple.attachTo(button);
+    }
+    </script>
 {% endblock %}

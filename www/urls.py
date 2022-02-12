@@ -27,7 +27,7 @@ urlpatterns = [
         name="set_course_follow",
     ),
     path("search/", include("search.urls")),
-    path("catalog/", include("catalog.urls")),
+    path("catalog/", include(("catalog.urls", "catalog"), namespace="catalog")),
     path("documents/", include("documents.urls")),
     path("users/", include("users.urls")),
     path("admin/", admin.site.urls),

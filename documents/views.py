@@ -53,7 +53,9 @@ def upload_file(request, slug):
 
             document.add_to_queue()
 
-            return HttpResponseRedirect(reverse("course_show", args=[course.slug]))
+            return HttpResponseRedirect(
+                reverse("catalog:course_show", args=[course.slug])
+            )
 
     else:
         form = UploadFileForm()
@@ -96,7 +98,9 @@ def upload_multiple_files(request, slug):
                 )
                 document.add_to_queue()
 
-            return HttpResponseRedirect(reverse("course_show", args=[course.slug]))
+            return HttpResponseRedirect(
+                reverse("catalog:course_show", args=[course.slug])
+            )
     return HttpResponseRedirect(reverse("document_put", args=(course.slug,)))
 
 
@@ -186,7 +190,7 @@ def document_reupload(request, pk):
             # )
 
             return HttpResponseRedirect(
-                reverse("course_show", args=(document.course.slug,))
+                reverse("catalog:course_show", args=(document.course.slug,))
             )
 
     else:
@@ -204,6 +208,11 @@ def document_show(request, pk):
 
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
+
+    if document.state != Document.DocumentState.DONE:
+        return HttpResponseRedirect(
+            reverse("catalog:course_show", args=(document.course.slug,))
+        )
 
     context = {
         "document": document,

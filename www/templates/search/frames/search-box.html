@@ -18,7 +18,7 @@
       {% if not initial %}
        <div id="search-results" class="results">
            {% for course in course_list %}
-           <a title="{{course.name}}" href="{% url 'course_show' course.slug %}" style="display: block;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;" target="_top">
+           <a title="{{course.name}}" href="{% url 'catalog:course_show' course.slug %}" style="display: block;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;" target="_top">
            <span>{{course.slug}}</span>
            {{course.name}}
            </a>

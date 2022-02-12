@@ -14,6 +14,7 @@ from www.utils import buildOrderedProgramList
 
 def index(request):
     if request.user.is_authenticated:
+        following_course = request.user.following_courses
         following = request.user.following_courses
         ndocs = max(5, len(following))
         docs = Document.objects.filter(course__in=following).order_by("-created")[
@@ -23,6 +24,7 @@ def index(request):
             "search": SearchForm(),
             "recent_docs": docs,
             "faculties": Category.objects.get(level=0).children.all(),
+            "following_course": following_course,
         }
         return render(request, "home.html", context)
     else:

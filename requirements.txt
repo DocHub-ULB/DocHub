@@ -48,6 +48,8 @@ click-plugins==1.1.1
     # via celery
 click-repl==0.2.0
     # via celery
+coolname==1.1.0
+    # via -r requirements.in
 coreapi==2.3.3
     # via djangorestframework-stubs
 coreschema==0.0.4
