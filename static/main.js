@@ -42,8 +42,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2
 
 
 class Viewer extends Controller {
-    static targets = ["renderer"]
-    static values = {src: String, hasPage: Boolean}
+    static targets = ["renderer", "loader"]
+    static values = {src: String, loaded: Boolean}
 
     static options = {
         threshold: 0, // default
@@ -53,10 +53,11 @@ class Viewer extends Controller {
         let loadingTask = pdfjs.getDocument(this.srcValue);
 
         loadingTask.onProgress = (data) => {
-            //this.loaderTarget.setAttribute("value", 100 * data.loaded / data.total);
+            this.loaderTarget.setAttribute("value", 100 * data.loaded / data.total);
         }
 
         this.pdf = await loadingTask.promise;
+        this.loadedValue = true;
         console.log("PDF loaded")
         this.pages = {};
 

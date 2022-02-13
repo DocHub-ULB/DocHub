@@ -32,7 +32,6 @@ div[data-viewer-target="renderer"] .page-wrapper {
     //transition-delay: .2s;
     transition-timing-function: ease-in;
     opacity: 0;
-    z-index: 2;
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 20px;
@@ -40,6 +39,7 @@ div[data-viewer-target="renderer"] .page-wrapper {
     //background-color: red;
     background-color: white;
 }
+
 
 div[data-viewer-target="renderer"] .page-wrapper[data-viewer-ready] {
     opacity: 1;
@@ -51,10 +51,9 @@ div[data-controller="viewer"] .loader {
     font-size: 3em;
     animation: breathing 2s ease-out infinite normal;
     position: absolute;
-    z-index:1;
 }
 
-div[data-controller="viewer"][data-viewer-has-page-value] .loader {
+div[data-controller="viewer"][data-viewer-loaded-value] .loader {
     transition-property: opacity;
     transition-duration: 0.2s;
     transition-timing-function: ease-out;
