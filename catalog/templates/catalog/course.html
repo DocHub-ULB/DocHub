@@ -136,7 +136,7 @@
                         </div>
                     </div>
                     <div style="position: absolute;right: 1em;top:0">
-                        <a href="/api/documents/{{ document.pk }}/original" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                        <a href="{% url 'api:document-pdf' document.pk %}" data-turbo="false" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
                             <span class="mdc-button__ripple"></span>
                             <i class="material-icons mdc-button__icon" aria-hidden="true">file_download</i>
                             <span class="mdc-button__label">Télécharger</span>
