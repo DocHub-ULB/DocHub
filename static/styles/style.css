@@ -1,12 +1,13 @@
 div[data-controller="viewer"] {
     flex-grow: 1;
     //border: 5px solid green;
-    display: flex;
+    display: grid;
+    grid-template-columns: 300px auto;
 }
 
 
 div[data-viewer-target="sidebar"] {
-    border: 5px solid blue;
+    //border: 5px solid blue;
     flex-basis: 200px;
 }
 

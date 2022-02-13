@@ -19,7 +19,12 @@
     {% block fullpage %}
         <!-- FIXME: do not hardcode url -->
         <div data-controller="viewer" data-viewer-src-value="/api/documents/{{ document.pk }}/pdf/?embed">
-            <div data-viewer-target="sidebar">S</div>
+            <div data-viewer-target="sidebar">
+                <h1>{{ document.name }}</h1>
+                <h2>{{ document.course.slug }}: {{ document.course.name }}</h2>
+                Uploadé par {{ document.user.fullname }}
+                Le {{ document.created }}
+            </div>
 
                 <div data-viewer-target="renderer">
                     <div class="loader" >
