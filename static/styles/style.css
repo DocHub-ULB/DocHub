@@ -119,6 +119,10 @@ html {
     background-color: white;
 }
 
+body {
+    margin: 0px 0px;
+}
+
 /* Navbar  */
 .nav {
     display: grid;
@@ -127,6 +131,10 @@ html {
     height: 50px;
     top: 0px;
     grid-template-columns: 20% 60% 20%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    background: #007095;
+    color: white;
+    
 }
 
 
@@ -141,8 +149,9 @@ html {
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
-    line-height: 28px;visibility
-    color: #000000;
+    line-height: 28px;
+
+    color: white;
 }
 
 
@@ -249,11 +258,10 @@ html {
 /* Course content */
 .deck{
     margin-top: 1em;
-    margin-left: 5vw;
     display: grid;
     grid-auto-rows: max-content;
     row-gap: 0.5em;
-    height: calc(100vh - 215px - 3em);
+    height: calc(100vh - 250px);
     overflow-y: auto;
 }
 
@@ -359,14 +367,18 @@ html {
     display:grid;
     grid-auto-rows: max-content max-content 1fr;
     row-gap: 20px;
-    grid-column-start: 4;
-    margin-top: .5em;
+    grid-column-start: 1;
+    padding-top: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
+    height: calc(100vh - 58px);
+    background: radial-gradient(circle, rgba(2,0,36,0.05) 0%, rgba(9,9,121,0.05) 35%, rgba(0,212,255,0.05) 100%);
 }
 
 .course-grid {
     display: grid;
-    grid-template-columns: 1fr 65% 1fr 25% 1fr;
-    margin-top: 1.5em;
+    grid-template-columns: 25% 75%;
 }
 
 .page-title {
@@ -507,7 +519,7 @@ html {
 .home-grid{
     height:85vh;
     display: grid;
-    grid-template: 1fr 40vh/ 1fr 50vw 1fr;
+    grid-template: 1fr 35vh/ 1fr 50vw 1fr;
     margin-bottom:1em
 }
 
@@ -515,7 +527,7 @@ html {
     grid-column-start: 2;
     position:relative;
     width:40vw;
-    margin: 25vh auto 0;
+    margin: 20vh auto 0;
 }
 
 .api-button {

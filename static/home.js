@@ -9,13 +9,9 @@ function emptySubCat(){
     var args = arguments;
 
     // Clean the corresponding category (fac/programs/blocs)
-    $("." + args[args.length - 2]).css("background-color", "white");
     for(var i=0; i<args.length - 2; i++){
         $('#' + args[i]).attr('src', $("#" + args[i] + "-finder-col").attr("empty-" + args[i] + "-url"))
     }
-
-    // Change the background of the category (fac/programs/blocs)
-    $('#' + args[args.length - 2]).css("background-color", "green");
 }
 
 /**

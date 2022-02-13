@@ -13,7 +13,7 @@
             join-course-url="{% url "set_course_follow" "follow" course.slug %}"
             following={% if following %}1{% else %}0{% endif %}
         >
-            <a href="{% url 'course_show' course.slug %}" target="_top" style="grid-column-start: 1;">{{ course.name }}</a>
+            <a href="{% url 'catalog:course_show' course.slug %}" target="_top" style="grid-column-start: 1;">{{ course.name }}</a>
 
             {% if following %}
                 <a

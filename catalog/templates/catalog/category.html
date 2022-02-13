@@ -15,7 +15,7 @@
     <ul class="breadcrumbs">
       {% for parent in category.get_ancestors %}
         <li>
-          <a href="{% url "category_show" parent.id %}">{{ parent.name }}</a>
+          <a href="{% url "catalog:category_show" parent.id %}">{{ parent.name }}</a>
         </li>
       {% endfor %}
       <li class="current">
@@ -39,20 +39,20 @@
           <li>
             <h6>
               {% if course in user_followed_courses %}
-                <a href="{% url "leave_course" course.slug %}?next={% url "category_show" category.id %}"
+                <a href="{% url "catalog:leave_course" course.slug %}?next={% url "catalog:category_show" category.id %}"
                    class="course-label radius success label toggle-follow"
                    title="Se désabonner du cours">
                   {{ course.slug }}
                 </a>
               {% else %}
-                <a href="{% url "join_course" course.slug %}?next={% url "category_show" category.id %}"
+                <a href="{% url "catalog:join_course" course.slug %}?next={% url "catalog:category_show" category.id %}"
                    class="course-label secondary radius label toggle-follow"
                    title="S'abonner au cours">
                   {{ course.slug }}
                 </a>
               {% endif %}
 
-              <a href="{% url 'course_show' course.slug %}">{{ course.name }}</a>
+              <a href="{% url 'catalog:course_show' course.slug %}">{{ course.name }}</a>
 
               {% if course in user_followed_courses %}
                 <small> (abonné)</small>
@@ -71,7 +71,7 @@
         {% for cat in category.children.all %}
         <li class="catalog-option">
           <h6>
-            <a href="{% url 'category_show' cat.id %}">
+            <a href="{% url 'catalog:category_show' cat.id %}">
               <i class="fi-folder round-icon small"></i>
               {{ cat.name }}
             </a>

@@ -64,7 +64,7 @@ def set_follow_course(request, slug: str, action: str) -> HttpResponse:
     else:
         course.followed_by.remove(request.user)
     course.save()
-    nextpage = request.GET.get("next", reverse("course_show", args=[slug]))
+    nextpage = request.GET.get("next", reverse("catalog:course_show", args=[slug]))
     return HttpResponseRedirect(nextpage)
 
 
@@ -117,4 +117,4 @@ def course_tree(request):
 @login_required
 def unfollow_all_courses(request):
     request.user.courses_set.clear()
-    return redirect("show_courses")
+    return redirect("catalog:show_courses")
