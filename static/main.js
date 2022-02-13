@@ -99,20 +99,8 @@ class Viewer extends Controller {
 
     }
 
-    getPageSize(i) {}
-
-    getPageRatio(i) {
+    getPageSizes(i) {
         let page = this.pages[i];
-        let viewport = page.getViewport({scale: 1,});
-        return `${viewport.width} / ${viewport.height}`;
-    }
-
-    async renderPage(i, wrapper) {
-
-        let canvas = document.createElement("canvas")
-        wrapper.appendChild(canvas);
-
-        let page = await this.pdf.getPage(i);
         let viewport = page.getViewport({scale: 1,});
 
         // retina support
@@ -120,35 +108,44 @@ class Viewer extends Controller {
 
         let scale = screenRatio * Math.max(window.innerWidth / viewport.width, window.innerHeight / viewport.height)
 
-        canvas.width = Math.floor(viewport.width * scale);
-        canvas.height = Math.floor(viewport.height * scale);
-        canvas.style.width = "100%";
+        let width = Math.floor(viewport.width * scale);
+        let height = Math.floor(viewport.height * scale);
+        return {width, height, scale}
+    }
 
-        let transform = scale !== 1
-            ? [scale, 0, 0, scale, 0, 0]
-            : null;
+    getPageRatio(i) {
+        const {width, height} = this.getPageSizes(i)
+        return `${width} / ${height}`;
+    }
+
+    async renderPage(i, wrapper) {
+
+        let canvas = document.createElement("canvas")
+        wrapper.appendChild(canvas);
+
+        let page = this.pages[i];
+
+        const {width, height, scale} = this.getPageSizes(i)
+
+        canvas.width = width
+        canvas.height = height
+        canvas.style.width = "100%";
 
         // Render PDF page into canvas context.
         let renderContext = {
             canvasContext: canvas.getContext('2d'),
-            transform,
-            viewport,
+            transform: [scale, 0, 0, scale, 0, 0],
+            viewport: page.getViewport({scale: 1,}),
         };
         await page.render(renderContext);
 
-        if(i < 2) {
-            // The page might be loading while being visible in the viewport
-            // se we want to make sure that the browser has rendered the canvas
-            // before starting the reveal animation
-            await new Promise((resolve) => setTimeout(resolve, 10));
-        }
-
-        canvas.setAttribute("data-viewer-ready", "")
+        wrapper.setAttribute("data-viewer-ready", "")
     }
 
     removePage(wrapper) {
         let canvas = wrapper.getElementsByTagName("canvas")[0]
-            if(canvas !== undefined) canvas.remove();
+        if(canvas !== undefined) canvas.remove();
+        wrapper.removeAttribute("data-viewer-ready")
     }
 
 }

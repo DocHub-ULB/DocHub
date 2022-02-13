@@ -1,6 +1,6 @@
 div[data-controller="viewer"] {
     flex-grow: 1;
-    border: 5px solid green;
+    //border: 5px solid green;
     display: flex;
 }
 
@@ -13,10 +13,11 @@ div[data-viewer-target="sidebar"] {
 div[data-viewer-target="renderer"] {
     background-color: rgb(242, 243, 245);
     flex-grow: 1;
-    border: 5px solid orange;
+    //border: 5px solid orange;
     padding: 20px;
     overflow-y: scroll;
-    height: 80vh;
+    height: calc(100vh - 50px);
+    box-sizing: border-box;
 }
 
 div[data-viewer-target="renderer"] .page-wrapper {
@@ -27,21 +28,22 @@ div[data-viewer-target="renderer"] .page-wrapper {
                 0 16px 32px rgba(0,0,0,0.07),
                 0 32px 64px rgba(0,0,0,0.07);
     transition-property: opacity, background-color;
-    transition-duration: 0.5s;
-    transition-delay: .2s;
+    transition-duration: 0.2s;
+    //transition-delay: .2s;
     transition-timing-function: ease-in;
-    //opacity: 0;
+    opacity: 0;
     z-index: 2;
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 20px;
-    border: 5px solid maroon;
-    background-color: red;
+    //border: 5px solid maroon;
+    //background-color: red;
+    background-color: white;
 }
 
-div[data-viewer-target="renderer"] .page-wrapper.page-loaded {
+div[data-viewer-target="renderer"] .page-wrapper[data-viewer-ready] {
     opacity: 1;
-    background-color: blue;
+    //background-color: blue;
 }
 
 div[data-controller="viewer"] .loader {
