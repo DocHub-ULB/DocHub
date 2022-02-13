@@ -104,10 +104,11 @@ class Viewer extends Controller {
         let page = this.pages[i];
         let viewport = page.getViewport({scale: 1,});
 
+
         // retina support
         let screenRatio = window.devicePixelRatio || 1
 
-        let scale = screenRatio * Math.max(window.innerWidth / viewport.width, window.innerHeight / viewport.height)
+        let scale = screenRatio * Math.max(this.rendererTarget.clientWidth / viewport.width, this.rendererTarget.clientHeight / viewport.height)
 
         let width = Math.floor(viewport.width * scale);
         let height = Math.floor(viewport.height * scale);
