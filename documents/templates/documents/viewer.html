@@ -18,12 +18,17 @@
 {% else %}
     {% block fullpage %}
         <!-- FIXME: do not hardcode url -->
-        <div data-controller="viewer" data-viewer-src-value="/api/documents/{{ document.pk }}/pdf/?embed">
+        <div data-controller="viewer" data-viewer-src-value="{% url 'api:document-pdf' document.pk %}?embed">
             <div data-viewer-target="sidebar">
                 <h1>{{ document.name }}</h1>
                 <h2>{{ document.course.slug }}: {{ document.course.name }}</h2>
                 Uploadé par {{ document.user.fullname }}
                 Le {{ document.created }}
+                <a class="button" data-turbo="false" href="{% url 'api:document-pdf' document.pk %}">Téléchager (.pdf)</a>
+                {% if document.file_type != '.pdf' %}
+                    <a class="button"  data-turbo="false" href="{% url 'api:document-original' document.pk %}">Téléchager ({{ document.file_type }})</a>
+                {% endif %}
+
             </div>
 
                 <div data-viewer-target="renderer">

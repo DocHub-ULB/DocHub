@@ -7,13 +7,12 @@ div[data-controller="viewer"] {
 
 
 div[data-viewer-target="sidebar"] {
-    //border: 5px solid blue;
-    flex-basis: 200px;
+    border: 1px solid lightgray;
+    padding: 10px;
 }
 
 div[data-viewer-target="renderer"] {
     background-color: rgb(242, 243, 245);
-    flex-grow: 1;
     //border: 5px solid orange;
     padding: 20px;
     overflow-y: scroll;
