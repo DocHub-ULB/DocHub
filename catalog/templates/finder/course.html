@@ -1,4 +1,8 @@
-{% load follow_tags %}
+{% if as_form %}
+    {% load moderated_tags %}
+{% else %}
+    {% load follow_tags %}
+{% endif %}
 {% load static %}
 
 <turbo-frame id="{{ turbo_id }}">
@@ -14,25 +18,34 @@
                 join-course-url="{% url "catalog:set_course_follow" "follow" course.slug %}"
                 following={% if following %}1{% else %}0{% endif %}
             >
-                <a href="{% url 'catalog:course_show' course.slug %}" target="_top" style="grid-column-start: 1;">{{ course.name }}</a>
-                {% if following %}
-                    <a
-                        title="Leave the course"
-                        id="follow-{{ course.slug }}"
-                        onclick="follow('{{ course.slug }}')"
-                        style="grid-column-start: 2;"
-                    >
-                        <i class="fas fa-minus-circle" style="color: #F34040"></i>
-                    </a>
+                {% if as_form %}
+                    <span style="grid-column-start: 1;">{{ course.name }}</span>
+                    {% if moderated %}
+                        <input type="checkbox" id="Course_{{ course.slug }}" name="Course_{{ course.slug }}" checked>
+                    {% else %}
+                        <input type="checkbox" id="Course_{{ course.slug }}" name="Course_{{ course.slug }}">
+                    {% endif %}
                 {% else %}
-                    <a
-                        title="Join the course"
-                        id="follow-{{ course.slug }}"
-                        onclick="follow('{{ course.slug }}')"
-                        style="grid-column-start: 2;"
-                    >
-                        <i class="fas fa-plus-circle" style="color: #43AC6A"></i>
-                    </a>
+                    <a href="{% url 'catalog:course_show' course.slug %}" target="_top" style="grid-column-start: 1;">{{ course.name }}</a>
+                    {% if following %}
+                        <a
+                            title="Leave the course"
+                            id="follow-{{ course.slug }}"
+                            onclick="follow('{{ course.slug }}')"
+                            style="grid-column-start: 2;"
+                        >
+                            <i class="fas fa-minus-circle" style="color: #F34040"></i>
+                        </a>
+                    {% else %}
+                        <a
+                            title="Join the course"
+                            id="follow-{{ course.slug }}"
+                            onclick="follow('{{ course.slug }}')"
+                            style="grid-column-start: 2;"
+                        >
+                            <i class="fas fa-plus-circle" style="color: #43AC6A"></i>
+                        </a>
+                    {% endif %}
                 {% endif %}
             </div>
         {% endfor %}

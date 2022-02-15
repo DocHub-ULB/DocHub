@@ -18,12 +18,12 @@
         {{ form.user.errors }}
         {{ form.user.label_tag }} {{ form.user }}
         {% if form.user.help_text %}
-        <p class="help">{{ form.user.help_text|safe }}</p>
+            <p class="help">{{ form.user.help_text|safe }}</p>
         {% endif %}
     </div>
 
     <div class="finder hide-on-mobile" style="margin-right:15vw;margin-left:15vw">
-        <turbo-frame id="facs" class="turbo-overflow" src="{% url "catalog:finder_turbo" "facs" "root" "false" %}">
+        <turbo-frame id="facs" class="turbo-overflow" src="{% url "catalog:finder_turbo" "facs" "root" "false" %}?form=true">
         </turbo-frame>
         <turbo-frame id="programs" class="turbo-overflow">
         </turbo-frame>

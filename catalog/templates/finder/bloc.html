@@ -6,7 +6,7 @@
                 <a
                     onclick="emptySubCat(['courses'], '{{ bloc.slug }}', '{{ turbo_id }}')"
                     class="inner-finder-col bloc_link"
-                    href="{% url "catalog:finder_turbo" "courses" bloc.slug mobile %}"
+                    href="{% url "catalog:finder_turbo" "courses" bloc.slug mobile %}{% if as_form %}?form=true{% endif %}"
                     data-turbo-frame="{{ futur_turbo_id }}"
                     id="{{ bloc.slug }}"
                 >
