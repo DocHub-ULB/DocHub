@@ -99,7 +99,11 @@ function toggleModal(modal){
 function setFac(facName){
     if(facName == "" || facName == null) return;
 
-    $("#programs").attr("src", "/catalog/finder/programs/" + facName + "/false");
+    if(facName == "mycourses"){
+        $("#programs").attr("src", "/catalog/finder/courses/" + facName + "/false");
+    } else { 
+        $("#programs").attr("src", "/catalog/finder/programs/" + facName + "/false");
+    }
 }
 
 function setProgram(programSlug){
