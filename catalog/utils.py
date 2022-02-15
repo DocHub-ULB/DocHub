@@ -56,7 +56,7 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
     """Returns a redered turbo-frame containing a list of the facs"""
     root = get_object_or_404(Category, slug="root")
     facs = root.children.all().order_by("name")
-    as_form = request.GET.get("form", False) ==  "true"
+    as_form = request.GET.get("form", False) == "true"
 
     if mobile == "true":
         turbo_id = "mobile"
@@ -73,7 +73,7 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
-            "as_form": as_form
+            "as_form": as_form,
         },
     )
 
@@ -102,7 +102,7 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
             "fac_name": fac.name,
-            "as_form": as_form
+            "as_form": as_form,
         },
     )
 
@@ -129,7 +129,7 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
             "program_name": program.name,
-            "as_form": as_form
+            "as_form": as_form,
         },
     )
 
@@ -158,6 +158,6 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "mobile": mobile,
             "bloc_name": bloc_name,
-            "as_form": as_form
+            "as_form": as_form,
         },
     )
