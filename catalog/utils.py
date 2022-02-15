@@ -56,6 +56,7 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
     """Returns a redered turbo-frame containing a list of the facs"""
     root = get_object_or_404(Category, slug="root")
     facs = root.children.all().order_by("name")
+    as_form = request.GET.get("form", False) ==  "true"
 
     if mobile == "true":
         turbo_id = "mobile"
@@ -72,6 +73,7 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
+            "as_form": as_form
         },
     )
 
@@ -80,6 +82,7 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
     """Returns a rendered turbo-frame containing a list of programs from the given fac"""
     fac = get_object_or_404(Category, slug=fac_slug)
     programs = fac.children.all().order_by("name")
+    as_form = request.GET.get("form", False) == "true"
 
     programs = buildOrderedProgramList(programs)
 
@@ -99,6 +102,7 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
             "fac_name": fac.name,
+            "as_form": as_form
         },
     )
 
@@ -107,6 +111,7 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
     """Returns a rendered turbo-frame containing the list of blocs from the given program"""
     program = get_object_or_404(Category, slug=program_slug)
     blocs = program.children.all().order_by("name")
+    as_form = request.GET.get("form", False) == "true"
 
     if mobile == "true":
         turbo_id = "mobile"
@@ -124,12 +129,14 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
             "program_name": program.name,
+            "as_form": as_form
         },
     )
 
 
 def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
     turbo_id = "courses"
+    as_form = request.GET.get("form", False) == "true"
 
     if bloc_slug == "mycourses":
         courses = request.user.following_courses
@@ -151,5 +158,6 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
             "turbo_id": turbo_id,
             "mobile": mobile,
             "bloc_name": bloc_name,
+            "as_form": as_form
         },
     )
