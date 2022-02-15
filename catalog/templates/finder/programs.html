@@ -8,7 +8,7 @@
             <div class="modal" id="{{ program_type.slug }}">
                 {% for program in program_type.programs %}
                     <a
-                        onclick="emptySubCat(['courses'], '{{ program.slug }}', 'program_link')"
+                        onclick="emptySubCat(['blocs', 'courses'], '{{ program.slug }}', '{{ turbo_id }}')"
                         class="inner-finder-col program_link" 
                         {% if program.slug_ %}
                             href="{% url "catalog:finder_turbo" "blocs" program.slug_ mobile %}"

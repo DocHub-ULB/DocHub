@@ -3,7 +3,7 @@
 
     {% if request.user.following_courses.count > 0 %}
         <a
-            onclick="emptySubCat(['blocs', 'courses'], 'mycourses', 'fac_link')"
+            onclick="emptySubCat(['programs', 'blocs', 'courses'], 'mycourses', '{{ turbo_id }}')"
             class="inner-finder-col fac_link"
             id="mycourses"
             href="{% url "catalog:finder_turbo" "courses" "mycourses" mobile %}"
@@ -15,7 +15,7 @@
     {% endif %}
     {% for fac in facs %}
         <a
-            onclick="emptySubCat('blocs', 'courses', '{{ fac.slug }}', 'fac_link')"
+            onclick="emptySubCat(['programs', 'blocs', 'courses'], '{{ fac.slug }}', '{{ turbo_id }}')"
             class="inner-finder-col fac_link"
             id="{{ fac.slug }}"
             href="{% url "catalog:finder_turbo" "programs" fac.slug mobile %}"

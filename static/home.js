@@ -5,19 +5,17 @@
  *
  * Used when clicking in the upper tree to hide the lower branches that become irrelevant
  */
-function emptySubCat(){
-    var args = arguments;
-
+function emptySubCat(categories, frame_value, frame_key){
     // Clean the corresponding category (fac/programs/blocs)
-    for(var i=0; i<args.length - 2; i++){
-        $('#' + args[i]).attr('src', $("#" + args[i] + "-finder-col").attr("empty-" + args[i] + "-url"))
+    var url = new URL(window.location);
+    url.searchParams.set(frame_key, frame_value);
+
+    for(var i=0; i<categories.length; i++){
+        $('#' + categories[i]).attr('src', $("#" + categories[i] + "-finder-col").attr("empty-url"))
+        url.searchParams.set(categories[i], '');
+        console.log("removing " + categories[i]);
     }
 
-    var url = new URL(window.location);
-    var key = args[args.length-1];
-    var value = args[args.length-2];
-
-    url.searchParams.set(key, value);
     history.pushState(history.state, history.title, url);
 }
 
