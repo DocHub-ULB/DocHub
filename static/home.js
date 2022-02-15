@@ -97,19 +97,19 @@ function toggleModal(modal){
 };
 
 function setFac(facName){
-    if(facName == "") return;
+    if(facName == "" || facName == null) return;
 
     $("#programs").attr("src", "/catalog/finder/programs/" + facName + "/false");
 }
 
 function setProgram(programSlug){
-    if(programSlug == "") return;
+    if(programSlug == "" || programSlug == null) return;
 
     $("#blocs").attr("src", "/catalog/finder/blocs/" + programSlug + "/false");
 }
 
 function setBloc(blocId){
-    if(blocId == "") return;
+    if(blocId == "" || blocId == null) return;
 
     $("#courses").attr("src", "/catalog/finder/courses/" + blocId + "/false");
 }
@@ -117,7 +117,7 @@ function setBloc(blocId){
 function load_initial_state(){
     var url = new URL(window.location);
 
-    setFac(url.searchParams.get("fac_link"));
-    setProgram(url.searchParams.get("program_link"));
-    setBloc(url.searchParams.get("bloc_link"));
+    setFac(url.searchParams.get("facs"));
+    setProgram(url.searchParams.get("programs"));
+    setBloc(url.searchParams.get("blocs"));
 }
