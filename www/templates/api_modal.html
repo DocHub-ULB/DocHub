@@ -38,23 +38,24 @@ print(response.json())
 </div>
 
 <script>
-  function toggleAPIModal(){
-    if($('#api_modal').css('display') == "none"){
-      $('#api_modal').css("display", "block");
-    } else {
-      $('#api_modal').css("display", "none")
+    function toggleAPIModal(){
+        if($('#api_modal').css('display') == "none"){
+            $('#api_modal').css("display", "block");
+        } else {
+            $('#api_modal').css("display", "none")
+        }
+        event.stopPropagation();
     }
-    event.stopPropagation();
-  }
 
-  $(document).click(function() {
-    // Must close the modal if opened
-    $('#api_modal').css("display", "none");
-  });
+    $(document).click(function() {
+        // Must close the modal if opened
+        $('#api_modal').css("display", "none");
+    });
 
-  $("#inner_modal").click(function(event) {
-      // Must stop event propagation to the document
-      event.stopPropagation();
-  });
-  hljs.highlightAll();
+    $("#inner_modal").click(function(event) {
+        // Must stop event propagation to the document
+        event.stopPropagation();
+    });
+
+    hljs.highlightAll();
 </script>
