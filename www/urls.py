@@ -1,3 +1,5 @@
+from multiprocessing.dummy import Namespace
+
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
@@ -21,7 +23,7 @@ urlpatterns = [
     path("documents/", include("documents.urls")),
     path("users/", include("users.urls")),
     path("admin/", admin.site.urls),
-    path("api/", include("www.rest_urls")),
+    path("api/", include(("www.rest_urls", "www"), namespace="api")),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
     path("login", users.views.login_view, name="login"),
     path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),

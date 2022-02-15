@@ -221,6 +221,7 @@ body {
 
 .card-content{
     grid-column-start: 2;
+    position: relative;
 }
 
 .card-title a{

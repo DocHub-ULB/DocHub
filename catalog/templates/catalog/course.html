@@ -3,6 +3,7 @@
 {% load static %}
 {% load humanize %}
 {% load follow_tags %}
+{% load moderated_tags %}
 {% load has_perm_on %}
 
 {% block header %}
@@ -99,6 +100,7 @@
             {% endif %}
         </h1>
         <ul class="deck" style="list-style-type: none;padding-left:0px">
+            {% is_moderated request.user course as moderated %}
             {% for document in documents %}
             <li
               class="card"
@@ -112,6 +114,7 @@
                     <div class="card-title">
                         <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
                         <span>{{ document.user.name }}</span>
+                        {% if document.is_certified %}<i class="material-icons" style="vertical-align: text-top;">recommend</i>{% endif %}
                     </div>
                     {% if document.description %}
                         <div class="card-comment">
@@ -132,6 +135,21 @@
                         {% endfor %}
                         </div>
                     </div>
+                    <div style="position: absolute;right: 1em;top:0">
+                        <a href="{% url 'api:document-pdf' document.pk %}" data-turbo="false" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                            <span class="mdc-button__ripple"></span>
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">file_download</i>
+                            <span class="mdc-button__label">Télécharger</span>
+                        </a>
+                        {% if moderated or request.user.is_staff %}
+                            <a href="{% url 'document_edit' document.pk%}" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007910;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                                <span class="mdc-button__ripple"></span>
+                                <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
+                                <span class="mdc-button__label">Editer</span>
+                            </a>
+                        {% endif %}
+                    </div>
+
                 </div>
             </li>
             {% empty %}

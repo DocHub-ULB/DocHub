@@ -13,6 +13,10 @@
             <div class="dropdown-content">
                 <a class="m-3" href="{% url "catalog:show_courses" %}">Mes cours</a>
                 <a class="m-3" href="{% url "logout" %}">Deconnexion</a>
+                {% if request.user.is_staff %}
+                    <a class="m-3" href="{% url "admin:index" %}">Admin</a>
+                    <a class="m-3" href="{% url "add_moderated_course" %}">Moderated course</a>
+                {% endif %}
             </div>
         </div>
     </div>
