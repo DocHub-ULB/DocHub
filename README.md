@@ -29,8 +29,14 @@ sudo pacman -S unoconv ruby python mupdf-tools
 
 ### Installation
 
+To create the virutal environment and install the requirements, run the following command:
 ```console
-make install database
+make install
+```
+
+To create a database with some dummy data, run the following command:
+```console
+make database
 ```
 
 ### Run
