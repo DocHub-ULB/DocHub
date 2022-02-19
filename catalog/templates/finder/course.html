@@ -48,6 +48,8 @@
                     {% endif %}
                 {% endif %}
             </div>
+        {% empty %}
+            <p>Il semblerait qu'il n'y ait rien ici</p>
         {% endfor %}
     </div>
 </turbo-frame>
