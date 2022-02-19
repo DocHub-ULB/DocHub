@@ -56,8 +56,8 @@ def getFacFrame(request) -> HttpResponse:
     """Returns a redered turbo-frame containing a list of the facs"""
     root = get_object_or_404(Category, slug="root")
     facs = root.children.all().order_by("name")
-    as_form = request.GET.get("form", False) == "true"
-    mobile = request.GET.get("mobile", "false") == "true"
+    as_form = request.GET.get("form", "false").lower() == "true"
+    mobile = request.GET.get("mobile", "false").lower() == "true"
     turbo_id = "facs"
 
     if mobile:  # Facs is the root frame, on mobile, only this one is used
@@ -82,8 +82,8 @@ def getProgramFrame(request, fac_slug: str) -> HttpResponse:
     """Returns a rendered turbo-frame containing a list of programs from the given fac"""
     fac = get_object_or_404(Category, slug=fac_slug)
     programs = fac.children.all().order_by("name")
-    as_form = request.GET.get("form", False) == "true"
-    mobile = request.GET.get("mobile", "false") == "true"
+    as_form = request.GET.get("form", "false").lower() == "true"
+    mobile = request.GET.get("mobile", "false").lower() == "true"
 
     programs = buildOrderedProgramList(programs)
 
@@ -112,8 +112,8 @@ def getBlocFrame(request, program_slug: str) -> HttpResponse:
     """Returns a rendered turbo-frame containing the list of blocs from the given program"""
     program = get_object_or_404(Category, slug=program_slug)
     blocs = program.children.all().order_by("name")
-    as_form = request.GET.get("form", False) == "true"
-    mobile = request.GET.get("mobile", "false") == "true"
+    as_form = request.GET.get("form", "false").lower() == "true"
+    mobile = request.GET.get("mobile", "false").lower() == "true"
 
     if mobile:  # Facs is the root frame, on mobile, only this one is used
         turbo_id = "facs"
@@ -138,8 +138,8 @@ def getBlocFrame(request, program_slug: str) -> HttpResponse:
 
 def getCourseFrame(request, bloc_slug: str) -> HttpResponse:
     turbo_id = "courses"
-    as_form = request.GET.get("form", False) == "true"
-    mobile = request.GET.get("mobile", "false") == "true"
+    as_form = request.GET.get("form", "false").lower() == "true"
+    mobile = request.GET.get("mobile", "false").lower() == "true"
 
     if bloc_slug == "mycourses":
         courses = request.user.following_courses
