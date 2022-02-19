@@ -10,31 +10,31 @@ class CourseFilter extends Controller {
     static targets = [ "query", "tag", "filterable" ]
 
     filter(event) {
-      let lowerCaseFilterTerm = this.queryTarget.value.toLowerCase()
-      let selectedTags = this.tagTargets
+        let lowerCaseFilterTerm = this.queryTarget.value.toLowerCase()
+        let selectedTags = this.tagTargets
         .filter((el) => el.checked)
         .map((el) => el.getAttribute("data-tag-name"));
 
-      this.filterableTargets.forEach((el, i) => {
-        let key =  el.getAttribute("data-filter-key");
-        let tags = el.getAttribute("data-tags").split(" ");
-        let containsText = key.toLowerCase().includes( lowerCaseFilterTerm );
-        let containsTags = _.difference(selectedTags, tags).length === 0;
-        el.classList.toggle("filter--filtered", !containsText || !containsTags)
-    })
-  }
+        this.filterableTargets.forEach((el, i) => {
+            let key =  el.getAttribute("data-filter-key");
+            let tags = el.getAttribute("data-tags").split(" ");
+            let containsText = key.toLowerCase().includes( lowerCaseFilterTerm );
+            let containsTags = _.difference(selectedTags, tags).length === 0;
+            el.classList.toggle("filter--filtered", !containsText || !containsTags)
+        })
+    }
 }
 
 class Search extends Controller {
     static targets = ["input", "output", "submit"]
 
     initialize() {
-      this.search = _.debounce(this.search, 200, {trailing: true})
+        this.search = _.debounce(this.search, 200, {trailing: true})
     }
 
     search(event) {
-      this.outputTarget.value = this.inputTarget.value
-      this.submitTarget.click();
+        this.outputTarget.value = this.inputTarget.value
+        this.submitTarget.click();
     }
 }
 

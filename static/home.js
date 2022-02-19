@@ -5,13 +5,18 @@
  *
  * Used when clicking in the upper tree to hide the lower branches that become irrelevant
  */
-function emptySubCat(){
-    var args = arguments;
-
+function emptySubCat(categories, frame_value, frame_key){
     // Clean the corresponding category (fac/programs/blocs)
-    for(var i=0; i<args.length - 2; i++){
-        $('#' + args[i]).attr('src', $("#" + args[i] + "-finder-col").attr("empty-" + args[i] + "-url"))
+    var url = new URL(window.location);
+    url.searchParams.set(frame_key, frame_value);
+
+    for(var i=0; i<categories.length; i++){
+        $('#' + categories[i]).attr('src', $("#" + categories[i] + "-finder-col").attr("empty-url"))
+        url.searchParams.set(categories[i], '');
+        console.log("removing " + categories[i]);
     }
+
+    history.pushState(history.state, history.title, url);
 }
 
 /**
@@ -90,3 +95,33 @@ function toggleModal(modal){
         $("#" + modal + "-arrow").removeClass("fa-angle-down");
     }
 };
+
+function setFac(facName){
+    if(facName == "" || facName == null) return;
+
+    if(facName == "mycourses"){
+        $("#programs").attr("src", "/catalog/finder/courses/" + facName + "/false");
+    } else { 
+        $("#programs").attr("src", "/catalog/finder/programs/" + facName + "/false");
+    }
+}
+
+function setProgram(programSlug){
+    if(programSlug == "" || programSlug == null) return;
+
+    $("#blocs").attr("src", "/catalog/finder/blocs/" + programSlug + "/false");
+}
+
+function setBloc(blocId){
+    if(blocId == "" || blocId == null) return;
+
+    $("#courses").attr("src", "/catalog/finder/courses/" + blocId + "/false");
+}
+
+function load_initial_state(){
+    var url = new URL(window.location);
+
+    setFac(url.searchParams.get("facs"));
+    setProgram(url.searchParams.get("programs"));
+    setBloc(url.searchParams.get("blocs"));
+}

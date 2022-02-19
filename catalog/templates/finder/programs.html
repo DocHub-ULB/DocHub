@@ -1,0 +1,27 @@
+<turbo-frame id="{{ turbo_id }}" class="turbo-overflow" src="{% url "catalog:finder_turbo" "programs" "empty" %}">
+    <div class="finder-col">
+        <h3 style="text-decoration: underline;color:{{fac_color}};">{{ fac_name }}</h3>
+        {% for program_type in program_types %}
+            <a class="inner-finder-col" onclick="toggleModal('{{ program_type.slug }}')" style="font-weight: bold;">
+                {{ program_type.name }}<i id="{{ program_type.slug }}-arrow" class="modal-arrow fas fa-angle-left" style="float:right;"></i>
+            </a>
+            <div class="modal" id="{{ program_type.slug }}">
+                {% for program in program_type.programs %}
+                    <a
+                        onclick="emptySubCat(['blocs', 'courses'], '{{ program.slug }}', '{{ turbo_id }}')"
+                        class="inner-finder-col program_link" 
+                        {% if program.slug_ %}
+                            href="{% url "catalog:finder_turbo" "blocs" program.slug_ %}?form={{ as_form }}&mobile={{ mobile }}"
+                        {% else %}
+                            href="{% url "catalog:finder_turbo" "blocs" program.slug %}?form={{ as_form }}&mobile={{ mobile }}"
+                        {% endif %}
+                        data-turbo-frame="{{ futur_turbo_id }}"
+                        id="{{ program.slug }}"
+                    >
+                        <i class="fas fa-chevron-right"></i> {{ program.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</turbo-frame>

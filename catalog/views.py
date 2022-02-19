@@ -3,7 +3,13 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import cache_page
@@ -12,6 +18,13 @@ from django.views.generic.detail import DetailView
 from mptt.utils import get_cached_trees
 
 from catalog.models import Category, Course
+from catalog.utils import (
+    getBlocFrame,
+    getCourseFrame,
+    getEmptyFrame,
+    getFacFrame,
+    getProgramFrame,
+)
 from documents.models import Vote
 
 
@@ -118,3 +131,29 @@ def course_tree(request):
 def unfollow_all_courses(request):
     request.user.courses_set.clear()
     return redirect("catalog:show_courses")
+
+
+def finder_turbo(request, id: str, category_slug: str):
+    """Allows the finder to load a frame"""
+    if category_slug == "empty":
+        return getEmptyFrame(request, id)
+    if id == "facs":
+        return getFacFrame(request)
+    if id == "programs":
+        return getProgramFrame(request, category_slug)
+    if id == "blocs":
+        return getBlocFrame(request, category_slug)
+    if id == "courses":
+        return getCourseFrame(request, category_slug)
+    else:
+        raise Http404("l'ID recherché est introuvable")
+
+
+def finder_follow_course(request, action: str, course_slug: str):
+    course = get_object_or_404(Course, slug=course_slug)
+    if action == "follow":
+        course.followed_by.add(request.user)
+    else:
+        course.followed_by.remove(request.user)
+    course.save()
+    return JsonResponse({"status": "success"})

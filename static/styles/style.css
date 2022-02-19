@@ -221,6 +221,12 @@ body {
 
 .card-content{
     grid-column-start: 2;
+    position: relative;
+    width: 100%;
+}
+
+.card-title{
+    width: 70%;
 }
 
 .card-title a{
@@ -411,6 +417,14 @@ body {
     border-radius: 5px;
 }
 
+.finder-course-link {
+    grid-column-start: 1;
+}
+
+.finder-course-link:hover {
+    text-decoration: underline;
+}
+
 .turbo-overflow {
     height: inherit;
 }
@@ -419,10 +433,10 @@ body {
     margin-left: 0.5em;
     max-height:0;
     overflow: hidden;
-    -webkit-transition: max-height 1s ease-in-out;
-    -moz-transition: max-height 1s ease-in-out;
-    -o-transition: max-height 1s ease-in-out;
-    transition: max-height 1s ease-in-out;
+    -webkit-transition: max-height 0.2s ease-in-out;
+    -moz-transition: max-height 0.2s ease-in-out;
+    -o-transition: max-height 0.2s ease-in-out;
+    transition: max-height 0.2s ease-in-out;
 }
 
 .home-grid{
@@ -529,6 +543,7 @@ body {
     font-family: Titillium Web;
     height: 25vh;
     overflow-y:auto;
+    z-index: 1;
 }
 
 .results a {
@@ -704,5 +719,13 @@ body {
     .visible-on-mobile {
         display: block;
         visibility: visible;
+    }
+
+    .big-finder {
+        display: block;
+    }
+
+    .remove-margin{
+        margin: 0px !important;
     }
 }

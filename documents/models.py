@@ -37,6 +37,7 @@ class Document(models.Model):
     tags = models.ManyToManyField("tags.Tag", blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
+    is_certified = models.BooleanField(default=False)
 
     size = models.PositiveIntegerField(default=0)
     pages = models.PositiveIntegerField(default=0)
