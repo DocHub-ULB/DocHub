@@ -138,13 +138,13 @@ def finder_turbo(request, id: str, category_slug: str):
     if category_slug == "empty":
         return getEmptyFrame(request, id)
     if id == "facs":
-        return getFacFrame(request, mobile)
+        return getFacFrame(request)
     if id == "programs":
-        return getProgramFrame(request, category_slug, mobile)
+        return getProgramFrame(request, category_slug)
     if id == "blocs":
-        return getBlocFrame(request, category_slug, mobile)
+        return getBlocFrame(request, category_slug)
     if id == "courses":
-        return getCourseFrame(request, category_slug, mobile)
+        return getCourseFrame(request, category_slug)
     else:
         raise Http404("l'ID recherché est introuvable")
 
