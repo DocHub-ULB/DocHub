@@ -1,5 +1,3 @@
-from multiprocessing.dummy import Namespace
-
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
