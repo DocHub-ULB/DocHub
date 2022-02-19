@@ -63,7 +63,7 @@ def getFacFrame(request) -> HttpResponse:
     if mobile:  # Facs is the root frame, on mobile, only this one is used
         futur_turbo_id = "mobile"
     else:
-        futur_turbo_id = "facs"
+        futur_turbo_id = "programs"
 
     return render(
         request,
