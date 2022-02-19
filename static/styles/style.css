@@ -5,6 +5,10 @@ div[data-controller="viewer"] {
     grid-template-columns: 300px auto;
 }
 
+div[data-controller="viewer"] .main {
+    background-color: rgb(242, 243, 245);
+}
+
 
 div[data-viewer-target="sidebar"] {
     border: 1px solid lightgray;
@@ -12,12 +16,12 @@ div[data-viewer-target="sidebar"] {
 }
 
 div[data-viewer-target="renderer"] {
-    background-color: rgb(242, 243, 245);
-    //border: 5px solid orange;
     padding: 20px;
-    overflow-y: scroll;
-    height: calc(100vh - 50px);
+    overflow-y: auto;
+    height: calc(100vh - 51px);
     box-sizing: border-box;
+    position: relative;
+    z-index: 2;
 }
 
 div[data-viewer-target="renderer"] .page-wrapper {
@@ -29,28 +33,45 @@ div[data-viewer-target="renderer"] .page-wrapper {
                 0 32px 64px rgba(0,0,0,0.07);
     transition-property: opacity, background-color;
     transition-duration: 0.2s;
-    //transition-delay: .2s;
     transition-timing-function: ease-in;
     opacity: 0;
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 20px;
-    //border: 5px solid maroon;
-    //background-color: red;
     background-color: white;
 }
 
 
 div[data-viewer-target="renderer"] .page-wrapper[data-viewer-ready] {
     opacity: 1;
-    //background-color: blue;
 }
 
 div[data-controller="viewer"] .loader {
-    margin-top: 30vh;
-    font-size: 3em;
-    animation: breathing 2s ease-out infinite normal;
+    text-align: center;
     position: absolute;
+    width: calc(100% - 300px);
+    height: calc(100vh - 51px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+div[data-controller="viewer"] .loader .text {
+    animation: breathing 2s ease-out infinite normal;
+    color: #555;
+}
+
+div[data-controller="viewer"][data-viewer-loaded-value] .loader .text {
+    animation: none;
+}
+
+
+div[data-controller="viewer"] .loader progress {
+    margin-top: 20px;
+    max-width: 400px;
+    width: 100%;
+    height: 20px;
 }
 
 div[data-controller="viewer"][data-viewer-loaded-value] .loader {
@@ -121,7 +142,33 @@ html {
 
 body {
     margin: 0px 0px;
+    font-family: Roboto;
 }
+
+progress {
+    appearance: none;
+    height: 20px;
+    border-radius: 5px;
+    background-color: #eee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress::-moz-progress-bar {
+    border-radius: 5px;
+    background-color: #007095;
+}
+
+progress::-webkit-progress-value {
+    background-color: #007095;
+    border-radius: 5px;
+}
+
 
 /* Navbar  */
 .nav {
@@ -134,7 +181,7 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     background: #007095;
     color: white;
-    
+
 }
 
 
@@ -145,7 +192,6 @@ body {
     justify-content: center;
     align-items: center;
 
-    font-family: Roboto;
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
@@ -164,7 +210,6 @@ body {
 }
 
 .dropdown span {
-    font-family: Roboto;
     font-style: normal;
     font-weight: normal;
     font-size: 1.2em;
@@ -183,7 +228,6 @@ body {
 }
 
 .dropdown-content a {
-    font-family: Roboto;
     font-size: 1em;
     text-align: center;
     display: inline-block;

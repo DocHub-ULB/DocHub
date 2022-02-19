@@ -52,12 +52,19 @@ class Viewer extends Controller {
     async connect() {
         let loadingTask = pdfjs.getDocument(this.srcValue);
 
-        loadingTask.onProgress = (data) => {
-            this.loaderTarget.setAttribute("value", 100 * data.loaded / data.total);
+        loadingTask.onProgress = async (data) => {
+            let percent = Math.round(data.loaded / data.total * 100)
+            this.loaderTarget.setAttribute("value", percent);
         }
+
+        //await new Promise((resolve) => setTimeout(resolve, 200000));
 
         this.pdf = await loadingTask.promise;
         this.loadedValue = true;
+
+        // sleep 20 seconds
+
+
         console.log("PDF loaded")
         this.pages = {};
 
