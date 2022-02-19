@@ -222,6 +222,11 @@ body {
 .card-content{
     grid-column-start: 2;
     position: relative;
+    width: 100%;
+}
+
+.card-title{
+    width: 70%;
 }
 
 .card-title a{
@@ -718,5 +723,9 @@ body {
 
     .big-finder {
         display: block;
+    }
+
+    .remove-margin{
+        margin: 0px !important;
     }
 }

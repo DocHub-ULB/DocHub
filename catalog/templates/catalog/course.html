@@ -114,7 +114,7 @@
                     <div class="card-title">
                         <a href="{% url 'document_show' document.pk %}">{{document.name}}</a>
                         <span>{{ document.user.name }}</span>
-                        {% if document.is_certified %}<i class="material-icons" style="vertical-align: text-top;">recommend</i>{% endif %}
+                        {% if document.is_certified %}<span class="material-icons" style="vertical-align: text-top; color: green;" title="Ce document est certifie">verified</span>{% endif %}
                     </div>
                     {% if document.description %}
                         <div class="card-comment">
@@ -136,18 +136,18 @@
                         </div>
                     </div>
                     <div style="position: absolute;right: 1em;top:0">
-                        <a href="{% url 'api:document-pdf' document.pk %}" data-turbo="false" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
-                            <span class="mdc-button__ripple"></span>
-                            <i class="material-icons mdc-button__icon" aria-hidden="true">file_download</i>
-                            <span class="mdc-button__label">Télécharger</span>
-                        </a>
                         {% if moderated or request.user.is_staff %}
-                            <a href="{% url 'document_edit' document.pk%}" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007910;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                            <a href="{% url 'document_edit' document.pk%}" class="mdc-button mdc-button--raised hide-on-mobile" style="--mdc-theme-primary: #007910;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
                                 <span class="mdc-button__ripple"></span>
                                 <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
                                 <span class="mdc-button__label">Editer</span>
                             </a>
                         {% endif %}
+                        <a href="{% url 'api:document-pdf' document.pk %}" data-turbo="false" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                            <span class="mdc-button__ripple"></span>
+                            <i class="material-icons mdc-button__icon remove-margin" aria-hidden="true">file_download</i>
+                            <span class="mdc-button__label hide-on-mobile">Télécharger</span>
+                        </a>
                     </div>
 
                 </div>
