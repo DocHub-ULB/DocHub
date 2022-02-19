@@ -1,5 +1,3 @@
-from email.policy import default
-
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -40,7 +38,7 @@ class FileForm(forms.Form):
         ),
     )
 
-    is_certified = forms.BooleanField(default=False, label="Certifier le document")
+    is_certified = forms.BooleanField(required=False, label="Certifier le document")
 
 
 class UploadFileForm(FileForm):
