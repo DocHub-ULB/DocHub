@@ -1,6 +1,6 @@
 <turbo-frame id="{{ turbo_id }}" class="turbo-overflow" src="{% url "catalog:finder_turbo" "programs" "empty" %}">
     <div class="finder-col">
-        <h3>{{ fac_name }}</h3>
+        <h3 style="text-decoration: underline;color:{{fac_color}};">{{ fac_name }}</h3>
         {% for program_type in program_types %}
             <a class="inner-finder-col" onclick="toggleModal('{{ program_type.slug }}')" style="font-weight: bold;">
                 {{ program_type.name }}<i id="{{ program_type.slug }}-arrow" class="modal-arrow fas fa-angle-left" style="float:right;"></i>

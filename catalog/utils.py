@@ -103,6 +103,7 @@ def getProgramFrame(request, fac_slug: str) -> HttpResponse:
             "futur_turbo_id": futur_turbo_id,
             "mobile": mobile,
             "fac_name": fac.name,
+            "fac_color": fac.description,
             "as_form": as_form,
         },
     )
