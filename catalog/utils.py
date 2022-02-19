@@ -52,18 +52,18 @@ def getEmptyFrame(request, id: str) -> HttpResponse:
     )
 
 
-def getFacFrame(request, mobile: str) -> HttpResponse:
+def getFacFrame(request) -> HttpResponse:
     """Returns a redered turbo-frame containing a list of the facs"""
     root = get_object_or_404(Category, slug="root")
     facs = root.children.all().order_by("name")
     as_form = request.GET.get("form", False) == "true"
+    mobile = request.GET.get("mobile", "false") == "true"
+    turbo_id = "facs"
 
-    if mobile == "true":
-        turbo_id = "mobile"
+    if mobile:  # Facs is the root frame, on mobile, only this one is used
         futur_turbo_id = "mobile"
     else:
-        turbo_id = "facs"
-        futur_turbo_id = "programs"
+        futur_turbo_id = "facs"
 
     return render(
         request,
@@ -78,17 +78,18 @@ def getFacFrame(request, mobile: str) -> HttpResponse:
     )
 
 
-def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
+def getProgramFrame(request, fac_slug: str) -> HttpResponse:
     """Returns a rendered turbo-frame containing a list of programs from the given fac"""
     fac = get_object_or_404(Category, slug=fac_slug)
     programs = fac.children.all().order_by("name")
     as_form = request.GET.get("form", False) == "true"
+    mobile = request.GET.get("mobile", "false") == "true"
 
     programs = buildOrderedProgramList(programs)
 
-    if mobile == "true":
-        turbo_id = "mobile"
-        futur_turbo_id = "mobile"
+    if mobile:  # Facs is the root frame, on mobile, only this one is used
+        turbo_id = "facs"
+        futur_turbo_id = "facs"
     else:
         turbo_id = "programs"
         futur_turbo_id = "blocs"
@@ -107,15 +108,16 @@ def getProgramFrame(request, fac_slug: str, mobile: str) -> HttpResponse:
     )
 
 
-def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
+def getBlocFrame(request, program_slug: str) -> HttpResponse:
     """Returns a rendered turbo-frame containing the list of blocs from the given program"""
     program = get_object_or_404(Category, slug=program_slug)
     blocs = program.children.all().order_by("name")
     as_form = request.GET.get("form", False) == "true"
+    mobile = request.GET.get("mobile", "false") == "true"
 
-    if mobile == "true":
-        turbo_id = "mobile"
-        futur_turbo_id = "mobile"
+    if mobile:  # Facs is the root frame, on mobile, only this one is used
+        turbo_id = "facs"
+        futur_turbo_id = "facs"
     else:
         turbo_id = "blocs"
         futur_turbo_id = "courses"
@@ -134,9 +136,10 @@ def getBlocFrame(request, program_slug: str, mobile: str) -> HttpResponse:
     )
 
 
-def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
+def getCourseFrame(request, bloc_slug: str) -> HttpResponse:
     turbo_id = "courses"
     as_form = request.GET.get("form", False) == "true"
+    mobile = request.GET.get("mobile", "false") == "true"
 
     if bloc_slug == "mycourses":
         courses = request.user.following_courses
@@ -147,8 +150,8 @@ def getCourseFrame(request, bloc_slug: str, mobile: str) -> HttpResponse:
         courses = Course.objects.filter(categories=bloc).order_by("name")
         bloc_name = bloc.name
 
-    if mobile == "true":
-        turbo_id = "mobile"
+    if mobile:
+        turbo_id = "facs"
 
     return render(
         request,
