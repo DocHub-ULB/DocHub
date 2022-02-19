@@ -133,7 +133,7 @@ def unfollow_all_courses(request):
     return redirect("catalog:show_courses")
 
 
-def finder_turbo(request, id: str, category_slug: str, mobile: str):
+def finder_turbo(request, id: str, category_slug: str):
     """Allows the finder to load a frame"""
     if category_slug == "empty":
         return getEmptyFrame(request, id)
