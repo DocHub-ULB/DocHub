@@ -38,7 +38,7 @@ class FileForm(forms.Form):
         ),
     )
 
-    is_certified = forms.BooleanField(default=False, label="Certifier le document")
+    is_certified = forms.BooleanField(required=False, label="Certifier le document")
 
 
 class UploadFileForm(FileForm):
