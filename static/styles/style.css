@@ -706,4 +706,8 @@ body {
         display: block;
         visibility: visible;
     }
+
+    .big-finder {
+        display: block;
+    }
 }
