@@ -530,6 +530,7 @@ body {
     font-family: Titillium Web;
     height: 25vh;
     overflow-y:auto;
+    z-index: 1;
 }
 
 .results a {
