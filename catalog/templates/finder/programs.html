@@ -1,4 +1,4 @@
-<turbo-frame id="{{ turbo_id }}" class="turbo-overflow" src="{% url "catalog:finder_turbo" "programs" "empty" mobile %}">
+<turbo-frame id="{{ turbo_id }}" class="turbo-overflow" src="{% url "catalog:finder_turbo" "programs" "empty" %}">
     <div class="finder-col">
         <h3>{{ fac_name }}</h3>
         {% for program_type in program_types %}
@@ -11,9 +11,9 @@
                         onclick="emptySubCat(['blocs', 'courses'], '{{ program.slug }}', '{{ turbo_id }}')"
                         class="inner-finder-col program_link" 
                         {% if program.slug_ %}
-                            href="{% url "catalog:finder_turbo" "blocs" program.slug_ mobile %}{% if as_form %}?form=true{% endif %}"
+                            href="{% url "catalog:finder_turbo" "blocs" program.slug_ %}{% if as_form %}?form=true{% endif %}"
                         {% else %}
-                            href="{% url "catalog:finder_turbo" "blocs" program.slug mobile %}{% if as_form %}?form=true{% endif %}"
+                            href="{% url "catalog:finder_turbo" "blocs" program.slug %}{% if as_form %}?form=true{% endif %}"
                         {% endif %}
                         data-turbo-frame="{{ futur_turbo_id }}"
                         id="{{ program.slug }}"

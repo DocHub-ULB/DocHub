@@ -6,7 +6,7 @@
 {% load static %}
 
 <turbo-frame id="{{ turbo_id }}">
-    <div id="courses-finder-col" class="finder-col" spinner-url="{% static "images/loading.gif" %}" empty-url="{% url "catalog:finder_turbo" "courses" "empty" mobile %}">
+    <div id="courses-finder-col" class="finder-col" spinner-url="{% static "images/loading.gif" %}" empty-url="{% url "catalog:finder_turbo" "courses" "empty" %}">
         <h3>{{ bloc_name }}</h3>
         {% for course in courses %}
             {% is_following request.user course as following %}

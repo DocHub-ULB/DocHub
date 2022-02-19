@@ -11,7 +11,7 @@
 {% endif %}
 
 <div class="big-finder">
-    <turbo-frame id="facs" class="turbo-overflow" src="{% url "catalog:finder_turbo" "facs" "root" "false" %}">
+    <turbo-frame id="facs" class="turbo-overflow">
     </turbo-frame>
     <turbo-frame id="programs" class="turbo-overflow hide-on-mobile">
     </turbo-frame>
@@ -29,6 +29,8 @@
     <script src="{% static "home.js" %}"></script>
     <script>
         $(document).ready(function(){
+            var mobile = window.matchMedia("(max-width: 900px)").matches
+            $("#facs").attr("src", "{% url "catalog:finder_turbo" "facs" "root" %}?mobile=" + mobile);
             load_initial_state();
         });
     </script>

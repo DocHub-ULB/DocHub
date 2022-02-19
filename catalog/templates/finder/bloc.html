@@ -1,12 +1,12 @@
 <turbo-frame id="{{ turbo_id }}">
-    <div id="{{ turbo_id }}-finder-col" class="finder-col" empty-url="{% url "catalog:finder_turbo" "blocs" "empty" mobile %}">
+    <div id="{{ turbo_id }}-finder-col" class="finder-col" empty-url="{% url "catalog:finder_turbo" "blocs" "empty" %}">
         <h3>{{ program_name }}</h3>
         {% if blocs|length > 0 %}
             {% for bloc in blocs %}
                 <a
                     onclick="emptySubCat(['courses'], '{{ bloc.slug }}', '{{ turbo_id }}')"
                     class="inner-finder-col bloc_link"
-                    href="{% url "catalog:finder_turbo" "courses" bloc.slug mobile %}{% if as_form %}?form=true{% endif %}"
+                    href="{% url "catalog:finder_turbo" "courses" bloc.slug %}{% if as_form %}?form=true{% endif %}"
                     data-turbo-frame="{{ futur_turbo_id }}"
                     id="{{ bloc.slug }}"
                 >
