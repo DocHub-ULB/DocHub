@@ -26,7 +26,7 @@
                         <input type="checkbox" id="Course_{{ course.slug }}" name="Course_{{ course.slug }}">
                     {% endif %}
                 {% else %}
-                    <a href="{% url 'catalog:course_show' course.slug %}" target="_top" style="grid-column-start: 1;">{{ course.name }}</a>
+                    <a href="{% url 'catalog:course_show' course.slug %}" target="_top" class="finder-course-link">{{ course.name }}</a>
                     {% if following %}
                         <a
                             title="Leave the course"
