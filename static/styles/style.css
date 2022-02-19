@@ -412,6 +412,14 @@ body {
     border-radius: 5px;
 }
 
+.finder-course-link {
+    grid-column-start: 1;
+}
+
+.finder-course-link:hover {
+    text-decoration: underline;
+}
+
 .turbo-overflow {
     height: inherit;
 }
