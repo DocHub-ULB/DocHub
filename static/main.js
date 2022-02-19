@@ -2,7 +2,6 @@ import _ from 'https://cdn.skypack.dev/lodash';
 
 import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
-import { useIntersection } from 'https://cdn.skypack.dev/stimulus-use'
 
 class CourseFilter extends Controller {
     static targets = [ "query", "tag", "filterable" ]
@@ -56,14 +55,8 @@ class Viewer extends Controller {
             let percent = Math.round(data.loaded / data.total * 100)
             this.loaderTarget.setAttribute("value", percent);
         }
-
-        //await new Promise((resolve) => setTimeout(resolve, 200000));
-
         this.pdf = await loadingTask.promise;
         this.loadedValue = true;
-
-        // sleep 20 seconds
-
 
         console.log("PDF loaded")
         this.pages = {};
