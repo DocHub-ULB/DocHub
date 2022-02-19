@@ -20,12 +20,16 @@ DocHub currently (Feb 2022) runs with Python 3.10 and Postgresql 14.
 
 ```console
 # Ubuntu
-sudo apt-get install unoconv python3-dev ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools
+sudo apt-get install unoconv python3-dev ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools redis-server
+sudo systemctl enable --now redis-server
 # Fedora
-sudo dnf install unoconv python-devel ruby mupdf
+sudo dnf install unoconv python-devel ruby mupdf redis
+sudo systemctl enable --now redis
 # Arch linux
-sudo pacman -S unoconv ruby python mupdf-tools
+sudo pacman -S unoconv ruby python mupdf-tools redis
+sudo systemctl enable --now redis
 ```
+
 
 ### Installation
 
