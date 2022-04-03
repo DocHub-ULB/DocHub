@@ -31,7 +31,7 @@ urlpatterns = [
     path("documents/", include("documents.urls")),
     path("users/", include("users.urls")),
     path("admin/", admin.site.urls),
-    path("api/", include("www.rest_urls")),
+    path("api/", include("www.rest_urls", namespace="api")),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
     path("login", users.views.login_view, name="login"),
     path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),

@@ -159,7 +159,7 @@ else:
         ]
     )
 
-    sentry_dsn = env("SENTRY_SDK")
+    sentry_dsn = env("SENTRY_SDK", default=None)
 
     if sentry_dsn is not None:
         import sentry_sdk
@@ -175,6 +175,7 @@ else:
     SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    WHITENOISE_ROOT = BASE_DIR / "static" / "root"
 
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 

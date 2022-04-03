@@ -1,17 +1,129 @@
+div[data-controller="viewer"] {
+    flex-grow: 1;
+    //border: 5px solid green;
+    display: grid;
+    grid-template-columns: 300px auto;
+}
+
+div[data-controller="viewer"] .main {
+    background-color: rgb(242, 243, 245);
+}
+
+
+div[data-viewer-target="sidebar"] {
+    border: 1px solid lightgray;
+    padding: 10px;
+}
+
+div[data-viewer-target="renderer"] {
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100vh - 51px);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+
+div[data-viewer-target="renderer"] .page-wrapper {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07),
+                0 2px 4px rgba(0,0,0,0.07),
+                0 4px 8px rgba(0,0,0,0.07),
+                0 8px 16px rgba(0,0,0,0.07),
+                0 16px 32px rgba(0,0,0,0.07),
+                0 32px 64px rgba(0,0,0,0.07);
+    transition-property: opacity, background-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in;
+    opacity: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+
+div[data-viewer-target="renderer"] .page-wrapper[data-viewer-ready] {
+    opacity: 1;
+}
+
+div[data-controller="viewer"] .loader {
+    text-align: center;
+    position: absolute;
+    width: calc(100% - 300px);
+    height: calc(100vh - 51px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+div[data-controller="viewer"] .loader .text {
+    animation: breathing 2s ease-out infinite normal;
+    color: #555;
+}
+
+div[data-controller="viewer"][data-viewer-loaded-value] .loader .text {
+    animation: none;
+}
+
+
+div[data-controller="viewer"] .loader progress {
+    margin-top: 20px;
+    max-width: 400px;
+    width: 100%;
+    height: 20px;
+}
+
+div[data-controller="viewer"][data-viewer-loaded-value] .loader {
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    opacity: 0;
+}
+
+@keyframes breathing {
+    0% {
+        transform: scale(0.9);
+    }
+
+    25% {
+        transform: scale(1);
+    }
+
+    60% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
+}
+
+div[data-viewer-target="toolbar"] {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: deeppink;
+    text-align: center;
+    margin: 30px;
+}
+
 /*
-
 Stick footer to the bottom
-https://dev.to/nehalahmadkhan/how-to-make-footer-stick-to-bottom-of-web-page-3i14
-
 */
 body{
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
-.footer{
-    margin-top: auto;
+
+main {
+    flex-grow: 1;
 }
+
+footer {}
 
 /* General css */
 h1,h2,h3,h4,h5,h6,p {
@@ -30,7 +142,33 @@ html {
 
 body {
     margin: 0px 0px;
+    font-family: Roboto;
 }
+
+progress {
+    appearance: none;
+    height: 20px;
+    border-radius: 5px;
+    background-color: #eee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress::-moz-progress-bar {
+    border-radius: 5px;
+    background-color: #007095;
+}
+
+progress::-webkit-progress-value {
+    background-color: #007095;
+    border-radius: 5px;
+}
+
 
 /* Navbar  */
 .nav {
@@ -43,7 +181,7 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     background: #007095;
     color: white;
-    
+
 }
 
 
@@ -54,7 +192,6 @@ body {
     justify-content: center;
     align-items: center;
 
-    font-family: Roboto;
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
@@ -73,7 +210,6 @@ body {
 }
 
 .dropdown span {
-    font-family: Roboto;
     font-style: normal;
     font-weight: normal;
     font-size: 1.2em;
@@ -92,7 +228,6 @@ body {
 }
 
 .dropdown-content a {
-    font-family: Roboto;
     font-size: 1em;
     text-align: center;
     display: inline-block;
