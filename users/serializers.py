@@ -18,7 +18,6 @@ class FollowedCourseSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    avatar = serializers.CharField(source="get_photo")
     token = TokenSerializer(source="auth_token")
     followed_courses = serializers.SerializerMethodField()
 
@@ -39,7 +38,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "is_staff",
             "is_representative",
             "is_academic",
-            "avatar",
             "token",
             "followed_courses",
         )
@@ -48,8 +46,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SmallUserSerializer(serializers.ModelSerializer):
-    avatar = serializers.CharField(source="get_photo")
-
     class Meta:
         model = User
         fields = (
@@ -57,7 +53,6 @@ class SmallUserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "is_representative",
-            "avatar",
         )
 
         extra_kwargs = {"url": {"lookup_field": "netid"}}
