@@ -60,7 +60,7 @@ class Document(models.Model):
 
     hidden = models.BooleanField(default=False, verbose_name="Est caché")
     import_source = models.CharField(
-        max_length=1024, null=True, verbose_name="Importé depuis"
+        max_length=1024, null=True, verbose_name="Importé depuis", blank=True
     )
 
     def __str__(self) -> str:
