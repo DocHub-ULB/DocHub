@@ -29,6 +29,7 @@ isort
 pre-commit
 pip-tools
 coolname
+black
 
 # Test
 mock
