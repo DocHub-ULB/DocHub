@@ -6,8 +6,6 @@
 #
 amqp==5.1.0
     # via kombu
-appnope==0.1.2
-    # via ipython
 asgiref==3.5.0
     # via django
 asttokens==2.0.5
@@ -214,7 +212,7 @@ pygments==2.11.2
     #   ipython
 pyparsing==3.0.7
     # via packaging
-pypdf2==1.26.0
+pypdf2==1.27.5
     # via -r requirements.in
 pytest==7.1.1
     # via pytest-django
