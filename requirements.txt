@@ -6,8 +6,6 @@
 #
 amqp==5.1.0
     # via kombu
-appnope==0.1.2
-    # via ipython
 asgiref==3.5.0
     # via django
 asttokens==2.0.5
@@ -64,7 +62,7 @@ deprecated==1.2.13
     # via redis
 distlib==0.3.4
     # via virtualenv
-django==4.0.3
+django==4.0.4
     # via
     #   -r requirements.in
     #   django-appconf
