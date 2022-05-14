@@ -3,8 +3,6 @@ import _ from 'https://cdn.skypack.dev/lodash';
 import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
 
-const application = Application.start()
-
 function normalize(s){
     let r=s.toLowerCase();
     r = r.replace(new RegExp("\\s", 'g'),"");

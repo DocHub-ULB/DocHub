@@ -212,17 +212,13 @@ def document_show(request, pk):
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
-    if document.state != Document.DocumentState.DONE:
-        return HttpResponseRedirect(
-            reverse("catalog:course_show", args=(document.course.slug,))
-        )
+    if document.state == Document.DocumentState.DONE:
+        document.views = F("views") + 1
+        document.save(update_fields=["views"])
 
     context = {
         "document": document,
     }
-
-    document.views = F("views") + 1
-    document.save(update_fields=["views"])
 
     return render(request, "documents/viewer.html", context)
 
