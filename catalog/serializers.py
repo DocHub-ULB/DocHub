@@ -16,7 +16,6 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "categories",
             "document_set",
-            "gehol_url",
             "followers_count",
             "description",
         )

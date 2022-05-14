@@ -39,10 +39,6 @@ class Course(models.Model):
     class Meta:
         ordering = ["slug"]
 
-    def gehol_url(self):
-        slug = self.slug.replace("-", "").upper()
-        return f"https://gehol.ulb.ac.be/gehol/Vue/HoraireCours.php?cours={slug}"
-
     def get_absolute_url(self):
         return reverse("catalog:course_show", args=(self.slug,))
 

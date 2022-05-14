@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from catalog.models import Course
+from catalog.views import slug_redirect
 from documents import logic
 from documents.forms import (
     FileForm,
@@ -21,6 +22,7 @@ from tags.models import Tag
 
 
 @login_required
+@slug_redirect
 def upload_file(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
@@ -74,6 +76,7 @@ def upload_file(request, slug):
 
 
 @login_required
+@slug_redirect
 def upload_multiple_files(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
