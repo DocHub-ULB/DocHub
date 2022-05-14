@@ -30,7 +30,7 @@ def index(request):
     else:
 
         def floor(num, r=1):
-            r = 10 ** r
+            r = 10**r
             return int((num // r) * r) if r != 0 else 0
 
         if Document.objects.count():
