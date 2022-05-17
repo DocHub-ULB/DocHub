@@ -2,93 +2,68 @@
 {% load login_url %}
 
 <!doctype html>
+
 <html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}DocHub - ULB{% endblock %}</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" crossorigin="anonymous"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor">
     {% block opengraph %}
-    <meta property="og:title" content="DocHub" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://dochub.be/static/images/facebook_cover.png" />
-    <meta property="og:url" content="https://dochub.be" />
-    <meta property="og:description" content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. " />
+        <meta property="og:title" content="DocHub"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" content="https://dochub.be/static/images/facebook_cover.png"/>
+        <meta property="og:url" content="https://dochub.be"/>
+        <meta property="og:description"
+              content="DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore. "/>
     {% endblock opengraph %}
+</head>
 
-    <link rel="icon" type="image/png" href="/static/images/favicon.png" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/foundation.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/5.5.3/css/normalize.css">
-
-    <!-- Start of Async Drift Code -->
-    <script>
-    !function() {
-      var t;
-      if (t = window.driftt = window.drift = window.driftt || [], !t.init) return t.invoked ? void (window.console && console.error && console.error("Drift snippet included twice.")) : (t.invoked = !0,
-      t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ],
-      t.factory = function(e) {
-        return function() {
-          var n;
-          return n = Array.prototype.slice.call(arguments), n.unshift(e), t.push(n), t;
-        };
-      }, t.methods.forEach(function(e) {
-        t[e] = t.factory(e);
-      }), t.load = function(t) {
-        var e, n, o, i;
-        e = 3e5, i = Math.ceil(new Date() / e) * e, o = document.createElement("script"),
-        o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + i + "/" + t + ".js",
-        n = document.getElementsByTagName("script")[0], n.parentNode.insertBefore(o, n);
-      });
-    }();
-    drift.SNIPPET_VERSION = '0.3.1';
-    drift.load('dzkrmavg2zw3');
-    </script>
-    <!-- End of Async Drift Code -->
-
-  </head>
-  <body>
-    <div class="sticky">
-    <nav class="top-bar" data-topbar="">
-        <ul class="title-area text-center">
-            <li class="name">
-               <h1><a href="/">DocHub</a></h1>
-            </li>
-        </ul>
-
-        <section class="top-bar-section">
-            <ul class="left">
-              <li class="divider"></li>
-            </ul>
-        </section>
-    </nav>
+<body>
+<nav class="container-xl navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-megaphone-fill" viewBox="0 0 16 16">
+                <path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-11zm-1 .724c-2.067.95-4.539 1.481-7 1.656v6.237a25.222 25.222 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56V3.224zm-8 7.841V4.934c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009a68.14 68.14 0 0 1 .496.008 64 64 0 0 1 1.51.048zm1.39 1.081c.285.021.569.047.85.078l.253 1.69a1 1 0 0 1-.983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a65.81 65.81 0 0 1 1.692.064c.327.017.65.037.966.06z"/>
+            </svg>
+            DocHub
+        </a>
     </div>
-    <div class="row">
-      {% block content %}
-        <div class="medium-6 small-12 columns small-centered">
-          <h1>DocHub</h1>
-          <p>
+</nav>
+<main class="container-xl mt-4">
+    {% block content %}
+        <p>
             Bienvenue sur DocHub, le site de partage de documents et d’entraide étudiante à l’ULB.<br>
-            DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés, d'anciens examens et bien plus encore.
-          </p>
-          <p class="text-center">
+            DocHub vous permet de poser des questions aux autres étudiants, échanger vos notes, vos résumés,
+            d'anciens examens et bien plus encore.
+        </p>
+        <p class="text-center">
             Tu n'as pas besoin de créer un compte, il suffit d'employer ton compte ULB.<br><br>
-            <a href="{% login_url %}" id="login_link" class="button success expand">Connexion avec l'ULB</a><br>
+            <a href="{% login_url %}" id="login_link" class="btn btn-primary btn-lg d-inline-flex align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                    <path fill-rule="evenodd"
+                          d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg>
+                Connexion avec l'ULB
+            </a><br>
             {% if debug %}
-            <small>Developpers could also <a href="/syslogin">syslogin</a></small>
+                <small>Developpers could also <a href="/syslogin">syslogin</a></small>
             {% endif %}
-          </p>
-          <p>
-          <i class="fi-page-copy"></i>
-          DocHub, c'est actuellement plus de {{documents|intcomma}} documents contenant
-          plus de {{pages|intcomma}} pages ajoutées par plus de {{users|intcomma}} utilisateurs.<br>
-          </p>
-        </div>
-      {% endblock %}
-    </div>
-
-    <script async defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
-  </body>
+        </p>
+        <p>
+            <i class="fi-page-copy"></i>
+            DocHub, c'est actuellement plus de {{ documents|intcomma }} documents contenant
+            plus de {{ pages|intcomma }} pages ajoutées par plus de {{ users|intcomma }} utilisateurs.<br>
+        </p>
+    {% endblock %}
+</main>
+<script async defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
+</body>
 </html>

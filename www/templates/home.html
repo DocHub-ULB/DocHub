@@ -2,99 +2,53 @@
 
 {% load static %}
 
-{% block header %}
-  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-{% endblock %}
-
-{# hide the search bar on the home page #}
-{% block navbar %}
-    {% with hide_search=True %}
-        {% include "navbar.html" %}
-    {% endwith %}
-{% endblock %}
 
 {% block content %}
-    {% comment %} {% if request.user.welcome %}
+    {% comment %} FIXME {% if request.user.welcome %}
         {% include "welcome.html" %}
     {% endif %} {% endcomment %}
-    <div class="home-grid">
-        <div class="home-search-container">
-            <div style="margin-bottom: 1em;text-align: center;">
-                <span style="font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Doc</span><span style="color:#007095;font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Hub</span>
-            </div>
-            {% include "search/frames/search-box.html" with initial=True %}
-            <div style="width: 100%;text-align:center;margin-top: 2em;">
-                <button onclick="location='#'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #009ACD;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
-                    <span class="mdc-button__ripple"></span>
-                    <span class="mdc-button__label">Chercher</span>
-                </button>
-            </div>
+    <form>
+        <div class="input-group mb-3">
+
+            <input type="search" class="form-control"
+                   placeholder="Chercher un cours (ex. info-f101 ou phys-f443)"
+                   aria-label="search"
+                   aria-describedby="basic-addon1">
         </div>
-        <div style="grid-column-start: 2;grid-row-start: 2;text-align: center;height: 30vh">
-            <hr style="color: #eee;width: 50%;">
-            <h1>Mes Cours</h1>
-            {% if following_course %}
-                <div style="height: 100%;display: grid;grid-template-columns:1fr 1fr 1fr;grid-gap: 0.75em;font-family: Roboto;font-style: normal;">
-                    {% for course in following_course %}
-                        <a href="{% url "catalog:course_show" course.slug %}">
-                            <div style="padding-left: 0.5em;padding-right: 0.5em">
-                                <div style="padding:0.75em;background-color: #00445A20;border-radius: 1em;">
-                                    <i class="fas fa-folder" style="margin-right: 5px;color: #009ACD;"></i> {{ course.name }}
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
+    </form>
+    {% comment %}{% include "search/frames/search-box.html" with initial=True %}{% endcomment %}
+
+
+
+    <h1 class="border-bottom">Mes Cours</h1>
+    {% if following_course %}
+        {% for course in following_course %}
+            <a href="{% url "catalog:course_show" course.slug %}" class="text-body text-decoration-none">
+                <div class="d-flex align-items-center my-2">
+                    <div class="flex-shrink-0 text-success px-2 py-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-folder" viewBox="0 0 16 16">
+                            <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-grow-1">
+                        {{ course.name }}
+                        <small class="text-muted text-nowrap">{{ course.slug|upper }}</small>
+                    </div>
                 </div>
-            {% else %}
-                <span style="font-family: Roboto;font-style: normal;font-weight: bold;"> Vous pouvez parcourir les differents cours <a href="{% url 'catalog:show_courses' %}" style="color: -webkit-link;text-decoration: underline;">ici</a></span>
-            {% endif %}
-            {% comment %} 
-            <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
-            </turbo-frame>
-            <turbo-frame id="programs" class="turbo-overflow">
-            </turbo-frame>
-            <turbo-frame id="blocs" class="turbo-overflow">
-            </turbo-frame>
-            <turbo-frame id="courses" class="turbo-overflow">
-            </turbo-frame> {% endcomment %}
-        </div>
-        <div class="finder visible-on-mobile">
-            <turbo-frame id="mobile" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "true" %}">
-            </turbo-frame>
-        </div>
-    </div>
+            </a>
+        {% endfor %}
+        <a href="" class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
+                 viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            <span>Ajouter d'autres cours</span>
+        </a>
+    {% else %}
+        <span style="font-family: Roboto;font-style: normal;font-weight: bold;"> Vous pouvez parcourir les differents cours <a
+                href="{% url 'catalog:show_courses' %}" style="color: -webkit-link;text-decoration: underline;">ici</a></span>
+    {% endif %}
 
-    <!-- Cours -->
-    {% comment %} {% if request.user.following_courses|length > 0 %}
-    <div class="row">
-        <div class="large-6 columns">
-            <h3>Mes cours</h3>
-            <ul class="no-list">
-                {% for course in request.user.following_courses %}
-                <li class="nav-link">
-                    <a href="{% url 'course_show' course.slug %}">
-                        <span class="course-label success radius label fixed-label">
-                            {{ course.slug }}
-                        </span>
-                        {{ course.name|truncatechars:40 }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    {% endif %} {% endcomment %}
 
-{% endblock %}
-
-{% block script %}
-    <script src="{% static "home.js" %}"></script>
-    <script>
-    const buttons = document.querySelectorAll('.mdc-button');
-    for (const button of buttons) {
-        mdc.ripple.MDCRipple.attachTo(button);
-    }
-    </script>
 {% endblock %}

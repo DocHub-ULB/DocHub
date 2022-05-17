@@ -134,3 +134,6 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.netid
+
+    def initials(self):
+        return self.first_name[0] + self.last_name[0]

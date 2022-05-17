@@ -56,6 +56,7 @@ def show_course(request, slug: str):
         "course": course,
         "tags": {tag for doc in documents for tag in doc.tags.all()},
         "documents": documents,
+        "following": course.followed_by.filter(id=request.user.id).exists(),
     }
 
     if request.user.is_authenticated:

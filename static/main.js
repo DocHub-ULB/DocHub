@@ -38,7 +38,7 @@ class CourseFilter extends Controller {
 
         let containsText = normalizedTitle.includes(normalizedFilterTerm);
         let containsTags = _.difference(selectedTags, tags).length === 0;
-        el.classList.toggle("filter--filtered", !containsText || !containsTags)
+        el.classList.toggle("d-none", !containsText || !containsTags)
     })
   }
 }
