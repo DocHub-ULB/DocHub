@@ -3,24 +3,24 @@ import _ from 'https://cdn.skypack.dev/lodash';
 import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
 
-function normalize(s){
-    let r=s.toLowerCase();
-    r = r.replace(new RegExp("\\s", 'g'),"");
-    r = r.replace(new RegExp("[àáâãäå]", 'g'),"a");
-    r = r.replace(new RegExp("æ", 'g'),"ae");
-    r = r.replace(new RegExp("ç", 'g'),"c");
-    r = r.replace(new RegExp("[èéêë]", 'g'),"e");
-    r = r.replace(new RegExp("[ìíîï]", 'g'),"i");
-    r = r.replace(new RegExp("ñ", 'g'),"n");
-    r = r.replace(new RegExp("[òóôõö]", 'g'),"o");
-    r = r.replace(new RegExp("œ", 'g'),"oe");
-    r = r.replace(new RegExp("[ùúûü]", 'g'),"u");
-    r = r.replace(new RegExp("[ýÿ]", 'g'),"y");
-    r = r.replace(new RegExp("\\W", 'g'),"");
+function normalize(s) {
+    let r = s.toLowerCase();
+    r = r.replace(new RegExp("\\s", 'g'), "");
+    r = r.replace(new RegExp("[àáâãäå]", 'g'), "a");
+    r = r.replace(new RegExp("æ", 'g'), "ae");
+    r = r.replace(new RegExp("ç", 'g'), "c");
+    r = r.replace(new RegExp("[èéêë]", 'g'), "e");
+    r = r.replace(new RegExp("[ìíîï]", 'g'), "i");
+    r = r.replace(new RegExp("ñ", 'g'), "n");
+    r = r.replace(new RegExp("[òóôõö]", 'g'), "o");
+    r = r.replace(new RegExp("œ", 'g'), "oe");
+    r = r.replace(new RegExp("[ùúûü]", 'g'), "u");
+    r = r.replace(new RegExp("[ýÿ]", 'g'), "y");
+    r = r.replace(new RegExp("\\W", 'g'), "");
     return r;
-};
+}
 
-function humanFileSize(bytes, dp=1) {
+function humanFileSize(bytes, dp = 1) {
     const thresh = 1000;
 
     if (Math.abs(bytes) < thresh) {
@@ -29,7 +29,7 @@ function humanFileSize(bytes, dp=1) {
 
     const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     let u = -1;
-    const r = 10**dp;
+    const r = 10 ** dp;
 
     do {
         bytes /= thresh;
@@ -48,41 +48,42 @@ function cleanName(name) {
 
 
 class CourseFilter extends Controller {
-    static targets = [ "query", "tag", "filterable" ]
+    static targets = ["query", "tag", "filterable"]
 
     filter(event) {
-      let normalizedFilterTerm = normalize(this.queryTarget.value)
-      let selectedTags = this.tagTargets
-        .filter((el) => el.checked)
-        .map((el) => el.getAttribute("data-tag-name"));
+        let normalizedFilterTerm = normalize(this.queryTarget.value)
+        let selectedTags = this.tagTargets
+            .filter((el) => el.checked)
+            .map((el) => el.getAttribute("data-tag-name"));
 
-      this.filterableTargets.forEach((el, i) => {
-        let key =  el.getAttribute("data-filter-key");
-        let tags = el.getAttribute("data-tags").split(" ");
+        this.filterableTargets.forEach((el, i) => {
+            let key = el.getAttribute("data-filter-key");
+            let tags = el.getAttribute("data-tags").split(" ");
 
-        let normalizedTitle = normalize(key)
+            let normalizedTitle = normalize(key)
 
-        let containsText = normalizedTitle.includes(normalizedFilterTerm);
-        let containsTags = _.difference(selectedTags, tags).length === 0;
-        el.classList.toggle("d-none", !containsText || !containsTags)
-    })
-  }
+            let containsText = normalizedTitle.includes(normalizedFilterTerm);
+            let containsTags = _.difference(selectedTags, tags).length === 0;
+            el.classList.toggle("d-none", !containsText || !containsTags)
+        })
+    }
 }
 
 class Search extends Controller {
     static targets = ["input", "output", "submit"]
 
     initialize() {
-      this.search = _.debounce(this.search, 200, {trailing: true})
+        this.search = _.debounce(this.search, 200, {trailing: true})
     }
 
     search(event) {
-      this.outputTarget.value = this.inputTarget.value
-      this.submitTarget.click();
+        this.outputTarget.value = this.inputTarget.value
+        this.submitTarget.click();
     }
 }
 
 import bundledEsModulesPdfjsDist from 'https://cdn.skypack.dev/@bundled-es-modules/pdfjs-dist@2.5.207-rc1';
+
 let pdfjs = bundledEsModulesPdfjsDist
 pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.5.207/build/pdf.worker.js"
 
@@ -119,11 +120,11 @@ class Viewer extends Controller {
                 let pageNumber = parseInt(wrapper.getAttribute("data-viewer-page-param"))
                 let isRendered = wrapper.getElementsByTagName("canvas")[0] !== undefined;
 
-                if(!isRendered && entry.isIntersecting) {
+                if (!isRendered && entry.isIntersecting) {
                     console.log("rendering page", pageNumber)
                     this.renderPage(pageNumber, wrapper);
                 }
-                if(isRendered && !entry.isIntersecting) {
+                if (isRendered && !entry.isIntersecting) {
                     console.log("Removing page", pageNumber)
                     this.removePage(wrapper);
                 }
@@ -193,11 +194,13 @@ class Viewer extends Controller {
 
     removePage(wrapper) {
         let canvas = wrapper.getElementsByTagName("canvas")[0]
-        if(canvas !== undefined) canvas.remove();
+        if (canvas !== undefined) canvas.remove();
         wrapper.removeAttribute("data-viewer-ready")
+    }
+}
 
 class Upload extends Controller {
-    static targets = ["input", "name", "size", "form"]
+    static targets = ["input", "inputwrapper", "name", "originalname", "size", "form"]
 
     input(event) {
         console.log("File upload", event);
@@ -206,6 +209,7 @@ class Upload extends Controller {
             this.inputTarget.setAttribute("filled", "")
             let file = files[0];
             this.nameTarget.value = cleanName(file.name)
+            this.originalnameTarget.textContent = file.name
             this.sizeTarget.textContent = humanFileSize(file.size);
 
             this.formTarget.classList.remove("upload--hide")
@@ -218,12 +222,14 @@ class Upload extends Controller {
 
     enter(event) {
         event.preventDefault()
-        this.inputTarget.setAttribute("active" , "")
+        this.inputwrapperTarget.setAttribute("active", "")
     }
 
     leave(event) {
-        if(event !== null) { event.preventDefault() }
-        this.inputTarget.removeAttribute("active")
+        if (event !== null) {
+            event.preventDefault()
+        }
+        this.inputwrapperTarget.removeAttribute("active")
     }
 
 }

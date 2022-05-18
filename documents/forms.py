@@ -32,8 +32,8 @@ class FileForm(forms.Form):
         queryset=Tag.objects.all(),
         widget=forms.SelectMultiple(
             attrs={
-                "class": "chosen-select form-input",
-                "data-placeholder": "Tags (optionnel)",
+                "class": "form-select",
+                "data-placeholder": "Ajoute des tags",
             }
         ),
     )

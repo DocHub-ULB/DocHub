@@ -94,39 +94,12 @@ def leave_course(request: HttpRequest, slug: str):
 
 
 @login_required
-def show_courses(request):
+def my_courses(request):
     # "suggestions": suggest(request.user),
     return render(
         request,
         "catalog/my_courses.html",
     )
-
-
-@cache_page(60 * 60)
-@login_required
-def course_tree(request):
-    def course(node: Course):
-        return {
-            "name": node.name,
-            "id": node.id,
-            "slug": node.slug,
-        }
-
-    def category(node: Category):
-        return {
-            "name": node.name,
-            "id": node.id,
-            "children": list(map(category, node.get_children())),
-            "courses": list(map(course, node.course_set.all())),
-        }
-
-    categories = list(
-        map(
-            category,
-            get_cached_trees(Category.objects.prefetch_related("course_set").all()),
-        )
-    )
-    return HttpResponse(json.dumps(categories), content_type="application/json")
 
 
 @login_required
