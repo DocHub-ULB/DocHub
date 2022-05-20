@@ -34,15 +34,20 @@
             <a href="#" class="close">&times;</a>
         </div>
     {% endif %}
-
-    <h1 style="font-weight: normal;">Uploader <small style="font-size: 60%;font-weight:200;">{{ course.name }}</small>
-    </h1>
-
+    <a href="{% url "catalog:course_show" course %}" class="text-reset text-decoration-none d-flex align-items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left"
+                 viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            {{ course.slug|upper }} {{ course.name }}
+        </a>
     <form
             action="{% url 'document_put' course.slug %}"
             method="post" enctype="multipart/form-data"
-            id="document-upload" style="margin: 1em"
+            id="document-upload"
             data-controller="upload"
+            class="mt-2"
     >
         {% csrf_token %}
         {{ form.non_field_errors }}
@@ -85,6 +90,7 @@
                 <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z"/>
                 <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
             </svg>
+
         </p>
 
 
@@ -146,8 +152,13 @@
                 </div>
             </div>
 
-            <input type="submit" class="btn btn-success"
-                   value="Ajouter ce fichier à {{ course.slug|upper }}"/>
+            <button type="submit" class="btn btn-success d-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus"
+                     viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+                Ajouter ce fichier à {{ course.slug|upper }}
+            </button>
         </div>
 
 

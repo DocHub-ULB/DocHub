@@ -1,45 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Éditer {{doc.name}}{% endblock %}
+{% block title %}Éditer {{ doc.name }}{% endblock %}
+
+{% block head %}
+    <script type="module">
+        import tomSelect from 'https://cdn.skypack.dev/tom-select';
+
+        new tomSelect('#id_tags', {hidePlaceholder: true});
+    </script>
+    <link href="https://cdn.skypack.dev/tom-select/dist/css/tom-select.bootstrap5.min.css"
+          rel="stylesheet" crossorigin="anonymous">
+{% endblock %}
+
 {% block content %}
-<div class="row">
-  <div class="large-7 columns">
-      {% if READ_ONLY %}
-          <br>
-          <div data-alert class="alert-box warning radius">
-            DocHub est en maintenance, vous ne pouvez pas uploader de documents pour l'instant.
-            Cela devrait être résolu dans quelques heures, renvenez bientôt ! :)
-            <a href="#" class="close">&times;</a>
-          </div>
-      {% endif %}
-    <h1>Modifier un document</h1>
-    <h3>{{doc.name}}</h3>
-    <form action="{% url 'document_edit' doc.id %}" method="post"
-            enctype="multipart/form-data" class="dropzone">
+    <form action="{% url 'document_edit' doc.id %}" method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
 
-        {% with form.name as field %}
-            {% include "simple_input.html" %}
-        {% endwith %}
-        {% with form.tags as field %}
-            {% include "simple_input.html" %}
-        {% endwith %}
-        {% with form.description as field %}
-            {% include "simple_input.html" %}
-        {% endwith %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Titre du document</label>
+            {{ form.name }}
+            <div class="form-text">
+                Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="id_tags" class="form-label">Tags</label>
+            {{ form.tags }}
+            <div class="form-text">
+                Sélectionne si possible les tags qui correspondent à ton document.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="added" class="form-label">Ajouté par</label>
 
-        <p class="text-right"><input type="submit" class="button success radius {% if READ_ONLY %}disabled{% endif %}" value="Editer" /></p>
+            <input type="input" class="form-control" id="added" value="{{ doc.user}}" disabled>
+        </div>
+
+        <input type="submit" class="btn btn-success" value="Mettre à jour"/>
     </form>
-  </div>
-</div>
-
-{% endblock %}
-
-{% block script %}
-<script>
-  $(document).ready(function() { $(".chosen-select").select2(); });
-</script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
 {% endblock %}

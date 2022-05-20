@@ -17,7 +17,7 @@ class FileForm(forms.Form):
     name = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={"class": "form-input", "placeholder": "Titre (optionnel)"}
+            attrs={"class": "form-control", "placeholder": "Titre (optionnel)"}
         ),
     )
     description = forms.CharField(
