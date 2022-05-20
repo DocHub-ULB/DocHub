@@ -4,20 +4,20 @@
 {% block title %}Liste des cours{% endblock %}
 
 {% block content %}
-{% if user.following_courses|length > 0 %}
-<a href="{% url 'catalog:unfollow_all_courses' %}" class="button red hide-on-mobile" style="position: absolute;right: 2em;top: 3em;">
-    Me désabonner de tous les cours
-</a>
-{% endif %}
+    {% if user.following_courses|length > 0 %}
+        <a href="{% url 'catalog:unfollow_all_courses' %}" class="button red hide-on-mobile" style="position: absolute;right: 2em;top: 3em;">
+            Me désabonner de tous les cours
+        </a>
+    {% endif %}
 
-<div class="big-finder hide-on-mobile">
-    <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
-    </turbo-frame>
-    <turbo-frame id="programs" class="turbo-overflow">
-    </turbo-frame>
-    <turbo-frame id="blocs" class="turbo-overflow">
-    </turbo-frame>
-    <turbo-frame id="courses" class="turbo-overflow">
-    </turbo-frame>
-</div>
+    <div class="big-finder hide-on-mobile">
+        <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
+        </turbo-frame>
+        <turbo-frame id="programs" class="turbo-overflow">
+        </turbo-frame>
+        <turbo-frame id="blocs" class="turbo-overflow">
+        </turbo-frame>
+        <turbo-frame id="courses" class="turbo-overflow">
+        </turbo-frame>
+    </div>
 {% endblock %}

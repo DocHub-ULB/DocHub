@@ -2,24 +2,24 @@
 {% load login_url %}
 
 {% block content %}
-<div class="medium-8 small-12 columns small-centered">
-  {% block preview %}
-  {% endblock preview %}
-  <hr>
-  <p>
-    DocHub est un site de partage de documents et d’entraide étudiante à l’ULB.<br>
-    DocHub te permet de poser des questions aux autres étudiants, échanger tes notes, tes résumés, d'anciens examens et bien plus encore.
-  </p>
-  <p>
-    Dochub est réservé à la communauté étudiante de l'ULB,
-    il faut donc que tu te connectes
-    (pas besoin de créer un compte, il suffit d'employer ton compte ULB)
-  </p>
-  <p class="text-center">
-    <a href="{% login_url request.get_full_path %}" id="login_link" class="button success expand">
-        Connexion avec l'ULB
-    </a>
-  </p>
+    <div class="medium-8 small-12 columns small-centered">
+        {% block preview %}
+        {% endblock preview %}
+        <hr>
+        <p>
+            DocHub est un site de partage de documents et d’entraide étudiante à l’ULB.<br>
+            DocHub te permet de poser des questions aux autres étudiants, échanger tes notes, tes résumés, d'anciens examens et bien plus encore.
+        </p>
+        <p>
+            Dochub est réservé à la communauté étudiante de l'ULB,
+            il faut donc que tu te connectes
+            (pas besoin de créer un compte, il suffit d'employer ton compte ULB)
+        </p>
+        <p class="text-center">
+            <a href="{% login_url request.get_full_path %}" id="login_link" class="button success expand">
+                Connexion avec l'ULB
+            </a>
+        </p>
 
-</div>
+    </div>
 {% endblock content %}

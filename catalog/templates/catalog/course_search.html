@@ -4,11 +4,11 @@
 {% block title %}Liste des cours{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="large-8 columns">
-      <h1>Recherche</h1>
-      <div id="react-search"></div>
-      <!-- <form action="" method="post">
+    <div class="row">
+        <div class="large-8 columns">
+            <h1>Recherche</h1>
+            <div id="react-search"></div>
+            <!-- <form action="" method="post">
           {% csrf_token %}
           {{ form.non_field_errors }}
 
@@ -34,27 +34,27 @@
           </div>
 
       </form> -->
-  </div>
-  <div class="large-12 columns">
-      <ul class="no-list">
-      {% for course in results %}
-        <li>
-          <a href="{% url 'catalog:course_show' course.slug %}"
-             class="course-label success radius label search-blob" style="opacity: 0.8">
-            {{ course.slug }}
-          </a>
+        </div>
+        <div class="large-12 columns">
+            <ul class="no-list">
+                {% for course in results %}
+                    <li>
+                        <a href="{% url 'catalog:course_show' course.slug %}"
+                            class="course-label success radius label search-blob" style="opacity: 0.8">
+                            {{ course.slug }}
+                        </a>
 
-          <a href="{% url 'catalog:course_show' course.slug %}">{{ course.name }}</a>
-          {% if course.document__count %}
-            <small style="color: grey">({{course.document__count}} documents)</small>
-          {% endif %}
-          <!-- <br> -->
-      </li>
-      {% empty %}
-        On dirait qu'il n'y a aucune cours qui s'appelle comme ça...<br>
-        Essaie peut-être une autre orthographe ou une recherche plus générale ?
-      {% endfor %}
-      </ul>
-  </div>
-</div>
+                        <a href="{% url 'catalog:course_show' course.slug %}">{{ course.name }}</a>
+                        {% if course.document__count %}
+                            <small style="color: grey">({{course.document__count}} documents)</small>
+                        {% endif %}
+                        <!-- <br> -->
+                    </li>
+                {% empty %}
+                    On dirait qu'il n'y a aucune cours qui s'appelle comme ça...<br>
+                    Essaie peut-être une autre orthographe ou une recherche plus générale ?
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
