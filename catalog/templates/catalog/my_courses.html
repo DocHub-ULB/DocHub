@@ -9,15 +9,4 @@
             Me désabonner de tous les cours
         </a>
     {% endif %}
-
-    <div class="big-finder hide-on-mobile">
-        <turbo-frame id="facs" class="turbo-overflow" src="{% url "finder_turbo" "facs" "root" "false" %}">
-        </turbo-frame>
-        <turbo-frame id="programs" class="turbo-overflow">
-        </turbo-frame>
-        <turbo-frame id="blocs" class="turbo-overflow">
-        </turbo-frame>
-        <turbo-frame id="courses" class="turbo-overflow">
-        </turbo-frame>
-    </div>
 {% endblock %}

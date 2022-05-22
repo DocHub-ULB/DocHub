@@ -1,4 +1,5 @@
 import json
+from dataclasses import dataclass
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
@@ -7,10 +8,7 @@ from django.db.models import Count, Q
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
-
-from mptt.utils import get_cached_trees
 
 from catalog.models import Category, Course
 from catalog.slug import normalize_slug
@@ -29,12 +27,6 @@ def slug_redirect(view):
         return view(request, slug, *args, **kwargs)
 
     return wrapper
-
-
-class CategoryDetailView(LoginRequiredMixin, DetailView):
-    model = Category
-    template_name = "catalog/category.html"
-    context_object_name = "category"
 
 
 @slug_redirect
@@ -105,4 +97,41 @@ def my_courses(request):
 @login_required
 def unfollow_all_courses(request):
     request.user.courses_set.clear()
-    return redirect("catalog:show_courses")
+    return redirect("home")
+
+
+@dataclass
+class Column:
+    category: Category
+    children: list[Category]
+    depth: int
+    category_prefix: str
+
+
+def finder(request, slugs: str = ""):
+    slug_list = slugs.split("/")
+    categories = [get_object_or_404(Category, slug=x) for x in slug_list]
+
+    for i in range(len(categories) - 1, 0, -1):
+        if categories[i].parent != categories[i - 1]:
+            raise Http404(f"Invalid category path, {i}")
+
+    columns = []
+    max_depth = len(categories)
+    for i, category in enumerate(categories):
+        depth = max_depth - i
+        path_list = ["."] + [".."] * (depth - 1)
+        columns.append(
+            Column(
+                category,
+                category.get_children().order_by("name"),
+                depth,
+                "/".join(path_list),
+            )
+        )
+
+    return render(
+        request,
+        "catalog/finder.html",
+        {"columns": columns, "extra_columns": range(4 - len(columns))},
+    )

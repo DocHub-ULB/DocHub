@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Liste des cours{% endblock %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% for column in columns %}
+                <li class="breadcrumb-item"><a href="{{ column.category_prefix }}/">{{ column.category.name }}</a></li>
+            {% endfor %}
+        </ol>
+    </nav>
+    <div class="d-flex">
+        {% for column in columns %}
+            <div class="border m-1 flex-grow-1 flex-basis-0 w-100">
+                <h5>{{ column.category.name }}</h5>
+                <ul>
+                    {% for subcat in column.children %}
+                        <li><a href="{{ column.category_prefix }}/{{ subcat.slug }}">{{ subcat.better_name }}</a></li>
+                    {% endfor %}
+                    {% for course in column.category.course_set.all %}
+                        <li><a href="{% url "catalog:course_show" course.slug %}">{{ course }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        {% for column in extra_columns %}
+            <div class="border m-1 flex-grow-1 flex-basis-0 w-100">
+
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

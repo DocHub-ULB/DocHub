@@ -2,6 +2,7 @@ import _ from 'https://cdn.skypack.dev/lodash';
 
 import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
+import { Autocomplete } from 'https://cdn.skypack.dev/stimulus-autocomplete';
 
 function normalize(s) {
     let r = s.toLowerCase();
@@ -240,5 +241,6 @@ application.register("course-filter", CourseFilter);
 application.register("search", Search);
 application.register("viewer", Viewer);
 application.register("upload", Upload);
+application.register('autocomplete', Autocomplete);
 
 application.debug = true;
