@@ -1,6 +1,6 @@
-<div id="search-results" class="pr-2" style="overflow-x: scroll">
+<div class="pr-2" style="overflow-x: scroll">
     {% if simplified %}
-        <li class="dropdown-item text-danger">
+        <li class="disabled dropdown-item text-danger">
             Ce résultat de recherche est simplifié parce que PostgreSQL
             n'est pas disponible.
         </li>
@@ -21,6 +21,9 @@
             </a>
         </li>
     {% empty %}
-        Aucun résultat
+        <li class="disabled dropdown-item">
+            Aucun résultat
+        </li>
+
     {% endfor %}
 </div>

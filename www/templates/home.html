@@ -4,7 +4,7 @@
 
 {% block header %}
     <form class="d-flex align-items-center container-xl"
-        style="height: 20vh; background-image: url('https://d20ohkaloyme4g.cloudfront.net/institutions/7nlYVqLmek1eGlGu1CB9.jpg'); background-size: cover">
+        style="height: 20vh; background-image: url('{% static 'images/building-a.jpeg' %}'); background-size: cover">
 
         <div class="input-group mx-4" data-controller="autocomplete"
             data-autocomplete-url-value="/search/courses/"
@@ -28,14 +28,24 @@
     {% endif %} {% endcomment %}
 
 
-    <h1 class="fs-3 border-bottom d-flex align-items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-            class="bi bi-star-fill text-warning"
-            viewBox="0 0 16 16">
-            <path
-                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-        </svg>
-        <span>Cours favoris</span>
+    <h1 class="fs-3 border-bottom d-flex justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                class="bi bi-star-fill text-warning"
+                viewBox="0 0 16 16">
+                <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+            </svg>
+            <span>Cours favoris</span>
+        </div>
+        <a href="" class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary mb-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
+                viewBox="0 0 16 16">
+                <path
+                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            <span>Ajouter d'autres cours</span>
+        </a>
     </h1>
     {% if following_course %}
         {% for course in following_course %}
@@ -55,14 +65,7 @@
                 </div>
             </a>
         {% endfor %}
-        <a href="" class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
-                viewBox="0 0 16 16">
-                <path
-                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>
-            <span>Ajouter d'autres cours</span>
-        </a>
+
     {% else %}
         <span style="font-family: Roboto;font-style: normal;font-weight: bold;"> Vous pouvez parcourir les differents cours <a
             href="{% url 'catalog:finder' %}">ici</a></span>
