@@ -1,7 +1,16 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
+
+
+class ProgramType(models.TextChoices):
+    BACHELOR = "BA", _("Bachelier")
+    MASTER = "MA", _("Master")
+    CERTIFICATE = "CERT", _("Certificat")
+    AGGREGATION = "AGG", _("Agrégation")
+    OTHER = "OTHE", _("Autre")
 
 
 class Category(MPTTModel):
@@ -15,6 +24,12 @@ class Category(MPTTModel):
         related_name="children",
         db_index=True,
         on_delete=models.CASCADE,
+    )
+
+    type = models.CharField(
+        max_length=4,
+        choices=ProgramType.choices,
+        default=ProgramType.OTHER,
     )
 
     class MPTTMeta:
@@ -44,6 +59,7 @@ class Category(MPTTModel):
         name = (
             name.removeprefix("Master en ")
             .removeprefix("Master : ")
+            .removeprefix("Master de spécialisation en ")
             .removeprefix("Master de ")
         )
         if "orientation" in name:
@@ -61,11 +77,23 @@ class Category(MPTTModel):
         return name
 
 
+class PeriodType(models.TextChoices):
+    FIRST = "Q1", _("1er quadri")
+    SECOND = "Q2", _("2ème quadri")
+    BOTH = "Y", _("Toute l'année")
+    UNKNOWN = "?", _("Inconnu")
+
+
 class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, through="CourseCategory")
     description = models.TextField(default="")
+    period = models.CharField(
+        max_length=4,
+        choices=PeriodType.choices,
+        default=PeriodType.UNKNOWN,
+    )
 
     followed_by = models.ManyToManyField("users.User", related_name="courses_set")
 
@@ -88,3 +116,12 @@ class Course(models.Model):
     @property
     def followers_count(self) -> int:
         return self.followed_by.count()
+
+
+class CourseCategory(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    mandatory = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ("course", "category")

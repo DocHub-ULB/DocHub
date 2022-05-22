@@ -23,7 +23,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--n",
-            help="Number of documents to generate per course",
+            help="Max number of documents to generate per course",
             type=int,
             default=5,
         )
@@ -53,7 +53,7 @@ class Command(BaseCommand):
             courses = courses.filter(slug=slug)
 
         for course in courses:
-            for _ in range(n):
+            for _ in range(random.randint(0, n)):
                 doc = Document.objects.create(
                     name=" ".join(generate()),
                     course=course,
