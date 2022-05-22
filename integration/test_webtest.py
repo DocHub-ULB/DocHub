@@ -52,7 +52,7 @@ def test_name_in_page(app, user):
     )
 
     index = app.get("/", user=user.netid)
-    assert user.first_name in index
+    assert user.initials() in index
 
 
 @pytest.mark.skip(reason="HTML changed too much in recent version")
