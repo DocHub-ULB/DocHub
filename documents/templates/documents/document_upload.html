@@ -1,71 +1,168 @@
 {% extends "base.html" %}
-{% block title %}Uploader{% endblock %}
+{% block title %}Ajouter un document à {{ course.slug|upper }}{% endblock %}
+
+{% block head %}
+    <script type="module">
+        import tomSelect from 'https://cdn.skypack.dev/tom-select';
+
+        new tomSelect('#id_tags', {hidePlaceholder: true});
+    </script>
+    <link href="https://cdn.skypack.dev/tom-select/dist/css/tom-select.bootstrap5.min.css"
+        rel="stylesheet" crossorigin="anonymous">
+
+    <style>
+        input[type=file]::file-selector-button {
+            display: none;
+        }
+
+        div[data-upload-target=inputwrapper][active] {
+            background: white !important;
+        }
+
+        .upload--hide {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-<div class="content">
-    <div style="grid-column-start: 2;margin-top:1em">
-        {% if READ_ONLY %}
+    {% if READ_ONLY %}
         <br>
         <div data-alert class="alert-box warning radius">
             DocHub est en maintenance, vous ne pouvez pas uploader de documents pour l'instant.
             Cela devrait être résolu dans quelques heures, renvenez bientôt ! :)
             <a href="#" class="close">&times;</a>
         </div>
-        {% endif %}
+    {% endif %}
+    <a href="{% url "catalog:course_show" course %}" class="text-reset text-decoration-none d-flex align-items-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        {{ course.slug|upper }} {{ course.name }}
+    </a>
+    <form
+        action="{% url 'document_put' course.slug %}"
+        method="post" enctype="multipart/form-data"
+        id="document-upload"
+        data-controller="upload"
+        class="mt-2"
+    >
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <p>Tu peux ajouter à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png,
+            doc(x), ppt(x), odt, et bien plus encore.
+        </p>
+        <p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green"
+                class="bi bi-check-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-file-earmark-word" viewBox="0 0 16 16">
+                <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-file-earmark-richtext" viewBox="0 0 16 16">
+                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                <path d="M4.5 12.5A.5.5 0 0 1 5 12h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 10h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm1.639-3.708 1.33.886 1.854-1.855a.25.25 0 0 1 .289-.047l1.888.974V8.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V8s1.54-1.274 1.639-1.208zM6.25 6a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-file-earmark-slides" viewBox="0 0 16 16">
+                <path d="M5 6a.5.5 0 0 0-.496.438l-.5 4A.5.5 0 0 0 4.5 11h3v2.016c-.863.055-1.5.251-1.5.484 0 .276.895.5 2 .5s2-.224 2-.5c0-.233-.637-.429-1.5-.484V11h3a.5.5 0 0 0 .496-.562l-.5-4A.5.5 0 0 0 11 6H5zm2 3.78V7.22c0-.096.106-.156.19-.106l2.13 1.279a.125.125 0 0 1 0 .214l-2.13 1.28A.125.125 0 0 1 7 9.778z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+                <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
+                <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z"/>
+                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+            </svg>
 
-        <h1 style="font-weight: normal;">Uploader <small style="font-size: 60%;font-weight:200;">{{course.name}}</small></h1>
-        {% comment %} <div class="delimiter" style="width: 100%"></div> {% endcomment %}
+        </p>
 
-        <form action="{% url 'document_put' course.slug %}" method="post" enctype="multipart/form-data" id="document-upload" style="margin: 1em">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <p>Vous pouvez uploader à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png,
-                doc(x), ppt(x), odt, et bien plus encore.<br>
-                Complétez une brève description du document afin d'aider tout le monde à trouver les informations plus
-                efficacement. Vous pourrez encore les éditer plus tard s'il le faut.</p>
 
-            {% with form.file as field %}
+        {% with form.file as field %}
             {% if field.errors %}
-            <small class="error">
-                {% for error in field.errors %}
-                {{error}}<br />
-                {% endfor %}
-            </small>
+                <small class="error">
+                    {% for error in field.errors %}
+                        {{ error }}<br/>
+                    {% endfor %}
+                </small>
             {% endif %}
-                {{field}}
-            {% endwith %}
+            <div
+                data-action="dragenter->upload#enter dragleave->upload#leave"
+                    class="d-flex mb-2 rounded border d-block bg-light position-relative"
+                    data-upload-target="inputwrapper"
+                    >
+                    <input
+                        type="file" name="file" required id="id_file"
+                        data-upload-target="input"
+                        data-action="change->upload#input"
+                        style="min-height: 150px; opacity: 0; z-index: 100; width: 100%;"
 
-            <div style="display:grid;grid-template-rows: max-content;">
-                {% with form.name as field %}
-                {% include "simple_input.html" %}
-                {% endwith %}
-                {% with form.tags as field %}
-                {% include "simple_input.html" %}
-                {% endwith %}
-                {% with form.description as field %}
-                {% include "simple_input.html" %}
-                {% endwith %}
+                        />
+                        <div class="position-absolute top-0 start-0 d-flex flex-column align-items-center justify-content-center text-muted p-2"
+                            style="width: 100%; height: 100%;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                                class="bi bi-cloud-arrow-up" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
+                                <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                            </svg>
+                            <span class="text-center">Drag & drop ou clic pour ajouter un fichier</span>
+                            <div>
+                                <span data-upload-target="originalname"></span>
+                                <span data-upload-target="size"></span>
+                            </div>
+                        </div>
+                    </div>
+
+        {% endwith %}
+
+        <div class="upload--hide"
+            data-upload-target="form"
+        >
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Titre du document</label>
+                <input type="text" id="name" name="name" class="form-control" data-upload-target="name">
+                <div class="form-text">
+                    Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
+
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="id_tags" class="form-label">Tags</label>
+                {{ form.tags }}
+                <div class="form-text">
+                    Sélectionne si possible les tags qui correspondent à ton document.
+                </div>
             </div>
 
-            <p style="text-align:right">
-                <br>
-                <input type="submit" class="button green {% if READ_ONLY %}disabled{% endif %}"
-                    value="Upload" />
-            </p>
-        </form>
+            <button type="submit" class="btn btn-success d-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus"
+                    viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+                Ajouter ce fichier à {{ course.slug|upper }}
+            </button>
+        </div>
 
 
-    </div>
-</div>
-{% endblock %}
+    </form>
 
-{% block script %}
-<script>
-    $(document).ready(function () {
-        $(".chosen-select").select2({
-            'placeholder': "Tags"
-        });
-    });
-</script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
 {% endblock %}

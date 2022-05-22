@@ -2,25 +2,25 @@
 {% load humanize %}
 
 {% block title %}
-Erreur lors de la connexion
+    Erreur lors de la connexion
 {% endblock %}
 
 {% block heading %}
-Nous n'avons pas pu t'authentifier
+    Nous n'avons pas pu t'authentifier
 {% endblock %}
 
 {% block expl %}
-Une erreur est apparue pendant ta connexion via l'ULB.
+    Une erreur est apparue pendant ta connexion via l'ULB.
 {% endblock %}
 
 {% block errcode %}
-CAS_NO_TICKET
+    CAS_NO_TICKET
 {% endblock %}
 
 {% block debug %}
-{% for k,v in args.items %}
-{{k}}: {{v}}
-{% empty %}
-EMPTY_GET_PARAMETERS
-{% endfor %}
+    {% for k,v in args.items %}
+        {{k}}: {{v}}
+    {% empty %}
+        EMPTY_GET_PARAMETERS
+    {% endfor %}
 {% endblock %}

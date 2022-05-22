@@ -17,7 +17,7 @@ class FileForm(forms.Form):
     name = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={"class": "form-input", "placeholder": "Titre (optionnel)"}
+            attrs={"class": "form-control", "placeholder": "Titre (optionnel)"}
         ),
     )
     description = forms.CharField(
@@ -32,8 +32,8 @@ class FileForm(forms.Form):
         queryset=Tag.objects.all(),
         widget=forms.SelectMultiple(
             attrs={
-                "class": "chosen-select form-input",
-                "data-placeholder": "Tags (optionnel)",
+                "class": "form-select",
+                "data-placeholder": "Ajoute des tags",
             }
         ),
     )

@@ -1,13 +1,13 @@
 <div style="width:100%">
-  <label {% if field.errors %} class="error" {% endif %}>
-    {{ field }}
-  </label>
-  {% if field.errors %}
-    <small class="error">
-      {% for error in field.errors %}
-        {{error}}<br />
-      {% endfor %}
-    </small>
-  {% endif %}
+    <label {% if field.errors %} class="error" {% endif %}>
+        {{ field }}
+    </label>
+    {% if field.errors %}
+        <small class="error">
+            {% for error in field.errors %}
+                {{error}}<br />
+            {% endfor %}
+        </small>
+    {% endif %}
 
 </div>
