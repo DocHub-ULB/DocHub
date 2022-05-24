@@ -9,7 +9,7 @@ def validate_uploaded_file(file):
     name = file.name
     if name.endswith(settings.REJECTED_FILE_FORMATS):
         raise ValidationError(
-            "Les fichiers compressés ne sont pas supportés pour le moment."
+            "Les documents compressés ne sont pas supportés pour le moment."
         )
 
 
