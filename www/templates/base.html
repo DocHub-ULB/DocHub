@@ -11,6 +11,18 @@
             rel="stylesheet" crossorigin="anonymous"
             integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor">
         <script type="module" src="{% static "main.js" %}" defer></script>
+        <style>
+            a .hover-underline {
+                text-decoration: underline;
+                text-decoration-color: transparent;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
+            }
+
+            a:hover .hover-underline {
+                text-decoration-color: black;
+            }
+        </style>
         {% block head %}{% endblock %}
     </head>
 
