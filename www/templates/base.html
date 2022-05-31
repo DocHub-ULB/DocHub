@@ -22,6 +22,35 @@
             a:hover .hover-underline {
                 text-decoration-color: black;
             }
+
+            .hover-scale {
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
+            }
+
+            .hover-scale:hover {
+                transform: scale(1.3);
+            }
+
+            .hover-scale-sm {
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
+            }
+
+            .hover-scale-sm:hover {
+                transform: scale(1.05);
+            }
+
+            a .hover-rotate {
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
+            }
+
+            a:hover .hover-rotate {
+                transform: rotate(-15deg);
+            }
+
+
         </style>
         {% block head %}{% endblock %}
     </head>
