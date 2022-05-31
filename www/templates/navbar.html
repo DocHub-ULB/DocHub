@@ -23,7 +23,7 @@
                 {% if request.user.is_staff %}
                     <li><a class="dropdown-item" href="/admin" data-turbo="false">Admin</a></li>
                 {% endif %}
-                <li><a class="dropdown-item" href="{% url "catalog:finder" %}">Tous les cours</a></li>
+                <li><a class="dropdown-item" href="{% url "catalog:finder_root" %}">Tous les cours</a></li>
                 <li><a class="dropdown-item" href="{% url "logout" %}">Déconnexion</a></li>
             </ul>
         </div>

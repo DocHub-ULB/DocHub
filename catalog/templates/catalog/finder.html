@@ -4,29 +4,91 @@
 {% block title %}Liste des cours{% endblock %}
 
 {% block content %}
-    <nav aria-label="breadcrumb">
+    {% comment %}
+    <nav aria-label="breadcrumb" class="d-none d-md-block">
         <ol class="breadcrumb">
             {% for column in columns %}
                 <li class="breadcrumb-item"><a href="{{ column.category_prefix }}/">{{ column.category.name }}</a></li>
             {% endfor %}
         </ol>
     </nav>
-    <div class="d-flex">
+    {% endcomment %}
+    <div class="d-flex gap-2">
         {% for column in columns %}
-            <div class="border m-1 flex-grow-1 flex-basis-0 w-100">
-                <h5>{{ column.category.name }}</h5>
-                <ul>
-                    {% for subcat in column.children %}
-                        <li><a href="{{ column.category_prefix }}/{{ subcat.slug }}">{{ subcat.better_name }}</a></li>
+            <div
+                class="border p-2 rounded flex-grow-1 flex-basis-0 w-100 {% if not forloop.last %}d-none d-md-block{% endif %}">
+                <h5>
+                    {% if forloop.last and not forloop.first %}
+                        <div class="d-inline-flex d-md-none">
+                            <a href="../">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {{ column.category.name }}
+                </h5>
+                <ul class="p-0" style="list-style: none;">
+                    {% regroup column.children by get_type_display as children_groups %}
+                    {% for type in children_groups %}
+                        <li>
+                            <div class="d-flex align-items-center gap-1 fs-5 border-bottom">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="currentColor" class="bi bi-mortarboard" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5ZM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46Z"/>
+                                    <path
+                                        d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46l-3.892-1.556Z"/>
+                                </svg>
+                                <div>{{ type.grouper }}{{ type.list|pluralize }}</div>
+                            </div>
+                        </li>
+                        {% for subcat in type.list %}
+                            <li>
+                                <a href="{{ column.category_prefix }}/{{ subcat.slug }}"
+                                    class="text-body text-decoration-none">
+                                    <div class="d-flex align-items-center my-1 ">
+                                        <div class="flex-shrink-0 px-2 py-1">
+
+                                        </div>
+                                        <div class="flex-grow-1 hover-underline">
+                                            {{ subcat.better_name|capfirst }}
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
                     {% endfor %}
                     {% for course in column.category.course_set.all %}
-                        <li><a href="{% url "catalog:course_show" course.slug %}">{{ course }}</a></li>
+                        <li>
+                            <a href="{% url "catalog:course_show" course.slug %}"
+                                class="text-body text-decoration-none">
+                                <div class="d-flex align-items-center my-1 border-bottom">
+                                    <div class="flex-shrink-0 px-2 py-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor"
+                                            class="bi bi-folder" viewBox="0 0 16 16">
+                                            <path
+                                                d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <span class="hover-underline">{{ course.name }}</span>
+                                        <small class="text-muted text-nowrap">{{ course.slug|upper }}</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
         {% endfor %}
         {% for column in extra_columns %}
-            <div class="border m-1 flex-grow-1 flex-basis-0 w-100">
+            <div class="border flex-grow-1 flex-basis-0 w-100 d-none d-md-block">
 
             </div>
         {% endfor %}
