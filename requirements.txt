@@ -315,7 +315,7 @@ vine==5.0.0
     #   kombu
 virtualenv==20.14.1
     # via pre-commit
-waitress==2.1.1
+waitress==2.1.2
     # via webtest
 wcwidth==0.2.5
     # via prompt-toolkit
