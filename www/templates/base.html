@@ -50,12 +50,21 @@
                 transform: rotate(-15deg);
             }
 
+            a .hover-spin {
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
+            }
+
+            a:hover .hover-spin {
+                transform: rotate(360deg);
+            }
+
 
         </style>
         {% block head %}{% endblock %}
     </head>
 
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         {% block navbar %}
             {% include "navbar.html" %}
         {% endblock %}
@@ -63,22 +72,19 @@
         {% block fullpage %}
             {% block header %}
             {% endblock %}
-            <main class="container-xl mt-4">
+            <main class="container-xl mt-4 flex-grow-1">
                 {% block content %}
                 {% endblock %}
             </main>
 
             <footer class="mt-3 p-2 text-center container-xl footer bg-light bg-gradient border-top">
-                Made with love at
+                Fait avec amour par des étudiants de l'ULB -
                 <a href="https://urlab.be">
                     <img src="{% static "images/urlab.png" %}" style="height: 1em;">
                     UrLab
                 </a>
                 <a href="https://cercle-informatique.be/"><img style="height: 1.0em;" src="{% static "images/ci.png" %}"></a>
-                <br/>
-                Code on <a href="https://github.com/UrLab/dochub">GitHub</a>
-                -
-                <a href="/api" data-turbo="false">API</a>
+                Code open-source sur <a href="https://github.com/UrLab/dochub">GitHub</a>
             </footer>
         {% endblock %}
     </body>
