@@ -5,23 +5,12 @@ from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
-from rest_framework.authtoken.models import Token
-
 from users.authBackend import (
     CasParseError,
     CasRejectError,
     CasRequestError,
     UlbCasBackend,
 )
-
-
-@login_required
-def reset_token(request):
-    Token.objects.filter(user=request.user).delete()
-    Token.objects.create(user=request.user)
-    messages.success(request, "La clé d'API a été regénérée")
-
-    return HttpResponseRedirect(reverse("settings"))
 
 
 @login_required

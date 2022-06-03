@@ -1,16 +1,8 @@
-import collections
-import itertools
-import os
 import re
-from os.path import join
 
-from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
-
-from rest_framework.authtoken.models import Token
 
 from catalog.models import Category, Course
 
@@ -75,33 +67,6 @@ class User(AbstractBaseUser):
     @property
     def name(self):
         return "{0.first_name} {0.last_name}".format(self)
-
-    @property
-    def api_token(self):
-        token, _created = Token.objects.get_or_create(user=self)
-
-        return token
-
-    # TODO: is this dead code ?
-    # def getPrograms(self):
-    #     """Returns a QS of the programs in which a course is followed by the user"""
-    #     blocs = Category.objects.filter(course__in=self.following_courses).select_related('parent')
-    #     programs = [bloc.parent.slug for bloc in blocs.all()]
-    #     return Category.objects.filter(level=2, slug__in=programs).annotate(
-    #         slug_=models.functions.Cast(
-    #             models.functions.Concat(
-    #                 models.Value("mycourses-"), 'slug'
-    #             ), output_field=models.SlugField()
-    #         ),
-    #     )
-
-    # TODO: is this dead code ?
-    # def getBlocs(self, program_slug):
-    #     """Returns a QS of blocs that contain a course the user follows"""
-    #     return set(Category.objects.filter(
-    #         level=3, parent__slug=program_slug,
-    #         course__in=self.following_courses
-    #     ))
 
     @property
     def following_courses(self):

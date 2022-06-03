@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.db.models import Sum
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import FileResponse, Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
+from django.views.decorators.cache import cache_control
+from django.views.decorators.http import require_GET
 from django.views.generic import TemplateView
 
 from catalog.forms import SearchForm
-from catalog.models import Category, Course
+from catalog.models import Category, Course, CourseUserView
 from documents.models import Document
 from users.models import User
 from www.utils import buildOrderedProgramList
@@ -20,10 +22,12 @@ def index(request):
         docs = Document.objects.filter(course__in=following).order_by("-created")[
             :ndocs
         ]
+        recent_views = CourseUserView.objects.order_by("-last_view")[:5]
+        recent_courses = [x.course for x in recent_views]
         context = {
             "search": SearchForm(),
             "recent_docs": docs,
-            "faculties": Category.objects.get(level=0).children.all(),
+            "recent_courses": recent_courses,
             "following_course": following_course,
         }
         return render(request, "home.html", context)
@@ -45,3 +49,10 @@ def index(request):
             "users": floor(User.objects.count()),
         }
         return render(request, "index.html", context)
+
+
+@require_GET
+@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
+def favicon(request):
+    file = (settings.BASE_DIR / "static" / "root" / "favicon.ico").open("rb")
+    return FileResponse(file)

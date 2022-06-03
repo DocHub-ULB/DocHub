@@ -2,8 +2,8 @@
 {% load has_perm_on %}
 
 {% block title %}{{ document.name }}{% endblock %}
+{% block header %}
 
-{% block fullpage %}
 
     <div class="container-xl py-3 border-bottom bg-light">
         <a href="{% url "catalog:course_show" document.course %}"
@@ -61,6 +61,8 @@
         </div>
 
     </div>
+{% endblock %}
+{% block content %}
     {% if document.state == "DONE" %}
         <div class="container-xl" data-controller="viewer"
             data-viewer-src-value="{% url 'api:document-pdf' document.pk %}?embed">
@@ -79,21 +81,18 @@
 
         </div>
     {% elif document.state == "ERROR" %}
-        <div class="container-md mt-2 px-4">
-            <p>
-                Ce document n'a pas pu être traité par DocHub à cause d'une erreur.
-                Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
-                    la version originale </a> si tu le désires.
-            </p>
+        <div class="alert alert-primary" role="alert">
+            Ce document n'a pas pu être traité par DocHub à cause d'une erreur.
+            Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
+                la version originale </a> si tu le désires.
         </div>
     {% else %}
-        <div class="container-md mt-2 px-4">
-            <p>
-                Ce document est en cours de traitement par DocHub et il n'est donc pas encore
-                possible d'en avoir un aperçu.
-                Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
-                    la version originale</a> si tu le désires.
-            </p>
+        <div class="alert alert-primary" role="alert">
+            Ce document est en cours de traitement par DocHub et il n'est donc pas encore
+            possible d'en avoir un aperçu.
+            Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
+                la version originale</a> si tu le désires.
+
         </div>
 
     {% endif %}
