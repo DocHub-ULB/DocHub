@@ -21,7 +21,6 @@ urlpatterns = [
     path("documents/", include("documents.urls")),
     path("users/", include("users.urls")),
     path("admin/", admin.site.urls),
-    path("api/", include("www.rest_urls", namespace="api")),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
     path("login", users.views.login_view, name="login"),
     path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),
@@ -44,6 +43,9 @@ if settings.DEBUG:
     from django.conf.urls.static import static
 
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        path("favicon.ico", www.views.favicon),
+    ]
 
     import debug_toolbar
 
