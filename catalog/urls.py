@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import RedirectView
 
 import catalog.views
 
@@ -11,6 +12,7 @@ urlpatterns = [
         catalog.views.unfollow_all_courses,
         name="unfollow_all_courses",
     ),
-    path("finder/", catalog.views.finder, name="finder"),
-    path("finder/<path:slugs>/", catalog.views.finder, name="finder"),
+    path("", catalog.views.finder_root, name="finder_root"),
+    path("f/", RedirectView.as_view(pattern_name="catalog:finder_root")),
+    path("f/<path:slugs>/", catalog.views.finder, name="finder"),
 ]

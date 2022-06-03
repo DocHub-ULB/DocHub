@@ -21,6 +21,5 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "parent", "level")
-    search_fields = ("slug", "parent__name", "parent__slug")
-    list_filter = ("level",)
+    list_display = ("name",)
+    search_fields = ("slug", "name")

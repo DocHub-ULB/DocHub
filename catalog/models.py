@@ -1,39 +1,40 @@
+from datetime import timedelta
+
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 
 
-class ProgramType(models.TextChoices):
-    BACHELOR = "BA", _("Bachelier")
-    MASTER = "MA", _("Master")
-    CERTIFICATE = "CERT", _("Certificat")
-    AGGREGATION = "AGG", _("Agrégation")
-    OTHER = "OTHE", _("Autre")
-
-
-class Category(MPTTModel):
+class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(max_length=255, db_index=True)
+    slug = models.SlugField(max_length=255, db_index=True, unique=True)
     description = models.TextField(blank=True, default="")
-    parent = TreeForeignKey(
+    parents = models.ManyToManyField(
         "self",
-        null=True,
         blank=True,
+        symmetrical=False,
         related_name="children",
-        db_index=True,
-        on_delete=models.CASCADE,
     )
+
+    class CategoryType(models.TextChoices):
+        BACHELOR = "BA", _("Bachelier")
+        MASTER = "MA", _("Master")
+        MASTER_SPECIALIZATION = "MS", _("Master de spécialisation")
+        CERTIFICATE = "CERT", _("Certificat")
+        AGGREGATION = "AGG", _("Agrégation")
+        UNIVERSITY = "UNI", _("Université")
+        FACULTY = "FAC", _("Faculté")
+        BLOC = "BLOC", _("Bloc")
 
     type = models.CharField(
         max_length=4,
-        choices=ProgramType.choices,
-        default=ProgramType.OTHER,
+        choices=CategoryType.choices,
+        default=None,
+        null=True,
     )
-
-    class MPTTMeta:
-        order_insertion_by = ["name"]
 
     class Meta:
         verbose_name_plural = "categories"
@@ -50,10 +51,10 @@ class Category(MPTTModel):
             .removeprefix("Faculté des ")
         )
         name = name.replace(
-            "Agrégation de l'enseignement secondaire supérieur", "Agrégation"
+            "Agrégation de l'enseignement secondaire supérieur - ", ""
         ).replace(
-            "Certificat d'aptitude pédagogique approprié à l'enseignement supérieur",
-            "Certificat",
+            "Certificat d'aptitude pédagogique approprié à l'enseignement supérieur - ",
+            "",
         )
         name = name.removeprefix("Bachelier en ").removeprefix("Bachelier : ")
         name = (
@@ -74,6 +75,8 @@ class Category(MPTTModel):
         for k, v in rr.items():
             if k in name:
                 name = v
+
+        name = name.replace(" ,", ",").replace("( ", "(")
         return name
 
 
@@ -125,3 +128,23 @@ class CourseCategory(models.Model):
 
     class Meta:
         unique_together = ("course", "category")
+
+
+class CourseUserView(models.Model):
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    views = models.IntegerField(default=1)
+    last_view = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "course")
+
+    @classmethod
+    def visit(cls, user, course: Course):
+        obj, created = cls.objects.get_or_create(user=user, course=course)
+        if not created and (timezone.now() - obj.last_view) > timedelta(minutes=5):
+            # Do not use F("views") + 1 here as we DO want a race condition to happen.
+            # Indeed, if the user loads 2 pages at the same instant, we want to count only
+            # one of them (as we count a new page view every 5 min only)
+            obj.views = obj.views + 1
+            obj.save()

@@ -4,13 +4,13 @@ from functools import wraps
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Q
+from django.db.models import Case, Count, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic.detail import DetailView
 
-from catalog.models import Category, Course
+from catalog.models import Category, Course, CourseUserView
 from catalog.slug import normalize_slug
 from documents.models import Vote
 
@@ -53,6 +53,7 @@ def show_course(request, slug: str):
 
     if request.user.is_authenticated:
         template = "catalog/course.html"
+        CourseUserView.visit(request.user, course)
     else:
         template = "catalog/noauth/course.html"
 
@@ -113,7 +114,9 @@ def finder(request, slugs: str = ""):
     categories = [get_object_or_404(Category, slug=x) for x in slug_list]
 
     for i in range(len(categories) - 1, 0, -1):
-        if categories[i].parent != categories[i - 1]:
+        parents = categories[i].parents.all()
+
+        if categories[i - 1] not in parents:
             raise Http404(f"Invalid category path, {i}")
 
     columns = []
@@ -124,7 +127,20 @@ def finder(request, slugs: str = ""):
         columns.append(
             Column(
                 category,
-                category.get_children().order_by("name"),
+                list(
+                    category.children.order_by(
+                        Case(
+                            When(type=Category.CategoryType.BACHELOR, then=Value(0)),
+                            When(type=Category.CategoryType.MASTER, then=Value(1)),
+                            When(
+                                type=Category.CategoryType.MASTER_SPECIALIZATION,
+                                then=Value(2),
+                            ),
+                            default=Value(3),
+                        ),
+                        "name",
+                    ).all()
+                ),
                 depth,
                 "/".join(path_list),
             )
@@ -135,3 +151,8 @@ def finder(request, slugs: str = ""):
         "catalog/finder.html",
         {"columns": columns, "extra_columns": range(4 - len(columns))},
     )
+
+
+def finder_root(request):
+    ulb = get_object_or_404(Category, slug="ULB")
+    return redirect(reverse("catalog:finder", args=[ulb.slug]))
