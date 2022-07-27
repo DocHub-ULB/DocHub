@@ -416,7 +416,7 @@ progress::-webkit-progress-value {
     padding-left: 1em;
     padding-right: 1em;
     border-right: 1px solid rgba(0, 0, 0, 0.25);
-    height: calc(100vh - 58px);
+    /* height: calc(100vh - 58px); */
     background: radial-gradient(circle, rgba(2,0,36,0.05) 0%, rgba(9,9,121,0.05) 35%, rgba(0,212,255,0.05) 100%);
 }
 
@@ -765,13 +765,15 @@ progress::-webkit-progress-value {
     .deck {
         margin-left: 0;
         row-gap: 0.5em;
-        overflow-y: visible;
-        height: 100%;
+        max-height: 60vh;
+        overflow-y: scroll;
     }
 
     .page-title {
         margin-left: 0;
         text-align: center;
+        font-size: 1.5em;
+        line-height: normal;
     }
 
     .dropdown-content {
