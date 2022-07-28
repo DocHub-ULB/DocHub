@@ -1,3 +1,5 @@
+from typing import Optional
+
 import contextlib
 import hashlib
 import os
@@ -162,12 +164,14 @@ def convert_office_to_pdf(self, document_id: int) -> int:
 def mesure_pdf_length(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
+    num_pages: int | None
     try:
         reader = PdfFileReader(document.pdf)
         num_pages = reader.getNumPages()
     except:
         num_pages = mutool_get_pages(document)
-    document.pages = num_pages
+    if num_pages is not None:
+        document.pages = num_pages
     document.save()
 
     return document_id
