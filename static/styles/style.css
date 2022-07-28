@@ -725,6 +725,23 @@ progress::-webkit-progress-value {
     transform: translateY(-50%);
 }
 
+.logo-home {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 6em;
+}
+
+.followed-course-grid {
+    height: 100%;
+    display: grid;
+    grid-template-columns:1fr 1fr 1fr;
+    grid-gap: 0.75em;
+    font-family: Roboto;
+    font-style: normal;
+    overflow-y: scroll;
+}
+
 /* Mobile view */
 
 .visible-on-mobile {
@@ -831,6 +848,7 @@ progress::-webkit-progress-value {
 
     .home-search-container {
         width: 85vw;
+        margin-top: 10vh;
     }
 
     .hide-on-mobile {
@@ -841,5 +859,17 @@ progress::-webkit-progress-value {
     .visible-on-mobile {
         display: block;
         visibility: visible;
+    }
+
+    .finder {
+        border: none;
+    }
+
+    .logo-home {
+        font-size: 3.5em;
+    }
+
+    .followed-course-grid {
+        grid-template-columns: 1fr 1fr;
     }
 }
