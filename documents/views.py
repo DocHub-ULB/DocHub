@@ -7,6 +7,7 @@ from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from catalog.models import Course
 from catalog.views import slug_redirect
@@ -73,38 +74,6 @@ def upload_file(request, slug):
             "course": course,
         },
     )
-
-
-@login_required
-@slug_redirect
-def upload_multiple_files(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-
-    if request.method == "POST":
-        if settings.READ_ONLY:
-            return HttpResponse("Upload is disabled for a few hours", status=401)
-
-        form = MultipleUploadFileForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            for attachment in form.cleaned_data["files"]:
-                name, extension = os.path.splitext(attachment.name)
-                name = logic.clean_filename(name)
-
-                document = logic.add_file_to_course(
-                    file=attachment,
-                    name=name,
-                    extension=extension,
-                    course=course,
-                    tags=[],
-                    user=request.user,
-                )
-                document.add_to_queue()
-
-            return HttpResponseRedirect(
-                reverse("catalog:course_show", args=[course.slug])
-            )
-    return HttpResponseRedirect(reverse("document_put", args=(course.slug,)))
 
 
 @login_required
@@ -232,3 +201,41 @@ def document_vote(request, pk):
     vote.save()
 
     return render(request, "catalog/like-dislike.html", context={"document": document})
+
+
+@login_required
+def document_original_file(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+
+    body = document.original.read()
+
+    response = HttpResponse(body, content_type="application/octet-stream")
+    response["Content-Description"] = "File Transfer"
+    response["Content-Transfer-Encoding"] = "binary"
+    response[
+        "Content-Disposition"
+    ] = f'attachment; filename="{document.safe_name}{document.file_type}"'.encode(
+        "ascii", "ignore"
+    )
+
+    document.downloads = F("downloads") + 1
+    document.save(update_fields=["downloads"])
+    return response
+
+
+@xframe_options_sameorigin
+@login_required
+def document_pdf_file(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+    body = document.pdf.read()
+
+    response = HttpResponse(body, content_type="application/pdf")
+    content_disposition = 'filename="%s.pdf"' % document.safe_name
+    if "embed" not in request.GET:
+        content_disposition = "attachment; " + content_disposition
+
+    response["Content-Disposition"] = content_disposition.encode("ascii", "ignore")
+
+    document.downloads = F("views") + 1
+    document.save(update_fields=["views"])
+    return response

@@ -25,7 +25,7 @@
         <div class="mt-2 d-flex gap-2">
             {% if document.state == "DONE" %}
                 <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1" data-turbo="false"
-                    href="{% url 'api:document-pdf' document.pk %}">
+                    href="{% url 'document_pdf' document.pk %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-download" viewBox="0 0 16 16">
                         <path
@@ -38,7 +38,7 @@
             {% endif %}
             {% if document.file_type != '.pdf' %}
                 <a class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1" data-turbo="false"
-                    href="{% url 'api:document-original' document.pk %}">
+                    href="{% url 'document_original' document.pk %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-download" viewBox="0 0 16 16">
                         <path
@@ -65,7 +65,7 @@
 {% block content %}
     {% if document.state == "DONE" %}
         <div class="container-xl" data-controller="viewer"
-            data-viewer-src-value="{% url 'api:document-pdf' document.pk %}?embed">
+            data-viewer-src-value="{% url 'document_pdf' document.pk %}?embed">
             <div data-viewer-target="sidebar">
 
 
@@ -83,14 +83,14 @@
     {% elif document.state == "ERROR" %}
         <div class="alert alert-primary" role="alert">
             Ce document n'a pas pu être traité par DocHub à cause d'une erreur.
-            Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
+            Mais tu peux <a href="{% url 'document_original' document.pk %}">télécharger
                 la version originale </a> si tu le désires.
         </div>
     {% else %}
         <div class="alert alert-primary" role="alert">
             Ce document est en cours de traitement par DocHub et il n'est donc pas encore
             possible d'en avoir un aperçu.
-            Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
+            Mais tu peux <a href="{% url 'document_original' document.pk %}">télécharger
                 la version originale</a> si tu le désires.
 
         </div>
