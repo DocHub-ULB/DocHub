@@ -11,8 +11,8 @@
         <span>{{user.name}}</span>
         <div style="position: relative">
             <div class="dropdown-content">
-                <a class="m-3" href="{% url "catalog:show_courses" %}">Mes cours</a>
-                <a class="m-3" href="{% url "logout" %}">Deconnexion</a>
+                <a href="{% url "catalog:show_courses" %}">Mes cours</a>
+                <a href="{% url "logout" %}">Deconnexion</a>
             </div>
         </div>
     </div>

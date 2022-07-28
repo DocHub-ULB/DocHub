@@ -229,11 +229,9 @@ progress::-webkit-progress-value {
 
 .dropdown-content a {
     font-size: 1em;
-    text-align: center;
     display: inline-block;
     width: 100%;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin: 0.5em;
 }
 
 .dropdown-content a:hover {
