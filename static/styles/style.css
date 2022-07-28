@@ -870,4 +870,8 @@ progress::-webkit-progress-value {
     .followed-course-grid {
         grid-template-columns: 1fr 1fr;
     }
+
+    h1 {
+        font-size: 1.5em;
+    }
 }
