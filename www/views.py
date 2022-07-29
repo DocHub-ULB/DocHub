@@ -22,7 +22,9 @@ def index(request):
         docs = Document.objects.filter(course__in=following).order_by("-created")[
             :ndocs
         ]
-        recent_views = CourseUserView.objects.order_by("-last_view")[:5]
+        recent_views = CourseUserView.objects.filter(user=request.user).order_by(
+            "-last_view"
+        )[:5]
         recent_courses = [x.course for x in recent_views]
         context = {
             "search": SearchForm(),

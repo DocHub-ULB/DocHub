@@ -1,49 +1,53 @@
-<br>
-<div class="row">
-    <div class="large-12 columns">
-        <div class="panel">
-            <div class="row">
-                <div class="small-11 columns">
-                    <h3>DocHub a maintenant tous les documents de Respublicae !</h3>
-                </div>
-                <div class="small-1 columns text-right">
-                    <a href="{% url "hide_new_panel" %}"><i class="fi-x"></i></a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-12 columns" id="firstStop">
-                    <p>
-                        Bienvenue sur DocHub, le site de partage de documents et d’entraide étudiante à l’ULB.<br>
-                        DocHub te permet de poser des questions aux autres étudiants, échanger tes notes et bien plus encore.
-                    </p>
-                    <p>
-                        DocHub vient d'importer tous les documents de Respublicae, mais ils ne sont pas encore tous triés.<br>
-                        Tu ne verras donc peut-être pas le cours qui t'intéresse dans le menu des
-                        cours mais tu peux faire une recherche juste au-dessus et tu devrais trouver ton bonheur !
-                    </p>
-                    <p>
-                        Comme sur Respublicae, tu peux uploader des docments,
-                        mais en plus de ça, tu peux t'abonner aux cours et tu verras les nouveaux uploads
-                        apparaitre dans ton fil d'actualité. DocHub te permet aussi de voir en
-                        direct le document dans ton navigateur sans devoir le télécharger.
-                    </p>
-                </div>
-            </div>
-        </div>
+<div class="d-flex flex-column flex-lg-row gap-2 gap-lg-5">
+    <div>
+        <h1 class="fs-3 d-flex align-items-center gap-2">
+            <span>👋</span>
+            <span> Bienvenue sur DocHub</span>
+        </h1>
+
+        <p>
+            DocHub est LE site de partage de documents et d’entraide étudiante à l’ULB.<br>
+            DocHub te permet d'échanger tes notes, syllabus, anciennes questions d'examen et bien plus encore.
+        </p>
+        <p>
+            Tu peux uploader des docments,
+            mais en plus de ça, tu peux ajouter des cours à tes favoris et verras les nouveaux ajouts
+            apparaitre directement ici. DocHub te permet aussi de voir en
+            direct le document dans ton navigateur sans devoir le télécharger.
+        </p>
+
+    </div>
+    <div>
+        <h1 class="fs-3 d-flex align-items-center gap-2">
+            <span>📖</span>
+            <span> Mode d'emploi</span>
+        </h1>
+        <ul style="list-style: none; padding: 0" class="d-flex flex-column gap-2">
+            <li>
+                ⭐ Pour trouver facilement tes cours et les ajouter à tes favoris,
+                tu peux utiliser la barre de recherche ici au-dessus ou alors tu peux
+                <a href="{% url "catalog:finder_root" %}"
+                    class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary mb-1">
+                    parcourir la liste de tous les cours
+                </a><br/>
+                Une fois que tu as trouvé ton bonheur, n'oublie pas de l'ajouter aux favoris ! ️
+            </li>
+            <li>
+                📄 Une fois sur la page d'un cours, tu verras tous les documents ajoutés par les étudiants.
+                Tu peux soit cliquer dessus et voir le document directement sans le télécharger soit en
+                télécharger une copie chez toi. Tu peux aussi filtrer les documents par catégorie ou par
+                titre quand il y en a beaucoup.
+            </li>
+            <li>
+                👍 Un document te parait de très bonne qualité ? Ou à l'inverse, il n'est plus à jour ?
+                Dis-le nous avec le bouton Utile/Pas utile en haut du document.
+            </li>
+            <li>
+                🚀 N'oublie pas non plus d'ajouter aussi des documents !
+                C'est grâce à des gens comme toi que DocHub est si bien fourni
+                et permet à tant d'étudiants de réussir
+            </li>
+        </ul>
+
     </div>
 </div>
-
-
-
-<ol class="joyride-list" data-joyride>
-    <li data-id="joy-abonner" data-text="Suivant" data-options="prev_button: false">
-        <p>Vous pouvez vous abonner à des cours. Ceux-ci apparaitront dans le menu ci-dessous.</p>
-    </li>
-    <li data-id="joy-flux" data-text="Suivant" data-options="tip_location:top; prev_button: false">
-        <p>Vous pouvez aussi suivre l'actualité dans le flux qui apparaitra ici.</p>
-    </li>
-    <li data-button="Fermer" data-options="tip_location:top; prev_button: false">
-        <h4>Bienvenue sur DocHub !</h4>
-        <p>DocHub vous souhaite une belle réussite !</p>
-    </li>
-</ol>
