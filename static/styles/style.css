@@ -785,6 +785,7 @@ progress::-webkit-progress-value {
         padding-right: 0.5em;
         margin-top: 0;
         width: 95vw;
+        z-index: 1;
     }
 
     .course-grid {
@@ -833,6 +834,7 @@ progress::-webkit-progress-value {
     .show-aside {
         display: block;
         visibility: visible;
+        z-index: 2;
     }
 
     .results a span {
@@ -881,7 +883,7 @@ progress::-webkit-progress-value {
     .remove-margin{
         margin: 0px !important;
     }
-    
+
     .finder {
         border: none;
     }
