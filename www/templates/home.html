@@ -19,11 +19,10 @@
     {% comment %} {% if request.user.welcome %}
         {% include "welcome.html" %}
     {% endif %} {% endcomment %}
-
     <div class="home-grid">
         <div class="home-search-container">
             <div style="margin-bottom: 1em;text-align: center;">
-                <span style="font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Doc</span><span style="color:#007095;font-family: Roboto;font-style: normal;font-weight: bold;font-size: 6em;">Hub</span>
+                <span class="logo-home">Doc</span><span class="logo-home" style="color:#007095;">Hub</span>
             </div>
             {% include "search/frames/search-box.html" with initial=True %}
             <div style="width: 100%;text-align:center;margin-top: 2em;">
@@ -37,7 +36,7 @@
             <hr style="color: #eee;width: 50%;">
             <h1>Mes Cours</h1>
             {% if following_course %}
-                <div style="height: 100%;display: grid;grid-template-columns:1fr 1fr 1fr;grid-gap: 0.75em;font-family: Roboto;font-style: normal;">
+                <div class="followed-course-grid">
                     {% for course in following_course %}
                         <a href="{% url "catalog:course_show" course.slug %}">
                             <div style="padding-left: 0.5em;padding-right: 0.5em">
@@ -60,10 +59,6 @@
             </turbo-frame>
             <turbo-frame id="courses" class="turbo-overflow">
             </turbo-frame> {% endcomment %}
-        </div>
-        <div class="finder visible-on-mobile">
-            <turbo-frame id="mobile" class="turbo-overflow" src="{% url "catalog:finder_turbo" "facs" "root" %}">
-            </turbo-frame>
         </div>
     </div>
 

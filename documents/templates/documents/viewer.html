@@ -1,23 +1,47 @@
 {% extends "base.html" %}
-{% load cache %}
 {% load has_perm_on %}
 
 {% block title %}{{ document.name }}{% endblock %}
-{% block content %}
-<!-- FIXME: check for other states (error) -->
-{% if document.state != "DONE" %}
-<p>
-Ce document est en cours de traitement par DocHub et il n'est donc pas encore
-possible d'en avoir un aperçu.
-<!-- FIXME: do not hardcode url -->
-Mais tu peux <a href="/api/documents/{{ document.pk }}/original">télécharger
-la version originale </a> si tu le désires.
-</p>
-{% else %}
-<!-- FIXME: do not hardcode url -->
-<embed src="/api/documents/{{ document.pk }}/pdf/?embed" type="application/pdf" width="100%" height="100%">
-{%endif%}
+
+{% block fullpage %}
+    {% if document.state == "DONE" %}
+        <div data-controller="viewer" data-viewer-src-value="{% url 'api:document-pdf' document.pk %}?embed">
+            <div data-viewer-target="sidebar">
+                <h1>{{ document.name }}</h1>
+                <h2>{{ document.course.slug }}: {{ document.course.name }}</h2>
+                Uploadé par {{ document.user.fullname }}
+                Le {{ document.created }}
+                <a class="button" data-turbo="false" href="{% url 'api:document-pdf' document.pk %}">Téléchager
+                    (.pdf)</a>
+                {% if document.file_type != '.pdf' %}
+                    <a class="button" data-turbo="false" href="{% url 'api:document-original' document.pk %}">Téléchager
+                        ({{ document.file_type }})</a>
+                {% endif %}
+
+            </div>
+            <div class="main">
+                <div class="loader">
+                    <div class="text">Chargement en cours...</div>
+                    <progress data-viewer-target="loader" max="100" value="0"></progress>
+                </div>
+                <div data-viewer-target="renderer"></div>
+            </div>
 
 
+        </div>
+    {% elif document.state == "ERROR"%}
+        <p>
+            Ce document n'a pas pu être traité par DocHub à cause d'une erreur.
+            Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
+            la version originale </a> si tu le désires.
+        </p>
+    {% else %}
+        <p>
+            Ce document est en cours de traitement par DocHub et il n'est donc pas encore
+            possible d'en avoir un aperçu.
+            Mais tu peux <a href="{% url 'api:document-original' document.pk %}">télécharger
+            la version originale </a> si tu le désires.
+        </p>
 
+    {% endif %}
 {% endblock %}

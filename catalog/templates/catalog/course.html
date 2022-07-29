@@ -7,37 +7,37 @@
 {% load has_perm_on %}
 
 {% block header %}
-  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style type="text/css">
+        body{
+            height: 100vh;
+            overflow: hidden;
+        }
+    </style>
 {% endblock %}
 
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
 {% block content %}
-<style>
-    body {
-        height: 100vh;
-        overflow: hidden;
-    }
-</style>
 <div class="course-grid" data-controller="course-filter">
     {% is_following request.user course as following %}
     <div class="aside">
-        <div style="grid-row-start:1;text-align: center;white-space: nowrap">
-            <button onclick="location='{% url 'document_put' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #087f23;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+        <div style="grid-row-start:1;text-align: center;">
+            <button onclick="location='{% url 'document_put' course.slug %}'" class="mdc-button mdc-button--raised" style="margin-bottom:0.5em;--mdc-theme-primary: #087f23;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
                 <span class="mdc-button__ripple"></span>
                 <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
                 <span class="mdc-button__label">Uploader un fichier</span>
             </button>
             {% if following %}
-                <button onclick="location='{% url 'catalog:leave_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #9b0000;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                <button onclick="location='{% url 'catalog:leave_course' course.slug %}'" class="mdc-button mdc-button--raised" style="margin-bottom:0.5em;--mdc-theme-primary: #9b0000;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
                     <span class="mdc-button__ripple"></span>
                     <i class="material-icons mdc-button__icon" aria-hidden="true">clear</i>
                     <span class="mdc-button__label">Se désabonner</span>
                 </button>
             {% else %}
-                <button onclick="location='{% url 'catalog:join_course' course.slug %}'" class="mdc-button mdc-button--raised" style="--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
+                <button onclick="location='{% url 'catalog:join_course' course.slug %}'" class="mdc-button mdc-button--raised" style="margin-bottom:0.5em;--mdc-theme-primary: #007ac1;--mdc-theme-on-primary: var(--mdc-theme-text-primary-on-dark);">
                     <span class="mdc-button__ripple"></span>
                     <i class="material-icons mdc-button__icon" aria-hidden="true">done</i>
                     <span class="mdc-button__label">S’abonner au cours</span>
@@ -161,7 +161,7 @@
             {% endfor %}
 
         </ul>
-        <footer class="footer">
+        {% comment %} <footer class="footer">
             <br>
             Made with love at
             <a href="https://urlab.be">
@@ -174,12 +174,12 @@
             </a>
             - <button onClick="toggleAPIModal()" class="api-button">API</button>
             <br><br>
-        </footer>
+        </footer> {% endcomment %}
     </div>
 
-    <a class="show-aside">
+    <button class="show-aside" onClick="show_aside()">
         <i class="fas fa-bars"></i>
-    </a>
+    </button>
 </div>
 {% endblock %}
 
@@ -192,6 +192,15 @@
     const list = new mdc.list.MDCList(document.querySelector('.mdc-list'));
     for (const listItemEl of list.listElements) {
       mdc.ripple.MDCRipple.attachTo(listItemEl);
+    }
+
+    function show_aside() {
+        if (document.getElementsByClassName('aside')[0].style.visibility != 'unset') {
+            document.getElementsByClassName('aside')[0].style.visibility = 'unset';
+        }
+        else {
+            document.getElementsByClassName('aside')[0].style.visibility = 'hidden';
+        }
     }
   </script>
 {% endblock %}

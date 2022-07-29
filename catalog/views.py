@@ -1,4 +1,5 @@
 import json
+from functools import wraps
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,47 +29,57 @@ from catalog.utils import (
 from documents.models import Vote
 
 
+def slug_redirect(view):
+    @wraps(view)
+    def wrapper(request: HttpRequest, slug: str, *args, **kwargs):
+        try:
+            normalized = normalize_slug(slug)
+        except ValueError:
+            raise Http404("This is not a valid course slug.")
+        if normalized != slug:
+            return redirect(request.path.replace(slug, normalized))
+        return view(request, slug, *args, **kwargs)
+
+    return wrapper
+
+
 class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = "catalog/category.html"
     context_object_name = "category"
 
 
-class CourseDetailView(DetailView):
-    model = Course
-    context_object_name = "course"
+@slug_redirect
+def show_course(request, slug: str):
+    course = get_object_or_404(Course, slug=slug)
 
-    def get_template_names(self, **kwargs):
-        if self.request.user.is_authenticated:
-            return "catalog/course.html"
-        else:
-            return "catalog/noauth/course.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        course = context["course"]
-
-        documents = (
-            course.document_set.exclude(state="ERROR", hidden=True)
-            .select_related("course", "user")
-            .prefetch_related("tags", "vote_set")
-            .annotate(
-                upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
-            )
-            .annotate(
-                downvotes=Count(
-                    "vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)
-                )
-            )
-            .order_by("-edited")
+    documents = (
+        course.document_set.exclude(state="ERROR", hidden=True)
+        .select_related("course", "user")
+        .prefetch_related("tags", "vote_set")
+        .annotate(upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))
+        .annotate(
+            downvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE))
         )
+        .order_by("-edited")
+    )
 
-        context["tags"] = {tag for doc in documents for tag in doc.tags.all()}
-        context["documents"] = documents
+    context = {
+        "course": course,
+        "tags": {tag for doc in documents for tag in doc.tags.all()},
+        "documents": documents,
+    }
 
-        return context
+    if request.user.is_authenticated:
+        template = "catalog/course.html"
+    else:
+        template = "catalog/noauth/course.html"
+
+    return render(request, template, context)
 
 
+@login_required
+@slug_redirect
 def set_follow_course(request, slug: str, action: str) -> HttpResponse:
     """Makes a user either follow or unfollow a course"""
     course = get_object_or_404(Course, slug=slug)
@@ -82,11 +93,13 @@ def set_follow_course(request, slug: str, action: str) -> HttpResponse:
 
 
 @login_required
+@slug_redirect
 def join_course(request: HttpRequest, slug: str):
     return set_follow_course(request, slug, "follow")
 
 
 @login_required
+@slug_redirect
 def leave_course(request: HttpRequest, slug: str):
     return set_follow_course(request, slug, "leave")
 

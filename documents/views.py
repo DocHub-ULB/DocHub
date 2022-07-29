@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from catalog.models import Course
+from catalog.views import slug_redirect
 from documents import logic
 from documents.forms import (
     FileForm,
@@ -21,6 +22,7 @@ from tags.models import Tag
 
 
 @login_required
+@slug_redirect
 def upload_file(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
@@ -74,6 +76,7 @@ def upload_file(request, slug):
 
 
 @login_required
+@slug_redirect
 def upload_multiple_files(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
@@ -216,17 +219,13 @@ def document_show(request, pk):
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
-    if document.state != Document.DocumentState.DONE:
-        return HttpResponseRedirect(
-            reverse("catalog:course_show", args=(document.course.slug,))
-        )
+    if document.state == Document.DocumentState.DONE:
+        document.views = F("views") + 1
+        document.save(update_fields=["views"])
 
     context = {
         "document": document,
     }
-
-    document.views = F("views") + 1
-    document.save(update_fields=["views"])
 
     return render(request, "documents/viewer.html", context)
 

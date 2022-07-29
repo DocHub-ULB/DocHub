@@ -7,6 +7,7 @@ from django.contrib.postgres.search import (
     SearchVector,
     TrigramSimilarity,
 )
+from django.db import connection
 from django.db.models import Count, F
 
 from catalog.models import Course
@@ -25,6 +26,9 @@ def search_course(string):
         )
         if len(exact_slug) > 0:
             return exact_slug
+
+    if connection.vendor != "postgresql":
+        return Course.objects.filter(name__contains=string)
 
     if len(string) < 6:
         similarity = 0.05

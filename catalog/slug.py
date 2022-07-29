@@ -1,3 +1,5 @@
+from typing import Callable, List
+
 import re
 
 
@@ -22,7 +24,7 @@ class Slug:
             raise ValueError("number may contain only digits")
 
     @property
-    def gehol(self):
+    def attached(self):
         return f"{self.domain}{self.faculty}{self.number}".upper()
 
     @property
@@ -31,10 +33,10 @@ class Slug:
 
     @property
     def dochub(self):
-        return f"{self.domain}-{self.faculty}-{self.number}".lower()
+        return f"{self.domain}-{self.faculty}{self.number}".lower()
 
     @classmethod
-    def from_gehol(cls, string: str):
+    def from_attached(cls, string: str) -> "Slug":
         match = re.match(r"([A-Za-z]+)([A-Za-z])(\d+)", string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFOF103'")
@@ -42,7 +44,7 @@ class Slug:
         return cls(domain, faculty, number)
 
     @classmethod
-    def from_catalog(cls, string: str):
+    def from_catalog(cls, string: str) -> "Slug":
         match = re.match(r"([A-Za-z]+)-([A-Za-z])(\d+)", string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFO-F103'")
@@ -50,7 +52,7 @@ class Slug:
         return cls(domain, faculty, number)
 
     @classmethod
-    def from_dochub(cls, string: str):
+    def from_dochub(cls, string: str) -> "Slug":
         match = re.match(r"([A-Za-z]+)-([A-Za-z])-(\d+)", string.upper())
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'info-f-103'")
@@ -59,7 +61,7 @@ class Slug:
 
     @classmethod
     def match_all(cls, string: str):
-        for method in [cls.from_catalog, cls.from_dochub, cls.from_gehol]:
+        for method in [cls.from_catalog, cls.from_dochub, cls.from_attached]:
             try:
                 return method(string)
             except ValueError:
@@ -84,3 +86,7 @@ class Slug:
 
     def __hash__(self):
         return hash((self.domain, self.faculty, self.number))
+
+
+def normalize_slug(slug: str) -> str:
+    return Slug.match_all(slug).dochub

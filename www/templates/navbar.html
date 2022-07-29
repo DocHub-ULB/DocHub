@@ -11,11 +11,11 @@
         <span>{{user.name}}</span>
         <div style="position: relative">
             <div class="dropdown-content">
-                <a class="m-3" href="{% url "catalog:show_courses" %}?facs=mycourses">Mes cours</a>
-                <a class="m-3" href="{% url "logout" %}">Deconnexion</a>
+                <a href="{% url "catalog:show_courses" %}?facs=mycourses">Mes cours</a>
+                <a href="{% url "logout" %}">Deconnexion</a>
                 {% if request.user.is_staff %}
-                    <a class="m-3" href="{% url "admin:index" %}">Admin</a>
-                    <a class="m-3" href="{% url "add_moderated_course" %}">Moderated course</a>
+                    <a href="{% url "admin:index" %}">Admin</a>
+                    <a href="{% url "add_moderated_course" %}">Moderated course</a>
                 {% endif %}
             </div>
         </div>

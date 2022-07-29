@@ -45,3 +45,4 @@ router.register(r"me", users.rest.Me, basename="users-me")
 router.register(r"tree", catalog.rest.Tree, basename="catalog-tree")
 
 urlpatterns = router.urls
+app_name = "api"

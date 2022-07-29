@@ -2,10 +2,10 @@ from django.urls import path
 
 import catalog.views
 from catalog.autocomplete import course_autocomplete
-from catalog.views import CategoryDetailView, CourseDetailView
+from catalog.views import CategoryDetailView
 
 urlpatterns = [
-    path("course/<slug:slug>", CourseDetailView.as_view(), name="course_show"),
+    path("course/<slug:slug>", catalog.views.show_course, name="course_show"),
     path("category/<int:pk>", CategoryDetailView.as_view(), name="category_show"),
     path("join/<slug:slug>", catalog.views.join_course, name="join_course"),
     path("leave/<slug:slug>", catalog.views.leave_course, name="leave_course"),

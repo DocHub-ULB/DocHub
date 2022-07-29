@@ -43,7 +43,6 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = "netid"
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
-    DEFAULT_PHOTO = join(settings.STATIC_URL, "images/default.jpg")
     objects = CustomUserManager()
 
     netid = models.CharField(max_length=20, unique=True)
@@ -52,15 +51,11 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=127)
     last_name = models.CharField(max_length=127)
     email = models.CharField(max_length=255, unique=True)
-    registration = models.CharField(max_length=80, blank=True)
     welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default="")
 
     register_method = models.CharField(max_length=32)
     last_login_method = models.CharField(max_length=32)
-
-    inferred_faculty = models.TextField(blank=True)
-    inscription_faculty = models.TextField(blank=True)
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
@@ -139,38 +134,3 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.netid
-
-    # TODO: is this dead code ?
-    def update_inscription_faculty(self):
-        inscription = self.inscription_set.order_by("-year").first()
-        if inscription:
-            self.inscription_faculty = inscription.faculty
-            self.save()
-
-    # TODO: is this dead code ?
-    def update_inferred_faculty(self):
-        courses = self.following_courses
-        categories = [x.categories.all() for x in courses]
-        categories = list(itertools.chain.from_iterable(categories))
-
-        faculties = [x.get_ancestors().filter(level=1).all() for x in categories]
-        faculties = list(itertools.chain.from_iterable(faculties))
-
-        counts = collections.Counter(faculties)
-        if counts:
-            faculty = counts.most_common()[0][0]
-            self.inferred_faculty = faculty.name
-            self.save()
-
-
-class Inscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    faculty = models.CharField(max_length=80, blank=True, default="")
-    section = models.CharField(max_length=80, blank=True, default="")
-    year = models.PositiveIntegerField(blank=True, null=True)
-
-    created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ("user", "section", "faculty", "year")
