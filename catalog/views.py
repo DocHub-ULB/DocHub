@@ -27,6 +27,7 @@ from catalog.utils import (
     getProgramFrame,
 )
 from documents.models import Vote
+from catalog.slug import normalize_slug
 
 
 def slug_redirect(view):
