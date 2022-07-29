@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
+from django.views.decorators.http import require_POST
 
 from catalog.models import Course
 from catalog.views import slug_redirect
@@ -187,20 +188,25 @@ def document_show(request, pk):
 
     context = {
         "document": document,
+        "user_vote": document.vote_set.filter(user=request.user).first(),
     }
 
     return render(request, "documents/viewer.html", context)
 
 
 @login_required
+@require_POST
 def document_vote(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
     vote, created = Vote.objects.get_or_create(document=document, user=request.user)
-    vote.vote_type = request.GET.get("vote_type")
-    vote.save()
+    if vote.vote_type == request.POST.get("vote_type"):
+        vote.delete()
+    else:
+        vote.vote_type = request.POST.get("vote_type")
+        vote.save()
 
-    return render(request, "catalog/like-dislike.html", context={"document": document})
+    return redirect(document.get_absolute_url())
 
 
 @login_required

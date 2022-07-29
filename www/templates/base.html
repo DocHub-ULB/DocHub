@@ -46,8 +46,12 @@
                 transition-duration: 150ms;
             }
 
-            a:hover .hover-rotate {
+            button:hover .hover-rotate, a:hover .hover-rotate {
                 transform: rotate(-15deg);
+            }
+
+            button:hover .hover-rotate-opposite, a:hover .hover-rotate-opposite {
+                transform: rotate(15deg);
             }
 
             a .hover-spin {
@@ -57,6 +61,12 @@
 
             a:hover .hover-spin {
                 transform: rotate(360deg);
+            }
+
+            a:hover .hover-translate {
+                transform: translate(-0.2em);
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
             }
 
 

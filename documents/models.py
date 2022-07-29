@@ -92,13 +92,18 @@ class Document(models.Model):
 
         return {"upvotes": upvotes, "downvotes": downvotes}
 
+    @property
+    def is_certified(self) -> bool:
+        """Is the document tagged with the "officiel" tag ?"""
+        return self.tags.filter(name="officiel").exists()
+
     def fullname(self) -> str:
         return self.__str__()
 
     def repair(self) -> None:
         if settings.READ_ONLY:
             raise Exception("Documents are read-only.")
-        repair.delay(self.id)
+        repair.delay(self.pk)
 
     def is_unconvertible(self) -> bool:
         return self.file_type in UNCONVERTIBLE_TYPES
