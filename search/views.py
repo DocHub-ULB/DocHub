@@ -1,5 +1,6 @@
 # TODO: is this dead code ?
 from django.db import connection
+from django.db.models import Count
 from django.views.generic.list import ListView
 
 import search.logic
@@ -14,7 +15,9 @@ class CourseSearchView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q", "")
-        return search.logic.search_course(query)
+        qs = search.logic.search_course(query)
+
+        return qs.annotate(category_count=Count("categories"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
