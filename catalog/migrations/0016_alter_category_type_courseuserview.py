@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("catalog", "0014_remove_category_level_remove_category_lft_and_more"),
+        ("catalog", "0015_remove_mptt"),
     ]
 
     operations = [

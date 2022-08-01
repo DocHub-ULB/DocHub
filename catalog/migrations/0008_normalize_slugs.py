@@ -2,11 +2,19 @@
 
 from django.db import migrations, models
 
+from catalog.slug import Slug
+
 
 def forwards(apps, schema_editor):
     Course = apps.get_model("catalog", "Course")
     for course in Course.objects.all():
-        course.slug = course.slug.lower()
+        raw_slug = course.slug
+
+        if raw_slug.lower().startswith("iinfo"):
+            raw_slug = raw_slug[1:]
+
+        slug = Slug.match_all(raw_slug)
+        course.slug = slug.dochub
         course.save()
 
 

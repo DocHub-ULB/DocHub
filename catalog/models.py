@@ -111,7 +111,7 @@ class Course(models.Model):
         return reverse("catalog:course_show", args=(self.slug,))
 
     def __str__(self):
-        return self.slug.upper()
+        return self.slug
 
     def fullname(self):
         return f"{self.name} ({self.slug.lower()})"

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("catalog", "0013_unique_category_slug"),
+        ("catalog", "0014_unique_category_slug"),
     ]
 
     operations = [

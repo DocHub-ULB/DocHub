@@ -18,8 +18,8 @@ class Slug:
             raise ValueError("faculty may contain only alphabetic chars")
 
         self.number = number.strip().lower()
-        if len(self.number) > 4 or len(self.number) < 2:
-            raise ValueError("number lenght must be 2, 3 or 4 chars only")
+        if len(self.number) > 5 or len(self.number) < 2:
+            raise ValueError("number lenght must be 2-5 chars only")
         if not self.number.isdigit():
             raise ValueError("number may contain only digits")
 
