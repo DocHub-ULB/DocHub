@@ -109,6 +109,11 @@ LOGIN_REDIRECT_URL = "index"
 LOGIN_URL = "/login"
 SITE_ID = 1
 
+AUTHENTICATION_BACKENDS = [
+    "users.authBackend.UlbCasBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
