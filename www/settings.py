@@ -22,6 +22,7 @@ else:
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost", "*"])
 USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=True)
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
