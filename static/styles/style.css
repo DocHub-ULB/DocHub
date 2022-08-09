@@ -788,6 +788,11 @@ progress::-webkit-progress-value {
         z-index: 1;
     }
 
+    .card-title a {
+        line-height: 1em;
+        font-size: 1.2em;
+    }
+
     .course-grid {
         grid-template-columns: 1fr 90% 1fr;
         margin-top: 0;
