@@ -18,10 +18,6 @@
         dans le cours "{{document.course.name}}" ({{document.course.slug|upper}}).
     </p>
     <p>
-        Ce document {{document.file_type}} fait {{document.pages}} pages et
-        est taggé dans les catégories
-        {% for tag in document.tags.all %}
-            {% if forloop.last %}{{tag}}.{% else %}{{tag}},{% endif %}
-        {% endfor %}
+        Ce document {{document.file_type}} fait {{document.pages}} pages.
     </p>
 {% endblock preview %}
