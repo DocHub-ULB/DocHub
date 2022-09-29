@@ -1,6 +1,6 @@
 import _ from 'https://cdn.skypack.dev/lodash';
 
-import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
+import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo@v7.2.0-rc.3'; // FIXME upgrade to 7.2.0 when skypack is fixed https://github.com/skypackjs/skypack-cdn/issues/319
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
 import { Autocomplete } from 'https://cdn.skypack.dev/stimulus-autocomplete';
 
