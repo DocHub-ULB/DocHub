@@ -1,7 +1,8 @@
-from typing import Iterable, Optional
+from typing import Optional
 
 import mimetypes
 import uuid
+from collections.abc import Iterable
 
 from django.core.files import File
 
