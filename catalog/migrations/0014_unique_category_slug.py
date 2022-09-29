@@ -9,7 +9,21 @@ class Migration(migrations.Migration):
         ("catalog", "0013_empty_categories"),
     ]
 
+    def forwards(apps, schema_editor):
+        # The old tree does not have unique slugs so we just use the id so the db is happy
+        # grep OLD_TREE to find other places we have done tricks to keep the old tree
+        Category = apps.get_model("catalog", "Category")
+        for cat in Category.objects.all():
+            cat.slug = cat.pk
+            cat.save()
+
+        root = Category.objects.order_by("pk").first()
+        assert root.name == "ULB"
+        root.slug = "ULB"
+        root.save()
+
     operations = [
+        migrations.RunPython(forwards, migrations.RunPython.noop),
         migrations.AlterField(
             model_name="category",
             name="slug",

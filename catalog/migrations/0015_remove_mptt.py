@@ -9,7 +9,26 @@ class Migration(migrations.Migration):
         ("catalog", "0014_unique_category_slug"),
     ]
 
+    def forwards(apps, schema_editor):
+        Category = apps.get_model("catalog", "Category")
+        for cat in Category.objects.all():
+            if cat.parent:
+                cat.parents.add(cat.parent)
+
+    def backwards(apps, schema_editor):
+        Category = apps.get_model("catalog", "Category")
+        for cat in Category.objects.all():
+            cat.parents.clear()
+
     operations = [
+        migrations.AddField(
+            model_name="category",
+            name="parents",
+            field=models.ManyToManyField(
+                blank=True, related_name="children", to="catalog.category"
+            ),
+        ),
+        migrations.RunPython(forwards, backwards),
         migrations.RemoveField(
             model_name="category",
             name="level",
@@ -29,12 +48,5 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name="category",
             name="tree_id",
-        ),
-        migrations.AddField(
-            model_name="category",
-            name="parents",
-            field=models.ManyToManyField(
-                blank=True, related_name="children", to="catalog.category"
-            ),
         ),
     ]

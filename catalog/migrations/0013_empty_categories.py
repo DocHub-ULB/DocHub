@@ -13,5 +13,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(forwards, migrations.RunPython.noop),
+        # We do not empty the categories as we want to keep the old tree
+        # while we don't have a way to migrate documents to the new courses
+        # grep OLD_TREE to find other places we have done tricks to keep the old tree
+        # migrations.RunPython(forwards, migrations.RunPython.noop),
     ]

@@ -16,7 +16,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(sql="DROP TABLE IF EXISTS telepathy_message"),
-        migrations.RunSQL(sql="DROP TABLE IF EXISTS telepathy_thread"),
-        migrations.RunPython(forwards, migrations.RunPython.noop),
+        migrations.RunSQL(sql="DROP TABLE IF EXISTS telepathy_message", reverse_sql=""),
+        migrations.RunSQL(sql="DROP TABLE IF EXISTS telepathy_thread", reverse_sql=""),
+        # We do not drop orphan courses as we don't have the new tree yet
+        # grep OLD_TREE to find other places we have done tricks to keep the old tree
+        # migrations.RunPython(forwards, migrations.RunPython.noop),
     ]
