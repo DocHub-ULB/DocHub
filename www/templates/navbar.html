@@ -17,7 +17,7 @@
         <div class="dropdown">
             <a class="nav-link hover-scale-sm" href="#" id="navbarDropdown" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="bg-light text-primary rounded-circle p-2">{{ user.initials }}</span>
+                <div class="bg-light text-primary rounded-circle p-2">{{ user.initials }}</div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {% if request.user.is_staff %}
