@@ -91,7 +91,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2
 
 class Viewer extends Controller {
     static targets = ["renderer", "loader"]
-    static values = {src: String, loaded: Boolean}
+    static values = {src: String, loaded: Boolean, error: Boolean}
 
     static options = {
         threshold: 0, // default
@@ -104,7 +104,16 @@ class Viewer extends Controller {
             let percent = Math.round(data.loaded / data.total * 100)
             this.loaderTarget.setAttribute("value", percent);
         }
-        this.pdf = await loadingTask.promise;
+
+        try{
+            this.pdf = await loadingTask.promise;
+        } catch (e) {
+            console.log("Error while loading remote PDF", e);
+            this.errorValue = true;
+            this.loadedValue = true;
+            return;
+        }
+
         this.loadedValue = true;
 
         console.log("PDF loaded")

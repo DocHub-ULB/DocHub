@@ -70,6 +70,14 @@
                 transition-duration: 150ms;
             }
 
+            div[data-controller="viewer"] .error {
+                display: none;
+            }
+
+            div[data-controller="viewer"][data-viewer-error-value] .error {
+                display: block;
+            }
+
             div[data-controller="viewer"] .loader {
                 text-align: center;
                 position: absolute;

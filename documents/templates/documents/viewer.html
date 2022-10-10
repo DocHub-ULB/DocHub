@@ -138,6 +138,13 @@
                     <div class="text text-muted">Chargement en cours...</div>
                     <progress data-viewer-target="loader" max="100" value="0"></progress>
                 </div>
+                <div class="error">
+                    <div class="alert alert-danger" role="alert">
+                        Oups ! Nous n'avons pas réussi à afficher l'apercu du document dans ton navigateur.
+                        Mais tu peux <a href="{% url 'document_pdf' document.pk %}">télécharger
+                            le pdf</a> si tu le désires.
+                    </div>
+                </div>
                 <div data-viewer-target="renderer"></div>
             </div>
 
