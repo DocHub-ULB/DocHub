@@ -74,6 +74,8 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
+                "www.context_processors.read_only",
+                "www.context_processors.sentry",
             ],
         },
     },
@@ -143,6 +145,7 @@ BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 
 CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 
+SENTRY_DSN = env("SENTRY_DSN", default=None)
 
 if DEBUG:
     INSTALLED_APPS.extend(
@@ -164,14 +167,12 @@ else:
         ]
     )
 
-    sentry_dsn = env("SENTRY_SDK", default=None)
-
-    if sentry_dsn is not None:
+    if SENTRY_DSN is not None:
         import sentry_sdk
         from sentry_sdk.integrations.django import DjangoIntegration
 
         sentry_sdk.init(
-            dsn=sentry_dsn,
+            dsn=SENTRY_DSN,
             integrations=[DjangoIntegration()],
             traces_sample_rate=1.0,
             send_default_pii=True,
