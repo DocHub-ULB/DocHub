@@ -3,7 +3,7 @@
 
 <html lang="fr">
 
-    <head data-sentry-dsn="{{ SENTRY_DSN }}" data-sentry-release="{{ SENTRY_RELEASE }}" sentry-user-email="{{ request.user.email }}">
+    <head data-sentry-dsn="{{ SENTRY_DSN }}" data-sentry-release="{{ SENTRY_RELEASE }}" data-sentry-email="{{ request.user.email }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}DocHub - ULB{% endblock %}</title>
