@@ -50,3 +50,4 @@ django-jsonfield-compat
 gunicorn
 sentry-sdk
 django-storages
+boto3
