@@ -4,6 +4,8 @@ import environ
 
 # First checks if the secrets are not stored in tmpfs by Docker
 # https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
+from sentry_sdk.utils import get_default_release
+
 env = environ.FileAwareEnv()
 
 # Set the project base directory
@@ -146,6 +148,7 @@ BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 
 SENTRY_DSN = env("SENTRY_DSN", default=None)
+SENTRY_RELEASE = get_default_release()
 
 if DEBUG:
     INSTALLED_APPS.extend(

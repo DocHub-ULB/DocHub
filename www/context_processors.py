@@ -6,4 +6,7 @@ def read_only(context):
 
 
 def sentry(context):
-    return {"SENTRY_DSN": getattr(settings, "SENTRY_DSN", None)}
+    return {
+        "SENTRY_DSN": getattr(settings, "SENTRY_DSN", None),
+        "SENTRY_RELEASE": getattr(settings, "SENTRY_RELEASE", None),
+    }
