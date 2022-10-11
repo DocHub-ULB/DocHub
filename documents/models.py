@@ -95,7 +95,8 @@ class Document(models.Model):
     @property
     def is_certified(self) -> bool:
         """Is the document tagged with the "officiel" tag ?"""
-        return self.tags.filter(name="officiel").exists()
+        tag_names = [tag.name for tag in self.tags.all()]
+        return "officiel" in tag_names
 
     def fullname(self) -> str:
         return self.__str__()

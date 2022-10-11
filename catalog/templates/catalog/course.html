@@ -105,7 +105,7 @@
                     class="border-top p-2 d-flex align-items-center"
                     data-course-filter-target="filterable"
                     data-filter-key='{{ document.name }}'
-                    data-tags="{{ document.tags.all|join:' ' }}"
+                    data-tags="{{ tags|join:' ' }}"
                 >
 
                     <a href="{% url 'document_show' document.pk %}"

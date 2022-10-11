@@ -31,6 +31,7 @@ pre-commit
 pip-tools
 coolname
 black
+django-debug-toolbar
 
 # Test
 mock
@@ -40,11 +41,11 @@ django-webtest
 mypy
 django-stubs
 
+
 # prod
 redis
 psycopg2-binary
 python-memcached
-django-debug-toolbar
 django-jsonfield
 django-jsonfield-compat
 gunicorn

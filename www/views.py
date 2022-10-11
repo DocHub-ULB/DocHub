@@ -19,9 +19,12 @@ def index(request):
         following_course = request.user.following_courses
         following = request.user.following_courses
         ndocs = max(5, len(following))
-        docs = Document.objects.filter(course__in=following).order_by("-created")[
-            :ndocs
-        ]
+        docs = (
+            Document.objects.filter(course__in=following)
+            .select_related("user")
+            .prefetch_related("tags")
+            .order_by("-created")[:ndocs]
+        )
         recent_views = CourseUserView.objects.filter(user=request.user).order_by(
             "-last_view"
         )[:5]
