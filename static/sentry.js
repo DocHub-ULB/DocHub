@@ -10,4 +10,4 @@ Sentry.init({
     release: head.dataset.sentryRelease,
 });
 
-Sentry.setUser({ email: head.dataset.sentryUserEmail });
+Sentry.setUser({ email: head.dataset.sentryEmail });
