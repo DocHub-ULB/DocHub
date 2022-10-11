@@ -106,7 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
-
 WSGI_APPLICATION = "www.wsgi.application"
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "index"
@@ -126,7 +125,6 @@ TIME_ZONE = "Europe/Brussels"
 USE_I18N = True
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -142,7 +140,6 @@ MEDIA_ROOT = env("MEDIA_ROOT", default=BASE_DIR / "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-
 BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 
 CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
@@ -151,18 +148,17 @@ SENTRY_DSN = env("SENTRY_DSN", default=None)
 SENTRY_RELEASE = get_default_release()
 
 if DEBUG:
-    INSTALLED_APPS.extend(
-        [
-            "django_extensions",
-            # "debug_toolbar",
-        ]
-    )
-    # MIDDLEWARE.extend(["debug_toolbar.middleware.DebugToolbarMiddleware"])
+    INSTALLED_APPS.extend(["django_extensions"])
+
     INTERNAL_IPS = [
         "127.0.0.1",
         "localhost",
         "0.0.0.0",
     ]
+
+    if env.bool("DDT", default=False):
+        MIDDLEWARE.extend(["debug_toolbar.middleware.DebugToolbarMiddleware"])
+        INSTALLED_APPS.extend(["debug_toolbar"])
 else:
     INSTALLED_APPS.extend(
         [
@@ -193,10 +189,8 @@ else:
     AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
     AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 
-
 READ_ONLY = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
-
 
 # Add an escape hatch if we really need to customise something
 # special at the end in production or elsewhere
