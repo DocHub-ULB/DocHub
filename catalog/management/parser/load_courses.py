@@ -13,22 +13,24 @@ ulb, _created = Category.objects.get_or_create(name="ULB", slug="root")
 for fac_name, fac_info in tree["ULB"].items():
     print(fac_name)
     fac_obj, _created = Category.objects.get_or_create(
-        name=fac_name, slug=slugify(fac_name), parent=ulb, description=fac_info["color"]
+        name=fac_name, slug=slugify(fac_name), description=fac_info["color"]
     )
+    fac_obj.parents.add(ulb)
 
     for program_slug, program_info in fac_info["programs"].items():
         print(" ", program_info["name"])
         program_obj, _created = Category.objects.get_or_create(
-            name=program_info["name"], slug=program_slug, parent=fac_obj
+            name=program_info["name"], slug=program_slug
         )
+        program_obj.parents.add(fac_obj)
 
         for bloc_name, bloc_info in program_info["blocs"].items():
             print("   ", bloc_name)
             bloc_obj, _created = Category.objects.get_or_create(
                 name=f"Bloc {bloc_name}",
                 slug=f"{program_slug}-bloc-{bloc_name}",
-                parent=program_obj,
             )
+            bloc_obj.parents.add(program_obj)
 
             for course_mnemo, course_info in bloc_info["courses"].items():
                 a += 1
