@@ -35,7 +35,8 @@ def tags():
 @pytest.fixture(scope="function")
 def tree():
     root = Category.objects.create(name="ULB")
-    science = Category.objects.create(name="science", parent=root)
+    science = Category.objects.create(name="science")
+    science.parents.add(root)
     swag = Course.objects.create(
         name="Optimization of algorithmical SWAG", slug="swag-h-042"
     )
@@ -48,7 +49,6 @@ def test_name_in_page(app, user):
     Category.objects.create(
         name="ULB",
         slug="root",
-        parent=None,
     )
 
     index = app.get("/", user=user.netid)

@@ -7,7 +7,8 @@ import pytest
 
 from catalog.models import Category, Course
 
-pytestmark = [pytest.mark.django_db]
+# TODO: reactivate this when we have a way to use the new ULB catalog
+pytestmark = [pytest.mark.django_db, pytest.mark.skip]
 
 fixtures = os.path.join(settings.BASE_DIR, "catalog", "tests", "fixtures")
 SIMPLE_TREE = os.path.join(fixtures, "simple_tree.yaml")

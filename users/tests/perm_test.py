@@ -9,8 +9,9 @@ pytestmark = pytest.mark.django_db
 
 @pytest.fixture(scope="function")
 def tree():
-    root = Category.objects.create(name="ULB")
-    science = Category.objects.create(name="science", parent=root)
+    root = Category.objects.create(name="ULB", slug="ulb")
+    science = Category.objects.create(name="science", slug="science")
+    science.parents.add(root)
 
     swag = Course.objects.create(
         name="Optimization of algorithmical SWAG", slug="swag-h-042"

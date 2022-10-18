@@ -13,7 +13,7 @@ from django.core.files.base import ContentFile, File
 
 from celery import chain, shared_task
 from celery.exceptions import SoftTimeLimitExceeded
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 
 from documents.models import Document, DocumentError
 
@@ -166,8 +166,8 @@ def mesure_pdf_length(self, document_id: int) -> int:
 
     num_pages: int | None
     try:
-        reader = PdfFileReader(document.pdf)
-        num_pages = reader.getNumPages()
+        reader = PdfReader(document.pdf)
+        num_pages = len(reader.pages)
     except:
         num_pages = mutool_get_pages(document)
     if num_pages is not None:
