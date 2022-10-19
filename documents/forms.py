@@ -34,6 +34,7 @@ class FileForm(forms.Form):
             attrs={
                 "class": "form-select",
                 "data-placeholder": "Ajoute des tags",
+                "data-controller": "tom-select",
             }
         ),
     )

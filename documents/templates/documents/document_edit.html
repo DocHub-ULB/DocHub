@@ -2,11 +2,6 @@
 {% block title %}Éditer {{ doc.name }}{% endblock %}
 
 {% block head %}
-    <script type="module">
-        import tomSelect from 'https://cdn.skypack.dev/tom-select';
-
-        new tomSelect('#id_tags', {hidePlaceholder: true});
-    </script>
     <link href="https://cdn.skypack.dev/tom-select/dist/css/tom-select.bootstrap5.min.css"
         rel="stylesheet" crossorigin="anonymous">
 {% endblock %}
