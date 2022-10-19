@@ -88,11 +88,22 @@ py.test
 
 ## Contribute !
 
-Come by #urlab on freenode or just fork this repo and submit a PR !
+### Newcomer ? 👶
+
+Check the issues tab and look and the issues tagged with the `easy pick` label. These are issues that are easy to fix and that will help you get started with the project. Once you feel comfortable with the codebase, you can tackle other issues.
+
+### Guidelines
+
+Assign yourself to an issue and start working on it *in your own branch*. If you have any questions or issue, feel free to ask them in the issue or tag some people you know can help.<br/>
+If your PR is completed, ask for reviews either by mentioning the people you want to review your PR (You can also set them as reviewers on the right) or by asking on our irc channel **#urlab** on libera.chat.
+
+### Any question ?
+
+Come by #urlab on libera.chat and feel free to ask anything !
 
 ## License
 
-Copyright 2012 - 2021, Cercle Informatique ASBL. All rights reserved.
+Copyright 2012 - 2022, Cercle Informatique ASBL. All rights reserved.
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU Affero General Public License as published by
