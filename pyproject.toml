@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "dochub"
+version = "2.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "*" 
+celery = "*" 
+pyPdf2 = "*" 
+requests = "*" 
+furl = "*" 
+django-mptt = "*"
+filemagic = "*" 
+beautifulsoup4 = "*" 
+django-compressor = "*"
+whitenoise = "*"
+types-requests = "*"
+django-environ = "*"
+rich = "*" 
+python-slugify = "*"
+types-python-slugify = "*"
+
+[tool.poetry.group.dev.dependencies]
+django-extensions = "*"
+ipython = "*"
+isort = "*"
+pre-commit = "*"
+pip-tools = "*"
+coolname = "*"
+black = "*"
+django-debug-toolbar = "*"
+
+[tool.poetry.group.test.dependencies]
+mock = "*"
+pytest-django = "*"
+responses = "*"
+django-webtest = "*"
+mypy = "*"
+django-stubs = "*"
+
+[tool.poetry.group.prod.dependencies]
+redis = "*"
+psycopg2 = "*"
+python-memcached = "*"
+gunicorn = "*"
+sentry-sdk = "*"
+django-storages = "*"
+boto3 = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
