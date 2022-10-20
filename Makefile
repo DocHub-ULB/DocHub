@@ -29,6 +29,7 @@ database:
 	@echo "from users.models import User; u=User.objects.get(netid='blabevue'); u.set_password('test'); u.save()" | $(PY) manage.py shell > /dev/null
 
 	@echo "Loading an minimal course tree"
+	$(PY) manage.py shell < ./catalog/management/commands/load_tree.py
 	$(PY) manage.py shell < ./catalog/management/commands/load_courses.py
 
 	@echo "Creating some tags"
