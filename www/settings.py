@@ -4,7 +4,6 @@ import environ
 
 # First checks if the secrets are not stored in tmpfs by Docker
 # https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
-from sentry_sdk.utils import get_default_release
 
 env = environ.FileAwareEnv()
 
@@ -14,13 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Take environment variables from .env file
 environ.Env.read_env(BASE_DIR / ".env")
 
-DEBUG = env.bool("DEBUG", default=True)
+DEBUG = env.bool("DEBUG", default=False)
 
 # Require the secret key if we are not in debug mode
-if DEBUG:
-    SECRET_KEY = env("SECRET_KEY", default="zisisverysecraite")
-else:
-    SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default="zisisverysecraite")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost", "*"])
 USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=True)
@@ -36,7 +32,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "mptt",
-    "django.contrib.postgres",
     "www",
     "documents",
     "users",
@@ -44,6 +39,9 @@ INSTALLED_APPS = [
     "tags",
     "search",
 ]
+
+if ALLOWED_HOSTS == "dochub.be":
+    INSTALLED_APPS += ("django.contrib.postgres",)
 
 DOCUMENT_STORAGE = "django.core.files.storage.FileSystemStorage"
 BASE_URL = env("BASE_URL", default="https://dochub.be/")
@@ -145,7 +143,6 @@ BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 
 SENTRY_DSN = env("SENTRY_DSN", default=None)
-SENTRY_RELEASE = get_default_release()
 
 if DEBUG:
     INSTALLED_APPS.extend(["django_extensions"])
@@ -160,34 +157,30 @@ if DEBUG:
         MIDDLEWARE.extend(["debug_toolbar.middleware.DebugToolbarMiddleware"])
         INSTALLED_APPS.extend(["debug_toolbar"])
 else:
-    INSTALLED_APPS.extend(
-        [
-            "gunicorn",
-        ]
-    )
-
     if SENTRY_DSN is not None:
         import sentry_sdk
-        from sentry_sdk.integrations.django import DjangoIntegration
+        from sentry_sdk.utils import get_default_release
+
+        SENTRY_RELEASE = get_default_release()
 
         sentry_sdk.init(
             dsn=SENTRY_DSN,
             traces_sample_rate=1.0,
             send_default_pii=True,
         )
+    if ALLOWED_HOSTS == "dochub.be":
+        SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
-    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+        STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        WHITENOISE_ROOT = BASE_DIR / "static" / "root"
 
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    WHITENOISE_ROOT = BASE_DIR / "static" / "root"
+        DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-    # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
-    AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
-    AWS_S3_ACCESS_KEY_ID = env("STORAGE_ACCESS_KEY")
-    AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
-    AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
+        # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+        AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
+        AWS_S3_ACCESS_KEY_ID = env("STORAGE_ACCESS_KEY")
+        AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
+        AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 
 READ_ONLY = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
