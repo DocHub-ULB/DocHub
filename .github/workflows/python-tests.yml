@@ -27,10 +27,15 @@ jobs:
     - name: Check pre-commit
       run: pre-commit run --all-files
 
-    - name: Install python packages
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+    - name: Install poetry
+      uses: snok/install-poetry@v1.3.2
+      with:
+        version: 1.2.1
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    
+    - name: Install dependencies
+      run: poetry install --no-interaction --only test
 
     - name: Django checks
       run: ./manage.py check
