@@ -168,19 +168,19 @@ else:
             traces_sample_rate=1.0,
             send_default_pii=True,
         )
+    if ALLOWED_HOSTS == "dochub.be":
+        SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
-    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+        STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        WHITENOISE_ROOT = BASE_DIR / "static" / "root"
 
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    WHITENOISE_ROOT = BASE_DIR / "static" / "root"
+        DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-    # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
-    AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
-    AWS_S3_ACCESS_KEY_ID = env("STORAGE_ACCESS_KEY")
-    AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
-    AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
+        # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+        AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
+        AWS_S3_ACCESS_KEY_ID = env("STORAGE_ACCESS_KEY")
+        AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
+        AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 
 READ_ONLY = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
