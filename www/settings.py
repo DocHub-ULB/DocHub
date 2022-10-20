@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "mptt",
-    "django.contrib.postgres",
     "www",
     "documents",
     "users",
@@ -43,6 +42,9 @@ INSTALLED_APPS = [
     "tags",
     "search",
 ]
+
+if ALLOWED_HOSTS == "dochub.be":
+    INSTALLED_APPS += ("django.contrib.postgres",)
 
 DOCUMENT_STORAGE = "django.core.files.storage.FileSystemStorage"
 BASE_URL = env("BASE_URL", default="https://dochub.be/")
