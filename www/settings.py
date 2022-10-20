@@ -16,10 +16,7 @@ environ.Env.read_env(BASE_DIR / ".env")
 DEBUG = env.bool("DEBUG", default=False)
 
 # Require the secret key if we are not in debug mode
-if DEBUG:
-    SECRET_KEY = env("SECRET_KEY", default="zisisverysecraite")
-else:
-    SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default="zisisverysecraite")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost", "*"])
 USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=True)
@@ -146,10 +143,6 @@ BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 
 SENTRY_DSN = env("SENTRY_DSN", default=None)
-if SENTRY_DSN:
-    from sentry_sdk.utils import get_default_release
-
-    SENTRY_RELEASE = get_default_release()
 
 if DEBUG:
     INSTALLED_APPS.extend(["django_extensions"])
@@ -164,15 +157,11 @@ if DEBUG:
         MIDDLEWARE.extend(["debug_toolbar.middleware.DebugToolbarMiddleware"])
         INSTALLED_APPS.extend(["debug_toolbar"])
 else:
-    INSTALLED_APPS.extend(
-        [
-            "gunicorn",
-        ]
-    )
-
     if SENTRY_DSN is not None:
         import sentry_sdk
-        from sentry_sdk.integrations.django import DjangoIntegration
+        from sentry_sdk.utils import get_default_release
+
+        SENTRY_RELEASE = get_default_release()
 
         sentry_sdk.init(
             dsn=SENTRY_DSN,
