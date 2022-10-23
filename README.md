@@ -33,19 +33,34 @@ sudo systemctl enable --now redis
 
 ### Installation
 
-To create the virutal environment and install the requirements, run the following command:
+If you install the packages listed above and follow the installation steps exactly, you should have a running version
+of DocHub on your machine. If it's not the case, **you are not the problem**, it means we have a bug.
+
+Please open an issue with the output of your console and describe the problem you encountered, we **will** and will fix
+it for you and the all the next users :rocket:
+
+To create the virtual environment and install the requirements, run the following command:
 ```console
 make install
+
+# Alternatively, if you prefer to do it by hand
+python3 -m venv ve
+source ve/bin/activate
+pip install -r requirements.txt
 ```
 
-To create a database with some dummy data, run the following command:
+To create a database and fill it with some dummy data, run the following command. Observe the output, it
+will tell you the credentials you can then use to log in.
 ```console
 make database
 ```
 
 ### Run
 
+This will have to be done each time you want to run DocHub.
+
 ```console
+source ve/bin/activate
 ./manage.py runserver
 ```
 

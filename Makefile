@@ -1,10 +1,10 @@
 ifeq ($(CI),true)
-    PY=python
+    PY=python3
 else
 ifndef VIRTUAL_ENV
 PY=ve/bin/python
 else
-PY=python
+PY=python3
 endif
 endif
 
@@ -13,7 +13,7 @@ init: database
 install: packages
 
 ve:
-	python -m venv ve
+	$(PY) -m venv ve
 
 packages: ve
 	ve/bin/pip install -r requirements.txt
