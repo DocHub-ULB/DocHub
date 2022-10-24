@@ -206,3 +206,10 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+
+if DEBUG:
+    print(
+        "Warning: you are running Dochub with DEBUG=True. This is dangerous if your server is publicly accessible."
+    )
+    print("You should set DEBUG=False in production.\n\n")
