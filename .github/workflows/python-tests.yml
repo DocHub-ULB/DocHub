@@ -62,7 +62,7 @@ jobs:
     - name: pytest with PostgreSQL
       run: pytest -k "not unoconv" -m postgresql
       env:
-        DB_URL: postgres://postgresql:postgresql@postgresql:5432/postgresql
+        DB_URL: postgres://postgres:postgres@postgres:5432/postgres
 
     - name: Check local dev initialization scripts
       run: make database
