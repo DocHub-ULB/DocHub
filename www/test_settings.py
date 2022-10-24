@@ -22,5 +22,8 @@ CELERY_ALWAYS_EAGER = True  # Skip the Celery daemon
 # which emulates the API and behavior of AsyncResult,
 # except the result is already evaluated.
 
+# Required if we don't want to build the collected static files upfront
+# (which is not possible desirable to do before each test run)
+WHITENOISE_MANIFEST_STRICT = False
 
 UPLOAD_DIR = tempfile.mkdtemp()
