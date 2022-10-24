@@ -9,5 +9,7 @@ CELERY_ALWAYS_EAGER = True  # Skip the Celery daemon
 # which emulates the API and behavior of AsyncResult,
 # except the result is already evaluated.
 
+DEBUG = False
+
 
 UPLOAD_DIR = tempfile.mkdtemp()
