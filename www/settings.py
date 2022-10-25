@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import environ
@@ -147,6 +148,19 @@ CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 SENTRY_DSN = env("SENTRY_DSN", default=None)
 SENTRY_RELEASE = get_default_release()
 
+# Only configure S3 storage if we have a STORAGE_ENDPOINT env variable else, default to the local filesystem
+if env("STORAGE_ENDPOINT", default=None):
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+    # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+    AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
+    AWS_S3_ACCESS_KEY_ID = env("STORAGE_ACCESS_KEY")
+    AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
+elif not DEBUG:
+    print("Warning: no storage configured but DEBUG=False, using local filesystem.")
+    print("You DO NOT want this in production!")
+
 if DEBUG:
     INSTALLED_APPS.extend(["django_extensions"])
 
@@ -181,13 +195,6 @@ else:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
     WHITENOISE_ROOT = BASE_DIR / "static" / "root"
 
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-    # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
-    AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
-    AWS_S3_ACCESS_KEY_ID = env("STORAGE_ACCESS_KEY")
-    AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
-    AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 
 READ_ONLY = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
@@ -199,3 +206,10 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+
+if DEBUG:
+    print(
+        "Warning: you are running Dochub with DEBUG=True. This is dangerous if your server is publicly accessible."
+    )
+    print("You should set DEBUG=False in production.\n\n")
