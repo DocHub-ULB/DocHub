@@ -28,3 +28,9 @@ repos:
       - id: djhtml
       - id: djcss
       - id: djjs
+
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: 1.11.0
+    hooks:
+      - id: django-upgrade
+        args: [ --target-version, "4.1" ]
