@@ -91,6 +91,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2
 class Viewer extends Controller {
     static targets = ["renderer", "loader"]
     static values = {src: String, loaded: Boolean, error: Boolean}
+    pageSizeLogDebounce = false;
 
     static options = {
         threshold: 0, // default
@@ -115,32 +116,19 @@ class Viewer extends Controller {
 
         this.loadedValue = true;
 
-        console.log("PDF loaded")
+        console.log("PDF loaded with ", this.pdf.numPages, " pages");
+        console.debug(this.pdf);
+
         this.pages = {};
 
         let options = {
-            root: this.element,
             rootMargin: '0px',
             threshold: 0
         }
-        let callback = (event) => {
-            event.map(entry => {
-                let wrapper = entry.target
-                let pageNumber = parseInt(wrapper.getAttribute("data-viewer-page-param"))
-                let isRendered = wrapper.getElementsByTagName("canvas")[0] !== undefined;
 
-                if (!isRendered && entry.isIntersecting) {
-                    console.log("rendering page", pageNumber)
-                    this.renderPage(pageNumber, wrapper);
-                }
-                if (isRendered && !entry.isIntersecting) {
-                    console.log("Removing page", pageNumber)
-                    this.removePage(wrapper);
-                }
-            })
-        }
+        this.observer = new IntersectionObserver(this.intersectionCallback.bind(this), options);
 
-        this.observer = new IntersectionObserver(callback, options);
+        let wrappers = [];
 
         for (let i = 1; i <= this.pdf.numPages; i++) {
             this.pages[i] = await this.pdf.getPage(i);
@@ -149,12 +137,34 @@ class Viewer extends Controller {
             wrapper.classList.add("page-wrapper");
             wrapper.style['aspectRatio'] = this.getPageRatio(i);
             wrapper.setAttribute("data-viewer-page-param", i)
-            this.observer.observe(wrapper)
 
+            wrappers.push(wrapper);
             this.rendererTarget.appendChild(wrapper);
 
         }
 
+        // only add all the pages to the observer after they are all created so we
+        // avoid listening to all the events while the pages are being created
+        // and the DOM reflows each time
+        wrappers.map((el) => this.observer.observe(el));
+
+    }
+
+    intersectionCallback(event) {
+        event.map(entry => {
+            let wrapper = entry.target
+            let pageNumber = parseInt(wrapper.getAttribute("data-viewer-page-param"))
+            let isRendered = wrapper.getElementsByTagName("canvas")[0] !== undefined;
+
+            if (!isRendered && entry.isIntersecting) {
+                console.log("Rendering page", pageNumber)
+                this.renderPage(pageNumber, wrapper);
+            }
+            if (isRendered && !entry.isIntersecting) {
+                console.log("Removing page", pageNumber)
+                this.removePage(wrapper);
+            }
+        })
     }
 
     getPageSizes(i) {
@@ -169,7 +179,10 @@ class Viewer extends Controller {
         let width = Math.floor(viewport.width * scale);
         let height = Math.floor(viewport.height * scale);
 
-        console.log(`${width}x${height}`)
+        if(!this.pageSizeLogDebounce){
+            this.pageSizeLogDebounce = true;
+            console.log(`Page ${i} canvas resolution is ${width}x${height}`)
+        }
         return {width, height, scale}
     }
 
