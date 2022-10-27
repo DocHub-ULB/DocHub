@@ -2,6 +2,7 @@ import _ from 'https://cdn.skypack.dev/lodash';
 
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
 import { Autocomplete } from 'https://cdn.skypack.dev/stimulus-autocomplete';
+import tomSelect from 'https://cdn.skypack.dev/tom-select';
 
 function normalize(s) {
     let r = s.toLowerCase();
@@ -96,6 +97,7 @@ class Viewer extends Controller {
     static options = {
         threshold: 0, // default
     }
+
 
     async connect() {
         let loadingTask = pdfjs.getDocument(this.srcValue);
@@ -257,6 +259,12 @@ class Upload extends Controller {
 
 }
 
+class TomSelect extends Controller {
+    async connect() {
+        new tomSelect(this.element, {hidePlaceholder: true});
+    }
+}
+
 const application = Application.start()
 
 application.register("course-filter", CourseFilter);
@@ -264,5 +272,6 @@ application.register("search", Search);
 application.register("viewer", Viewer);
 application.register("upload", Upload);
 application.register('autocomplete', Autocomplete);
+application.register('tom-select', TomSelect);
 
 application.debug = true;
