@@ -3,8 +3,10 @@ from typing import Optional
 import mimetypes
 import uuid
 from collections.abc import Iterable
+from math import floor
 
 from django.core.files import File
+from django.db.models import F
 
 from catalog.models import Course
 from tags.models import Tag
@@ -140,3 +142,17 @@ def tags_from_name(name: str) -> set[Tag]:
 
 
 from documents.models import Document  # NOQA
+
+
+def get_total_views_percentile(percentile: int):
+    """ "
+    Compute the 90th percentile of the number of views of a document across all courses
+    This is not pretty but django does not give us percentile aggregation functions
+    And SQLite does not provide percentile functions either
+    """
+    total_documents = Document.objects.count()
+    return (
+        Document.objects.annotate(total_views=F("views") + F("downloads"))
+        .order_by("total_views")[floor(total_documents * percentile / 100)]
+        .total_views
+    )

@@ -1,17 +1,15 @@
-import json
 from dataclasses import dataclass
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Case, Count, Q, Value, When
+from django.db.models import Case, Count, F, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.generic.detail import DetailView
 
 from catalog.models import Category, Course, CourseUserView
 from catalog.slug import normalize_slug
+from documents.logic import get_total_views_percentile
 from documents.models import Vote
 
 
@@ -37,9 +35,10 @@ def show_course(request, slug: str):
         course.document_set.exclude(state="ERROR", hidden=True)
         .select_related("course", "user")
         .prefetch_related("tags", "vote_set")
-        .annotate(upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))
         .annotate(
-            downvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE))
+            upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)),
+            downvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)),
+            total_views=F("views") + F("downloads"),
         )
         .order_by("-edited")
     )
@@ -49,6 +48,7 @@ def show_course(request, slug: str):
         "tags": {tag for doc in documents for tag in doc.tags.all()},
         "documents": documents,
         "following": course.followed_by.filter(id=request.user.id).exists(),
+        "p90_views": get_total_views_percentile(90),
     }
 
     if request.user.is_authenticated:
