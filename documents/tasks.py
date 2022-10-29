@@ -15,6 +15,7 @@ from celery import chain, shared_task
 from celery.exceptions import SoftTimeLimitExceeded
 from PyPDF2 import PdfReader
 
+import logging
 from documents.models import Document, DocumentError
 
 from .exceptions import (
@@ -30,7 +31,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
         return None
 
     doc_id = args[0]
-    print(f"Document {doc_id} failed.")
+    logging.debug(f"Document {doc_id} failed.")
 
     document = Document.objects.get(id=doc_id)
     document.state = Document.DocumentState.ERROR

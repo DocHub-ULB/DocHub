@@ -6,6 +6,7 @@ from django.core.management import BaseCommand
 import requests
 from bs4 import BeautifulSoup
 from rich import print
+import logging
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
 
@@ -20,7 +21,7 @@ class Command(BaseCommand):
         programs = []
 
         parent_programs: set[str] = set()
-        print("[bold blue]Gathering the list of available programs...[/]\n")
+        logging.debug("[bold blue]Gathering the list of available programs...[/]\n")
 
         with Progress(
             SpinnerColumn(),
@@ -107,12 +108,12 @@ class Command(BaseCommand):
                 progress.update(task1, completed=self.PAGE_SIZE * page)
                 page += 1
 
-        print(
+        logging.debug(
             f"Found {len(parent_programs)} programs containing options, ignoring those..."
         )
-        print(parent_programs)
+        logging.debug(parent_programs)
         programs = [p for p in programs if p["slug"] not in parent_programs]
 
-        print(f"Found {len(programs)} distinct programs, dumping to json...")
+        logging.debug(f"Found {len(programs)} distinct programs, dumping to json...")
         with open("programs.json", "w") as f:
             json.dump(programs, f, indent=4)

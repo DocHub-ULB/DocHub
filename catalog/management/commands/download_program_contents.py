@@ -5,6 +5,7 @@ from django.core.management import BaseCommand
 
 import requests
 from rich import print
+import logging
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
 
@@ -14,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         with open("programs.json") as f:
             programs: list[dict] = json.load(f)
-        print("\n[bold blue]Listing the course content of all programs...[/]\n")
+        logging.debug("\n[bold blue]Listing the course content of all programs...[/]\n")
 
         failed: list = []
         program_content: dict[str, dict[str, dict]] = {}
@@ -46,19 +47,19 @@ class Command(BaseCommand):
                     response = requests.get(URL)
                     if not response.ok:
                         if "parent" in progam:
-                            print(
+                            logging.debug(
                                 f"[yellow]Skip:[/] [magenta]{progam['slug'].upper()}[/] with bogus parent {progam['parent'].upper()}"
                             )
                         else:
-                            print(
+                            logging.debug(
                                 f"[red]Error:[/] [magenta]{progam['slug'].upper()}[/] failed with {response.status_code}"
                             )
-                            print("  ", URL)
+                            logging.debug("  ", URL)
                         continue
 
                 except Exception as e:
-                    print(f"[red]Error:[/] Failed to GET {progam['slug'].upper()}")
-                    print("  URL", URL)
+                    logging.debug(f"[red]Error:[/] Failed to GET {progam['slug'].upper()}")
+                    logging.debug("  URL", URL)
                     progress.console.print_exception()
                     continue
 
@@ -81,7 +82,7 @@ class Command(BaseCommand):
                             }
                 except Exception as e:
                     failed.append(progam["slug"])
-                    print(f"Error while listing content of {progam['slug']}")
+                    logging.debug(f"Error while listing content of {progam['slug']}")
                     progress.console.print_exception()
 
         with open(

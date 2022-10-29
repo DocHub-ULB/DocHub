@@ -2,6 +2,7 @@ from typing import Optional
 
 import mimetypes
 import uuid
+import logging
 from collections.abc import Iterable
 
 from django.core.files import File
@@ -16,7 +17,7 @@ except ImportError:
     import platform
 
     if platform.machine() == "arm64" and platform.system() == "Darwin":
-        print(
+        logging.debug(
             "There is a bug with libmagic on Apple Silicon, disabling the feature for now"
         )
     else:
