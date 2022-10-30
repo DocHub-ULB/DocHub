@@ -5,6 +5,7 @@ from django.db.models.query import QuerySet
 from .models import Document, DocumentError, Vote
 
 
+@admin.action(description="Reprocess selected documents")
 def reprocess(modeladmin, request, queryset: "QuerySet[Document]"):
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
@@ -13,26 +14,19 @@ def reprocess(modeladmin, request, queryset: "QuerySet[Document]"):
         doc.reprocess(force=True)
 
 
-reprocess.short_description = "Reprocess selected documents"  # type: ignore
-
-
+@admin.action(description="Auto-tag selected documents")
 def autotag(modeladmin, request, queryset: "QuerySet[Document]"):
     for doc in queryset:
         doc.tag_from_name()
 
 
-autotag.short_description = "Auto-tag selected documents"  # type: ignore
-
-
+@admin.action(description="Repair selected documents")
 def repair(modeladmin, request, queryset: "QuerySet[Document]"):
     if settings.READ_ONLY:
         raise Exception("Documents are read-only.")
 
     for doc in queryset:
         doc.repair()
-
-
-repair.short_description = "Repair selected documents"  # type: ignore
 
 
 class VoteInline(admin.StackedInline):
