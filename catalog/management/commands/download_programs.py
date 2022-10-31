@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 
 from django.core.management import BaseCommand
@@ -6,7 +7,6 @@ from django.core.management import BaseCommand
 import requests
 from bs4 import BeautifulSoup
 from rich import print
-import logging
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
 

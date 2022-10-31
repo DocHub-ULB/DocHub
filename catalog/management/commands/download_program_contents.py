@@ -1,11 +1,11 @@
 import json
+import logging
 from urllib.parse import quote
 
 from django.core.management import BaseCommand
 
 import requests
 from rich import print
-import logging
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
 
@@ -58,7 +58,9 @@ class Command(BaseCommand):
                         continue
 
                 except Exception as e:
-                    logging.debug(f"[red]Error:[/] Failed to GET {progam['slug'].upper()}")
+                    logging.debug(
+                        f"[red]Error:[/] Failed to GET {progam['slug'].upper()}"
+                    )
                     logging.debug("  URL", URL)
                     progress.console.print_exception()
                     continue

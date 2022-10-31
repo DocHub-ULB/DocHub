@@ -1,6 +1,7 @@
 import json
-import os
 import logging
+import os
+
 from django.utils.text import slugify
 
 from catalog.models import Category, Course

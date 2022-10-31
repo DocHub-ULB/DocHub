@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 from pathlib import Path
 
 import environ
@@ -159,7 +159,9 @@ if env("STORAGE_ENDPOINT", default=None):
     AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
     AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 elif not DEBUG:
-    logging.debug("Warning: no storage configured but DEBUG=False, using local filesystem.")
+    logging.debug(
+        "Warning: no storage configured but DEBUG=False, using local filesystem."
+    )
     logging.debug("You DO NOT want this in production!")
 
 if DEBUG:

@@ -1,8 +1,8 @@
 from typing import Optional
 
+import logging
 import mimetypes
 import uuid
-import logging
 from collections.abc import Iterable
 
 from django.core.files import File

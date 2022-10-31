@@ -2,6 +2,7 @@ from typing import Optional
 
 import contextlib
 import hashlib
+import logging
 import os
 import re
 import subprocess
@@ -15,7 +16,6 @@ from celery import chain, shared_task
 from celery.exceptions import SoftTimeLimitExceeded
 from PyPDF2 import PdfReader
 
-import logging
 from documents.models import Document, DocumentError
 
 from .exceptions import (
