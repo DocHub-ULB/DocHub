@@ -1,5 +1,4 @@
 import json
-import logging
 from urllib.parse import quote
 
 from django.core.management import BaseCommand
@@ -8,6 +7,8 @@ import requests
 from rich import print
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
+from www.logger_settings import logger
+
 
 class Command(BaseCommand):
     help = ""
@@ -15,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         with open("programs.json") as f:
             programs: list[dict] = json.load(f)
-        logging.debug("\n[bold blue]Listing the course content of all programs...[/]\n")
+        logger.debug("\n[bold blue]Listing the course content of all programs...[/]\n")
 
         failed: list = []
         program_content: dict[str, dict[str, dict]] = {}
@@ -47,21 +48,21 @@ class Command(BaseCommand):
                     response = requests.get(URL)
                     if not response.ok:
                         if "parent" in progam:
-                            logging.debug(
+                            logger.debug(
                                 f"[yellow]Skip:[/] [magenta]{progam['slug'].upper()}[/] with bogus parent {progam['parent'].upper()}"
                             )
                         else:
-                            logging.debug(
+                            logger.debug(
                                 f"[red]Error:[/] [magenta]{progam['slug'].upper()}[/] failed with {response.status_code}"
                             )
-                            logging.debug("  ", URL)
+                            logger.debug("  ", URL)
                         continue
 
                 except Exception as e:
-                    logging.debug(
+                    logger.debug(
                         f"[red]Error:[/] Failed to GET {progam['slug'].upper()}"
                     )
-                    logging.debug("  URL", URL)
+                    logger.debug("  URL", URL)
                     progress.console.print_exception()
                     continue
 
@@ -84,7 +85,7 @@ class Command(BaseCommand):
                             }
                 except Exception as e:
                     failed.append(progam["slug"])
-                    logging.debug(f"Error while listing content of {progam['slug']}")
+                    logger.debug(f"Error while listing content of {progam['slug']}")
                     progress.console.print_exception()
 
         with open(

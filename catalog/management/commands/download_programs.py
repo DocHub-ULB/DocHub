@@ -1,5 +1,4 @@
 import json
-import logging
 import re
 
 from django.core.management import BaseCommand
@@ -8,6 +7,8 @@ import requests
 from bs4 import BeautifulSoup
 from rich import print
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
+
+from www.logger_settings import logger
 
 
 class Command(BaseCommand):
@@ -21,7 +22,7 @@ class Command(BaseCommand):
         programs = []
 
         parent_programs: set[str] = set()
-        logging.debug("[bold blue]Gathering the list of available programs...[/]\n")
+        logger.debug("[bold blue]Gathering the list of available programs...[/]\n")
 
         with Progress(
             SpinnerColumn(),
@@ -108,12 +109,12 @@ class Command(BaseCommand):
                 progress.update(task1, completed=self.PAGE_SIZE * page)
                 page += 1
 
-        logging.debug(
+        logger.debug(
             f"Found {len(parent_programs)} programs containing options, ignoring those..."
         )
-        logging.debug(parent_programs)
+        logger.debug(parent_programs)
         programs = [p for p in programs if p["slug"] not in parent_programs]
 
-        logging.debug(f"Found {len(programs)} distinct programs, dumping to json...")
+        logger.debug(f"Found {len(programs)} distinct programs, dumping to json...")
         with open("programs.json", "w") as f:
             json.dump(programs, f, indent=4)

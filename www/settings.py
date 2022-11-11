@@ -1,4 +1,3 @@
-import logging
 import os
 from pathlib import Path
 
@@ -7,6 +6,8 @@ import environ
 # First checks if the secrets are not stored in tmpfs by Docker
 # https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
 from sentry_sdk.utils import get_default_release
+
+from www.logger_settings import logger
 
 env = environ.FileAwareEnv()
 
@@ -159,10 +160,10 @@ if env("STORAGE_ENDPOINT", default=None):
     AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
     AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 elif not DEBUG:
-    logging.debug(
+    logger.debug(
         "Warning: no storage configured but DEBUG=False, using local filesystem."
     )
-    logging.debug("You DO NOT want this in production!")
+    logger.debug("You DO NOT want this in production!")
 
 if DEBUG:
     INSTALLED_APPS.extend(["django_extensions"])
@@ -212,7 +213,7 @@ except ImportError:
 
 
 if DEBUG:
-    logging.debug(
+    logger.debug(
         "Warning: you are running Dochub with DEBUG=True. This is dangerous if your server is publicly accessible."
     )
-    logging.debug("You should set DEBUG=False in production.\n\n")
+    logger.debug("You should set DEBUG=False in production.\n\n")

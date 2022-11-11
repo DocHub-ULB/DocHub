@@ -2,7 +2,6 @@ from typing import Optional
 
 import contextlib
 import hashlib
-import logging
 import os
 import re
 import subprocess
@@ -17,6 +16,7 @@ from celery.exceptions import SoftTimeLimitExceeded
 from PyPDF2 import PdfReader
 
 from documents.models import Document, DocumentError
+from www.logger_settings import logger
 
 from .exceptions import (
     DocumentProcessingError,
@@ -31,7 +31,7 @@ def on_failure(self, exc, task_id, args, kwargs, einfo):
         return None
 
     doc_id = args[0]
-    logging.debug(f"Document {doc_id} failed.")
+    logger.debug(f"Document {doc_id} failed.")
 
     document = Document.objects.get(id=doc_id)
     document.state = Document.DocumentState.ERROR

@@ -1,6 +1,5 @@
 from typing import Optional
 
-import logging
 import mimetypes
 import uuid
 from collections.abc import Iterable
@@ -10,6 +9,7 @@ from django.core.files import File
 from catalog.models import Course
 from tags.models import Tag
 from users.models import User
+from www.logger_settings import logger
 
 try:
     import magic
@@ -17,7 +17,7 @@ except ImportError:
     import platform
 
     if platform.machine() == "arm64" and platform.system() == "Darwin":
-        logging.debug(
+        logger.debug(
             "There is a bug with libmagic on Apple Silicon, disabling the feature for now"
         )
     else:
