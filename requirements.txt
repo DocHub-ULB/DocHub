@@ -175,7 +175,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==9.2.0
+pillow==9.3.0
     # via -r requirements.in
 pip-tools==6.8.0
     # via -r requirements.in
@@ -266,11 +266,7 @@ toml==0.10.2
     # via pre-commit
 tomli==2.0.1
     # via
-    #   black
-    #   build
     #   django-stubs
-    #   mypy
-    #   pep517
     #   pytest
 traitlets==5.4.0
     # via
