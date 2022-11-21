@@ -16,6 +16,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+
     steps:
     - uses: actions/checkout@v3
     - name: Apt update
@@ -44,8 +59,13 @@ jobs:
     - name: Statics checks
       run: ./manage.py collectstatic --noinput -v 0
 
-    - name: pytest
+    - name: pytest with SQLite
       run: pytest -k "not unoconv"
 
-    - name: database checks
+    - name: pytest with PostgreSQL
+      run: pytest -k "not unoconv" -m postgresql
+      env:
+        DB_URL: postgres://postgres:postgres@localhost:5432/postgres
+
+    - name: Check local dev initialization scripts
       run: make database
