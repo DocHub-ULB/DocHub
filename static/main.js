@@ -1,7 +1,7 @@
 import _ from 'https://cdn.skypack.dev/lodash';
 
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
-import { Autocomplete } from 'https://cdn.skypack.dev/stimulus-autocomplete';
+import {Autocomplete} from 'https://cdn.skypack.dev/stimulus-autocomplete';
 import tomSelect from 'https://cdn.skypack.dev/tom-select';
 
 function normalize(s) {
@@ -107,7 +107,7 @@ class Viewer extends Controller {
             this.loaderTarget.setAttribute("value", percent);
         }
 
-        try{
+        try {
             this.pdf = await loadingTask.promise;
         } catch (e) {
             console.log("Error while loading remote PDF", e);
@@ -181,7 +181,7 @@ class Viewer extends Controller {
         let width = Math.floor(viewport.width * scale);
         let height = Math.floor(viewport.height * scale);
 
-        if(!this.pageSizeLogDebounce){
+        if (!this.pageSizeLogDebounce) {
             this.pageSizeLogDebounce = true;
             console.log(`Page ${i} canvas resolution is ${width}x${height}`)
         }
@@ -265,6 +265,37 @@ class TomSelect extends Controller {
     }
 }
 
+class Share extends Controller {
+    static values = {
+        shareUrl: String
+    }
+
+    connect() {
+        if ("share" in navigator) {
+            this.element.classList.remove("d-none")
+        }
+    }
+
+    async share() {
+        const url = new URL(this.shareUrlValue, window.location);
+        console.log("Sharing", url.href)
+        try {
+            await navigator.share({
+                url: url.href,
+            })
+        } catch (error) {
+            if (error.toString().includes('AbortError')) {
+                // Yes, checking the string representation of the error is hideous,
+                // but I don't know how to do better and AbortError is undefined
+                console.info("Share aborted by user")
+            } else {
+                throw error;
+            }
+        }
+    }
+
+}
+
 const application = Application.start()
 
 application.register("course-filter", CourseFilter);
@@ -273,5 +304,6 @@ application.register("viewer", Viewer);
 application.register("upload", Upload);
 application.register('autocomplete', Autocomplete);
 application.register('tom-select', TomSelect);
+application.register('share', Share);
 
 application.debug = true;
