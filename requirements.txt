@@ -36,7 +36,7 @@ build==0.8.0
     # via pip-tools
 celery==5.2.7
     # via -r requirements.in
-certifi==2022.9.24
+certifi==2022.12.7
     # via
     #   requests
     #   sentry-sdk
@@ -266,11 +266,7 @@ toml==0.10.2
     # via pre-commit
 tomli==2.0.1
     # via
-    #   black
-    #   build
     #   django-stubs
-    #   mypy
-    #   pep517
     #   pytest
 traitlets==5.4.0
     # via
