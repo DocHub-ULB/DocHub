@@ -3,7 +3,8 @@
 
 <html lang="fr">
 
-    <head data-sentry-dsn="{{ SENTRY_DSN }}" data-sentry-release="{{ SENTRY_RELEASE }}" data-sentry-email="{{ request.user.email }}">
+    <head data-sentry-dsn="{{ SENTRY_DSN }}" data-sentry-release="{{ SENTRY_RELEASE }}"
+        data-sentry-email="{{ request.user.email }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}DocHub - ULB{% endblock %}</title>
@@ -11,6 +12,12 @@
             rel="stylesheet" crossorigin="anonymous"
             integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor">
         <script type="module" src="{% static "main.js" %}" defer></script>
+        <!--
+    See https://github.com/hotwired/turbo/issues/735#issuecomment-1257143652
+    and https://github.com/skypackjs/skypack-cdn/issues/319
+    -->
+        <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@7.2.0/dist/turbo.es2017-umd.min.js" async
+            type="text/javascript"></script>
         <script type="module" src="{% static "sentry.js" %}" defer></script>
         <script defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
 
@@ -147,14 +154,22 @@
                 {% endblock %}
             </main>
 
-            <footer class="mt-3 p-2 text-center container-xl footer bg-light bg-gradient border-top">
-                Fait avec amour par des étudiants de l'ULB -
-                <a href="https://urlab.be">
-                    <img src="{% static "images/urlab.png" %}" style="height: 1em;">
-                    UrLab
-                </a>
-                <a href="https://cercle-informatique.be/"><img style="height: 1.0em;" src="{% static "images/ci.png" %}"></a>
-                Code open-source sur <a href="https://github.com/UrLab/dochub">GitHub</a>
+            <footer class="mt-3 p-2 container-xl footer bg-light bg-gradient border-top d-md-flex gap-4 justify-content-center">
+                <div>
+                    Fait avec amour par des étudiants de l'ULB -
+                    <a href="mailto:contact@dochub.be">
+                        contact@dochub.be
+                    </a>
+                </div>
+                <div>
+                    <a href="https://urlab.be">
+                        <img src="{% static "images/urlab.png" %}" style="height: 1em;">
+                        UrLab
+                    </a>
+                    <a href="https://cercle-informatique.be/"><img style="height: 1.0em;"
+                        src="{% static "images/ci.png" %}"></a>
+                    Code open-source sur <a href="https://github.com/UrLab/dochub">GitHub</a>
+                </div>
             </footer>
         {% endblock %}
     </body>
