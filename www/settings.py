@@ -196,7 +196,7 @@ else:
     WHITENOISE_ROOT = BASE_DIR / "static" / "root"
 
 
-READ_ONLY = False
+READ_ONLY: bool = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
 
 # Add an escape hatch if we really need to customise something

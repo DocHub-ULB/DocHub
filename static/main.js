@@ -1,5 +1,6 @@
 import _ from 'https://cdn.skypack.dev/lodash';
 
+import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo@v7.2.4';
 import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
 import { Autocomplete } from 'https://cdn.skypack.dev/stimulus-autocomplete';
 import tomSelect from 'https://cdn.skypack.dev/tom-select';
