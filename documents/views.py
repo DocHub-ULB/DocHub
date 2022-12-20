@@ -14,12 +14,13 @@ from catalog.models import Course
 from catalog.views import slug_redirect
 from documents import logic
 from documents.forms import (
+    BulkFilesForm,
     FileForm,
     MultipleUploadFileForm,
     ReUploadForm,
     UploadFileForm,
 )
-from documents.models import Document, Vote
+from documents.models import BulkDocuments, Document, Vote
 from tags.models import Tag
 
 
@@ -245,3 +246,26 @@ def document_pdf_file(request, pk):
     document.downloads = F("views") + 1
     document.save(update_fields=["views"])
     return response
+
+
+@login_required
+def submit_bulk(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+
+    if request.method == "POST":
+        form = BulkFilesForm(request.POST)
+
+        if form.is_valid():
+            BulkDocuments.objects.create(
+                url=form.cleaned_data["url"], course=course, user=request.user
+            )
+
+            return render(
+                request,
+                "documents/document_bulk.html",
+                {
+                    "course": course,
+                },
+            )
+
+    return HttpResponseRedirect(reverse("document_put", args=[course.slug]))
