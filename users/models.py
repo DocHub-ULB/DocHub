@@ -51,7 +51,7 @@ class User(AbstractBaseUser):
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
-    is_representative = models.BooleanField(default=False)
+    is_moderator = models.BooleanField(default=False)
 
     moderated_courses = models.ManyToManyField("catalog.Course", blank=True)
 

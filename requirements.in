@@ -21,6 +21,8 @@ django-environ
 rich
 python-slugify
 types-python-slugify
+django-crispy-forms
+crispy-bootstrap5
 
 # Dev
 django-extensions

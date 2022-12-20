@@ -26,8 +26,8 @@
     {% if not following_course and not recent_courses %}
         {% include "welcome.html" %}
     {% else %}
-        <div class="d-flex flex-column flex-lg-row gap-2 gap-lg-5">
-            <div class="flex-grow-1">
+        <div class="row gap-2 gap-lg-5">
+            <div class="col-lg">
                 <h1 class="fs-3 border-bottom d-flex justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -76,7 +76,13 @@
                     Une fois que tu as trouvé ton bonheur, n'oublie pas de l'ajouter aux favoris ! ️
                 {% endif %}
 
-
+                {% if not request.user.is_moderator %}
+                    <div class="alert alert-info" role="alert">
+                        Tu es délégué d'année, délégué cours de ton cercle ou dans un bureau étudiant&nbsp;?
+                        Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Clique
+                            ici</a> pour les recevoir !
+                    </div>
+                {% endif %}
                 <h1 class="fs-3 border-bottom d-flex justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -115,7 +121,7 @@
                         href="{% url 'catalog:finder_root' %}">ici</a></span>
                 {% endif %}
             </div>
-            <div class="flex-grow-1">
+            <div class="col-lg">
                 {% if following_course and recent_docs %}
                     <h1 class="fs-3 border-bottom d-flex align-items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"

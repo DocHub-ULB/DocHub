@@ -10,14 +10,14 @@ class UserAdmin(admin.ModelAdmin):
         "name",
         "is_staff",
         "is_academic",
-        "is_representative",
+        "is_moderator",
         "last_login",
         "created",
     )
     list_filter = (
         "is_staff",
         "is_academic",
-        "is_representative",
+        "is_moderator",
         "last_login",
         "created",
     )
@@ -60,7 +60,7 @@ class UserAdmin(admin.ModelAdmin):
                 "fields": (
                     "is_staff",
                     "is_academic",
-                    "is_representative",
+                    "is_moderator",
                     "moderated_courses",
                 ),
             },

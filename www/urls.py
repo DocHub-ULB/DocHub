@@ -20,6 +20,7 @@ urlpatterns = [
     path("catalog/", include(("catalog.urls", "catalog"), namespace="catalog")),
     path("documents/", include("documents.urls")),
     path("users/", include("users.urls")),
+    path("moderation/", include("moderation.urls")),
     path("admin/", admin.site.urls),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
     path("login", users.views.login_view, name="login"),
@@ -37,7 +38,6 @@ handler400 = "www.error.error400"
 handler403 = "www.error.error403"
 handler404 = "www.error.error404"
 handler500 = "www.error.error500"
-
 
 if settings.DEBUG:
     from django.conf.urls.static import static
