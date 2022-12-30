@@ -34,7 +34,8 @@ def show_course(request, slug: str):
     course = get_object_or_404(Course, slug=slug)
 
     documents = (
-        course.document_set.exclude(state="ERROR", hidden=True)
+        course.document_set.exclude(state="ERROR")
+        .exclude(hidden=True)
         .select_related("course", "user")
         .prefetch_related("tags", "vote_set")
         .annotate(upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))

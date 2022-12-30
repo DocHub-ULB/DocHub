@@ -81,6 +81,7 @@ class DocumentAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "state",
+        "hidden",
         "created",
         "edited",
         "file_type",
