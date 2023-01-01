@@ -75,7 +75,8 @@
                 {% endif %}
                 <button data-controller="share" data-share-url="{{ document.get_absolute_url }}"
                     data-action="click->share#share"
-                    class="d-none btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1" style="height: 2.2em">
+                    class="d-none btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
+                    style="height: 2.2em">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-box-arrow-up" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -162,11 +163,20 @@
 
         </div>
     {% elif document.state == "ERROR" %}
-        <div class="alert alert-primary" role="alert">
-            Ce document n'a pas pu être traité par DocHub à cause d'une erreur.
-            Mais tu peux <a href="{% url 'document_original' document.pk %}">télécharger
-                la version originale </a> si tu le désires.
-        </div>
+        {% if document.is_unconvertible %}
+            <div class="alert alert-primary" role="alert">
+                DocHub ne sait pas générer d'aperçu pour ce document.
+                Mais tu peux le
+                <a href="{% url 'document_original' document.pk %}">télécharger</a>
+                et l'ouvrir directement chez toi.
+            </div>
+        {% else %}
+            <div class="alert alert-primary" role="alert">
+                Ce document n'a pas pu être traité par DocHub à cause d'une erreur.
+                Mais tu peux <a href="{% url 'document_original' document.pk %}">télécharger
+                    la version originale </a> si tu le désires.
+            </div>
+        {% endif %}
     {% else %}
         <div class="alert alert-primary" role="alert">
             Ce document est en cours de traitement par DocHub et il n'est donc pas encore

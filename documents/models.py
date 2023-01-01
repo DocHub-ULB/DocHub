@@ -12,6 +12,10 @@ UNCONVERTIBLE_TYPES = [
     ".tex",
     ".djvu",
     ".pages",
+    ".goodnotes",
+    ".apkg",
+    ".one",
+    ".mp4",
 ]
 
 
