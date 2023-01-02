@@ -62,6 +62,7 @@ class Document(models.Model):
     )
     md5 = models.CharField(max_length=32, default="", db_index=True)
 
+    certified = models.BooleanField(default=False, verbose_name="Est certifié")
     hidden = models.BooleanField(default=False, verbose_name="Est caché")
     import_source = models.CharField(
         max_length=1024, null=True, verbose_name="Importé depuis", blank=True
@@ -99,8 +100,7 @@ class Document(models.Model):
     @property
     def is_certified(self) -> bool:
         """Is the document tagged with the "officiel" tag ?"""
-        tag_names = [tag.name for tag in self.tags.all()]
-        return "officiel" in tag_names
+        return self.certified
 
     def fullname(self) -> str:
         return self.__str__()
