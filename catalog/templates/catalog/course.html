@@ -134,16 +134,15 @@
                                 {{ document.user.name }} |
                                 {{ document.pages }} page{{ document.pages|pluralize }} |
                                 {{ document.date|date:"F Y"|capfirst }}
-                                <div class="tags d-none">
-                                    {% for kw in document.tags.all %}
-                                        <span
-                                            data-id="{{ kw.id }}"
-                                            style="background-color: {{ kw.color }}; color:white;"
-                                        >
-                                            {{ kw }}
-                                        </span>
-                                    {% endfor %}
-                                </div>
+                                {% for kw in document.tags.all %}
+                                    <span
+                                        data-id="{{ kw.id }}"
+                                        class="badge"
+                                        style="background-color: {{ kw.color }}; color:white;"
+                                    >
+                                        {{ kw }}
+                                    </span>
+                                {% endfor %}
                             </div>
                         </div>
                     </a>
