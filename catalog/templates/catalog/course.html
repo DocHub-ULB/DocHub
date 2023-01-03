@@ -2,7 +2,7 @@
 
 {% load static %}
 {% load humanize %}
-{% load has_write_perm_on %}
+{% load permissions %}
 
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 

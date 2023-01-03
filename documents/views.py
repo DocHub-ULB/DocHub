@@ -118,6 +118,11 @@ def document_edit(request, pk):
                     },
                 )
 
+            # TODO Log edit
+            # action.send(
+            #     request.user, verb="a édité", action_object=doc, target=doc.course
+            # )
+
             form.save()
             return HttpResponseRedirect(reverse("document_show", args=[doc.id]))
 
