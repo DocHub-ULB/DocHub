@@ -2,6 +2,7 @@ import os
 import uuid
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
@@ -87,6 +88,15 @@ def document_edit(request, pk):
     if request.method == "POST":
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
+
+        if "delete" in request.POST:
+            doc.hidden = True
+            doc.save()
+            # TODO: use the messages in the templates (later)
+            messages.success(request, "Le document a bien été caché !")
+            return HttpResponseRedirect(
+                reverse("catalog:course_show", args=[doc.course.slug])
+            )
 
         form = FileForm(request.POST)
 

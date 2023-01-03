@@ -28,10 +28,14 @@
         <div class="mb-3">
             <label for="added" class="form-label">Ajouté par</label>
 
-            <input type="input" class="form-control" id="added" value="{{ doc.user}}" disabled>
+            <input type="input" class="form-control" id="added" value="{{ doc.user }}" disabled>
         </div>
 
-        <input type="submit" class="btn btn-success" value="Mettre à jour"/>
+        <input type="submit" class="btn btn-success" name="update" value="Mettre à jour"/>
+        <input type="submit" class="btn btn-link text-danger"
+            name="delete" value="Cacher le document"
+            data-turbo-confirm="Est-tu certain de vouloir cacher ce document ?"
+        />
     </form>
 
 {% endblock %}
