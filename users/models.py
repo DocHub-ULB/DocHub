@@ -75,7 +75,7 @@ class User(AbstractBaseUser):
     def has_perm(self, perm_list, obj=None):
         return self.is_staff
 
-    def write_perm(self, obj):
+    def moderation_perm(self, obj):
         if self.is_staff:
             return True
 
@@ -86,7 +86,13 @@ class User(AbstractBaseUser):
             ids = [course.id for course in self.moderated_courses.only("id")]
             self._moderated_courses = ids
 
-        return obj.write_perm(self, self._moderated_courses)
+        return obj.course_id in self._moderated_courses
+
+    def write_perm(self, obj):
+        if obj and (obj.user.id == self.id):
+            return True
+
+        return self.moderation_perm(obj)
 
     def fullname(self):
         return self.name

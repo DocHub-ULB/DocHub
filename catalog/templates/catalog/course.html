@@ -2,7 +2,7 @@
 
 {% load static %}
 {% load humanize %}
-{% load has_perm_on %}
+{% load has_write_perm_on %}
 
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
@@ -181,7 +181,7 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        {% if request.user|has_perm_on:document %}
+                        {% if request.user|has_write_perm_on:document %}
                             <a class="btn d-none d-sm-block" title="Modifier"
                                href="{% url 'document_edit' document.pk %}"
                                data-turbo="false">

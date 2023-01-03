@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load has_perm_on %}
+{% load has_write_perm_on %}
 
 {% block title %}{{ document.name }}{% endblock %}
 {% block header %}
@@ -61,7 +61,7 @@
                         Téléchager ({{ document.file_type }})
                     </a>
                 {% endif %}
-                {% if request.user|has_perm_on:document %}
+                {% if request.user|has_write_perm_on:document %}
                     <a class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
                        href="{% url 'document_edit' document.pk %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
