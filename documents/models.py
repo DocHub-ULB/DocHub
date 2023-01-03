@@ -97,11 +97,6 @@ class Document(models.Model):
 
         return {"upvotes": upvotes, "downvotes": downvotes}
 
-    @property
-    def is_certified(self) -> bool:
-        """Is the document tagged with the "officiel" tag ?"""
-        return self.certified
-
     def fullname(self) -> str:
         return self.__str__()
 
