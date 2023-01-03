@@ -86,7 +86,7 @@ class User(AbstractBaseUser):
             ids = [course.id for course in self.moderated_courses.only("id")]
             self._moderated_courses = ids
 
-        return obj.course_id in self._moderated_courses
+        return obj.write_perm(self, self._moderated_courses)
 
     def write_perm(self, obj):
         if obj and (obj.user.id == self.id):
