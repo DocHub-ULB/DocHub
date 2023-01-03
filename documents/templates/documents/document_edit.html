@@ -18,6 +18,7 @@
                 Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
             </div>
         </div>
+
         <div class="mb-3">
             <label for="id_tags" class="form-label">Tags</label>
             {{ form.tags }}
@@ -25,6 +26,17 @@
                 Sélectionne si possible les tags qui correspondent à ton document.
             </div>
         </div>
+
+        {% if request.user.is_staff %}
+            <div class="mb-3">
+                <label for="id_tags" class="form-label">Certifié: </label>
+                {{ form.certified }}
+                <div class="form-text">
+                    Le document est-il certifié ?
+                </div>
+            </div>
+        {% endif %}
+
         <div class="mb-3">
             <label for="added" class="form-label">Ajouté par</label>
 
