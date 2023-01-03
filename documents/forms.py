@@ -51,6 +51,10 @@ class UploadFileForm(FileForm):
     )
 
 
+class BulkFilesForm(FileForm):
+    url = forms.URLField()
+
+
 class ReUploadForm(forms.Form):
     file = forms.FileField(validators=[validate_uploaded_file])
 
