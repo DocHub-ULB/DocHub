@@ -86,7 +86,7 @@ class DocumentAdmin(admin.ModelAdmin):
         "edited",
         "file_type",
     )
-    search_fields = ("md5", "name", "user__netid")
+    search_fields = ("id", "md5", "name", "user__netid")
     raw_id_fields = ("user", "course")
 
     inlines = [VoteInline]
