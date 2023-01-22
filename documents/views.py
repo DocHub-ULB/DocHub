@@ -22,6 +22,7 @@ from documents.forms import (
     UploadFileForm,
 )
 from documents.models import BulkDocuments, Document, Vote
+from moderation.models import ModerationLog
 from tags.models import Tag
 
 
@@ -91,6 +92,13 @@ def document_edit(request, pk):
             return HttpResponse("Upload is disabled for a few hours", status=401)
 
         if "delete" in request.POST:
+            if request.user != doc.user:
+                ModerationLog.track(
+                    user=request.user,
+                    content_object=doc,
+                    values={"hidden": (doc.hidden, True)},
+                )
+
             doc.hidden = True
             doc.save()
             # TODO: use the messages in the templates (later)
@@ -102,6 +110,20 @@ def document_edit(request, pk):
         form = FileForm(request.POST)
 
         if form.is_valid():
+            if request.user != doc.user:
+                ModerationLog.track(
+                    user=request.user,
+                    content_object=doc,
+                    values={
+                        "name": (doc.name, form.cleaned_data["name"]),
+                        "description": (
+                            doc.description,
+                            form.cleaned_data["description"],
+                        ),
+                        "tags": (doc.tags.all(), form.cleaned_data["tags"]),
+                    },
+                )
+
             doc.name = form.cleaned_data["name"]
             doc.description = form.cleaned_data["description"]
 
@@ -110,11 +132,6 @@ def document_edit(request, pk):
                 doc.tags.add(Tag.objects.get(name=tag))
 
             doc.save()
-
-            # TODO Log edit
-            # action.send(
-            #     request.user, verb="a édité", action_object=doc, target=doc.course
-            # )
 
             return HttpResponseRedirect(reverse("document_show", args=[doc.id]))
 
@@ -139,6 +156,7 @@ def document_reupload(request, pk):
 
     if not request.user.write_perm(obj=document):
         return HttpResponse("You may not edit this document.", status=403)
+    # FIXME: log moderation action
 
     if document.state != Document.DocumentState.DONE:
         return HttpResponse(
