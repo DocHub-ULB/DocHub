@@ -43,17 +43,6 @@ class UserAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Notifications",
-            {
-                "classes": ("collapse",),
-                "fields": (
-                    "notify_on_response",
-                    "notify_on_new_doc",
-                    "notify_on_new_thread",
-                ),
-            },
-        ),
-        (
             "Moderation",
             {
                 "classes": ("collapse",),

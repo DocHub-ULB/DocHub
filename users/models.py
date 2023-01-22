@@ -55,11 +55,6 @@ class User(AbstractBaseUser):
 
     moderated_courses = models.ManyToManyField("catalog.Course", blank=True)
 
-    notify_on_response = models.BooleanField(default=True)
-    notify_on_new_doc = models.BooleanField(default=True)
-    notify_on_new_thread = models.BooleanField(default=True)
-    notify_on_upload = True
-
     def __init__(self, *args, **kwargs):
         self._moderated_courses = None
         super().__init__(*args, **kwargs)
