@@ -15,7 +15,10 @@
         <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo@v7.2.4" defer></script>
         <script type="module" src="{% static "main.js" %}" defer data-turbo-track="reload"></script>
 
+        <!--
+        Sentry on the frontend gives us almost only false positives, mostly due to network errors triggered by Turbo.
         <script type="module" src="{% static "sentry.js" %}" defer data-turbo-track="reload"></script>
+        -->
         <script defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js" data-turbo-track="reload"></script>
 
         <style>
