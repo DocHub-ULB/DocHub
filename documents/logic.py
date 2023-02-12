@@ -6,21 +6,11 @@ from collections.abc import Iterable
 
 from django.core.files import File
 
+import magic
+
 from catalog.models import Course
 from tags.models import Tag
 from users.models import User
-
-try:
-    import magic
-except ImportError:
-    import platform
-
-    if platform.machine() == "arm64" and platform.system() == "Darwin":
-        print(
-            "There is a bug with libmagic on Apple Silicon, disabling the feature for now"
-        )
-    else:
-        raise
 
 
 def clean_filename(name: str) -> str:
