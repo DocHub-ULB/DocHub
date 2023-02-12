@@ -1,3 +1,5 @@
+from typing import Any
+
 import json
 from urllib.parse import quote
 
@@ -11,7 +13,7 @@ from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 class Command(BaseCommand):
     help = ""
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         with open("programs.json") as f:
             programs: list[dict] = json.load(f)
         print("\n[bold blue]Listing the course content of all programs...[/]\n")

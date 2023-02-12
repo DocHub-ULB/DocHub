@@ -157,7 +157,7 @@ mdurl==0.1.2
     # via markdown-it-py
 mock==5.0.1
     # via -r requirements.in
-mypy==0.991
+mypy==1.0.0
     # via
     #   -r requirements.in
     #   django-stubs

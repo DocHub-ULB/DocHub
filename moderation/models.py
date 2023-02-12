@@ -70,11 +70,11 @@ class ModerationLog(models.Model):
         The old and new values should be strings of lists (in that case, every item of the list is converted to a str and then joined by comas.
         """
         for field, (old, new) in values.items():
-            if isinstance(old, (collections.abc.Iterable, QuerySet)) and not isinstance(
+            if isinstance(old, (collections.abc.Iterable, QuerySet)) and not isinstance(  # type: ignore
                 old, str
             ):
                 old = ",".join([str(x) for x in old])
-            if isinstance(new, (collections.abc.Iterable, QuerySet)) and not isinstance(
+            if isinstance(new, (collections.abc.Iterable, QuerySet)) and not isinstance(  # type: ignore
                 new, str
             ):
                 new = ",".join([str(x) for x in new])

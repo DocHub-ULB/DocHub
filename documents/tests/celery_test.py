@@ -49,7 +49,6 @@ def create_doc(name, ext):
 
 @pytest.mark.slow
 def test_add_to_queue():
-
     doc = create_doc("Document name", ".pdf")
     with open("documents/tests/files/3pages.pdf", "rb") as fd:
         f = File(fd)

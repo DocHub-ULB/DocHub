@@ -32,7 +32,6 @@ class CustomUserManager(UserManager):
 
 
 class User(AbstractBaseUser):
-
     USERNAME_FIELD = "netid"
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
     objects = CustomUserManager()

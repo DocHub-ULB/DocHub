@@ -18,7 +18,6 @@ def get_category(slug, name=None, parent=None, type=None):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-
         with open("catalog/management/parser/data/courses.json") as f:
             programs = json.load(f)
 
