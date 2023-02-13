@@ -12,12 +12,12 @@ from users.models import User
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def user():
     return User.objects.create_user(netid="test_user")
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def course():
     return Course.objects.create(slug="test-t-100")
 

@@ -56,7 +56,7 @@ def test_unknown_structure(path):
 
 
 @pytest.mark.parametrize(
-    "path,expected_error,expected_text",
+    ("path", "expected_error", "expected_text"),
     [
         (
             "users/tests/xml-fixtures/invalid-service.xml",
