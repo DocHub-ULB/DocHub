@@ -103,10 +103,10 @@ def test_document_file_cleanup():
     pdffilename = doc.pdf.file.name
 
     doc.delete()
-    with pytest.raises(IOError) as errorinfo:
-        open(originalfilename)
+    with pytest.raises(IOError) as errorinfo, open(originalfilename):
+        pass
     assert "No such file or directory" in str(errorinfo)
 
-    with pytest.raises(IOError) as errorinfo:
-        open(pdffilename)
+    with pytest.raises(IOError) as errorinfo, open(pdffilename):
+        pass
     assert "No such file or directory" in str(errorinfo)

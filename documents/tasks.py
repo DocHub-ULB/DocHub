@@ -196,27 +196,26 @@ def repair(self, document_id: int) -> int:
 
     with file_as_local(
         document.pdf, prefix="dochub_pdf_repair_", suffix=".broken.pdf"
-    ) as tmpfile:
-        with temporary_file_path(
-            prefix="dochub_pdf_repair_", suffix=".repaired.pdf"
-        ) as output_path:
-            try:
-                subprocess.check_output(
-                    ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
-                    stderr=subprocess.STDOUT,
-                )
-            except OSError as e:
-                raise MissingBinary("mutool") from e
-            except subprocess.CalledProcessError as e:
-                raise DocumentProcessingError(
-                    document,
-                    exc=e,
-                    message="mutool clean has failed : %s" % e.output[:900],
-                ) from e
+    ) as tmpfile, temporary_file_path(
+        prefix="dochub_pdf_repair_", suffix=".repaired.pdf"
+    ) as output_path:
+        try:
+            subprocess.check_output(
+                ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
+                stderr=subprocess.STDOUT,
+            )
+        except OSError as e:
+            raise MissingBinary("mutool") from e
+        except subprocess.CalledProcessError as e:
+            raise DocumentProcessingError(
+                document,
+                exc=e,
+                message="mutool clean has failed : %s" % e.output[:900],
+            ) from e
 
-            with open(output_path, "rb") as fd:
-                document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
-                document.pdf.close()
+        with open(output_path, "rb") as fd:
+            document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
+            document.pdf.close()
 
     if pdf_is_original:
         document.original = document.pdf

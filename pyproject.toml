@@ -15,15 +15,19 @@ markers = """
 select = [
     "F", "E", "W", "YTT", "B", "COM818",
     "C4", "DTZ", "T10", "EXE", "ISC",
-    "ICN", "G", "PIE", "PYI", "PT"
+    "ICN", "G", "PIE", "PYI", "PT",
+    "SIM"
 ]
 # Not now: "N", "ANN", "S", "BLE", "A", "DJ", "EM", "INP"
-# Never ? "FBT", "D", "COM", "T20"
+# Partial some day ? "RET"
+# Never ? "FBT", "D", "COM", "T20", "Q"
 ignore = [
     "E501", # Line too long
     "B905", # Not available <3.10
     "PT011", # `pytest.raises(Exception)` is too broad
     "PT004", # Fixture does not return anything
+    "SIM108", # Use ternary operator
+    "SIM105", # Use `contextlib.suppress(Alarm)`
 ]
 
 [tool.ruff.per-file-ignores]

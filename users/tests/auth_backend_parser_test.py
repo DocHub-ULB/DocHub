@@ -6,7 +6,8 @@ from users.authBackend import CasParseError, CasRejectError, UlbCasBackend
 
 
 def test_parser():
-    xml = open("users/tests/xml-fixtures/minimal.xml").read()
+    with open("users/tests/xml-fixtures/minimal.xml") as fd:
+        xml = fd.read()
     ret = UlbCasBackend()._parse_response(xml)
 
     assert ret == {
@@ -18,7 +19,8 @@ def test_parser():
 
 
 def test_wihout_email():
-    xml = open("users/tests/xml-fixtures/no-email.xml").read()
+    with open("users/tests/xml-fixtures/no-email.xml") as fd:
+        xml = fd.read()
     ret = UlbCasBackend()._parse_response(xml)
 
     assert ret == {
@@ -33,7 +35,8 @@ def test_wihout_email():
 
 
 def test_invalid_xml():
-    xml = open("users/tests/xml-fixtures/invalid-xml.xml").read()
+    with open("users/tests/xml-fixtures/invalid-xml.xml") as fd:
+        xml = fd.read()
 
     with pytest.raises(CasParseError) as e:
         UlbCasBackend()._parse_response(xml)
@@ -48,7 +51,8 @@ def test_invalid_xml():
     ],
 )
 def test_unknown_structure(path):
-    xml = open(path).read()
+    with open(path) as fd:
+        xml = fd.read()
 
     with pytest.raises(CasParseError) as e:
         UlbCasBackend()._parse_response(xml)
@@ -71,7 +75,8 @@ def test_unknown_structure(path):
     ],
 )
 def test_invalid_service(path, expected_error, expected_text):
-    xml = open(path).read()
+    with open(path) as fd:
+        xml = fd.read()
 
     with pytest.raises(CasRejectError) as e:
         UlbCasBackend()._parse_response(xml)
