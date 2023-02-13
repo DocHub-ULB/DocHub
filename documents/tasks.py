@@ -138,12 +138,12 @@ def convert_office_to_pdf(self, document_id: int) -> int:
                 sub = subprocess.check_output(
                     ["unoconv", "-f", "pdf", "--stdout", tmpfile.name]
                 )
-            except OSError:
-                raise MissingBinary("unoconv")
+            except OSError as e:
+                raise MissingBinary("unoconv") from e
             except subprocess.CalledProcessError as e:
                 raise DocumentProcessingError(
                     document, exc=e, message='"unoconv" has failed: %s' % e.output[:800]
-                )
+                ) from e
 
         document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
@@ -205,14 +205,14 @@ def repair(self, document_id: int) -> int:
                     ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
                     stderr=subprocess.STDOUT,
                 )
-            except OSError:
-                raise MissingBinary("mutool")
+            except OSError as e:
+                raise MissingBinary("mutool") from e
             except subprocess.CalledProcessError as e:
                 raise DocumentProcessingError(
                     document,
                     exc=e,
                     message="mutool clean has failed : %s" % e.output[:900],
-                )
+                ) from e
 
             with open(output_path, "rb") as fd:
                 document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
@@ -265,12 +265,12 @@ def mutool_get_pages(document: Document) -> int | None:
             output = subprocess.check_output(
                 ["mutool", "info", tmpfile.name], stderr=subprocess.STDOUT
             )
-        except OSError:
-            raise MissingBinary("mutool")
+        except OSError as e:
+            raise MissingBinary("mutool") from e
         except subprocess.CalledProcessError as e:
             raise DocumentProcessingError(
                 document, exc=e, message="mutool info has failed : %s" % e.output
-            )
+            ) from e
 
     lines = output.split(b"\n")
     for line in lines:

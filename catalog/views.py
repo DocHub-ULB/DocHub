@@ -18,7 +18,7 @@ def slug_redirect(view):
         try:
             normalized = normalize_slug(slug)
         except ValueError:
-            raise Http404("This is not a valid course slug.")
+            raise Http404("This is not a valid course slug.") from None
         if normalized != slug:
             return redirect(request.path.replace(slug, normalized))
         return view(request, slug, *args, **kwargs)
