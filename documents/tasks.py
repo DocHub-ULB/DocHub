@@ -1,5 +1,3 @@
-from typing import Optional
-
 import contextlib
 import hashlib
 import os
@@ -168,7 +166,7 @@ def mesure_pdf_length(self, document_id: int) -> int:
     try:
         reader = PdfReader(document.pdf)
         num_pages = len(reader.pages)
-    except:
+    except Exception:
         num_pages = mutool_get_pages(document)
     if num_pages is not None:
         document.pages = num_pages

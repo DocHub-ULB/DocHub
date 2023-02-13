@@ -58,7 +58,7 @@ class Command(BaseCommand):
                             print("  ", URL)
                         continue
 
-                except Exception as e:
+                except Exception:
                     print(f"[red]Error:[/] Failed to GET {progam['slug'].upper()}")
                     print("  URL", URL)
                     progress.console.print_exception()
@@ -81,7 +81,7 @@ class Command(BaseCommand):
                                 "lecturers": course["lecturers"],
                                 "quadri": course["quadri"],
                             }
-                except Exception as e:
+                except Exception:
                     failed.append(progam["slug"])
                     print(f"Error while listing content of {progam['slug']}")
                     progress.console.print_exception()

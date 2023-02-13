@@ -1,7 +1,4 @@
-from typing import List
-
 import re
-from collections.abc import Callable
 
 
 class Slug:

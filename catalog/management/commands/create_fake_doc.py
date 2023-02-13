@@ -1,10 +1,8 @@
 # type: ignore
 
 import random
-from datetime import timedelta
 
 from django.core.management import BaseCommand
-from django.utils import timezone
 
 from coolname import generate
 

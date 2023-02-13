@@ -1,14 +1,11 @@
-import json
 from dataclasses import dataclass
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Case, Count, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.generic.detail import DetailView
 
 from catalog.models import Category, Course, CourseUserView
 from catalog.slug import normalize_slug

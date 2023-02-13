@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import collections.abc
 
 from django.contrib.contenttypes.fields import GenericForeignKey
