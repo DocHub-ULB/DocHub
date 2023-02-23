@@ -147,7 +147,7 @@ kombu==5.2.4
     # via celery
 markdown==3.4.1
     # via -r requirements.in
-markdown-it-py==2.1.0
+markdown-it-py==2.2.0
     # via rich
 matplotlib-inline==0.1.6
     # via ipython
