@@ -1,5 +1,7 @@
-from datetime import UTC, datetime
+from datetime import datetime
 from unittest import mock
+
+from pytz import UTC
 
 from www import helpers
 
