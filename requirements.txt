@@ -149,8 +149,6 @@ jsonfield==3.1.0
     # via -r requirements.in
 kombu==5.2.4
     # via celery
-markdown==3.4.1
-    # via -r requirements.in
 markdown-it-py==2.1.0
     # via rich
 matplotlib-inline==0.1.6
@@ -279,7 +277,6 @@ tomli==2.0.1
     #   build
     #   django-stubs
     #   mypy
-    #   pyproject-hooks
     #   pytest
 traitlets==5.8.1
     # via
