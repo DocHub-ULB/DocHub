@@ -73,8 +73,8 @@ def test_fill_twice():
     assert course.name == new_course.name
 
 
-@pytest.mark.slow
-@pytest.mark.network
+@pytest.mark.slow()
+@pytest.mark.network()
 def test_load_tree_hit_ulb():
     call_command("loadtree", REAL_TREE, hitulb=True)
 

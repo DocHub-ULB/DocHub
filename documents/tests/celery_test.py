@@ -47,7 +47,7 @@ def create_doc(name, ext):
     return doc
 
 
-@pytest.mark.slow
+@pytest.mark.slow()
 def test_add_to_queue():
     doc = create_doc("Document name", ".pdf")
     with open("documents/tests/files/3pages.pdf", "rb") as fd:
@@ -63,7 +63,7 @@ def test_add_to_queue():
     assert doc.original.path == doc.pdf.path
 
 
-@pytest.mark.slow
+@pytest.mark.slow()
 def test_send_duplicate():
     test_add_to_queue()
 
@@ -80,8 +80,8 @@ def test_send_duplicate():
 
 
 # TODO : mock unoconv and provide a fake pdf instead
-@pytest.mark.unoconv
-@pytest.mark.slow
+@pytest.mark.unoconv()
+@pytest.mark.slow()
 def test_send_office():
     doc = create_doc("My office doc", ".docx")
 

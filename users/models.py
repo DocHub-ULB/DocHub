@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
 from django.utils import timezone
 
-from catalog.models import Category, Course
+from catalog.models import Course
 
 
 class CustomUserManager(UserManager):

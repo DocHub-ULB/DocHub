@@ -1,14 +1,11 @@
-import json
 from dataclasses import dataclass
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Case, Count, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.generic.detail import DetailView
 
 from catalog.models import Category, Course, CourseUserView
 from catalog.slug import normalize_slug
@@ -21,7 +18,7 @@ def slug_redirect(view):
         try:
             normalized = normalize_slug(slug)
         except ValueError:
-            raise Http404("This is not a valid course slug.")
+            raise Http404("This is not a valid course slug.") from None
         if normalized != slug:
             return redirect(request.path.replace(slug, normalized))
         return view(request, slug, *args, **kwargs)

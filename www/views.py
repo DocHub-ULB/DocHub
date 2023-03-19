@@ -1,17 +1,14 @@
 from django.conf import settings
 from django.db.models import Sum
-from django.http import FileResponse, Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render
-from django.template.loader import get_template
+from django.http import FileResponse
+from django.shortcuts import render
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_GET
-from django.views.generic import TemplateView
 
 from catalog.forms import SearchForm
-from catalog.models import Category, Course, CourseUserView
+from catalog.models import CourseUserView
 from documents.models import Document
 from users.models import User
-from www.utils import buildOrderedProgramList
 
 
 def index(request):

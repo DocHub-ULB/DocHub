@@ -16,7 +16,8 @@ def fake_base_url(settings):
 @responses.activate
 def test_auth(fake_base_url):
     ticket = "this-is-a-cas-ticket"
-    xml = open("users/tests/xml-fixtures/minimal.xml").read()
+    with open("users/tests/xml-fixtures/minimal.xml") as fd:
+        xml = fd.read()
 
     responses.add(
         responses.GET,

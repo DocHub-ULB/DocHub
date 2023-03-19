@@ -1,0 +1,40 @@
+[tool.pytest.ini_options]
+norecursedirs = "ve ve3 static media .git node_modules"
+DJANGO_SETTINGS_MODULE="www.test_settings"
+addopts = "--reuse-db"
+markers = """
+    slow: marks tests as slow (deselect with '-m "not slow"')
+    network: marks tests using the network (deselect with '-m "not network"')
+    unoconv: uses unoconv (underterministic)
+    webtest: http queries against localhost
+    celery: uses celery tasks
+    postgresql: needs a postgresql database to run
+"""
+
+[tool.ruff]
+select = [
+    "F", "E", "W", "YTT", "B", "COM818",
+    "C4", "DTZ", "T10", "EXE", "ISC",
+    "ICN", "G", "PIE", "PYI", "PT",
+    "SIM", "TID", "PL", "RSE", "RUF"
+]
+# Not now: "N", "ANN", "S", "BLE", "A", "DJ", "EM",
+#          "INP", "TCH", "ERA", "PGH", "SLF",
+# Partial some day ? "RET", "PTH", "TRY"
+# Never ? "FBT", "D", "COM", "T20", "Q", "ARG", "PD"
+ignore = [
+    "E501", # Line too long
+    "B905", # Not available <3.10
+    "PT011", # `pytest.raises(Exception)` is too broad
+    "PT004", # Fixture does not return anything
+    "SIM108", # Use ternary operator
+    "SIM105", # Use `contextlib.suppress(Alarm)`
+    "PLR2004", # Magic value used in comparison
+    "PLR0913", # Too many arguments to function call
+    "PLR0911", # Too many return statements
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"] # imported but unused
+"www/settings.py" = ["F403"] # import *` used; unable to detect undefined names
+"www/test_settings.py" = ["F403"] # import *` used; unable to detect undefined names

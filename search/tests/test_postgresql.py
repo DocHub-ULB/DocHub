@@ -4,8 +4,8 @@ import pytest
 
 
 def needs_postgres(fn):
-    @pytest.mark.django_db
-    @pytest.mark.postgresql
+    @pytest.mark.django_db()
+    @pytest.mark.postgresql()
     @pytest.mark.skipif(
         connection.vendor != "postgresql",
         reason="This test requires a PostgreSQL database",

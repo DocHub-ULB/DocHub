@@ -63,8 +63,8 @@ class UlbCasBackend:
         # Try to parse the response from the CAS provider
         try:
             tree = ET.fromstring(xml)
-        except ET.ParseError:
-            raise CasParseError("INVALID_XML", xml)
+        except ET.ParseError as e:
+            raise CasParseError("INVALID_XML", xml) from e
 
         success = tree.find(
             "./cas:authenticationSuccess", namespaces=self.XML_NAMESPACES

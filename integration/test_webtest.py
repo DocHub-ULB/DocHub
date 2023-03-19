@@ -12,27 +12,27 @@ from users.models import User
 pytestmark = [pytest.mark.django_db, pytest.mark.webtest]
 
 
-@pytest.fixture(scope="function")
-def app(request):
+@pytest.fixture()
+def app():
     wtm = django_webtest.WebTestMixin()
     wtm._patch_settings()
-    request.addfinalizer(wtm._unpatch_settings)
-    return django_webtest.DjangoTestApp()
+    yield django_webtest.DjangoTestApp()
+    wtm._unpatch_settings()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def user():
     return User.objects.create_user(
         netid="nimarcha", email="lol@lol.be", first_name="Nikita", last_name="Marchant"
     )
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def tags():
     return [Tag.objects.create(name="my tag"), Tag.objects.create(name="my other tag")]
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def tree():
     root = Category.objects.create(name="ULB")
     science = Category.objects.create(name="science")

@@ -49,7 +49,7 @@ def suggest(target_user: User, K: int = 15) -> list[tuple[Course, int]]:
     best_matches: typing.Counter[int] = collections.Counter()
     target_set = users_following[target_user.id]
 
-    for user_id, score in neighbors:
+    for user_id, _score in neighbors:
         differences = users_following[user_id] - target_set
         best_matches.update(differences)
 

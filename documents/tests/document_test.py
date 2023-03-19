@@ -12,7 +12,7 @@ from users.models import User
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def doc():
     user = User.objects.create_user(netid="test_user")
     doc = Document.objects.create(name="A document", user=user)
@@ -47,19 +47,19 @@ def test_url(doc):
 def test_tag_from_name_exam(doc):
     doc.name = "Examen (corrigé)"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == {"examen", "corrigé"}
+    assert {x.name for x in doc.tags.all()} == {"examen", "corrigé"}
 
 
 def test_tag_from_name_exam_month(doc):
     doc.name = "Mai 2012"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == {"examen"}
+    assert {x.name for x in doc.tags.all()} == {"examen"}
 
 
 def test_tag_resume(doc):
     doc.name = "Résumé de Nicolas"
     doc.tag_from_name()
-    assert set(map(lambda x: x.name, doc.tags.all())) == {"résumé"}
+    assert {x.name for x in doc.tags.all()} == {"résumé"}
 
 
 @mock.patch.object(Document, "add_to_queue")
@@ -103,10 +103,10 @@ def test_document_file_cleanup():
     pdffilename = doc.pdf.file.name
 
     doc.delete()
-    with pytest.raises(IOError) as errorinfo:
-        open(originalfilename)
+    with pytest.raises(IOError) as errorinfo, open(originalfilename):
+        pass
     assert "No such file or directory" in str(errorinfo)
 
-    with pytest.raises(IOError) as errorinfo:
-        open(pdffilename)
+    with pytest.raises(IOError) as errorinfo, open(pdffilename):
+        pass
     assert "No such file or directory" in str(errorinfo)

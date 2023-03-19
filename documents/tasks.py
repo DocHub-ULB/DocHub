@@ -1,5 +1,3 @@
-from typing import Optional
-
 import contextlib
 import hashlib
 import os
@@ -140,12 +138,12 @@ def convert_office_to_pdf(self, document_id: int) -> int:
                 sub = subprocess.check_output(
                     ["unoconv", "-f", "pdf", "--stdout", tmpfile.name]
                 )
-            except OSError:
-                raise MissingBinary("unoconv")
+            except OSError as e:
+                raise MissingBinary("unoconv") from e
             except subprocess.CalledProcessError as e:
                 raise DocumentProcessingError(
                     document, exc=e, message='"unoconv" has failed: %s' % e.output[:800]
-                )
+                ) from e
 
         document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
@@ -168,7 +166,7 @@ def mesure_pdf_length(self, document_id: int) -> int:
     try:
         reader = PdfReader(document.pdf)
         num_pages = len(reader.pages)
-    except:
+    except Exception:
         num_pages = mutool_get_pages(document)
     if num_pages is not None:
         document.pages = num_pages
@@ -198,27 +196,26 @@ def repair(self, document_id: int) -> int:
 
     with file_as_local(
         document.pdf, prefix="dochub_pdf_repair_", suffix=".broken.pdf"
-    ) as tmpfile:
-        with temporary_file_path(
-            prefix="dochub_pdf_repair_", suffix=".repaired.pdf"
-        ) as output_path:
-            try:
-                subprocess.check_output(
-                    ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
-                    stderr=subprocess.STDOUT,
-                )
-            except OSError:
-                raise MissingBinary("mutool")
-            except subprocess.CalledProcessError as e:
-                raise DocumentProcessingError(
-                    document,
-                    exc=e,
-                    message="mutool clean has failed : %s" % e.output[:900],
-                )
+    ) as tmpfile, temporary_file_path(
+        prefix="dochub_pdf_repair_", suffix=".repaired.pdf"
+    ) as output_path:
+        try:
+            subprocess.check_output(
+                ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
+                stderr=subprocess.STDOUT,
+            )
+        except OSError as e:
+            raise MissingBinary("mutool") from e
+        except subprocess.CalledProcessError as e:
+            raise DocumentProcessingError(
+                document,
+                exc=e,
+                message="mutool clean has failed : %s" % e.output[:900],
+            ) from e
 
-            with open(output_path, "rb") as fd:
-                document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
-                document.pdf.close()
+        with open(output_path, "rb") as fd:
+            document.pdf.save(str(uuid.uuid4()) + ".pdf", File(fd))
+            document.pdf.close()
 
     if pdf_is_original:
         document.original = document.pdf
@@ -267,12 +264,12 @@ def mutool_get_pages(document: Document) -> int | None:
             output = subprocess.check_output(
                 ["mutool", "info", tmpfile.name], stderr=subprocess.STDOUT
             )
-        except OSError:
-            raise MissingBinary("mutool")
+        except OSError as e:
+            raise MissingBinary("mutool") from e
         except subprocess.CalledProcessError as e:
             raise DocumentProcessingError(
                 document, exc=e, message="mutool info has failed : %s" % e.output
-            )
+            ) from e
 
     lines = output.split(b"\n")
     for line in lines:
