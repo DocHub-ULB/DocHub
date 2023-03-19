@@ -11,7 +11,7 @@ from django.core.files.base import ContentFile, File
 
 from celery import chain, shared_task
 from celery.exceptions import SoftTimeLimitExceeded
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
 from documents.models import Document, DocumentError
 

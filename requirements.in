@@ -3,7 +3,7 @@ markdown
 celery
 Pillow
 pygments
-pyPdf2
+pypdf
 requests
 furl
 django-mptt
