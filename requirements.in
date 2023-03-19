@@ -1,5 +1,4 @@
 Django>=3
-markdown
 celery
 Pillow
 pygments
