@@ -71,11 +71,11 @@ class ModerationLog(models.Model):
             if isinstance(old, (collections.abc.Iterable, QuerySet)) and not isinstance(  # type: ignore
                 old, str
             ):
-                old = ",".join([str(x) for x in old])
+                old = ",".join([str(x) for x in old])  # noqa: PLW2901
             if isinstance(new, (collections.abc.Iterable, QuerySet)) and not isinstance(  # type: ignore
                 new, str
             ):
-                new = ",".join([str(x) for x in new])
+                new = ",".join([str(x) for x in new])  # noqa: PLW2901
             if old != new:
                 cls.objects.create(
                     user=user,

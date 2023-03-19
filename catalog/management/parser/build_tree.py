@@ -46,8 +46,8 @@ def get_or_create_course(fac: dict, program: dict, bloc: dict, course: dict) -> 
 
 def build_tree(all_courses):
     for raw_program in all_courses:
-        for fac in raw_program["FAC"]:
-            fac = get_or_create_fac(fac)
+        for f in raw_program["FAC"]:
+            fac = get_or_create_fac(f)
             program = {"mnemo": raw_program["MNEMO"], "name": raw_program["name"]}
             program = get_or_create_program(fac, program)
             if "courses" not in raw_program.keys():

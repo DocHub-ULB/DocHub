@@ -32,6 +32,7 @@ ignore = [
     "PLR2004", # Magic value used in comparison
     "PLR0913", # Too many arguments to function call
     "PLR0911", # Too many return statements
+    "PLC1901", # if x != "" is not the same as if x
 ]
 
 [tool.ruff.per-file-ignores]
