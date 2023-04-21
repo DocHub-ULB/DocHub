@@ -258,7 +258,7 @@ six==1.16.0
     #   python-memcached
 soupsieve==2.4
     # via beautifulsoup4
-sqlparse==0.4.3
+sqlparse==0.4.4
     # via
     #   django
     #   django-debug-toolbar
