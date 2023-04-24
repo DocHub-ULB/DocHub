@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("documents", "0001_initial"),
     ]
@@ -12,7 +11,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="document",
-            name="certified",
-            field=models.BooleanField(default=False, verbose_name="Est certifié"),
+            name="staff_pick",
+            field=models.BooleanField(default=False, verbose_name="Staff pick"),
         ),
     ]

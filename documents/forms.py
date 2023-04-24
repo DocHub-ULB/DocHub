@@ -3,7 +3,6 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from documents.models import Document
-from tags.models import Tag
 
 
 def validate_uploaded_file(file):
@@ -17,7 +16,7 @@ def validate_uploaded_file(file):
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = ("name", "description", "tags", "certified")
+        fields = ("name", "description", "tags", "staff_pick")
         widgets = {
             "name": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "Titre (optionnel)"}

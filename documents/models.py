@@ -62,7 +62,7 @@ class Document(models.Model):
     )
     md5 = models.CharField(max_length=32, default="", db_index=True)
 
-    certified = models.BooleanField(default=False, verbose_name="Est certifié")
+    staff_pick = models.BooleanField(default=False, verbose_name="Staff pick")
     hidden = models.BooleanField(default=False, verbose_name="Est caché")
     import_source = models.CharField(
         max_length=1024, null=True, verbose_name="Importé depuis", blank=True

@@ -30,10 +30,10 @@
 
         {% if request.user|has_moderation_perm_on:doc %}
             <div class="mb-3">
-                <label for="id_tags" class="form-label">Certifié: </label>
-                {{ form.certified }}
+                <label for="id_tags" class="form-label">Staff pick: </label>
+                {{ form.staff_pick }}
                 <div class="form-text">
-                    Le document est-il certifié ?
+                    Marquer ce document comme un "staff pick"
                 </div>
             </div>
         {% endif %}
