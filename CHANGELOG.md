@@ -5,8 +5,9 @@ This page tries to contain all changes made on DocHub.
 # Unreleased
 
  * Add CHANGELOG.md and CONTRIBUTING.md
- * Remove unused dependecy on `markdown`
+ * Remove unused dependency on `markdown`
  * Package upgrade
+ * Switch to psycopg3
 
 # 2023.2.0
 
