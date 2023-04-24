@@ -31,6 +31,12 @@ class DocumentForm(forms.ModelForm):
                     "data-controller": "tom-select",
                 }
             ),
+            "staff_pick": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                    "placeholder": "Description (optionnel)",
+                }
+            ),
         }
 
 
