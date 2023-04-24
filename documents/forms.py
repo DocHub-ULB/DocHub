@@ -45,7 +45,7 @@ class UploadFileForm(DocumentForm):
     )
 
 
-class BulkFilesForm(FileForm):
+class BulkFilesForm(forms.Form):
     url = forms.URLField()
 
 

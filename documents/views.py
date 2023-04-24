@@ -14,10 +14,15 @@ from django.views.decorators.http import require_POST
 from catalog.models import Course
 from catalog.views import slug_redirect
 from documents import logic
-from documents.forms import DocumentForm, ReUploadForm, BulkFilesForm, UploadFileForm, MultipleUploadFileForm
+from documents.forms import (
+    BulkFilesForm,
+    DocumentForm,
+    MultipleUploadFileForm,
+    ReUploadForm,
+    UploadFileForm,
+)
 from documents.models import BulkDocuments, Document, Vote
 from moderation.models import ModerationLog
-from tags.models import Tag
 
 
 @login_required
