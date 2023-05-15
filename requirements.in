@@ -46,7 +46,7 @@ time-machine
 
 # prod
 redis
-psycopg2-binary
+psycopg[binary,pool]
 python-memcached
 django-jsonfield
 django-jsonfield-compat
