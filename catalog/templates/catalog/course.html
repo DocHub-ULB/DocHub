@@ -2,7 +2,7 @@
 
 {% load static %}
 {% load humanize %}
-{% load has_perm_on %}
+{% load permissions %}
 
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
@@ -121,8 +121,8 @@
                         <div>
                             <div class="hover-underline">
                                 {{ document.name|capfirst }}
-                                {% if document.is_certified %}
-                                    <svg title="Ce document a été certifié" xmlns="http://www.w3.org/2000/svg"
+                                {% if document.staff_pick %}
+                                    <svg title="Staff pick" xmlns="http://www.w3.org/2000/svg"
                                          width="16" height="16" fill="currentColor"
                                          class="bi bi-patch-check-fill text-primary" viewBox="0 0 16 16">
                                         <path
@@ -181,7 +181,7 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        {% if request.user|has_perm_on:document %}
+                        {% if request.user|has_write_perm_on:document %}
                             <a class="btn d-none d-sm-block" title="Modifier"
                                href="{% url 'document_edit' document.pk %}"
                                data-turbo="false">

@@ -12,9 +12,13 @@ from django import template
 register = template.Library()
 
 
-def has_perm_on(user, obj):
+@register.filter(name="has_write_perm_on")
+def has_write_perm_on(user, obj):
     """Does `user` has write permission on `obj` ?"""
     return user.write_perm(obj=obj)
 
 
-register.filter("has_perm_on", has_perm_on)
+@register.filter(name="has_moderation_perm_on")
+def has_moderation_perm_on(user, obj):
+    """Does `user` has moderation permission on `obj` ?"""
+    return user.moderation_perm(obj=obj)

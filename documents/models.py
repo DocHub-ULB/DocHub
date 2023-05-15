@@ -62,6 +62,7 @@ class Document(models.Model):
     )
     md5 = models.CharField(max_length=32, default="", db_index=True)
 
+    staff_pick = models.BooleanField(default=False, verbose_name="Staff pick")
     hidden = models.BooleanField(default=False, verbose_name="Est caché")
     import_source = models.CharField(
         max_length=1024, null=True, verbose_name="Importé depuis", blank=True
@@ -95,12 +96,6 @@ class Document(models.Model):
                 raise NotImplementedError("Vote not of known type.")
 
         return {"upvotes": upvotes, "downvotes": downvotes}
-
-    @property
-    def is_certified(self) -> bool:
-        """Is the document tagged with the "officiel" tag ?"""
-        tag_names = [tag.name for tag in self.tags.all()]
-        return "officiel" in tag_names
 
     def fullname(self) -> str:
         return self.__str__()

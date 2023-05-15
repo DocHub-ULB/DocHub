@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load has_perm_on %}
+{% load permissions %}
 
 {% block title %}{{ document.name }}{% endblock %}
 {% block header %}
@@ -19,8 +19,8 @@
 
         <h1 class="fs-4 mb-0 d-flex align-items-center gap-1">
             {{ document.name }}
-            {% if document.is_certified %}
-                <svg title="Ce document a été certifié" xmlns="http://www.w3.org/2000/svg"
+            {% if document.staff_pick %}
+                <svg title="Staff pick" xmlns="http://www.w3.org/2000/svg"
                      width="16" height="16" fill="currentColor"
                      class="bi bi-patch-check-fill text-primary" viewBox="0 0 16 16">
                     <path
@@ -61,7 +61,7 @@
                         Téléchager ({{ document.file_type }})
                     </a>
                 {% endif %}
-                {% if request.user|has_perm_on:document %}
+                {% if request.user|has_write_perm_on:document %}
                     <a class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
                        href="{% url 'document_edit' document.pk %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

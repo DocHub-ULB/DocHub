@@ -16,14 +16,13 @@ from catalog.views import slug_redirect
 from documents import logic
 from documents.forms import (
     BulkFilesForm,
-    FileForm,
+    DocumentForm,
     MultipleUploadFileForm,
     ReUploadForm,
     UploadFileForm,
 )
 from documents.models import BulkDocuments, Document, Vote
 from moderation.models import ModerationLog
-from tags.models import Tag
 
 
 @login_required
@@ -107,7 +106,7 @@ def document_edit(request, pk):
                 reverse("catalog:course_show", args=[doc.course.slug])
             )
 
-        form = FileForm(request.POST)
+        form = DocumentForm(request.POST, instance=doc)
 
         if form.is_valid():
             if request.user != doc.user:
@@ -124,21 +123,16 @@ def document_edit(request, pk):
                     },
                 )
 
-            doc.name = form.cleaned_data["name"]
-            doc.description = form.cleaned_data["description"]
+            # TODO Log edit
+            # action.send(
+            #     request.user, verb="a édité", action_object=doc, target=doc.course
+            # )
 
-            doc.tags.clear()
-            for tag in form.cleaned_data["tags"]:
-                doc.tags.add(Tag.objects.get(name=tag))
-
-            doc.save()
-
+            form.save()
             return HttpResponseRedirect(reverse("document_show", args=[doc.id]))
 
     else:
-        form = FileForm(
-            {"name": doc.name, "description": doc.description, "tags": doc.tags.all()}
-        )
+        form = DocumentForm(instance=doc)
 
     return render(
         request,
