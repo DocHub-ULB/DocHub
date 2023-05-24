@@ -101,6 +101,12 @@
             </svg>
 
         </p>
+        <p>
+            <small class="text-muted ">
+                N'oublie pas que ce qui est uploadé sur DocHub est soumis au droit d’auteur,
+                et que tu dois donc avoir l'autorisation de son auteur pour l'y ajouter sur DocHub.
+            </small>
+        </p>
 
 
         {% with form.file as field %}
@@ -198,7 +204,8 @@
                 </div>
             </label>
             <div class="d-flex gap-2">
-                <div class="flex-grow-1"><input type="text" id="url" name="url" class="form-control" placeholder="http://"></div>
+                <div class="flex-grow-1"><input type="text" id="url" name="url" class="form-control"
+                                                placeholder="http://"></div>
                 <button type="submit" class="btn btn-primary mb-2">Envoyer</button>
             </div>
             <div class="form-text">
@@ -207,6 +214,5 @@
             </div>
         </div>
     </form>
-
 
 {% endblock %}
