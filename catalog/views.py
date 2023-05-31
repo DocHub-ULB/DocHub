@@ -42,6 +42,15 @@ def show_course(request, slug: str):
         .order_by("-edited")
     )
 
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            documents = documents | course.document_set.filter(hidden=True).all()
+        else:
+            documents = (
+                documents
+                | course.document_set.filter(hidden=True, user=request.user).all()
+            )
+
     context = {
         "course": course,
         "tags": {tag for doc in documents for tag in doc.tags.all()},

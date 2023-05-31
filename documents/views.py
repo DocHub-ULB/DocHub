@@ -90,7 +90,7 @@ def document_edit(request, pk):
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
 
-        if "delete" in request.POST:
+        if "hide" in request.POST:
             if request.user != doc.user:
                 ModerationLog.track(
                     user=request.user,
@@ -102,6 +102,22 @@ def document_edit(request, pk):
             doc.save()
             # TODO: use the messages in the templates (later)
             messages.success(request, "Le document a bien été caché !")
+            return HttpResponseRedirect(
+                reverse("catalog:course_show", args=[doc.course.slug])
+            )
+
+        elif "unhide" in request.POST:
+            if request.user != doc.user:
+                ModerationLog.track(
+                    user=request.user,
+                    content_object=doc,
+                    values={"hidden": (doc.hidden, False)},
+                )
+
+            doc.hidden = False
+            doc.save()
+            # TODO: use the messages in the templates (later)
+            messages.success(request, "Le document a ete rendu visible !")
             return HttpResponseRedirect(
                 reverse("catalog:course_show", args=[doc.course.slug])
             )

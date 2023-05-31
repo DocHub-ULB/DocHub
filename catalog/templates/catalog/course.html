@@ -110,6 +110,7 @@
                     data-course-filter-target="filterable"
                     data-filter-key='{{ document.name }}'
                     data-tags="{{ document.tags.all|join:' ' }}"
+                    {% if document.hidden %}style="opacity: 0.5;"{% endif %}
                 >
 
                     <a href="{% url 'document_show' document.pk %}"
@@ -120,6 +121,7 @@
                         </div>
                         <div>
                             <div class="hover-underline">
+                                {% if document.hidden %}<strong>Only visible for you: this document is hidden</strong><br>{% endif %}
                                 {{ document.name|capfirst }}
                                 {% if document.staff_pick %}
                                     <svg title="Staff pick" xmlns="http://www.w3.org/2000/svg"
