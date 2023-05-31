@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
 from django.utils import timezone
 
-from catalog.models import Category, Course
+from catalog.models import Course
 
 
 class CustomUserManager(UserManager):
@@ -32,7 +32,6 @@ class CustomUserManager(UserManager):
 
 
 class User(AbstractBaseUser):
-
     USERNAME_FIELD = "netid"
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
     objects = CustomUserManager()
@@ -51,14 +50,9 @@ class User(AbstractBaseUser):
 
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
-    is_representative = models.BooleanField(default=False)
+    is_moderator = models.BooleanField(default=False)
 
     moderated_courses = models.ManyToManyField("catalog.Course", blank=True)
-
-    notify_on_response = models.BooleanField(default=True)
-    notify_on_new_doc = models.BooleanField(default=True)
-    notify_on_new_thread = models.BooleanField(default=True)
-    notify_on_upload = True
 
     def __init__(self, *args, **kwargs):
         self._moderated_courses = None
@@ -81,7 +75,7 @@ class User(AbstractBaseUser):
     def has_perm(self, perm_list, obj=None):
         return self.is_staff
 
-    def write_perm(self, obj):
+    def moderation_perm(self, obj):
         if self.is_staff:
             return True
 
@@ -93,6 +87,12 @@ class User(AbstractBaseUser):
             self._moderated_courses = ids
 
         return obj.write_perm(self, self._moderated_courses)
+
+    def write_perm(self, obj):
+        if obj and (obj.user.id == self.id):
+            return True
+
+        return self.moderation_perm(obj)
 
     def fullname(self):
         return self.name

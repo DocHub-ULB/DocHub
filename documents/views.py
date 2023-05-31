@@ -2,6 +2,7 @@ import os
 import uuid
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
@@ -14,13 +15,14 @@ from catalog.models import Course
 from catalog.views import slug_redirect
 from documents import logic
 from documents.forms import (
-    FileForm,
+    BulkFilesForm,
+    DocumentForm,
     MultipleUploadFileForm,
     ReUploadForm,
     UploadFileForm,
 )
-from documents.models import Document, Vote
-from tags.models import Tag
+from documents.models import BulkDocuments, Document, Vote
+from moderation.models import ModerationLog
 
 
 @login_required
@@ -88,29 +90,49 @@ def document_edit(request, pk):
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
 
-        form = FileForm(request.POST)
+        if "delete" in request.POST:
+            if request.user != doc.user:
+                ModerationLog.track(
+                    user=request.user,
+                    content_object=doc,
+                    values={"hidden": (doc.hidden, True)},
+                )
+
+            doc.hidden = True
+            doc.save()
+            # TODO: use the messages in the templates (later)
+            messages.success(request, "Le document a bien été caché !")
+            return HttpResponseRedirect(
+                reverse("catalog:course_show", args=[doc.course.slug])
+            )
+
+        form = DocumentForm(request.POST, instance=doc)
 
         if form.is_valid():
-            doc.name = form.cleaned_data["name"]
-            doc.description = form.cleaned_data["description"]
-
-            doc.tags.clear()
-            for tag in form.cleaned_data["tags"]:
-                doc.tags.add(Tag.objects.get(name=tag))
-
-            doc.save()
+            if request.user != doc.user:
+                ModerationLog.track(
+                    user=request.user,
+                    content_object=doc,
+                    values={
+                        "name": (doc.name, form.cleaned_data["name"]),
+                        "description": (
+                            doc.description,
+                            form.cleaned_data["description"],
+                        ),
+                        "tags": (doc.tags.all(), form.cleaned_data["tags"]),
+                    },
+                )
 
             # TODO Log edit
             # action.send(
             #     request.user, verb="a édité", action_object=doc, target=doc.course
             # )
 
+            form.save()
             return HttpResponseRedirect(reverse("document_show", args=[doc.id]))
 
     else:
-        form = FileForm(
-            {"name": doc.name, "description": doc.description, "tags": doc.tags.all()}
-        )
+        form = DocumentForm(instance=doc)
 
     return render(
         request,
@@ -128,6 +150,7 @@ def document_reupload(request, pk):
 
     if not request.user.write_perm(obj=document):
         return HttpResponse("You may not edit this document.", status=403)
+    # FIXME: log moderation action
 
     if document.state != Document.DocumentState.DONE:
         return HttpResponse(
@@ -245,3 +268,26 @@ def document_pdf_file(request, pk):
     document.downloads = F("views") + 1
     document.save(update_fields=["views"])
     return response
+
+
+@login_required
+def submit_bulk(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+
+    if request.method == "POST":
+        form = BulkFilesForm(request.POST)
+
+        if form.is_valid():
+            BulkDocuments.objects.create(
+                url=form.cleaned_data["url"], course=course, user=request.user
+            )
+
+            return render(
+                request,
+                "documents/document_bulk.html",
+                {
+                    "course": course,
+                },
+            )
+
+    return HttpResponseRedirect(reverse("document_put", args=[course.slug]))

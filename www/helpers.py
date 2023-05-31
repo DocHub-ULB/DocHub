@@ -1,9 +1,9 @@
 # TODO: is this dead code ?
-from datetime import datetime
+from django.utils import timezone
 
 
 def current_year():
-    now = datetime.today()
+    now = timezone.now().date()
     if now.month < 9:
         return now.year - 1
     elif now.month == 9:

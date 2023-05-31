@@ -1,9 +1,8 @@
 Django>=3
-markdown
 celery
 Pillow
 pygments
-pyPdf2
+pypdf
 requests
 furl
 django-mptt
@@ -21,6 +20,8 @@ django-environ
 rich
 python-slugify
 types-python-slugify
+django-crispy-forms
+crispy-bootstrap5
 
 # Dev
 django-extensions
@@ -40,11 +41,12 @@ responses
 django-webtest
 mypy
 django-stubs
+time-machine
 
 
 # prod
 redis
-psycopg2-binary
+psycopg[binary,pool]
 python-memcached
 django-jsonfield
 django-jsonfield-compat

@@ -4,7 +4,6 @@ from documents.models import Document
 
 
 class Command(BaseCommand):
-
     help = "Auto-tag documents based on their name"
 
     def handle(self, *args, **options):

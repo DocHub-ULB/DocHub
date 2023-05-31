@@ -8,7 +8,6 @@ from catalog.models import Course
 
 
 class CourseSearchView(ListView):
-
     model = Course
     paginate_by = 30
     template_name = "search/course_list.html"

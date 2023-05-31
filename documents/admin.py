@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.db.models.query import QuerySet
 
-from .models import Document, DocumentError, Vote
+from .models import BulkDocuments, Document, DocumentError, Vote
 
 
 @admin.action(description="Reprocess selected documents")
@@ -81,11 +81,12 @@ class DocumentAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "state",
+        "hidden",
         "created",
         "edited",
         "file_type",
     )
-    search_fields = ("md5", "name", "user__netid")
+    search_fields = ("id", "md5", "name", "user__netid")
     raw_id_fields = ("user", "course")
 
     inlines = [VoteInline]
@@ -123,3 +124,9 @@ class DocumentAdmin(admin.ModelAdmin):
 @admin.register(DocumentError)
 class DocumentErrorAdmin(admin.ModelAdmin):
     list_display = ("exception", "document", "task_id")
+
+
+@admin.register(BulkDocuments)
+class BulkDocumentsAdmin(admin.ModelAdmin):
+    list_display = ("url", "processed", "course", "user", "created")
+    list_filter = ("processed",)

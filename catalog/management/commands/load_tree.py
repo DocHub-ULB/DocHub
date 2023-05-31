@@ -1,3 +1,5 @@
+from typing import Any
+
 import json
 
 from django.core.management.base import BaseCommand
@@ -35,8 +37,7 @@ def slugify0(name):
 
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
-
+    def handle(self, *args: Any, **options: Any) -> None:
         with open("programs.json") as f:
             programs = json.load(f)
 
@@ -58,7 +59,7 @@ class Command(BaseCommand):
                 type=Category.CategoryType.UNIVERSITY,
             )
 
-            for name, color in level0.items():
+            for name, _color in level0.items():
                 Category.objects.create(
                     name=name,
                     slug=slugify0(name),
@@ -66,7 +67,7 @@ class Command(BaseCommand):
                 )
 
             # Level 1
-            for name, color in level1.items():
+            for name, _color in level1.items():
                 slug = (
                     name.removeprefix("Faculté de ")
                     .removeprefix("Faculté d'")

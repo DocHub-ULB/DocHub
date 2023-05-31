@@ -4,15 +4,15 @@
 
 {% block header %}
     <form class="d-flex align-items-center container-xl"
-        style="height: 20vh; background-image: url('{% static 'images/building-a.jpeg' %}'); background-size: cover">
+          style="height: 20vh; background-image: url('{% static 'images/building-a.jpeg' %}'); background-size: cover">
 
         <div class="input-group mx-4" data-controller="autocomplete"
-            data-autocomplete-url-value="/search/courses/"
-            data-autocomplete-min-length-value="3"
+             data-autocomplete-url-value="/search/courses/"
+             data-autocomplete-min-length-value="3"
         >
             <input type="search" class="form-control dropdown-toggle"
-                placeholder="Chercher un cours (ex. info-f101 ou phys-f443)"
-                aria-label="search" data-autocomplete-target="input">
+                   placeholder="Chercher un cours (ex. info-f101 ou phys-f443)"
+                   aria-label="search" data-autocomplete-target="input">
             <ul data-autocomplete-target="results"
                 class="dropdown-menu show w-100 shadow"
                 style="margin-top: 2.5em;" hidden
@@ -26,23 +26,23 @@
     {% if not following_course and not recent_courses %}
         {% include "welcome.html" %}
     {% else %}
-        <div class="d-flex flex-column flex-lg-row gap-2 gap-lg-5">
-            <div class="flex-grow-1">
+        <div class="row gap-2 gap-lg-5">
+            <div class="col-lg">
                 <h1 class="fs-3 border-bottom d-flex justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-star-fill text-warning"
-                            viewBox="0 0 16 16">
+                             class="bi bi-star-fill text-warning"
+                             viewBox="0 0 16 16">
                             <path
                                 d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                         </svg>
                         <span>Cours favoris</span>
                     </div>
                     <a href="{% url "catalog:finder_root" %}"
-                        class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary mb-1">
+                       class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary mb-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-plus"
-                            viewBox="0 0 16 16">
+                             class="bi bi-plus"
+                             viewBox="0 0 16 16">
                             <path
                                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                         </svg>
@@ -55,7 +55,7 @@
                             <div class="d-flex align-items-center my-2">
                                 <div class="flex-shrink-0 px-2 py-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-folder" viewBox="0 0 16 16">
+                                         class="bi bi-folder" viewBox="0 0 16 16">
                                         <path
                                             d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
                                     </svg>
@@ -76,11 +76,17 @@
                     Une fois que tu as trouvé ton bonheur, n'oublie pas de l'ajouter aux favoris ! ️
                 {% endif %}
 
-
+                {% if not request.user.is_moderator %}
+                    <div class="alert alert-info" role="alert">
+                        Tu es délégué d'année, délégué cours de ton cercle ou dans un bureau étudiant&nbsp;?
+                        Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Clique
+                            ici</a> pour les recevoir !
+                    </div>
+                {% endif %}
                 <h1 class="fs-3 border-bottom d-flex justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-clock-history" viewBox="0 0 16 16">
+                             class="bi bi-clock-history" viewBox="0 0 16 16">
                             <path
                                 d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
                             <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
@@ -96,7 +102,7 @@
                             <div class="d-flex align-items-center my-2">
                                 <div class="flex-shrink-0 px-2 py-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-folder" viewBox="0 0 16 16">
+                                         class="bi bi-folder" viewBox="0 0 16 16">
                                         <path
                                             d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
                                     </svg>
@@ -115,11 +121,11 @@
                         href="{% url 'catalog:finder_root' %}">ici</a></span>
                 {% endif %}
             </div>
-            <div class="flex-grow-1">
+            <div class="col-lg">
                 {% if following_course and recent_docs %}
                     <h1 class="fs-3 border-bottom d-flex align-items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-clock-history" viewBox="0 0 16 16">
+                             class="bi bi-clock-history" viewBox="0 0 16 16">
                             <path
                                 d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
                             <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
@@ -137,10 +143,10 @@
                                 data-tags="{{ document.tags.all|join:' ' }}"
                             >
                                 <a href="{% url 'document_show' document.pk %}"
-                                    class="d-flex align-items-center gap-2 text-reset text-decoration-none">
+                                   class="d-flex align-items-center gap-2 text-reset text-decoration-none">
                                     <div class="rounded border bg-light p-1">
                                         <img src="{% static "images/default_page.webp" %}"
-                                            width="60" height="50" style="object-fit: cover;">
+                                             width="60" height="50" style="object-fit: cover;">
                                     </div>
                                     <div>
                                         <div class="hover-underline">

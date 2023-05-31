@@ -26,7 +26,6 @@ TAGS = {
 
 
 class Command(BaseCommand):
-
     help = "Import documents in a course"
 
     def add_arguments(self, parser):

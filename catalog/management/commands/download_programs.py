@@ -1,3 +1,5 @@
+from typing import Any
+
 import json
 import re
 
@@ -16,8 +18,8 @@ class Command(BaseCommand):
 
     URL = f"https://www.ulb.be/servlet/search?beanKey=beanKeyRechercheFormation&types=formation&natureFormation=ulb&s=FACULTE_ASC&limit={PAGE_SIZE}"
 
-    def handle(self, *args, **options):
-        programs = []
+    def handle(self, *args: Any, **options: Any) -> None:
+        programs: list[dict] = []
 
         parent_programs: set[str] = set()
         print("[bold blue]Gathering the list of available programs...[/]\n")

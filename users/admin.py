@@ -10,14 +10,14 @@ class UserAdmin(admin.ModelAdmin):
         "name",
         "is_staff",
         "is_academic",
-        "is_representative",
+        "is_moderator",
         "last_login",
         "created",
     )
     list_filter = (
         "is_staff",
         "is_academic",
-        "is_representative",
+        "is_moderator",
         "last_login",
         "created",
     )
@@ -43,24 +43,13 @@ class UserAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Notifications",
-            {
-                "classes": ("collapse",),
-                "fields": (
-                    "notify_on_response",
-                    "notify_on_new_doc",
-                    "notify_on_new_thread",
-                ),
-            },
-        ),
-        (
             "Moderation",
             {
                 "classes": ("collapse",),
                 "fields": (
                     "is_staff",
                     "is_academic",
-                    "is_representative",
+                    "is_moderator",
                     "moderated_courses",
                 ),
             },

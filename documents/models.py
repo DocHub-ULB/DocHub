@@ -12,6 +12,10 @@ UNCONVERTIBLE_TYPES = [
     ".tex",
     ".djvu",
     ".pages",
+    ".goodnotes",
+    ".apkg",
+    ".one",
+    ".mp4",
 ]
 
 
@@ -58,6 +62,7 @@ class Document(models.Model):
     )
     md5 = models.CharField(max_length=32, default="", db_index=True)
 
+    staff_pick = models.BooleanField(default=False, verbose_name="Staff pick")
     hidden = models.BooleanField(default=False, verbose_name="Est caché")
     import_source = models.CharField(
         max_length=1024, null=True, verbose_name="Importé depuis", blank=True
@@ -91,12 +96,6 @@ class Document(models.Model):
                 raise NotImplementedError("Vote not of known type.")
 
         return {"upvotes": upvotes, "downvotes": downvotes}
-
-    @property
-    def is_certified(self) -> bool:
-        """Is the document tagged with the "officiel" tag ?"""
-        tag_names = [tag.name for tag in self.tags.all()]
-        return "officiel" in tag_names
 
     def fullname(self) -> str:
         return self.__str__()
@@ -189,6 +188,18 @@ class DocumentError(models.Model):
 
     def __str__(self):
         return "#" + self.exception
+
+
+class BulkDocuments(models.Model):
+    url = models.URLField()
+    course = models.ForeignKey(
+        "catalog.Course", null=False, verbose_name="Cours", on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, verbose_name="Utilisateur", on_delete=models.CASCADE
+    )
+    created = models.DateTimeField(auto_now_add=True)
+    processed = models.BooleanField(default=False)
 
 
 @receiver(pre_delete, sender=Document)

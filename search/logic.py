@@ -14,7 +14,6 @@ from catalog.models import Course
 
 
 def search_course(string):
-
     slug_matches = re.findall(r"([A-Za-z]+)[- ]{0,1}([A-Za-z])[- ]{0,1}(\d+)", string)
 
     if slug_matches:

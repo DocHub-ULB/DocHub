@@ -7,7 +7,7 @@ from users.models import User
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def tree():
     root = Category.objects.create(name="ULB", slug="ulb")
     science = Category.objects.create(name="science", slug="science")
@@ -24,14 +24,14 @@ def tree():
     return root
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def user():
     return User.objects.create_user(
         netid="myuser", email="myuser@lol.be", first_name="My", last_name="User"
     )
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def other_user():
     return User.objects.create_user(
         netid="otheruser",

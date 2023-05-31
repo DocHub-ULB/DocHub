@@ -1,14 +1,11 @@
-import json
 from dataclasses import dataclass
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Case, Count, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.generic.detail import DetailView
 
 from catalog.models import Category, Course, CourseUserView
 from catalog.slug import normalize_slug
@@ -21,7 +18,7 @@ def slug_redirect(view):
         try:
             normalized = normalize_slug(slug)
         except ValueError:
-            raise Http404("This is not a valid course slug.")
+            raise Http404("This is not a valid course slug.") from None
         if normalized != slug:
             return redirect(request.path.replace(slug, normalized))
         return view(request, slug, *args, **kwargs)
@@ -34,7 +31,8 @@ def show_course(request, slug: str):
     course = get_object_or_404(Course, slug=slug)
 
     documents = (
-        course.document_set.exclude(state="ERROR", hidden=True)
+        course.document_set.exclude(state="ERROR")
+        .exclude(hidden=True)
         .select_related("course", "user")
         .prefetch_related("tags", "vote_set")
         .annotate(upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))

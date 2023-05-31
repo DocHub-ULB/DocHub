@@ -1,7 +1,4 @@
-from django.conf import settings
-
 import pytest
-from PIL import Image
 
 from users.models import User
 

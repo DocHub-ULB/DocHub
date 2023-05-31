@@ -1,3 +1,5 @@
+from typing import Any
+
 import json
 from urllib.parse import quote
 
@@ -11,7 +13,7 @@ from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 class Command(BaseCommand):
     help = ""
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         with open("programs.json") as f:
             programs: list[dict] = json.load(f)
         print("\n[bold blue]Listing the course content of all programs...[/]\n")
@@ -56,7 +58,7 @@ class Command(BaseCommand):
                             print("  ", URL)
                         continue
 
-                except Exception as e:
+                except Exception:
                     print(f"[red]Error:[/] Failed to GET {progam['slug'].upper()}")
                     print("  URL", URL)
                     progress.console.print_exception()
@@ -79,7 +81,7 @@ class Command(BaseCommand):
                                 "lecturers": course["lecturers"],
                                 "quadri": course["quadri"],
                             }
-                except Exception as e:
+                except Exception:
                     failed.append(progam["slug"])
                     print(f"Error while listing content of {progam['slug']}")
                     progress.console.print_exception()

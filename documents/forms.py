@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from tags.models import Tag
+from documents.models import Document
 
 
 def validate_uploaded_file(file):
@@ -13,34 +13,34 @@ def validate_uploaded_file(file):
         )
 
 
-class FileForm(forms.Form):
-    name = forms.CharField(
-        required=False,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Titre (optionnel)"}
-        ),
-    )
-    description = forms.CharField(
-        required=False,
-        widget=forms.Textarea(
-            attrs={"class": "form-input", "placeholder": "Description (optionnel)"}
-        ),
-    )
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ("name", "description", "tags", "staff_pick")
+        widgets = {
+            "name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Titre (optionnel)"}
+            ),
+            "description": forms.Textarea(
+                attrs={"class": "form-input", "placeholder": "Description (optionnel)"}
+            ),
+            "tags": forms.SelectMultiple(
+                attrs={
+                    "class": "form-select",
+                    "data-placeholder": "Ajoute des tags",
+                    "data-controller": "tom-select",
+                }
+            ),
+            "staff_pick": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                    "placeholder": "Description (optionnel)",
+                }
+            ),
+        }
 
-    tags = forms.ModelMultipleChoiceField(
-        required=False,
-        queryset=Tag.objects.all(),
-        widget=forms.SelectMultiple(
-            attrs={
-                "class": "form-select",
-                "data-placeholder": "Ajoute des tags",
-                "data-controller": "tom-select",
-            }
-        ),
-    )
 
-
-class UploadFileForm(FileForm):
+class UploadFileForm(DocumentForm):
     file = forms.FileField(
         validators=[validate_uploaded_file],
         widget=forms.FileInput(
@@ -49,6 +49,10 @@ class UploadFileForm(FileForm):
             }
         ),
     )
+
+
+class BulkFilesForm(forms.Form):
+    url = forms.URLField()
 
 
 class ReUploadForm(forms.Form):
