@@ -97,7 +97,7 @@
                                data-action="change->course-filter#filter"
                                data-course-filter-target="tag"
                         />
-                        <label for="tag-{{ tag.name }}">{{ tag.name }}</label>
+                        <label for="tag-{{ tag.name }}">{{ tag.name }} {{ tag.icon|safe }}</label>
                     </li>
                 {% endfor %}
             </ul>
@@ -138,9 +138,9 @@
                                     <span
                                         data-id="{{ kw.id }}"
                                         class="badge"
-                                        style="background-color: {{ kw.color }}; color:white;"
+                                        style="background-color: {{ kw.color }}; color:white;font-size:0.8em"
                                     >
-                                        {{ kw }}
+                                        {{kw.icon|safe}}
                                     </span>
                                 {% endfor %}
                             </div>
