@@ -44,11 +44,32 @@ def show_course(request, slug: str):
 
     if request.user.is_authenticated:
         if request.user.is_staff:
-            documents = documents | course.document_set.filter(hidden=True).all()
+            documents = documents | course.document_set.filter(
+                hidden=True
+            ).select_related("course", "user").prefetch_related(
+                "tags", "vote_set"
+            ).annotate(
+                upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
+            ).annotate(
+                downvotes=Count(
+                    "vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)
+                )
+            ).order_by(
+                "-edited"
+            )
         else:
-            documents = (
-                documents
-                | course.document_set.filter(hidden=True, user=request.user).all()
+            documents = documents | course.document_set.filter(
+                hidden=True, user=request.user
+            ).select_related("course", "user").prefetch_related(
+                "tags", "vote_set"
+            ).annotate(
+                upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
+            ).annotate(
+                downvotes=Count(
+                    "vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)
+                )
+            ).order_by(
+                "-edited"
             )
 
     context = {
