@@ -30,9 +30,16 @@ def slug_redirect(view):
 def show_course(request, slug: str):
     course = get_object_or_404(Course, slug=slug)
 
+    if not request.user.is_authenticated:
+        display = Q(hidden=False)
+    elif request.user.is_staff:
+        display = Q()
+    else:
+        display = Q(hidden=True, user=request.user) | Q(hidden=False)
+
     documents = (
         course.document_set.exclude(state="ERROR")
-        .exclude(hidden=True)
+        .filter(display)
         .select_related("course", "user")
         .prefetch_related("tags", "vote_set")
         .annotate(upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))
@@ -41,36 +48,6 @@ def show_course(request, slug: str):
         )
         .order_by("-edited")
     )
-
-    if request.user.is_authenticated:
-        if request.user.is_staff:
-            documents = documents | course.document_set.filter(
-                hidden=True
-            ).select_related("course", "user").prefetch_related(
-                "tags", "vote_set"
-            ).annotate(
-                upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
-            ).annotate(
-                downvotes=Count(
-                    "vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)
-                )
-            ).order_by(
-                "-edited"
-            )
-        else:
-            documents = documents | course.document_set.filter(
-                hidden=True, user=request.user
-            ).select_related("course", "user").prefetch_related(
-                "tags", "vote_set"
-            ).annotate(
-                upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
-            ).annotate(
-                downvotes=Count(
-                    "vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE)
-                )
-            ).order_by(
-                "-edited"
-            )
 
     context = {
         "course": course,
