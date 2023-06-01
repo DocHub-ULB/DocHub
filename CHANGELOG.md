@@ -3,6 +3,7 @@
 This page tries to contain all changes made on DocHub.
 
 # Unreleased
+ * Show hidden document to the authors/admin and allow modification of this state
 
 # 2032.5.0
 
