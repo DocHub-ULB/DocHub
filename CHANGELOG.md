@@ -6,7 +6,9 @@ This page tries to contain all changes made on DocHub.
  * Show hidden document to the authors/admin and allow modification of this state
  * Add course slug to the display of "Documents récents"
 
-# 2032.5.0
+ * Fix makefile to load correctly the tree & the courses
+
+# 2023.5.0
 
  * Add CHANGELOG.md and CONTRIBUTING.md
  * Remove unused dependency on `markdown`

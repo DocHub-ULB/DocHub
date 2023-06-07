@@ -21,15 +21,14 @@ packages: ve
 database:
 	$(PY) manage.py migrate -v 0
 	@echo "Creating user ${USER} with password 'test'"
-	$(PY) manage.py createsuperuser --netid=${USER} --first_name=Gaston --last_name=Lagaffe --email=${USER}@fake.ulb.ac.be --noinput
-	@echo "from users.models import User; u=User.objects.get(netid='${USER}'); u.set_password('test'); u.save()" | $(PY) manage.py shell > /dev/null
+	@echo "from users.models import User; u=User.objects.get_or_create(netid='${USER}', first_name='Gaston', last_name='Lagaffe', email='${USER}@fake.ulb.ac.be'); u[0].set_password('test'); u[0].save()" | $(PY) manage.py shell > /dev/null
 
 	@echo "Creating user blabevue with password 'test'"
-	$(PY) manage.py createsuperuser --netid=blabevue --first_name=Bertrand --last_name=Labevue --email=blabevue@fake.ulb.ac.be --noinput
-	@echo "from users.models import User; u=User.objects.get(netid='blabevue'); u.set_password('test'); u.save()" | $(PY) manage.py shell > /dev/null
+	@echo "from users.models import User; u=User.objects.get_or_create(netid='blabevue', first_name='Bertrand', last_name='Labevue', email='blabevue@fake.ulb.ac.be'); u[0].set_password('test'); u[0].save()" | $(PY) manage.py shell > /dev/null
 
 	@echo "Loading an minimal course tree"
-	$(PY) manage.py shell < ./catalog/management/commands/load_courses.py
+	$(PY) manage.py load_tree
+	$(PY) manage.py load_courses
 
 	@echo "Creating some tags"
 	@echo "[__import__('tags').models.Tag.objects.create(name=x) for x in ('syllabus', 'officiel', 'examen', 'resume', 'synthese', 'notes')]" | $(PY) manage.py shell > /dev/null
