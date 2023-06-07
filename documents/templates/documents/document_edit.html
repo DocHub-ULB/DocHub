@@ -69,10 +69,15 @@
         -->
         <div class="mt-3">
             <input type="submit" class="btn btn-success" name="update" value="Mettre à jour"/>
-            <input type="submit" class="btn btn-link text-danger"
-                   name="delete" value="Cacher le document"
-                   data-turbo-confirm="Est-tu certain de vouloir cacher ce document ?"
-            />
+            {% if doc.hidden %}
+                <input type="submit" class="btn btn-link text-primary"
+                       name="unhide" value="Rendre visible le document"
+                       data-turbo-confirm="Est-tu certain de vouloir rendre visible ce document ?"/>
+            {% else %}
+                <input type="submit" class="btn btn-link text-danger"
+                       name="hide" value="Cacher le document"
+                       data-turbo-confirm="Est-tu certain de vouloir cacher ce document ?"/>
+            {% endif %}
         </div>
     </form>
 

@@ -3,6 +3,7 @@
 This page tries to contain all changes made on DocHub.
 
 # Unreleased
+ * Show hidden document to the authors/admin and allow modification of this state
  * Add course slug to the display of "Documents récents"
 
 # 2032.5.0
