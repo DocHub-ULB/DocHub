@@ -3,6 +3,7 @@
 This page tries to contain all changes made on DocHub.
 
 # Unreleased
+ * Add course slug to the display of "Documents récents"
 
 # 2032.5.0
 
