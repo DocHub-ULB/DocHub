@@ -4,8 +4,6 @@ This page tries to contain all changes made on DocHub.
 
 # Unreleased
 
-# 2023.6.0
-
  * Fix makefile to load correctly the tree & the courses
 
 # 2023.5.0
