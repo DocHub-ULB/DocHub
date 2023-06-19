@@ -4,6 +4,8 @@ This page tries to contain all changes made on DocHub.
 
 # Unreleased
 
+ * Show real thumbnails for the documents
+
 # 2023.6.0
 
  * Show hidden document to the authors/admin and allow modification of this state

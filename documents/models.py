@@ -52,6 +52,7 @@ class Document(models.Model):
     file_type = models.CharField(max_length=255, default="")
     original = models.FileField(upload_to="original_document")
     pdf = models.FileField(upload_to="pdf_document")
+    thumbnail = models.FileField(upload_to="thumbnail", null=True)
 
     state = models.CharField(
         max_length=20,

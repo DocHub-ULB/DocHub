@@ -5,6 +5,7 @@ import re
 import subprocess
 import tempfile
 import uuid
+from io import BytesIO
 
 from django.conf import settings
 from django.core.files.base import ContentFile, File
@@ -21,6 +22,7 @@ from .exceptions import (
     MissingBinary,
     SkipException,
 )
+from .thumbnail import get_thumbnail
 
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -176,6 +178,19 @@ def mesure_pdf_length(self, document_id: int) -> int:
 
 
 @doctask
+def process_thumbnail(self, document_id: int) -> int:
+    document = Document.objects.get(pk=document_id)
+    _, img = get_thumbnail(stream=document.pdf.open())
+
+    blob = BytesIO()
+    img.save(blob, "webp", quality=20)
+    document.thumbnail.save(str(uuid.uuid4()) + ".webp", File(blob))
+    document.save()
+
+    return document_id
+
+
+@doctask
 def finish_file(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
     document.state = Document.DocumentState.DONE
@@ -226,10 +241,16 @@ def repair(self, document_id: int) -> int:
     return document_id
 
 
-process_pdf = chain(checksum.s(), mesure_pdf_length.s(), finish_file.s())
+process_pdf = chain(
+    checksum.s(), mesure_pdf_length.s(), process_thumbnail.s(), finish_file.s()
+)
 
 process_office = chain(
-    checksum.s(), convert_office_to_pdf.s(), mesure_pdf_length.s(), finish_file.s()
+    checksum.s(),
+    convert_office_to_pdf.s(),
+    mesure_pdf_length.s(),
+    process_thumbnail.s(),
+    finish_file.s(),
 )
 
 process_unconvertible = chain(checksum.s(), finish_file.s())
