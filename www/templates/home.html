@@ -145,8 +145,13 @@
                                 <a href="{% url 'document_show' document.pk %}"
                                    class="d-flex align-items-center gap-2 text-reset text-decoration-none">
                                     <div class="rounded border bg-light p-1">
-                                        <img src="{% static "images/default_page.webp" %}"
-                                             width="60" height="50" style="object-fit: cover;">
+                                        {% if document.thumbnail %}
+                                            <img src="{{ document.thumbnail.url }}"
+                                                 width="60" height="50" style="object-fit: cover;">
+                                        {% else %}
+                                            <img src="{% static "images/default_page.webp" %}"
+                                                 width="60" height="50" style="object-fit: cover;">
+                                        {% endif %}
                                     </div>
                                     <div>
                                         <div class="hover-underline">
