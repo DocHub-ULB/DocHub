@@ -46,7 +46,7 @@ def show_course(request, slug: str):
         .annotate(
             downvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE))
         )
-        .order_by("-edited")
+        .order_by("-created")
     )
 
     context = {

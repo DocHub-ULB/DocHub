@@ -4,7 +4,10 @@ This page tries to contain all changes made on DocHub.
 
 # Unreleased
 
+# 2023.7.0
+
  * Show real thumbnails for the documents
+ * In catalog, order documents by creation date, not edition
 
 # 2023.6.0
 
