@@ -60,6 +60,7 @@ class DocumentAdmin(admin.ModelAdmin):
         "pages",
         "original",
         "pdf",
+        "thumbnail",
         "md5",
         "state",
     )
@@ -113,7 +114,7 @@ class DocumentAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     ("file_type", "md5"),
-                    ("original", "pdf"),
+                    ("original", "pdf", "thumbnail"),
                     ("views", "downloads"),
                 )
             },

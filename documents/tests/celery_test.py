@@ -238,3 +238,16 @@ def test_repairs_original_too():
 
     with doc.original.open() as fd:
         assert fd.read(4) == b"%PDF"
+
+
+def test_thumbnail():
+    doc = create_doc("Document name2", ".pdf")
+
+    with open("documents/tests/files/3pages.pdf", "rb") as fd:
+        f = File(fd)
+        doc.pdf.save("another-uuid-beef-dead.pdf", f)
+
+    tasks.process_thumbnail.delay(doc.id)
+
+    doc = Document.objects.get(id=doc.id)  # Get back the updated instance
+    assert doc.thumbnail.name
