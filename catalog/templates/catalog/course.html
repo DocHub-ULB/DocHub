@@ -97,7 +97,7 @@
                                data-action="change->course-filter#filter"
                                data-course-filter-target="tag"
                         />
-                        <label for="tag-{{ tag.name }}">{{ tag.name }}</label>
+                        <label for="tag-{{ tag.name }}">{{ tag.name }} {{ tag.icon|safe }}</label>
                     </li>
                 {% endfor %}
             </ul>
@@ -147,16 +147,15 @@
                                 {{ document.user.name }} |
                                 {{ document.pages }} page{{ document.pages|pluralize }} |
                                 {{ document.date|date:"F Y"|capfirst }}
-                                <div class="tags d-none">
-                                    {% for kw in document.tags.all %}
-                                        <span
-                                            data-id="{{ kw.id }}"
-                                            style="background-color: {{ kw.color }}; color:white;"
-                                        >
-                                            {{ kw }}
-                                        </span>
-                                    {% endfor %}
-                                </div>
+                                {% for kw in document.tags.all %}
+                                    <span
+                                        data-id="{{ kw.id }}"
+                                        class="badge"
+                                        style="background-color: {{ kw.color }}; color:white;font-size:0.8em"
+                                    >
+                                        {{kw.icon|safe}}
+                                    </span>
+                                {% endfor %}
                             </div>
                         </div>
                     </a>
