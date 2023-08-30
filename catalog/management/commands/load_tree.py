@@ -50,9 +50,11 @@ class Command(BaseCommand):
         level1 = {k: v for k, v in faculties.items() if not is_level0(k)}
 
         with transaction.atomic():
+            print("Deleting all categories")
             Category.objects.all().delete()
 
             # Level 0
+            print("Creating level 0")
             ULB = Category.objects.create(
                 name="Université Libre de Bruxelles",
                 slug="ULB",
@@ -67,6 +69,7 @@ class Command(BaseCommand):
                 )
 
             # Level 1
+            print("Creating level 1")
             for name, _color in level1.items():
                 slug = (
                     name.removeprefix("Faculté de ")
@@ -81,6 +84,7 @@ class Command(BaseCommand):
                 c.parents.add(ULB)
 
             # Programs
+            print("Adding all programs")
             for program in programs:
                 if "bachelier" in program["name"].lower() or "BA" in program["slug"]:
                     program_type = Category.CategoryType.BACHELOR
@@ -107,3 +111,5 @@ class Command(BaseCommand):
                 for faculty in program["faculty"]:
                     parent = Category.objects.get(name=faculty["name"])
                     c.parents.add(parent)
+
+            print("Done")

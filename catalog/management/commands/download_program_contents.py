@@ -86,7 +86,5 @@ class Command(BaseCommand):
                     print(f"Error while listing content of {progam['slug']}")
                     progress.console.print_exception()
 
-        with open(
-            "catalog/management/parser/data/courses.json", "w+"
-        ) as all_courses_json:
+        with open("courses.json", "w+") as all_courses_json:
             json.dump(program_content, all_courses_json, indent=2)

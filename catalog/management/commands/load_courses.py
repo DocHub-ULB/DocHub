@@ -18,13 +18,15 @@ def get_category(slug, name=None, parent=None, type=None):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        with open("catalog/management/parser/data/courses.json") as f:
+        with open("courses.json") as f:
             programs = json.load(f)
 
         with transaction.atomic():
+            print("Removing all categories from all courses")
             for course in Course.objects.all():
                 course.categories.clear()
             for program_slug, courses in programs.items():
+                print(f"Inserting {len(courses)} courses from {program_slug}")
                 category = get_category(program_slug)
                 for course in courses.values():
                     bloc = course["bloc"]
