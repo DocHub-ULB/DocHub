@@ -51,12 +51,21 @@ class Command(BaseCommand):
                             print(
                                 f"[yellow]Skip:[/] [magenta]{progam['slug'].upper()}[/] with bogus parent {progam['parent'].upper()}"
                             )
+
+                            print("Retry")
+                            qs = f"/ksup/programme?gen=prod&anet={progam['slug'].upper()}&lang=fr"
+                            URL = f"https://www.ulb.be/api/formation?path={quote(qs)}"
+                            response = requests.get(URL)
+                            if not response.ok:
+                                print("Retry failed")
+                                continue
+
                         else:
                             print(
                                 f"[red]Error:[/] [magenta]{progam['slug'].upper()}[/] failed with {response.status_code}"
                             )
                             print("  ", URL)
-                        continue
+                            continue
 
                 except Exception:
                     print(f"[red]Error:[/] Failed to GET {progam['slug'].upper()}")
