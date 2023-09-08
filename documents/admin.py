@@ -105,7 +105,15 @@ class DocumentAdmin(admin.ModelAdmin):
                     "hidden",
                     "tags",
                     "description",
-                    "import_source",
+                )
+            },
+        ),
+        (
+            "History",
+            {
+                "fields": (
+                    ("import_source",),
+                    ("migrated_from_slug", "migrated_from_name"),
                 )
             },
         ),
