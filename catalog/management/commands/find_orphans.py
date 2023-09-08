@@ -14,10 +14,12 @@ class Command(BaseCommand):
             programs = json.load(f)
 
         new_slugs = set()
+        slug2name = {}
         for _program_slug, courses in programs.items():
             for course in courses.values():
                 slug = normalize_slug(course["id"])
                 new_slugs.add(slug)
+                slug2name[slug] = course["title"]
 
         courses = Course.objects.all().annotate(num_docs=Count("document"))
         orphans = courses.exclude(slug__in=new_slugs)
@@ -36,4 +38,4 @@ class Command(BaseCommand):
         with open("csv/new_slugs.csv", "w") as fd:
             writer = csv.writer(fd)
             for slug in new_slugs:
-                writer.writerow((slug,))
+                writer.writerow((slug, slug2name[slug]))
