@@ -104,6 +104,26 @@
         </div>
 
         <ul class="p-0" style="list-style: none;">
+            {% if imported_from_courses %}
+                <li class="p-2 alert alert-info">
+                    <span style="font-size: .5rem; transform: translate(0, -2px);" class="badge rounded-pill bg-danger">
+                        NEW
+                    </span>
+                    Ce cours contient des documents qui ont été déplacés depuis
+                    le{{ imported_from_courses|pluralize }} cours suivant{{ imported_from_courses|pluralize }} :
+                    {% for imported_slug, imported_name in imported_from_courses %}
+                        {{ imported_slug }} ({{ imported_name }}){% if not forloop.last %},{% endif %}
+                    {% endfor %}<br/>
+                    Il se pourrait que nous nous soyons trompés lors de la migration. Si c'était le cas,
+                    <a href="mailto:contact@dochub.be?subject={{ "Erreur de migration de document" |urlencode }}&body=
+
+
+
+                             {{ "Certains documents dans le cours " |urlencode }}{{ course.slug }}{{ " ont été importés à tord, ils devraient être dans le cours :" |urlencode }} ">faites-le-nous
+                        savoir</a> !
+
+                </li>
+            {% endif %}
             {% for document in documents %}
                 <li
                     class="border-top p-2 d-flex align-items-center"
@@ -147,6 +167,14 @@
                                 {{ document.user.name }} |
                                 {{ document.pages }} page{{ document.pages|pluralize }} |
                                 {{ document.date|date:"F Y"|capfirst }}
+                                {% if document.import_source %}
+                                    | Importé depuis {{ document.import_source }}
+                                {% endif %}
+                                {% if document.import_source %}
+                                    | Migré depuis
+                                    <abbr
+                                        title="Ce document à été ajouté dans {{ document.migrated_from_name }}: {{ document.migrated_from_slug }} qui n'est plus enseigné.">{{ document.migrated_from_slug }}</abbr>
+                                {% endif %}
                                 <div class="tags d-none">
                                     {% for kw in document.tags.all %}
                                         <span

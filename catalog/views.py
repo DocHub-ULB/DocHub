@@ -54,6 +54,11 @@ def show_course(request, slug: str):
         "tags": {tag for doc in documents for tag in doc.tags.all()},
         "documents": documents,
         "following": course.followed_by.filter(id=request.user.id).exists(),
+        "imported_from_courses": {
+            (d.migrated_from_slug, d.migrated_from_name)
+            for d in documents
+            if d.migrated_from_slug
+        },
     }
 
     if request.user.is_authenticated:
