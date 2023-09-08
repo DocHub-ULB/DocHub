@@ -38,7 +38,7 @@ def slugify0(name):
 
 class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:
-        with open("programs.json") as f:
+        with open("csv/programs.json") as f:
             programs = json.load(f)
 
         faculties: dict[str, str] = {}  # name: color
@@ -75,6 +75,8 @@ class Command(BaseCommand):
                     name.removeprefix("Faculté de ")
                     .removeprefix("Faculté d'")
                     .removeprefix("Faculté des ")
+                    .removeprefix("Institut d'")
+                    .removeprefix("Institut des")
                 )
                 c = Category.objects.create(
                     name=name,
@@ -86,14 +88,17 @@ class Command(BaseCommand):
             # Programs
             print("Adding all programs")
             for program in programs:
-                if "bachelier" in program["name"].lower() or "BA" in program["slug"]:
-                    program_type = Category.CategoryType.BACHELOR
-                elif (
-                    "spécialisation" in program["name"].lower()
-                    or "MS" in program["slug"]
+                if "bachelier" in program["name"].lower() or program["slug"].startswith(
+                    "BA"
                 ):
+                    program_type = Category.CategoryType.BACHELOR
+                elif "spécialisation" in program["name"].lower() or program[
+                    "slug"
+                ].startswith("MS"):
                     program_type = Category.CategoryType.MASTER_SPECIALIZATION
-                elif "master" in program["name"].lower() or "MA" in program["slug"]:
+                elif "master" in program["name"].lower() or program["slug"].startswith(
+                    "MA"
+                ):
                     program_type = Category.CategoryType.MASTER
                 elif "certificat" in program["name"].lower():
                     program_type = Category.CategoryType.CERTIFICATE

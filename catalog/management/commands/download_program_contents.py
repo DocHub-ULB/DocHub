@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = ""
 
     def handle(self, *args: Any, **options: Any) -> None:
-        with open("programs.json") as f:
+        with open("csv/programs.json") as f:
             programs: list[dict] = json.load(f)
         print("\n[bold blue]Listing the course content of all programs...[/]\n")
 
@@ -95,5 +95,5 @@ class Command(BaseCommand):
                     print(f"Error while listing content of {progam['slug']}")
                     progress.console.print_exception()
 
-        with open("courses.json", "w+") as all_courses_json:
+        with open("csv/courses.json", "w+") as all_courses_json:
             json.dump(program_content, all_courses_json, indent=2)

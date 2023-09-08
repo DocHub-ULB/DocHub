@@ -116,5 +116,5 @@ class Command(BaseCommand):
         programs = [p for p in programs if p["slug"] not in parent_programs]
 
         print(f"Found {len(programs)} distinct programs, dumping to json...")
-        with open("programs.json", "w") as f:
+        with open("csv/programs.json", "w") as f:
             json.dump(programs, f, indent=4)

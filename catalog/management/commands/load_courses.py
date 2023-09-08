@@ -18,7 +18,7 @@ def get_category(slug, name=None, parent=None, type=None):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        with open("courses.json") as f:
+        with open("csv/courses.json") as f:
             programs = json.load(f)
 
         with transaction.atomic():
