@@ -19,7 +19,8 @@
             {{ course.slug|upper }} {{ course.name }}
         </h1>
         {% if course.is_archive %}
-            <p>Ce cours ne fait plus partie du programme de l'ULB, il est gardé ici uniquement pour des raisons historiques.</p>
+            <p>Ce cours ne fait plus partie du programme de l'ULB, il est gardé ici uniquement pour des raisons
+                historiques.</p>
         {% endif %}
         {% if not course.is_archive %}
             <a class="btn btn-outline-success btn-sm d-inline-flex align-items-center gap-1"
@@ -67,41 +68,43 @@
 {% endblock %}
 {% block content %}
     <div data-controller="course-filter">
-        <form class="d-flex mb-3 gap-2">
-            <input
-                class="flex-fill rounded px-2"
-                style="border-style: solid"
-                type="text" name="cours"
-                placeholder="Chercher par titre de document..."
-                data-course-filter-target="query"
-                data-action="input->course-filter#filter"
+        {% if documents %}
+            <form class="d-flex mb-3 gap-2">
+                <input
+                    class="flex-fill rounded px-2"
+                    style="border-style: solid"
+                    type="text" name="cours"
+                    placeholder="Chercher par titre de document..."
+                    data-course-filter-target="query"
+                    data-action="input->course-filter#filter"
 
-            >
-            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
-               aria-expanded="false" aria-controls="collapseExample">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-funnel"
-                     viewBox="0 0 16 16">
-                    <path
-                        d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
-                </svg>
-            </a>
-        </form>
-        <div class="collapse" id="collapseExample">
-            <ul class="p-0" style="display: grid; grid: repeat(2, auto) / auto-flow auto; gap: 0.5em">
-                {% for tag in tags %}
-                    <li class="badge d-inline-flex gap-1 border"
-                        style="accent-color:{{ tag.color }}; border-color:{{ tag.color }}; color: {{ tag.color }}">
-                        <input type="checkbox"
-                               id="tag-{{ tag.name }}"
-                               data-tag-name="{{ tag.name }}"
-                               data-action="change->course-filter#filter"
-                               data-course-filter-target="tag"
-                        />
-                        <label for="tag-{{ tag.name }}">{{ tag.name }}</label>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+                >
+                <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false" aria-controls="collapseExample">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-funnel"
+                         viewBox="0 0 16 16">
+                        <path
+                            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
+                    </svg>
+                </a>
+            </form>
+            <div class="collapse" id="collapseExample">
+                <ul class="p-0" style="display: grid; grid: repeat(2, auto) / auto-flow auto; gap: 0.5em">
+                    {% for tag in tags %}
+                        <li class="badge d-inline-flex gap-1 border"
+                            style="accent-color:{{ tag.color }}; border-color:{{ tag.color }}; color: {{ tag.color }}">
+                            <input type="checkbox"
+                                   id="tag-{{ tag.name }}"
+                                   data-tag-name="{{ tag.name }}"
+                                   data-action="change->course-filter#filter"
+                                   data-course-filter-target="tag"
+                            />
+                            <label for="tag-{{ tag.name }}">{{ tag.name }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
         <ul class="p-0" style="list-style: none;">
             {% if imported_from_courses %}
@@ -148,9 +151,12 @@
                         <div>
                             <div class="hover-underline">
                                 {% if document.hidden %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
-                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                                        <path
+                                            d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
                                     </svg>
                                 {% endif %}
                                 {{ document.name|capfirst }}
@@ -248,12 +254,31 @@
                     </div>
                 </li>
             {% empty %}
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">
+
+                        Rentrée 2023-2024: Nouveaux cours !
+                        <span style="font-size: .5rem;transform: translate(0, -5px);" class="badge rounded-pill bg-danger">
+                            NEW
+                        </span>
+
+                    </h4>
+                    Le programme de cours de l'ULB a parfois beaucoup changé au cours des années.
+                    DocHub s'est adapté en renommant des cours et en déplacent les documents
+                    mais il se pourrait que certains documents soient mal rangés.
+                    <br>
+                    Si tu ne trouves plus des documents des années précédentes,
+                    <a href="/catalog/f/archives/">regarde dans les archives</a> !
+                </div>
                 <div>
                     <h3>Il n’y a encore rien dans ce cours…</h3>
                     <p>Les documents que tu trouves sur DocHub ont été partagés par des
                         étudiants comme toi et nous. N'hésite pas à partager tes notes, des questions d'examens
-                        ou même juste un scan des questions du dernier TP. C'est grâce à des petits gestes comme ça que DocHub est si complet !</p>
+                        ou même juste un scan des questions du dernier TP. C'est grâce à des petits gestes comme ça que
+                        DocHub est si complet !</p>
+
                 </div>
+
             {% endfor %}
         </ul>
     </div>
