@@ -61,6 +61,7 @@ class Category(models.Model):
             .removeprefix("Master de spécialisation en ")
             .removeprefix("Master de ")
         )
+
         if "orientation" in name:
             name = name.replace("orientation générale", "orientation Général").replace(
                 "orientation ", "("
@@ -74,7 +75,20 @@ class Category(models.Model):
             if k in name:
                 name = v
 
+        name = name.replace("sciences de la santé publique à finalité", "")
+        name = name.replace(", (", " (")
+
+        if "sciences de l'ingénieur (" in name:
+            name = name.replace("sciences de l'ingénieur (", "").replace(")", "")
+
+        name = name.replace("(Général)", "")
+
         name = name.replace(" ,", ",").replace("( ", "(")
+
+        name = name.replace(", option Bruxelles", "")
+        name = name.replace("(Site de Charleroi)", "(Charleroi)")
+        name = name.replace("(Général à finalité ", "(")
+
         return name
 
 
