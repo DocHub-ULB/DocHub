@@ -96,7 +96,7 @@ def test_simple_upload(app, user, tree, tags):
         reverse("catalog:course_show", args=("swag-h-042",)), user=user.netid
     )
     put = course.click(description="Uploader un document")
-    form = [x for x in put.forms.values() if x.id == "document-upload"][0]
+    form = next(x for x in put.forms.values() if x.id == "document-upload")
     form["file"] = Upload("documents/tests/files/3pages.pdf")
     form["tags"].select_multiple(texts=["my tag"])
     response = form.submit()

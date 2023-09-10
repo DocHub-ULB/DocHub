@@ -23,7 +23,7 @@ def buildOrderedProgramList(programs) -> list:
 
     for program in programs:
         program_type, type_slug = programTypeAndSlug(program)
-        if type_slug not in program_dict.keys():
+        if type_slug not in program_dict:
             program_dict[type_slug] = {
                 "name": program_type,
                 "slug": type_slug,

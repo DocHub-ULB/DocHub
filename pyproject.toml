@@ -33,6 +33,7 @@ ignore = [
     "PLR0913", # Too many arguments to function call
     "PLR0911", # Too many return statements
     "PLC1901", # if x != "" is not the same as if x
+    "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]
 
 [tool.ruff.per-file-ignores]

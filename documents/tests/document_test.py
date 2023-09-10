@@ -66,7 +66,7 @@ def test_tag_resume(doc):
 def test_reprocess_done(mock_add_to_queue, doc):
     doc.state = Document.DocumentState.DONE
 
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017
         doc.reprocess()
     assert mock_add_to_queue.called == 0
 

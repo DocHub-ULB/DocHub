@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.9.0
     hooks:
       - id: black
 
@@ -17,7 +17,7 @@ repos:
         files: \.html$
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
+    rev: v3.10.1
     hooks:
       - id: pyupgrade
         args: [ "--py310-plus" ]
@@ -30,13 +30,13 @@ repos:
       - id: djjs
 
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.13.0
+    rev: 1.14.1
     hooks:
       - id: django-upgrade
         args: [ --target-version, "4.1" ]
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.0.262'
+    rev: 'v0.0.287'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
