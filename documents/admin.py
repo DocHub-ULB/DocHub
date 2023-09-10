@@ -110,12 +110,7 @@ class DocumentAdmin(admin.ModelAdmin):
         ),
         (
             "History",
-            {
-                "fields": (
-                    ("import_source",),
-                    ("migrated_from_slug", "migrated_from_name"),
-                )
-            },
+            {"fields": (("import_source",),)},
         ),
         (
             "Extra",

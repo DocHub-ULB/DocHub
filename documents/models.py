@@ -69,8 +69,6 @@ class Document(models.Model):
     import_source = models.CharField(
         max_length=1024, null=True, verbose_name="Importé depuis", blank=True
     )
-    migrated_from_slug = models.CharField(null=True)
-    migrated_from_name = models.CharField(null=True, max_length=255)
 
     def __str__(self) -> str:
         return self.name
