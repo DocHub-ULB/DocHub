@@ -154,7 +154,11 @@ def finder(request, slugs: str = ""):
     return render(
         request,
         "catalog/finder.html",
-        {"columns": columns, "extra_columns": range(4 - len(columns))},
+        {
+            "columns": columns,
+            "extra_columns": range(4 - len(columns)),
+            "is_archive": categories[0].is_archive,
+        },
     )
 
 

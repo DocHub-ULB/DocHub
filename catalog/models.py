@@ -17,6 +17,8 @@ class Category(models.Model):
         related_name="children",
     )
 
+    is_archive = models.BooleanField(default=False)
+
     class CategoryType(models.TextChoices):
         BACHELOR = "BA", _("Bachelier")
         MASTER = "MA", _("Master")
@@ -111,6 +113,7 @@ class Course(models.Model):
     )
 
     followed_by = models.ManyToManyField("users.User", related_name="courses_set")
+    is_archive = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["slug"]
@@ -131,9 +134,6 @@ class Course(models.Model):
     @property
     def followers_count(self) -> int:
         return self.followed_by.count()
-
-    def is_archive(self):
-        return self.categories.count() == 0
 
 
 class CourseCategory(models.Model):

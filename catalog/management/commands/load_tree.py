@@ -50,8 +50,23 @@ class Command(BaseCommand):
         level1 = {k: v for k, v in faculties.items() if not is_level0(k)}
 
         with transaction.atomic():
-            print("Deleting all categories")
-            Category.objects.all().delete()
+            if Category.objects.filter(slug="archives").first():
+                print("We already have archives, deleting the non-archives")
+                Category.objects.filter(is_archive=False).delete()
+            else:
+                print("Archiving old categories")
+                old_ulb = Category.objects.filter(slug="ULB").first()
+                old_ulb.name = "Archives"
+                old_ulb.slug = "archives"
+                old_ulb.type = Category.CategoryType.UNIVERSITY
+                old_ulb.save()
+
+                Category.objects.all().update(is_archive=True)
+
+                print("Fixing old faculties")
+                for child in old_ulb.children.all():
+                    child.type = Category.CategoryType.FACULTY
+                    child.save()
 
             # Level 0
             print("Creating level 0")

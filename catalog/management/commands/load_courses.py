@@ -22,9 +22,11 @@ class Command(BaseCommand):
             programs = json.load(f)
 
         with transaction.atomic():
-            print("Removing all categories from all courses")
+            print("Temporarily set all courses as archived")
             for course in Course.objects.all():
-                course.categories.clear()
+                course.is_archive = True
+                course.save()
+
             for program_slug, courses in programs.items():
                 print(f"Inserting {len(courses)} courses from {program_slug}")
                 category = get_category(program_slug)
@@ -43,4 +45,7 @@ class Command(BaseCommand):
                             "name": course["title"],
                         },
                     )[0]
+                    c.name = course["title"]
+                    c.is_archive = False
+                    c.save()
                     c.categories.add(p)
