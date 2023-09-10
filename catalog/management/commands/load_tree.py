@@ -55,7 +55,7 @@ class Command(BaseCommand):
                 Category.objects.filter(is_archive=False).delete()
             else:
                 print("Archiving old categories")
-                old_ulb = Category.objects.filter(slug="ULB").first()
+                old_ulb = Category.objects.filter(slug="ULB").get()
                 old_ulb.name = "Archives"
                 old_ulb.slug = "archives"
                 old_ulb.type = Category.CategoryType.UNIVERSITY
