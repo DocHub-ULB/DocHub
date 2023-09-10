@@ -48,5 +48,5 @@ def search_course(string):
             similarity=F("name_similarity") + F("slug_similarity"),
         )
         .filter(similarity__gt=similarity)
-        .order_by("-rank", "-similarity", "-document__count")
+        .order_by("-rank", "-similarity", "is_archive", "-document__count")
     )

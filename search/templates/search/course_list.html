@@ -11,7 +11,7 @@
                href="{% url 'catalog:course_show' course.slug %}"
                class="text-reset text-decoration-none d-inline-block w-100 d-flex align-items-center gap-2"
             >
-                {% if course.category_count == 0 %}
+                {% if course.is_archive %}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-archive" viewBox="0 0 16 16">
                         <path
