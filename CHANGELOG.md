@@ -2,7 +2,22 @@
 
 This page tries to contain all changes made on DocHub.
 
-# Unreleased
+# 2023.9.0 - Codename NEWTREE
+
+We are now using the new tree !
+
+ * The old tree is still available, in an "archives" root category
+ * Categories and courses now have an "is_archive" flag
+ * A link to the archives is available in the finder
+ * Courses in the archive with no documents were deleted as they have no value and clutter the search
+ * When a course is empty, we suggest looking in the archives
+ * The finder now shows icons for faculties, to separate masters from bachelors, ...
+
+Bonuses:
+
+ * Improve `better_name()` so the tree is nicer
+ * In the document list, make it clear that imported documents are imported
+   * Packages update
 
 # 2023.7.0
 
