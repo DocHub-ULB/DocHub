@@ -4,29 +4,25 @@
 #
 #    pip-compile
 #
-amqp==5.1.1
+amqp==5.2.0
     # via kombu
-appnope==0.1.3
-    # via ipython
 asgiref==3.7.2
     # via django
-asttokens==2.4.0
+asttokens==2.4.1
     # via stack-data
 async-timeout==4.0.3
     # via redis
-backcall==0.2.0
-    # via ipython
 beautifulsoup4==4.12.2
     # via
     #   -r requirements.in
     #   webtest
-billiard==4.1.0
+billiard==4.2.0
     # via celery
-black==23.9.1
+black==23.11.0
     # via -r requirements.in
-boto3==1.7.84
+boto3==1.33.6
     # via -r requirements.in
-botocore==1.10.84
+botocore==1.33.6
     # via
     #   boto3
     #   s3transfer
@@ -34,15 +30,15 @@ brotli==1.1.0
     # via whitenoise
 build==1.0.3
     # via pip-tools
-celery==5.3.4
+celery==5.3.6
     # via -r requirements.in
-certifi==2023.7.22
+certifi==2023.11.17
     # via
     #   requests
     #   sentry-sdk
 cfgv==3.4.0
     # via pre-commit
-charset-normalizer==3.3.0
+charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via
@@ -60,13 +56,13 @@ click-repl==0.3.0
     # via celery
 coolname==2.2.0
     # via -r requirements.in
-crispy-bootstrap5==0.7
+crispy-bootstrap5==2023.10
     # via -r requirements.in
 decorator==5.1.1
     # via ipython
 distlib==0.3.7
     # via virtualenv
-django==4.2.6
+django==5.0
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
@@ -80,11 +76,11 @@ django==4.2.6
     #   django-stubs
     #   django-stubs-ext
     #   jsonfield
-django-appconf==1.0.5
+django-appconf==1.0.6
     # via django-compressor
 django-compressor==4.4
     # via -r requirements.in
-django-crispy-forms==2.0
+django-crispy-forms==2.1
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
@@ -104,23 +100,21 @@ django-mptt==0.15.0
     # via -r requirements.in
 django-pipeline==2.1.0
     # via -r requirements.in
-django-storages==1.14.1
+django-storages==1.14.2
     # via -r requirements.in
-django-stubs==4.2.4
+django-stubs==4.2.6
     # via -r requirements.in
-django-stubs-ext==4.2.2
+django-stubs-ext==4.2.5
     # via django-stubs
 django-webtest==1.9.11
     # via -r requirements.in
-docutils==0.20.1
-    # via botocore
-exceptiongroup==1.1.3
+exceptiongroup==1.2.0
     # via
     #   ipython
     #   pytest
-executing==2.0.0
+executing==2.0.1
     # via stack-data
-filelock==3.12.4
+filelock==3.13.1
     # via virtualenv
 filemagic==1.6
     # via -r requirements.in
@@ -132,25 +126,25 @@ honcho==1.1.0
     # via -r requirements.in
 html5lib==1.1
     # via -r requirements.in
-identify==2.5.30
+identify==2.5.32
     # via pre-commit
-idna==3.4
+idna==3.6
     # via requests
 iniconfig==2.0.0
     # via pytest
-ipython==8.16.1
+ipython==8.18.1
     # via -r requirements.in
 isort==5.12.0
     # via -r requirements.in
 jedi==0.19.1
     # via ipython
-jmespath==0.10.0
+jmespath==1.0.1
     # via
     #   boto3
     #   botocore
 jsonfield==3.1.0
     # via -r requirements.in
-kombu==5.3.2
+kombu==5.3.4
     # via celery
 markdown-it-py==3.0.0
     # via rich
@@ -160,10 +154,8 @@ mdurl==0.1.2
     # via markdown-it-py
 mock==5.1.0
     # via -r requirements.in
-mypy==1.5.1
-    # via
-    #   -r requirements.in
-    #   django-stubs
+mypy==1.7.1
+    # via -r requirements.in
 mypy-extensions==1.0.0
     # via
     #   black
@@ -182,52 +174,50 @@ parso==0.8.3
     # via jedi
 pathspec==0.11.2
     # via black
-pexpect==4.8.0
+pexpect==4.9.0
     # via ipython
-pickleshare==0.7.5
-    # via ipython
-pillow==10.0.1
+pillow==10.1.0
     # via -r requirements.in
 pip-tools==7.3.0
     # via -r requirements.in
-platformdirs==3.11.0
+platformdirs==4.0.0
     # via
     #   black
     #   virtualenv
 pluggy==1.3.0
     # via pytest
-pre-commit==3.4.0
+pre-commit==3.5.0
     # via -r requirements.in
-prompt-toolkit==3.0.39
+prompt-toolkit==3.0.41
     # via
     #   click-repl
     #   ipython
-psycopg[binary,pool]==3.1.12
+psycopg[binary,pool]==3.1.14
     # via -r requirements.in
-psycopg-binary==3.1.12
+psycopg-binary==3.1.14
     # via psycopg
-psycopg-pool==3.1.8
+psycopg-pool==3.2.0
     # via psycopg
 ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
     # via stack-data
-pygments==2.16.1
+pygments==2.17.2
     # via
     #   -r requirements.in
     #   ipython
     #   rich
-pymupdf==1.23.4
+pymupdf==1.23.7
     # via -r requirements.in
-pymupdfb==1.23.3
+pymupdfb==1.23.7
     # via pymupdf
-pypdf==3.16.2
+pypdf==3.17.1
     # via -r requirements.in
 pyproject-hooks==1.0.0
     # via build
-pytest==7.4.2
+pytest==7.4.3
     # via pytest-django
-pytest-django==4.5.2
+pytest-django==4.7.0
     # via -r requirements.in
 python-dateutil==2.8.2
     # via
@@ -251,15 +241,15 @@ requests==2.31.0
     # via
     #   -r requirements.in
     #   responses
-responses==0.23.3
+responses==0.24.1
     # via -r requirements.in
-rich==13.6.0
+rich==13.7.0
     # via -r requirements.in
 rjsmin==1.2.1
     # via django-compressor
-s3transfer==0.1.13
+s3transfer==0.8.2
     # via boto3
-sentry-sdk==1.31.0
+sentry-sdk==1.38.0
     # via -r requirements.in
 six==1.16.0
     # via
@@ -291,7 +281,7 @@ tomli==2.0.1
     #   pip-tools
     #   pyproject-hooks
     #   pytest
-traitlets==5.11.2
+traitlets==5.14.0
     # via
     #   ipython
     #   matplotlib-inline
@@ -303,8 +293,7 @@ types-pyyaml==6.0.12.12
     # via
     #   -r requirements.in
     #   django-stubs
-    #   responses
-types-requests==2.31.0.7
+types-requests==2.31.0.10
     # via -r requirements.in
 typing-extensions==4.8.0
     # via
@@ -317,22 +306,23 @@ typing-extensions==4.8.0
     #   psycopg-pool
 tzdata==2023.3
     # via celery
-urllib3==2.0.6
+urllib3==2.0.7
     # via
+    #   botocore
     #   requests
     #   responses
     #   sentry-sdk
     #   types-requests
-vine==5.0.0
+vine==5.1.0
     # via
     #   amqp
     #   celery
     #   kombu
-virtualenv==20.24.5
+virtualenv==20.25.0
     # via pre-commit
 waitress==2.1.2
     # via webtest
-wcwidth==0.2.8
+wcwidth==0.2.12
     # via prompt-toolkit
 webencodings==0.5.1
     # via html5lib
@@ -340,9 +330,9 @@ webob==1.8.7
     # via webtest
 webtest==3.0.0
     # via django-webtest
-wheel==0.41.2
+wheel==0.42.0
     # via pip-tools
-whitenoise[brotli]==6.5.0
+whitenoise[brotli]==6.6.0
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:

@@ -104,7 +104,7 @@ class PeriodType(models.TextChoices):
 class Course(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
-    categories = models.ManyToManyField(Category, through="CourseCategory")
+    categories = models.ManyToManyField(Category, through="CourseCategory")  # type: ignore
     description = models.TextField(default="")
     period = models.CharField(
         max_length=4,
