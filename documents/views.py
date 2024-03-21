@@ -257,10 +257,10 @@ def document_original_file(request, pk):
     response = HttpResponse(body, content_type="application/octet-stream")
     response["Content-Description"] = "File Transfer"
     response["Content-Transfer-Encoding"] = "binary"
-    response[
-        "Content-Disposition"
-    ] = f'attachment; filename="{document.safe_name}{document.file_type}"'.encode(
-        "ascii", "ignore"
+    response["Content-Disposition"] = (
+        f'attachment; filename="{document.safe_name}{document.file_type}"'.encode(
+            "ascii", "ignore"
+        )
     )
 
     document.downloads = F("downloads") + 1
