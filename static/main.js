@@ -1,8 +1,8 @@
 import _ from 'https://cdn.skypack.dev/lodash';
 
-import {Controller, Application} from 'https://cdn.skypack.dev/@hotwired/stimulus';
+import {Controller, Application} from 'https://unpkg.com/@hotwired/stimulus@3.2.2?module';
 import {Autocomplete} from 'https://cdn.skypack.dev/stimulus-autocomplete';
-import tomSelect from 'https://cdn.skypack.dev/tom-select';
+import tomSelect from 'https://unpkg.com/tom-select@2.3.1?module';
 
 function normalize(s) {
     let r = s.toLowerCase();
@@ -83,10 +83,10 @@ class Search extends Controller {
     }
 }
 
-import bundledEsModulesPdfjsDist from 'https://cdn.skypack.dev/@bundled-es-modules/pdfjs-dist@2.5.207-rc1';
+import bundledEsModulesPdfjsDist from 'https://unpkg.com/@bundled-es-modules/pdfjs-dist@2.16.106';
 
 let pdfjs = bundledEsModulesPdfjsDist
-pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.5.207/build/pdf.worker.js"
+pdfjs.GlobalWorkerOptions.workerSrc = "https://unpkg.com/@bundled-es-modules/pdfjs-dist@2.16.106/build/pdf.worker.js"
 
 
 class Viewer extends Controller {

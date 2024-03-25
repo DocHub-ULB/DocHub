@@ -1,5 +1,5 @@
-import * as Sentry from "https://cdn.skypack.dev/@sentry/browser";
-import { BrowserTracing } from "https://cdn.skypack.dev/@sentry/tracing";
+import * as Sentry from "https://unpkg.com/@sentry/browser@7.108.0?module";
+import { BrowserTracing } from "https://unpkg.com/@sentry/tracing@7.108.0?module";
 
 const head = document.querySelector("head");
 const DSN = head.dataset.sentryDsn;
