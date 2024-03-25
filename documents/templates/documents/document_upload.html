@@ -39,6 +39,14 @@
         </svg>
         <span class="hover-underline">{{ course.slug|upper }} {{ course.name }}</span>
     </a>
+    {% if course.is_archive %}
+        <div class="alert alert-primary">
+            Ce cours ne fait plus partie du programme de l'ULB, il est gardé uniquement pour des raisons
+            historiques. <br/>
+            Tu peux continuer à y uploader des documents, mais si possible, essaie plutôt de les y mettre
+            dans le cours qui est actuellement enseigné.
+        </div>
+    {% endif %}
     <form
         action="{% url 'document_put' course.slug %}"
         method="post" enctype="multipart/form-data"
