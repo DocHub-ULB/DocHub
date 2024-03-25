@@ -6,6 +6,7 @@ from django.db.models import Case, Count, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from catalog.models import Category, Course, CourseUserView
 from catalog.slug import normalize_slug
@@ -81,12 +82,14 @@ def set_follow_course(request, slug: str, action: str) -> HttpResponse:
 
 @login_required
 @slug_redirect
+@require_POST
 def join_course(request: HttpRequest, slug: str):
     return set_follow_course(request, slug, "follow")
 
 
 @login_required
 @slug_redirect
+@require_POST
 def leave_course(request: HttpRequest, slug: str):
     return set_follow_course(request, slug, "leave")
 
