@@ -2,6 +2,13 @@
 
 This page tries to contain all changes made on DocHub.
 
+# 2024.3.0 
+
+ * Upgrade JS libraries (notable change is Turbo 8)
+ * Add view transitions (fancy animations when changing pages)
+ * Allow uploading documents on archived courses (but with a warning)
+ * Usual python packages update
+
 # 2023.9.0 - Codename NEWTREE
 
 We are now using the new tree !
@@ -17,7 +24,7 @@ Bonuses:
 
  * Improve `better_name()` so the tree is nicer
  * In the document list, make it clear that imported documents are imported
-   * Packages update
+ * Packages update
 
 # 2023.7.0
 
