@@ -114,7 +114,7 @@ filemagic==1.6
     # via -r requirements.in
 furl==2.1.3
     # via -r requirements.in
-gunicorn==21.2.0
+gunicorn==22.0.0
     # via -r requirements.in
 honcho==1.1.0
     # via -r requirements.in
