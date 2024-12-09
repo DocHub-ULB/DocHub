@@ -28,7 +28,7 @@ def get_or_create_bloc(fac: dict, program: dict, bloc: dict) -> dict:
     fac = get_or_create_fac(fac)
     program = get_or_create_program(fac, program)
 
-    bloc = bloc["val"] if bloc["val"] != "U" else "1"
+    bloc = bloc["val"] if bloc["val"] != "U" else "1"  # type: ignore
     if bloc not in program["blocs"]:
         program["blocs"][bloc] = {"val": bloc, "courses": {}}
     return program["blocs"][bloc]

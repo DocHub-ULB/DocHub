@@ -258,14 +258,11 @@ process_unconvertible = chain(checksum.s(), finish_file.s())
 
 @contextlib.contextmanager
 def file_as_local(fileobj, prefix="", suffix=""):
-    tmpfile = tempfile.NamedTemporaryFile(prefix=prefix, suffix=suffix)
-    tmpfile.write(fileobj.read())
-    tmpfile.flush()
+    with tempfile.NamedTemporaryFile(prefix=prefix, suffix=suffix) as tmpfile:
+        tmpfile.write(fileobj.read())
+        tmpfile.flush()
 
-    try:
         yield tmpfile
-    finally:
-        tmpfile.close()
 
 
 @contextlib.contextmanager

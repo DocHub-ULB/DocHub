@@ -154,9 +154,11 @@ CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 SENTRY_DSN = env("SENTRY_DSN", default=None)
 SENTRY_RELEASE = get_default_release()
 
+FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
 # Only configure S3 storage if we have a STORAGE_ENDPOINT env variable else, default to the local filesystem
 if env("STORAGE_ENDPOINT", default=None):
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
     # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
     AWS_S3_ENDPOINT_URL = env("STORAGE_ENDPOINT")
@@ -166,6 +168,15 @@ if env("STORAGE_ENDPOINT", default=None):
 elif not DEBUG:
     print("Warning: no storage configured but DEBUG=False, using local filesystem.")
     print("You DO NOT want this in production!")
+
+STORAGES = {
+    "default": {
+        "BACKEND": FILE_STORAGE,
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 if DEBUG:
     INSTALLED_APPS.extend(["django_extensions"])

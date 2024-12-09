@@ -37,7 +37,7 @@ def slugify0(name):
 
 
 class Command(BaseCommand):
-    def handle(self, *args: Any, **options: Any) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: PLR0912
         with open("csv/programs.json") as f:
             programs = json.load(f)
 
