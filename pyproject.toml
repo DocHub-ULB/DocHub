@@ -11,7 +11,7 @@ markers = """
     postgresql: needs a postgresql database to run
 """
 
-[tool.ruff]
+[tool.ruff.lint]
 select = [
     "F", "E", "W", "YTT", "B", "COM818",
     "C4", "DTZ", "T10", "EXE", "ISC",
@@ -26,7 +26,6 @@ ignore = [
     "E501", # Line too long
     "B905", # Not available <3.10
     "PT011", # `pytest.raises(Exception)` is too broad
-    "PT004", # Fixture does not return anything
     "SIM108", # Use ternary operator
     "SIM105", # Use `contextlib.suppress(Alarm)`
     "PLR2004", # Magic value used in comparison
@@ -34,9 +33,10 @@ ignore = [
     "PLR0911", # Too many return statements
     "PLC1901", # if x != "" is not the same as if x
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+    "SIM103", # Return the condition directly
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"] # imported but unused
 "www/settings.py" = ["F403"] # import *` used; unable to detect undefined names
 "www/test_settings.py" = ["F403"] # import *` used; unable to detect undefined names

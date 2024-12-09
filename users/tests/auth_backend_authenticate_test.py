@@ -8,7 +8,7 @@ from users.models import User
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture()
+@pytest.fixture
 def fake_base_url(settings):
     settings.BASE_URL = "http://example.com/"
 

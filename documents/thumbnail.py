@@ -2,11 +2,11 @@ from typing import IO
 
 import statistics
 
-import fitz
+import pymupdf
 from PIL import Image, ImageOps
 
 
-def _get_thumb_from_page(page: fitz.fitz.Page):
+def _get_thumb_from_page(page: pymupdf.Page):
     pix = page.get_pixmap()
     mode = "RGBA" if pix.alpha else "RGB"
     img = Image.frombytes(mode, (pix.width, pix.height), pix.samples)
@@ -18,7 +18,7 @@ def get_thumbnail(
     pdf: str | None = None, stream: IO[bytes] | None = None
 ) -> tuple[int, Image.Image]:
     s = stream.read() if stream else None
-    doc = fitz.open(filename=pdf, stream=s, filetype="pdf")
+    doc = pymupdf.open(filename=pdf, stream=s, filetype="pdf")
 
     # Iterate on the first 10 pages to find an interesting one to thumbnail
     for i in range(min(doc.page_count, 10)):
