@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}Ajouter un document à {{ course.slug|upper }}{% endblock %}
 
 {% block head %}
@@ -18,7 +19,7 @@
             display: none;
         }
     </style>
-{% endblock %}
+{% endblock head %}
 
 {% block content %}
     {% if READ_ONLY %}
@@ -117,7 +118,7 @@
         </p>
 
 
-        {% with form.file as field %}
+        {% with field=form.file %}
             {% if field.errors %}
                 <small class="error">
                     {% for error in field.errors %}
@@ -223,4 +224,4 @@
         </div>
     </form>
 
-{% endblock %}
+{% endblock content %}

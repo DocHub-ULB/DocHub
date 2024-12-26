@@ -5,7 +5,7 @@
 {% block head %}
     <link href="https://unpkg.com/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css"
           rel="stylesheet" crossorigin="anonymous">
-{% endblock %}
+{% endblock head %}
 
 {% block content %}
     <form action="{% url 'document_edit' doc.id %}" method="post">
@@ -81,4 +81,4 @@
         </div>
     </form>
 
-{% endblock %}
+{% endblock content %}

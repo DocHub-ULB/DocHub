@@ -6,7 +6,7 @@
     <meta property="og:title" content="{{ document.name }}" />
     <meta property="article:tag" content="{{ document.tags.all|join:"," }}" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="{{ document.name }} est un {{document.file_type}} de {{document.pages}} pages et est taggé dans les catégories : {{ document.tags.all|join:"," }}" />
+    <meta property="og:description" content="{{ document.name }} est un {{ document.file_type }} de {{ document.pages }} pages et est taggé dans les catégories : {{ document.tags.all|join:"," }}" />
 {% endblock opengraph %}
 
 {% block preview %}
@@ -15,9 +15,9 @@
     <p>
         Un étudiant a uploadé le document
         <strong>"{{ document.name }}"</strong>
-        dans le cours "{{document.course.name}}" ({{document.course.slug|upper}}).
+        dans le cours "{{ document.course.name }}" ({{ document.course.slug|upper }}).
     </p>
     <p>
-        Ce document {{document.file_type}} fait {{document.pages}} pages.
+        Ce document {{ document.file_type }} fait {{ document.pages }} pages.
     </p>
 {% endblock preview %}

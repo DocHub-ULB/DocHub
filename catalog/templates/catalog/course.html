@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% load static %}
-{% load humanize %}
-{% load permissions %}
+{% load humanize permissions static %}
 
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
@@ -66,7 +64,8 @@
             </turbo-frame>
         {% endif %}
     </header>
-{% endblock %}
+{% endblock header %}
+
 {% block content %}
     <div data-controller="course-filter">
         {% if documents %}
@@ -262,4 +261,4 @@
     </div>
 
 
-{% endblock %}
+{% endblock content %}

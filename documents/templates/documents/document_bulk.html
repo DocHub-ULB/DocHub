@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% block title %}Ré-uploader {{ document.name }}{% endblock %}
+
 {% block content %}
     <a href="{% url "catalog:course_show" course %}"
        class="text-reset text-decoration-none d-flex align-items-center gap-1">
@@ -26,4 +28,4 @@
     </div>
 
     <a class="btn btn-primary" href="{% url "catalog:course_show" course %}">Retour au cours</a>
-{% endblock %}
+{% endblock content %}

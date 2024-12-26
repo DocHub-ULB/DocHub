@@ -202,14 +202,14 @@
     <body class="d-flex flex-column min-vh-100">
         {% block navbar %}
             {% include "navbar.html" %}
-        {% endblock %}
+        {% endblock navbar %}
 
         {% block fullpage %}
             {% block header %}
-            {% endblock %}
+            {% endblock header %}
             <main class="container-xl mt-4 flex-grow-1">
                 {% block content %}
-                {% endblock %}
+                {% endblock content %}
             </main>
 
             <footer class="mt-3 p-2 container-xl footer bg-light bg-gradient border-top d-md-flex gap-4 justify-content-center">
@@ -229,11 +229,11 @@
                     Code open-source sur <a href="https://github.com/UrLab/dochub">GitHub</a>
                 </div>
             </footer>
-        {% endblock %}
+        {% endblock fullpage %}
     </body>
 
     <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             crossorigin="anonymous" data-turbo-eval="false" defer></script>
     {% block script %}
-    {% endblock %}
+    {% endblock script %}
 </html>

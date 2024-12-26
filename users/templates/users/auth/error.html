@@ -3,20 +3,20 @@
 
 {% block title %}
     Erreur lors de la connexion
-{% endblock %}
+{% endblock title %}
 
 {% block heading %}
     Nous n'avons pas pu t'authentifier
-{% endblock %}
+{% endblock heading %}
 
 {% block expl %}
     Une erreur est apparue pendant ta connexion via l'ULB.
-{% endblock %}
+{% endblock expl %}
 
 {% block errcode %}
-    CAS_{{code}}
-{% endblock %}
+    CAS_{{ code }}
+{% endblock errcode %}
 
 {% block debug %}
-    {{debug}}
-{% endblock %}
+    {{ debug }}
+{% endblock debug %}

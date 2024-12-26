@@ -2,6 +2,7 @@
 {% load permissions %}
 
 {% block title %}{{ document.name }}{% endblock %}
+
 {% block header %}
 
 
@@ -136,7 +137,8 @@
         </div>
 
     </div>
-{% endblock %}
+{% endblock header %}
+
 {% block content %}
     {% if document.state == "DONE" %}
         <div class="container-xl" data-controller="viewer"
@@ -187,4 +189,4 @@
         </div>
 
     {% endif %}
-{% endblock %}
+{% endblock content %}

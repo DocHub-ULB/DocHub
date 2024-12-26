@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Ré-uploader {{document.name}}{% endblock %}
+
+{% block title %}Ré-uploader {{ document.name }}{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="large-7 columns">
@@ -12,16 +14,16 @@
                 </div>
             {% endif %}
             <h1>Ré-uploader</h1>
-            <h3>{{document.name}}</h3>
+            <h3>{{ document.name }}</h3>
             <form action="" method="post" enctype="multipart/form-data" class="dropzone">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
 
-                {% with form.file as field %}
+                {% with field=form.file %}
                     {% if field.errors %}
                         <small class="error">
                             {% for error in field.errors %}
-                                {{error}}<br />
+                                {{ error }}<br />
                             {% endfor %}
                         </small>
                     {% endif %}
@@ -29,7 +31,7 @@
                         <br>
                         <div class="row">
                             <div class="small-6 columns">
-                                {{field}}
+                                {{ field }}
                             </div>
                             <div  class="small-6 columns">
                             </div>
@@ -41,11 +43,10 @@
             </form>
         </div>
     </div>
-{% endblock %}
-
+{% endblock content %}
 
 {% block script %}
     <script>
         $(document).ready(function() { $(".chosen-select").select2(); });
     </script>
-{% endblock %}
+{% endblock script %}
