@@ -209,11 +209,14 @@ def repair(self, document_id: int) -> int:
 
     pdf_is_original = document.pdf == document.original
 
-    with file_as_local(
-        document.pdf, prefix="dochub_pdf_repair_", suffix=".broken.pdf"
-    ) as tmpfile, temporary_file_path(
-        prefix="dochub_pdf_repair_", suffix=".repaired.pdf"
-    ) as output_path:
+    with (
+        file_as_local(
+            document.pdf, prefix="dochub_pdf_repair_", suffix=".broken.pdf"
+        ) as tmpfile,
+        temporary_file_path(
+            prefix="dochub_pdf_repair_", suffix=".repaired.pdf"
+        ) as output_path,
+    ):
         try:
             subprocess.check_output(
                 ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
