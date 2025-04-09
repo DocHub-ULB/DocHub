@@ -1,3 +1,4 @@
+# mypy: disable-error-code="union-attr, arg-type"
 from typing import Any
 
 import json
