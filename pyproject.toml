@@ -1,3 +1,68 @@
+[project]
+name = "dochub"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.13.3",
+    "celery>=5.5.1",
+    "crispy-bootstrap5>=2025.4",
+    "django>=3",
+    "django-compressor>=4.5.1",
+    "django-crispy-forms>=2.3",
+    "django-environ>=0.12.0",
+    "django-mptt>=0.17.0",
+    "django-pipeline>=4.0.0",
+    "furl>=2.1.4",
+    "html5lib>=1.1",
+    "jsonfield>=3.1.0",
+    "pillow>=11.1.0",
+    "pygments>=2.19.1",
+    "pymupdf>=1.25.5",
+    "pypdf>=5.4.0",
+    "python-magic>=0.4.27",
+    "python-slugify>=8.0.4",
+    "pyyaml>=6.0.2",
+    "requests>=2.32.3",
+    "rich>=14.0.0",
+    "types-python-slugify>=8.0.2.20240310",
+    "types-pyyaml>=6.0.12.20250402",
+    "types-requests>=2.32.0.20250328",
+    "whitenoise[brotli]>=6.9.0",
+]
+
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "coolname>=2.2.0",
+    "django-debug-toolbar>=5.1.0",
+    "django-extensions>=4.0",
+    "honcho>=2.0.0",
+    "ipython>=9.1.0",
+    "isort>=6.0.1",
+    "pip-tools>=7.4.1",
+    "pre-commit>=4.2.0",
+    "django-stubs>=5.1.3",
+    "django-webtest>=1.9.13",
+    "mock>=5.2.0",
+    "mypy>=1.15.0",
+    "pytest-django>=4.11.1",
+    "responses>=0.25.7",
+    "time-machine>=2.16.0",
+]
+prod = [
+    "boto3>=1.37.29",
+    "django-jsonfield>=1.4.1",
+    "django-jsonfield-compat>=0.4.4",
+    "django-storages>=1.14.6",
+    "gunicorn>=23.0.0",
+    "psycopg[binary,pool]>=3.2.6",
+    "python-memcached>=1.62",
+    "redis>=5.2.1",
+    "sentry-sdk>=2.25.1",
+]
+
+
 [tool.pytest.ini_options]
 norecursedirs = "ve ve3 static media .git node_modules"
 DJANGO_SETTINGS_MODULE="www.test_settings"

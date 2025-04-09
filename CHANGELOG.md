@@ -2,6 +2,14 @@
 
 This page tries to contain all changes made on DocHub.
 
+# 2025.4.0
+
+ * Switch to UV as the package manager
+ * Upgrade dependencies
+ * Switch to Python 3.13
+ * Remove deprecated `filemagic` and replace with `python-magic`
+ * Remove unmaintained docker compose setup
+
 # 2024.3.0 
 
  * Upgrade JS libraries (notable change is Turbo 8)
