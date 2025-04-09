@@ -49,7 +49,7 @@ jobs:
       run: sudo apt install -y graphicsmagick mupdf-tools ghostscript unoconv python3-dev
 
     - name: Install the project
-      run: uv sync --all-extras --dev
+      run: uv sync --dev --group=prod
 
     - name: Django checks
       run: uv run ./manage.py check
