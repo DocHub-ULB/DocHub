@@ -234,7 +234,7 @@ rcssmin==1.1.2
     # via django-compressor
 redis==5.2.1
     # via -r requirements.in
-requests==2.32.3
+requests==2.32.4
     # via
     #   -r requirements.in
     #   responses
