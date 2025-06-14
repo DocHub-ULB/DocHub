@@ -1,4 +1,3 @@
-import platform
 from io import BytesIO
 
 import pytest
@@ -40,10 +39,6 @@ def test_add_file_to_course(user, course):
     assert doc.file_type == ".dll"
 
 
-@pytest.mark.skipif(
-    platform.machine() == "arm64" and platform.system() == "Darwin",
-    reason="There is a bug with libmagic on Apple Silicon",
-)
 def test_no_extension(user, course):
     doc = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\n/\x00\x00\t\x81\x08\x06\x00\x00\x00'\x06\xfee\x00\x00\x00\tpHYs\x00\x00n\xba\x00\x00n\xba\x01\xd6\xde\xb1\x17\x00\x00\x00\x19tEXtSoftware\x00www.inkscape.org\x9b\xee<\x1a\x00\x00 \x00IDATx"
     file = BytesIO(doc)

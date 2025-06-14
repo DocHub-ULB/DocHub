@@ -1,11 +1,11 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 25.1.0
     hooks:
       - id: black
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.1
     hooks:
       - id: isort
 
@@ -17,7 +17,7 @@ repos:
         files: \.html$
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.0
+    rev: v3.19.1
     hooks:
       - id: pyupgrade
         args: [ "--py310-plus" ]
@@ -30,13 +30,13 @@ repos:
       - id: djjs
 
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.22.2
+    rev: 1.24.0
     hooks:
       - id: django-upgrade
         args: [ --target-version, "4.1" ]
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.8.2'
+    rev: 'v0.11.3'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
