@@ -2,7 +2,7 @@
 
 This page tries to contain all changes made on DocHub.
 
-# 2025.4.0
+# 2025.6.0
 
  * Switch to UV as the package manager
  * Upgrade dependencies
