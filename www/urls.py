@@ -47,10 +47,11 @@ if settings.DEBUG:
         path("favicon.ico", www.views.favicon),
     ]
 
-    import debug_toolbar
+    if "debug_toolbar" in settings.INSTALLED_APPS:
+        import debug_toolbar
 
-    urlpatterns.extend(
-        [
-            path("__debug__/", include(debug_toolbar.urls)),
-        ]
-    )
+        urlpatterns.extend(
+            [
+                path("__debug__/", include(debug_toolbar.urls)),
+            ]
+        )

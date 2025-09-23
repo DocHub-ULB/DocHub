@@ -181,7 +181,7 @@ def document_reupload(request, pk):
 
         if form.is_valid():
             file = request.FILES["file"]
-            name, extension = os.path.splitext(file.name)
+            _name, extension = os.path.splitext(file.name)
 
             document.pdf.delete(save=False)
             document.original.delete(save=False)
@@ -238,7 +238,7 @@ def document_show(request, pk):
 def document_vote(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
-    vote, created = Vote.objects.get_or_create(document=document, user=request.user)
+    vote, _created = Vote.objects.get_or_create(document=document, user=request.user)
     if vote.vote_type == request.POST.get("vote_type"):
         vote.delete()
     else:
