@@ -30,7 +30,12 @@
                     <li><a class="dropdown-item" href="/admin" data-turbo="false">Admin</a></li>
                 {% endif %}
 
-                <li><a class="dropdown-item" href="{% url "logout" %}">Déconnexion</a></li>
+                <li>
+                    <form method="post" action="{% url "logout" %}" class="dropdown-item d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class=" border-0 bg-transparent p-0 w-100 text-start">Déconnexion</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
