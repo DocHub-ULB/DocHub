@@ -36,12 +36,12 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
     objects = CustomUserManager()
 
-    netid = models.CharField(max_length=20, unique=True)
+    netid = models.CharField(max_length=512, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
-    first_name = models.CharField(max_length=127)
-    last_name = models.CharField(max_length=127)
-    email = models.CharField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=512)
+    last_name = models.CharField(max_length=512)
+    email = models.CharField(max_length=512, unique=True)
     welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default="")
 

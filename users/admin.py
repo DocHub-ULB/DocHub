@@ -8,6 +8,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = (
         "netid",
         "name",
+        "email",
         "is_staff",
         "is_academic",
         "is_moderator",
@@ -21,7 +22,7 @@ class UserAdmin(admin.ModelAdmin):
         "last_login",
         "created",
     )
-    search_fields = ("netid", "first_name", "last_name")
+    search_fields = ("netid", "first_name", "last_name", "email")
     date_hierarchy = "created"
 
     readonly_fields = (
@@ -38,6 +39,7 @@ class UserAdmin(admin.ModelAdmin):
                     "netid",
                     "first_name",
                     "last_name",
+                    "email",
                     "last_login",
                 )
             },
