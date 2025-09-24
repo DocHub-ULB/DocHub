@@ -14,14 +14,24 @@
                 {% endblock expl %}
             </p>
 
-            <a href="/" class="button tiny">Retour</a><br>
+            <a href="/" class="button tiny">Retour</a><br><br>
 
-            <small style="color: grey;">Code d'erreur: {% block errcode %}ERR_UNKNOWN{% endblock %}</small>
+            <p>
+                L'erreur persiste ? Fais un screenshot de cette page et envoie là à
+                <a href="mailto:contact@dochub.be">
+                    contact@dochub.be</a>, on se fera un plaisir de t'aider !
+            </p>
 
-            <pre style="color: grey; font-size: .5em">
-        {% block debug %}
-        {% endblock debug %}
-      </pre>
+            <small style="color: grey;">
+                Code d'erreur: {% block errcode %}ERR_UNKNOWN{% endblock %}
+                <br>
+                Date: {% now "c" %}
+            </small>
+
+<pre style="color: grey; font-size: .8em; white-space: pre-wrap;">
+Contexte: {% block debug %}
+{% endblock debug %}
+</pre>
 
         </div>
     </div>
