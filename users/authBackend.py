@@ -2,6 +2,7 @@ import logging
 import xml.etree.ElementTree as ET
 
 from django.conf import settings
+from django.db.models import Q
 from django.urls import reverse
 
 import requests
@@ -45,7 +46,9 @@ class UlbCasBackend:
 
         # Get or create a user from the parsed user_dict
         try:
-            user = User.objects.get(netid=user_dict["netid"])
+            user = User.objects.get(
+                Q(netid=user_dict["netid"]) | Q(email=user_dict["email"])
+            )
         except User.DoesNotExist:
             user = User.objects.create_user(
                 netid=user_dict["netid"],
