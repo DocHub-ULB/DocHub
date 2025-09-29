@@ -58,6 +58,7 @@ dev = [
     "pytest-django>=4.11.1",
     "responses>=0.25.7",
     "time-machine>=2.16.0",
+    "ruff>=0.13.1",
 ]
 
 [tool.pytest.ini_options]
