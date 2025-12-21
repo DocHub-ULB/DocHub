@@ -108,7 +108,7 @@ class Course(models.Model):
     description = models.TextField(default="")
     period = models.CharField(
         max_length=4,
-        choices=PeriodType.choices,
+        choices=PeriodType,
         default=PeriodType.UNKNOWN,
     )
 

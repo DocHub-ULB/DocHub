@@ -87,7 +87,6 @@ select = [
 # Never ? "FBT", "D", "COM", "T20", "Q", "ARG", "PD"
 ignore = [
     "E501", # Line too long
-    "B905", # Not available <3.10
     "PT011", # `pytest.raises(Exception)` is too broad
     "SIM108", # Use ternary operator
     "SIM105", # Use `contextlib.suppress(Alarm)`
