@@ -142,7 +142,11 @@ class CourseCategory(models.Model):
     mandatory = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ("course", "category")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["course", "category"], name="unique_course_category"
+            ),
+        ]
 
 
 class CourseUserView(models.Model):
@@ -152,7 +156,11 @@ class CourseUserView(models.Model):
     last_view = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ("user", "course")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "course"], name="unique_user_course_view"
+            ),
+        ]
 
     @classmethod
     def visit(cls, user, course: Course):

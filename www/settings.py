@@ -95,7 +95,7 @@ DATABASES = {
 }
 
 # Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -117,7 +117,6 @@ WSGI_APPLICATION = "www.wsgi.application"
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "index"
 LOGIN_URL = "/login"
-SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
     "users.authBackend.UlbCasBackend",
@@ -125,7 +124,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
+# https://docs.djangoproject.com/en/6.0/topics/i18n/
 
 LANGUAGE_CODE = "fr-be"
 TIME_ZONE = "Europe/Brussels"
@@ -133,7 +132,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+# https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -144,8 +143,6 @@ MEDIA_URL = "/media/"
 
 STATIC_ROOT = env("STATIC_ROOT", default=BASE_DIR / "collected_static")
 MEDIA_ROOT = env("MEDIA_ROOT", default=BASE_DIR / "media")
-
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 
@@ -174,7 +171,7 @@ STORAGES = {
         "BACKEND": FILE_STORAGE,
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
@@ -208,7 +205,6 @@ else:
 
     SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
     WHITENOISE_ROOT = BASE_DIR / "static" / "root"
 
 
