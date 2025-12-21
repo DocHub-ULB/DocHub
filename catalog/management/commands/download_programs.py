@@ -71,7 +71,7 @@ class Command(BaseCommand):
                     if mnemonic_span.text not in known_slugs:
                         fac = mnemonic_span.find_previous_siblings("a")
                         program_name = mnemonic_span.find_previous(
-                            "strong", "search-result__structure-intitule"
+                            "strong", {"class": "search-result__structure-intitule"}
                         ).text
 
                         faculties: list = []
@@ -91,13 +91,13 @@ class Command(BaseCommand):
                         }
 
                         if option_div := mnemonic_span.find_previous(
-                            "div", "search-result__resultat--fille"
+                            "div", {"class": "search-result__resultat--fille"}
                         ):
                             parent_program_div = option_div.find_previous(
-                                "div", "search-result__result-item"
+                                "div", {"class": "search-result__result-item"}
                             )
                             parent_mnemonic_span = parent_program_div.find(
-                                "span", "search-result__mnemonique"
+                                "span", {"class": "search-result__mnemonique"}
                             )
                             p["parent"] = parent_mnemonic_span.text
                             parent_programs.add(parent_mnemonic_span.text)
