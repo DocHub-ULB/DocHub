@@ -72,7 +72,7 @@ class UlbCasBackend:
         success = tree.find(
             "./cas:authenticationSuccess", namespaces=self.XML_NAMESPACES
         )
-        if not success:
+        if success is None:
             failure = tree.find(
                 "./cas:authenticationFailure", namespaces=self.XML_NAMESPACES
             )
