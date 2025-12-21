@@ -219,7 +219,7 @@ def repair(self, document_id: int) -> int:
     ):
         try:
             subprocess.check_output(
-                ["mutool", "clean", "-gggg", "-l", tmpfile.name, output_path],
+                ["mutool", "clean", "-gggg", tmpfile.name, output_path],
                 stderr=subprocess.STDOUT,
             )
         except OSError as e:
