@@ -1,3 +1,7 @@
+import logging
+import os
+import subprocess
+
 from django.core.files import File
 
 import celery
@@ -7,6 +11,8 @@ from documents import tasks
 from documents.models import Document
 from documents.tasks import mutool_get_pages, process_document
 from users.models import User
+
+logger = logging.getLogger(__name__)
 
 pytestmark = [pytest.mark.django_db, pytest.mark.celery]
 
@@ -55,10 +61,53 @@ def test_send_duplicate():
     assert Document.objects.filter(id=doc.id).count() == 0
 
 
+@pytest.fixture
+def unoserver():
+    # Check if unoserver is running
+    ping_result = subprocess.run(
+        ["unoping"], capture_output=True, timeout=5, check=False
+    )
+
+    if ping_result.returncode != 0:
+        logger.debug("Unoserver is not running, starting it ourselves")
+        sub = subprocess.Popen(
+            [
+                f"{os.environ['HOME']}/.local/bin/unoserver",
+                "--daemon",
+                "--conversion-timeout",
+                "300",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        logger.debug("Unoserver started")
+
+        yield
+
+        logger.debug("Killing unoserver")
+        sub.kill()
+
+        # Get stdout and stderr
+        stdout, stderr = sub.communicate(timeout=5)
+
+        # Log them
+        if stdout:
+            logger.info(
+                "unoserver stdout:\n%s", stdout.decode("utf-8", errors="replace")
+            )
+        if stderr:
+            logger.error(
+                "unoserver stderr:\n%s", stderr.decode("utf-8", errors="replace")
+            )
+    else:
+        logger.debug("Unoserver is already running")
+        yield
+
+
 # TODO : mock unoserver and provide a fake pdf instead
 @pytest.mark.unoserver
 @pytest.mark.slow
-def test_send_office():
+def test_send_office(unoserver):
     doc = create_doc("My office doc", ".docx")
 
     with open("documents/tests/files/2pages.docx", "rb") as fd:

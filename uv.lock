@@ -600,6 +600,7 @@ dependencies = [
     { name = "types-python-slugify" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "unoserver" },
     { name = "whitenoise", extra = ["brotli"] },
 ]
 
@@ -659,6 +660,7 @@ requires-dist = [
     { name = "types-python-slugify", specifier = ">=8.0.2.20240310" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250402" },
     { name = "types-requests", specifier = ">=2.32.0.20250328" },
+    { name = "unoserver", specifier = "==3.6" },
     { name = "whitenoise", extras = ["brotli"], specifier = ">=6.9.0" },
 ]
 
@@ -1851,6 +1853,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8b/2e/c14812d3d4d9cd1773c6be938f89e5735a1f11a9f184ac3639b93cef35d5/tzlocal-5.3.1.tar.gz", hash = "sha256:cceffc7edecefea1f595541dbd6e990cb1ea3d19bf01b2809f362a03dd7921fd", size = 30761, upload-time = "2025-03-05T21:17:41.549Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c2/14/e2a54fabd4f08cd7af1c07030603c3356b74da07f7cc056e600436edfa17/tzlocal-5.3.1-py3-none-any.whl", hash = "sha256:eb1a66c3ef5847adf7a834f1be0800581b683b5608e74f86ecbcef8ab91bb85d", size = 18026, upload-time = "2025-03-05T21:17:39.857Z" },
+]
+
+[[package]]
+name = "unoserver"
+version = "3.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6f/87/1301e71a6cbf920d51f10ab3b1b068701d6f979c4ee5f831bfcdad7b7d95/unoserver-3.6.tar.gz", hash = "sha256:e446bcb3638c51880f002aaeecab1cf74dfa9df81035f027f7ff2e081b6d7015", size = 114624, upload-time = "2025-11-24T13:38:33.64Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b5/1d/c94f830a815260f0f53effdd17f8bd04c578d7423874eb93a07357708693/unoserver-3.6-py3-none-any.whl", hash = "sha256:25c360fa194396a89cb79b4edd2735f8e4f0fd8531e59db3952114585bd7df05", size = 27633, upload-time = "2025-11-24T13:38:31.586Z" },
 ]
 
 [[package]]

@@ -37,6 +37,7 @@ dependencies = [
     "psycopg[binary,pool]>=3.2.6",
     "python-memcached>=1.62",
     "redis>=5.2.1",
+    "unoserver==3.6",
 ]
 
 
@@ -65,6 +66,9 @@ dev = [
 norecursedirs = ".venv ve ve3 static media .git node_modules"
 DJANGO_SETTINGS_MODULE="www.test_settings"
 addopts = "--reuse-db"
+filterwarnings = [
+    "ignore:builtin type.*has no __module__ attribute:DeprecationWarning"
+]
 markers = """
     slow: marks tests as slow (deselect with '-m "not slow"')
     network: marks tests using the network (deselect with '-m "not network"')

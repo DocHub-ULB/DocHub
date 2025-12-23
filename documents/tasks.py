@@ -132,7 +132,7 @@ checksum.throws = (ExisingChecksum,)
 def convert_office_to_pdf(self, document_id: int) -> int:
     document = Document.objects.get(pk=document_id)
 
-    try:
+    if settings.DEBUG:
         # Check if unoserver is running
         ping_result = subprocess.run(
             ["unoping"], capture_output=True, timeout=5, check=False
@@ -140,30 +140,35 @@ def convert_office_to_pdf(self, document_id: int) -> int:
 
         if ping_result.returncode != 0:
             # Server not running, start it as a daemon
-            # Note: --daemon causes the process to fork, so we use Popen and don't wait
-            subprocess.Popen(
-                ["unoserver", "--daemon", "--conversion-timeout", "300"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
+            # Here we want to use the system unoserver, as it needs access to LibreOffice
+            try:
+                subprocess.Popen(
+                    [
+                        f"{os.environ['HOME']}/.local/bin/unoserver",
+                        "--daemon",
+                        "--conversion-timeout",
+                        "300",
+                    ],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+            except FileNotFoundError as e:
+                raise MissingBinary("unoserver") from e
             # Give the server time to start up and be ready
             time.sleep(2)
 
-        try:
-            result = subprocess.run(
-                ["unoconvert", "-", "-", "--convert-to", "pdf"],
-                input=document.original.read(),
-                capture_output=True,
-                check=True,
-            )
-            sub = result.stdout
-        except subprocess.CalledProcessError as e:
-            raise DocumentProcessingError(
-                document, exc=e, message='"unoconvert" has failed: %s' % e.output[:800]
-            ) from e
-
-    except FileNotFoundError as e:
-        raise MissingBinary("unoserver") from e
+    try:
+        result = subprocess.run(
+            ["unoconvert", "-", "-", "--convert-to", "pdf"],
+            input=document.original.read(),
+            capture_output=True,
+            check=True,
+        )
+        sub = result.stdout
+    except subprocess.CalledProcessError as e:
+        raise DocumentProcessingError(
+            document, exc=e, message='"unoconvert" has failed: %s' % e.stderr[:800]
+        ) from e
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
