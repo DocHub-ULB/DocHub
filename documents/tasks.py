@@ -4,6 +4,7 @@ import os
 import re
 import subprocess
 import tempfile
+import time
 import uuid
 from io import BytesIO
 
@@ -11,7 +12,6 @@ from django.conf import settings
 from django.core.files.base import ContentFile, File
 
 from celery import chain, shared_task
-from celery.exceptions import SoftTimeLimitExceeded
 from pypdf import PdfReader
 
 from documents.models import Document, DocumentError
@@ -130,34 +130,49 @@ checksum.throws = (ExisingChecksum,)
 
 @short_doctask
 def convert_office_to_pdf(self, document_id: int) -> int:
-    try:
-        document = Document.objects.get(pk=document_id)
+    document = Document.objects.get(pk=document_id)
 
-        with file_as_local(
-            document.original, prefix="dochub_unoconv_input_"
-        ) as tmpfile:
+    if settings.DEBUG:
+        # Check if unoserver is running
+        ping_result = subprocess.run(
+            ["unoping"], capture_output=True, timeout=5, check=False
+        )
+
+        if ping_result.returncode != 0:
+            # Server not running, start it as a daemon
+            # Here we want to use the system unoserver, as it needs access to LibreOffice
             try:
-                sub = subprocess.check_output(
-                    ["unoconv", "-f", "pdf", "--stdout", tmpfile.name]
+                subprocess.Popen(
+                    [
+                        "unoserver",
+                        "--daemon",
+                        "--conversion-timeout",
+                        "300",
+                    ],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
                 )
-            except OSError as e:
-                raise MissingBinary("unoconv") from e
-            except subprocess.CalledProcessError as e:
-                raise DocumentProcessingError(
-                    document, exc=e, message='"unoconv" has failed: %s' % e.output[:800]
-                ) from e
+            except FileNotFoundError as e:
+                raise MissingBinary("unoserver") from e
+            # Give the server time to start up and be ready
+            time.sleep(2)
 
-        document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
+    try:
+        result = subprocess.run(
+            ["unoconvert", "-", "-", "--convert-to", "pdf"],
+            input=document.original.read(),
+            capture_output=True,
+            check=True,
+        )
+        sub = result.stdout
+    except subprocess.CalledProcessError as e:
+        raise DocumentProcessingError(
+            document, exc=e, message="unoconvert has failed: %s" % e.stderr[:2000]
+        ) from e
 
-        return document_id
+    document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
 
-    except SoftTimeLimitExceeded as e:
-        # If we timeouted, kill the faulty openoffice daemon
-        # it will respawn at the next unoconv invocation
-        os.system("killall soffice.bin")
-        # Still raise the exception so the pipeline for this
-        # document is still stopped
-        raise e
+    return document_id
 
 
 @short_doctask

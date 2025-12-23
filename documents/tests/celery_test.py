@@ -1,5 +1,5 @@
-import signal
-from subprocess import call
+import logging
+import subprocess
 
 from django.core.files import File
 
@@ -11,28 +11,9 @@ from documents.models import Document
 from documents.tasks import mutool_get_pages, process_document
 from users.models import User
 
+logger = logging.getLogger(__name__)
+
 pytestmark = [pytest.mark.django_db, pytest.mark.celery]
-
-
-class Alarm(Exception):
-    pass
-
-
-def alarm_handler(signum, frame):
-    raise Alarm
-
-
-def start_unoconv():
-    signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(1)
-    try:
-        call(["unoconv", "--listener"])  # workaround for a shitty unoconv
-        # Error: Unable to connect or start own listener. Aborting.
-        # Setting a timeout because if a listener exists alreay it hangs...
-    except Alarm:
-        pass
-
-    signal.alarm(0)  # cancel alarm
 
 
 def create_doc(name, ext):
@@ -79,17 +60,58 @@ def test_send_duplicate():
     assert Document.objects.filter(id=doc.id).count() == 0
 
 
-# TODO : mock unoconv and provide a fake pdf instead
-@pytest.mark.unoconv
+@pytest.fixture
+def unoserver():
+    # Check if unoserver is running
+    ping_result = subprocess.run(
+        ["unoping"], capture_output=True, timeout=5, check=False
+    )
+
+    if ping_result.returncode != 0:
+        logger.debug("Unoserver is not running, starting it ourselves")
+        sub = subprocess.Popen(
+            [
+                "unoserver",
+                "--daemon",
+                "--conversion-timeout",
+                "300",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        logger.debug("Unoserver started")
+
+        yield
+
+        logger.debug("Killing unoserver")
+        sub.kill()
+
+        # Get stdout and stderr
+        stdout, stderr = sub.communicate(timeout=5)
+
+        # Log them
+        if stdout:
+            logger.info(
+                "unoserver stdout:\n%s", stdout.decode("utf-8", errors="replace")
+            )
+        if stderr:
+            logger.error(
+                "unoserver stderr:\n%s", stderr.decode("utf-8", errors="replace")
+            )
+    else:
+        logger.debug("Unoserver is already running")
+        yield
+
+
+# TODO : mock unoserver and provide a fake pdf instead
+@pytest.mark.unoserver
 @pytest.mark.slow
-def test_send_office():
+def test_send_office(unoserver):
     doc = create_doc("My office doc", ".docx")
 
     with open("documents/tests/files/2pages.docx", "rb") as fd:
         f = File(fd)
         doc.original.save("silly-unique-deadbeef-file.docx", f)
-
-    start_unoconv()
 
     result = process_document.delay(doc.id)
     assert result.status == celery.states.SUCCESS, result.traceback

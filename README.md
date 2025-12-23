@@ -32,13 +32,17 @@ First, install uv and system dependencies:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Ubuntu
-sudo apt-get install unoconv python3-dev ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools redis-server
+sudo apt-get install libreoffice pipx python3-dev ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools redis-server
+# unoserver needs access to LibreOffice's 'uno' library from system packages
+pipx install unoserver --system-site-packages
 sudo systemctl enable --now redis-server
 # Fedora
-sudo dnf install unoconv python-devel ruby mupdf redis
+sudo dnf install libreoffice pipx python-devel ruby mupdf redis
+pipx install unoserver --system-site-packages
 sudo systemctl enable --now redis
 # Arch linux
-sudo pacman -S unoconv ruby python mupdf-tools redis
+sudo pacman -S libreoffice python-pipx ruby python mupdf-tools redis
+pipx install unoserver --system-site-packages
 sudo systemctl enable --now redis
 ```
 
