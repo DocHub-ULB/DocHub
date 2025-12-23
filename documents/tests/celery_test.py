@@ -1,6 +1,3 @@
-import signal
-from subprocess import call
-
 from django.core.files import File
 
 import celery
@@ -12,27 +9,6 @@ from documents.tasks import mutool_get_pages, process_document
 from users.models import User
 
 pytestmark = [pytest.mark.django_db, pytest.mark.celery]
-
-
-class Alarm(Exception):
-    pass
-
-
-def alarm_handler(signum, frame):
-    raise Alarm
-
-
-def start_unoconv():
-    signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(1)
-    try:
-        call(["unoconv", "--listener"])  # workaround for a shitty unoconv
-        # Error: Unable to connect or start own listener. Aborting.
-        # Setting a timeout because if a listener exists alreay it hangs...
-    except Alarm:
-        pass
-
-    signal.alarm(0)  # cancel alarm
 
 
 def create_doc(name, ext):
@@ -79,8 +55,8 @@ def test_send_duplicate():
     assert Document.objects.filter(id=doc.id).count() == 0
 
 
-# TODO : mock unoconv and provide a fake pdf instead
-@pytest.mark.unoconv
+# TODO : mock unoserver and provide a fake pdf instead
+@pytest.mark.unoserver
 @pytest.mark.slow
 def test_send_office():
     doc = create_doc("My office doc", ".docx")
@@ -88,8 +64,6 @@ def test_send_office():
     with open("documents/tests/files/2pages.docx", "rb") as fd:
         f = File(fd)
         doc.original.save("silly-unique-deadbeef-file.docx", f)
-
-    start_unoconv()
 
     result = process_document.delay(doc.id)
     assert result.status == celery.states.SUCCESS, result.traceback

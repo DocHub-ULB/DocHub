@@ -46,7 +46,10 @@ jobs:
       run: sudo apt update
 
     - name: Install apt packages
-      run: sudo apt install -y graphicsmagick mupdf-tools ghostscript unoconv python3-dev
+      run: sudo apt install -y graphicsmagick mupdf-tools ghostscript libreoffice pipx python3-dev
+
+    - name: Install unoserver
+      run: pipx install unoserver --system-site-packages
 
     - name: Install the project
       run: uv sync --dev
@@ -64,10 +67,10 @@ jobs:
       run: uv run ./manage.py collectstatic --noinput -v 0
 
     - name: pytest with SQLite
-      run: uv run pytest -k "not unoconv"
+      run: uv run pytest
 
     - name: pytest with PostgreSQL
-      run: uv run pytest -k "not unoconv" -m postgresql
+      run: uv run pytest -m postgresql
       env:
         DB_URL: postgres://postgres:postgres@localhost:5432/postgres
 
