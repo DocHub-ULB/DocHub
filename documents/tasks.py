@@ -144,7 +144,7 @@ def convert_office_to_pdf(self, document_id: int) -> int:
             try:
                 subprocess.Popen(
                     [
-                        f"{os.environ['HOME']}/.local/bin/unoserver",
+                        "unoserver",
                         "--daemon",
                         "--conversion-timeout",
                         "300",

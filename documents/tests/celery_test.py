@@ -1,5 +1,4 @@
 import logging
-import os
 import subprocess
 
 from django.core.files import File
@@ -72,7 +71,7 @@ def unoserver():
         logger.debug("Unoserver is not running, starting it ourselves")
         sub = subprocess.Popen(
             [
-                f"{os.environ['HOME']}/.local/bin/unoserver",
+                "unoserver",
                 "--daemon",
                 "--conversion-timeout",
                 "300",
