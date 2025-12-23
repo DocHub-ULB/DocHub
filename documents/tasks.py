@@ -167,7 +167,7 @@ def convert_office_to_pdf(self, document_id: int) -> int:
         sub = result.stdout
     except subprocess.CalledProcessError as e:
         raise DocumentProcessingError(
-            document, exc=e, message='"unoconvert" has failed: %s' % e.stderr[:800]
+            document, exc=e, message="unoconvert has failed: %s" % e.stderr[:2000]
         ) from e
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
