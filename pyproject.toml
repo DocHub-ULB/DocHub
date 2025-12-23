@@ -62,13 +62,13 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-norecursedirs = "ve ve3 static media .git node_modules"
+norecursedirs = ".venv ve ve3 static media .git node_modules"
 DJANGO_SETTINGS_MODULE="www.test_settings"
 addopts = "--reuse-db"
 markers = """
     slow: marks tests as slow (deselect with '-m "not slow"')
     network: marks tests using the network (deselect with '-m "not network"')
-    unoconv: uses unoconv (underterministic)
+    unoserver: uses unoserver for office document conversion
     webtest: http queries against localhost
     celery: uses celery tasks
     postgresql: needs a postgresql database to run
