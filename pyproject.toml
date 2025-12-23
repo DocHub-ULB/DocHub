@@ -37,7 +37,6 @@ dependencies = [
     "psycopg[binary,pool]>=3.2.6",
     "python-memcached>=1.62",
     "redis>=5.2.1",
-    "unoserver==3.6",
 ]
 
 
