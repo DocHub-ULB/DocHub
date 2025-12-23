@@ -27,8 +27,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps tcp port 5432 on service container to the host
           - 5432:5432
+      unoserver:
+        image: ghcr.io/dochub-ulb/unoserver:latest
+        ports:
+          - 2003:2003
 
 
     steps:
