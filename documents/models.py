@@ -52,7 +52,7 @@ class Document(models.Model):
     file_type = models.CharField(max_length=255, default="")
     original = models.FileField(upload_to="original_document")
     pdf = models.FileField(upload_to="pdf_document")
-    thumbnail = models.FileField(upload_to="thumbnail", null=True)
+    thumbnail = models.FileField(upload_to="thumbnail", blank=True, default="")
 
     state = models.CharField(
         max_length=20,
@@ -179,7 +179,11 @@ class Vote(models.Model):
     vote_type = models.CharField(max_length=10, choices=VoteType.choices)
 
     class Meta:
-        unique_together = ("user", "document")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "document"], name="unique_user_document_vote"
+            ),
+        ]
 
 
 class DocumentError(models.Model):

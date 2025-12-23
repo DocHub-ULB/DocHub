@@ -8,7 +8,7 @@ from users.models import User
 
 
 def distance(v1: list[bool], v2: list[bool]) -> float:
-    absolute_difference = [abs(c1 - c2) for c1, c2 in zip(v1, v2)]
+    absolute_difference = [abs(c1 - c2) for c1, c2 in zip(v1, v2, strict=True)]
     distance = sum(absolute_difference)
     return distance
 

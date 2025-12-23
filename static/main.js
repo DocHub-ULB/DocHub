@@ -1,8 +1,8 @@
-import _ from 'https://cdn.skypack.dev/lodash';
+import _ from 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/+esm';
 
-import {Controller, Application} from 'https://unpkg.com/@hotwired/stimulus@3.2.2?module';
-import {Autocomplete} from 'https://cdn.skypack.dev/stimulus-autocomplete';
-import tomSelect from 'https://unpkg.com/tom-select@2.3.1?module';
+import {Controller, Application} from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
+import {Autocomplete} from 'https://cdn.jsdelivr.net/npm/stimulus-autocomplete@3.1.0/+esm';
+import tomSelect from 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/+esm';
 
 function normalize(s) {
     let r = s.toLowerCase();
@@ -83,10 +83,8 @@ class Search extends Controller {
     }
 }
 
-import bundledEsModulesPdfjsDist from 'https://unpkg.com/@bundled-es-modules/pdfjs-dist@2.16.106';
-
-let pdfjs = bundledEsModulesPdfjsDist
-pdfjs.GlobalWorkerOptions.workerSrc = "https://unpkg.com/@bundled-es-modules/pdfjs-dist@2.16.106/build/pdf.worker.js"
+import {getDocument, GlobalWorkerOptions} from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/+esm';
+GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/build/pdf.worker.mjs"
 
 
 class Viewer extends Controller {
@@ -100,7 +98,7 @@ class Viewer extends Controller {
 
 
     async connect() {
-        let loadingTask = pdfjs.getDocument(this.srcValue);
+        let loadingTask = getDocument(this.srcValue);
 
         loadingTask.onProgress = async (data) => {
             let percent = Math.round(data.loaded / data.total * 100)
