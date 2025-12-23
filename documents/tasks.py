@@ -140,14 +140,14 @@ def convert_office_to_pdf(self, document_id: int) -> int:
 
         if ping_result.returncode != 0:
             # Server not running, start it as a daemon
-            subprocess.run(
+            # Note: --daemon causes the process to fork, so we use Popen and don't wait
+            subprocess.Popen(
                 ["unoserver", "--daemon", "--conversion-timeout", "300"],
-                capture_output=True,
-                timeout=10,
-                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
-            # Give the server a moment to start up
-            time.sleep(1)
+            # Give the server time to start up and be ready
+            time.sleep(2)
 
         try:
             result = subprocess.run(
