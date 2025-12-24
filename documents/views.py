@@ -17,6 +17,7 @@ from documents import logic
 from documents.forms import (
     BulkFilesForm,
     DocumentForm,
+    DocumentReportForm,
     MultipleUploadFileForm,
     ReUploadForm,
     UploadFileForm,
@@ -228,6 +229,7 @@ def document_show(request, pk):
     context = {
         "document": document,
         "user_vote": document.vote_set.filter(user=request.user).first(),
+        "form": DocumentReportForm(),
     }
 
     return render(request, "documents/viewer.html", context)
@@ -307,3 +309,35 @@ def submit_bulk(request, slug):
             )
 
     return HttpResponseRedirect(reverse("document_put", args=[course.slug]))
+
+
+@login_required
+def document_report(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+
+    if request.method == "POST":
+        form = DocumentReportForm(request.POST)
+
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.user = request.user
+            report.document = document
+            report.save()
+
+            messages.success(
+                request,
+                "Votre signalement a bien été enregistré. Merci de votre contribution !",
+            )
+            return redirect(document.get_absolute_url())
+
+    else:
+        form = DocumentReportForm()
+
+    return render(
+        request,
+        "documents/document_report.html",
+        {
+            "form": form,
+            "document": document,
+        },
+    )

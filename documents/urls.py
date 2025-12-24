@@ -15,6 +15,7 @@ urlpatterns = [
     ),
     path("<int:pk>", documents.views.document_show, name="document_show"),
     path("<int:pk>/vote", documents.views.document_vote, name="document_vote"),
+    path("<int:pk>/report", documents.views.document_report, name="document_report"),
     path(
         "<int:pk>/original",
         documents.views.document_original_file,
