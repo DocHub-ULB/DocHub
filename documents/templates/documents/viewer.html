@@ -135,7 +135,9 @@
                     </button>
                 </form>
             </turbo-frame>
-            <button id="openReportDialog"
+            <button data-controller="modal-trigger"
+                    data-modal-trigger-target-value="reportDialog"
+                    data-action="click->modal-trigger#open"
                     class="mt-2 btn btn-outline-warning btn-sm d-inline-flex align-items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-flag"
                      viewBox="0 0 16 16">

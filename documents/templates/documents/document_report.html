@@ -13,38 +13,13 @@
 {% endblock content %}
 
 {% partialdef report_modal %}
-    <dialog id="reportDialog" class="rounded shadow-lg border-0 p-0" style="max-width: 800px; width: 90vw;">
+    <dialog id="reportDialog"
+            data-controller="modal"
+            data-action="click->modal#clickOutside"
+            class="rounded shadow-lg border-0 p-0"
+            style="max-width: 800px; width: 90vw;">
         {% include "documents/document_report.html#report_card" %}
     </dialog>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const dialog = document.getElementById('reportDialog');
-            const openButton = document.getElementById('openReportDialog');
-
-            if (openButton && dialog) {
-                openButton.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    dialog.showModal();
-                });
-            }
-
-            // Close dialog on backdrop click
-            if (dialog) {
-                dialog.addEventListener('click', function (e) {
-                    const rect = dialog.getBoundingClientRect();
-                    if (
-                        e.clientX < rect.left ||
-                        e.clientX > rect.right ||
-                        e.clientY < rect.top ||
-                        e.clientY > rect.bottom
-                    ) {
-                        dialog.close();
-                    }
-                });
-            }
-        });
-    </script>
 
     <style>
         #reportDialog::backdrop {
@@ -96,7 +71,7 @@
             </div>
 
             <div class="card-footer d-flex gap-2 justify-content-end">
-                <a href="{% url 'document_show' document.id %}" class="btn btn-outline-secondary">Annuler</a>
+                <button type="button" data-action="click->modal#close" class="btn btn-outline-secondary">Annuler</button>
                 <button type="submit" class="btn btn-primary">
                     Envoyer
                 </button>

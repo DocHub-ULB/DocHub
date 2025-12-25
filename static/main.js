@@ -294,6 +294,43 @@ class Share extends Controller {
 
 }
 
+class Modal extends Controller {
+    open(event) {
+        if (event) event.preventDefault();
+        this.element.showModal();
+    }
+
+    close() {
+        this.element.close();
+    }
+
+    clickOutside(event) {
+        const rect = this.element.getBoundingClientRect();
+        if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+        ) {
+            this.close();
+        }
+    }
+}
+
+class ModalTrigger extends Controller {
+    static values = {
+        target: String
+    }
+
+    open(event) {
+        event.preventDefault();
+        const dialog = document.getElementById(this.targetValue);
+        if (dialog) {
+            dialog.showModal();
+        }
+    }
+}
+
 const application = Application.start()
 
 application.register("course-filter", CourseFilter);
@@ -303,5 +340,7 @@ application.register("upload", Upload);
 application.register('autocomplete', Autocomplete);
 application.register('tom-select', TomSelect);
 application.register('share', Share);
+application.register('modal', Modal);
+application.register('modal-trigger', ModalTrigger);
 
 application.debug = true;
