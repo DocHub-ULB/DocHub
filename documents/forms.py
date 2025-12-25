@@ -76,7 +76,6 @@ class DocumentReportForm(forms.ModelForm):
             "description": forms.Textarea(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Description (optionnel)",
                     "rows": 2,
                 }
             ),
