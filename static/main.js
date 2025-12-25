@@ -295,25 +295,8 @@ class Share extends Controller {
 }
 
 class Modal extends Controller {
-    open(event) {
-        if (event) event.preventDefault();
-        this.element.showModal();
-    }
-
     close() {
         this.element.close();
-    }
-
-    clickOutside(event) {
-        const rect = this.element.getBoundingClientRect();
-        if (
-            event.clientX < rect.left ||
-            event.clientX > rect.right ||
-            event.clientY < rect.top ||
-            event.clientY > rect.bottom
-        ) {
-            this.close();
-        }
     }
 }
 
@@ -323,6 +306,12 @@ class ModalTrigger extends Controller {
     }
 
     open(event) {
+        // Allow browser default behavior when modifier keys are pressed
+        // (Ctrl+click, Cmd+click, Shift+click, or middle-click)
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.button === 1) {
+            return;
+        }
+
         event.preventDefault();
         const dialog = document.getElementById(this.targetValue);
         if (dialog) {

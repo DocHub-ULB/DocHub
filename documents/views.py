@@ -326,7 +326,7 @@ def document_report(request, pk):
 
             messages.success(
                 request,
-                "Votre signalement a bien été enregistré. Merci de votre contribution !",
+                "Ton signalement a bien été enregistré. Merci de ta contribution !",
             )
             return redirect(document.get_absolute_url())
 
