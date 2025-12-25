@@ -149,36 +149,12 @@ class DocumentReportAdmin(admin.ModelAdmin):
         "problem_type",
         "user",
         "created",
-        "has_description",
     )
     list_filter = ("problem_type", "created")
     search_fields = ("document__name", "user__netid", "user__email")
     raw_id_fields = ("user", "document")
     date_hierarchy = "created"
     readonly_fields = ("created",)
-
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    ("document", "user"),
-                    "problem_type",
-                    "created",
-                )
-            },
-        ),
-        (
-            "Details",
-            {
-                "fields": ("description",),
-            },
-        ),
-    )
-
-    @admin.display(boolean=True, description="Has description")
-    def has_description(self, obj: DocumentReport) -> bool:
-        return bool(obj.description)
 
 
 @admin.register(BulkDocuments)

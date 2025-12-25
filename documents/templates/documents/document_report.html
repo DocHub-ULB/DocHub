@@ -16,16 +16,9 @@
     <dialog id="reportDialog"
             data-controller="modal"
             data-action="click->modal#clickOutside"
-            class="rounded shadow-lg border-0 p-0"
-            style="max-width: 800px; width: 90vw;">
+            class="rounded shadow-lg border-0 p-0">
         {% include "documents/document_report.html#report_card" %}
     </dialog>
-
-    <style>
-        #reportDialog::backdrop {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-    </style>
 {% endpartialdef %}
 
 {% partialdef report_card %}

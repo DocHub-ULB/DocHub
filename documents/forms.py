@@ -77,7 +77,7 @@ class DocumentReportForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Description (optionnel)",
-                    "rows": 4,
+                    "rows": 2,
                 }
             ),
         }

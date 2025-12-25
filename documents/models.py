@@ -192,6 +192,7 @@ class DocumentReport(models.Model):
         WRONG_TITLE = "wrong_title", "Le titre ou la description est erroné"
         LOW_QUALITY = "low_quality", "Contenu de mauvaise qualité ou inutile"
         READABILITY = "readability", "Problème de lisibilité"
+        OUTDATED = "outdated", "Document obsolète"
         OTHER = "other", "Autre raison"
 
         @classmethod
@@ -202,6 +203,7 @@ class DocumentReport(models.Model):
                 cls.WRONG_TITLE: "Le contenu du document n'est pas correctement décrit",
                 cls.LOW_QUALITY: "Le contenu peut être non pertinent, contenir uniquement le plan du cours, avoir de nombreuses fautes ou être (presque) vide",
                 cls.READABILITY: "Le document est difficile à lire en raison d'une mauvaise écriture ou d'une photo de mauvaise qualité",
+                cls.OUTDATED: "Le document est dépassé ou ne correspond plus au contenu actuel du cours",
                 cls.OTHER: "Une autre raison non listée ci-dessus",
             }
             return descriptions.get(value, "")
@@ -228,12 +230,6 @@ class DocumentReport(models.Model):
         verbose_name="Description",
     )
     created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["document", "created"]),
-            models.Index(fields=["created"]),
-        ]
 
     def __str__(self) -> str:
         return f"Report on {self.document.name} by {self.user}"
