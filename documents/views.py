@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -254,6 +254,10 @@ def document_vote(request, pk):
 def document_original_file(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
+    # Check if original file exists
+    if not document.original or not document.original.name:
+        raise Http404("Le fichier original n'existe pas pour ce document")
+
     body = document.original.read()
 
     response = HttpResponse(body, content_type="application/octet-stream")
@@ -274,6 +278,11 @@ def document_original_file(request, pk):
 @login_required
 def document_pdf_file(request, pk):
     document = get_object_or_404(Document, pk=pk)
+
+    # Check if PDF file exists
+    if not document.pdf or not document.pdf.name:
+        raise Http404("Le fichier PDF n'existe pas pour ce document")
+
     body = document.pdf.read()
 
     response = HttpResponse(body, content_type="application/pdf")
