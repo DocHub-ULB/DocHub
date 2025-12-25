@@ -216,7 +216,8 @@
                                 </svg>
                             </a>
                         {% endif %}
-                        <a class="btn" title="Télécharger" href="{% url 'document_pdf' document.pk %}"
+                        <a class="btn" title="Télécharger"
+                           href="{% if document.pdf and document.pdf.name %}{% url 'document_pdf' document.pk %}{% else %}{% url 'document_original' document.pk %}{% endif %}"
                            data-turbo="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-download" viewBox="0 0 16 16">
