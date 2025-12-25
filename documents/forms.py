@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from documents.models import Document
+from documents.models import Document, DocumentReport
 
 
 def validate_uploaded_file(file):
@@ -61,3 +61,22 @@ class ReUploadForm(forms.Form):
 
 class MultipleUploadFileForm(UploadFileForm):
     pass
+
+
+class DocumentReportForm(forms.ModelForm):
+    class Meta:
+        model = DocumentReport
+        fields = ("problem_type", "description")
+        widgets = {
+            "problem_type": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 2,
+                }
+            ),
+        }

@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.contrib import admin
+from django.db.models import Count
 from django.db.models.query import QuerySet
 
-from .models import BulkDocuments, Document, DocumentError, Vote
+from .models import BulkDocuments, Document, DocumentError, DocumentReport, Vote
 
 
 @admin.action(description="Reprocess selected documents")
@@ -73,6 +74,7 @@ class DocumentAdmin(admin.ModelAdmin):
         "pages",
         "views",
         "downloads",
+        "report_count",
         "hidden",
         "state",
         "created",
@@ -124,10 +126,35 @@ class DocumentAdmin(admin.ModelAdmin):
         ),
     )
 
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(report_count=Count("reports"))
+        return queryset
+
+    @admin.display(ordering="report_count", description="Reports")
+    def report_count(self, obj: Document) -> int:
+        return obj.report_count  # type: ignore[attr-defined]
+
 
 @admin.register(DocumentError)
 class DocumentErrorAdmin(admin.ModelAdmin):
     list_display = ("exception", "document", "task_id")
+
+
+@admin.register(DocumentReport)
+class DocumentReportAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "document",
+        "problem_type",
+        "user",
+        "created",
+    )
+    list_filter = ("problem_type", "created")
+    search_fields = ("document__name", "user__netid", "user__email")
+    raw_id_fields = ("user", "document")
+    date_hierarchy = "created"
+    readonly_fields = ("created",)
 
 
 @admin.register(BulkDocuments)

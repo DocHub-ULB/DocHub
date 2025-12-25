@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Signaler {{ document.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-xl py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {% include "documents/document_report.html#report_card" %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% partialdef report_modal %}
+    <dialog id="reportDialog"
+            data-controller="modal"
+            data-action="click->modal#clickOutside"
+            class="rounded shadow-lg border-0 p-0">
+        {% include "documents/document_report.html#report_card" %}
+    </dialog>
+{% endpartialdef %}
+
+{% partialdef report_card %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Signaler un problème</h5>
+        </div>
+
+        <form action="{% url 'document_report' document.id %}" method="post">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+            <div class="card-body">
+                <div class="mb-3">
+                    {% load documents_tags %}
+                    {% for choice_value, choice_label in form.fields.problem_type.choices %}
+                        {% if choice_value %}
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="problem_type"
+                                       id="problem_{{ choice_value }}" value="{{ choice_value }}"
+                                       {% if form.problem_type.value == choice_value %}checked{% endif %}>
+                                <label class="form-check-label" for="problem_{{ choice_value }}">
+                                    <div class="fw-semibold">{{ choice_label }}</div>
+                                    <div class="text-muted small">
+                                        {{ choice_value|problem_type_description }}
+                                    </div>
+                                </label>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Commentaire (optionnel)
+                        <div class="form-text small">
+                            Tu peux ajouter des détails supplémentaires pour nous aider à comprendre le problème.
+                        </div>
+                    </label>
+
+                    {{ form.description }}
+
+                </div>
+            </div>
+
+            <div class="card-footer d-flex gap-2 justify-content-end">
+                <button type="button" data-action="click->modal#close" class="btn btn-outline-secondary">Annuler</button>
+                <button type="submit" class="btn btn-primary">
+                    Envoyer
+                </button>
+            </div>
+        </form>
+    </div>
+{% endpartialdef %}

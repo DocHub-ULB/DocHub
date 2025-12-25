@@ -186,6 +186,55 @@ class Vote(models.Model):
         ]
 
 
+class DocumentReport(models.Model):
+    class ProblemType(models.TextChoices):
+        WRONG_MODULE = "wrong_module", "Ce document est dans le mauvais cours"
+        WRONG_TITLE = "wrong_title", "Le titre ou la description est erroné"
+        LOW_QUALITY = "low_quality", "Contenu de mauvaise qualité ou inutile"
+        READABILITY = "readability", "Problème de lisibilité"
+        OUTDATED = "outdated", "Document obsolète"
+        OTHER = "other", "Autre raison"
+
+        @classmethod
+        def get_description(cls, value: str) -> str:
+            """Get the detailed description for a problem type."""
+            descriptions = {
+                cls.WRONG_MODULE.value: "Ce document appartient à un autre cours",
+                cls.WRONG_TITLE.value: "Le contenu du document n'est pas correctement décrit",
+                cls.LOW_QUALITY.value: "Le contenu peut être non pertinent, contenir uniquement le plan du cours, avoir de nombreuses fautes ou être (presque) vide",
+                cls.READABILITY.value: "Le document est difficile à lire en raison d'une mauvaise écriture ou d'une photo de mauvaise qualité",
+                cls.OUTDATED.value: "Le document est dépassé ou ne correspond plus au contenu actuel du cours",
+                cls.OTHER.value: "Une autre raison non listée ci-dessus",
+            }
+            return descriptions.get(value, "")
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Utilisateur",
+    )
+    document = models.ForeignKey(
+        Document,
+        on_delete=models.CASCADE,
+        related_name="reports",
+        verbose_name="Document",
+    )
+    problem_type = models.CharField(
+        max_length=20,
+        choices=ProblemType.choices,
+        verbose_name="Type de problème",
+    )
+    description = models.TextField(
+        blank=True,
+        default="",
+        verbose_name="Description",
+    )
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"Report on {self.document.name} by {self.user}"
+
+
 class DocumentError(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     task_id = models.CharField(max_length=255)
