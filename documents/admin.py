@@ -133,7 +133,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
     @admin.display(ordering="report_count", description="Reports")
     def report_count(self, obj: Document) -> int:
-        return obj.report_count
+        return obj.report_count  # type: ignore[attr-defined]
 
 
 @admin.register(DocumentError)

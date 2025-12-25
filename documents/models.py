@@ -199,12 +199,12 @@ class DocumentReport(models.Model):
         def get_description(cls, value: str) -> str:
             """Get the detailed description for a problem type."""
             descriptions = {
-                cls.WRONG_MODULE: "Ce document appartient à un autre cours",
-                cls.WRONG_TITLE: "Le contenu du document n'est pas correctement décrit",
-                cls.LOW_QUALITY: "Le contenu peut être non pertinent, contenir uniquement le plan du cours, avoir de nombreuses fautes ou être (presque) vide",
-                cls.READABILITY: "Le document est difficile à lire en raison d'une mauvaise écriture ou d'une photo de mauvaise qualité",
-                cls.OUTDATED: "Le document est dépassé ou ne correspond plus au contenu actuel du cours",
-                cls.OTHER: "Une autre raison non listée ci-dessus",
+                cls.WRONG_MODULE.value: "Ce document appartient à un autre cours",
+                cls.WRONG_TITLE.value: "Le contenu du document n'est pas correctement décrit",
+                cls.LOW_QUALITY.value: "Le contenu peut être non pertinent, contenir uniquement le plan du cours, avoir de nombreuses fautes ou être (presque) vide",
+                cls.READABILITY.value: "Le document est difficile à lire en raison d'une mauvaise écriture ou d'une photo de mauvaise qualité",
+                cls.OUTDATED.value: "Le document est dépassé ou ne correspond plus au contenu actuel du cours",
+                cls.OTHER.value: "Une autre raison non listée ci-dessus",
             }
             return descriptions.get(value, "")
 
