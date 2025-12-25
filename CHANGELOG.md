@@ -2,6 +2,16 @@
 
 This page tries to contain all changes made on DocHub.
 
+# 2025.12.1
+
+ * Add a "report this document" feature
+
+# 2025.12.0
+
+ * Upgrade to Django 6.0
+ * Switch to jsdelivr for the CDN
+ * Migrate from unoconv (deprecated) to unoserver
+
 # 2025.6.0
 
  * Switch to UV as the package manager
