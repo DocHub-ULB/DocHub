@@ -1,4 +1,5 @@
 from django.contrib.sitemaps import Sitemap
+from django.db.models import Max
 
 from catalog.models import Course
 
@@ -9,9 +10,7 @@ class CourseSitemap(Sitemap):
     protocol = "https"
 
     def items(self):
-        return Course.objects.prefetch_related("document_set")
+        return Course.objects.annotate(latest_doc_date=Max("document__created"))
 
     def lastmod(self, obj: Course):
-        lastdoc = obj.document_set.order_by("-created").first()
-        if lastdoc:
-            return lastdoc.created
+        return obj.latest_doc_date
