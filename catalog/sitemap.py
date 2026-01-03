@@ -13,4 +13,4 @@ class CourseSitemap(Sitemap):
         return Course.objects.annotate(latest_doc_date=Max("document__created"))
 
     def lastmod(self, obj: Course):
-        return obj.latest_doc_date
+        return obj.latest_doc_date  # type: ignore[attr-defined]
