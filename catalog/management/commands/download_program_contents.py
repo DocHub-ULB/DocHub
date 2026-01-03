@@ -11,9 +11,16 @@ from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
 
 class Command(BaseCommand):
-    help = ""
+    help = "Fetch course content for each program from ULB API and save to csv/courses.json"
 
     def handle(self, *args: Any, **options: Any) -> None:
+        """
+        For each program in csv/programs.json, fetches its course content from ULB API.
+
+        Programs that are "options" (specializations) have a "parent" field and require
+        both the parent slug and option slug in the API call. If that fails, we retry
+        with just the option slug.
+        """
         with open("csv/programs.json") as f:
             programs: list[dict] = json.load(f)
         print("\n[bold blue]Listing the course content of all programs...[/]\n")
@@ -38,27 +45,42 @@ class Command(BaseCommand):
                     advance=1,
                     description=f"Listing the course content of {progam['slug'].upper()}...",
                 )
-                if "parent" in progam:
+
+                # Build API query string
+                # If this is an option/specialization (has a parent), include both parent and option
+                # Otherwise, just query by the program slug
+                is_option = "parent" in progam
+
+                if is_option:
+                    # Format: ?anet=PARENT_SLUG&option=OPTION_SLUG
                     qs = f"/ksup/programme?gen=prod&anet={progam['parent'].upper()}&option={progam['slug'].upper()}&lang=fr"
                 else:
+                    # Format: ?anet=PROGRAM_SLUG
                     qs = f"/ksup/programme?gen=prod&anet={progam['slug'].upper()}&lang=fr"
 
                 URL = f"https://www.ulb.be/api/formation?path={quote(qs)}"
                 try:
                     response = requests.get(URL)
                     if not response.ok:
-                        if "parent" in progam:
+                        # If this is an option and the parent+option query failed,
+                        # retry with just the option slug (parent might be invalid)
+                        if is_option:
                             print(
-                                f"[yellow]Skip:[/] [magenta]{progam['slug'].upper()}[/] with bogus parent {progam['parent'].upper()}"
+                                f"[yellow]Failed to fetch option with parent:[/] "
+                                f"[magenta]{progam['slug'].upper()}[/] (parent: {progam['parent'].upper()})"
                             )
 
-                            print("Retry")
+                            print("[yellow]Retrying without parent parameter...[/] ")
                             qs = f"/ksup/programme?gen=prod&anet={progam['slug'].upper()}&lang=fr"
                             URL = f"https://www.ulb.be/api/formation?path={quote(qs)}"
                             response = requests.get(URL)
                             if not response.ok:
-                                print("Retry failed")
+                                print(
+                                    f"[red]Failed with status {response.status_code}[/]"
+                                )
                                 continue
+                            else:
+                                print("[green]Success[/]")
 
                         else:
                             print(
@@ -80,7 +102,12 @@ class Command(BaseCommand):
                     if len(programme_json["blocs"]) == 0:
                         continue
 
-                    for course in programme_json["blocs"][-1]["progCourses"]:
+                    # Extract courses from the last bloc (final year)
+                    # Each bloc represents a year in the program
+                    last_bloc = programme_json["blocs"][-1]
+
+                    for course in last_bloc["progCourses"]:
+                        # Skip placeholder courses (TEMP-0000, HULB-0000)
                         if course["id"] not in ["TEMP-0000", "HULB-0000"]:
                             program_content[progam["slug"]][course["id"]] = {
                                 "id": course["id"],
