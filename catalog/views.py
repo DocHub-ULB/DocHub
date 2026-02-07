@@ -76,6 +76,15 @@ def set_follow_course(request, slug: str, action: str) -> HttpResponse:
     else:
         course.followed_by.remove(request.user)
     course.save()
+
+    if request.htmx:
+        following = course.followed_by.filter(id=request.user.id).exists()
+        return render(
+            request,
+            "catalog/course.html#favorite",
+            {"course": course, "following": following},
+        )
+
     nextpage = request.GET.get("next", reverse("catalog:course_show", args=[slug]))
     return HttpResponseRedirect(nextpage)
 

@@ -1,8 +1,8 @@
 import _ from 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/+esm';
-
-import {Controller, Application} from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
-import {Autocomplete} from 'https://cdn.jsdelivr.net/npm/stimulus-autocomplete@3.1.0/+esm';
 import tomSelect from 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/+esm';
+import {getDocument, GlobalWorkerOptions} from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/+esm';
+
+GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/build/pdf.worker.mjs"
 
 function normalize(s) {
     let r = s.toLowerCase();
@@ -42,294 +42,245 @@ function humanFileSize(bytes, dp = 1) {
 }
 
 function cleanName(name) {
-    // Returns the name withtout dashes, underscores and removes the extension
+    // Returns the name without dashes, underscores and removes the extension
     return name.replace(/[-_]/g, ' ').replace(/\.[^.]+$/, '');
-
 }
 
 
-class CourseFilter extends Controller {
-    static targets = ["query", "tag", "filterable"]
+// Alpine.js components
+document.addEventListener('alpine:init', () => {
 
-    filter(event) {
-        let normalizedFilterTerm = normalize(this.queryTarget.value)
-        let selectedTags = this.tagTargets
-            .filter((el) => el.checked)
-            .map((el) => el.getAttribute("data-tag-name"));
+    // Course filter: client-side filtering of documents by text query and tags
+    Alpine.data('courseFilter', () => ({
+        filter() {
+            const query = this.$refs.query ? this.$refs.query.value : '';
+            const normalizedQuery = normalize(query);
 
-        this.filterableTargets.forEach((el, i) => {
-            let key = el.getAttribute("data-filter-key");
-            let tags = el.getAttribute("data-tags").split(" ");
+            const tags = Array.from(this.$el.querySelectorAll('[data-tag-name]'))
+                .filter(el => el.checked)
+                .map(el => el.getAttribute('data-tag-name'));
 
-            let normalizedTitle = normalize(key)
+            this.$el.querySelectorAll('[data-filter-key]').forEach(el => {
+                const key = el.getAttribute('data-filter-key');
+                const elTags = el.getAttribute('data-tags').split(' ');
+                const normalizedTitle = normalize(key);
 
-            let containsText = normalizedTitle.includes(normalizedFilterTerm);
-            let containsTags = _.difference(selectedTags, tags).length === 0;
-            el.classList.toggle("d-none", !containsText || !containsTags)
-        })
-    }
-}
-
-class Search extends Controller {
-    static targets = ["input", "output", "submit"]
-
-    initialize() {
-        this.search = _.debounce(this.search, 200, {trailing: true})
-    }
-
-    search(event) {
-        this.outputTarget.value = this.inputTarget.value
-        this.submitTarget.click();
-    }
-}
-
-import {getDocument, GlobalWorkerOptions} from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/+esm';
-GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/build/pdf.worker.mjs"
-
-
-class Viewer extends Controller {
-    static targets = ["renderer", "loader"]
-    static values = {src: String, loaded: Boolean, error: Boolean}
-    pageSizeLogDebounce = false;
-
-    static options = {
-        threshold: 0, // default
-    }
-
-
-    async connect() {
-        let loadingTask = getDocument(this.srcValue);
-
-        loadingTask.onProgress = async (data) => {
-            let percent = Math.round(data.loaded / data.total * 100)
-            this.loaderTarget.setAttribute("value", percent);
+                const containsText = normalizedTitle.includes(normalizedQuery);
+                const containsTags = _.difference(tags, elTags).length === 0;
+                el.classList.toggle('d-none', !containsText || !containsTags);
+            });
         }
+    }));
 
+    // Upload: file upload with drag-and-drop preview
+    Alpine.data('upload', () => ({
+        dragging: false,
+
+        handleFile(event) {
+            const files = this.$refs.input.files;
+            if (files.length > 0) {
+                this.$refs.input.setAttribute('filled', '');
+                const file = files[0];
+                this.$refs.name.value = cleanName(file.name);
+                this.$refs.originalname.textContent = file.name;
+                this.$refs.size.textContent = humanFileSize(file.size);
+                this.$refs.form.classList.remove('upload--hide');
+            } else {
+                this.$refs.input.removeAttribute('filled');
+                this.$refs.form.classList.add('upload--hide');
+            }
+            this.dragging = false;
+        },
+
+        enter(event) {
+            event.preventDefault();
+            this.dragging = true;
+        },
+
+        leave(event) {
+            event.preventDefault();
+            this.dragging = false;
+        }
+    }));
+
+    // Share: Web Share API
+    Alpine.data('share', (shareUrl) => ({
+        supported: false,
+
+        init() {
+            this.supported = 'share' in navigator;
+        },
+
+        async doShare() {
+            const url = new URL(shareUrl, window.location);
+            console.log('Sharing', url.href);
+            try {
+                await navigator.share({ url: url.href });
+            } catch (error) {
+                if (error.toString().includes('AbortError')) {
+                    console.info('Share aborted by user');
+                } else {
+                    throw error;
+                }
+            }
+        }
+    }));
+
+    // Modal trigger: opens a <dialog> element
+    Alpine.data('modalTrigger', (targetId) => ({
+        open(event) {
+            if (event.ctrlKey || event.metaKey || event.shiftKey || event.button === 1) {
+                return;
+            }
+            event.preventDefault();
+            const dialog = document.getElementById(targetId);
+            if (dialog) {
+                dialog.showModal();
+            }
+        }
+    }));
+});
+
+
+// PDF Viewer: initialized via data attribute, not Alpine (too complex for Alpine's reactive model)
+function initViewer(el) {
+    const src = el.dataset.viewerSrc;
+    const renderer = el.querySelector('[data-viewer-renderer]');
+    const loader = el.querySelector('[data-viewer-loader]');
+
+    let pages = {};
+    let pageSizeLogDebounce = false;
+
+    async function load() {
+        const loadingTask = getDocument(src);
+
+        loadingTask.onProgress = (data) => {
+            const percent = Math.round(data.loaded / data.total * 100);
+            loader.setAttribute('value', percent);
+        };
+
+        let pdf;
         try {
-            this.pdf = await loadingTask.promise;
+            pdf = await loadingTask.promise;
         } catch (e) {
-            console.log("Error while loading remote PDF", e);
-            this.errorValue = true;
-            this.loadedValue = true;
+            console.log('Error while loading remote PDF', e);
+            el.setAttribute('data-error', '');
+            el.setAttribute('data-loaded', '');
             return;
         }
 
-        this.loadedValue = true;
+        el.setAttribute('data-loaded', '');
 
-        console.log("PDF loaded with ", this.pdf.numPages, " pages");
-        console.debug(this.pdf);
+        console.log('PDF loaded with', pdf.numPages, 'pages');
+        console.debug(pdf);
 
-        this.pages = {};
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const wrapper = entry.target;
+                const pageNumber = parseInt(wrapper.getAttribute('data-page'));
+                const isRendered = wrapper.getElementsByTagName('canvas')[0] !== undefined;
 
-        let options = {
-            rootMargin: '0px',
-            threshold: 0
-        }
+                if (!isRendered && entry.isIntersecting) {
+                    console.log('Rendering page', pageNumber);
+                    renderPage(pageNumber, wrapper);
+                }
+                if (isRendered && !entry.isIntersecting) {
+                    console.log('Removing page', pageNumber);
+                    removePage(wrapper);
+                }
+            });
+        }, { rootMargin: '0px', threshold: 0 });
 
-        this.observer = new IntersectionObserver(this.intersectionCallback.bind(this), options);
+        const wrappers = [];
 
-        let wrappers = [];
+        for (let i = 1; i <= pdf.numPages; i++) {
+            pages[i] = await pdf.getPage(i);
 
-        for (let i = 1; i <= this.pdf.numPages; i++) {
-            this.pages[i] = await this.pdf.getPage(i);
-
-            let wrapper = document.createElement("div");
-            wrapper.classList.add("page-wrapper");
-            wrapper.style['aspectRatio'] = this.getPageRatio(i);
-            wrapper.setAttribute("data-viewer-page-param", i)
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('page-wrapper');
+            wrapper.style['aspectRatio'] = getPageRatio(i);
+            wrapper.setAttribute('data-page', i);
 
             wrappers.push(wrapper);
-            this.rendererTarget.appendChild(wrapper);
-
+            renderer.appendChild(wrapper);
         }
 
-        // only add all the pages to the observer after they are all created so we
-        // avoid listening to all the events while the pages are being created
-        // and the DOM reflows each time
-        wrappers.map((el) => this.observer.observe(el));
-
+        wrappers.forEach(w => observer.observe(w));
     }
 
-    intersectionCallback(event) {
-        event.map(entry => {
-            let wrapper = entry.target
-            let pageNumber = parseInt(wrapper.getAttribute("data-viewer-page-param"))
-            let isRendered = wrapper.getElementsByTagName("canvas")[0] !== undefined;
+    function getPageSizes(i) {
+        const page = pages[i];
+        const viewport = page.getViewport({ scale: 1 });
+        const screenRatio = window.devicePixelRatio || 1;
+        const scale = screenRatio * (renderer.clientWidth / viewport.width);
+        const width = Math.floor(viewport.width * scale);
+        const height = Math.floor(viewport.height * scale);
 
-            if (!isRendered && entry.isIntersecting) {
-                console.log("Rendering page", pageNumber)
-                this.renderPage(pageNumber, wrapper);
-            }
-            if (isRendered && !entry.isIntersecting) {
-                console.log("Removing page", pageNumber)
-                this.removePage(wrapper);
-            }
-        })
-    }
-
-    getPageSizes(i) {
-        let page = this.pages[i];
-        let viewport = page.getViewport({scale: 1,});
-
-        // retina support
-        let screenRatio = window.devicePixelRatio || 1
-
-        let scale = screenRatio * (this.rendererTarget.clientWidth / viewport.width)
-
-        let width = Math.floor(viewport.width * scale);
-        let height = Math.floor(viewport.height * scale);
-
-        if (!this.pageSizeLogDebounce) {
-            this.pageSizeLogDebounce = true;
-            console.log(`Page ${i} canvas resolution is ${width}x${height}`)
+        if (!pageSizeLogDebounce) {
+            pageSizeLogDebounce = true;
+            console.log(`Page ${i} canvas resolution is ${width}x${height}`);
         }
-        return {width, height, scale}
+        return { width, height, scale };
     }
 
-    getPageRatio(i) {
-        const {width, height} = this.getPageSizes(i)
+    function getPageRatio(i) {
+        const { width, height } = getPageSizes(i);
         return `${width} / ${height}`;
     }
 
-    async renderPage(i, wrapper) {
-
-        let canvas = document.createElement("canvas")
+    async function renderPage(i, wrapper) {
+        const canvas = document.createElement('canvas');
         wrapper.appendChild(canvas);
 
-        let page = this.pages[i];
+        const page = pages[i];
+        const { width, height, scale } = getPageSizes(i);
 
-        const {width, height, scale} = this.getPageSizes(i)
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = '100%';
 
-        canvas.width = width
-        canvas.height = height
-        canvas.style.width = "100%";
-
-        // Render PDF page into canvas context.
-        let renderContext = {
+        const renderContext = {
             canvasContext: canvas.getContext('2d'),
             transform: [scale, 0, 0, scale, 0, 0],
-            viewport: page.getViewport({scale: 1,}),
+            viewport: page.getViewport({ scale: 1 }),
         };
         await page.render(renderContext);
 
-        wrapper.setAttribute("data-viewer-ready", "")
+        wrapper.setAttribute('data-viewer-ready', '');
     }
 
-    removePage(wrapper) {
-        let canvas = wrapper.getElementsByTagName("canvas")[0]
+    function removePage(wrapper) {
+        const canvas = wrapper.getElementsByTagName('canvas')[0];
         if (canvas !== undefined) canvas.remove();
-        wrapper.removeAttribute("data-viewer-ready")
+        wrapper.removeAttribute('data-viewer-ready');
     }
+
+    load();
 }
 
-class Upload extends Controller {
-    static targets = ["input", "inputwrapper", "name", "originalname", "size", "form"]
-
-    input(event) {
-        console.log("File upload", event);
-        let files = this.inputTarget.files;
-        if (files.length > 0) {
-            this.inputTarget.setAttribute("filled", "")
-            let file = files[0];
-            this.nameTarget.value = cleanName(file.name)
-            this.originalnameTarget.textContent = file.name
-            this.sizeTarget.textContent = humanFileSize(file.size);
-
-            this.formTarget.classList.remove("upload--hide")
-        } else {
-            this.inputTarget.removeAttribute("filled")
-            this.formTarget.classList.add("upload--hide")
-        }
-        this.leave(null);
-    }
-
-    enter(event) {
-        event.preventDefault()
-        this.inputwrapperTarget.setAttribute("active", "")
-    }
-
-    leave(event) {
-        if (event !== null) {
-            event.preventDefault()
-        }
-        this.inputwrapperTarget.removeAttribute("active")
-    }
-
+// Initialize viewers on page load and after htmx swaps
+function initViewers() {
+    document.querySelectorAll('[data-viewer-src]:not([data-viewer-initialized])').forEach(el => {
+        el.setAttribute('data-viewer-initialized', '');
+        initViewer(el);
+    });
 }
 
-class TomSelect extends Controller {
-    async connect() {
-        new tomSelect(this.element, {hidePlaceholder: true});
-    }
+// Initialize tom-select widgets
+function initTomSelects() {
+    document.querySelectorAll('[data-tom-select]:not([data-tom-select-initialized])').forEach(el => {
+        el.setAttribute('data-tom-select-initialized', '');
+        new tomSelect(el, { hidePlaceholder: true });
+    });
 }
 
-class Share extends Controller {
-    static values = {
-        shareUrl: String
-    }
+// Run initializers on page load and after htmx content swaps
+document.addEventListener('DOMContentLoaded', () => {
+    initViewers();
+    initTomSelects();
+});
 
-    connect() {
-        if ("share" in navigator) {
-            this.element.classList.remove("d-none")
-        }
-    }
-
-    async share() {
-        const url = new URL(this.shareUrlValue, window.location);
-        console.log("Sharing", url.href)
-        try {
-            await navigator.share({
-                url: url.href,
-            })
-        } catch (error) {
-            if (error.toString().includes('AbortError')) {
-                // Yes, checking the string representation of the error is hideous,
-                // but I don't know how to do better and AbortError is undefined
-                console.info("Share aborted by user")
-            } else {
-                throw error;
-            }
-        }
-    }
-
-}
-
-class Modal extends Controller {
-    close() {
-        this.element.close();
-    }
-}
-
-class ModalTrigger extends Controller {
-    static values = {
-        target: String
-    }
-
-    open(event) {
-        // Allow browser default behavior when modifier keys are pressed
-        // (Ctrl+click, Cmd+click, Shift+click, or middle-click)
-        if (event.ctrlKey || event.metaKey || event.shiftKey || event.button === 1) {
-            return;
-        }
-
-        event.preventDefault();
-        const dialog = document.getElementById(this.targetValue);
-        if (dialog) {
-            dialog.showModal();
-        }
-    }
-}
-
-const application = Application.start()
-
-application.register("course-filter", CourseFilter);
-application.register("search", Search);
-application.register("viewer", Viewer);
-application.register("upload", Upload);
-application.register('autocomplete', Autocomplete);
-application.register('tom-select', TomSelect);
-application.register('share', Share);
-application.register('modal', Modal);
-application.register('modal-trigger', ModalTrigger);
-
-application.debug = true;
+document.addEventListener('htmx:afterSettle', () => {
+    initViewers();
+    initTomSelects();
+});

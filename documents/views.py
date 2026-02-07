@@ -247,6 +247,14 @@ def document_vote(request, pk):
         vote.vote_type = request.POST.get("vote_type")
         vote.save()
 
+    if request.htmx:
+        user_vote = Vote.objects.filter(document=document, user=request.user).first()
+        return render(
+            request,
+            "documents/viewer.html#vote",
+            {"document": document, "user_vote": user_vote},
+        )
+
     return redirect(document.get_absolute_url())
 
 

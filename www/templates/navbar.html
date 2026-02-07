@@ -27,7 +27,7 @@
                     <li><a class="dropdown-item" href="/moderation">Modération</a></li>
                 {% endif %}
                 {% if request.user.is_staff %}
-                    <li><a class="dropdown-item" href="/admin" data-turbo="false">Admin</a></li>
+                    <li><a class="dropdown-item" href="/admin" hx-boost="false">Admin</a></li>
                 {% endif %}
 
                 <li>

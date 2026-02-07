@@ -28,7 +28,7 @@ class DocumentForm(forms.ModelForm):
                 attrs={
                     "class": "form-select",
                     "data-placeholder": "Ajoute des tags",
-                    "data-controller": "tom-select",
+                    "data-tom-select": "",
                 }
             ),
             "staff_pick": forms.CheckboxInput(

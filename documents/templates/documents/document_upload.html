@@ -11,7 +11,7 @@
             display: none;
         }
 
-        div[data-upload-target=inputwrapper][active] {
+        [x-ref=inputwrapper][data-active] {
             background: white !important;
         }
 
@@ -52,7 +52,7 @@
         action="{% url 'document_put' course.slug %}"
         method="post" enctype="multipart/form-data"
         id="document-upload"
-        data-controller="upload"
+        x-data="upload()"
         class="mt-2"
     >
         {% csrf_token %}
@@ -112,7 +112,7 @@
         </p>
         <p>
             <small class="text-muted ">
-                N'oublie pas que ce qui est uploadé sur DocHub est soumis au droit d’auteur,
+                N'oublie pas que ce qui est uploadé sur DocHub est soumis au droit d'auteur,
                 et que tu dois donc avoir l'autorisation de son auteur pour l'y ajouter sur DocHub.
             </small>
         </p>
@@ -127,14 +127,16 @@
                 </small>
             {% endif %}
             <div
-                data-action="dragenter->upload#enter dragleave->upload#leave"
+                @dragenter="enter($event)"
+                @dragleave="leave($event)"
                 class="d-flex mb-2 rounded border d-block bg-light position-relative"
-                data-upload-target="inputwrapper"
+                x-ref="inputwrapper"
+                :data-active="dragging || undefined"
             >
                 <input
                     type="file" name="file" required id="id_file"
-                    data-upload-target="input"
-                    data-action="change->upload#input"
+                    x-ref="input"
+                    @change="handleFile($event)"
                     style="min-height: 150px; opacity: 0; z-index: 100; width: 100%;"
 
                 />
@@ -150,8 +152,8 @@
                     </svg>
                     <span class="text-center">Drag & drop ou clic pour ajouter un document</span>
                     <div>
-                        <span data-upload-target="originalname"></span>
-                        <span data-upload-target="size"></span>
+                        <span x-ref="originalname"></span>
+                        <span x-ref="size"></span>
                     </div>
                 </div>
             </div>
@@ -159,12 +161,12 @@
         {% endwith %}
 
         <div class="upload--hide"
-             data-upload-target="form"
+             x-ref="form"
         >
 
             <div class="mb-3">
                 <label for="name" class="form-label">Titre du document</label>
-                <input type="text" id="name" name="name" class="form-control" data-upload-target="name">
+                <input type="text" id="name" name="name" class="form-control" x-ref="name">
                 <div class="form-text">
                     Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
 

@@ -1,13 +1,14 @@
 {% load like_tags %}
 
-<turbo-frame id="like-dislike-{{ document.pk }}" class="card-like">
+<div id="like-dislike-{{ document.pk }}" class="card-like"
+     hx-target="#like-dislike-{{ document.pk }}" hx-swap="outerHTML">
     {% user_liked request.user document as liked %}
-    <a class="like" href="{% url "document_vote" document.pk %}?vote_type=up">
+    <a class="like" hx-get="{% url "document_vote" document.pk %}?vote_type=up" hx-boost="false">
         <i class="fas fa-thumbs-up" style="grid-row-start:1;{% if liked == "up" %}color: #43AC6A;{% endif %}"></i>
         <span>{{ document.votes.upvotes }}</span>
     </a>
-    <a class="dislike" href="{% url "document_vote" document.pk %}?vote_type=down">
+    <a class="dislike" hx-get="{% url "document_vote" document.pk %}?vote_type=down" hx-boost="false">
         <i class="fas fa-thumbs-down" style="grid-row-start:2;{% if liked == "down" %}color: #9e1d1d;{% endif %}"></i>
         <span>{{ document.votes.downvotes }}</span>
     </a>
-</turbo-frame>
+</div>

@@ -14,8 +14,7 @@
 
 {% partialdef report_modal %}
     <dialog id="reportDialog"
-            data-controller="modal"
-            data-action="click->modal#clickOutside"
+            @click="if ($event.target === $el) $el.close()"
             class="rounded shadow-lg border-0 p-0">
         {% include "documents/document_report.html#report_card" %}
     </dialog>
@@ -64,7 +63,7 @@
             </div>
 
             <div class="card-footer d-flex gap-2 justify-content-end">
-                <button type="button" data-action="click->modal#close" class="btn btn-outline-secondary">Annuler</button>
+                <button type="button" onclick="this.closest('dialog')?.close()" class="btn btn-outline-secondary">Annuler</button>
                 <button type="submit" class="btn btn-primary">
                     Envoyer
                 </button>

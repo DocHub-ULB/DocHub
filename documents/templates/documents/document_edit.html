@@ -72,11 +72,11 @@
             {% if doc.hidden %}
                 <input type="submit" class="btn btn-link text-primary"
                        name="unhide" value="Rendre visible le document"
-                       data-turbo-confirm="Est-tu certain de vouloir rendre visible ce document ?"/>
+                       hx-confirm="Est-tu certain de vouloir rendre visible ce document ?"/>
             {% else %}
                 <input type="submit" class="btn btn-link text-danger"
                        name="hide" value="Cacher le document"
-                       data-turbo-confirm="Est-tu certain de vouloir cacher ce document ?"/>
+                       hx-confirm="Est-tu certain de vouloir cacher ce document ?"/>
             {% endif %}
         </div>
     </form>

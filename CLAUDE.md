@@ -5,7 +5,7 @@ with minimal maintenance and to be accessible to junior newcomers.
 We minimize the number of dependencies. 
 We prefer simple patterns over clever ones.
 JavaScript is kept to a minimum, we do not use build steps.
-We prefer plain HTML first, hotwire turbo second, hotwire stimulus third and other
+We prefer plain HTML first, htmx second, Alpine.js third and other
 JS libs only when necessary
 
 ## Commands

@@ -10,6 +10,7 @@ dependencies = [
     "django-compressor>=4.5.1",
     "django-crispy-forms>=2.3",
     "django-environ>=0.12.0",
+    "django-htmx>=1.21.0",
     "django-mptt>=0.17.0",
     "django-pipeline>=4.0.0",
     "furl>=2.1.4",

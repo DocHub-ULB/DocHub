@@ -11,15 +11,17 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
               rel="stylesheet" crossorigin="anonymous">
 
-        <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.20+esm" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js" defer></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+        <meta name="htmx-config" content='{"globalViewTransitions": true}'>
         <meta name="view-transition" content="same-origin">
-        <script type="module" src="{% static "main.js" %}" defer data-turbo-track="reload"></script>
+        <script type="module" src="{% static "main.js" %}" defer></script>
 
         <!--
-        Sentry on the frontend gives us almost only false positives, mostly due to network errors triggered by Turbo.
-        <script type="module" src="{% static "sentry.js" %}" defer data-turbo-track="reload"></script>
+        Sentry on the frontend gives us almost only false positives, mostly due to network errors.
+        <script type="module" src="{% static "sentry.js" %}" defer></script>
         -->
-        <script defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js" data-turbo-track="reload"></script>
+        <script defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
 
         <style>
             nav {
@@ -137,15 +139,15 @@
                 transition-duration: 150ms;
             }
 
-            div[data-controller="viewer"] .error {
+            .viewer .error {
                 display: none;
             }
 
-            div[data-controller="viewer"][data-viewer-error-value] .error {
+            .viewer[data-error] .error {
                 display: block;
             }
 
-            div[data-controller="viewer"] .loader {
+            .viewer .loader {
                 text-align: center;
                 position: absolute;
                 width: 90%;
@@ -156,7 +158,7 @@
                 align-items: center;
             }
 
-            div[data-controller="viewer"][data-viewer-loaded-value] .loader {
+            .viewer[data-loaded] .loader {
                 transition-property: opacity;
                 transition-duration: 0.2s;
                 transition-timing-function: ease-out;
@@ -207,7 +209,7 @@
         {% block head %}{% endblock %}
     </head>
 
-    <body class="d-flex flex-column min-vh-100">
+    <body class="d-flex flex-column min-vh-100" hx-boost="true">
         {% block navbar %}
             {% include "navbar.html" %}
         {% endblock navbar %}
@@ -249,7 +251,7 @@
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-            crossorigin="anonymous" data-turbo-eval="false" defer></script>
+            crossorigin="anonymous" defer></script>
     {% block script %}
     {% endblock script %}
 </html>

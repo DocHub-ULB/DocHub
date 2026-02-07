@@ -6,16 +6,21 @@
     <form class="d-flex align-items-center container-xl"
           style="height: 20vh; background-image: url('{% static 'images/building-a.jpeg' %}'); background-size: cover">
 
-        <div class="input-group mx-4" data-controller="autocomplete"
-             data-autocomplete-url-value="/search/courses/"
-             data-autocomplete-min-length-value="3"
-        >
+        <div class="input-group mx-4 position-relative">
             <input type="search" class="form-control dropdown-toggle"
+                   name="q"
                    placeholder="Chercher un cours (ex. info-f101 ou phys-f443)"
-                   aria-label="search" data-autocomplete-target="input">
-            <ul data-autocomplete-target="results"
+                   aria-label="search"
+                   hx-get="/search/courses/"
+                   hx-trigger="input changed delay:300ms, keyup[key=='Enter']"
+                   hx-target="#autocomplete-results"
+                   hx-swap="innerHTML"
+                   hx-params="q"
+                   autocomplete="off"
+            >
+            <ul id="autocomplete-results"
                 class="dropdown-menu show w-100 shadow"
-                style="margin-top: 2.5em;" hidden
+                style="margin-top: 2.5em;"
             >
             </ul>
         </div>
