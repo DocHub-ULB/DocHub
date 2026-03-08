@@ -223,15 +223,16 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "simple": {
-            "format": "{levelname} {message}",
-            "style": "{",
+        "rich": {
+            "format": "%(message)s",
         },
     },
     "handlers": {
         "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
+            "rich_tracebacks": True,
+            "show_path": False,
         },
     },
     "root": {
