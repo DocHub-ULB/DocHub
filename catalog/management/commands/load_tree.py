@@ -1,6 +1,7 @@
 from typing import Any
 
 import json
+import logging
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -8,6 +9,8 @@ from django.db import transaction
 from slugify import slugify
 
 from catalog.models import Category
+
+logger = logging.getLogger(__name__)
 
 STOP = {"d'", "de", "du", "et", "l'", "la", "le", "les"}
 
@@ -51,10 +54,10 @@ class Command(BaseCommand):
 
         with transaction.atomic():
             if Category.objects.filter(slug="archives").first():
-                print("We already have archives, deleting the non-archives")
+                logger.info("We already have archives, deleting the non-archives")
                 Category.objects.filter(is_archive=False).delete()
             else:
-                print("Archiving old categories")
+                logger.info("Archiving old categories")
                 old_ulb = Category.objects.filter(slug="ULB").get()
                 old_ulb.name = "Archives"
                 old_ulb.slug = "archives"
@@ -63,13 +66,13 @@ class Command(BaseCommand):
 
                 Category.objects.all().update(is_archive=True)
 
-                print("Fixing old faculties")
+                logger.info("Fixing old faculties")
                 for child in old_ulb.children.all():
                     child.type = Category.CategoryType.FACULTY
                     child.save()
 
             # Level 0
-            print("Creating level 0")
+            logger.info("Creating level 0")
             ULB = Category.objects.create(
                 name="Université Libre de Bruxelles",
                 slug="ULB",
@@ -84,7 +87,7 @@ class Command(BaseCommand):
                 )
 
             # Level 1
-            print("Creating level 1")
+            logger.info("Creating level 1")
             for name, _color in level1.items():
                 slug = (
                     name.removeprefix("Faculté de ")
@@ -101,7 +104,7 @@ class Command(BaseCommand):
                 c.parents.add(ULB)
 
             # Programs
-            print("Adding all programs")
+            logger.info("Adding all programs")
             for program in programs:
                 if "bachelier" in program["name"].lower() or program["slug"].startswith(
                     "BA"
@@ -132,4 +135,4 @@ class Command(BaseCommand):
                     parent = Category.objects.get(name=faculty["name"])
                     c.parents.add(parent)
 
-            print("Done")
+            logger.info("Done")

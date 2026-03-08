@@ -91,7 +91,7 @@ TEMPLATES = [
 ]
 
 DATABASES = {
-    "default": env.db_url("DB_URL", default=f'sqlite:///{BASE_DIR / "db.sqlite"}')
+    "default": env.db_url("DB_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite'}")
 }
 
 # Password validation
@@ -219,9 +219,30 @@ try:
 except ImportError:
     pass
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
 
 if DEBUG:
-    print(
-        "Warning: you are running Dochub with DEBUG=True. This is dangerous if your server is publicly accessible."
-    )
-    print("You should set DEBUG=False in production.\n\n")
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.warning("Warning: you are running Dochub with DEBUG=True...")
+    logger.warning("You should set DEBUG=False in production.")
