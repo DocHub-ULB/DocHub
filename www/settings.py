@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import environ
@@ -5,6 +6,8 @@ import environ
 # First checks if the secrets are not stored in tmpfs by Docker
 # https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
 from sentry_sdk.utils import get_default_release
+
+logger = logging.getLogger(__name__)
 
 env = environ.FileAwareEnv()
 
@@ -163,8 +166,10 @@ if env("STORAGE_ENDPOINT", default=None):
     AWS_S3_SECRET_ACCESS_KEY = env("STORAGE_SECRET_KEY")
     AWS_STORAGE_BUCKET_NAME = env("STORAGE_MEDIA_BUCKET_NAME")
 elif not DEBUG:
-    print("Warning: no storage configured but DEBUG=False, using local filesystem.")
-    print("You DO NOT want this in production!")
+    logger.warning(
+        "Warning: no storage configured but DEBUG=False, using local filesystem."
+    )
+    logger.warning("You DO NOT want this in production!")
 
 STORAGES = {
     "default": {
