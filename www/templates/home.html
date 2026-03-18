@@ -1,185 +1,188 @@
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block header %}
-    <form class="d-flex align-items-center container-xl"
-          style="height: 20vh; background-image: url('{% static 'images/building-a.jpeg' %}'); background-size: cover">
-
-        <div class="input-group mx-4" data-controller="autocomplete"
-             data-autocomplete-url-value="/search/courses/"
-             data-autocomplete-min-length-value="3"
-        >
-            <input type="search" class="form-control dropdown-toggle"
-                   placeholder="Chercher un cours (ex. info-f101 ou phys-f443)"
-                   aria-label="search" data-autocomplete-target="input">
-            <ul data-autocomplete-target="results"
-                class="dropdown-menu show w-100 shadow"
-                style="margin-top: 2.5em;" hidden
-            >
-            </ul>
+    <div class="bg-ulb text-white py-4 shadow-sm mb-4"
+         style="background-image: linear-gradient(rgba(0, 84, 154, 0.85), rgba(0, 84, 154, 0.95)), url('{% static 'images/building-a.jpeg' %}'); background-size: cover; background-position: center;">
+        <div class="container-xl d-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="fs-2 fw-bold mb-1">Bonjour {{ request.user.first_name|default:"" }} 👋</h1>
+                <p class="mb-0 text-white-50">Prêt(e) à étudier ? Voici les dernières nouveautés de tes cours.</p>
+            </div>
+            <div class="d-none d-md-block">
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-journal-text opacity-50" viewBox="0 0 16 16">
+                    <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                    <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                    <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                </svg>
+            </div>
         </div>
-    </form>
+    </div>
 {% endblock header %}
 
 {% block content %}
     {% if not following_course and not recent_courses %}
         {% include "welcome.html" %}
     {% else %}
-        <div class="row gap-2 gap-lg-5">
-            <div class="col-lg">
-                <h1 class="fs-3 border-bottom d-flex justify-content-between">
-                    <div class="d-flex align-items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                             class="bi bi-star-fill text-warning"
-                             viewBox="0 0 16 16">
-                            <path
-                                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                        </svg>
-                        <span>Cours favoris</span>
-                    </div>
-                    <a href="{% url "catalog:finder_root" %}"
-                       class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-plus"
-                             viewBox="0 0 16 16">
-                            <path
-                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                        <span>Ajouter d'autres cours</span>
-                    </a>
-                </h1>
-                {% if following_course %}
-                    {% for course in following_course %}
-                        <a href="{% url "catalog:course_show" course.slug %}" class="text-body text-decoration-none">
-                            <div class="d-flex align-items-center my-2">
-                                <div class="flex-shrink-0 px-2 py-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                         class="bi bi-folder" viewBox="0 0 16 16">
-                                        <path
-                                            d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
-                                    </svg>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <span class="hover-underline">{{ course.name }}</span>
-                                    <small class="text-muted text-nowrap">{{ course.slug|upper }}</small>
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
+        <div class="row g-4 mb-5">
 
-
-                {% else %}
-                    Pour trouver facilement tes cours et les ajouter à tes favoris,
-                    tu peux utiliser la barre de recherche ici au-dessus ou alors tu peux
-                    en ajouter avec le bouton ci-contre.<br/>
-                    Une fois que tu as trouvé ton bonheur, n'oublie pas de l'ajouter aux favoris ! ️
-                {% endif %}
+            <div class="col-lg-4">
 
                 {% if not request.user.is_moderator %}
-                    <div class="alert alert-info" role="alert">
-                        Tu es délégué d'année, délégué cours de ton cercle ou dans un bureau étudiant&nbsp;?
-                        Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Clique
-                            ici</a> pour les recevoir !
+                    <div class="alert alert-info border-0 shadow-sm rounded-4 p-3 mb-4 d-flex gap-3 align-items-start" style="background-color: #e0f2fe; color: #004085;" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shield-lock-fill mt-1 flex-shrink-0" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5z"/>
+                        </svg>
+                        <div style="font-size: 0.85rem; line-height: 1.4;">
+                            <strong>Délégué(e) ?</strong> Obtiens des droits de modération en <a href="{% url 'representative_request' %}" class="alert-link">cliquant ici</a>.
+                        </div>
                     </div>
                 {% endif %}
-                <h1 class="fs-3 border-bottom d-flex justify-content-between">
-                    <div class="d-flex align-items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                             class="bi bi-clock-history" viewBox="0 0 16 16">
-                            <path
-                                d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
-                            <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
-                            <path
-                                d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
-                        </svg>
-                        <span>Cours vus récemment</span>
-                    </div>
-                </h1>
-                {% if recent_courses %}
-                    {% for course in recent_courses %}
-                        <a href="{% url "catalog:course_show" course.slug %}" class="text-body text-decoration-none">
-                            <div class="d-flex align-items-center my-2">
-                                <div class="flex-shrink-0 px-2 py-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                         class="bi bi-folder" viewBox="0 0 16 16">
-                                        <path
-                                            d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
-                                    </svg>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <span class="hover-underline">{{ course.name }}</span>
-                                    <small class="text-muted text-nowrap">{{ course.slug|upper }}</small>
-                                </div>
-                            </div>
+
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white border-0 pt-3 pb-2 d-flex justify-content-between align-items-center">
+                        <h2 class="fs-5 fw-bold mb-0 d-flex align-items-center gap-2">
+                            <span class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                </svg>
+                            </span>
+                            Favoris
+                        </h2>
+                        <a href="{% url 'catalog:finder_root' %}" class="btn btn-sm btn-light rounded-circle text-secondary hover-scale-sm" title="Ajouter des cours">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/></svg>
                         </a>
-                    {% endfor %}
+                    </div>
 
+                    <div class="card-body pt-0 custom-scrollbar" style="max-height: 320px; overflow-y: auto;">
+                        {% if following_course %}
+                            <div class="list-group list-group-flush gap-2">
+                                {% for course in following_course %}
+                                    <a href="{% url 'catalog:course_show' course.slug %}" class="list-group-item list-group-item-action rounded-3 border bg-light bg-opacity-50 p-2 d-flex align-items-center gap-3 hover-scale-sm transition-all">
+                                        <div class="text-ulb bg-white rounded p-2 shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder2-open" viewBox="0 0 16 16"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v5a.5.5 0 0 1-.5.5H1.5a.5.5 0 0 1-.5-.5v-5zm1 1v5h12v-5H2.5z"/><path d="M1 8.5A1.5 1.5 0 0 1 2.5 7h11A1.5 1.5 0 0 1 15 8.5v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 13.5v-5z"/></svg>
+                                        </div>
+                                        <div class="overflow-hidden">
+                                            <div class="text-truncate fw-medium text-dark" style="font-size: 0.9rem;">{{ course.name }}</div>
+                                            <small class="text-muted fw-bold" style="font-size: 0.7rem;">{{ course.slug|upper }}</small>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted small mb-0 mt-2">Cherche tes cours via la barre de recherche pour les ajouter ici.</p>
+                        {% endif %}
+                    </div>
+                </div>
 
-                {% else %}
-                    <span> Tu veux parcourir les different cours <a
-                        href="{% url 'catalog:finder_root' %}">ici</a></span>
+                {% if recent_courses %}
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-header bg-white border-0 pt-3 pb-2">
+                            <h2 class="fs-5 fw-bold mb-0 d-flex align-items-center gap-2">
+                                <span class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
+                                        <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
+                                        <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
+                                        <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+                                    </svg>
+                                </span>
+                                Vus récemment
+                            </h2>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="list-group list-group-flush gap-1">
+                                {% for course in recent_courses %}
+                                    <a href="{% url 'catalog:course_show' course.slug %}" class="list-group-item list-group-item-action rounded-3 border-0 p-2 d-flex align-items-center gap-3 hover-scale-sm">
+                                        <div class="text-secondary bg-light rounded p-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg>
+                                        </div>
+                                        <div class="overflow-hidden">
+                                            <div class="text-truncate text-dark" style="font-size: 0.85rem;">{{ course.name }}</div>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
-            <div class="col-lg">
-                {% if following_course and recent_docs %}
-                    <h1 class="fs-3 border-bottom d-flex align-items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                             class="bi bi-clock-history" viewBox="0 0 16 16">
-                            <path
-                                d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
-                            <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
-                            <path
-                                d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+
+            <div class="col-lg-8">
+
+                <div class="d-flex justify-content-between align-items-end mb-3 border-bottom pb-2">
+                    <h2 class="fs-4 fw-bold mb-0 text-ulb d-flex align-items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-file-earmark-richtext-fill" viewBox="0 0 16 16">
+                            <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.293 0zM9.5 1.5v2a.5.5 0 0 0 .5.5h2l-2.5-2.5zm-5 5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0 2A.5.5 0 0 1 5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0 2A.5.5 0 0 1 5 10h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
                         </svg>
-                        <span>Documents récents</span>
-                    </h1>
-                    <ul class="p-0" style="list-style: none;">
-                        {% for document in recent_docs %}
-                            <li
-                                class="border-bottom p-2"
-                                data-course-filter-target="filterable"
-                                data-filter-key='{{ document.name }}'
-                                data-tags="{{ document.tags.all|join:' ' }}"
-                            >
-                                <a href="{% url 'document_show' document.pk %}"
-                                   class="d-flex align-items-center gap-2 text-reset text-decoration-none">
-                                    <div class="rounded border bg-light p-1">
-                                        {% if document.thumbnail %}
-                                            <img src="{{ document.thumbnail.url }}"
-                                                 width="60" height="50" style="object-fit: cover;">
-                                        {% else %}
-                                            <img src="{% static "images/default_page.webp" %}"
-                                                 width="60" height="50" style="object-fit: cover;">
-                                        {% endif %}
-                                    </div>
-                                    <div>
-                                        <div class="hover-underline">
-                                            {{ document.name|capfirst }}
-                                        </div>
-                                        <div class="fw-light" style="font-size: .7em">
-                                            {{ document.user.name }} |
-                                            {{ document.pages }} page{{ document.pages|pluralize }} |
-                                            {{ document.date|date:"F Y"|capfirst }}
-                                            <div class="tags d-none">
-                                                {% for kw in document.tags.all %}
-                                                    <span
-                                                        data-id="{{ kw.id }}"
-                                                        style="background-color: {{ kw.color }}; color:white;"
-                                                    >
-                                                        {{ kw }}
-                                                    </span>
-                                                {% endfor %}
+                        Documents récents
+                    </h2>
+                </div>
+
+                {% if following_course and recent_docs %}
+                    <div class="pe-2 pb-2 custom-scrollbar" style="max-height: calc(100vh - 380px); overflow-y: auto; overflow-x: hidden;">
+                        <div class="row row-cols-1 row-cols-md-2 g-3">
+                            {% for document in recent_docs %}
+                                <div class="col" data-course-filter-target="filterable" data-filter-key='{{ document.name }}' data-tags="{{ document.tags.all|join:' ' }}">
+                                    <a href="{% url 'document_show' document.pk %}" class="text-decoration-none text-body">
+                                        <div class="card h-100 border shadow-sm rounded-4 hover-scale-sm transition-all bg-white">
+                                            <div class="card-body p-3 d-flex gap-3 align-items-center">
+
+                                                <div class="flex-shrink-0 rounded-3 overflow-hidden border shadow-sm" style="width: 55px; height: 75px;">
+                                                    {% if document.thumbnail %}
+                                                        <img src="{{ document.thumbnail.url }}" class="w-100 h-100" style="object-fit: cover;">
+                                                    {% else %}
+                                                        <img src="{% static 'images/default_page.webp' %}" class="w-100 h-100" style="object-fit: cover;">
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h3 class="fs-6 fw-bold mb-1 text-truncate text-dark" title="{{ document.name|capfirst }}">{{ document.name|capfirst }}</h3>
+                                                    <div class="d-flex flex-wrap gap-1 align-items-center text-muted" style="font-size: 0.75rem;">
+                                                        <span class="badge bg-light text-dark border">{{ document.course.slug|upper }}</span>
+                                                        <span>• {{ document.pages }} p.</span>
+                                                        <span>• {{ document.date|date:"M Y"|title }}</span>
+                                                    </div>
+
+                                                    <div class="tags d-none">
+                                                        {% for kw in document.tags.all %}
+                                                            <span data-id="{{ kw.id }}" style="background-color: {{ kw.color }}; color:white;">{{ kw }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                            | {{ document.course.slug|upper }}
                                         </div>
-                                    </div>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                {% else %}
+                    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: #f8fafc;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center p-4">
+
+                            <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mb-3" style="width: 55px; height: 55px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#00549A" class="bi bi-folder2-open opacity-75" viewBox="0 0 16 16">
+                                    <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v5a.5.5 0 0 1-.5.5H1.5a.5.5 0 0 1-.5-.5v-5zm1 1v5h12v-5H2.5z"/>
+                                    <path d="M1 8.5A1.5 1.5 0 0 1 2.5 7h11A1.5 1.5 0 0 1 15 8.5v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 13.5v-5z"/>
+                                </svg>
+                            </div>
+
+                            <h3 class="fs-6 fw-bold text-ulb mb-1">C'est bien calme par ici...</h3>
+
+                            <p class="text-muted mb-3" style="max-width: 400px; font-size: 0.85rem;">
+                                Il n'y a pas encore de documents récents pour tes cours favoris. N'hésite pas à explorer le catalogue !
+                            </p>
+
+                            <a href="{% url 'catalog:finder_root' %}" class="btn btn-ulb btn-sm rounded-pill px-4 shadow-sm">
+                                Explorer le catalogue
+                            </a>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
+
         </div>
     {% endif %}
 {% endblock content %}
