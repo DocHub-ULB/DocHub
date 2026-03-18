@@ -21,13 +21,12 @@
     </head>
 
     <body>
-        <nav class="container-xl navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm w-100">
+            <div class="container-xl d-flex justify-content-between align-items-center">
                 <a class="navbar-brand d-flex align-items-center gap-2 position-relative pe-3" href="/">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-megaphone-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-11zm-1 .724c-2.067.95-4.539 1.481-7 1.656v6.237a25.222 25.222 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56V3.224zm-8 7.841V4.934c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009a68.14 68.14 0 0 1 .496.008 64 64 0 0 1 1.51.048zm1.39 1.081c.285.021.569.047.85.078l.253 1.69a1 1 0 0 1-.983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a65.81 65.81 0 0 1 1.692.064c.327.017.65.037.966.06z"/>
+                        <path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-11zm-1 .724c-2.067.95-4.539 1.481-7 1.656v6.237a25.222 25.222 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56V3.224zm-8 7.841V4.934c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009a68.14 68.14 0 0 1 .496.008 64 64 0 0 1 1.51.048zm1.39 1.081c.285.021.569.047.85.078l.253 1.69a1 1 0 0 1-.983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a65.81 65.81 0 0 1 1.692.064c.327.017.65.037.966.06z"/>
                     </svg>
                     DocHub
                     <span style="font-size: .5rem;"
@@ -35,75 +34,88 @@
                         2.0
                     </span>
                 </a>
+
+                <span class="text-white opacity-75 d-none d-md-block" style="font-size: 0.85rem;">
+                    🚀 Initiative étudiante par <a href="https://urlab.be" target="_blank" class="text-white fw-bold text-decoration-none">UrLab</a> & <a href="https://cercle-informatique.be/" target="_blank" class="text-white fw-bold text-decoration-none">CI</a>
+                </span>
             </div>
         </nav>
         <main class="container-xl mt-4">
             {% block content %}
-                <p>
-                    Bienvenue sur DocHub, un site de partage de documents et d’entraide étudiante pour l’ULB.<br>
-                    DocHub te permet d'échanger des notes, tes résumés,
-                    d'anciens examens et bien plus encore.
-                </p>
-                <p class="text-center">
-                    Tu n'as pas besoin de créer un compte, il suffit d'employer ton compte ULB.<br><br>
-                    <a href="{% login_url %}" id="login_link"
-                       class="btn btn-primary btn-lg d-inline-flex align-items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                  d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
-                            <path fill-rule="evenodd"
-                                  d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-                        </svg>
-                        Connexion avec l'ULB
-                    </a><br>
-                    {% if debug %}
-                        <small>Developpers could also <a href="/syslogin">syslogin</a></small>
-                    {% endif %}
-                </p>
-                <div class="mt-4">
-                    <div class="d-flex justify-content-around">
-                        <div class="text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
-                                 class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-                                <path
-                                    d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                                <path
-                                    d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                <div class="row justify-content-center mt-2">
+                    <div class="col-lg-8">
+
+                        <div class="alert alert-warning shadow-sm d-flex align-items-center mb-3 py-2" role="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-3" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                             </svg>
-                            <div class="fs-1">{{ documents|intcomma }}</div>
-                            Documents
+                            <div style="font-size: 0.9rem;">
+                                <strong>Info importante :</strong> DocHub est une initiative étudiante indépendante gérée par <a href="https://urlab.be" target="_blank" class="alert-link">UrLab</a> et le <a href="https://cercle-informatique.be/" target="_blank" class="alert-link">Cercle Informatique</a>.<br>
+                                L'<a href="https://uv.ulb.ac.be/" target="_blank" class="alert-link">Université Virtuelle</a> ou MonULB restent les seules sources de référence pour les documents officiels.
+                            </div>
                         </div>
-                        <div class="text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
-                                 class="bi bi-stack" viewBox="0 0 16 16">
-                                <path
-                                    d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"/>
-                                <path
-                                    d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"/>
-                            </svg>
-                            <div class="fs-1">{{ pages|intcomma }}</div>
-                            Pages
+
+                        <div class="card shadow-sm border-0 rounded-4 mb-3">
+                            <div class="card-body p-4 text-center">
+                                <h1 class="h4 fw-bold mb-2 text-primary">Bienvenue sur DocHub 👋</h1>
+                                <p class="text-muted mb-3 fs-6">
+                                    Le site de partage de documents et d’entraide étudiante numéro 1 à l’ULB.<br>
+                                    Échange tes notes, tes résumés, d'anciens examens et bien plus encore.
+                                </p>
+
+                                <div class="p-3 bg-light rounded-3 mb-2">
+                                    <p class="mb-2 fw-medium" style="font-size: 0.95rem;">Pas besoin de créer un compte, utilise ton compte ULB !</p>
+                                    <a href="{% login_url %}" id="login_link" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                                            <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                        </svg>
+                                        Connexion avec l'ULB
+                                    </a>
+                                    {% if debug %}
+                                        <div class="mt-2">
+                                            <small class="text-muted" style="font-size: 0.75rem;">Développeurs : <a href="/syslogin" class="text-decoration-none">syslogin</a></small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
-                                 class="bi bi-mortarboard" viewBox="0 0 16 16">
-                                <path
-                                    d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5ZM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46Z"/>
-                                <path
-                                    d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46l-3.892-1.556Z"/>
-                            </svg>
-                            <div class="fs-1">{{ users|intcomma }}</div>
-                            Etudiants
+
+                        <div class="row g-2 justify-content-center text-center">
+                            <div class="col-12 col-md-4">
+                                <div class="p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-text text-secondary mb-1" viewBox="0 0 16 16">
+                                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                    </svg>
+                                    <div class="fs-3 fw-bold text-dark lh-1">{{ documents|intcomma }}</div>
+                                    <div class="text-muted text-uppercase fw-semibold mt-1" style="font-size: 0.75rem;">Documents</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="p-2 border-start border-end">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-stack text-secondary mb-1" viewBox="0 0 16 16">
+                                        <path d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"/>
+                                        <path d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"/>
+                                    </svg>
+                                    <div class="fs-3 fw-bold text-dark lh-1">{{ pages|intcomma }}</div>
+                                    <div class="text-muted text-uppercase fw-semibold mt-1" style="font-size: 0.75rem;">Pages</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-mortarboard text-secondary mb-1" viewBox="0 0 16 16">
+                                        <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5ZM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46Z"/>
+                                        <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46l-3.892-1.556Z"/>
+                                    </svg>
+                                    <div class="fs-3 fw-bold text-dark lh-1">{{ users|intcomma }}</div>
+                                    <div class="text-muted text-uppercase fw-semibold mt-1" style="font-size: 0.75rem;">Étudiants</div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
-                <p class="mt-4">
-                    N'oublie pas que l'<a href="https://uv.ulb.ac.be/">Université Virtuelle</a>
-                    reste la source de référence pour accéder aux documents institutionnels et que
-                    l’ULB n’est pas responsable du contenu de ce site web,
-                    qui est maintenu et hébergé par des étudiants de <a href="https://urlab.be/">UrLab</a>.
-                </p>
             {% endblock content %}
         </main>
         <script async defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
