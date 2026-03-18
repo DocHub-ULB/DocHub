@@ -1,22 +1,28 @@
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm w-100 py-2 sticky-top" style="background-color: #00549A;">
-    <div class="container-xl d-flex align-items-center justify-content-between flex-wrap flex-lg-nowrap gap-2">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm w-100 py-2 bg-ulb sticky-top" style="z-index: 1050;">
+    <div class="container-xl d-flex justify-content-between align-items-center flex-wrap flex-lg-nowrap gap-2">
 
         <div class="d-flex align-items-center flex-shrink-0">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold pe-2 m-0 hover-scale-sm" href="/">
-                <div class="bg-white text-primary rounded d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-megaphone-fill" viewBox="0 0 16 16">
+            <a class="navbar-brand d-flex align-items-center gap-2 position-relative pe-3 hover-scale-sm m-0" href="/">
+                <div class="bg-white rounded d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#00549A"
+                         class="bi bi-megaphone-fill" viewBox="0 0 16 16">
                         <path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-11zm-1 .724c-2.067.95-4.539 1.481-7 1.656v6.237a25.222 25.222 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56V3.224zm-8 7.841V4.934c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009a68.14 68.14 0 0 1 .496.008 64 64 0 0 1 1.51.048zm1.39 1.081c.285.021.569.047.85.078l.253 1.69a1 1 0 0 1-.983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a65.81 65.81 0 0 1 1.692.064c.327.017.65.037.966.06z"/>
                     </svg>
                 </div>
-                <span class="fs-5 text-white">DocHub</span>
+                DocHub
+                <span style="font-size: .5rem;"
+                      class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-info text-dark">
+                    2.0
+                </span>
             </a>
 
-            <span class="d-none d-md-inline-block badge rounded-pill ms-2 fw-normal" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); font-size: 0.75rem;">
-                Initiative étudiante : <a href="https://urlab.be" target="_blank" class="text-white fw-bold text-decoration-none">UrLab</a> & <a href="https://cercle-informatique.be/" target="_blank" class="text-white fw-bold text-decoration-none">CI</a>
+            <span class="d-none d-md-inline-block badge rounded-pill ms-4 fw-normal"
+                  style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); font-size: 0.75rem;">
+                Initiative étudiante par <a href="https://urlab.be" target="_blank" class="text-white fw-bold text-decoration-none">UrLab</a> & <a href="https://cercle-informatique.be/" target="_blank" class="text-white fw-bold text-decoration-none">CI</a>
             </span>
         </div>
 
-        <div class="flex-grow-1 mx-lg-4 w-100 order-3 order-lg-2 mt-2 mt-lg-0">
+        <div class="flex-grow-1 mx-lg-4 w-100 order-3 order-lg-2 mt-2 mt-lg-0 position-relative" style="z-index: 1060;">
             <form class="d-flex m-0" onsubmit="event.preventDefault();">
                 <div class="input-group" data-controller="autocomplete" data-autocomplete-url-value="/search/courses/" data-autocomplete-min-length-value="3">
 
@@ -31,8 +37,8 @@
                            aria-label="search" data-autocomplete-target="input" style="background-color: #ffffff;">
 
                     <ul data-autocomplete-target="results"
-                        class="dropdown-menu show w-100 shadow-lg rounded-3 border-0 p-1"
-                        style="position: absolute; top: 100%; left: 0; margin-top: 0.5rem; max-height: 350px; overflow-y: auto;"
+                        class="dropdown-menu show w-100 border-0 p-1 search-results-menu"
+                        style="position: absolute; top: 100%; left: 0; margin-top: 0.5rem;"
                         hidden>
                     </ul>
                 </div>
@@ -47,7 +53,7 @@
 
             <div class="nav-item dropdown">
                 <a class="nav-link p-0 ms-1 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm hover-scale-sm"
+                    <div class="bg-white text-ulb rounded-circle d-flex align-items-center justify-content-center shadow-sm hover-scale-sm"
                          style="width: 36px; height: 36px; font-weight: bold;">
                         {{ user.initials }}
                     </div>

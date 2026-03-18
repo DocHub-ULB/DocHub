@@ -1,4 +1,4 @@
-{% load humanize login_url %}
+{% load humanize login_url static %}
 
 <!doctype html>
 
@@ -8,8 +8,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}DocHub - ULB{% endblock %}</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-              rel="stylesheet" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
         {% block opengraph %}
             <meta property="og:title" content="DocHub"/>
             <meta property="og:type" content="website"/>
@@ -21,7 +21,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm w-100 py-2" style="background-color: #00549A;">
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm w-100 py-2 bg-ulb">
             <div class="container-xl d-flex justify-content-between align-items-center">
 
                 <a class="navbar-brand d-flex align-items-center gap-2 position-relative pe-3" href="/">
@@ -61,7 +61,7 @@
 
                         <div class="card shadow-sm border-0 rounded-4 mb-3">
                             <div class="card-body p-4 text-center">
-                                <h1 class="h4 fw-bold mb-2" style="color: #00549A;">Bienvenue sur DocHub 👋</h1>
+                                <h1 class="h4 fw-bold mb-2 text-ulb">Bienvenue sur DocHub 👋</h1>
                                 <p class="text-muted mb-3 fs-6">
                                     Le site de partage de documents et d’entraide étudiante numéro 1 à l’ULB.<br>
                                     Échange tes notes, tes résumés, d'anciens examens et bien plus encore.
@@ -69,7 +69,7 @@
 
                                 <div class="p-3 bg-light rounded-3 mb-2">
                                     <p class="mb-2 fw-medium" style="font-size: 0.95rem;">Pas besoin de créer un compte, utilise ton compte ULB !</p>
-                                    <a href="{% login_url %}" id="login_link" class="btn d-inline-flex align-items-center gap-2 px-4 shadow-sm" style="background-color: #00549A; color: white; border-color: #00549A;">
+                                    <a href="{% login_url %}" id="login_link" class="btn btn-ulb d-inline-flex align-items-center gap-2 px-5 py-2 shadow-sm rounded-pill">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
                                             <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
