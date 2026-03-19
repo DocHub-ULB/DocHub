@@ -15,7 +15,7 @@ def index(request):
     if request.user.is_authenticated:
         following_course = request.user.following_courses
         following = request.user.following_courses
-        ndocs = max(5, len(following))
+        ndocs = max(12, len(following))
         docs = (
             Document.objects.filter(course__in=following)
             .select_related("user")

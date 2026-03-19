@@ -129,7 +129,7 @@
                 </div>
 
                 {% if following_course and recent_docs %}
-                    <div class="pe-2 pb-2 custom-scrollbar flex-grow-1" style="min-height: 350px; max-height: calc(100vh - 240px); overflow-y: auto; overflow-x: hidden;">
+                    <div class="pe-2 pb-2 flex-grow-1">
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             {% for document in recent_docs %}
                                 <div class="col" data-course-filter-target="filterable" data-filter-key='{{ document.name }}' data-tags="{{ document.tags.all|join:' ' }}">
