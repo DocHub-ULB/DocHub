@@ -114,7 +114,13 @@ class Command(BaseCommand):
                 elif "master" in program["name"].lower() or program["slug"].startswith(
                     "MA"
                 ):
-                    program_type = Category.CategoryType.MASTER
+                    if (
+                        "enseignement" in program["name"].lower()
+                        or "-ES" in program["slug"]
+                    ):
+                        program_type = Category.CategoryType.AGGREGATION
+                    else:
+                        program_type = Category.CategoryType.MASTER
                 elif "certificat" in program["name"].lower():
                     program_type = Category.CategoryType.CERTIFICATE
                 elif "agrégation" in program["name"].lower():

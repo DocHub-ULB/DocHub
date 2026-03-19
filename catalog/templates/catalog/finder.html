@@ -23,14 +23,6 @@
         </div>
     {% else %}
         <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">
-
-                Rentrée 2023-2024: Nouveaux cours !
-                <span style="font-size: .5rem;transform: translate(0, -5px);" class="badge rounded-pill bg-danger">
-                    NEW
-                </span>
-
-            </h4>
             Le programme de cours de l'ULB a parfois beaucoup changé au cours des années.
             Si tu ne trouves plus des documents des années précédentes,
             <a href="/catalog/f/archives/">regarde dans les archives</a> !
@@ -73,7 +65,7 @@
                         {% endif %}
                         {% for subcat in type.list %}
                             <li>
-                                <a href="{{ column.category_prefix }}/{{ subcat.slug }}"
+                                <a href="{{ column.category_prefix }}/{{ subcat.slug }}/"
                                    class="text-body text-decoration-none">
                                     <div class="d-flex align-items-center my-1 ">
                                         <div class="flex-shrink-0 px-2 py-1">

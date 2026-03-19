@@ -99,6 +99,8 @@ ignore = [
     "PLC1901", # if x != "" is not the same as if x
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
     "SIM103", # Return the condition directly
+    "PLR0912", # Too many branches
+    "PLR0915", # Too many statements
 ]
 
 [tool.ruff.lint.per-file-ignores]

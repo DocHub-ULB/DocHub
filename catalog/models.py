@@ -56,6 +56,8 @@ class Category(models.Model):
             "Certificat d'aptitude pédagogique approprié à l'enseignement supérieur - ",
             "",
         )
+        name = name.replace("Master en enseignement section ", "Enseignement ")
+
         name = name.removeprefix("Bachelier en ").removeprefix("Bachelier : ")
         name = (
             name.removeprefix("Master en ")
@@ -89,7 +91,14 @@ class Category(models.Model):
 
         name = name.replace(", option Bruxelles", "")
         name = name.replace("(Site de Charleroi)", "(Charleroi)")
+        name = name.replace("(Site de Mons)", "(Mons)")
         name = name.replace("(Général à finalité ", "(")
+
+        name = name.replace("option SOIR", "(soir)")
+        name = name.replace("option JOUR", "")
+
+        name = name.replace("), (", ", ")
+        name = name.removesuffix(", ")
 
         return name
 

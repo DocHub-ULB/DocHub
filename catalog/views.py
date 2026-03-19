@@ -144,7 +144,11 @@ def finder(request, slugs: str = ""):
                                 type=Category.CategoryType.MASTER_SPECIALIZATION,
                                 then=Value(2),
                             ),
-                            default=Value(3),
+                            When(
+                                type=Category.CategoryType.AGGREGATION,
+                                then=Value(3),
+                            ),
+                            default=Value(4),
                         ),
                         "name",
                     ).all()
