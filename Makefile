@@ -1,20 +1,34 @@
 PY=uv run
 
-init: database
+.PHONY: init database
 
+init: database
 
 database:
 	$(PY) manage.py migrate -v 0
+	@echo "Creating root category (ULB)"
+	@echo "from catalog.models import Category; Category.objects.get_or_create(slug='ULB', defaults={'name': 'ULB'})" | $(PY) manage.py shell > /dev/null
 	@echo "Creating user ${USER} with password 'test'"
-	@echo "from users.models import User; u=User.objects.get_or_create(netid='${USER}', first_name='Gaston', last_name='Lagaffe', email='${USER}@fake.ulb.ac.be'); u[0].set_password('test'); u[0].save()" | $(PY) manage.py shell > /dev/null
-
+	@echo "from users.models import User; u, _ = User.objects.get_or_create(netid='${USER}', defaults={'first_name': 'Gaston', 'last_name': 'Lagaffe', 'email': '${USER}@fake.ulb.ac.be'}); u.set_password('test'); u.is_moderator=True; u.save()" | $(PY) manage.py shell > /dev/null
 	@echo "Creating user blabevue with password 'test'"
-	@echo "from users.models import User; u=User.objects.get_or_create(netid='blabevue', first_name='Bertrand', last_name='Labevue', email='blabevue@fake.ulb.ac.be'); u[0].set_password('test'); u[0].save()" | $(PY) manage.py shell > /dev/null
-
+	@echo "from users.models import User; u, _ = User.objects.get_or_create(netid='blabevue', defaults={'first_name': 'Bertrand', 'last_name': 'Labevue', 'email': 'blabevue@fake.ulb.ac.be'}); u.set_password('test'); u.save()" | $(PY) manage.py shell > /dev/null
 	@echo "Creating some tags"
-	@echo "[__import__('tags').models.Tag.objects.create(name=x) for x in ('syllabus', 'officiel', 'examen', 'resume', 'synthese', 'notes')]" | $(PY) manage.py shell > /dev/null
+	@echo "from tags.models import Tag; [Tag.objects.get_or_create(name=x) for x in ('syllabus', 'officiel', 'examen', 'resume', 'synthese', 'notes')]" | $(PY) manage.py shell > /dev/null
+	
+	@echo "Loading tree and courses..."
+	@if [ -f "csv/programs.json" ]; then \
+		$(PY) manage.py load_tree; \
+	else \
+		echo "Warning: csv/programs.json not found, skipping load_tree"; \
+	fi
+	
+	@if [ -f "csv/courses.json" ]; then \
+		$(PY) manage.py load_courses; \
+	else \
+		echo "Warning: csv/courses.json not found, skipping load_courses"; \
+	fi
 
-	@echo "Adding some fake document"
+	@echo "Adding some fake documents"
 	$(PY) manage.py create_fake_doc
-
-	@echo "Your DB should be ready now. Run the server with ./manage.py runserver"
+	@echo ""
+	@echo "Done! Run: uv run python manage.py runserver"
