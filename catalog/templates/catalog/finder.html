@@ -1,121 +1,129 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Liste des cours{% endblock %}
+{% block title %}Liste des cours - DocHub{% endblock %}
 
 {% block content %}
-    {% comment %}
-    <nav aria-label="breadcrumb" class="d-none d-md-block">
-        <ol class="breadcrumb">
-            {% for column in columns %}
-                <li class="breadcrumb-item"><a href="{{ column.category_prefix }}/">{{ column.category.name }}</a></li>
-            {% endfor %}
-        </ol>
-    </nav>
-    {% endcomment %}
+
     {% if is_archive %}
-        <div class="alert alert-info" role="alert">
-            <h4 class="alert-heading">
-                Archives
-            </h4>
-            Le programme de cours de l'ULB a parfois beaucoup changé au cours des années.
-            Tu te trouves ici dans les archives des années précédentes.
+        <div class="alert border-0 shadow-sm rounded-4 p-3 p-md-4 mb-4 d-flex gap-3 align-items-center" style="background-color: #f8f9fa; border-left: 5px solid #6c757d !important;" role="alert">
+            <div class="bg-secondary bg-opacity-10 p-3 rounded-circle text-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+                    <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
+                </svg>
+            </div>
+            <div class="flex-grow-1">
+                <h4 class="alert-heading fs-5 fw-bold mb-1 text-secondary">Navigation dans les Archives</h4>
+                <p class="mb-0 text-muted" style="font-size: 0.9rem;">
+                    Tu consultes l'ancien programme de cours. Les dossiers et les intitulés peuvent différer du programme actuel.
+                </p>
+            </div>
+            <div class="flex-shrink-0 d-none d-md-block">
+                <a href="{% url 'catalog:finder_root' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold">
+                    Retour au programme actuel
+                </a>
+            </div>
         </div>
     {% else %}
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">
-
-                Rentrée 2023-2024: Nouveaux cours !
-                <span style="font-size: .5rem;transform: translate(0, -5px);" class="badge rounded-pill bg-danger">
-                    NEW
-                </span>
-
-            </h4>
-            Le programme de cours de l'ULB a parfois beaucoup changé au cours des années.
-            Si tu ne trouves plus des documents des années précédentes,
-            <a href="/catalog/f/archives/">regarde dans les archives</a> !
+        <div class="alert border-0 shadow-sm rounded-4 p-3 p-md-4 mb-4 d-flex gap-3 align-items-start" style="background-color: #d1e7dd; color: #0f5132;" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-stars mt-1 flex-shrink-0" viewBox="0 0 16 16">
+                <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.734 1.734 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"/>
+            </svg>
+            <div>
+                <h4 class="alert-heading fs-5 fw-bold mb-1 d-flex align-items-center gap-2">
+                    Nouvelle année, nouveau programme !
+                    <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">NEW</span>
+                </h4>
+                <p class="mb-0" style="font-size: 0.95rem;">
+                    Le programme de cours de l'ULB évolue. Si tu ne trouves plus les documents d'un cours spécifique, n'hésite pas à <a href="/catalog/f/archives/" class="alert-link fw-bold text-decoration-underline">fouiller dans nos archives</a> !
+                </p>
+            </div>
         </div>
     {% endif %}
-    <div class="d-flex gap-2">
+
+    <div class="d-flex gap-3 align-items-stretch mb-4" style="height: calc(100vh - 250px); min-height: 60vh;">
+
         {% for column in columns %}
-            <div
-                class="border p-2 rounded flex-grow-1 flex-basis-0 w-100 {% if not forloop.last %}d-none d-md-block{% endif %}">
-                <h5>
-                    {% if forloop.last and not forloop.first %}
-                        <div class="d-inline-flex d-md-none hover-scale">
-                            <a href="../">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                     class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+            <div class="card border-0 shadow-sm rounded-4 flex-grow-1 flex-basis-0 w-100 overflow-hidden h-100 {% if not forloop.last %}d-none d-md-flex flex-column{% else %}d-flex flex-column{% endif %}">
+
+                <div class="card-header bg-white border-bottom px-3 py-3 flex-shrink-0 custom-scrollbar d-flex flex-column" style="height: 85px; overflow-y: auto;">
+                    <div class="d-flex align-items-start gap-2 w-100 my-auto">
+                        {% if forloop.last and not forloop.first %}
+                            <a href="../" class="d-inline-flex d-md-none text-secondary hover-scale-sm transition-all flex-shrink-0 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
                                 </svg>
                             </a>
-                        </div>
-                    {% endif %}
-                    {{ column.category.name }}
-                </h5>
-                <ul class="p-0" style="list-style: none;">
-                    {% regroup column.children by get_type_display as children_groups %}
-                    {% for type in children_groups %}
-                        {% if type.grouper != "OTHE" %}
-                            <li>
-                                <div class="d-flex align-items-center gap-1 fs-5 border-bottom">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                         fill="currentColor" class="bi bi-mortarboard" viewBox="0 0 16 16">
-                                        <path
-                                            d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5ZM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46Z"/>
-                                        <path
-                                            d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46l-3.892-1.556Z"/>
-                                    </svg>
-                                    <div>{{ type.grouper }}{{ type.list|pluralize }}</div>
-                                </div>
-                            </li>
                         {% endif %}
-                        {% for subcat in type.list %}
-                            <li>
-                                <a href="{{ column.category_prefix }}/{{ subcat.slug }}"
-                                   class="text-body text-decoration-none">
-                                    <div class="d-flex align-items-center my-1 ">
-                                        <div class="flex-shrink-0 px-2 py-1">
+                        <h2 class="fs-6 fw-bold mb-0 text-ulb w-100" style="line-height: 1.35;">
+                            {{ column.category.name }}
+                        </h2>
+                    </div>
+                </div>
 
-                                        </div>
-                                        <div class="flex-grow-1 hover-underline">
-                                            {{ subcat.better_name|capfirst }}
-                                        </div>
+                <div class="card-body p-0 custom-scrollbar flex-grow-1" style="overflow-y: auto; min-height: 0;">
+                    <div class="list-group list-group-flush">
+
+                        {% regroup column.children by get_type_display as children_groups %}
+
+                        {% for type in children_groups %}
+                            {% if type.grouper != "OTHE" %}
+                                <div class="list-group-item bg-light text-muted fw-bold text-uppercase py-2 border-bottom" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-mortarboard-fill" viewBox="0 0 16 16">
+                                            <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z"/>
+                                            <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Z"/>
+                                        </svg>
+                                        {{ type.grouper }}{{ type.list|pluralize }}
                                     </div>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for course in column.category.course_set.all %}
-                        <li>
-                            <a href="{% url "catalog:course_show" course.slug %}"
-                               class="text-body text-decoration-none">
-                                <div class="d-flex align-items-center my-1 border-bottom">
-                                    <div class="flex-shrink-0 px-2 py-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor"
-                                             class="bi bi-folder" viewBox="0 0 16 16">
-                                            <path
-                                                d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                                </div>
+                            {% endif %}
+
+                            {% for subcat in type.list %}
+                                <a href="{{ column.category_prefix }}/{{ subcat.slug }}" class="list-group-item list-group-item-action border-bottom-0 d-flex align-items-center gap-3 py-3 hover-bg-light transition-all">
+                                    <div class="text-ulb opacity-75 flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-folder2" viewBox="0 0 16 16">
+                                            <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v5a.5.5 0 0 1-.5.5H1.5a.5.5 0 0 1-.5-.5v-5zm1 1v5h12v-5H2.5z"/>
                                         </svg>
                                     </div>
-                                    <div class="flex-grow-1">
-                                        <span class="hover-underline">{{ course.name }}</span>
-                                        <small class="text-muted text-nowrap">{{ course.slug|upper }}</small>
+                                    <div class="flex-grow-1 fw-medium text-dark text-wrap" style="font-size: 0.95rem;">
+                                        {{ subcat.better_name|capfirst }}
                                     </div>
+                                    <div class="text-muted flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        {% endfor %}
+
+                        {% for course in column.category.course_set.all %}
+                            <a href="{% url 'catalog:course_show' course.slug %}" class="list-group-item list-group-item-action border-bottom d-flex align-items-center gap-3 py-3 bg-white hover-bg-light transition-all">
+                                <div class="text-secondary bg-light rounded p-2 flex-shrink-0 shadow-sm border border-secondary border-opacity-10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
+                                        <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <div class="text-dark fw-bold text-wrap" style="font-size: 0.95rem;">{{ course.name }}</div>
+                                    <div class="text-muted small fw-medium mt-1">{{ course.slug|upper }}</div>
                                 </div>
                             </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endfor %}
-        {% for column in extra_columns %}
-            <div class="border flex-grow-1 flex-basis-0 w-100 d-none d-md-block">
+                        {% endfor %}
 
+                    </div>
+                </div>
             </div>
         {% endfor %}
+
+        {% for column in extra_columns %}
+            <div class="card border-0 bg-transparent flex-grow-1 flex-basis-0 w-100 d-none d-md-block border-end border-opacity-25" style="border-style: dashed !important;">
+            </div>
+        {% endfor %}
+
     </div>
 
 {% endblock content %}
