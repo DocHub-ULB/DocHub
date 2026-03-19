@@ -1,23 +1,31 @@
 {% extends "noauth.html" %}
 
-{% block title %}{{ document.name }} (dans {{ document.course.slug|upper }}) - DocHub{% endblock %}
+{% block title %}{{ document.name }} ({{ document.course.slug|upper }}) - DocHub{% endblock %}
 
 {% block opengraph %}
     <meta property="og:title" content="{{ document.name }}" />
-    <meta property="article:tag" content="{{ document.tags.all|join:"," }}" />
+    <meta property="article:tag" content="{{ document.tags.all|join:',' }}" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="{{ document.name }} est un {{ document.file_type }} de {{ document.pages }} pages et est taggé dans les catégories : {{ document.tags.all|join:"," }}" />
+    <meta property="og:description" content="{{ document.name }} est un document de {{ document.pages }} pages taggé dans : {{ document.tags.all|join:', ' }}" />
 {% endblock opengraph %}
 
 {% block preview %}
-    <h1 class="text-center">{{ document.course.slug|upper }}</h1>
+    <div class="text-center">
+        <h1 class="h3 fw-bold mb-3">{{ document.course.slug|upper }}</h1>
 
-    <p>
-        Un étudiant a uploadé le document
-        <strong>"{{ document.name }}"</strong>
-        dans le cours "{{ document.course.name }}" ({{ document.course.slug|upper }}).
-    </p>
-    <p>
-        Ce document {{ document.file_type }} fait {{ document.pages }} pages.
-    </p>
+        <div class="alert alert-secondary border-0 bg-light p-3 mb-0" style="font-size: 0.95rem;">
+            <p class="mb-2">
+                Un étudiant a partagé le document <br>
+                <strong class="fs-5 text-dark">"{{ document.name }}"</strong><br>
+                dans le cours <strong>{{ document.course.name }}</strong> ({{ document.course.slug|upper }}).
+            </p>
+            <p class="mb-0 text-muted small">
+                Ce document
+                {% if document.file_type %}
+                    <strong class="text-uppercase">{{ document.file_type|slice:"1:" }}</strong>
+                {% endif %}
+                fait <strong>{{ document.pages }}</strong> page{{ document.pages|pluralize }}.
+            </p>
+        </div>
+    </div>
 {% endblock preview %}
