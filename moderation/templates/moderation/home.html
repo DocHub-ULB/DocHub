@@ -1,34 +1,61 @@
 {% extends "base.html" %}
 
-{% block title %}Modération{% endblock %}
+{% block title %}Espace Modération - DocHub{% endblock %}
 
 {% block header %}
-    <header class="container-xl py-4 border-bottom bg-light">
-        <h1 class="d-flex align-items-center gap-2">
-            Modération
-        </h1>
-        <a class="btn btn-outline-success btn-sm d-inline-flex align-items-center gap-1"
-           href="">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                 class="bi bi-person-fill-add" viewBox="0 0 16 16">
-                <path
-                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                <path
-                    d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
-            </svg>
-            <span>Ajouter un modérateur</span>
-        </a>
-        <a class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1"
-           href="">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill"
-                 viewBox="0 0 16 16">
-                <path
-                    d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
-            </svg>
-            <span>Liste des modérateurs</span>
-        </a>
-    </header>
+    <div class="bg-ulb text-white py-4 shadow-sm mb-4" style="background-image: linear-gradient(rgba(0, 84, 154, 0.9), rgba(0, 84, 154, 0.95));">
+        <div class="container-xl d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center text-ulb flex-shrink-0" style="width: 55px; height: 55px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-shield-lock-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="fs-3 fw-bold mb-1">Espace Modération</h1>
+                    <p class="mb-0 text-white-50" style="font-size: 0.9rem;">Gérez les accès, les utilisateurs et le contenu de la plateforme.</p>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <a href="" class="btn btn-light rounded-pill d-inline-flex align-items-center gap-2 shadow-sm hover-scale-sm fw-medium text-ulb px-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
+                    </svg>
+                    Ajouter un modérateur
+                </a>
+                <a href="" class="btn btn-outline-light rounded-pill d-inline-flex align-items-center gap-2 hover-scale-sm fw-medium px-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                    </svg>
+                    Liste des modérateurs
+                </a>
+            </div>
+
+        </div>
+    </div>
 {% endblock header %}
 
 {% block content %}
+    <div class="row justify-content-center mt-2 mb-5">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 bg-white text-center p-5">
+
+                <div class="bg-light rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-4 mx-auto text-secondary" style="width: 70px; height: 70px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"/>
+                    </svg>
+                </div>
+
+                <h2 class="fs-4 fw-bold text-dark mb-3">Prêt à modérer !</h2>
+
+                <p class="text-muted mx-auto mb-0" style="max-width: 500px; line-height: 1.6;">
+                    Utilise les boutons situés dans l'en-tête pour ajouter ou gérer les membres de l'équipe de modération de DocHub.
+                </p>
+
+            </div>
+        </div>
+    </div>
 {% endblock content %}
