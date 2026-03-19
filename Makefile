@@ -14,9 +14,20 @@ database:
 	@echo "from users.models import User; u, _ = User.objects.get_or_create(netid='blabevue', defaults={'first_name': 'Bertrand', 'last_name': 'Labevue', 'email': 'blabevue@fake.ulb.ac.be'}); u.set_password('test'); u.save()" | $(PY) manage.py shell > /dev/null
 	@echo "Creating some tags"
 	@echo "from tags.models import Tag; [Tag.objects.get_or_create(name=x) for x in ('syllabus', 'officiel', 'examen', 'resume', 'synthese', 'notes')]" | $(PY) manage.py shell > /dev/null
+	
 	@echo "Loading tree and courses..."
-	$(PY) manage.py load_tree
-	$(PY) manage.py load_courses
+	@if [ -f "csv/programs.json" ]; then \
+		$(PY) manage.py load_tree; \
+	else \
+		echo "Warning: csv/programs.json not found, skipping load_tree"; \
+	fi
+	
+	@if [ -f "csv/courses.json" ]; then \
+		$(PY) manage.py load_courses; \
+	else \
+		echo "Warning: csv/courses.json not found, skipping load_courses"; \
+	fi
+
 	@echo "Adding some fake documents"
 	$(PY) manage.py create_fake_doc
 	@echo ""
