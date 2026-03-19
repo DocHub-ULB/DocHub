@@ -9,17 +9,22 @@
 {% endblock opengraph %}
 
 {% block preview %}
-    <h1 class="text-center">{{ course.slug|upper }}</h1>
-    <p>
-        Le cours de <strong>{{ course.name }} ({{ course.slug|upper }})</strong> contient
-        {{ documents.count }} documents
-        {% if threads.count > 2 %}
-            et {{ threads.count }} discussions.
-        {% endif %}
-    </p>
-    <p>
-        {% if followers_count > 1 %}
-            {{ followers_count }} personnes sont abonnées à ce cours.
-        {% endif %}
-    </p>
+    <div class="text-center">
+        <h1 class="h3 fw-bold mb-3">{{ course.slug|upper }}</h1>
+
+        <div class="alert alert-secondary border-0 bg-light p-3 mb-0" style="font-size: 0.95rem;">
+            <p class="mb-1">
+                Le cours de <strong>{{ course.name }} ({{ course.slug|upper }})</strong> contient
+                <strong>{{ documents.count }}</strong> document{{ documents.count|pluralize }}
+                {% if threads.count > 2 %}
+                    et <strong>{{ threads.count }}</strong> discussions.
+                {% endif %}
+            </p>
+            {% if followers_count > 1 %}
+                <p class="mb-0 text-muted small">
+                    {{ followers_count }} personnes sont abonnées à ce cours.
+                </p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock preview %}
