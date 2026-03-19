@@ -1,84 +1,117 @@
 {% extends "base.html" %}
 {% load permissions %}
+
 {% block title %}Éditer {{ doc.name }}{% endblock %}
 
 {% block head %}
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.min.css"
-          rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" crossorigin="anonymous">
 {% endblock head %}
 
 {% block content %}
-    <form action="{% url 'document_edit' doc.id %}" method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
+    <div class="container-xl py-4 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Titre du document</label>
-            {{ form.name }}
-            <div class="form-text">
-                Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
-            </div>
-        </div>
+                <a href="{% url 'document_show' doc.id %}" class="text-muted text-decoration-none d-inline-flex align-items-center gap-1 mb-4 hover-underline fw-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg>
+                    Retour au document
+                </a>
 
-        <div class="mb-3">
-            <label for="id_tags" class="form-label">Tags</label>
-            {{ form.tags }}
-            <div class="form-text">
-                Sélectionne si possible les tags qui correspondent à ton document.
-            </div>
-        </div>
-
-        {% if request.user|has_moderation_perm_on:doc %}
-            <div class="card ">
-                <h5 class="card-header">Modération</h5>
-                <div class="card-body">
-                    <p class="card-text">
-                        <div class="form-check form-switch">
-                            {{ form.staff_pick }}
-                            <label class="form-check-label" for="id_staff_pick">
-                                Staff pick
-                            </label>
-                            <div class="form-text">
-                                En tant que modérateur, tu peux marquer ce document comme un "staff pick".<br/>
-                                Cela signifie que l'équipe de modération de DocHub considère ce document comme
-                                étant d'une grande qualité et méritant d'être mis en avant.<br/>
-                                Il apparaitra dans la liste des documents avec cette icône :
-                                <svg title="Staff pick" xmlns="http://www.w3.org/2000/svg"
-                                     width="16" height="16" fill="currentColor"
-                                     class="bi bi-patch-check-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
-                                </svg>
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 fw-bold text-dark mb-0">Paramètres du document</h1>
+                </div>
+                {% if doc.state == "DONE" or doc.state == "REPAIRED" %}
+                    <div class="card border-0 shadow-sm rounded-4 mb-4 bg-light">
+                        <div class="card-body p-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                            <div>
+                                <h3 class="fs-6 fw-bold mb-1 d-flex align-items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/><path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/></svg>
+                                    Fichier source
+                                </h3>
+                                <p class="text-muted small mb-0">Uploader une nouvelle version du fichier sans perdre les votes et les tags.</p>
+                            </div>
+                            <div>
+                                <a href="{% url 'document_reupload' doc.id %}" class="btn btn-outline-primary rounded-pill fw-medium text-nowrap">
+                                    Remplacer le fichier
+                                </a>
                             </div>
                         </div>
-                        <div class="mb-3">
+                    </div>
+                {% endif %}
 
+                <form action="{% url 'document_edit' doc.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body p-4 p-md-5">
+                            <h3 class="fs-5 fw-bold mb-4">Informations générales</h3>
+
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-bold text-dark">Titre du document</label>
+                                {{ form.name }}
+                                <div class="form-text small">Essaye de rendre le titre clair pour que d'autres puissent trouver ton document facilement.</div>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="id_tags" class="form-label fw-bold text-dark">Tags</label>
+                                {{ form.tags }}
+                                <div class="form-text small">Sélectionne les tags qui correspondent à ton document.</div>
+                            </div>
                         </div>
-                    </p>
-                </div>
+                    </div>
+
+                    {% if request.user|has_moderation_perm_on:doc %}
+                        <div class="card border-warning border-opacity-50 shadow-sm rounded-4 mb-4 bg-warning bg-opacity-10">
+                            <div class="card-body p-4">
+                                <h5 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-shield-lock-fill text-warning" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5z"/></svg>
+                                    Outils de Modération
+                                </h5>
+
+                                <div class="form-check form-switch d-flex align-items-center gap-3 ps-0 mb-0">
+                                    <div class="flex-grow-1">
+                                        <label class="form-check-label fw-bold text-dark" for="id_staff_pick">Staff pick</label>
+                                        <p class="text-muted small mb-0 mt-1">
+                                            Marquer ce document comme étant d'une grande qualité. Il apparaitra avec l'icône
+                                            <svg title="Staff pick" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#ffc107" class="bi bi-patch-check-fill d-inline" viewBox="0 0 16 16"><path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/></svg>
+                                            dans la liste.
+                                        </p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        {{ form.staff_pick }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mt-5">
+
+                        <div class="order-2 order-sm-1">
+                            {% if doc.hidden %}
+                                <button type="submit" name="unhide" class="btn btn-outline-success rounded-pill px-4 fw-medium hover-scale-sm" data-turbo-confirm="Es-tu certain de vouloir rendre visible ce document ?">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill me-1" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg>
+                                    Rendre visible
+                                </button>
+                            {% else %}
+                                <button type="submit" name="hide" class="btn btn-outline-danger rounded-pill px-4 fw-medium hover-scale-sm" data-turbo-confirm="Es-tu certain de vouloir cacher ce document ?">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill me-1" viewBox="0 0 16 16"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/></svg>
+                                    Cacher le document
+                                </button>
+                            {% endif %}
+                        </div>
+
+                        <div class="order-1 order-sm-2 text-end">
+                            <button type="submit" name="update" class="btn btn-ulb rounded-pill px-5 py-2 shadow-sm fw-bold hover-scale-sm w-100 w-sm-auto">
+                                Mettre à jour
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+
             </div>
-
-        {% endif %}
-
-        <!--
-        <div>
-            <label for="added" class="form-label">Ajouté par</label>
-
-            <input type="input" class="form-control" id="added" value="{{ doc.user }}" disabled>
         </div>
-        -->
-        <div class="mt-3">
-            <input type="submit" class="btn btn-success" name="update" value="Mettre à jour"/>
-            {% if doc.hidden %}
-                <input type="submit" class="btn btn-link text-primary"
-                       name="unhide" value="Rendre visible le document"
-                       data-turbo-confirm="Est-tu certain de vouloir rendre visible ce document ?"/>
-            {% else %}
-                <input type="submit" class="btn btn-link text-danger"
-                       name="hide" value="Cacher le document"
-                       data-turbo-confirm="Est-tu certain de vouloir cacher ce document ?"/>
-            {% endif %}
-        </div>
-    </form>
-
+    </div>
 {% endblock content %}

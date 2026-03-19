@@ -16,33 +16,48 @@
     <dialog id="reportDialog"
             data-controller="modal"
             data-action="click->modal#clickOutside"
-            class="rounded shadow-lg border-0 p-0">
+            class="rounded-4 shadow-lg border-0 p-0"
+            style="max-width: 550px; width: 95%; backdrop-filter: blur(3px);">
         {% include "documents/document_report.html#report_card" %}
     </dialog>
 {% endpartialdef %}
 
 {% partialdef report_card %}
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">Signaler un problème</h5>
+    <div class="card border-0 rounded-4 overflow-hidden">
+
+        <div class="card-header bg-warning bg-opacity-25 border-0 p-4 d-flex align-items-center justify-content-between">
+            <h5 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-flag-fill text-warning" viewBox="0 0 16 16">
+                    <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>
+                </svg>
+                Signaler un problème
+            </h5>
+            <button type="button" class="btn-close" data-action="click->modal#close" aria-label="Fermer"></button>
         </div>
 
         <form action="{% url 'document_report' document.id %}" method="post">
             {% csrf_token %}
-
             {{ form.non_field_errors }}
-            <div class="card-body">
-                <div class="mb-3">
+
+            <div class="card-body p-4">
+                <p class="text-muted small mb-4">
+                    Qu'est-ce qui ne va pas avec le document <strong>{{ document.name }}</strong> ? Ton signalement aidera nos modérateurs à garder DocHub propre.
+                </p>
+
+                <div class="mb-4">
                     {% load documents_tags %}
                     {% for choice_value, choice_label in form.fields.problem_type.choices %}
                         {% if choice_value %}
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="problem_type"
+                            <div class="position-relative border rounded-3 mb-2 p-3 hover-bg-light transition-all">
+                                <input class="form-check-input position-absolute top-50 start-0 translate-middle-y ms-3 cursor-pointer"
+                                       type="radio" name="problem_type"
                                        id="problem_{{ choice_value }}" value="{{ choice_value }}"
-                                       {% if form.problem_type.value == choice_value %}checked{% endif %}>
-                                <label class="form-check-label" for="problem_{{ choice_value }}">
-                                    <div class="fw-semibold">{{ choice_label }}</div>
-                                    <div class="text-muted small">
+                                       {% if form.problem_type.value == choice_value %}checked{% endif %}
+                                       required style="transform: scale(1.2);">
+
+                                <label class="form-check-label stretched-link ms-4 ps-2 d-block cursor-pointer" for="problem_{{ choice_value }}">
+                                    <div class="fw-bold text-dark">{{ choice_label }}</div>
+                                    <div class="text-muted mt-1" style="font-size: 0.85rem; line-height: 1.4;">
                                         {{ choice_value|problem_type_description }}
                                     </div>
                                 </label>
@@ -51,22 +66,21 @@
                     {% endfor %}
                 </div>
 
-                <div class="mb-3">
-                    <label for="id_description" class="form-label">Commentaire (optionnel)
-                        <div class="form-text small">
-                            Tu peux ajouter des détails supplémentaires pour nous aider à comprendre le problème.
-                        </div>
-                    </label>
-
+                <div class="mb-2">
+                    <label for="{{ form.description.id_for_label }}" class="form-label fw-bold text-dark mb-0">Commentaire (optionnel)</label>
+                    <p class="form-text small text-muted mt-1 mb-2">
+                        Ajoute des détails pour aider l'équipe de modération à comprendre le souci.
+                    </p>
                     {{ form.description }}
-
                 </div>
             </div>
 
-            <div class="card-footer d-flex gap-2 justify-content-end">
-                <button type="button" data-action="click->modal#close" class="btn btn-outline-secondary">Annuler</button>
-                <button type="submit" class="btn btn-primary">
-                    Envoyer
+            <div class="card-footer bg-light border-top-0 p-3 d-flex gap-2 justify-content-end">
+                <button type="button" data-action="click->modal#close" class="btn btn-light border rounded-pill px-4 fw-medium hover-scale-sm">
+                    Annuler
+                </button>
+                <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm hover-scale-sm">
+                    Envoyer le signalement
                 </button>
             </div>
         </form>
