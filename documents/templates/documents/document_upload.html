@@ -193,7 +193,8 @@
 
     <form class="mt-5 text-muted"
           action="{% url 'document_submit_bulk' course.slug %}"
-          method="post">
+          method="post"
+          data-turbo="false">
         {% csrf_token %}
 
         <div class="mb-3">
