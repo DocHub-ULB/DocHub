@@ -309,13 +309,19 @@ def submit_bulk(request, slug):
                 url=form.cleaned_data["url"], course=course, user=request.user
             )
 
-            return render(
-                request,
-                "documents/document_bulk.html",
-                {
-                    "course": course,
-                },
+            success_url = (
+                reverse("document_submit_bulk", args=[course.slug]) + "?success=1"
             )
+            return HttpResponseRedirect(success_url)
+
+    if request.GET.get("success") == "1":
+        return render(
+            request,
+            "documents/document_bulk.html",
+            {
+                "course": course,
+            },
+        )
 
     return HttpResponseRedirect(reverse("document_put", args=[course.slug]))
 
