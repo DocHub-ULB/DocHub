@@ -1,9 +1,12 @@
 import csv
+import logging
 
 from django.core.management.base import BaseCommand
 
 import requests
 from bs4 import BeautifulSoup
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -17,9 +20,9 @@ class Command(BaseCommand):
 
         courses = []
         fails = []
-        print(f"Found {len(options)} options")
+        logger.info("Found %s options", len(options))  # debug car verbeux
         for option in options:
-            print(f"..{option.text}")
+            logger.debug("..%s", option.text)
             value = option["value"]
             response = requests.get(
                 f"https://uv.ulb.ac.be/course/index.php?categoryid={value}&browse=courses&perpage=1000&page=0"
@@ -27,7 +30,7 @@ class Command(BaseCommand):
             soup = BeautifulSoup(response.content, "html.parser")
 
             course_divs = soup.find_all("div", {"class": "coursebox"})
-            print(f"Found {len(courses)} in {option.text}")
+            logger.info("Found %s in %s", len(courses), option.text)
 
             for course in course_divs:
                 try:
@@ -37,7 +40,7 @@ class Command(BaseCommand):
                 except:  # noqa
                     fails.append(course.text)
 
-        print(f"Found {len(courses)} and failed to parse {len(fails)}")
+        logger.info("Found %s and failed to parse %s", len(courses), len(fails))
         with open("csv/uv_courses.csv", "w") as fd:
             writer = csv.writer(fd)
             for course in courses:

@@ -1,5 +1,6 @@
 import contextlib
 import hashlib
+import logging
 import os
 import re
 import subprocess
@@ -24,13 +25,15 @@ from .exceptions import (
 )
 from .thumbnail import get_thumbnail
 
+logger = logging.getLogger(__name__)
+
 
 def on_failure(self, exc, task_id, args, kwargs, einfo):
     if isinstance(exc, SkipException):
         return None
 
     doc_id = args[0]
-    print(f"Document {doc_id} failed.")
+    logger.error("Document %s failed to process.", doc_id)
 
     document = Document.objects.get(id=doc_id)
     document.state = Document.DocumentState.ERROR

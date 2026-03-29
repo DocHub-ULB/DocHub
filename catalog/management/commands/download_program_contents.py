@@ -1,76 +1,76 @@
 from typing import Any
 
 import json
+import logging
 from urllib.parse import quote
 
 from django.core.management import BaseCommand
 
 import requests
-from rich import print
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = ""
+    help = "Download course contents for all programs from ULB API"
 
     def handle(self, *args: Any, **options: Any) -> None:
         with open("csv/programs.json") as f:
             programs: list[dict] = json.load(f)
-        print("\n[bold blue]Listing the course content of all programs...[/]\n")
+        logger.info("Listing the course content of all programs...")
 
         failed: list = []
         program_content: dict[str, dict[str, dict]] = {}
-
-        # programs = [p for p in programs if p["slug"] in ["BA-GEOG"]]
-
         with Progress(
             SpinnerColumn(),
             *Progress.get_default_columns(),
             MofNCompleteColumn(),
         ) as progress:
-            task1 = progress.add_task(
-                "Listing the course content of all programs...", total=len(programs)
-            )
+            task1 = progress.add_task("Processing programs...", total=len(programs))
 
             for progam in programs:
+                slug_upper = progam["slug"].upper()
                 progress.update(
                     task1,
                     advance=1,
-                    description=f"Listing the course content of {progam['slug'].upper()}...",
+                    description=f"Listing content of {slug_upper}...",
                 )
+
                 if "parent" in progam:
-                    qs = f"/ksup/programme?gen=prod&anet={progam['parent'].upper()}&option={progam['slug'].upper()}&lang=fr"
+                    qs = f"/ksup/programme?gen=prod&anet={progam['parent'].upper()}&option={slug_upper}&lang=fr"
                 else:
-                    qs = f"/ksup/programme?gen=prod&anet={progam['slug'].upper()}&lang=fr"
+                    qs = f"/ksup/programme?gen=prod&anet={slug_upper}&lang=fr"
 
                 URL = f"https://www.ulb.be/api/formation?path={quote(qs)}"
                 try:
                     response = requests.get(URL)
                     if not response.ok:
                         if "parent" in progam:
-                            print(
-                                f"[yellow]Skip:[/] [magenta]{progam['slug'].upper()}[/] with bogus parent {progam['parent'].upper()}"
+                            # Utilisation de logger.warning pour les sauts/retries
+                            logger.warning(
+                                "Skip: %s with bogus parent %s. Retrying...",
+                                slug_upper,
+                                progam["parent"].upper(),
                             )
 
-                            print("Retry")
-                            qs = f"/ksup/programme?gen=prod&anet={progam['slug'].upper()}&lang=fr"
+                            qs = f"/ksup/programme?gen=prod&anet={slug_upper}&lang=fr"
                             URL = f"https://www.ulb.be/api/formation?path={quote(qs)}"
                             response = requests.get(URL)
                             if not response.ok:
-                                print("Retry failed")
+                                logger.error("Retry failed for %s", slug_upper)
                                 continue
-
                         else:
-                            print(
-                                f"[red]Error:[/] [magenta]{progam['slug'].upper()}[/] failed with {response.status_code}"
+                            logger.error(
+                                "%s failed with %s. URL: %s",
+                                slug_upper,
+                                response.status_code,
+                                URL,
                             )
-                            print("  ", URL)
                             continue
 
                 except Exception:
-                    print(f"[red]Error:[/] Failed to GET {progam['slug'].upper()}")
-                    print("  URL", URL)
-                    progress.console.print_exception()
+                    logger.exception("Failed to GET %s. URL: %s", slug_upper, URL)
                     continue
 
                 try:
@@ -92,8 +92,11 @@ class Command(BaseCommand):
                             }
                 except Exception:
                     failed.append(progam["slug"])
-                    print(f"Error while listing content of {progam['slug']}")
-                    progress.console.print_exception()
+                    logger.exception(
+                        "Error while listing content of %s", progam["slug"]
+                    )
 
         with open("csv/courses.json", "w+") as all_courses_json:
             json.dump(program_content, all_courses_json, indent=2)
+
+        logger.info("Course content download complete. Saved to csv/courses.json")
