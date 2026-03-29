@@ -3,6 +3,8 @@ name: Python application
 on:
   push:
     branches: [ main ]
+    tags:
+      - '20*'
   pull_request:
 
 jobs:

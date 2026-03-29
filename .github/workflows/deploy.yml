@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["Python application"]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.workflow_run.conclusion == 'success'
+      && startsWith(github.event.workflow_run.head_branch, '20')
+    steps:
+      - name: Trigger deploy webhook
+        env:
+          WEBHOOK_SECRET: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
+        run: |
+          REF="refs/tags/${{ github.event.workflow_run.head_branch }}"
+          PAYLOAD="{\"ref\":\"$REF\"}"
+          SIGNATURE="sha256=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" | cut -d' ' -f2)"
+          RESPONSE=$(curl -sf --max-time 120 \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: $SIGNATURE" \
+            -d "$PAYLOAD" \
+            "https://dochub.be/webhook/dochub-deploy")
+          echo "$RESPONSE"
