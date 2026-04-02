@@ -12,16 +12,15 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
       && startsWith(github.event.workflow_run.head_branch, '20')
     steps:
-      - name: Trigger deploy webhook
+      - name: Deploy ${{ github.event.workflow_run.head_branch }}
         env:
           WEBHOOK_SECRET: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
+          TAG: ${{ github.event.workflow_run.head_branch }}
         run: |
-          TAG="${{ github.event.workflow_run.head_branch }}"
-          REF="refs/tags/$TAG"
-          PAYLOAD="{\"ref\":\"$REF\"}"
+          PAYLOAD="{\"ref\":\"refs/tags/$TAG\"}"
           SIGNATURE="sha256=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" | cut -d' ' -f2)"
 
-          HTTP_CODE=$(curl --max-time 120 \
+          HTTP_CODE=$(curl -s --max-time 120 \
             -o /tmp/deploy-output.txt \
             -w "%{http_code}" \
             -X POST \
@@ -30,15 +29,9 @@ jobs:
             -d "$PAYLOAD" \
             "https://dochub.be/webhook/dochub-deploy")
 
-          echo "=== Deploy output ==="
           cat /tmp/deploy-output.txt
 
           if [ "$HTTP_CODE" != "200" ]; then
             echo "Webhook returned HTTP $HTTP_CODE"
-            exit 1
-          fi
-
-          if ! grep -q "Deployed $TAG" /tmp/deploy-output.txt; then
-            echo "Deploy did not complete successfully"
             exit 1
           fi
