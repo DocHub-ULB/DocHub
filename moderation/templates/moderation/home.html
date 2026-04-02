@@ -51,23 +51,22 @@
                                     </p>
                                 </div>
                             {% else %}
-                                <div class="flex-grow-1"></div> {% endif %}
+                                <div class="flex-grow-1"></div>
+                            {% endif %}
 
                             <p class="text-muted small mb-3">
                                 📅 Reçue le {{ req.created|date:"d/m/Y à H:i" }}
                             </p>
 
-                            <div class="d-flex gap-2 pt-3 border-top">
-                                <form method="post" action="{% url 'process_request' req.id %}" class="flex-grow-1">
+                            <div class="pt-3 border-top mt-auto">
+                                <form method="post" action="{% url 'process_request' req.id %}" class="w-100">
                                     {% csrf_token %}
-                                    <input type="hidden" name="action" value="accept">
-                                    <button type="submit" class="btn btn-success btn-sm w-100 fw-bold">Accepter</button>
-                                </form>
+                                    <input type="text" name="rejection_reason" class="form-control form-control-sm mb-2" placeholder="Motif du refus (optionnel, affiché à l'étudiant)...">
 
-                                <form method="post" action="{% url 'process_request' req.id %}" class="flex-grow-1" onsubmit="return confirm('Es-tu sûr de vouloir refuser cette demande ?');">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="reject">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">Refuser</button>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" name="action" value="accept" class="btn btn-success btn-sm flex-grow-1 fw-bold">Accepter</button>
+                                        <button type="submit" name="action" value="reject" class="btn btn-outline-danger btn-sm flex-grow-1" onclick="return confirm('Es-tu sûr de vouloir refuser cette demande ?');">Refuser</button>
+                                    </div>
                                 </form>
                             </div>
 

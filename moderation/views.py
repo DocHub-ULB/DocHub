@@ -37,10 +37,13 @@ def moderation_home(request):
 @user_passes_test(is_moderator, login_url="/")
 @require_POST
 def process_request(request, request_id):
-    """Traite une demande de rôle (Accepter ou Refuser)"""
+    """Traite une demande de rôle (Accepter ou Refuser) et log l'action"""
     rep_request = get_object_or_404(RepresentativeRequest, id=request_id)
     action = request.POST.get("action")
     target_user = rep_request.user
+
+    # Dictionnaire des modifications pour le système de logs
+    log_values = {"processed": (False, True)}
 
     if action == "accept":
         # Vérifie qu'il n'a pas déjà les droits (au cas où un autre modo l'a déjà fait)
@@ -65,17 +68,25 @@ def process_request(request, request_id):
                 f"{target_user.netid} avait déjà des droits. Demande archivée.",
             )
 
-        rep_request.processed = True
-        rep_request.save()
-
     elif action == "reject":
-        # On marque simplement la demande comme traitée pour la faire disparaître
-        rep_request.processed = True
-        rep_request.save()
+        # On récupère la raison du refus
+        reason = request.POST.get("rejection_reason", "").strip()
+        rep_request.rejection_reason = reason
+        if reason:
+            log_values["rejection_reason"] = ("", reason)
+
         messages.warning(
             request,
             f"La demande de {target_user.netid} a été refusée.",
         )
+
+    # On logue que la demande a été traitée (et potentiellement la raison)
+    ModerationLog.track(
+        user=request.user, content_object=rep_request, values=log_values
+    )
+
+    rep_request.processed = True
+    rep_request.save()
 
     return redirect("moderation_home")
 
@@ -165,6 +176,7 @@ def moderators_management(request):
 
 @login_required
 def representative_request(request):
+    # check si demande de refus
     if RepresentativeRequest.objects.filter(
         user=request.user, processed=False
     ).exists():
@@ -173,6 +185,18 @@ def representative_request(request):
             "moderation/representative_request_received.html",
         )
 
+    # On récupère la dernière raison de refus si l'étudiant n'est ni Admin ni Modo
+    rejection_msg = None
+    if not request.user.is_moderator and not request.user.is_staff:
+        last_req = (
+            RepresentativeRequest.objects.filter(user=request.user, processed=True)
+            .order_by("-created")
+            .first()
+        )
+        if last_req and last_req.rejection_reason:
+            rejection_msg = last_req.rejection_reason
+
+    # Traitement classique
     if request.method == "POST":
         form = RepresentativeRequestForm(request.POST)
         if form.is_valid():
@@ -182,4 +206,9 @@ def representative_request(request):
             return redirect("representative_request")
     else:
         form = RepresentativeRequestForm()
-    return render(request, "moderation/representative_request.html", {"form": form})
+
+    return render(
+        request,
+        "moderation/representative_request.html",
+        {"form": form, "rejection_reason": rejection_msg},
+    )

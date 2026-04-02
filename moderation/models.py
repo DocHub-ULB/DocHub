@@ -38,6 +38,7 @@ class RepresentativeRequest(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     processed = models.BooleanField(default=False)
+    rejection_reason = models.TextField(verbose_name="Raison du refus", blank=True)
 
 
 class ModerationLog(models.Model):
