@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from moderation.forms import RepresentativeRequestForm
 from moderation.models import ModerationLog, RepresentativeRequest
@@ -16,13 +17,71 @@ def is_moderator(user):
 
 
 @login_required
-@user_passes_test(is_moderator)
+@user_passes_test(is_moderator, login_url="/")
 def moderation_home(request):
-    return render(request, "moderation/home.html")
+    # On récupère toutes les demandes non traitées, de la plus récente à la plus ancienne
+    pending_requests = (
+        RepresentativeRequest.objects.filter(processed=False)
+        .select_related("user")
+        .order_by("-created")
+    )
+
+    return render(
+        request,
+        "moderation/home.html",
+        {"pending_requests": pending_requests},
+    )
 
 
 @login_required
-@user_passes_test(is_moderator)
+@user_passes_test(is_moderator, login_url="/")
+@require_POST
+def process_request(request, request_id):
+    """Traite une demande de rôle (Accepter ou Refuser)"""
+    rep_request = get_object_or_404(RepresentativeRequest, id=request_id)
+    action = request.POST.get("action")
+    target_user = rep_request.user
+
+    if action == "accept":
+        # Vérifie qu'il n'a pas déjà les droits (au cas où un autre modo l'a déjà fait)
+        # Si les 2 modos font la meme chose en meme temps
+        if not target_user.is_staff and not target_user.is_moderator:
+            target_user.is_moderator = True
+            target_user.save()
+
+            # Création du log de modération
+            ModerationLog.track(
+                user=request.user,
+                content_object=target_user,
+                values={"is_moderator": (False, True)},
+            )
+            messages.success(
+                request,
+                f"La demande a été acceptée. {target_user.netid} est maintenant modérateur !",
+            )
+        else:
+            messages.info(
+                request,
+                f"{target_user.netid} avait déjà des droits. Demande archivée.",
+            )
+
+        rep_request.processed = True
+        rep_request.save()
+
+    elif action == "reject":
+        # On marque simplement la demande comme traitée pour la faire disparaître
+        rep_request.processed = True
+        rep_request.save()
+        messages.warning(
+            request,
+            f"La demande de {target_user.netid} a été refusée.",
+        )
+
+    return redirect("moderation_home")
+
+
+@login_required
+@user_passes_test(is_moderator, login_url="/")
 def moderators_management(request):
     if request.method == "POST":
         action = request.POST.get("action")

@@ -9,8 +9,12 @@ urlpatterns = [
         views.representative_request,
         name="representative_request",
     ),
-    # Nouvelle URL pour la gestion des modérateurs
     path(
         "manage-moderators/", views.moderators_management, name="moderators_management"
+    ),
+    path(
+        "process-request/<int:request_id>/",
+        views.process_request,
+        name="process_request",
     ),
 ]
