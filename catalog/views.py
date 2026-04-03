@@ -106,7 +106,7 @@ def my_courses(request):
 @login_required
 def unfollow_all_courses(request):
     request.user.courses_set.clear()
-    return redirect("home")
+    return redirect("catalog:my_courses")
 
 
 @dataclass

@@ -15,4 +15,5 @@ urlpatterns = [
     path("", catalog.views.finder_root, name="finder_root"),
     path("f/", RedirectView.as_view(pattern_name="catalog:finder_root")),
     path("f/<path:slugs>/", catalog.views.finder, name="finder"),
+    path("my/", catalog.views.my_courses, name="my_courses"),
 ]

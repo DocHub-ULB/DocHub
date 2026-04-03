@@ -1,20 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Demande d'accès{% endblock %}
+{% block title %}Demande envoyée - DocHub{% endblock %}
 
 {% block content %}
-    <h1>Demande de droits de modération</h1>
-    <div class="alert alert-success mt-2 d-flex align-items-center gap-2" role="alert">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock"
-             viewBox="0 0 16 16">
-            <path
-                d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"/>
-        </svg>
-        <div>
-            Merci ! Nous avons bien reçu ta demande. Les admins font une rapide vérifications puis te donneront accès.
-            Tu recevras un email une fois que c'est le cas !
+    <div class="row justify-content-center align-items-center mt-5 mb-5">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4 bg-white text-center p-4 p-md-5">
+
+                <div class="mb-4 d-flex justify-content-center">
+                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 80px; height: 80px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="fs-3 fw-bold text-dark mb-3">Demande envoyée !</h1>
+
+                <p class="text-muted mb-4" style="font-size: 1.05rem; line-height: 1.6;">
+                    Merci ! Nous avons bien reçu ta demande de droits de modération. <br><br>
+                    Les administrateurs vont faire une rapide vérification avant de te donner l'accès. Tu recevras un email de confirmation dès que ton compte sera activé.
+                </p>
+
+                <div class="mt-2">
+                    <a href="/" class="btn btn-primary rounded-pill px-5 py-2 fw-medium shadow-sm hover-scale-sm" style="background-color: #00549A; border-color: #00549A;">
+                        Retour à l'accueil
+                    </a>
+                </div>
+
+            </div>
+
         </div>
     </div>
-
-    <a href="/" class="btn btn-primary">Retour</a>
 {% endblock content %}

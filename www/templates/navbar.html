@@ -1,42 +1,115 @@
-<nav class="container-xl navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-    <div class="container-fluid">
-        <a class="hover-scale-sm navbar-brand d-flex align-items-center gap-2 position-relative pe-3" href="/">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                 class="hover-rotate bi bi-megaphone-fill" viewBox="0 0 16 16">
-                <path
-                    d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-11zm-1 .724c-2.067.95-4.539 1.481-7 1.656v6.237a25.222 25.222 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56V3.224zm-8 7.841V4.934c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009a68.14 68.14 0 0 1 .496.008 64 64 0 0 1 1.51.048zm1.39 1.081c.285.021.569.047.85.078l.253 1.69a1 1 0 0 1-.983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a65.81 65.81 0 0 1 1.692.064c.327.017.65.037.966.06z"/>
-            </svg>
-            DocHub
-            <span style="font-size: .5rem;"
-                  class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-info">
-                2.0
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm w-100 py-2 bg-ulb sticky-top" style="z-index: 1050;">
+    <div class="container-xl d-flex justify-content-between align-items-center flex-wrap flex-lg-nowrap gap-2">
+
+        <div class="d-flex align-items-center flex-shrink-0">
+            <a class="navbar-brand d-flex align-items-center gap-2 position-relative pe-3 hover-scale-sm m-0" href="/">
+                <div class="bg-white rounded d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#00549A"
+                         class="bi bi-megaphone-fill" viewBox="0 0 16 16">
+                        <path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-11zm-1 .724c-2.067.95-4.539 1.481-7 1.656v6.237a25.222 25.222 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56V3.224zm-8 7.841V4.934c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009a68.14 68.14 0 0 1 .496.008 64 64 0 0 1 1.51.048zm1.39 1.081c.285.021.569.047.85.078l.253 1.69a1 1 0 0 1-.983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a65.81 65.81 0 0 1 1.692.064c.327.017.65.037.966.06z"/>
+                    </svg>
+                </div>
+                <span class="d-none d-sm-inline">DocHub</span>
+                <span style="font-size: .5rem;"
+                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info text-dark mt-1 ms-n2">
+                    2.0
+                </span>
+            </a>
+
+            <span class="d-none d-md-inline-block badge rounded-pill ms-3 fw-normal"
+                  style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); font-size: 0.75rem;">
+                Initiative par <a href="https://urlab.be" target="_blank" class="text-white fw-bold text-decoration-none">UrLab</a> & <a href="https://cercle-informatique.be/" target="_blank" class="text-white fw-bold text-decoration-none">CI</a>
             </span>
-        </a>
-        <div class="flex-grow-1 spacer"></div>
-        <div class="navbar-nav">
-            <a class="nav-link px-2" href="{% url "catalog:finder_root" %}">Tous les cours</a>
         </div>
 
-        <div class="dropdown">
-            <a class="nav-link hover-scale-sm" href="#" id="navbarDropdown" role="button"
-               data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="bg-light text-primary rounded-circle p-2">{{ user.initials }}</div>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                {% if request.user.is_staff or request.user.is_moderator %}
-                    <li><a class="dropdown-item" href="/moderation">Modération</a></li>
-                {% endif %}
-                {% if request.user.is_staff %}
-                    <li><a class="dropdown-item" href="/admin" data-turbo="false">Admin</a></li>
-                {% endif %}
+        <div class="flex-grow-1 mx-lg-4 w-100 order-3 order-lg-2 mt-2 mt-lg-0 position-relative" style="z-index: 1060;">
+            <form class="d-flex m-0" onsubmit="event.preventDefault();">
+                <div class="input-group" data-controller="autocomplete" data-autocomplete-url-value="/search/courses/" data-autocomplete-min-length-value="3">
 
-                <li>
-                    <form method="post" action="{% url "logout" %}" class="dropdown-item d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class=" border-0 bg-transparent p-0 w-100 text-start">Déconnexion</button>
-                    </form>
-                </li>
-            </ul>
+                    <span class="input-group-text bg-white border-0 rounded-start-pill text-muted px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </span>
+
+                    <input type="search" class="form-control dropdown-toggle border-0 rounded-end-pill py-2 shadow-none"
+                           placeholder="Rechercher un cours (ex. info-f101)"
+                           aria-label="search" data-autocomplete-target="input" style="background-color: #ffffff;">
+
+                    <ul data-autocomplete-target="results"
+                        class="dropdown-menu show w-100 border-0 p-2 shadow search-results-menu rounded-4"
+                        style="position: absolute; top: 100%; left: 0; margin-top: 0.5rem;"
+                        hidden>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="navbar-nav d-flex flex-row align-items-center justify-content-end gap-2 gap-sm-3 order-2 order-lg-3 flex-shrink-0">
+
+            <a class="nav-link text-white hover-scale-sm fw-medium d-flex align-items-center gap-2 p-0 px-sm-2" href="{% url 'catalog:finder_root' %}" title="Tous les cours">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-journal-album d-lg-none" viewBox="0 0 16 16">
+                    <path d="M5.5 4a.5.5 0 0 0-.5.5v5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.5-.5h-1zm1 7a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3z"/>
+                    <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                    <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                </svg>
+                <span class="d-none d-lg-inline">Tous les cours</span>
+            </a>
+
+            <div class="nav-item dropdown">
+                <a class="nav-link p-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    <div class="bg-white text-ulb rounded-circle d-flex align-items-center justify-content-center shadow-sm hover-scale-sm"
+                         style="width: 36px; height: 36px; font-weight: bold;">
+                        {{ user.initials }}
+                    </div>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 rounded-4 position-absolute" aria-labelledby="navbarDropdown" style="min-width: 220px; z-index: 1070;">
+                    <li class="px-3 py-3 border-bottom bg-light rounded-top-4">
+                        <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Connecté(e) en tant que</small>
+                        <strong class="text-dark fs-6">{{ user.first_name }} {{ user.last_name|default:"Étudiant" }}</strong>
+                    </li>
+
+                    <div class="py-2">
+                        {% if request.user.is_staff or request.user.is_moderator %}
+                            <li>
+                                <a class="dropdown-item py-2 fw-medium d-flex align-items-center gap-2" href="/moderation">
+                                    <span class="bg-warning bg-opacity-25 text-warning rounded p-1 d-flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-shield-check" viewBox="0 0 16 16"><path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/><path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/></svg>
+                                    </span>
+                                    Modération
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% if request.user.is_staff %}
+                            <li>
+                                <a class="dropdown-item py-2 fw-medium d-flex align-items-center gap-2" href="/admin" data-turbo="false">
+                                    <span class="bg-primary bg-opacity-10 text-primary rounded p-1 d-flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16"><path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/></svg>
+                                    </span>
+                                    Administration
+                                </a>
+                            </li>
+                        {% endif %}
+                    </div>
+
+                    <li><hr class="dropdown-divider m-0 opacity-10"></li>
+
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" class="p-2 m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-white text-danger w-100 text-start rounded-3 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 hover-bg-light transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                </svg>
+                                Déconnexion
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>

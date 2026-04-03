@@ -1,0 +1,49 @@
+/* Couleurs Officielles ULB */
+:root {
+    --ulb-blue: #00549A;
+    --ulb-blue-dark: #004075;
+}
+
+.bg-ulb { background-color: var(--ulb-blue) !important; }
+.text-ulb { color: var(--ulb-blue) !important; }
+
+/* Boutons personnalisés */
+.btn-ulb {
+    background-color: var(--ulb-blue);
+    color: white;
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-ulb:hover {
+    background-color: var(--ulb-blue-dark);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Correction ici (box-shadow au lieu de shadow) */
+}
+
+/* Animations et interactions */
+.hover-scale-sm {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-scale-sm:hover {
+    transform: scale(1.02);
+}
+
+/* Utilitaires de cartes */
+.card-modern {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* --- Menu Autocomplete --- */
+.search-results-menu {
+    max-height: 350px;
+    overflow-y: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    background-color: #ffffff !important;
+    z-index: 1055 !important; /* Supérieur au z-index par défaut de la navbar (1030) et des alertes (1050) */
+}

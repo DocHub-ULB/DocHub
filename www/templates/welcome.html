@@ -1,53 +1,50 @@
-<div class="d-flex flex-column flex-lg-row gap-2 gap-lg-5">
-    <div>
-        <h1 class="fs-3 d-flex align-items-center gap-2">
-            <span>👋</span>
-            <span> Bienvenue sur DocHub</span>
-        </h1>
-
-        <p>
-            DocHub est le site de partage de documents et d’entraide étudiante le plus utilisé à l’ULB.<br>
-            DocHub te permet d'échanger tes notes, syllabus, anciennes questions d'examen et bien plus encore.
-        </p>
-        <p>
-            Tu peux uploader des docments,
-            mais en plus de ça, tu peux ajouter des cours à tes favoris et verras les nouveaux ajouts
-            apparaitre directement ici. DocHub te permet aussi de voir en
-            direct le document dans ton navigateur sans devoir le télécharger.
-        </p>
-
+<div class="row g-4 mb-0" style="margin-top: -3.5rem;">
+    <div class="col-lg-6">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4" style="background-color: #f8fafc;">
+            <div class="card-body">
+                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mb-4" style="width: 60px; height: 60px;">
+                    <span class="fs-3">👋</span>
+                </div>
+                <h1 class="fs-4 fw-bold text-ulb mb-3">Bienvenue sur DocHub</h1>
+                <p class="text-muted" style="line-height: 1.6;">
+                    DocHub est la plateforme de partage de documents et d’entraide étudiante de référence à l’ULB.<br><br>
+                    Échange tes notes, tes résumés ou tes anciens examens. Tu peux consulter les documents directement en ligne sans téléchargement et t'abonner à tes cours pour ne rien rater.
+                </p>
+            </div>
+        </div>
     </div>
-    <div>
-        <h1 class="fs-3 d-flex align-items-center gap-2">
-            <span>📖</span>
-            <span> Mode d'emploi</span>
-        </h1>
-        <ul style="list-style: none; padding: 0" class="d-flex flex-column gap-2">
-            <li>
-                ⭐ Pour trouver facilement tes cours et les ajouter à tes favoris,
-                tu peux utiliser la barre de recherche ici au-dessus ou alors tu peux
-                <a href="{% url "catalog:finder_root" %}"
-                   class="d-inline-flex align-items-center btn btn-sm btn-outline-secondary mb-1">
-                    parcourir la liste de tous les cours
-                </a><br/>
-                Une fois que tu as trouvé ton bonheur, n'oublie pas de l'ajouter aux favoris ! ️
-            </li>
-            <li>
-                📄 Une fois sur la page d'un cours, tu verras tous les documents ajoutés par les étudiants.
-                Tu peux soit cliquer dessus et voir le document directement sans le télécharger soit en
-                télécharger une copie chez toi. Tu peux aussi filtrer les documents par catégorie ou par
-                titre quand il y en a beaucoup.
-            </li>
-            <li>
-                👍 Un document te parait de très bonne qualité ? Ou à l'inverse, il n'est plus à jour ?
-                Dis-le nous avec le bouton Utile/Pas utile en haut du document.
-            </li>
-            <li>
-                🚀 N'oublie pas non plus d'ajouter aussi des documents !
-                C'est grâce à des gens comme toi que DocHub est si bien fourni
-                et permet à tant d'étudiants de réussir
-            </li>
-        </ul>
 
+    <div class="col-lg-6">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="card-body">
+                <div class="bg-light rounded-circle shadow-sm d-flex align-items-center justify-content-center mb-4 text-ulb" style="width: 60px; height: 60px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-book-half" viewBox="0 0 16 16">
+                        <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                    </svg>
+                </div>
+                <h2 class="fs-4 fw-bold mb-4">Mode d'emploi</h2>
+
+                <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                    <li class="d-flex gap-3">
+                        <span class="fs-5">⭐</span>
+                        <div class="small">
+                            <strong>Trouve tes cours :</strong> Utilise la barre de recherche ou <a href="{% url 'catalog:finder_root' %}" class="text-ulb fw-bold text-decoration-none">parcours le catalogue</a>. Ajoute-les aux favoris pour les voir sur ton Dashboard.
+                        </div>
+                    </li>
+                    <li class="d-flex gap-3">
+                        <span class="fs-5">📄</span>
+                        <div class="small">
+                            <strong>Consulte & Filtre :</strong> Accède aux documents et utilise les filtres pour trouver rapidement ce qu'il te faut (Résumés, Examens, etc.).
+                        </div>
+                    </li>
+                    <li class="d-flex gap-3">
+                        <span class="fs-5">👍</span>
+                        <div class="small">
+                            <strong>Contribue :</strong> Vote pour les documents utiles et aide la communauté en partageant tes propres ressources !
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
