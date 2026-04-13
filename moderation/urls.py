@@ -9,8 +9,13 @@ urlpatterns = [
         views.representative_request,
         name="representative_request",
     ),
+    # New architecture for moderator management
+    path("moderators/", views.moderators_list, name="moderators_list"),
+    path("moderators/add/", views.moderator_add, name="moderator_add"),
     path(
-        "manage-moderators/", views.moderators_management, name="moderators_management"
+        "moderators/remove/<int:user_id>/",
+        views.moderator_remove,
+        name="moderator_remove",
     ),
     path(
         "process-request/<int:request_id>/",

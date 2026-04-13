@@ -16,9 +16,8 @@
                         <h5 class="card-title h6 mb-0">Ajouter un modérateur</h5>
                     </div>
                     <div class="card-body">
-                        <form method="post" class="d-flex flex-column gap-2">
+                        <form method="post" action="{% url 'moderator_add' %}" class="d-flex flex-column gap-2">
                             {% csrf_token %}
-                            <input type="hidden" name="action" value="add">
                             <label for="netid" class="form-label small text-muted">NetID de l'étudiant</label>
                             <input type="text" class="form-control" id="netid" name="netid" placeholder="Ex: blabevue" required>
                             <button type="submit" class="btn btn-success mt-2">Promouvoir modérateur</button>
@@ -68,12 +67,16 @@
                                             {% elif mod.is_staff %}
                                                 <span class="text-muted small">Intouchable</span>
                                             {% else %}
-                                                <form method="post" class="d-inline" onsubmit="return confirm('Es-tu sûr de vouloir retirer les droits de {{ mod.netid }} ?');">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="action" value="remove">
-                                                    <input type="hidden" name="user_id" value="{{ mod.id }}">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Retirer</button>
-                                                </form>
+
+                                                {% if user.is_staff %}
+                                                    <form method="post" action="{% url 'moderator_remove' mod.id %}" class="d-inline" onsubmit="return confirm('Es-tu sûr de vouloir retirer les droits de {{ mod.netid }} ?');">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">Retirer</button>
+                                                    </form>
+                                                {% else %}
+                                                    <span class="text-muted small fst-italic">Admin seulement</span>
+                                                {% endif %}
+
                                             {% endif %}
                                         </td>
                                     </tr>

@@ -101,85 +101,78 @@ def process_representative_request(request, request_id):
 
 @login_required
 @user_passes_test(is_moderator, login_url="/")
-def moderators_management(request):
-    if request.method == "POST":
-        action = request.POST.get("action")
-
-        # ACTION: ADD A MODERATOR
-        if action == "add":
-            netid_to_add = request.POST.get("netid", "").strip()
-            if netid_to_add:
-                try:
-                    target_user = User.objects.get(netid=netid_to_add)
-
-                    # Check that the user is not an Admin or already a Moderator
-                    if not target_user.is_staff and not target_user.is_moderator:
-                        target_user.is_moderator = True
-                        target_user.save()
-
-                        # CREATE THE LOG HERE
-                        ModerationLog.track(
-                            user=request.user,
-                            content_object=target_user,
-                            values={"is_moderator": (False, True)},
-                        )
-
-                        messages.success(
-                            request,
-                            f"{target_user.netid} est maintenant modérateur !",
-                        )
-                    else:
-                        messages.info(
-                            request,
-                            "Cet utilisateur a déjà des droits (Modérateur ou Admin).",
-                        )
-                except User.DoesNotExist:
-                    messages.warning(
-                        request,
-                        f"❌ L'étudiant avec le netid '{netid_to_add}' n'a pas été trouvé.",
-                    )
-
-        # ACTION: REMOVE A MODERATOR
-        elif action == "remove":
-            user_id = request.POST.get("user_id")
-            target_user = get_object_or_404(User, id=user_id)
-
-            # Security: cannot modify an Admin or remove yourself
-            # Handled in HTML by disabling buttons, but we double the security here
-            if target_user.is_staff:
-                messages.warning(
-                    request,
-                    "Impossible de retirer les droits d'un Administrateur Système ici.",
-                )
-            elif target_user == request.user:
-                messages.warning(
-                    request, "Vous ne pouvez pas retirer vos propres droits ici."
-                )
-            elif target_user.is_moderator:
-                target_user.is_moderator = False
-                target_user.save()
-
-                # CREATE THE LOG HERE
-                ModerationLog.track(
-                    user=request.user,
-                    content_object=target_user,
-                    values={"is_moderator": (True, False)},
-                )
-
-                messages.success(
-                    request, f"🗑️ Les droits de {target_user.netid} ont été retirés."
-                )
-
-        return redirect("moderators_management")
-
-    # Display the page (GET) - List Admins and Moderators
+def moderators_list(request):
+    """Display the list of all Admins and Moderators"""
     moderators = User.objects.filter(Q(is_staff=True) | Q(is_moderator=True)).order_by(
         "-is_staff", "first_name"
     )
-
     return render(
         request, "moderation/moderators_management.html", {"moderators": moderators}
     )
+
+
+@login_required
+@user_passes_test(is_moderator, login_url="/")
+@require_POST
+def moderator_add(request):
+    """Add a new moderator using their NetID"""
+    netid_to_add = request.POST.get("netid", "").strip()
+    if netid_to_add:
+        try:
+            target_user = User.objects.get(netid=netid_to_add)
+
+            if not target_user.is_staff and not target_user.is_moderator:
+                target_user.is_moderator = True
+                target_user.save()
+
+                ModerationLog.track(
+                    user=request.user,
+                    content_object=target_user,
+                    values={"is_moderator": (False, True)},
+                )
+                messages.success(
+                    request, f"{target_user.netid} est maintenant modérateur !"
+                )
+            else:
+                messages.info(
+                    request, "Cet utilisateur a déjà des droits (Modérateur ou Admin)."
+                )
+        except User.DoesNotExist:
+            messages.warning(
+                request,
+                f"❌ L'étudiant avec le netid '{netid_to_add}' n'a pas été trouvé.",
+            )
+
+    return redirect("moderators_list")
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff, login_url="/")  # 🔒 Only Admins can remove
+@require_POST
+def moderator_remove(request, user_id):
+    """Remove moderator rights from a user (Admin only)"""
+    target_user = get_object_or_404(User, id=user_id)
+
+    if target_user.is_staff:
+        messages.warning(
+            request, "Impossible de retirer les droits d'un Administrateur Système ici."
+        )
+    elif target_user == request.user:
+        messages.warning(request, "Vous ne pouvez pas retirer vos propres droits ici.")
+    elif target_user.is_moderator:
+        target_user.is_moderator = False
+        target_user.save()
+
+        ModerationLog.track(
+            user=request.user,
+            content_object=target_user,
+            values={"is_moderator": (True, False)},
+        )
+        messages.success(
+            request, f"🗑️ Les droits de {target_user.netid} ont été retirés."
+        )
+
+    return redirect("moderators_list")
 
 
 @login_required
