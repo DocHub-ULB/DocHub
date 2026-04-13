@@ -308,13 +308,17 @@ def submit_bulk(request, slug):
             BulkDocuments.objects.create(
                 url=form.cleaned_data["url"], course=course, user=request.user
             )
-
-            success_url = (
-                reverse("document_submit_bulk", args=[course.slug]) + "?success=1"
+            success_url = reverse(
+                "document_submit_bulk", args=[course.slug], query={"success": ""}
             )
             return HttpResponseRedirect(success_url)
+        else:
+            error_url = reverse(
+                "document_put", args=[course.slug], query={"error": "bulk"}
+            )
+            return HttpResponseRedirect(error_url)
 
-    if request.GET.get("success") == "1":
+    if "success" in request.GET:
         return render(
             request,
             "documents/document_bulk.html",
