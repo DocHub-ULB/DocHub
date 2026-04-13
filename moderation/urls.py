@@ -14,7 +14,7 @@ urlpatterns = [
     ),
     path(
         "process-request/<int:request_id>/",
-        views.process_request,
-        name="process_request",
+        views.process_representative_request,
+        name="process_representative_request",
     ),
 ]

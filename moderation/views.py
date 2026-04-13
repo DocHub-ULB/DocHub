@@ -3,23 +3,24 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from moderation.forms import RepresentativeRequestForm
+from moderation.forms import ProcessRepresentativeRequestForm, RepresentativeRequestForm
 from moderation.models import ModerationLog, RepresentativeRequest
 
 User = get_user_model()
 
 
 def is_moderator(user):
-    # On donne l'accès aux Admins (is_staff) ET aux Modérateurs (is_moderator)
+    # Grant access to Admins (is_staff) AND Moderators (is_moderator)
     return user.is_staff or user.is_moderator
 
 
 @login_required
 @user_passes_test(is_moderator, login_url="/")
 def moderation_home(request):
-    # On récupère toutes les demandes non traitées, de la plus récente à la plus ancienne
+    # Fetch all pending requests, from newest to oldest
     pending_requests = (
         RepresentativeRequest.objects.filter(processed=False)
         .select_related("user")
@@ -36,23 +37,31 @@ def moderation_home(request):
 @login_required
 @user_passes_test(is_moderator, login_url="/")
 @require_POST
-def process_request(request, request_id):
-    """Traite une demande de rôle (Accepter ou Refuser) et log l'action"""
+def process_representative_request(request, request_id):
+    """Processes a role request (Accept or Reject) and logs the action"""
     rep_request = get_object_or_404(RepresentativeRequest, id=request_id)
-    action = request.POST.get("action")
     target_user = rep_request.user
 
-    # Dictionnaire des modifications pour le système de logs
+    # Pass POST data to the Django form
+    form = ProcessRepresentativeRequestForm(request.POST)
+
+    if not form.is_valid():
+        # If the form is invalid (e.g., rejection reason is too short)
+        url = reverse("moderation_home") + "?error=reason"
+        return redirect(url)
+
+    action = form.cleaned_data["action"]
+
+    # Dictionary of changes for the logging system
     log_values = {"processed": (False, True)}
 
     if action == "accept":
-        # Vérifie qu'il n'a pas déjà les droits (au cas où un autre modo l'a déjà fait)
-        # Si les 2 modos font la meme chose en meme temps
+        # Check if the user already has rights (in case another mod already processed it)
         if not target_user.is_staff and not target_user.is_moderator:
             target_user.is_moderator = True
             target_user.save()
 
-            # Création du log de modération
+            # Create the moderation log
             ModerationLog.track(
                 user=request.user,
                 content_object=target_user,
@@ -69,18 +78,17 @@ def process_request(request, request_id):
             )
 
     elif action == "reject":
-        # On récupère la raison du refus
-        reason = request.POST.get("rejection_reason", "").strip()
+        # Get the rejection reason from the validated form
+        reason = form.cleaned_data["rejection_reason"]
         rep_request.rejection_reason = reason
-        if reason:
-            log_values["rejection_reason"] = ("", reason)
+        log_values["rejection_reason"] = ("", reason)
 
         messages.warning(
             request,
             f"La demande de {target_user.netid} a été refusée.",
         )
 
-    # On logue que la demande a été traitée (et potentiellement la raison)
+    # Log that the request was processed (and potentially the reason)
     ModerationLog.track(
         user=request.user, content_object=rep_request, values=log_values
     )
@@ -97,19 +105,19 @@ def moderators_management(request):
     if request.method == "POST":
         action = request.POST.get("action")
 
-        # ACTION : AJOUTER UN MODÉRATEUR
+        # ACTION: ADD A MODERATOR
         if action == "add":
             netid_to_add = request.POST.get("netid", "").strip()
             if netid_to_add:
                 try:
                     target_user = User.objects.get(netid=netid_to_add)
 
-                    # Vérifier qu'il n'est ni Admin ni déjà Modérateur
+                    # Check that the user is not an Admin or already a Moderator
                     if not target_user.is_staff and not target_user.is_moderator:
                         target_user.is_moderator = True
                         target_user.save()
 
-                        # ON CRÉE LE LOG ICI
+                        # CREATE THE LOG HERE
                         ModerationLog.track(
                             user=request.user,
                             content_object=target_user,
@@ -131,13 +139,13 @@ def moderators_management(request):
                         f"❌ L'étudiant avec le netid '{netid_to_add}' n'a pas été trouvé.",
                     )
 
-        # ACTION : RETIRER UN MODÉRATEUR
+        # ACTION: REMOVE A MODERATOR
         elif action == "remove":
             user_id = request.POST.get("user_id")
             target_user = get_object_or_404(User, id=user_id)
 
-            # Sécurité : impossible de toucher à un Admin ou de se retirer soi-même
-            # Gerer dans le Html en desactivant les boutons, mais on double la sécurité ici
+            # Security: cannot modify an Admin or remove yourself
+            # Handled in HTML by disabling buttons, but we double the security here
             if target_user.is_staff:
                 messages.warning(
                     request,
@@ -151,7 +159,7 @@ def moderators_management(request):
                 target_user.is_moderator = False
                 target_user.save()
 
-                # ON CRÉE LE LOG ICI
+                # CREATE THE LOG HERE
                 ModerationLog.track(
                     user=request.user,
                     content_object=target_user,
@@ -164,7 +172,7 @@ def moderators_management(request):
 
         return redirect("moderators_management")
 
-    # Affichage de la page (GET) - On liste les Admins et les Modérateurs
+    # Display the page (GET) - List Admins and Moderators
     moderators = User.objects.filter(Q(is_staff=True) | Q(is_moderator=True)).order_by(
         "-is_staff", "first_name"
     )
@@ -176,7 +184,7 @@ def moderators_management(request):
 
 @login_required
 def representative_request(request):
-    # check si demande de refus
+    # Check if there is a pending request
     if RepresentativeRequest.objects.filter(
         user=request.user, processed=False
     ).exists():
@@ -185,7 +193,7 @@ def representative_request(request):
             "moderation/representative_request_received.html",
         )
 
-    # On récupère la dernière raison de refus si l'étudiant n'est ni Admin ni Modo
+    # Get the last rejection reason if the user is not Admin or Mod
     rejection_msg = None
     if not request.user.is_moderator and not request.user.is_staff:
         last_req = (
@@ -196,7 +204,7 @@ def representative_request(request):
         if last_req and last_req.rejection_reason:
             rejection_msg = last_req.rejection_reason
 
-    # Traitement classique
+    # Standard processing
     if request.method == "POST":
         form = RepresentativeRequestForm(request.POST)
         if form.is_valid():
