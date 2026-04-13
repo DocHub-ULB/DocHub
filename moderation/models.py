@@ -40,6 +40,9 @@ class RepresentativeRequest(models.Model):
     processed = models.BooleanField(default=False)
     rejection_reason = models.TextField(verbose_name="Raison du refus", blank=True)
 
+    def __str__(self):
+        return f"Demande d'accès de {self.user.netid}"
+
 
 class ModerationLog(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
@@ -59,7 +62,83 @@ class ModerationLog(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.user.get_short_name()} modified {self.content_type.name}#{self.object_id} {self.target_field}: '{self.old_value}' -> '{self.new_value}'"
+        return f"{self.user.get_short_name()} a fait une action le {self.timestamp.strftime('%d/%m/%Y')}"
+
+    ### Action translation logic ###
+
+    @property
+    def action_text(self):
+        """Translates the technical action into a readable French sentence. Acts as a catch-all."""
+        if self.target_field == "is_moderator":
+            return (
+                "a promu modérateur"
+                if str(self.new_value) == "True"
+                else "a retiré les droits de"
+            )
+        elif self.target_field == "action_accepter":
+            return "a accepté la demande de"
+        elif self.target_field == "action_rejeter":
+            return "a refusé la demande de"
+
+        # Fallback for all other technical fields (e.g., 'visible', 'is_active', title changes)
+        return f"a modifié le champ '{self.target_field}' de"
+
+    @property
+    def action_color(self):
+        """Assigns a Bootstrap color based on the action type. Acts as a catch-all."""
+        if self.target_field == "is_moderator":
+            return "success" if str(self.new_value) == "True" else "danger"
+        elif self.target_field == "action_accepter":
+            return "success"
+        elif self.target_field == "action_rejeter":
+            return "warning"
+
+        # Specific colors for known fallback fields
+        if self.target_field in ["visible", "is_active"]:
+            return "success" if str(self.new_value) == "True" else "danger"
+
+        return "secondary"
+
+    @property
+    def target_text(self):
+        """Smartly retrieves the target NetID or object name. Acts as a catch-all."""
+        if not self.content_object:
+            return f"Objet supprimé (ID: {self.object_id})"
+
+        if self.content_type.model == "representativerequest":
+            return self.content_object.user.netid
+        if self.content_type.model == "user":
+            return self.content_object.netid
+
+        # Fallback for Documents, Courses, etc.
+        return str(self.content_object)
+
+    @property
+    def details_text(self):
+        """Displays additional details (like the rejection reason or old values for legacy logs)"""
+        if self.target_field == "action_rejeter" and self.new_value != "Sans motif":
+            return f'Motif : "{self.new_value}"'
+
+        # If it's a technical fallback action, we show what changed
+        if self.target_field not in [
+            "is_moderator",
+            "action_accepter",
+            "action_rejeter",
+        ]:
+            # Truncate strings that are too long to avoid breaking the UI
+            old = (
+                self.old_value[:40] + "..."
+                if len(self.old_value) > 40
+                else self.old_value
+            )
+            new = (
+                self.new_value[:40] + "..."
+                if len(self.new_value) > 40
+                else self.new_value
+            )
+            return f"Ancienne valeur : {old} ➔ Nouvelle valeur : {new}"
+
+        return ""
 
     @classmethod
     def track(cls, user, content_object: models.Model, values: dict[str, tuple]):

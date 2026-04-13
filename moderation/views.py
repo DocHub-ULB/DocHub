@@ -53,21 +53,18 @@ def process_representative_request(request, request_id):
 
     action = form.cleaned_data["action"]
 
-    # Dictionary of changes for the logging system
-    log_values = {"processed": (False, True)}
-
     if action == "accept":
-        # Check if the user already has rights (in case another mod already processed it)
+        # Check if the user already has rights
         if not target_user.is_staff and not target_user.is_moderator:
             target_user.is_moderator = True
             target_user.save()
 
-            # Create the moderation log
             ModerationLog.track(
                 user=request.user,
-                content_object=target_user,
-                values={"is_moderator": (False, True)},
+                content_object=rep_request,
+                values={"action_accepter": ("", "Acceptée")},
             )
+
             messages.success(
                 request,
                 f"La demande a été acceptée. {target_user.netid} est maintenant modérateur !",
@@ -82,18 +79,19 @@ def process_representative_request(request, request_id):
         # Get the rejection reason from the validated form
         reason = form.cleaned_data["rejection_reason"]
         rep_request.rejection_reason = reason
-        log_values["rejection_reason"] = ("", reason)
+
+        ModerationLog.track(
+            user=request.user,
+            content_object=rep_request,
+            values={"action_rejeter": ("", reason if reason else "Sans motif")},
+        )
 
         messages.warning(
             request,
             f"La demande de {target_user.netid} a été refusée.",
         )
 
-    # Log that the request was processed (and potentially the reason)
-    ModerationLog.track(
-        user=request.user, content_object=rep_request, values=log_values
-    )
-
+    # Mark as processed without logging technical noise
     rep_request.processed = True
     rep_request.save()
 
@@ -148,7 +146,7 @@ def moderator_add(request):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff, login_url="/")  # 🔒 Only Admins can remove
+@user_passes_test(lambda u: u.is_staff, login_url="/")  # Only Admins can remove
 @require_POST
 def moderator_remove(request, user_id):
     """Remove moderator rights from a user (Admin only)"""

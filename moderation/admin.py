@@ -1,31 +1,33 @@
 from django.contrib import admin
 
-from moderation.models import ModerationLog, RepresentativeRequest
-
-
-@admin.register(RepresentativeRequest)
-class RepresentativeRequestAdmin(admin.ModelAdmin):
-    list_display = ("user", "faculty", "processed", "created")
-    list_filter = ("processed",)
+from moderation.models import ModerationLog
 
 
 @admin.register(ModerationLog)
 class ModerationLogAdmin(admin.ModelAdmin):
     list_display = (
         "user",
-        "content_type",
-        "target_item",
-        "target_field",
-        "old_value",
-        "new_value",
         "timestamp",
+        "display_action",
+        "display_target",
+        "display_details",
     )
     list_filter = ("target_field", "timestamp", "content_type")
-    search_fields = ("user__netid", "object_id", "old_value", "new_value")
+    search_fields = ("user__netid", "object_id")
 
-    @admin.display(description="Objet ciblé")
-    def target_item(self, obj):
-        """Retourne le nom lisible de l'objet ciblé au lieu de son simple numéro d'ID"""
-        if obj.content_object:
-            return str(obj.content_object)
-        return f"ID {obj.object_id} (Supprimé)"
+    def get_queryset(self, request):
+        """Hide old technical logs to keep the admin clean"""
+        qs = super().get_queryset(request)
+        return qs.exclude(target_field__in=["processed", "rejection_reason", "statut"])
+
+    @admin.display(description="Action")
+    def display_action(self, obj):
+        return obj.action_text
+
+    @admin.display(description="Cible")
+    def display_target(self, obj):
+        return obj.target_text
+
+    @admin.display(description="Détails")
+    def display_details(self, obj):
+        return obj.details_text
