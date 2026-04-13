@@ -22,4 +22,9 @@ urlpatterns = [
         views.process_representative_request,
         name="process_representative_request",
     ),
+    path(
+        "logs/",
+        views.public_logs,
+        name="public_logs",
+    ),
 ]

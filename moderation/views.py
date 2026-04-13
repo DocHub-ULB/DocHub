@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -212,4 +213,29 @@ def representative_request(request):
         request,
         "moderation/representative_request.html",
         {"form": form, "rejection_reason": rejection_msg},
+    )
+
+
+@login_required
+def public_logs(request):
+    """Public ledger of moderation actions for accountability (accessible to all logged users)."""
+
+    # Fetch all relevant logs, excluding noisy backend fields
+    log_list = (
+        ModerationLog.objects.exclude(
+            target_field__in=["processed", "rejection_reason", "statut"]
+        )
+        .select_related("user", "content_type")
+        .order_by("-timestamp")
+    )
+
+    # Set up pagination (e.g., 50 logs per page)
+    paginator = Paginator(log_list, 50)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(
+        request,
+        "moderation/public_logs.html",
+        {"logs": page_obj},
     )
