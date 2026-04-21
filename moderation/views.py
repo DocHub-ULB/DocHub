@@ -1,27 +1,67 @@
+from functools import wraps
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from moderation.forms import ProcessRepresentativeRequestForm, RepresentativeRequestForm
+from moderation.forms import (
+    AddModeratorForm,
+    ProcessRepresentativeRequestForm,
+    RepresentativeRequestForm,
+)
 from moderation.models import ModerationLog, RepresentativeRequest
 
 User = get_user_model()
 
 
+# --- Custom Decorators for 403 Permissions ---
+
+
 def is_moderator(user):
-    # Grant access to Admins (is_staff) AND Moderators (is_moderator)
     return user.is_staff or user.is_moderator
 
 
+def moderator_required(view_func):
+    """Decorator for views that checks that the user is a moderator, raising a 403 if not."""
+
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if is_moderator(request.user):
+            return view_func(request, *args, **kwargs)
+        raise PermissionDenied(
+            "Tu n'as pas les droits de modération pour accéder à cette page."
+        )
+
+    return _wrapped_view
+
+
+def admin_required(view_func):
+    """Decorator for views that checks that the user is staff, raising a 403 if not."""
+
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_staff:
+            return view_func(request, *args, **kwargs)
+        raise PermissionDenied(
+            "Seul un administrateur système peut effectuer cette action."
+        )
+
+    return _wrapped_view
+
+
+# ---------------------------------------------
+
+
 @login_required
-@user_passes_test(is_moderator, login_url="/")
+@moderator_required
 def moderation_home(request):
-    # Fetch all pending requests, from newest to oldest
+    """Main dashboard for moderators."""
     pending_requests = (
         RepresentativeRequest.objects.filter(processed=False)
         .select_related("user")
@@ -36,28 +76,27 @@ def moderation_home(request):
 
 
 @login_required
-@user_passes_test(is_moderator, login_url="/")
+@moderator_required
 @require_POST
 def process_representative_request(request, request_id):
-    """Processes a role request (Accept or Reject) and logs the action"""
-    rep_request = get_object_or_404(RepresentativeRequest, id=request_id)
+    """Processes a role request (Accept or Reject) and logs the action."""
+    rep_request = get_object_or_404(
+        RepresentativeRequest, id=request_id, processed=False
+    )
     target_user = rep_request.user
 
-    # Pass POST data to the Django form
     form = ProcessRepresentativeRequestForm(request.POST)
 
     if not form.is_valid():
-        # If the form is invalid (e.g., rejection reason is too short)
         url = reverse("moderation_home") + "?error=reason"
         return redirect(url)
 
     action = form.cleaned_data["action"]
 
     if action == "accept":
-        # Check if the user already has rights
         if not target_user.is_staff and not target_user.is_moderator:
             target_user.is_moderator = True
-            target_user.save()
+            target_user.save(update_fields=["is_moderator"])
 
             ModerationLog.track(
                 user=request.user,
@@ -76,7 +115,6 @@ def process_representative_request(request, request_id):
             )
 
     elif action == "reject":
-        # Get the rejection reason from the validated form
         reason = form.cleaned_data["rejection_reason"]
         rep_request.rejection_reason = reason
 
@@ -91,38 +129,48 @@ def process_representative_request(request, request_id):
             f"La demande de {target_user.netid} a été refusée.",
         )
 
-    # Mark as processed without logging technical noise
+    # Mark as processed with update_fields for performance
     rep_request.processed = True
-    rep_request.save()
+    rep_request.save(update_fields=["processed", "rejection_reason"])
 
     return redirect("moderation_home")
 
 
 @login_required
-@user_passes_test(is_moderator, login_url="/")
+@moderator_required
 def moderators_list(request):
-    """Display the list of all Admins and Moderators"""
+    """Display the list of all Admins and Moderators."""
     moderators = User.objects.filter(Q(is_staff=True) | Q(is_moderator=True)).order_by(
         "-is_staff", "first_name"
     )
     return render(
-        request, "moderation/moderators_management.html", {"moderators": moderators}
+        request,
+        "moderation/moderators_management.html",
+        {"moderators": moderators, "add_form": AddModeratorForm()},
     )
 
 
 @login_required
-@user_passes_test(is_moderator, login_url="/")
+@moderator_required
 @require_POST
 def moderator_add(request):
-    """Add a new moderator using their NetID"""
-    netid_to_add = request.POST.get("netid", "").strip()
-    if netid_to_add:
+    """Add a new moderator using a validated Form."""
+    form = AddModeratorForm(request.POST)
+
+    if form.is_valid():
+        netid_to_add = form.cleaned_data["netid"]
+
         try:
             target_user = User.objects.get(netid=netid_to_add)
 
             if not target_user.is_staff and not target_user.is_moderator:
                 target_user.is_moderator = True
-                target_user.save()
+                target_user.save(update_fields=["is_moderator"])
+
+                # FIX : Close any pending request for this user automatically
+                RepresentativeRequest.objects.filter(
+                    user=target_user, processed=False
+                ).update(processed=True, rejection_reason="")
 
                 ModerationLog.track(
                     user=request.user,
@@ -146,10 +194,10 @@ def moderator_add(request):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff, login_url="/")  # Only Admins can remove
+@admin_required
 @require_POST
 def moderator_remove(request, user_id):
-    """Remove moderator rights from a user (Admin only)"""
+    """Remove moderator rights from a user (Admin only)."""
     target_user = get_object_or_404(User, id=user_id)
 
     if target_user.is_staff:
@@ -157,10 +205,10 @@ def moderator_remove(request, user_id):
             request, "Impossible de retirer les droits d'un Administrateur Système ici."
         )
     elif target_user == request.user:
-        messages.warning(request, "Vous ne pouvez pas retirer vos propres droits ici.")
+        messages.warning(request, "Tu ne peux pas retirer tes propres droits ici.")
     elif target_user.is_moderator:
         target_user.is_moderator = False
-        target_user.save()
+        target_user.save(update_fields=["is_moderator"])
 
         ModerationLog.track(
             user=request.user,
@@ -176,7 +224,14 @@ def moderator_remove(request, user_id):
 
 @login_required
 def representative_request(request):
-    # Check if there is a pending request
+    """Handle student requests to become a moderator."""
+    if is_moderator(request.user):
+        messages.info(
+            request,
+            "Tu es déjà modérateur (ou admin), tu n'as pas besoin de faire de demande !",
+        )
+        return redirect("/")
+
     if RepresentativeRequest.objects.filter(
         user=request.user, processed=False
     ).exists():
@@ -185,18 +240,15 @@ def representative_request(request):
             "moderation/representative_request_received.html",
         )
 
-    # Get the last rejection reason if the user is not Admin or Mod
     rejection_msg = None
-    if not request.user.is_moderator and not request.user.is_staff:
-        last_req = (
-            RepresentativeRequest.objects.filter(user=request.user, processed=True)
-            .order_by("-created")
-            .first()
-        )
-        if last_req and last_req.rejection_reason:
-            rejection_msg = last_req.rejection_reason
+    last_req = (
+        RepresentativeRequest.objects.filter(user=request.user, processed=True)
+        .order_by("-created")
+        .first()
+    )
+    if last_req and last_req.rejection_reason:
+        rejection_msg = last_req.rejection_reason
 
-    # Standard processing
     if request.method == "POST":
         form = RepresentativeRequestForm(request.POST)
         if form.is_valid():

@@ -40,3 +40,17 @@ class ProcessRepresentativeRequestForm(forms.Form):
             )
 
         return cleaned_data
+
+
+class AddModeratorForm(forms.Form):
+    netid = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Ex: blabevue",
+                "id": "netid",
+            }
+        ),
+    )
