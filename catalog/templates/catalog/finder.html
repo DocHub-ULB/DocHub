@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb" class="d-none d-md-block">
         <ol class="breadcrumb">
             {% for column in columns %}
-                <li class="breadcrumb-item"><a href="{{ column.category_prefix }}/">{{ column.category.name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ column.url }}">{{ column.category.name }}</a></li>
             {% endfor %}
         </ol>
     </nav>
@@ -55,7 +55,7 @@
                     {{ column.category.name }}
                 </h5>
                 <ul class="p-0" style="list-style: none;">
-                    {% regroup column.children by get_type_display as children_groups %}
+                    {% regroup column.children by category.get_type_display as children_groups %}
                     {% for type in children_groups %}
                         {% if type.grouper != "OTHE" %}
                             <li>
@@ -71,16 +71,16 @@
                                 </div>
                             </li>
                         {% endif %}
-                        {% for subcat in type.list %}
+                        {% for child in type.list %}
                             <li>
-                                <a href="{{ column.category_prefix }}/{{ subcat.slug }}"
+                                <a href="{{ child.url }}"
                                    class="text-body text-decoration-none">
                                     <div class="d-flex align-items-center my-1 ">
                                         <div class="flex-shrink-0 px-2 py-1">
 
                                         </div>
                                         <div class="flex-grow-1 hover-underline">
-                                            {{ subcat.better_name|capfirst }}
+                                            {{ child.category.better_name|capfirst }}
                                         </div>
                                     </div>
                                 </a>
