@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from moderation.models import ModerationLog
+from moderation.models import ModerationLog, RepresentativeRequest
+
+
+@admin.register(RepresentativeRequest)
+class RepresentativeRequestAdmin(admin.ModelAdmin):
+    list_display = ("user", "faculty", "role", "processed", "created")
+    list_filter = ("processed", "faculty", "role")
+    search_fields = ("user__netid", "user__email")
 
 
 @admin.register(ModerationLog)
