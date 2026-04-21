@@ -61,7 +61,7 @@ class BulkFilesForm(forms.Form):
             }
         ),
         error_messages={
-            "invalid": "Le lien fourni n'est pas valide. Veuillez entrer une URL complète (ex: https://...)."
+            "invalid": "Le lien fourni n'est pas valide. Entre une URL complète (ex: https://...)."
         },
     )
 
