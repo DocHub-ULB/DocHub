@@ -271,12 +271,8 @@ def public_logs(request):
     """Public ledger of moderation actions for accountability (accessible to all logged users)."""
 
     # Fetch all relevant logs, excluding noisy backend fields
-    log_list = (
-        ModerationLog.objects.exclude(
-            target_field__in=["processed", "rejection_reason", "statut"]
-        )
-        .select_related("user", "content_type")
-        .order_by("-timestamp")
+    log_list = ModerationLog.objects.select_related("user", "content_type").order_by(
+        "-timestamp"
     )
 
     # Set up pagination (e.g., 50 logs per page)
