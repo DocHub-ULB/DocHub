@@ -68,6 +68,7 @@ def upload_file(request, slug):
         form = UploadFileForm()
 
     multiform = MultipleUploadFileForm()
+    bulk_form = BulkFilesForm()
 
     return render(
         request,
@@ -75,6 +76,7 @@ def upload_file(request, slug):
         {
             "form": form,
             "multiform": multiform,
+            "bulk_form": bulk_form,
             "course": course,
         },
     )
@@ -305,17 +307,58 @@ def submit_bulk(request, slug):
         form = BulkFilesForm(request.POST)
 
         if form.is_valid():
-            BulkDocuments.objects.create(
-                url=form.cleaned_data["url"], course=course, user=request.user
-            )
+            url = form.cleaned_data["url"]
 
+            # Verify Duplicate Submission URL
+            if BulkDocuments.objects.filter(
+                url=url, course=course, processed=False
+            ).exists():
+                form.add_error(
+                    "url",
+                    "Ce lien a déjà été soumis pour ce cours et est en attente de traitement.",
+                )
+                return render(
+                    request,
+                    "documents/document_upload.html",
+                    {
+                        "course": course,
+                        "form": UploadFileForm(),
+                        "multiform": MultipleUploadFileForm(),
+                        "bulk_form": form,
+                    },
+                    # status=422  mandatory for Turbo: forces the display of validation errors (Turbo ignores 200 codes)
+                    status=422,
+                )
+
+            # Succes submit URL
+            BulkDocuments.objects.create(url=url, course=course, user=request.user)
+            success_url = (
+                reverse("document_submit_bulk", args=[course.slug]) + "?success=true"
+            )
+            return HttpResponseRedirect(success_url)
+
+        else:
+            # Bad URL submit
             return render(
                 request,
-                "documents/document_bulk.html",
+                "documents/document_upload.html",
                 {
                     "course": course,
+                    "form": UploadFileForm(),
+                    "multiform": MultipleUploadFileForm(),
+                    "bulk_form": form,
                 },
+                status=422,
             )
+
+    if "success" in request.GET:
+        return render(
+            request,
+            "documents/document_bulk.html",
+            {
+                "course": course,
+            },
+        )
 
     return HttpResponseRedirect(reverse("document_put", args=[course.slug]))
 
