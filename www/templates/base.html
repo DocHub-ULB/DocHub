@@ -236,13 +236,17 @@
                     </a>
                 </div>
                 <div>
-                    <a href="https://urlab.be">
+                    <a href="https://urlab.be" class="text-decoration-none me-2">
                         <img src="{% static "images/urlab.png" %}" style="height: 1em;">
                         UrLab
                     </a>
-                    <a href="https://cercle-informatique.be/"><img style="height: 1.0em;"
-                                                                   src="{% static "images/ci.png" %}"></a>
-                    Code open-source sur <a href="https://github.com/UrLab/dochub">GitHub</a>
+                    <a href="https://cercle-informatique.be/" class="text-decoration-none me-2">
+                        <img style="height: 1.0em;" src="{% static "images/ci.png" %}">
+                    </a>
+                    <span class="text-muted">|</span>
+                    <a href="https://github.com/UrLab/dochub" class="ms-2">GitHub</a>
+                    <span class="text-muted mx-1">&bull;</span>
+                    <a href="{% url 'public_logs' %}">Transparence modération</a>
                 </div>
             </footer>
         {% endblock fullpage %}

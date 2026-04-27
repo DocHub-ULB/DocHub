@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Gestion des Modérateurs{% endblock %}
+
+{% block content %}
+    <div class="container-xl mt-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0">Gestion des modérateurs</h1>
+            <a href="{% url 'moderation_home' %}" class="btn btn-outline-secondary btn-sm">Retour au Dashboard</a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-light border-0 pt-3">
+                        <h5 class="card-title h6 mb-0">Ajouter un modérateur</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'moderator_add' %}" class="d-flex flex-column gap-2">
+                            {% csrf_token %}
+                            <label for="netid" class="form-label small text-muted">NetID de l'étudiant</label>
+                            <input type="text" class="form-control" id="netid" name="netid" placeholder="Ex: blabevue" required>
+                            <button type="submit" class="btn btn-success mt-2">Promouvoir modérateur</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>NetID</th>
+                                    <th>Utilisateur</th>
+                                    <th>Rôle</th>
+                                    <th>Dernière connexion</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mod in moderators %}
+                                    <tr>
+                                        <td><strong>{{ mod.netid }}</strong></td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div>
+                                                    {{ mod.fullname|default:"-" }}
+                                                    <br><small class="text-muted">{{ mod.email }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if mod.is_staff %}
+                                                <span class="badge bg-danger">Admin</span>
+                                            {% else %}
+                                                <span class="badge bg-primary">Modérateur</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-muted small">
+                                            {{ mod.last_login|date:"d/m/Y à H:i"|default:"Jamais" }}
+                                        </td>
+                                        <td class="text-end">
+                                            {% if mod == request.user %}
+                                                <span class="badge bg-secondary">Vous</span>
+                                            {% elif mod.is_staff %}
+                                                <span class="text-muted small">Intouchable</span>
+                                            {% else %}
+
+                                                {% if user.is_staff %}
+                                                    <form method="post" action="{% url 'moderator_remove' mod.id %}" class="d-inline" data-turbo-confirm="Es-tu sûr de vouloir retirer les droits de {{ mod.netid }} ?">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">Retirer</button>
+                                                    </form>
+                                                {% else %}
+                                                    <span class="text-muted small fst-italic">Admin seulement</span>
+                                                {% endif %}
+
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">Aucun modérateur trouvé.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
