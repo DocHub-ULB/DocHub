@@ -61,6 +61,11 @@ dev = [
     "ruff>=0.13.1",
 ]
 
+[tool.uv]
+exclude-newer = "7 days"
+exclude-newer-package = { django = false }
+
+
 [tool.pytest.ini_options]
 norecursedirs = ".venv ve ve3 static media .git node_modules"
 DJANGO_SETTINGS_MODULE="www.test_settings"

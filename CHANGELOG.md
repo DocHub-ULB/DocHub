@@ -1,6 +1,16 @@
 # Changelog
 
-This page tries to contain all changes made on DocHub.
+This page tries to contain all use facing changes made on DocHub.
+
+# 2026.4.0 
+
+ * Add a institutional disclaimer and contribution call on the login page
+
+# 2026.3.0
+
+ * Fix a few performace issues
+ * Fix PDF download error for documents without PDF files
+ * Improve search results layout and archived courses visibility
 
 # 2025.12.1
 
