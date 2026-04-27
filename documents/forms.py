@@ -52,7 +52,18 @@ class UploadFileForm(DocumentForm):
 
 
 class BulkFilesForm(forms.Form):
-    url = forms.URLField()
+    url = forms.URLField(
+        widget=forms.URLInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "https://...",
+                "id": "url",
+            }
+        ),
+        error_messages={
+            "invalid": "Le lien fourni n'est pas valide. Entre une URL complète (ex: https://...)."
+        },
+    )
 
 
 class ReUploadForm(forms.Form):

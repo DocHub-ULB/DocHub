@@ -110,11 +110,17 @@ def unfollow_all_courses(request):
 
 
 @dataclass
+class ChildCategory:
+    category: Category
+    url: str
+
+
+@dataclass
 class Column:
     category: Category
-    children: list[Category]
+    children: list[ChildCategory]
     depth: int
-    category_prefix: str
+    url: str
 
 
 def finder(request, slugs: str = ""):
@@ -128,29 +134,32 @@ def finder(request, slugs: str = ""):
             raise Http404(f"Invalid category path, {i}")
 
     columns = []
-    max_depth = len(categories)
     for i, category in enumerate(categories):
-        depth = max_depth - i
-        path_list = ["."] + [".."] * (depth - 1)
+        slug_path = "/".join(slug_list[: i + 1])
+        children = category.children.order_by(
+            Case(
+                When(type=Category.CategoryType.BACHELOR, then=Value(0)),
+                When(type=Category.CategoryType.MASTER, then=Value(1)),
+                When(
+                    type=Category.CategoryType.MASTER_SPECIALIZATION,
+                    then=Value(2),
+                ),
+                default=Value(3),
+            ),
+            "name",
+        ).all()
         columns.append(
             Column(
                 category,
-                list(
-                    category.children.order_by(
-                        Case(
-                            When(type=Category.CategoryType.BACHELOR, then=Value(0)),
-                            When(type=Category.CategoryType.MASTER, then=Value(1)),
-                            When(
-                                type=Category.CategoryType.MASTER_SPECIALIZATION,
-                                then=Value(2),
-                            ),
-                            default=Value(3),
-                        ),
-                        "name",
-                    ).all()
-                ),
-                depth,
-                "/".join(path_list),
+                [
+                    ChildCategory(
+                        child,
+                        reverse("catalog:finder", args=[f"{slug_path}/{child.slug}"]),
+                    )
+                    for child in children
+                ],
+                len(categories) - i,
+                reverse("catalog:finder", args=[slug_path]),
             )
         )
 

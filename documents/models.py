@@ -269,13 +269,11 @@ def cleanup_document_files(instance: Document, **kwargs) -> None:
         raise Exception("Documents are read-only.")
 
     pdf_file_name = instance.pdf.name
-    if pdf_file_name != "" and instance.pdf.storage.exists(pdf_file_name):
+    if pdf_file_name and instance.pdf.storage.exists(pdf_file_name):
         instance.pdf.storage.delete(pdf_file_name)
 
     original_file_name = instance.original.name
-    if original_file_name != "" and instance.original.storage.exists(
-        original_file_name
-    ):
+    if original_file_name and instance.original.storage.exists(original_file_name):
         instance.original.storage.delete(original_file_name)
 
 
