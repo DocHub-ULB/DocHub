@@ -69,7 +69,7 @@
                                             {% else %}
 
                                                 {% if user.is_staff %}
-                                                    <form method="post" action="{% url 'moderator_remove' mod.id %}" class="d-inline" onsubmit="return confirm('Es-tu sûr de vouloir retirer les droits de {{ mod.netid }} ?');">
+                                                    <form method="post" action="{% url 'moderator_remove' mod.id %}" class="d-inline" data-turbo-confirm="Es-tu sûr de vouloir retirer les droits de {{ mod.netid }} ?">
                                                         {% csrf_token %}
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">Retirer</button>
                                                     </form>
