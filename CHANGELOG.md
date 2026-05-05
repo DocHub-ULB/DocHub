@@ -2,7 +2,7 @@
 
 This page tries to contain all use facing changes made on DocHub.
 
-# Unreleased
+# 2026.5.0
 
 Moderation:
  * moderators can now edit any document
@@ -10,6 +10,10 @@ Moderation:
  * admins can now add and remove moderators
  * add a moderation tree view showing who promoted whom
  * add a public moderation transparency log
+
+Fixes:
+ * fix bulk upload Turbo error
+ * fix catalog navigation flicker
 
 # 2026.4.0 
 
