@@ -3,6 +3,12 @@
 {% block title %}Demande d'accès{% endblock %}
 
 {% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'moderation_about' %}">Modération</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Demande d'accès</li>
+        </ol>
+    </nav>
     <h1>Demande de droits de modération</h1>
 
     {% if rejection_reason %}
@@ -36,7 +42,7 @@
     {% endif %}
 
     <p>
-        Tu es délégué d'année, délégué cours de ton cercle ou dans un bureau étudiant&nbsp;?
+        Tu es délégué·e d'année, délégué·e cours de ton cercle ou dans un bureau étudiant·e&nbsp;?
         Tu peux avoir des droits de modération sur DocHub.
     </p>
     <p>

@@ -76,11 +76,26 @@
                     Une fois que tu as trouvé ton bonheur, n'oublie pas de l'ajouter aux favoris ! ️
                 {% endif %}
 
-                {% if not request.user.is_moderator %}
+                {% if request.user.is_moderator and not request.user.moderator_welcome_dismissed %}
+                    <div class="alert alert-success d-flex justify-content-between align-items-start gap-3" role="alert">
+                        <div class="flex-grow-1">
+                            <strong>🎉 Félicitations&nbsp;!</strong> Tu es maintenant modérateur·trice sur DocHub.
+                            {% if request.user.promoted_by %}
+                                {{ request.user.promoted_by.fullname }} t'a accordé ces droits.
+                            {% endif %}
+                            Tu peux désormais modifier, masquer et mieux organiser les documents.
+                            <a href="{% url "moderation_about" %}" class="alert-link">Découvre ce que permet la modération</a>.
+                        </div>
+                        <form method="post" action="{% url 'moderator_banner_hide' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-close" aria-label="Fermer"></button>
+                        </form>
+                    </div>
+                {% elif not request.user.is_moderator and not request.user.is_staff %}
                     <div class="alert alert-info" role="alert">
-                        Tu es délégué d'année, délégué cours de ton cercle ou dans un bureau étudiant&nbsp;?
-                        Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Clique
-                            ici</a> pour les recevoir !
+                        Tu es délégué·e d'année, délégué·e cours de ton cercle ou dans un bureau étudiant·e&nbsp;?
+                        Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Demande
+                            les droits</a> ou <a href="{% url "moderation_about" %}">découvre comment fonctionne la modération</a>.
                     </div>
                 {% endif %}
                 <h1 class="fs-3 border-bottom d-flex justify-content-between">

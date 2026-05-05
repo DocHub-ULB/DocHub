@@ -1,95 +1,108 @@
 {% extends "base.html" %}
 
-{% block title %}Gestion des Modérateurs{% endblock %}
+{% block title %}Gestion des modérateur·trices{% endblock %}
 
 {% block content %}
     <div class="container-xl mt-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0">Gestion des modérateurs</h1>
-            <a href="{% url 'moderation_home' %}" class="btn btn-outline-secondary btn-sm">Retour au Dashboard</a>
-        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'moderation_about' %}">Modération</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Gestion des modérateur·trices</li>
+            </ol>
+        </nav>
+        <h1 class="h3 mb-4">Gestion des modérateur·trices</h1>
 
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light border-0 pt-3">
-                        <h5 class="card-title h6 mb-0">Ajouter un modérateur</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="post" action="{% url 'moderator_add' %}" class="d-flex flex-column gap-2">
-                            {% csrf_token %}
-                            <label for="netid" class="form-label small text-muted">NetID de l'étudiant</label>
-                            <input type="text" class="form-control" id="netid" name="netid" placeholder="Ex: blabevue" required>
-                            <button type="submit" class="btn btn-success mt-2">Promouvoir modérateur</button>
-                        </form>
-                    </div>
-                </div>
+        {% if request.GET.error == 'reason' %}
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                Veuillez fournir une raison d'au moins 10 caractères pour justifier le refus.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+        {% endif %}
 
-            <div class="col-md-8">
-                <div class="card shadow-sm border-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>NetID</th>
-                                    <th>Utilisateur</th>
-                                    <th>Rôle</th>
-                                    <th>Dernière connexion</th>
-                                    <th class="text-end">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for mod in moderators %}
-                                    <tr>
-                                        <td><strong>{{ mod.netid }}</strong></td>
-                                        <td>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div>
-                                                    {{ mod.fullname|default:"-" }}
-                                                    <br><small class="text-muted">{{ mod.email }}</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {% if mod.is_staff %}
-                                                <span class="badge bg-danger">Admin</span>
-                                            {% else %}
-                                                <span class="badge bg-primary">Modérateur</span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-muted small">
-                                            {{ mod.last_login|date:"d/m/Y à H:i"|default:"Jamais" }}
-                                        </td>
-                                        <td class="text-end">
-                                            {% if mod == request.user %}
-                                                <span class="badge bg-secondary">Vous</span>
-                                            {% elif mod.is_staff %}
-                                                <span class="text-muted small">Intouchable</span>
-                                            {% else %}
+        <p>
+            En tant que modérateur·trice, tu peux toi-même promouvoir de nouveaux·elles modérateur·trices.
+        </p>
+        <p>
+            ⚠️ Attention, en promouvant quelqu'un·e, <strong>tu en deviens responsable</strong>.
+            N'accorde ce droit qu'à des personnes de confiance — un·e modérateur·trice
+            peut modifier ou masquer n'importe quel document sur DocHub.
+            Un grand pouvoir implique de grandes responsabilités.
+            <br>
+            La promotion sera publiquement visible dans <a href="{% url 'moderation_tree' %}">l'arbre de modération</a>,
+            qui montrera que c'est toi qui as accordé cet accès.
+        </p>
 
-                                                {% if user.is_staff %}
-                                                    <form method="post" action="{% url 'moderator_remove' mod.id %}" class="d-inline" data-turbo-confirm="Es-tu sûr de vouloir retirer les droits de {{ mod.netid }} ?">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger">Retirer</button>
-                                                    </form>
-                                                {% else %}
-                                                    <span class="text-muted small fst-italic">Admin seulement</span>
-                                                {% endif %}
-
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted py-4">Aucun modérateur trouvé.</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+        <h2 class="h5 mb-1">Demandes en attente</h2>
+        <p class="text-muted mb-3">Des étudiant·es ont demandé à rejoindre l'équipe de modération. À toi de juger si leur candidature mérite d'être acceptée.</p>
+        {% for req in pending_requests %}
+            <div class="border rounded p-3 mb-3">
+                <div class="mb-3">
+                    <strong>{{ req.user.fullname }}</strong>
+                    <span class="text-muted ms-1">{{ req.user.netid }}</span>
                 </div>
+
+                <dl class="row mb-2" style="row-gap: 0.1rem;">
+                    <dt class="col-sm-3 text-muted fw-normal small">Faculté</dt>
+                    <dd class="col-sm-9 small mb-0">{{ req.get_faculty_display }}</dd>
+                    <dt class="col-sm-3 text-muted fw-normal small">Rôle</dt>
+                    <dd class="col-sm-9 small mb-0">{{ req.get_role_display }}</dd>
+                    {% if req.comment %}
+                        <dt class="col-sm-3 text-muted fw-normal small">Commentaire</dt>
+                        <dd class="col-sm-9 small mb-0 fst-italic">{{ req.comment }}</dd>
+                    {% endif %}
+                </dl>
+
+                <form method="post" action="{% url 'process_representative_request' req.id %}">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accepter</button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#reject-form-{{ req.id }}"
+                            aria-expanded="false"
+                            aria-controls="reject-form-{{ req.id }}"
+                        >
+                            Refuser
+                        </button>
+                    </div>
+                    <div class="collapse mt-2" id="reject-form-{{ req.id }}">
+                        <div class="row g-2 align-items-center">
+                            <div class="col-12 col-md-8 col-lg-6">
+                                <input type="text" name="rejection_reason" class="form-control form-control-sm" placeholder="Motif de refus (10 caractères min.)" minlength="10">
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Confirmer</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
+        {% empty %}
+            <div class="border rounded bg-light-subtle text-muted px-3 py-4 mb-4">
+                <strong class="d-block text-body mb-1">Aucune demande en attente</strong>
+                <span class="small">Les nouvelles candidatures apparaîtront ici.</span>
+            </div>
+        {% endfor %}
+
+        <h2 class="h5 mb-1">Ajouter un·e modérateur·trice</h2>
+        <p class="text-muted mb-3">Si tu connais le netid d'un·e étudiant·e de confiance, tu peux l'ajouter directement sans qu'une demande soit nécessaire.</p>
+        <form method="post" action="{% url 'moderator_add' %}" class="row g-2 align-items-end">
+            {% csrf_token %}
+            <div class="col-12 col-md-8 col-lg-6">
+                <label for="netid" class="form-label small text-muted">NetID de l'étudiant·e</label>
+                <input type="text" class="form-control {% if request.GET.error == 'not_found' %}is-invalid{% endif %}" id="netid" name="netid" placeholder="Ex: blabevue" value="{{ request.GET.netid }}" required>
+                {% if request.GET.error == 'not_found' %}
+                    <div class="invalid-feedback">Aucun·e étudiant·e avec le netid « {{ request.GET.netid }} » n'a été trouvé·e.</div>
+                {% endif %}
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-success">Promouvoir</button>
+            </div>
+        </form>
     </div>
 {% endblock content %}

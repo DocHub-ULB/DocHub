@@ -1,6 +1,6 @@
 <nav class="container-xl navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container-fluid">
-        <a class="hover-scale-sm navbar-brand d-flex align-items-center gap-2 position-relative pe-3" href="/">
+        <a class="hover-scale-sm navbar-brand d-flex align-items-center gap-2 position-relative pe-3" href="{% url 'index' %}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                  class="hover-rotate bi bi-megaphone-fill" viewBox="0 0 16 16">
                 <path
@@ -24,10 +24,10 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {% if request.user.is_staff or request.user.is_moderator %}
-                    <li><a class="dropdown-item" href="/moderation">Modération</a></li>
+                    <li><a class="dropdown-item" href="{% url 'moderation_home' %}">Modération</a></li>
                 {% endif %}
                 {% if request.user.is_staff %}
-                    <li><a class="dropdown-item" href="/admin" data-turbo="false">Admin</a></li>
+                    <li><a class="dropdown-item" href="{% url 'admin:index' %}" data-turbo="false">Admin</a></li>
                 {% endif %}
 
                 <li>

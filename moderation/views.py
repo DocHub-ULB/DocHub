@@ -1,3 +1,4 @@
+from collections import defaultdict
 from functools import wraps
 
 from django.contrib import messages
@@ -5,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -62,17 +63,7 @@ def admin_required(view_func):
 @moderator_required
 def moderation_home(request):
     """Main dashboard for moderators."""
-    pending_requests = (
-        RepresentativeRequest.objects.filter(processed=False)
-        .select_related("user")
-        .order_by("-created")
-    )
-
-    return render(
-        request,
-        "moderation/home.html",
-        {"pending_requests": pending_requests},
-    )
+    return render(request, "moderation/home.html")
 
 
 @login_required
@@ -88,7 +79,7 @@ def process_representative_request(request, request_id):
     form = ProcessRepresentativeRequestForm(request.POST)
 
     if not form.is_valid():
-        url = reverse("moderation_home") + "?error=reason"
+        url = reverse("manage_moderators") + "?error=reason"
         return redirect(url)
 
     action = form.cleaned_data["action"]
@@ -96,7 +87,8 @@ def process_representative_request(request, request_id):
     if action == "accept":
         if not target_user.is_staff and not target_user.is_moderator:
             target_user.is_moderator = True
-            target_user.save(update_fields=["is_moderator"])
+            target_user.promoted_by = request.user
+            target_user.save(update_fields=["is_moderator", "promoted_by"])
 
             ModerationLog.track(
                 user=request.user,
@@ -106,7 +98,7 @@ def process_representative_request(request, request_id):
 
             messages.success(
                 request,
-                f"La demande a été acceptée. {target_user.netid} est maintenant modérateur !",
+                f"La demande a été acceptée. {target_user.netid} est maintenant modérateur·trice !",
             )
         else:
             messages.info(
@@ -133,20 +125,22 @@ def process_representative_request(request, request_id):
     rep_request.processed = True
     rep_request.save(update_fields=["processed", "rejection_reason"])
 
-    return redirect("moderation_home")
+    return redirect("manage_moderators")
 
 
 @login_required
 @moderator_required
-def moderators_list(request):
-    """Display the list of all Admins and Moderators."""
-    moderators = User.objects.filter(Q(is_staff=True) | Q(is_moderator=True)).order_by(
-        "-is_staff", "first_name"
+def manage_moderators(request):
+    """Display moderator requests and direct promotion controls."""
+    pending_requests = (
+        RepresentativeRequest.objects.filter(processed=False)
+        .select_related("user")
+        .order_by("-created")
     )
     return render(
         request,
         "moderation/moderators_management.html",
-        {"moderators": moderators, "add_form": AddModeratorForm()},
+        {"pending_requests": pending_requests},
     )
 
 
@@ -165,7 +159,8 @@ def moderator_add(request):
 
             if not target_user.is_staff and not target_user.is_moderator:
                 target_user.is_moderator = True
-                target_user.save(update_fields=["is_moderator"])
+                target_user.promoted_by = request.user
+                target_user.save(update_fields=["is_moderator", "promoted_by"])
 
                 # FIX : Close any pending request for this user automatically
                 RepresentativeRequest.objects.filter(
@@ -178,19 +173,17 @@ def moderator_add(request):
                     values={"is_moderator": (False, True)},
                 )
                 messages.success(
-                    request, f"{target_user.netid} est maintenant modérateur !"
+                    request, f"{target_user.netid} est maintenant modérateur·trice !"
                 )
             else:
-                messages.info(
-                    request, "Cet utilisateur a déjà des droits (Modérateur ou Admin)."
-                )
+                messages.info(request, "Cet utilisateur a déjà des droits.")
         except User.DoesNotExist:
-            messages.warning(
-                request,
-                f"❌ L'étudiant avec le netid '{netid_to_add}' n'a pas été trouvé.",
+            url = (
+                reverse("manage_moderators") + f"?error=not_found&netid={netid_to_add}"
             )
+            return redirect(url)
 
-    return redirect("moderators_list")
+    return redirect("manage_moderators")
 
 
 @login_required
@@ -208,29 +201,26 @@ def moderator_remove(request, user_id):
         messages.warning(request, "Tu ne peux pas retirer tes propres droits ici.")
     elif target_user.is_moderator:
         target_user.is_moderator = False
-        target_user.save(update_fields=["is_moderator"])
+        target_user.promoted_by = None
+        target_user.save(update_fields=["is_moderator", "promoted_by"])
 
         ModerationLog.track(
             user=request.user,
             content_object=target_user,
             values={"is_moderator": (True, False)},
         )
-        messages.success(
-            request, f"🗑️ Les droits de {target_user.netid} ont été retirés."
-        )
+        messages.warning(request, f"Les droits de {target_user.netid} ont été retirés.")
 
-    return redirect("moderators_list")
+    return redirect("manage_moderators")
 
 
 @login_required
 def representative_request(request):
     """Handle student requests to become a moderator."""
     if is_moderator(request.user):
-        messages.info(
-            request,
-            "Tu es déjà modérateur (ou admin), tu n'as pas besoin de faire de demande !",
+        raise PermissionDenied(
+            "Tu es déjà modérateur (ou admin), tu n'as pas besoin de faire de demande."
         )
-        return redirect("/")
 
     if RepresentativeRequest.objects.filter(
         user=request.user, processed=False
@@ -287,3 +277,60 @@ def public_logs(request):
         "moderation/public_logs.html",
         {"logs": page_obj},
     )
+
+
+@login_required
+def moderation_tree(request):
+    """Public page showing who promoted whom as moderator."""
+    moderators = (
+        User.objects.filter(Q(is_staff=True) | Q(is_moderator=True))
+        .select_related("promoted_by")
+        .annotate(action_count=Count("moderationlog"))
+        .order_by("first_name")
+    )
+
+    all_ids = {u.id for u in moderators}
+    children = defaultdict(list)
+    roots = []
+
+    for u in moderators:
+        if u.promoted_by_id and u.promoted_by_id in all_ids:
+            children[u.promoted_by_id].append(u)
+        else:
+            roots.append(u)
+
+    def build_subtree(user):
+        return [{"user": c, "children": build_subtree(c)} for c in children[user.id]]
+
+    tree = [{"user": r, "children": build_subtree(r)} for r in roots]
+
+    return render(request, "moderation/tree.html", {"tree": tree})
+
+
+@login_required
+def moderation_profile(request, netid):
+    """Public profile page showing a moderator's actions."""
+    profile_user = get_object_or_404(User, netid=netid)
+    has_moderation_history = ModerationLog.objects.filter(user=profile_user).exists()
+    if not (
+        profile_user.is_staff or profile_user.is_moderator or has_moderation_history
+    ):
+        raise PermissionDenied("Ce profil n'a pas d'activité de modération publique.")
+
+    logs = (
+        ModerationLog.objects.filter(user=profile_user)
+        .select_related("content_type")
+        .prefetch_related("content_object")
+        .order_by("-timestamp")
+    )
+    return render(
+        request,
+        "moderation/profile.html",
+        {"profile_user": profile_user, "logs": logs},
+    )
+
+
+@login_required
+def moderation_about(request):
+    """Public page explaining the moderation system."""
+    return render(request, "moderation/about.html")

@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 import pytest
 
 from users.models import User
@@ -30,3 +32,21 @@ def test_name():
         netid="jeanduj", first_name="Jean", last_name="DuJardin"
     )
     assert u.name == "Jean DuJardin"
+
+
+def test_moderator_banner_hide(client):
+    user = User.objects.create_user(
+        netid="moduser",
+        email="mod@ulb.be",
+        first_name="Mod",
+        last_name="User",
+        is_moderator=True,
+    )
+    client.force_login(user)
+
+    response = client.post(reverse("moderator_banner_hide"))
+
+    assert response.status_code == 302
+
+    user.refresh_from_db()
+    assert user.moderator_welcome_dismissed is True

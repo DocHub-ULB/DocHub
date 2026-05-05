@@ -4,8 +4,6 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
 from django.utils import timezone
 
-from catalog.models import Course
-
 
 class CustomUserManager(UserManager):
     PATTERN = re.compile(r"[\W_]+")
@@ -51,12 +49,14 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
     is_moderator = models.BooleanField(default=False)
-
-    moderated_courses = models.ManyToManyField("catalog.Course", blank=True)
-
-    def __init__(self, *args, **kwargs):
-        self._moderated_courses = None
-        super().__init__(*args, **kwargs)
+    moderator_welcome_dismissed = models.BooleanField(default=False)
+    promoted_by = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="promoted_users",
+    )
 
     @property
     def name(self):
@@ -66,7 +66,7 @@ class User(AbstractBaseUser):
     def following_courses(self):
         return self.courses_set.all()
 
-    def is_following(self, course: Course):
+    def is_following(self, course):
         return self.courses_set.filter(slug=course.slug).exists()
 
     def has_module_perms(self, *args, **kwargs):
@@ -76,17 +76,7 @@ class User(AbstractBaseUser):
         return self.is_staff
 
     def moderation_perm(self, obj):
-        if self.is_staff:
-            return True
-
-        if obj is None:
-            return False
-
-        if self._moderated_courses is None:
-            ids = [course.id for course in self.moderated_courses.only("id")]
-            self._moderated_courses = ids
-
-        return obj.write_perm(self, self._moderated_courses)
+        return self.is_staff or self.is_moderator
 
     def write_perm(self, obj):
         if obj and (obj.user.id == self.id):

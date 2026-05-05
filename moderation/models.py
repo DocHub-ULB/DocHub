@@ -81,6 +81,8 @@ class ModerationLog(models.Model):
             return "a accepté la demande de"
         elif self.target_field == "action_rejeter":
             return "a refusé la demande de"
+        elif self.target_field == "reupload":
+            return "a re-uploadé"
         return f"a modifié '{self.target_field}' sur"
 
     @property
@@ -92,6 +94,8 @@ class ModerationLog(models.Model):
             return "success"
         elif self.target_field == "action_rejeter":
             return "warning"
+        elif self.target_field == "reupload":
+            return "info"
         return "secondary"
 
     @property

@@ -3,8 +3,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # --- Public Landing ---
+    path("", views.moderation_about, name="moderation_about"),
     # --- Main Dashboard ---
-    path("", views.moderation_home, name="moderation_home"),
+    path("home/", views.moderation_home, name="moderation_home"),
     # --- Logs Publics ---
     path("logs/", views.public_logs, name="public_logs"),
     # --- Representative Request ---
@@ -19,11 +21,14 @@ urlpatterns = [
         name="process_representative_request",
     ),
     # --- Moderators Management ---
-    path("moderators/", views.moderators_list, name="moderators_list"),
-    path("moderators/add/", views.moderator_add, name="moderator_add"),
+    path("manage/", views.manage_moderators, name="manage_moderators"),
+    path("manage/add/", views.moderator_add, name="moderator_add"),
     path(
-        "moderators/remove/<int:user_id>/",
+        "manage/remove/<int:user_id>/",
         views.moderator_remove,
         name="moderator_remove",
     ),
+    # --- Public Pages ---
+    path("tree/", views.moderation_tree, name="moderation_tree"),
+    path("profile/<str:netid>/", views.moderation_profile, name="moderation_profile"),
 ]

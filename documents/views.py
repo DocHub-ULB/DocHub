@@ -125,6 +125,10 @@ def document_edit(request, pk):
                 reverse("catalog:course_show", args=[doc.course.slug])
             )
 
+        old_name = doc.name
+        old_description = doc.description
+        old_tags = list(doc.tags.all())
+
         form = DocumentForm(request.POST, instance=doc)
 
         if form.is_valid():
@@ -133,12 +137,12 @@ def document_edit(request, pk):
                     user=request.user,
                     content_object=doc,
                     values={
-                        "name": (doc.name, form.cleaned_data["name"]),
+                        "name": (old_name, form.cleaned_data["name"]),
                         "description": (
-                            doc.description,
+                            old_description,
                             form.cleaned_data["description"],
                         ),
-                        "tags": (doc.tags.all(), form.cleaned_data["tags"]),
+                        "tags": (old_tags, form.cleaned_data["tags"]),
                     },
                 )
 
@@ -169,7 +173,6 @@ def document_reupload(request, pk):
 
     if not request.user.write_perm(obj=document):
         return HttpResponse("You may not edit this document.", status=403)
-    # FIXME: log moderation action
 
     if document.state != Document.DocumentState.DONE:
         return HttpResponse(
@@ -196,13 +199,12 @@ def document_reupload(request, pk):
 
             document.reprocess(force=True)
 
-            # TODO Log new version upload
-            # action.send(
-            #     request.user,
-            #     verb="a uploadé une nouvelle version de",
-            #     action_object=document,
-            #     target=document.course,
-            # )
+            if request.user != document.user:
+                ModerationLog.track(
+                    user=request.user,
+                    content_object=document,
+                    values={"reupload": ("", file.name)},
+                )
 
             return HttpResponseRedirect(
                 reverse("catalog:course_show", args=(document.course.slug,))

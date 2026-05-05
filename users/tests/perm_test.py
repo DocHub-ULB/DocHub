@@ -1,27 +1,9 @@
 import pytest
 
-from catalog.models import Category, Course
 from documents.models import Document
 from users.models import User
 
 pytestmark = pytest.mark.django_db
-
-
-@pytest.fixture
-def tree():
-    root = Category.objects.create(name="ULB", slug="ulb")
-    science = Category.objects.create(name="science", slug="science")
-    science.parents.add(root)
-
-    swag = Course.objects.create(
-        name="Optimization of algorithmical SWAG", slug="swag-h-042"
-    )
-    swag.categories.add(science)
-
-    yolo = Course.objects.create(name="Yolo as new life manager", slug="yolo-f-101")
-    yolo.categories.add(science)
-
-    return root
 
 
 @pytest.fixture
@@ -58,23 +40,11 @@ def test_owner(user):
     assert user.write_perm(doc)
 
 
-def test_moderator(user, other_user, tree):
-    course = Course.objects.last()
-    user.moderated_courses.add(course)
-
-    doc = Document.objects.create(user=other_user, course=course)
+def test_moderator(user, other_user):
+    user.is_moderator = True
+    user.save()
+    doc = Document.objects.create(user=other_user)
     assert user.write_perm(doc)
-
-
-def test_bad_moderator(user, other_user, tree):
-    course = Course.objects.last()
-    other_course = Course.objects.first()
-    assert course.id != other_course.id
-
-    user.moderated_courses.add(course)
-
-    doc = Document.objects.create(user=other_user, course=other_course)
-    assert not user.write_perm(doc)
 
 
 # TODO : do the same for threads and messages
