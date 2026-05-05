@@ -1,25 +1,39 @@
 {% extends "base.html" %}
 
-{% block title %}Transparence Modération{% endblock %}
+{% block title %}{{ profile_user.netid }} — Profil de modération{% endblock %}
 
 {% block content %}
     <div class="container-xl mt-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'moderation_about' %}">Modération</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Journal</li>
+                <li class="breadcrumb-item"><a href="{% url 'public_logs' %}">Journal</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ profile_user.netid }}</li>
             </ol>
         </nav>
-        <h1>Journal de modération</h1>
-        <p class="text-muted">Toutes les actions de modération sont enregistrées ici publiquement.
-            Tu peux voir qui a fait quoi et quand.</p>
-        <div class="card shadow-sm border-0 mb-4">
+
+        <div class="d-flex align-items-start justify-content-between mb-4">
+            <div>
+                <h1 class="mb-0">{{ profile_user.netid }}</h1>
+                <p class="text-muted mb-1">{{ profile_user.name }}</p>
+                {% if profile_user.promoted_by %}
+                    <p class="text-muted small mb-0">Promu·e par <a href="{% url 'moderation_profile' profile_user.promoted_by.netid %}">{{ profile_user.promoted_by.netid }}</a></p>
+                {% endif %}
+            </div>
+            {% if request.user.is_staff and profile_user.is_moderator %}
+                <form method="post" action="{% url 'moderator_remove' profile_user.id %}" data-turbo-confirm="Es-tu sûr de vouloir retirer les droits de {{ profile_user.netid }} ?">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Retirer les droits</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="card shadow-sm border-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small text-uppercase">
                         <tr>
                             <th class="ps-4">Date</th>
-                            <th>Modérateur</th>
                             <th>Action</th>
                             <th>Cible</th>
                         </tr>
@@ -29,9 +43,6 @@
                             <tr>
                                 <td class="ps-4 text-muted small" style="white-space: nowrap;">
                                     {{ log.timestamp|date:"d/m/Y à H:i" }}
-                                </td>
-                                <td>
-                                    <strong><a href="{% url 'moderation_profile' log.user.netid %}">{{ log.user.netid }}</a></strong>
                                 </td>
                                 <td>
                                     <span class="badge bg-{{ log.action_color }} bg-opacity-10 text-{{ log.action_color }} border border-{{ log.action_color }}">
@@ -47,8 +58,8 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-5">
-                                    Aucune action de modération n'a encore été effectuée.
+                                <td colspan="3" class="text-center text-muted py-5">
+                                    Aucune action de modération enregistrée.
                                 </td>
                             </tr>
                         {% endfor %}
@@ -56,32 +67,5 @@
                 </table>
             </div>
         </div>
-
-        {% if logs.has_other_pages %}
-            <nav aria-label="Pagination du registre">
-                <ul class="pagination justify-content-center">
-                    {% if logs.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ logs.previous_page_number }}">Précédent</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">Précédent</span></li>
-                    {% endif %}
-
-                    <li class="page-item active" aria-current="page">
-                        <span class="page-link">Page {{ logs.number }} sur {{ logs.paginator.num_pages }}</span>
-                    </li>
-
-                    {% if logs.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ logs.next_page_number }}">Suivant</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">Suivant</span></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
-
     </div>
 {% endblock content %}

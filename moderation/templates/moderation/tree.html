@@ -4,13 +4,16 @@
 
 {% block content %}
     <div class="container-xl mt-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0">Arbre de modération</h1>
-            <a href="{% url 'moderation_about' %}" class="btn btn-outline-secondary btn-sm">Retour</a>
-        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'moderation_about' %}">Modération</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Arbre</li>
+            </ol>
+        </nav>
+        <h1 class="h3 mb-4">Arbre de modération</h1>
 
         <p class="text-muted mb-4">
-            Cette page montre qui a promu qui en tant que modérateur.
+            Cette page montre qui a promu·e qui en tant que modérateur·trice.
             Chaque branche représente une chaîne de confiance.
         </p>
 

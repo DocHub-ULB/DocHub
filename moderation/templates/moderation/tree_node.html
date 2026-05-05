@@ -1,5 +1,5 @@
 <li>
-    <strong>{{ node.user.netid }}</strong>
+    <strong><a href="{% url 'moderation_profile' node.user.netid %}">{{ node.user.netid }}</a></strong>
     <span class="text-muted">{{ node.user.name }}</span>
     <span class="doc-count">({{ node.user.document_count }})</span>
     {% if node.user.is_staff %}

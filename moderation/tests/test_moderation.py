@@ -87,6 +87,7 @@ def test_full_moderation_workflow(client, admin, moderator, regular_user, docume
         {"action": "accept"},
     )
     assert resp.status_code == 302
+    assert resp.url == reverse("moderators_list")
 
     regular_user.refresh_from_db()
     assert regular_user.is_moderator is True

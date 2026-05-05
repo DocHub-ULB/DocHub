@@ -63,17 +63,7 @@ def admin_required(view_func):
 @moderator_required
 def moderation_home(request):
     """Main dashboard for moderators."""
-    pending_requests = (
-        RepresentativeRequest.objects.filter(processed=False)
-        .select_related("user")
-        .order_by("-created")
-    )
-
-    return render(
-        request,
-        "moderation/home.html",
-        {"pending_requests": pending_requests},
-    )
+    return render(request, "moderation/home.html")
 
 
 @login_required
@@ -89,7 +79,7 @@ def process_representative_request(request, request_id):
     form = ProcessRepresentativeRequestForm(request.POST)
 
     if not form.is_valid():
-        url = reverse("moderation_home") + "?error=reason"
+        url = reverse("moderators_list") + "?error=reason"
         return redirect(url)
 
     action = form.cleaned_data["action"]
@@ -135,20 +125,22 @@ def process_representative_request(request, request_id):
     rep_request.processed = True
     rep_request.save(update_fields=["processed", "rejection_reason"])
 
-    return redirect("moderation_home")
+    return redirect("moderators_list")
 
 
 @login_required
 @moderator_required
 def moderators_list(request):
     """Display the list of all Admins and Moderators."""
-    moderators = User.objects.filter(Q(is_staff=True) | Q(is_moderator=True)).order_by(
-        "-is_staff", "first_name"
+    pending_requests = (
+        RepresentativeRequest.objects.filter(processed=False)
+        .select_related("user")
+        .order_by("-created")
     )
     return render(
         request,
         "moderation/moderators_management.html",
-        {"moderators": moderators, "add_form": AddModeratorForm()},
+        {"pending_requests": pending_requests},
     )
 
 
@@ -186,10 +178,8 @@ def moderator_add(request):
             else:
                 messages.info(request, "Cet utilisateur a déjà des droits.")
         except User.DoesNotExist:
-            messages.warning(
-                request,
-                f"L'étudiant avec le netid '{netid_to_add}' n'a pas été trouvé.",
-            )
+            url = reverse("moderators_list") + f"?error=not_found&netid={netid_to_add}"
+            return redirect(url)
 
     return redirect("moderators_list")
 
@@ -317,6 +307,23 @@ def moderation_tree(request):
     tree = [{"user": r, "children": build_subtree(r)} for r in roots]
 
     return render(request, "moderation/tree.html", {"tree": tree})
+
+
+@login_required
+def moderation_profile(request, netid):
+    """Public profile page showing a moderator's actions."""
+    profile_user = get_object_or_404(User, netid=netid)
+    logs = (
+        ModerationLog.objects.filter(user=profile_user)
+        .select_related("content_type")
+        .prefetch_related("content_object")
+        .order_by("-timestamp")
+    )
+    return render(
+        request,
+        "moderation/profile.html",
+        {"profile_user": profile_user, "logs": logs},
+    )
 
 
 @login_required

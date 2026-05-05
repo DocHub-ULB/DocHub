@@ -4,69 +4,52 @@
 
 {% block content %}
     <div class="container-xl mt-4" style="max-width: 800px;">
-        <h1 class="h3 mb-4">La modération sur DocHub</h1>
+        <h1 id="moderation" class="mb-4">La modération sur DocHub</h1>
 
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h2 class="h5 card-title">Que peuvent faire les modérateurs ?</h2>
-                <p>
-                    Les modérateurs sont des étudiants bénévoles qui aident à garder DocHub propre et bien organisé.
-                    Ils peuvent :
-                </p>
-                <ul>
-                    <li>Modifier le titre, la description et les tags de n'importe quel document</li>
-                    <li>Cacher ou rendre visible un document (par exemple si le contenu n'est pas approprié)</li>
-                    <li>Re-uploader une nouvelle version d'un document</li>
-                    <li>Marquer un document comme "Staff pick"</li>
-                </ul>
-                <p class="mb-0 text-muted">
-                    Les modérateurs n'ont <strong>pas</strong> accès au panneau d'administration de Django, qui est réservé aux administrateurs système.
-                </p>
-            </div>
-        </div>
+        <h2 id="role">Que peuvent faire les modérateur·trices ?</h2>
+        <p>
+            Les modérateur·trices sont des étudiant·es bénévoles qui aident à garder DocHub propre et bien organisé.
+            Elles et ils peuvent :
+        </p>
+        <ul class="mb-4">
+            <li>Modifier le titre, la description et les tags de n'importe quel document</li>
+            <li>Cacher ou rendre visible un document (par exemple si le contenu n'est pas approprié)</li>
+            <li>Re-uploader une nouvelle version d'un document</li>
+            <li>Marquer un document comme "Staff pick"</li>
+        </ul>
 
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h2 class="h5 card-title">Transparence totale</h2>
-                <p>
-                    Toutes les actions de modération sont enregistrées publiquement.
-                    N'importe quel utilisateur connecté peut consulter le journal de modération
-                    pour voir qui a fait quoi et quand.
-                </p>
-                <a href="{% url 'public_logs' %}" class="btn btn-outline-primary btn-sm">
-                    Consulter le journal de modération
-                </a>
-            </div>
-        </div>
+        <h2 id="transparence">Transparence</h2>
+        <p>
+            Toutes les actions de modération sont enregistrées publiquement.
+            N'importe quel utilisateur connecté peut consulter le journal de modération
+            pour voir qui a fait quoi et quand.
+        </p>
+        <p class="mb-4"><a href="{% url 'public_logs' %}">Consulter le journal de modération</a></p>
 
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h2 class="h5 card-title">Comment devenir modérateur ?</h2>
-                <p>
-                    Tu es délégué d'année, délégué cours de ton cercle, membre d'un bureau étudiant
-                    ou simplement un étudiant motivé ? Tu peux demander les droits de modération !
-                </p>
-                <p>
-                    Remplis le formulaire de demande, et un modérateur existant examinera ta candidature.
-                    Si elle est acceptée, tu recevras immédiatement les droits.
-                </p>
-                <a href="{% url 'representative_request' %}" class="btn btn-outline-success btn-sm">
-                    Demander les droits de modération
-                </a>
-            </div>
-        </div>
+        {% if request.user.is_moderator or request.user.is_staff %}
+            <h2 id="ajouter-moderateur">Ajouter un·e modérateur·trice</h2>
+            <p>
+                En tant que modérateur·trice, tu peux promouvoir un·e étudiant·e en lui accordant les droits de modération depuis la liste des modérateur·trices.
+                Attention, en ajoutant quelqu'un·e comme modérateur·trice, <b>tu en es responsable</b>, n'accorde pas ce droit à la légère.
+            </p>
+            <p class="mb-4"><a href="{% url 'moderators_list' %}">Ajouter des modérateur·trices</a></p>
+        {% else %}
+            <h2 id="devenir-moderateur">Comment devenir modérateur·trice ?</h2>
+            <p>
+                Tu es délégué·e d'année, délégué·e cours de ton cercle, membre d'un bureau étudiant·e
+                ou simplement un·e étudiant·e motivé·e ? Tu peux demander les droits de modération !
+            </p>
+            <p>
+                Remplis le formulaire de demande, et un·e modérateur·trice examinera ta candidature.
+                Si elle est acceptée, tu recevras immédiatement les droits.
+            </p>
+            <p class="mb-4"><a href="{% url 'representative_request' %}">Demander les droits de modération</a></p>
+        {% endif %}
 
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h2 class="h5 card-title">L'arbre de modération</h2>
-                <p>
-                    Tu peux voir qui a promu qui dans l'arbre de modération.
-                    Chaque branche montre la chaîne de confiance entre modérateurs.
-                </p>
-                <a href="{% url 'moderation_tree' %}" class="btn btn-outline-secondary btn-sm">
-                    Voir l'arbre de modération
-                </a>
-            </div>
-        </div>
+        <h2 id="arbre">L'arbre de modération</h2>
+        <p>
+            Tu peux voir qui a promu qui dans l'arbre de modération.
+        </p>
+        <p><a href="{% url 'moderation_tree' %}">Voir l'arbre de modération</a></p>
     </div>
 {% endblock content %}
