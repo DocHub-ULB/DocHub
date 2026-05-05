@@ -285,7 +285,10 @@ def moderation_tree(request):
     moderators = (
         User.objects.filter(Q(is_staff=True) | Q(is_moderator=True))
         .select_related("promoted_by")
-        .annotate(action_count=Count("moderationlog"))
+        .annotate(
+            action_count=Count("moderationlog", distinct=True),
+            document_count=Count("document", distinct=True),
+        )
         .order_by("first_name")
     )
 
