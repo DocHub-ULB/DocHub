@@ -8,7 +8,11 @@
 {% endblock heading %}
 
 {% block expl %}
-    Tu n'as pas accès à cette page. Ceci est surement dû à des privilèges insuffisants.
+    {% if exception_message %}
+        {{ exception_message }}
+    {% else %}
+        Tu n'as pas accès à cette page. Ceci est surement dû à des privilèges insuffisants.
+    {% endif %}
 {% endblock expl %}
 
 {% block errcode %}

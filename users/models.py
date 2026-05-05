@@ -49,6 +49,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_academic = models.BooleanField(default=False)
     is_moderator = models.BooleanField(default=False)
+    moderator_welcome_dismissed = models.BooleanField(default=False)
     promoted_by = models.ForeignKey(
         "self",
         null=True,

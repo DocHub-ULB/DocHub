@@ -218,11 +218,9 @@ def moderator_remove(request, user_id):
 def representative_request(request):
     """Handle student requests to become a moderator."""
     if is_moderator(request.user):
-        messages.info(
-            request,
-            "Tu es déjà modérateur (ou admin), tu n'as pas besoin de faire de demande !",
+        raise PermissionDenied(
+            "Tu es déjà modérateur (ou admin), tu n'as pas besoin de faire de demande."
         )
-        return redirect("/")
 
     if RepresentativeRequest.objects.filter(
         user=request.user, processed=False

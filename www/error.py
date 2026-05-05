@@ -8,7 +8,12 @@ def error400(request, exception=None):
 
 
 def error403(request, exception=None):
-    return render(request, "error/403.html", status=403)
+    return render(
+        request,
+        "error/403.html",
+        {"exception_message": str(exception) if exception else ""},
+        status=403,
+    )
 
 
 def error404(request, exception=None):

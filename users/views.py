@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from requests.exceptions import ConnectionError, SSLError
 
@@ -22,6 +23,15 @@ logger = logging.getLogger(__name__)
 def panel_hide(request):
     request.user.welcome = False
     request.user.save()
+
+    return HttpResponseRedirect(reverse("index"))
+
+
+@login_required
+@require_POST
+def moderator_banner_hide(request):
+    request.user.moderator_welcome_dismissed = True
+    request.user.save(update_fields=["moderator_welcome_dismissed"])
 
     return HttpResponseRedirect(reverse("index"))
 

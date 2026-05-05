@@ -232,10 +232,10 @@ def test_admin_required_blocks_moderator(client, moderator, regular_user):
     assert resp.status_code == 403
 
 
-def test_representative_request_redirects_moderator(client, moderator):
+def test_representative_request_blocks_moderator(client, moderator):
     login(client, moderator)
     resp = client.get(reverse("representative_request"))
-    assert resp.status_code == 302
+    assert resp.status_code == 403
 
 
 # --- D. Edge cases ---
