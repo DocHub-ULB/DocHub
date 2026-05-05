@@ -2,6 +2,15 @@
 
 This page tries to contain all use facing changes made on DocHub.
 
+# Unreleased
+
+Moderation:
+ * moderators can now edit any document
+ * moderators can now approve new moderators
+ * admins can now add and remove moderators
+ * add a moderation tree view showing who promoted whom
+ * add a public moderation transparency log
+
 # 2026.4.0 
 
  * Add a institutional disclaimer and contribution call on the login page
