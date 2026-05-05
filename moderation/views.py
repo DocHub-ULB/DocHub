@@ -79,7 +79,7 @@ def process_representative_request(request, request_id):
     form = ProcessRepresentativeRequestForm(request.POST)
 
     if not form.is_valid():
-        url = reverse("moderators_list") + "?error=reason"
+        url = reverse("manage_moderators") + "?error=reason"
         return redirect(url)
 
     action = form.cleaned_data["action"]
@@ -125,13 +125,13 @@ def process_representative_request(request, request_id):
     rep_request.processed = True
     rep_request.save(update_fields=["processed", "rejection_reason"])
 
-    return redirect("moderators_list")
+    return redirect("manage_moderators")
 
 
 @login_required
 @moderator_required
-def moderators_list(request):
-    """Display the list of all Admins and Moderators."""
+def manage_moderators(request):
+    """Display moderator requests and direct promotion controls."""
     pending_requests = (
         RepresentativeRequest.objects.filter(processed=False)
         .select_related("user")
@@ -178,10 +178,12 @@ def moderator_add(request):
             else:
                 messages.info(request, "Cet utilisateur a déjà des droits.")
         except User.DoesNotExist:
-            url = reverse("moderators_list") + f"?error=not_found&netid={netid_to_add}"
+            url = (
+                reverse("manage_moderators") + f"?error=not_found&netid={netid_to_add}"
+            )
             return redirect(url)
 
-    return redirect("moderators_list")
+    return redirect("manage_moderators")
 
 
 @login_required
@@ -209,7 +211,7 @@ def moderator_remove(request, user_id):
         )
         messages.warning(request, f"Les droits de {target_user.netid} ont été retirés.")
 
-    return redirect("moderators_list")
+    return redirect("manage_moderators")
 
 
 @login_required
@@ -283,7 +285,7 @@ def moderation_tree(request):
     moderators = (
         User.objects.filter(Q(is_staff=True) | Q(is_moderator=True))
         .select_related("promoted_by")
-        .annotate(document_count=Count("moderationlog"))
+        .annotate(action_count=Count("moderationlog"))
         .order_by("first_name")
     )
 
@@ -309,6 +311,12 @@ def moderation_tree(request):
 def moderation_profile(request, netid):
     """Public profile page showing a moderator's actions."""
     profile_user = get_object_or_404(User, netid=netid)
+    has_moderation_history = ModerationLog.objects.filter(user=profile_user).exists()
+    if not (
+        profile_user.is_staff or profile_user.is_moderator or has_moderation_history
+    ):
+        raise PermissionDenied("Ce profil n'a pas d'activité de modération publique.")
+
     logs = (
         ModerationLog.objects.filter(user=profile_user)
         .select_related("content_type")

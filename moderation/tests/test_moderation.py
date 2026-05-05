@@ -87,7 +87,7 @@ def test_full_moderation_workflow(client, admin, moderator, regular_user, docume
         {"action": "accept"},
     )
     assert resp.status_code == 302
-    assert resp.url == reverse("moderators_list")
+    assert resp.url == reverse("manage_moderators")
 
     regular_user.refresh_from_db()
     assert regular_user.is_moderator is True
@@ -297,3 +297,25 @@ def test_moderation_tree_shows_promotions(client, admin, moderator, regular_user
     assert resp.status_code == 200
     assert b"student" in resp.content
     assert b"admin" in resp.content
+
+
+def test_moderation_profile_blocks_non_moderator_without_logs(client, regular_user):
+    login(client, regular_user)
+    resp = client.get(reverse("moderation_profile", args=[regular_user.netid]))
+    assert resp.status_code == 403
+
+
+def test_moderation_profile_allows_former_moderator_with_logs(
+    client, admin, regular_user
+):
+    ModerationLog.objects.create(
+        user=regular_user,
+        content_object=admin,
+        target_field="is_moderator",
+        old_value="False",
+        new_value="True",
+    )
+    login(client, admin)
+    resp = client.get(reverse("moderation_profile", args=[regular_user.netid]))
+    assert resp.status_code == 200
+    assert b"student" in resp.content

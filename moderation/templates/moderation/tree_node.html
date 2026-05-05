@@ -1,7 +1,7 @@
 <li>
     <strong><a href="{% url 'moderation_profile' node.user.netid %}">{{ node.user.netid }}</a></strong>
     <span class="text-muted">{{ node.user.name }}</span>
-    <span class="doc-count">({{ node.user.document_count }})</span>
+    <span class="doc-count">({{ node.user.action_count }} action{{ node.user.action_count|pluralize }})</span>
     {% if node.user.is_staff %}
         <span class="badge bg-danger ms-1" style="font-size:0.7em;">Admin</span>
     {% endif %}

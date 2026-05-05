@@ -21,7 +21,7 @@ urlpatterns = [
         name="process_representative_request",
     ),
     # --- Moderators Management ---
-    path("manage/", views.moderators_list, name="moderators_list"),
+    path("manage/", views.manage_moderators, name="manage_moderators"),
     path("manage/add/", views.moderator_add, name="moderator_add"),
     path(
         "manage/remove/<int:user_id>/",
