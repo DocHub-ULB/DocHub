@@ -135,6 +135,7 @@ def manage_moderators(request):
     pending_requests = (
         RepresentativeRequest.objects.filter(processed=False)
         .select_related("user")
+        .annotate(user_document_count=Count("user__document"))
         .order_by("-created")
     )
     return render(

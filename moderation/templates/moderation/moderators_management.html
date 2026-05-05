@@ -49,11 +49,16 @@
                     <dd class="col-sm-9 small mb-0">{{ req.get_faculty_display }}</dd>
                     <dt class="col-sm-3 text-muted fw-normal small">Rôle</dt>
                     <dd class="col-sm-9 small mb-0">{{ req.get_role_display }}</dd>
+                    <dt class="col-sm-3 text-muted fw-normal small">Inscrit·e depuis</dt>
+                    <dd class="col-sm-9 small mb-0">{{ req.user.created|date:"d/m/Y" }} ({{ req.user.created|timesince }}){% if req.user.is_recent %} <span class="text-warning">⚠️ moins d'un mois</span>{% endif %}</dd>
+                    <dt class="col-sm-3 text-muted fw-normal small">Documents uploadés</dt>
+                    <dd class="col-sm-9 small mb-0">{{ req.user_document_count }}{% if req.user_document_count < 5 %} <span class="text-warning">⚠️ moins de 5 documents</span>{% endif %}</dd>
                     {% if req.comment %}
                         <dt class="col-sm-3 text-muted fw-normal small">Commentaire</dt>
                         <dd class="col-sm-9 small mb-0 fst-italic">{{ req.comment }}</dd>
                     {% endif %}
                 </dl>
+
 
                 <form method="post" action="{% url 'process_representative_request' req.id %}">
                     {% csrf_token %}

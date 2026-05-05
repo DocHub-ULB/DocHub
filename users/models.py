@@ -1,4 +1,5 @@
 import re
+from datetime import timedelta
 
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 from django.db import models
@@ -57,6 +58,10 @@ class User(AbstractBaseUser):
         on_delete=models.SET_NULL,
         related_name="promoted_users",
     )
+
+    @property
+    def is_recent(self):
+        return timezone.now() - self.created < timedelta(days=30)
 
     @property
     def name(self):
