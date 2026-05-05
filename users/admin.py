@@ -29,8 +29,6 @@ class UserAdmin(admin.ModelAdmin):
         "netid",
         "last_login",
     )
-    filter_horizontal = ("moderated_courses",)
-
     fieldsets = (
         (
             None,
@@ -52,7 +50,6 @@ class UserAdmin(admin.ModelAdmin):
                     "is_staff",
                     "is_academic",
                     "is_moderator",
-                    "moderated_courses",
                 ),
             },
         ),

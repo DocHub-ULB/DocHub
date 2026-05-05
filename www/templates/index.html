@@ -23,7 +23,7 @@
     <body>
         <nav class="container-xl navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand d-flex align-items-center gap-2 position-relative pe-3" href="/">
+                <a class="navbar-brand d-flex align-items-center gap-2 position-relative pe-3" href="{% url 'index' %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-megaphone-fill" viewBox="0 0 16 16">
                         <path
@@ -58,7 +58,7 @@
                         Connexion avec l'ULB
                     </a><br>
                     {% if debug %}
-                        <small>Developpers could also <a href="/syslogin">syslogin</a></small>
+                        <small>Developpers could also <a href="{% url 'syslogin' %}">syslogin</a></small>
                     {% endif %}
                 </p>
                 <div class="mt-4">

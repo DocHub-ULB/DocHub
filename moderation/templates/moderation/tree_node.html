@@ -1,0 +1,15 @@
+<li>
+    <strong>{{ node.user.netid }}</strong>
+    <span class="text-muted">{{ node.user.name }}</span>
+    <span class="doc-count">({{ node.user.document_count }})</span>
+    {% if node.user.is_staff %}
+        <span class="badge bg-danger ms-1" style="font-size:0.7em;">Admin</span>
+    {% endif %}
+    {% if node.children %}
+        <ul>
+            {% for child in node.children %}
+                {% include "moderation/tree_node.html" with node=child %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

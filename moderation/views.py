@@ -1,3 +1,4 @@
+from collections import defaultdict
 from functools import wraps
 
 from django.contrib import messages
@@ -5,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -96,7 +97,8 @@ def process_representative_request(request, request_id):
     if action == "accept":
         if not target_user.is_staff and not target_user.is_moderator:
             target_user.is_moderator = True
-            target_user.save(update_fields=["is_moderator"])
+            target_user.promoted_by = request.user
+            target_user.save(update_fields=["is_moderator", "promoted_by"])
 
             ModerationLog.track(
                 user=request.user,
@@ -165,7 +167,8 @@ def moderator_add(request):
 
             if not target_user.is_staff and not target_user.is_moderator:
                 target_user.is_moderator = True
-                target_user.save(update_fields=["is_moderator"])
+                target_user.promoted_by = request.user
+                target_user.save(update_fields=["is_moderator", "promoted_by"])
 
                 # FIX : Close any pending request for this user automatically
                 RepresentativeRequest.objects.filter(
@@ -181,13 +184,11 @@ def moderator_add(request):
                     request, f"{target_user.netid} est maintenant modérateur !"
                 )
             else:
-                messages.info(
-                    request, "Cet utilisateur a déjà des droits (Modérateur ou Admin)."
-                )
+                messages.info(request, "Cet utilisateur a déjà des droits.")
         except User.DoesNotExist:
             messages.warning(
                 request,
-                f"❌ L'étudiant avec le netid '{netid_to_add}' n'a pas été trouvé.",
+                f"L'étudiant avec le netid '{netid_to_add}' n'a pas été trouvé.",
             )
 
     return redirect("moderators_list")
@@ -208,7 +209,8 @@ def moderator_remove(request, user_id):
         messages.warning(request, "Tu ne peux pas retirer tes propres droits ici.")
     elif target_user.is_moderator:
         target_user.is_moderator = False
-        target_user.save(update_fields=["is_moderator"])
+        target_user.promoted_by = None
+        target_user.save(update_fields=["is_moderator", "promoted_by"])
 
         ModerationLog.track(
             user=request.user,
@@ -287,3 +289,37 @@ def public_logs(request):
         "moderation/public_logs.html",
         {"logs": page_obj},
     )
+
+
+@login_required
+def moderation_tree(request):
+    """Public page showing who promoted whom as moderator."""
+    moderators = (
+        User.objects.filter(Q(is_staff=True) | Q(is_moderator=True))
+        .select_related("promoted_by")
+        .annotate(document_count=Count("moderationlog"))
+        .order_by("first_name")
+    )
+
+    all_ids = {u.id for u in moderators}
+    children = defaultdict(list)
+    roots = []
+
+    for u in moderators:
+        if u.promoted_by_id and u.promoted_by_id in all_ids:
+            children[u.promoted_by_id].append(u)
+        else:
+            roots.append(u)
+
+    def build_subtree(user):
+        return [{"user": c, "children": build_subtree(c)} for c in children[user.id]]
+
+    tree = [{"user": r, "children": build_subtree(r)} for r in roots]
+
+    return render(request, "moderation/tree.html", {"tree": tree})
+
+
+@login_required
+def moderation_about(request):
+    """Public page explaining the moderation system."""
+    return render(request, "moderation/about.html")

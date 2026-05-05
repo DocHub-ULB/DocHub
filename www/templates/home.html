@@ -79,8 +79,8 @@
                 {% if not request.user.is_moderator %}
                     <div class="alert alert-info" role="alert">
                         Tu es délégué d'année, délégué cours de ton cercle ou dans un bureau étudiant&nbsp;?
-                        Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Clique
-                            ici</a> pour les recevoir !
+                        Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Demande
+                            les droits</a> ou <a href="{% url "moderation_about" %}">découvre comment fonctionne la modération</a>.
                     </div>
                 {% endif %}
                 <h1 class="fs-3 border-bottom d-flex justify-content-between">

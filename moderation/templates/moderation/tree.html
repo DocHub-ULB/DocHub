@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Arbre de modération{% endblock %}
+
+{% block content %}
+    <div class="container-xl mt-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0">Arbre de modération</h1>
+            <a href="{% url 'moderation_about' %}" class="btn btn-outline-secondary btn-sm">Retour</a>
+        </div>
+
+        <p class="text-muted mb-4">
+            Cette page montre qui a promu qui en tant que modérateur.
+            Chaque branche représente une chaîne de confiance.
+        </p>
+
+        <style>
+            .mod-tree ul {
+                list-style: none;
+                padding-left: 1.5rem;
+                margin: 0;
+                position: relative;
+            }
+            .mod-tree ul::before {
+                content: '';
+                position: absolute;
+                left: 0.4rem;
+                top: 0;
+                bottom: 0.75rem;
+                border-left: 1px solid #ccc;
+            }
+            .mod-tree li {
+                position: relative;
+                padding: 0.15rem 0;
+            }
+            .mod-tree li::before {
+                content: '';
+                position: absolute;
+                left: -1.1rem;
+                top: 0.75rem;
+                width: 0.7rem;
+                border-top: 1px solid #ccc;
+            }
+            .mod-tree .tree-root {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .mod-tree .tree-root::before {
+                display: none;
+            }
+            .mod-tree .tree-root > li::before {
+                display: none;
+            }
+            .mod-tree .doc-count {
+                color: #888;
+                font-size: 0.9em;
+            }
+        </style>
+
+        {% if tree %}
+            <div class="mod-tree">
+                <ul class="tree-root">
+                    {% for root in tree %}
+                        {% include "moderation/tree_node.html" with node=root %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="alert alert-light border text-center py-5 text-muted">
+                <p class="mb-0">Aucune promotion enregistrée.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
