@@ -98,7 +98,7 @@ def process_representative_request(request, request_id):
 
             messages.success(
                 request,
-                f"La demande a été acceptée. {target_user.netid} est maintenant modérateur !",
+                f"La demande a été acceptée. {target_user.netid} est maintenant modérateur·trice !",
             )
         else:
             messages.info(
@@ -173,7 +173,7 @@ def moderator_add(request):
                     values={"is_moderator": (False, True)},
                 )
                 messages.success(
-                    request, f"{target_user.netid} est maintenant modérateur !"
+                    request, f"{target_user.netid} est maintenant modérateur·trice !"
                 )
             else:
                 messages.info(request, "Cet utilisateur a déjà des droits.")
@@ -207,9 +207,7 @@ def moderator_remove(request, user_id):
             content_object=target_user,
             values={"is_moderator": (True, False)},
         )
-        messages.success(
-            request, f"🗑️ Les droits de {target_user.netid} ont été retirés."
-        )
+        messages.warning(request, f"Les droits de {target_user.netid} ont été retirés.")
 
     return redirect("moderators_list")
 

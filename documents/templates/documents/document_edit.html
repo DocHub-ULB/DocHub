@@ -67,6 +67,14 @@
             <input type="input" class="form-control" id="added" value="{{ doc.user }}" disabled>
         </div>
         -->
+        {% if request.user != doc.user and request.user|has_moderation_perm_on:doc %}
+            <p class="text-muted mt-3 mb-2">
+                ⚠️ Tu modifies ici un document qui ne t'appartient pas. En tant que modérateur·trice,
+                tu peux corriger, masquer ou mettre en avant des documents pour garder DocHub propre et utile,
+                et ces actions sont enregistrées publiquement dans le
+                <a href="{% url 'public_logs' %}">journal de modération</a>.
+            </p>
+        {% endif %}
         <div class="mt-3">
             <input type="submit" class="btn btn-success" name="update" value="Mettre à jour"/>
             {% if doc.hidden %}

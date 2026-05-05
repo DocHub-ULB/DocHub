@@ -83,21 +83,26 @@
                 </form>
             </div>
         {% empty %}
-            <p class="text-muted mb-4">Aucune demande en attente.</p>
+            <div class="border rounded bg-light-subtle text-muted px-3 py-4 mb-4">
+                <strong class="d-block text-body mb-1">Aucune demande en attente</strong>
+                <span class="small">Les nouvelles candidatures apparaîtront ici.</span>
+            </div>
         {% endfor %}
 
         <h2 class="h5 mb-1">Ajouter un·e modérateur·trice</h2>
-        <p class="text-muted mb-3">Si tu connais le netid d'un·e étudiant·e de confiance, tu peux l'ajouter directement sans qu'iel ait besoin de faire une demande.</p>
-        <form method="post" action="{% url 'moderator_add' %}" class="d-flex gap-2 align-items-end">
+        <p class="text-muted mb-3">Si tu connais le netid d'un·e étudiant·e de confiance, tu peux l'ajouter directement sans qu'une demande soit nécessaire.</p>
+        <form method="post" action="{% url 'moderator_add' %}" class="row g-2 align-items-end">
             {% csrf_token %}
-            <div class="flex-grow-1">
+            <div class="col-12 col-md-8 col-lg-6">
                 <label for="netid" class="form-label small text-muted">NetID de l'étudiant·e</label>
                 <input type="text" class="form-control {% if request.GET.error == 'not_found' %}is-invalid{% endif %}" id="netid" name="netid" placeholder="Ex: blabevue" value="{{ request.GET.netid }}" required>
                 {% if request.GET.error == 'not_found' %}
                     <div class="invalid-feedback">Aucun·e étudiant·e avec le netid « {{ request.GET.netid }} » n'a été trouvé·e.</div>
                 {% endif %}
             </div>
-            <button type="submit" class="btn btn-success">Promouvoir</button>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-success">Promouvoir</button>
+            </div>
         </form>
     </div>
 {% endblock content %}
