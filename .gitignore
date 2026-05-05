@@ -5,6 +5,8 @@ dumper/*.json
 htmlcov/
 db.sql
 db.sqlite
+db.sqlite3
+.rodney/
 initial_data.json
 ve
 graph.*
