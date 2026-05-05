@@ -27,6 +27,27 @@ JS libs only when necessary
 - Follow Django naming: models in PascalCase, fields/methods in snake_case
 - Use `blank=True, default=""` for optional text fields
 
+## Icons
+All icons are Bootstrap Icons stored as Django template includes in `www/templates/icons/`.
+Use them with `{% include %}` — never write inline SVGs directly in templates.
+
+```html
+{% include "icons/bi-download.html" %}
+{% include "icons/bi-download.html" with size=20 %}
+{% include "icons/bi-star-fill.html" with class="text-warning hover-spin" %}
+{% include "icons/bi-exclamation-triangle-fill.html" with size=22 style="color: #ef4444;" %}
+{% include "icons/bi-check-circle.html" with fill="green" %}
+```
+
+Parameters (all optional):
+- `size` — width and height in px, default `16`
+- `class` — extra CSS classes appended after the base `bi bi-*` class
+- `style` — inline style string
+- `fill` — SVG fill value, default `currentColor` (inherits from text color)
+- `title` — accessible title attribute (used on `bi-patch-check-fill` for "Staff pick")
+
+To add a new icon, create `www/templates/icons/bi-<name>.html` following the same pattern as existing files.
+
 ## Text Tone & User-Facing Content
 The application uses a **friendly, informal, student-to-student tone** in all user-facing text:
 
