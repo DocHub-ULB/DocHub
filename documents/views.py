@@ -4,6 +4,7 @@ import uuid
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import F
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -234,6 +235,10 @@ def document_show(request, pk):
         "document": document,
         "user_vote": document.vote_set.filter(user=request.user).first(),
         "form": DocumentReportForm(),
+        "has_moderation_history": ModerationLog.objects.filter(
+            content_type=ContentType.objects.get_for_model(Document),
+            object_id=document.pk,
+        ).exists(),
     }
 
     return render(request, "documents/viewer.html", context)
