@@ -2,6 +2,13 @@
 
 This page tries to contain all use facing changes made on DocHub.
 
+# 2026.5.1
+
+Moderation:
+ * show document counts in the moderation tree
+ * show document counts and registration date in pending moderator requests
+ * warn moderators when a candidate account is very recent (<1 month) or has few uploads (<5)
+
 # 2026.5.0
 
 Moderation:
