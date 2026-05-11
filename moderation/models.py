@@ -88,7 +88,13 @@ class ModerationLog(models.Model):
         elif self.target_field == "action_rejeter":
             return "a refusé la demande de"
         elif self.target_field == "reupload":
-            return "a re-uploadé"
+            return "a remplacé le fichier de"
+        elif self.target_field == "staff_pick":
+            return (
+                "a ajouté un staff pick sur"
+                if str(self.new_value) == "True"
+                else "a retiré le staff pick de"
+            )
         label = self.FIELD_LABELS.get(self.target_field, self.target_field)
         return f"a modifié '{label}' sur"
 
@@ -96,17 +102,25 @@ class ModerationLog(models.Model):
     def document_action_text(self):
         """Action text for document history context (no trailing 'sur')."""
         if self.target_field == "reupload":
-            return "re-upload"
+            return "fichier remplacé"
         if self.target_field == "hidden":
-            return "caché" if str(self.new_value) == "True" else "rendu visible"
+            return (
+                "document caché"
+                if str(self.new_value) == "True"
+                else "document rendu visible"
+            )
         if self.target_field == "staff_pick":
             return (
-                "ajouté staff pick"
+                "staff pick ajouté"
                 if str(self.new_value) == "True"
-                else "retiré staff pick"
+                else "staff pick retiré"
             )
-        label = self.FIELD_LABELS.get(self.target_field, self.target_field)
-        return f"modifié {label}"
+        field_actions = {
+            "name": "titre modifié",
+            "description": "description modifiée",
+            "tags": "tags modifiés",
+        }
+        return field_actions.get(self.target_field, f"{self.target_field} modifié")
 
     @property
     def action_color(self):
