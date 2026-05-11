@@ -71,6 +71,7 @@ class ModerationLog(models.Model):
         "description": "description",
         "tags": "tags",
         "hidden": "visibilité",
+        "staff_pick": "staff pick",
     }
 
     @property
@@ -98,6 +99,12 @@ class ModerationLog(models.Model):
             return "re-upload"
         if self.target_field == "hidden":
             return "caché" if str(self.new_value) == "True" else "rendu visible"
+        if self.target_field == "staff_pick":
+            return (
+                "ajouté staff pick"
+                if str(self.new_value) == "True"
+                else "retiré staff pick"
+            )
         label = self.FIELD_LABELS.get(self.target_field, self.target_field)
         return f"modifié {label}"
 

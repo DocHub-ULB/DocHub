@@ -129,6 +129,7 @@ def document_edit(request, pk):
         old_name = doc.name
         old_description = doc.description
         old_tags = list(doc.tags.all())
+        old_staff_pick = doc.staff_pick
 
         form = DocumentForm(request.POST, instance=doc)
 
@@ -144,6 +145,7 @@ def document_edit(request, pk):
                             form.cleaned_data["description"],
                         ),
                         "tags": (old_tags, form.cleaned_data["tags"]),
+                        "staff_pick": (old_staff_pick, form.cleaned_data["staff_pick"]),
                     },
                 )
 

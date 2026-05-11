@@ -49,11 +49,11 @@
                                     </span>
                                 </td>
                                 <td class="small text-muted">
-                                    {% if log.old_value and log.new_value and log.target_field != "reupload" %}
+                                    {% if log.target_field == "reupload" %}
+                                        {{ log.new_value }}
+                                    {% elif log.target_field != "hidden" and log.target_field != "staff_pick" and log.old_value and log.new_value %}
                                         <span class="text-decoration-line-through">{{ log.old_value|truncatewords:15 }}</span>
                                         &rarr; {{ log.new_value|truncatewords:15 }}
-                                    {% elif log.target_field == "reupload" %}
-                                        {{ log.new_value }}
                                     {% endif %}
                                 </td>
                             </tr>
