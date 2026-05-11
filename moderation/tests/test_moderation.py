@@ -210,19 +210,19 @@ def test_public_logs_view(client, moderator, regular_user):
 
 def test_moderator_required_blocks_regular_user(client, regular_user):
     login(client, regular_user)
-    resp = client.get(reverse("moderation_home"))
+    resp = client.get(reverse("manage_moderators"))
     assert resp.status_code == 403
 
 
 def test_moderator_required_allows_moderator(client, moderator):
     login(client, moderator)
-    resp = client.get(reverse("moderation_home"))
+    resp = client.get(reverse("manage_moderators"))
     assert resp.status_code == 200
 
 
 def test_moderator_required_allows_staff(client, admin):
     login(client, admin)
-    resp = client.get(reverse("moderation_home"))
+    resp = client.get(reverse("manage_moderators"))
     assert resp.status_code == 200
 
 

@@ -24,7 +24,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {% if request.user.is_staff or request.user.is_moderator %}
-                    <li><a class="dropdown-item" href="{% url 'moderation_home' %}">Modération</a></li>
+                    <li><a class="dropdown-item" href="{% url 'moderation_about' %}">Modération</a></li>
                 {% endif %}
                 {% if request.user.is_staff %}
                     <li><a class="dropdown-item" href="{% url 'admin:index' %}" data-turbo="false">Admin</a></li>

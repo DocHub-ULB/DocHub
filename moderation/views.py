@@ -61,13 +61,6 @@ def admin_required(view_func):
 
 @login_required
 @moderator_required
-def moderation_home(request):
-    """Main dashboard for moderators."""
-    return render(request, "moderation/home.html")
-
-
-@login_required
-@moderator_required
 @require_POST
 def process_representative_request(request, request_id):
     """Processes a role request (Accept or Reject) and logs the action."""

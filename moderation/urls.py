@@ -5,8 +5,6 @@ from . import views
 urlpatterns = [
     # --- Public Landing ---
     path("", views.moderation_about, name="moderation_about"),
-    # --- Main Dashboard ---
-    path("home/", views.moderation_home, name="moderation_home"),
     # --- Logs Publics ---
     path("logs/", views.public_logs, name="public_logs"),
     # --- Representative Request ---
