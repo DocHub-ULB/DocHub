@@ -66,7 +66,12 @@ class ModerationLog(models.Model):
     def __str__(self):
         return f"{self.user.get_short_name()} a fait une action le {self.timestamp.strftime('%d/%m/%Y')}"
 
-    ### Action translation logic ###
+    FIELD_LABELS = {
+        "name": "titre",
+        "description": "description",
+        "tags": "tags",
+        "hidden": "visibilité",
+    }
 
     @property
     def action_text(self):
@@ -83,7 +88,18 @@ class ModerationLog(models.Model):
             return "a refusé la demande de"
         elif self.target_field == "reupload":
             return "a re-uploadé"
-        return f"a modifié '{self.target_field}' sur"
+        label = self.FIELD_LABELS.get(self.target_field, self.target_field)
+        return f"a modifié '{label}' sur"
+
+    @property
+    def document_action_text(self):
+        """Action text for document history context (no trailing 'sur')."""
+        if self.target_field == "reupload":
+            return "re-upload"
+        if self.target_field == "hidden":
+            return "caché" if str(self.new_value) == "True" else "rendu visible"
+        label = self.FIELD_LABELS.get(self.target_field, self.target_field)
+        return f"modifié {label}"
 
     @property
     def action_color(self):

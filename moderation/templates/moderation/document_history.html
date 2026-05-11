@@ -31,6 +31,7 @@
                             <th class="ps-4">Date</th>
                             <th>Modérateur</th>
                             <th>Action</th>
+                            <th>Détails</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,16 +45,21 @@
                                 </td>
                                 <td>
                                     <span class="badge bg-{{ log.action_color }} bg-opacity-10 text-{{ log.action_color }} border border-{{ log.action_color }}">
-                                        {{ log.action_text }}
+                                        {{ log.document_action_text }}
                                     </span>
-                                    {% if log.details_text %}
-                                        <div class="mt-1 small text-muted fst-italic">{{ log.details_text }}</div>
+                                </td>
+                                <td class="small text-muted">
+                                    {% if log.old_value and log.new_value and log.target_field != "reupload" %}
+                                        <span class="text-decoration-line-through">{{ log.old_value|truncatewords:15 }}</span>
+                                        &rarr; {{ log.new_value|truncatewords:15 }}
+                                    {% elif log.target_field == "reupload" %}
+                                        {{ log.new_value }}
                                     {% endif %}
                                 </td>
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="3" class="text-center text-muted py-5">
+                                <td colspan="4" class="text-center text-muted py-5">
                                     Aucune action de modération enregistrée sur ce document.
                                 </td>
                             </tr>
