@@ -191,6 +191,77 @@ def test_log_on_document_edit_by_moderator(client, moderator, document):
     assert log.user == moderator
 
 
+def test_document_owner_cannot_forge_staff_pick(client, regular_user, course):
+    """Prevent owners from setting the moderator-only staff_pick field by forging POST data."""
+    document = Document.objects.create(
+        user=regular_user,
+        course=course,
+        name="Student Doc",
+        staff_pick=False,
+    )
+
+    login(client, regular_user)
+    resp = client.post(
+        reverse("document_edit", args=[document.id]),
+        {"name": "Student Doc", "description": "", "staff_pick": "on"},
+    )
+
+    assert resp.status_code == 302
+    document.refresh_from_db()
+    assert document.staff_pick is False
+    assert not ModerationLog.objects.filter(target_field="staff_pick").exists()
+
+
+def test_document_owner_edit_preserves_existing_staff_pick(
+    client, regular_user, course
+):
+    """Prevent owner edits from clearing staff_pick because the hidden checkbox is absent from the form."""
+    document = Document.objects.create(
+        user=regular_user,
+        course=course,
+        name="Student Doc",
+        staff_pick=True,
+    )
+
+    login(client, regular_user)
+    resp = client.post(
+        reverse("document_edit", args=[document.id]),
+        {"name": "Updated Student Doc", "description": ""},
+    )
+
+    assert resp.status_code == 302
+    document.refresh_from_db()
+    assert document.name == "Updated Student Doc"
+    assert document.staff_pick is True
+    assert not ModerationLog.objects.filter(target_field="staff_pick").exists()
+
+
+def test_moderator_staff_pick_change_is_logged_on_own_document(
+    client, moderator, course
+):
+    """Ensure allowed staff_pick changes remain auditable even on a moderator's own document."""
+    document = Document.objects.create(
+        user=moderator,
+        course=course,
+        name="Moderator Doc",
+        staff_pick=False,
+    )
+
+    login(client, moderator)
+    resp = client.post(
+        reverse("document_edit", args=[document.id]),
+        {"name": "Moderator Doc", "description": "", "staff_pick": "on"},
+    )
+
+    assert resp.status_code == 302
+    document.refresh_from_db()
+    assert document.staff_pick is True
+    log = ModerationLog.objects.get(target_field="staff_pick")
+    assert log.user == moderator
+    assert log.old_value == "False"
+    assert log.new_value == "True"
+
+
 def test_public_logs_view(client, moderator, regular_user):
     ModerationLog.objects.create(
         user=moderator,
