@@ -2,13 +2,12 @@ import logging
 import xml.etree.ElementTree as ET
 
 from django.conf import settings
-from django.db.models import Q
 from django.urls import reverse
 
 import requests
 from furl import furl
 
-from users.models import User
+from users.models import CasFailure, User
 
 logger = logging.getLogger(__name__)
 
@@ -45,19 +44,42 @@ class UlbCasBackend:
         user_dict = self._parse_response(resp.text)
 
         # Get or create a user from the parsed user_dict
+        # Prefer matching by netid (primary CAS identifier), fall back to email
         try:
-            user = User.objects.get(
-                Q(netid=user_dict["netid"]) | Q(email=user_dict["email"])
-            )
+            user = User.objects.get(netid=user_dict["netid"])
         except User.DoesNotExist:
-            user = User.objects.create_user(
-                netid=user_dict["netid"],
-                email=user_dict["email"],
-                first_name=user_dict["first_name"],
-                last_name=user_dict["last_name"],
-                register_method=self.LOGIN_METHOD,
-            )
+            try:
+                user = User.objects.get(email=user_dict["email"])
+            except User.DoesNotExist:
+                user = User.objects.create_user(
+                    netid=user_dict["netid"],
+                    email=user_dict["email"],
+                    first_name=user_dict["first_name"],
+                    last_name=user_dict["last_name"],
+                    register_method=self.LOGIN_METHOD,
+                )
+
+        # Sync all fields from CAS on every login
+        user.netid = user_dict["netid"]
+        user.first_name = user_dict["first_name"]
+        user.last_name = user_dict["last_name"]
         user.last_login_method = self.LOGIN_METHOD
+
+        # Only update email if no other user already has it
+        conflict = (
+            User.objects.filter(email=user_dict["email"]).exclude(pk=user.pk).first()
+        )
+        if conflict:
+            CasFailure.objects.create(
+                code="EMAIL_CONFLICT",
+                details=(
+                    f"CAS returned email {user_dict['email']} for user {user.netid} (id={user.pk}), "
+                    f"but it belongs to user {conflict.netid} (id={conflict.pk})"
+                ),
+            )
+        else:
+            user.email = user_dict["email"]
+
         user.save()
 
         return user
