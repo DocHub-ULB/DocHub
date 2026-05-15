@@ -2,6 +2,10 @@
 
 This page tries to contain all use facing changes made on DocHub.
 
+# Unreleased
+
+ * Add document moderation history view showing all actions taken on a document
+
 # 2026.5.1
 
 Moderation:
