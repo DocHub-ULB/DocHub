@@ -4,6 +4,7 @@ import uuid
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import F
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -24,6 +25,13 @@ from documents.forms import (
 )
 from documents.models import BulkDocuments, Document, Vote
 from moderation.models import ModerationLog
+
+
+def _document_form_for_user(user, document, *args, **kwargs):
+    form = DocumentForm(*args, instance=document, **kwargs)
+    if not user.moderation_perm(document):
+        form.fields.pop("staff_pick", None)
+    return form
 
 
 @login_required
@@ -128,21 +136,38 @@ def document_edit(request, pk):
         old_name = doc.name
         old_description = doc.description
         old_tags = list(doc.tags.all())
+        old_staff_pick = doc.staff_pick
 
-        form = DocumentForm(request.POST, instance=doc)
+        can_staff_pick = request.user.moderation_perm(doc)
+        form = _document_form_for_user(request.user, doc, request.POST)
 
         if form.is_valid():
             if request.user != doc.user:
+                values = {
+                    "name": (old_name, form.cleaned_data["name"]),
+                    "description": (
+                        old_description,
+                        form.cleaned_data["description"],
+                    ),
+                    "tags": (old_tags, form.cleaned_data["tags"]),
+                }
+                if can_staff_pick:
+                    values["staff_pick"] = (
+                        old_staff_pick,
+                        form.cleaned_data["staff_pick"],
+                    )
+                ModerationLog.track(
+                    user=request.user, content_object=doc, values=values
+                )
+            elif can_staff_pick:
                 ModerationLog.track(
                     user=request.user,
                     content_object=doc,
                     values={
-                        "name": (old_name, form.cleaned_data["name"]),
-                        "description": (
-                            old_description,
-                            form.cleaned_data["description"],
+                        "staff_pick": (
+                            old_staff_pick,
+                            form.cleaned_data["staff_pick"],
                         ),
-                        "tags": (old_tags, form.cleaned_data["tags"]),
                     },
                 )
 
@@ -155,7 +180,7 @@ def document_edit(request, pk):
             return HttpResponseRedirect(reverse("document_show", args=[doc.id]))
 
     else:
-        form = DocumentForm(instance=doc)
+        form = _document_form_for_user(request.user, doc)
 
     return render(
         request,
@@ -234,6 +259,10 @@ def document_show(request, pk):
         "document": document,
         "user_vote": document.vote_set.filter(user=request.user).first(),
         "form": DocumentReportForm(),
+        "has_moderation_history": ModerationLog.objects.filter(
+            content_type=ContentType.objects.get_for_model(Document),
+            object_id=document.pk,
+        ).exists(),
     }
 
     return render(request, "documents/viewer.html", context)

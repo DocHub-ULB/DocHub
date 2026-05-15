@@ -4,6 +4,7 @@ from functools import wraps
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
@@ -11,6 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from documents.models import Document
 from moderation.forms import (
     AddModeratorForm,
     ProcessRepresentativeRequestForm,
@@ -331,3 +333,20 @@ def moderation_profile(request, netid):
 def moderation_about(request):
     """Public page explaining the moderation system."""
     return render(request, "moderation/about.html")
+
+
+@login_required
+def document_history(request, pk):
+    """Moderation history for a single document — all actions by all moderators."""
+    document = get_object_or_404(Document, pk=pk)
+    content_type = ContentType.objects.get_for_model(Document)
+    logs = (
+        ModerationLog.objects.filter(content_type=content_type, object_id=pk)
+        .select_related("user")
+        .order_by("-timestamp")
+    )
+    return render(
+        request,
+        "moderation/document_history.html",
+        {"document": document, "logs": logs},
+    )
