@@ -15,6 +15,7 @@ from users.authBackend import (
     CasRequestError,
     UlbCasBackend,
 )
+from users.models import CasFailure
 
 logger = logging.getLogger(__name__)
 
@@ -57,37 +58,48 @@ def auth_ulb(request):
         user = authenticate(ticket=ticket)
     except CasRejectError as e:
         logger.exception("CAS rejected")
+        code = e.args[0]
+        debug = e.args[1]
+        _log_cas_failure(request, ticket, code, debug)
         return TemplateResponse(
-            request, "users/auth/error.html", {"code": e.args[0], "debug": e.args[1]}
+            request, "users/auth/error.html", {"code": code, "debug": debug}
         )
     except CasRequestError as e:
         logger.exception("CAS request error")
         cas_request = e.args[0]
+        code = f"REQUEST_{cas_request.status_code}"
+        debug = f"{cas_request.url}\n{cas_request.text[:1000]}"
+        _log_cas_failure(request, ticket, code, debug)
         return TemplateResponse(
-            request,
-            "users/auth/error.html",
-            {
-                "code": f"REQUEST_{cas_request.status_code}",
-                "debug": f"{cas_request.url}\n{cas_request.text[:1000]}",
-            },
+            request, "users/auth/error.html", {"code": code, "debug": debug}
         )
     except CasParseError as e:
         logger.exception("CAS parse error")
+        code = e.args[0]
+        debug = e.args[1]
+        _log_cas_failure(request, ticket, code, debug)
         return TemplateResponse(
-            request, "users/auth/error.html", {"code": e.args[0], "debug": e.args[1]}
+            request, "users/auth/error.html", {"code": code, "debug": debug}
         )
     except (ConnectionError, SSLError) as e:
         logger.exception("CAS SSL error")
+        code = "SSL"
+        debug = str(e.args[0])
+        _log_cas_failure(request, ticket, code, debug)
         return TemplateResponse(
-            request, "users/auth/error.html", {"code": "SSL", "debug": e.args[0]}
+            request, "users/auth/error.html", {"code": code, "debug": debug}
         )
     except Exception as e:
         logger.exception("CAS unknown error")
+        code = "UNKNOWN"
+        debug = str(e)
+        _log_cas_failure(request, ticket, code, debug)
         return TemplateResponse(
-            request, "users/auth/error.html", {"code": "UNKNOWN", "debug": e.args[0]}
+            request, "users/auth/error.html", {"code": code, "debug": debug}
         )
 
     if user is None:
+        _log_cas_failure(request, ticket, "AUTH_RETURNED_NONE", "")
         return TemplateResponse(request, "users/auth/unknown-error.html", {})
 
     login(request, user)
@@ -100,3 +112,12 @@ def auth_ulb(request):
         resp.set_cookie("next_url", "", max_age=-100000)
         return resp
     return HttpResponseRedirect("/")
+
+
+def _log_cas_failure(request, ticket, code, details):
+    CasFailure.objects.create(
+        code=code,
+        details=details,
+        ticket=ticket or "",
+        ip_address=request.META.get("REMOTE_ADDR"),
+    )
