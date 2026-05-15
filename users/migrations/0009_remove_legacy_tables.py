@@ -8,9 +8,13 @@ LEGACY_TABLES = [
 
 
 def remove_legacy_tables(apps, schema_editor):
+    vendor = schema_editor.connection.vendor
     with schema_editor.connection.cursor() as cursor:
         for table in LEGACY_TABLES:
-            cursor.execute(f"DROP TABLE IF EXISTS {table} CASCADE")
+            if vendor == "sqlite":
+                cursor.execute(f"DROP TABLE IF EXISTS {table}")
+            else:
+                cursor.execute(f"DROP TABLE IF EXISTS {table} CASCADE")
 
 
 class Migration(migrations.Migration):
