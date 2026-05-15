@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User
+from .models import CasFailure, User
 
 
 @admin.register(User)
@@ -64,3 +64,18 @@ class UserAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+
+@admin.register(CasFailure)
+class CasFailureAdmin(admin.ModelAdmin):
+    list_display = ("code", "ticket", "ip_address", "created")
+    list_filter = ("code",)
+    search_fields = ("ticket", "details", "ip_address")
+    date_hierarchy = "created"
+    readonly_fields = ("code", "details", "ticket", "ip_address", "created")
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False

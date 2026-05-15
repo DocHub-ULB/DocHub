@@ -97,3 +97,17 @@ class User(AbstractBaseUser):
 
     def initials(self):
         return self.first_name[0] + self.last_name[0]
+
+
+class CasFailure(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    code = models.CharField(max_length=64)
+    details = models.TextField(blank=True, default="")
+    ticket = models.CharField(max_length=512, blank=True, default="")
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created"]
+
+    def __str__(self):
+        return f"{self.code} ({self.created:%Y-%m-%d %H:%M})"
