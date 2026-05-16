@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Stats - DocHub{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-2">
+        <h1 class="mb-0">Stats</h1>
+        <form method="get" class="d-flex flex-wrap align-items-center gap-2">
+            <label for="range" class="form-label mb-0">Période :</label>
+            <select id="range" name="range" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+                {% for option in range_options %}
+                    <option value="{{ option.key }}" {% if option.key == range_key %}selected{% endif %}>{{ option.label }}</option>
+                {% endfor %}
+            </select>
+            <span class="text-muted small">
+                Du {{ start|date:"d/m/Y" }} au {{ end|date:"d/m/Y" }}
+            </span>
+            <noscript><button type="submit" class="btn btn-sm btn-primary">Appliquer</button></noscript>
+        </form>
+    </div>
+
+    {% for section, charts in sections.items %}
+        <h2 class="h4 mt-4 mb-3">{{ section }}</h2>
+        <div class="row g-4">
+            {% for chart in charts %}
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6 card-title text-muted">{{ chart.title }}</h3>
+                            <canvas data-controller="chart"
+                                    data-stats-key="{{ chart.key }}"
+                                    data-chart-label-value="{{ chart.title }}"
+                                    data-chart-labels-id-value="chart-labels"
+                                    data-chart-data-value="{{ chart.data_json }}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    {{ labels|json_script:"chart-labels" }}
+{% endblock content %}

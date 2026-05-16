@@ -320,6 +320,55 @@ class ModalTrigger extends Controller {
     }
 }
 
+class Chart extends Controller {
+    static values = {
+        data: Array,
+        label: String,
+        labelsId: String,
+    }
+
+    async connect() {
+        const ChartJS = (await import('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/auto/+esm')).default;
+
+        const labels = JSON.parse(document.getElementById(this.labelsIdValue).textContent);
+
+        this.chart = new ChartJS(this.element, {
+            type: "line",
+            data: {
+                labels,
+                datasets: [{
+                    label: this.labelValue,
+                    data: this.dataValue,
+                    borderColor: "#0d6efd",
+                    backgroundColor: "rgba(13, 110, 253, 0.1)",
+                    fill: true,
+                    tension: 0,
+                    pointRadius: 0,
+                    borderWidth: 1.5,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2.5,
+                animation: false,
+                interaction: {mode: "index", intersect: false},
+                plugins: {legend: {display: false}},
+                scales: {
+                    y: {beginAtZero: true, ticks: {precision: 0}},
+                    x: {ticks: {maxTicksLimit: 8, maxRotation: 0}},
+                },
+            },
+        });
+    }
+
+    disconnect() {
+        if (this.chart) {
+            this.chart.destroy();
+        }
+    }
+}
+
 const application = Application.start()
 
 application.register("course-filter", CourseFilter);
@@ -331,5 +380,6 @@ application.register('tom-select', TomSelect);
 application.register('share', Share);
 application.register('modal', Modal);
 application.register('modal-trigger', ModalTrigger);
+application.register('chart', Chart);
 
 application.debug = true;

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "tags",
     "search",
     "moderation",
+    "stats",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

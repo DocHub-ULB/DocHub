@@ -4,6 +4,7 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Add a /stats/ page with charts of DocHub activity over time
  * Add document moderation history view showing all actions taken on a document
  * Fix login errors when ULB changes your email or netid
  * Log CAS authentication failures in the admin for easier debugging
