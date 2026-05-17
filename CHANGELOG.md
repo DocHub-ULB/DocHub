@@ -4,7 +4,11 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Show the deployed version in the footer, linked to the changelog
+
 # 2026.5.3
+
+*No user facing changes*
 
 # 2026.5.2
 

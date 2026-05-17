@@ -251,6 +251,14 @@
                         <span class="text-muted mx-1">&bull;</span>
                         <a href="{% url 'stats' %}">Stats</a>
                     {% endif %}
+                    {% if GIT_DESCRIBE %}
+                        <span class="text-muted mx-1">&bull;</span>
+                        <a href="https://github.com/UrLab/dochub/blob/main/CHANGELOG.md"
+                           class="text-muted text-decoration-none"
+                           title="Version déployée — voir le changelog">
+                            <small>{{ GIT_DESCRIBE }}</small>
+                        </a>
+                    {% endif %}
                 </div>
             </footer>
         {% endblock fullpage %}

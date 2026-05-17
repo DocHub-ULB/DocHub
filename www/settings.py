@@ -1,4 +1,5 @@
 import logging
+import subprocess
 from pathlib import Path
 
 import environ
@@ -89,6 +90,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "www.context_processors.read_only",
                 "www.context_processors.sentry",
+                "www.context_processors.version",
             ],
         },
     },
@@ -154,6 +156,24 @@ CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 
 SENTRY_DSN = env("SENTRY_DSN", default=None)
 SENTRY_RELEASE = get_default_release()
+
+
+def _git_describe() -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "describe", "--tags", "--dirty", "--always"],
+            cwd=BASE_DIR,
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=True,
+        )
+    except (subprocess.SubprocessError, FileNotFoundError):
+        return None
+    return result.stdout.strip() or None
+
+
+GIT_DESCRIBE = _git_describe()
 
 FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
