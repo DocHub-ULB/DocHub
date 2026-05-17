@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.5.3
+
 # 2026.5.2
 
  * Add a /stats/ page with charts of DocHub activity over time
