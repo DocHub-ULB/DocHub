@@ -24,10 +24,10 @@ git fetch --tags --prune origin
 git checkout "$TAG"
 
 echo "[2/4] Running migrations..."
-/srv/dochub/.local/bin/uv run manage.py migrate --noinput
+/srv/dochub/.local/bin/uv run --frozen manage.py migrate --noinput
 
 echo "[3/4] Collecting static files..."
-/srv/dochub/.local/bin/uv run manage.py collectstatic --noinput
+/srv/dochub/.local/bin/uv run --frozen manage.py collectstatic --noinput
 
 echo "[4/4] Restarting services..."
 sudo /bin/systemctl restart dochub-gunicorn dochub-celery

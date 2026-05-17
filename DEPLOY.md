@@ -32,11 +32,14 @@ journalctl -fu dochub-webhook
 1. Validates the tag format
 2. Acquires a file lock (prevents concurrent deploys)
 3. `git fetch --tags --prune origin && git checkout $TAG`
-4. `uv run manage.py migrate --noinput`
-5. `uv run manage.py collectstatic --noinput`
+4. `uv run --frozen manage.py migrate --noinput`
+5. `uv run --frozen manage.py collectstatic --noinput`
 6. `sudo systemctl restart dochub-gunicorn dochub-celery`
 
 If any step fails, `set -e` stops the script before restarting services, so the old code keeps running.
+
+`--frozen` is mandatory: without it, `uv run` rewrites `uv.lock`'s dynamic `exclude-newer` timestamp on every invocation, leaving a dirty working tree that breaks the next
+deploy's `git checkout`. The `dochub-gunicorn` and `dochub-celery` systemd units pass `--frozen` for the same reason.
 
 ## GitHub secret
 
