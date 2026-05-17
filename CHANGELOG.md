@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.5.2
+
  * Add a /stats/ page with charts of DocHub activity over time
  * Track more activity on /stats/ (views, downloads, searches, follows, pages traffic, feature usage, ...)
  * Add document moderation history view showing all actions taken on a document
