@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 
 import search.logic
 from catalog.models import Course
+from stats.models import DailyStat, Metric
 
 
 class CourseSearchView(ListView):
@@ -13,6 +14,8 @@ class CourseSearchView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q", "")
+        if query:
+            DailyStat.track(Metric.SEARCH_QUERY)
         return search.logic.search_course(query)
 
     def get_context_data(self, **kwargs):

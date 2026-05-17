@@ -247,6 +247,10 @@
                     <a href="https://github.com/UrLab/dochub" class="ms-2">GitHub</a>
                     <span class="text-muted mx-1">&bull;</span>
                     <a href="{% url 'moderation_about' %}">Modération</a>
+                    {% if request.user.is_authenticated %}
+                        <span class="text-muted mx-1">&bull;</span>
+                        <a href="{% url 'stats' %}">Stats</a>
+                    {% endif %}
                 </div>
             </footer>
         {% endblock fullpage %}

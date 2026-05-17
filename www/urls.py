@@ -21,6 +21,7 @@ urlpatterns = [
     path("documents/", include("documents.urls")),
     path("users/", include("users.urls")),
     path("moderation/", include("moderation.urls")),
+    path("stats/", include("stats.urls")),
     path("admin/", admin.site.urls),
     path("syslogin", LoginView.as_view(template_name="syslogin.html"), name="syslogin"),
     path("login", users.views.login_view, name="login"),
