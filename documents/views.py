@@ -25,6 +25,7 @@ from documents.forms import (
 )
 from documents.models import BulkDocuments, Document, Vote
 from moderation.models import ModerationLog
+from stats.models import DailyStat, Metric
 
 
 def _document_form_for_user(user, document, *args, **kwargs):
@@ -42,6 +43,8 @@ def upload_file(request, slug):
     if request.method == "POST":
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
+
+        DailyStat.track(Metric.UPLOAD_SUBMIT)
 
         form = UploadFileForm(request.POST, request.FILES)
 
@@ -100,6 +103,8 @@ def document_edit(request, pk):
     if request.method == "POST":
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
+
+        DailyStat.track(Metric.DOCUMENT_EDIT)
 
         if "hide" in request.POST:
             if request.user != doc.user:
@@ -208,6 +213,8 @@ def document_reupload(request, pk):
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
 
+        DailyStat.track(Metric.DOCUMENT_REUPLOAD)
+
         form = ReUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -254,6 +261,7 @@ def document_show(request, pk):
     if document.state == Document.DocumentState.DONE:
         document.views = F("views") + 1
         document.save(update_fields=["views"])
+        DailyStat.track(Metric.DOCUMENT_VIEW)
 
     context = {
         "document": document,
@@ -304,6 +312,7 @@ def document_original_file(request, pk):
 
     document.downloads = F("downloads") + 1
     document.save(update_fields=["downloads"])
+    DailyStat.track(Metric.DOCUMENT_DOWNLOAD)
     return response
 
 
@@ -327,6 +336,7 @@ def document_pdf_file(request, pk):
 
     document.downloads = F("views") + 1
     document.save(update_fields=["views"])
+    DailyStat.track(Metric.DOCUMENT_DOWNLOAD)
     return response
 
 

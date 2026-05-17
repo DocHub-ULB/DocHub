@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from catalog.models import Category, Course, CourseUserView
 from catalog.slug import normalize_slug
 from documents.models import Vote
+from stats.models import DailyStat, Metric
 
 
 def slug_redirect(view):
@@ -60,6 +61,7 @@ def show_course(request, slug: str):
     if request.user.is_authenticated:
         template = "catalog/course.html"
         CourseUserView.visit(request.user, course)
+        DailyStat.track(Metric.COURSE_PAGE_VIEW)
     else:
         template = "catalog/noauth/course.html"
 
@@ -73,8 +75,10 @@ def set_follow_course(request, slug: str, action: str) -> HttpResponse:
     course = get_object_or_404(Course, slug=slug)
     if action == "follow":
         course.followed_by.add(request.user)
+        DailyStat.track(Metric.COURSE_FOLLOW)
     else:
         course.followed_by.remove(request.user)
+        DailyStat.track(Metric.COURSE_UNFOLLOW)
     course.save()
     nextpage = request.GET.get("next", reverse("catalog:course_show", args=[slug]))
     return HttpResponseRedirect(nextpage)
@@ -97,6 +101,7 @@ def leave_course(request: HttpRequest, slug: str):
 @login_required
 def my_courses(request):
     # "suggestions": suggest(request.user),
+    DailyStat.track(Metric.MY_COURSES_VIEW)
     return render(
         request,
         "catalog/my_courses.html",
@@ -125,6 +130,11 @@ class Column:
 
 def finder(request, slugs: str = ""):
     slug_list = slugs.split("/")
+
+    DailyStat.track(Metric.FINDER_VIEW)
+    if len(slug_list) >= 3:
+        DailyStat.track(Metric.FINDER_VIEW_DEEP)
+
     categories = [get_object_or_404(Category, slug=x) for x in slug_list]
 
     for i in range(len(categories) - 1, 0, -1):

@@ -4,13 +4,14 @@ import json
 from datetime import date, timedelta
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate, TruncMonth, TruncWeek
 from django.shortcuts import render
 from django.utils import timezone
 
 from documents.models import Document, DocumentReport, Vote
 from moderation.models import ModerationLog, RepresentativeRequest
+from stats.models import DailyStat, Metric
 from users.models import CasFailure, User
 
 
@@ -107,8 +108,27 @@ def _labels(start: date, end: date, granularity: str) -> list[str]:
     return [b.isoformat() for b in _buckets(start, end, granularity)]
 
 
+def _stat_series(name: str, start: date, end: date, granularity: str) -> list[int]:
+    """Sum DailyStat rows for `name` into the bucket grid."""
+    qs = DailyStat.objects.filter(name=name, date__gte=start, date__lte=end)
+    if granularity == "daily":
+        rows = qs.values("date").annotate(total=Sum("value"))
+        by_bucket = {row["date"]: row["total"] for row in rows}
+    else:
+        trunc = TruncMonth("date") if granularity == "monthly" else TruncWeek("date")
+        rows = qs.annotate(bucket=trunc).values("bucket").annotate(total=Sum("value"))
+        by_bucket = {}
+        for row in rows:
+            bucket = row["bucket"]
+            if hasattr(bucket, "date"):
+                bucket = bucket.date()
+            by_bucket[bucket] = by_bucket.get(bucket, 0) + row["total"]
+    return [by_bucket.get(b, 0) for b in _buckets(start, end, granularity)]
+
+
 @login_required
 def stats(request):
+    DailyStat.track(Metric.STATS_VIEW)
     option = _range_option(request.GET.get("range", "")) or _range_option(DEFAULT_RANGE)
 
     today = timezone.localdate()
@@ -118,75 +138,90 @@ def stats(request):
 
     labels = _labels(start, end, granularity)
 
-    charts = [
-        {
-            "section": "Contenu",
-            "title": "Documents uploadés",
-            "key": "documents",
-            "data": _series(
+    def qs_chart(title, key, queryset, date_field):
+        return {
+            "title": title,
+            "key": key,
+            "data": _series(queryset, date_field, start, end, granularity),
+        }
+
+    def metric_chart(metric):
+        return {
+            "title": metric.label,
+            "key": metric.value,
+            "data": _stat_series(metric, start, end, granularity),
+        }
+
+    sections = {
+        "Lifecycle de contenu": [
+            qs_chart(
+                "Documents uploadés",
+                "documents",
                 Document.objects.filter(import_source__isnull=True),
                 "created",
-                start,
-                end,
-                granularity,
             ),
-        },
-        {
-            "section": "Contenu",
-            "title": "Votes",
-            "key": "votes",
-            "data": _series(Vote.objects.all(), "when", start, end, granularity),
-        },
-        {
-            "section": "Contenu",
-            "title": "Documents signalés",
-            "key": "reports",
-            "data": _series(
-                DocumentReport.objects.all(), "created", start, end, granularity
+            qs_chart(
+                "Documents signalés", "reports", DocumentReport.objects.all(), "created"
             ),
-        },
-        {
-            "section": "Communauté",
-            "title": "Nouveaux utilisateurs",
-            "key": "users",
-            "data": _series(User.objects.all(), "created", start, end, granularity),
-        },
-        {
-            "section": "Communauté",
-            "title": "Demandes de modérateur·trices",
-            "key": "rep_requests",
-            "data": _series(
+            metric_chart(Metric.UPLOAD_SUBMIT),
+            metric_chart(Metric.DOCUMENT_EDIT),
+            metric_chart(Metric.DOCUMENT_REUPLOAD),
+        ],
+        "Découverte": [
+            metric_chart(Metric.SEARCH_QUERY),
+            metric_chart(Metric.FINDER_VIEW),
+            metric_chart(Metric.FINDER_VIEW_DEEP),
+            metric_chart(Metric.COURSE_PAGE_VIEW),
+        ],
+        "Engagement": [
+            qs_chart("Votes", "votes", Vote.objects.all(), "when"),
+            metric_chart(Metric.DOCUMENT_VIEW),
+            metric_chart(Metric.DOCUMENT_DOWNLOAD),
+            metric_chart(Metric.COURSE_FOLLOW),
+            metric_chart(Metric.COURSE_UNFOLLOW),
+            metric_chart(Metric.MY_COURSES_VIEW),
+        ],
+        "Modération — actions": [
+            qs_chart(
+                "Demandes de modérateur·trices",
+                "rep_requests",
                 RepresentativeRequest.objects.all(),
                 "created",
-                start,
-                end,
-                granularity,
             ),
-        },
-        {
-            "section": "Autres",
-            "title": "Actions de modération",
-            "key": "moderation",
-            "data": _series(
-                ModerationLog.objects.all(), "timestamp", start, end, granularity
+            qs_chart(
+                "Actions de modération",
+                "moderation",
+                ModerationLog.objects.all(),
+                "timestamp",
             ),
-        },
-        {
-            "section": "Autres",
-            "title": "Erreurs de login ULB",
-            "key": "cas_failures",
-            "data": _series(
-                CasFailure.objects.all(), "created", start, end, granularity
+            metric_chart(Metric.MODERATION_MANAGE_VIEW),
+        ],
+        "Modération — transparence": [
+            metric_chart(Metric.MODERATION_LOG_VIEW),
+            metric_chart(Metric.MODERATION_TREE_VIEW),
+            metric_chart(Metric.MODERATION_PROFILE_VIEW),
+            metric_chart(Metric.MODERATION_ABOUT_VIEW),
+            metric_chart(Metric.MODERATION_ABOUT_VIEW_MOD),
+            metric_chart(Metric.DOCUMENT_HISTORY_VIEW),
+        ],
+        "Comptes": [
+            qs_chart("Nouveaux utilisateurs", "users", User.objects.all(), "created"),
+            qs_chart(
+                "Erreurs de login ULB",
+                "cas_failures",
+                CasFailure.objects.all(),
+                "created",
             ),
-        },
-    ]
+            metric_chart(Metric.LOGIN_SUCCESS),
+        ],
+        "Méta": [
+            metric_chart(Metric.STATS_VIEW),
+        ],
+    }
 
-    for chart in charts:
-        chart["data_json"] = json.dumps(chart["data"])
-
-    sections: dict[str, list[dict]] = {}
-    for chart in charts:
-        sections.setdefault(chart["section"], []).append(chart)
+    for charts in sections.values():
+        for chart in charts:
+            chart["data_json"] = json.dumps(chart["data"])
 
     return render(
         request,
