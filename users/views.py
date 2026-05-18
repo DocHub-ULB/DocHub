@@ -10,6 +10,8 @@ from django.views.decorators.http import require_POST
 from requests.exceptions import ConnectionError, SSLError
 
 from users.authBackend import (
+    CasInvalidService,
+    CasInvalidTicket,
     CasParseError,
     CasRejectError,
     CasRequestError,
@@ -56,13 +58,28 @@ def auth_ulb(request):
 
     try:
         user = authenticate(ticket=ticket)
+    except (CasInvalidService, CasInvalidTicket) as e:
+        already_retried = request.COOKIES.get("cas_autoretry") == "1"
+        if already_retried:
+            # Show an error page to the user
+            logger.exception("CAS rejected after recovery attempt")
+            _log_cas_failure(request, ticket, e.code, e.debug)
+            return TemplateResponse(
+                request, "users/auth/error.html", {"code": e.code, "debug": e.debug}
+            )
+        else:
+            # If it's the first try, just redirect the user to the login page
+            # so they get an automatic retry.
+            # Also set a 60s cookie to avoid a second (or more) retry and an infinite redirect loop
+            _log_cas_failure(request, ticket, f"AUTORETRY__{e.code}", e.debug)
+            resp = HttpResponseRedirect(reverse("login"))
+            resp.set_cookie("cas_autoretry", "1", max_age=60)
+            return resp
     except CasRejectError as e:
         logger.exception("CAS rejected")
-        code = e.args[0]
-        debug = e.args[1]
-        _log_cas_failure(request, ticket, code, debug)
+        _log_cas_failure(request, ticket, e.code, e.debug)
         return TemplateResponse(
-            request, "users/auth/error.html", {"code": code, "debug": debug}
+            request, "users/auth/error.html", {"code": e.code, "debug": e.debug}
         )
     except CasRequestError as e:
         logger.exception("CAS request error")
@@ -75,11 +92,9 @@ def auth_ulb(request):
         )
     except CasParseError as e:
         logger.exception("CAS parse error")
-        code = e.args[0]
-        debug = e.args[1]
-        _log_cas_failure(request, ticket, code, debug)
+        _log_cas_failure(request, ticket, e.code, e.debug)
         return TemplateResponse(
-            request, "users/auth/error.html", {"code": code, "debug": debug}
+            request, "users/auth/error.html", {"code": e.code, "debug": e.debug}
         )
     except (ConnectionError, SSLError) as e:
         logger.exception("CAS SSL error")

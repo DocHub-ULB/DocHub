@@ -99,7 +99,14 @@ class UlbCasBackend:
                 "./cas:authenticationFailure", namespaces=self.XML_NAMESPACES
             )
             if failure is not None:
-                raise CasRejectError(failure.attrib.get("code"), failure.text)
+                # Distinct subclasses for the common codes
+                code = failure.attrib.get("code")
+                if code == "INVALID_TICKET":
+                    raise CasInvalidTicket(code, failure.text)
+                elif code == "INVALID_SERVICE":
+                    raise CasInvalidService(code, failure.text)
+                else:
+                    raise CasRejectError(code, failure.text)
             else:
                 raise CasParseError("UNKNOWN_STRUCTURE", xml)
 
@@ -157,8 +164,22 @@ class CasRequestError(CasError):
 
 
 class CasParseError(CasError):
-    pass
+    def __init__(self, code, debug):
+        super().__init__(code, debug)
+        self.code = code
+        self.debug = debug
 
 
 class CasRejectError(CasError):
+    def __init__(self, code, debug):
+        super().__init__(code, debug)
+        self.code = code
+        self.debug = debug
+
+
+class CasInvalidTicket(CasRejectError):
+    pass
+
+
+class CasInvalidService(CasRejectError):
     pass

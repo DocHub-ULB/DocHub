@@ -1,6 +1,12 @@
 import pytest
 
-from users.authBackend import CasParseError, CasRejectError, UlbCasBackend
+from users.authBackend import (
+    CasInvalidService,
+    CasInvalidTicket,
+    CasParseError,
+    CasRejectError,
+    UlbCasBackend,
+)
 
 # Parse valid cases
 
@@ -60,25 +66,28 @@ def test_unknown_structure(path):
 
 
 @pytest.mark.parametrize(
-    ("path", "expected_error", "expected_text"),
+    ("path", "expected_exc", "expected_error", "expected_text"),
     [
         (
             "users/tests/xml-fixtures/invalid-service.xml",
+            CasInvalidService,
             "INVALID_SERVICE",
             "does not match supplied service",
         ),
         (
             "users/tests/xml-fixtures/invalid-ticket.xml",
+            CasInvalidTicket,
             "INVALID_TICKET",
             "not recognized",
         ),
     ],
 )
-def test_invalid_service(path, expected_error, expected_text):
+def test_invalid_service(path, expected_exc, expected_error, expected_text):
     with open(path) as fd:
         xml = fd.read()
 
-    with pytest.raises(CasRejectError) as e:
+    with pytest.raises(expected_exc) as e:
         UlbCasBackend()._parse_response(xml)
+    assert isinstance(e.value, CasRejectError)
     assert e.value.args[0] == expected_error
     assert expected_text in e.value.args[1]
