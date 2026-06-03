@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.6.0
+
  * Auto-recover from common CAS login errors (stale bookmark, refreshed callback) instead of showing an error page
 
 # 2026.5.4
