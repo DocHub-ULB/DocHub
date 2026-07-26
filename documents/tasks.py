@@ -9,10 +9,9 @@ import time
 import uuid
 from io import BytesIO
 
+from celery import chain, shared_task
 from django.conf import settings
 from django.core.files.base import ContentFile, File
-
-from celery import chain, shared_task
 from pypdf import PdfReader
 
 from documents.models import Document, DocumentError

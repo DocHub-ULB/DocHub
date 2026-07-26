@@ -49,7 +49,6 @@ def delete_numeric_netid_users(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0009_remove_legacy_tables"),
     ]

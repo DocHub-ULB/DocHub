@@ -2,9 +2,8 @@
 
 import random
 
-from django.core.management import BaseCommand
-
 from coolname import generate
+from django.core.management import BaseCommand
 
 from catalog.models import Course
 from documents.models import Document, Vote

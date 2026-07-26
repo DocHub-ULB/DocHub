@@ -1,6 +1,5 @@
-from django.urls import reverse
-
 import pytest
+from django.urls import reverse
 
 from catalog.models import Course
 from documents.models import Document, DocumentReport

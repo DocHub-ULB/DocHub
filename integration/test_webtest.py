@@ -1,7 +1,6 @@
-from django.urls import reverse
-
 import django_webtest
 import pytest
+from django.urls import reverse
 from webtest import Upload
 
 from catalog.models import Category, Course

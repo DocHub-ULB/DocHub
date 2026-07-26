@@ -1,11 +1,9 @@
-from typing import Any
-
 import json
 import logging
+from typing import Any
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
-
 from slugify import slugify
 
 from catalog.models import Category

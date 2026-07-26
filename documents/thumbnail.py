@@ -1,6 +1,5 @@
-from typing import IO
-
 import statistics
+from typing import IO
 
 import pymupdf
 from PIL import Image, ImageOps

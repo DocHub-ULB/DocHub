@@ -1,10 +1,9 @@
 import logging
 import xml.etree.ElementTree as ET
 
+import requests
 from django.conf import settings
 from django.urls import reverse
-
-import requests
 from furl import furl
 
 from users.models import CasFailure, User

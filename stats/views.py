@@ -1,7 +1,6 @@
-from typing import NamedTuple
-
 import json
 from datetime import date, timedelta
+from typing import NamedTuple
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum

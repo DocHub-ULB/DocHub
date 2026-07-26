@@ -18,7 +18,6 @@ def remove_legacy_tables(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0008_user_moderator_welcome_dismissed"),
     ]

@@ -1,12 +1,10 @@
-from typing import Optional
-
 import mimetypes
 import uuid
 from collections.abc import Iterable
-
-from django.core.files import File
+from typing import Optional
 
 import magic
+from django.core.files import File
 
 from catalog.models import Course
 from tags.models import Tag

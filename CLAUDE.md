@@ -11,14 +11,14 @@ JS libs only when necessary
 ## Commands
 - **Run tests**: `uv run pytest` (all tests) or `uv run pytest path/to/test_file.py::TestClass::test_method` (single test)
 - **Lint**: `uv run ruff check --fix`
-- **Format**: `uv run black .` and `uv run isort .`
+- **Format**: `uv run ruff format .`
 - **Type check**: `uv run mypy`
 - **Pre-commit**: `uv run pre-commit run --all-files`
 - **Database setup**: `make database` (creates test users and sample data)
 - **Run server**: `uv run manage.py runserver`
 
 ## Code Style
-- Use **Black** formatting with **isort** for imports (profile=black)
+- Use **ruff format** for formatting and ruff's `I` rules for import ordering
 - Use **Django 6.0** patterns and **Python 3.13** features
 - Type hints required (mypy enabled for main modules)
 - Use Django's TextChoices for model choices

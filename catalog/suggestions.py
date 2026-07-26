@@ -1,7 +1,6 @@
 # TODO: is this dead code ?
-import typing
-
 import collections
+import typing
 
 from catalog.models import Course
 from users.models import User

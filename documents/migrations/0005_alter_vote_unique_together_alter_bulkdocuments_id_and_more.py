@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("documents", "0004_document_thumbnail"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

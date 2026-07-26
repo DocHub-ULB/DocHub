@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("moderation", "0004_representativerequest_rejection_reason"),
     ]

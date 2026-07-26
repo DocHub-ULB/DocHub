@@ -1,10 +1,9 @@
 import sys
 from unittest import mock
 
-from django.core.files import File
-
 import pytest
 from celery_test import create_doc
+from django.core.files import File
 
 from documents.models import Document, process_document
 from users.models import User

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("catalog", "0003_category_is_archive_course_is_archive"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

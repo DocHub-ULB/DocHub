@@ -1,14 +1,12 @@
 # mypy: disable-error-code="union-attr, arg-type"
-from typing import Any
-
 import json
 import logging
 import re
-
-from django.core.management import BaseCommand
+from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
+from django.core.management import BaseCommand
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
 logger = logging.getLogger(__name__)
