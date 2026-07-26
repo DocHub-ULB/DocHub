@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 doc = Document.objects.create(
                     name=" ".join(generate()),
                     course=course,
-                    user=user if user else User.objects.order_by("?").first(),
+                    user=user or User.objects.order_by("?").first(),
                     pages=max(1, int(random.gauss(5, 10))),
                     import_source="fake-doc",
                 )

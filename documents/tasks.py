@@ -169,7 +169,7 @@ def convert_office_to_pdf(self, document_id: int) -> int:
         sub = result.stdout
     except subprocess.CalledProcessError as e:
         raise DocumentProcessingError(
-            document, exc=e, message="unoconvert has failed: %s" % e.stderr[:2000]
+            document, exc=e, message=f"unoconvert has failed: {e.stderr[:2000]}"
         ) from e
 
     document.pdf.save(str(uuid.uuid4()) + ".pdf", ContentFile(sub))
@@ -245,7 +245,7 @@ def repair(self, document_id: int) -> int:
             raise DocumentProcessingError(
                 document,
                 exc=e,
-                message="mutool clean has failed : %s" % e.output[:900],
+                message=f"mutool clean has failed : {e.output[:900]}",
             ) from e
 
         with open(output_path, "rb") as fd:
@@ -306,7 +306,7 @@ def mutool_get_pages(document: Document) -> int | None:
             raise MissingBinary("mutool") from e
         except subprocess.CalledProcessError as e:
             raise DocumentProcessingError(
-                document, exc=e, message="mutool info has failed : %s" % e.output
+                document, exc=e, message=f"mutool info has failed : {e.output}"
             ) from e
 
     lines = output.split(b"\n")

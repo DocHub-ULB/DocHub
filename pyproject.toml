@@ -80,12 +80,16 @@ markers = """
     postgresql: needs a postgresql database to run
 """
 
+[tool.ruff]
+target-version = "py313"
+
 [tool.ruff.lint]
 select = [
     "F", "E", "W", "I", "YTT", "B", "COM818",
     "C4", "DTZ", "T10", "EXE", "ISC",
     "ICN", "G", "PIE", "PYI", "PT",
-    "SIM", "TID", "PL", "RSE", "RUF"
+    "SIM", "TID", "PL", "RSE", "RUF",
+    "UP", "FURB", "LOG", "PERF", "FLY", "INT",
 ]
 # Not now: "N", "ANN", "S", "BLE", "A", "DJ", "EM",
 #          "INP", "TCH", "ERA", "PGH", "SLF",

@@ -328,7 +328,7 @@ def document_pdf_file(request, pk):
     body = document.pdf.read()
 
     response = HttpResponse(body, content_type="application/pdf")
-    content_disposition = 'filename="%s.pdf"' % document.safe_name
+    content_disposition = f'filename="{document.safe_name}.pdf"'
     if "embed" not in request.GET:
         content_disposition = "attachment; " + content_disposition
 

@@ -65,7 +65,7 @@ class User(AbstractBaseUser):
 
     @property
     def name(self):
-        return "{0.first_name} {0.last_name}".format(self)
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def following_courses(self):

@@ -6,12 +6,6 @@ repos:
         types: [ file ]
         files: \.html$
 
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
-    hooks:
-      - id: pyupgrade
-        args: [ "--py313-plus" ]
-
   - repo: https://github.com/rtts/djhtml
     rev: '3.0.11'
     hooks:

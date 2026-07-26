@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         docs = Document.objects.all()
-        self.stdout.write("Auto-tagging %i documents..." % docs.count())
+        self.stdout.write(f"Auto-tagging {docs.count()} documents...")
 
         for doc in docs:
             doc.tag_from_name()

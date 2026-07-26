@@ -1,7 +1,7 @@
 class MissingBinary(EnvironmentError):
     def __repr__(self):
         message = self.args[0] if self.args else ""
-        return "MissingBinary: %s" % message
+        return f"MissingBinary: {message}"
 
     __str__ = __repr__
 
@@ -29,9 +29,7 @@ class UploadError(DocumentProcessingError):
 
 class DownloadError(DocumentProcessingError):
     def __repr__(self):
-        return "UploadError('Downloading doc {0.id} from {0.original} failed')".format(
-            self.document
-        )
+        return f"UploadError('Downloading doc {self.document.id} from {self.document.original} failed')"
 
 
 class SkipException(Exception):
