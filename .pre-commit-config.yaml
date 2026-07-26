@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 26.3.1
+    rev: 26.5.1
     hooks:
       - id: black
 
@@ -30,13 +30,13 @@ repos:
       - id: djjs
 
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.30.0
+    rev: 1.31.1
     hooks:
       - id: django-upgrade
         args: [ --target-version, "6.0" ]
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.15.8'
+    rev: 'v0.16.0'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
