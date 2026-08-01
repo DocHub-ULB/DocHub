@@ -69,7 +69,9 @@ norecursedirs = ".venv ve ve3 static media .git node_modules"
 DJANGO_SETTINGS_MODULE="www.test_settings"
 addopts = "--reuse-db"
 filterwarnings = [
-    "ignore:builtin type.*has no __module__ attribute:DeprecationWarning"
+    "error::DeprecationWarning",
+    "error::PendingDeprecationWarning",
+    "ignore:builtin type.*has no __module__ attribute:DeprecationWarning",
 ]
 markers = """
     slow: marks tests as slow (deselect with '-m "not slow"')

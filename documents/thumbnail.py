@@ -34,9 +34,9 @@ def get_thumbnail(
 
         # For each slice, we look at the std dev of all pixels (0 being black, 255 being white)
         devs = [
-            statistics.stdev(top.getdata()),
-            statistics.stdev(middle.getdata()),
-            statistics.stdev(bottom.getdata()),
+            statistics.stdev(top.get_flattened_data()),
+            statistics.stdev(middle.get_flattened_data()),
+            statistics.stdev(bottom.get_flattened_data()),
         ]
 
         # If at least 2 slices of the 3 contain something, we keep this page
