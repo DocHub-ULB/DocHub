@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Sum
+from django.db.models import Count, Sum
 from django.http import FileResponse
 from django.shortcuts import render
 from django.views.decorators.cache import cache_control
@@ -13,12 +13,12 @@ from users.models import User
 
 def index(request):
     if request.user.is_authenticated:
-        following_course = request.user.following_courses
         following = request.user.following_courses
+        following_course = following.annotate(documents_count=Count("document"))
         ndocs = max(5, len(following))
         docs = (
             Document.objects.filter(course__in=following)
-            .select_related("user")
+            .select_related("user", "course")
             .prefetch_related("tags")
             .order_by("-created")[:ndocs]
         )
@@ -28,11 +28,18 @@ def index(request):
             .order_by("-last_view")[:5]
         )
         recent_courses = [x.course for x in recent_views]
+        staff_pick = (
+            Document.objects.filter(staff_pick=True, hidden=False)
+            .select_related("user", "course")
+            .order_by("-created")
+            .first()
+        )
         context = {
             "search": SearchForm(),
             "recent_docs": docs,
             "recent_courses": recent_courses,
             "following_course": following_course,
+            "staff_pick": staff_pick,
         }
         return render(request, "home.html", context)
     else:

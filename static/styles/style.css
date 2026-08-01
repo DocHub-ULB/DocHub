@@ -1,0 +1,921 @@
+/* ============================================
+   DocHub — "Papier" design system
+   Notebook-paper aesthetic: historic DocHub blue as primary accent,
+   yellow highlighter as secondary accent, serif display type,
+   hand-drawn doodle texture. See design_handoff_dochub_refresh/README.md
+   for the full spec this file implements.
+
+   Bootstrap is still used by templates not yet migrated to this system,
+   so it's pulled in under its own cascade layer: unlayered rules (all of
+   ours, below) always win over layered rules regardless of selector
+   specificity, so we never have to fight Bootstrap for precedence.
+   ============================================ */
+
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css") layer(bootstrap);
+
+:root {
+    --bg: #f5f0e6;
+    --bg-raised: #fdfaf2;
+    --bg-sunk: #ece5d5;
+    --ink: #2b231a;
+    --ink-soft: #5b4e3d;
+    --ink-faint: #8a7c67;
+    --rule: #d9cfb8;
+    --rule-strong: #b5a787;
+
+    --brand-blue: #1D3356;
+    --brand-blue-soft: #a8b2c0;
+    --brand-blue-tint: #dfe4ec;
+    --accent: #1D3356;
+    --accent-soft: #dfe4ec;
+    --accent-ink: #ffffff;
+
+    --highlight: #ffd84d;
+    --highlight-soft: #fff2b8;
+    --highlight-ink: #5a4410;
+
+    --positive: #6f8c3a;
+    --negative: #c55c3a;
+    --danger: #b43a2a;
+
+    --font-display: "Instrument Serif", "Times New Roman", serif;
+    --font-body: "DM Sans", -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    --font-hand: "Caveat", cursive;
+
+    --radius-sm: 4px;
+    --radius: 6px;
+    --radius-lg: 10px;
+
+    --shadow: 0 1px 0 rgba(43, 35, 26, 0.06), 0 4px 14px -6px rgba(43, 35, 26, 0.12);
+    --shadow-card: 0 1px 0 rgba(43, 35, 26, 0.05), 0 8px 22px -10px rgba(43, 35, 26, 0.14);
+}
+
+/* ============ base ============ */
+
+body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 28px;
+}
+
+/* Bootstrap only strips underlines from specific components (.btn, .nav-link,
+   .dropdown-item, ...), not plain <a> tags. Reset within our own chrome/pages
+   instead of doing it globally, so unmigrated Bootstrap pages keep their
+   default link affordance until they're redesigned too. :where() carries zero
+   specificity, so this can never outrank a component's own color (e.g.
+   .btn-primary) the way a plain ".main a" selector would. */
+:where(.topbar, .site-footer, .main) a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.font-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+/* wraps the first word of a heading in the design's recurring
+   "italic serif, brand blue" treatment */
+.lede {
+    font-style: italic;
+    color: var(--brand-blue);
+}
+
+/* yellow highlighter marker-stroke behind text, not a background box */
+.marker {
+    font-style: italic;
+    padding: 0 6px;
+    background: linear-gradient(
+        transparent 60%,
+        var(--highlight) 60%,
+        var(--highlight) 92%,
+        transparent 92%
+    );
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+}
+
+/* lighter variant for the hero's date/tagline line — regular weight,
+   slightly larger, wider tracking, unlike the bolder section-head eyebrow */
+.hero-eyebrow {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+}
+
+/* ============ page shell ============ */
+
+.main {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 56px 32px 112px;
+    position: relative;
+    background-image: linear-gradient(
+        transparent 27px,
+        rgba(181, 167, 135, 0.3) 27px,
+        rgba(181, 167, 135, 0.3) 28px
+    );
+    background-size: 100% 28px;
+    background-position: 0 56px;
+    background-repeat: repeat-y;
+}
+
+/* ============ topbar ============ */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--rule);
+
+    .topbar-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+}
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--ink);
+
+    em {
+        font-style: italic;
+        color: var(--brand-blue);
+    }
+}
+
+.logo-mark {
+    position: relative;
+    width: 26px;
+    height: 30px;
+    flex-shrink: 0;
+    display: inline-block;
+
+    .pg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-blue);
+        border-radius: 2px 9px 2px 2px;
+    }
+
+    .fold {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        background: var(--highlight);
+        clip-path: polygon(100% 0, 0 0, 100% 100%);
+    }
+
+    .dot {
+        position: absolute;
+        left: 50%;
+        bottom: 6px;
+        width: 5px;
+        height: 5px;
+        background: var(--highlight);
+        border-radius: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.logo-tagline {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--brand-blue);
+    transform: rotate(-2deg);
+    margin-left: 2px;
+}
+
+@media (max-width: 1100px) {
+    .logo-tagline {
+        display: none;
+    }
+}
+
+.search-bar {
+    flex: 1;
+    max-width: 540px;
+    position: relative;
+
+    input {
+        width: 100%;
+        padding: 10px 16px 10px 40px;
+        background: var(--bg-raised);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        font-size: 14px;
+        outline: none;
+        color: var(--ink);
+    }
+
+    svg {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--ink-faint);
+        pointer-events: none;
+    }
+
+    .kbd {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--ink-faint);
+        padding: 2px 6px;
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        background: var(--bg);
+    }
+}
+
+.topnav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    a {
+        padding: 8px 14px;
+        border-radius: var(--radius);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-soft);
+    }
+
+    a:hover, a.active {
+        color: var(--ink);
+        background: var(--bg-sunk);
+    }
+}
+
+/* search-as-you-type results panel (stimulus-autocomplete) */
+.search-results {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 25;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 6px;
+    list-style: none;
+    margin: 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.search-results[hidden] {
+    display: none;
+}
+
+.search-result-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+}
+
+.search-result-row:hover {
+    background: var(--bg-sunk);
+}
+
+.search-result-row .search-result-icon {
+    flex-shrink: 0;
+    color: var(--ink-faint);
+    display: flex;
+}
+
+.search-result-row .search-result-name {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-faint);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.search-result-empty {
+    text-align: center;
+    padding: 24px 12px;
+    color: var(--ink-faint);
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid var(--rule);
+    cursor: pointer;
+}
+
+.user-menu {
+    position: relative;
+
+    summary {
+        list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .user-menu-panel {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        min-width: 200px;
+        background: var(--bg-raised);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+        z-index: 30;
+
+        a, button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--ink);
+        }
+
+        a:hover, button:hover {
+            background: var(--bg-sunk);
+        }
+    }
+}
+
+/* ============ buttons ============ */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--rule);
+    background: var(--bg-raised);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 120ms ease;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    background: var(--bg-sunk);
+    color: var(--ink);
+}
+
+.btn-primary {
+    background: var(--ink);
+    color: var(--bg-raised);
+    border-color: var(--ink);
+}
+
+.btn-primary:hover {
+    background: var(--ink-soft);
+    color: var(--bg-raised);
+}
+
+.btn-accent {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+}
+
+.btn-accent:hover {
+    background: color-mix(in srgb, var(--accent) 90%, black);
+    color: var(--accent-ink);
+}
+
+.btn-sm {
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+/* ============ card / pill ============ */
+
+.card {
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 999px;
+    background: var(--bg-sunk);
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+}
+
+.pill-mono {
+    font-family: var(--font-mono);
+}
+
+.chip-accent {
+    background: var(--highlight-soft);
+    color: var(--highlight-ink);
+    border: 1px solid var(--highlight);
+}
+
+/* ============ doc thumbnail ============ */
+
+.pdf-thumb {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-sunk);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.pdf-thumb::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 0;
+    border-color: transparent var(--rule) transparent transparent;
+    pointer-events: none;
+}
+
+/* ============ sticky note (footer CTA, hero aside) ============ */
+
+.sticky-note {
+    background: var(--highlight-soft);
+    border: 1px solid var(--highlight);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    position: relative;
+}
+
+/* washi-tape strip pinning the note down, per the handoff's post-it motif */
+.sticky-note::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    width: 56px;
+    height: 16px;
+    background: rgba(255, 216, 77, 0.55);
+    transform: translateX(-50%) rotate(-3deg);
+}
+
+/* ============ home: hero ============ */
+
+.home-hero {
+    padding: 0 0 20px;
+    position: relative;
+}
+
+.home-hero h1 {
+    font-family: var(--font-display);
+    font-size: 64px;
+    line-height: 1.15;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+}
+
+@media (max-width: 700px) {
+    .home-hero h1 {
+        font-size: 40px;
+    }
+}
+
+.home-hero .hero-aside {
+    position: absolute;
+    right: 0;
+    top: 22px;
+    width: 168px;
+    transform: rotate(2.5deg);
+    font-family: var(--font-display);
+    font-size: 15px;
+    line-height: 1.3;
+    color: var(--highlight-ink);
+}
+
+@media (max-width: 1100px) {
+    .home-hero .hero-aside {
+        display: none;
+    }
+}
+
+/* ============ home: section head ============ */
+
+.section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+}
+
+.section-head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+}
+
+/* ============ home: followed-course grid ============ */
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+@media (max-width: 1000px) {
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .course-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.course-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 18px;
+    display: block;
+    color: var(--ink);
+}
+
+.course-card:hover {
+    border-color: var(--rule-strong);
+}
+
+.course-card .course-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.course-card .course-card-name {
+    font-size: 17px;
+    line-height: 1.2;
+    font-weight: 500;
+    font-family: var(--font-display);
+    margin-bottom: 14px;
+}
+
+.course-card .course-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.course-card-add {
+    border: 2px dashed var(--rule);
+    border-radius: var(--radius);
+    padding: 20px;
+    color: var(--ink-faint);
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 130px;
+}
+
+.course-card-add:hover {
+    color: var(--ink-soft);
+    border-color: var(--rule-strong);
+}
+
+/* ============ home: activity feed ============ */
+
+.activity-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--ink);
+}
+
+.activity-row:hover {
+    background: var(--bg-sunk);
+}
+
+.activity-row .activity-title {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.activity-row .activity-meta {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-top: 4px;
+}
+
+.staff-pick-badge {
+    margin-left: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--accent-soft);
+    color: var(--brand-blue);
+    padding: 1px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+/* ============ home: sidebar cards ============ */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    position: sticky;
+    top: 90px;
+}
+
+.staff-pick-card {
+    background: var(--highlight-soft);
+    border: 1px solid var(--highlight);
+    color: var(--highlight-ink);
+}
+
+.staff-pick-card .staff-pick-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.15;
+    font-weight: 500;
+    margin: 10px 0;
+}
+
+.tip-card {
+    padding: 16px;
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius);
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    position: relative;
+    overflow: hidden;
+}
+
+.tip-card .doodle {
+    position: absolute;
+    right: -10px;
+    bottom: -14px;
+    width: 70px;
+    height: 70px;
+    color: var(--brand-blue);
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+.footer-doodle {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 360px;
+    height: 200px;
+    color: var(--brand-blue);
+    opacity: 0.06;
+    pointer-events: none;
+}
+
+/* ============ home layout ============ */
+
+.home-columns {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .home-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: static;
+    }
+}
+
+/* ============ footer ============ */
+
+.site-footer {
+    margin-top: 80px;
+    border-top: 1px solid var(--rule);
+    background: var(--bg-raised);
+    padding: 56px 32px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 48px;
+}
+
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.footer-grid h3 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
+}
+
+.footer-grid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-grid a {
+    color: var(--ink-soft);
+    font-size: 14px;
+}
+
+.footer-grid a:hover {
+    color: var(--ink);
+}
+
+.footer-brand {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+}
+
+.footer-tagline {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    max-width: 32ch;
+    line-height: 1.5;
+    margin: 0 0 10px;
+}
+
+.footer-credit {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.footer-credit a {
+    color: var(--brand-blue);
+    text-decoration: underline wavy;
+    text-decoration-color: var(--highlight);
+    text-underline-offset: 3px;
+}
+
+.footer-sticky-note {
+    transform: rotate(-1.2deg);
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    border-top: 1px dashed var(--rule);
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.footer-bottom a {
+    color: var(--ink-faint);
+}
+
+.footer-bottom a:hover {
+    color: var(--ink);
+}
+
+/* ============ topbar: small screens ============ */
+/* Kept last in the file (rather than near .topbar above) so it reliably wins
+   over the unconditional .topnav/.search-bar rules at equal specificity.
+   Below this width, logo + nav + search + upload + avatar no longer fit on
+   one row without overflowing off-screen — and the avatar/user-menu is the
+   only way to log out, so it must never be pushed out of view. Wrap the
+   search bar onto its own row and drop the secondary nav links to make room. */
+@media (max-width: 760px) {
+    .topbar-inner {
+        flex-wrap: wrap;
+        row-gap: 10px;
+        padding: 12px 16px;
+    }
+
+    .topnav {
+        display: none;
+    }
+
+    .search-bar {
+        order: 10;
+        flex: 1 1 100%;
+        max-width: none;
+    }
+}

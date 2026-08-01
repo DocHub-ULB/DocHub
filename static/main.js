@@ -320,6 +320,23 @@ class ModalTrigger extends Controller {
     }
 }
 
+class Disclosure extends Controller {
+    connect() {
+        this.onClickOutside = this.onClickOutside.bind(this);
+        document.addEventListener("click", this.onClickOutside);
+    }
+
+    disconnect() {
+        document.removeEventListener("click", this.onClickOutside);
+    }
+
+    onClickOutside(event) {
+        if (this.element.open && !this.element.contains(event.target)) {
+            this.element.open = false;
+        }
+    }
+}
+
 class Chart extends Controller {
     static values = {
         data: Array,
@@ -381,5 +398,6 @@ application.register('share', Share);
 application.register('modal', Modal);
 application.register('modal-trigger', ModalTrigger);
 application.register('chart', Chart);
+application.register('disclosure', Disclosure);
 
 application.debug = true;
