@@ -47,6 +47,11 @@
     --radius: 6px;
     --radius-lg: 10px;
 
+    /* base vertical rhythm unit — half the 28px ruled-line spacing on .main's
+       background, so line-heights/margins/paddings built from this land on
+       the notebook-paper lines instead of drifting across the page */
+    --grid: 14px;
+
     --shadow: 0 1px 0 rgba(43, 35, 26, 0.06), 0 4px 14px -6px rgba(43, 35, 26, 0.12);
     --shadow-card: 0 1px 0 rgba(43, 35, 26, 0.05), 0 8px 22px -10px rgba(43, 35, 26, 0.14);
 }
@@ -58,7 +63,7 @@ body {
     color: var(--ink);
     font-family: var(--font-body);
     font-size: 15px;
-    line-height: 28px;
+    line-height: calc(var(--grid) * 2);
 }
 
 /* Bootstrap only strips underlines from specific components (.btn, .nav-link,
@@ -121,15 +126,15 @@ body {
     max-width: 1280px;
     margin: 0 auto;
     width: 100%;
-    padding: 56px 32px 112px;
+    padding: calc(var(--grid) * 4) 32px calc(var(--grid) * 8);
     position: relative;
     background-image: linear-gradient(
-        transparent 27px,
-        rgba(181, 167, 135, 0.3) 27px,
-        rgba(181, 167, 135, 0.3) 28px
+        transparent calc(var(--grid) * 2 - 1px),
+        rgba(181, 167, 135, 0.3) calc(var(--grid) * 2 - 1px),
+        rgba(181, 167, 135, 0.3) calc(var(--grid) * 2)
     );
-    background-size: 100% 28px;
-    background-position: 0 56px;
+    background-size: 100% calc(var(--grid) * 2);
+    background-position: 0 calc(var(--grid) * 4);
     background-repeat: repeat-y;
 }
 
@@ -391,12 +396,17 @@ body {
 
 /* ============ buttons ============ */
 
+/* min-height (not padding + line-height) sets the grid-aligned box height,
+   since an inline-flex row's height follows its tallest child — an icon
+   taller than the text's line-height would otherwise stretch the button
+   past its intended, grid-aligned size */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 10px 16px;
+    min-height: calc(var(--grid) * 3);
+    padding: 0 16px;
     border-radius: var(--radius);
     font-size: 14px;
     font-weight: 500;
@@ -436,7 +446,8 @@ body {
 }
 
 .btn-sm {
-    padding: 6px 10px;
+    min-height: calc(var(--grid) * 2);
+    padding: 0 10px;
     font-size: 13px;
 }
 
@@ -446,14 +457,15 @@ body {
     background: var(--bg-raised);
     border: 1px solid var(--rule);
     border-radius: var(--radius);
-    padding: 20px;
+    padding: var(--grid);
 }
 
 .pill {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 2px 8px;
+    padding: calc(var(--grid) / 2) 8px;
+    line-height: var(--grid);
     font-size: 11px;
     font-weight: 500;
     border-radius: 999px;
@@ -531,23 +543,23 @@ body {
 /* ============ home: hero ============ */
 
 .home-hero {
-    padding: 0 0 28px;
+    padding: 0 0 calc(var(--grid) * 2);
     position: relative;
 }
 
 .home-hero h1 {
     font-family: var(--font-display);
     font-size: 64px;
-    line-height: 84px;
+    line-height: calc(var(--grid) * 6);
     font-weight: 400;
     letter-spacing: -0.02em;
-    margin: 0 0 14px;
+    margin: 0 0 var(--grid);
 }
 
 @media (max-width: 700px) {
     .home-hero h1 {
         font-size: 40px;
-        line-height: 56px;
+        line-height: calc(var(--grid) * 4);
     }
 }
 
@@ -575,7 +587,7 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 14px;
+    margin-bottom: var(--grid);
     gap: 16px;
 }
 
@@ -583,7 +595,7 @@ body {
     margin: 0;
     font-family: var(--font-display);
     font-size: 34px;
-    line-height: 42px;
+    line-height: calc(var(--grid) * 3);
     font-weight: 400;
     letter-spacing: -0.015em;
 }
@@ -593,7 +605,7 @@ body {
 .course-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+    gap: var(--grid);
 }
 
 @media (max-width: 1000px) {
@@ -612,7 +624,7 @@ body {
     background: var(--bg-raised);
     border: 1px solid var(--rule);
     border-radius: var(--radius);
-    padding: 18px;
+    padding: var(--grid);
     display: block;
     color: var(--ink);
 }
@@ -625,15 +637,15 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: var(--grid);
 }
 
 .course-card .course-card-name {
     font-size: 17px;
-    line-height: 1.2;
+    line-height: calc(var(--grid) * 2);
     font-weight: 500;
     font-family: var(--font-display);
-    margin-bottom: 14px;
+    margin-bottom: var(--grid);
 }
 
 .course-card .course-card-meta {
@@ -647,7 +659,7 @@ body {
 .course-card-add {
     border: 2px dashed var(--rule);
     border-radius: var(--radius);
-    padding: 20px;
+    padding: var(--grid);
     color: var(--ink-faint);
     font-size: 14px;
     font-weight: 500;
@@ -656,7 +668,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 130px;
+    min-height: calc(var(--grid) * 9);
 }
 
 .course-card-add:hover {
@@ -671,7 +683,7 @@ body {
     grid-template-columns: 44px 1fr auto;
     gap: 14px;
     align-items: center;
-    padding: 14px 4px;
+    padding: var(--grid) 4px;
     border-bottom: 1px solid var(--rule);
     background: var(--bg);
     color: var(--ink);
@@ -684,7 +696,7 @@ body {
 .activity-row .activity-title {
     font-size: 15px;
     font-weight: 500;
-    line-height: 1.25;
+    line-height: calc(var(--grid) * 2);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -693,7 +705,7 @@ body {
 .activity-row .activity-meta {
     font-size: 12px;
     color: var(--ink-faint);
-    margin-top: 4px;
+    margin-top: 0;
 }
 
 .staff-pick-badge {
@@ -712,7 +724,7 @@ body {
 .sidebar {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: calc(var(--grid) * 2);
     position: sticky;
     top: 90px;
 }
@@ -726,18 +738,18 @@ body {
 .staff-pick-card .staff-pick-title {
     font-family: var(--font-display);
     font-size: 22px;
-    line-height: 1.15;
+    line-height: calc(var(--grid) * 2);
     font-weight: 500;
-    margin: 10px 0;
+    margin: var(--grid) 0;
 }
 
 .tip-card {
-    padding: 14px 16px;
+    padding: var(--grid) 16px;
     border: 1px dashed var(--rule-strong);
     border-radius: var(--radius);
     font-size: 13px;
     color: var(--ink-soft);
-    line-height: 28px;
+    line-height: calc(var(--grid) * 2);
     position: relative;
     overflow: hidden;
 }
@@ -776,7 +788,7 @@ body {
 @media (max-width: 900px) {
     .home-columns {
         grid-template-columns: 1fr;
-        gap: 42px;
+        gap: calc(var(--grid) * 3);
     }
 
     .sidebar {
@@ -792,7 +804,7 @@ body {
     gap: 6px;
     font-size: 13px;
     color: var(--ink-faint);
-    margin-bottom: 14px;
+    margin-bottom: var(--grid);
 }
 
 .breadcrumb a:hover {
@@ -812,7 +824,7 @@ body {
     grid-template-columns: 1fr auto;
     gap: 32px;
     align-items: start;
-    padding-bottom: 28px;
+    padding-bottom: calc(var(--grid) * 2);
     border-bottom: 1px solid var(--rule);
     position: relative;
     overflow: hidden;
@@ -822,7 +834,7 @@ body {
     font-family: var(--font-mono);
     font-size: 12.5px;
     color: var(--ink-faint);
-    margin-bottom: 14px;
+    margin-bottom: var(--grid);
 }
 
 .course-header h1 {
@@ -830,8 +842,8 @@ body {
     font-size: 52px;
     font-weight: 400;
     letter-spacing: -0.02em;
-    line-height: 56px;
-    margin: 0 0 14px;
+    line-height: calc(var(--grid) * 4);
+    margin: 0 0 var(--grid);
 }
 
 .course-header h1 em {
@@ -847,7 +859,7 @@ body {
 .course-header .course-actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--grid);
     min-width: 220px;
 }
 
@@ -858,7 +870,7 @@ body {
 .course-header .course-stats {
     display: flex;
     gap: 24px;
-    padding: 14px 4px;
+    padding: var(--grid) 4px;
 }
 
 .course-header .course-stats strong {
@@ -889,7 +901,7 @@ body {
 @media (max-width: 760px) {
     .course-header {
         grid-template-columns: 1fr;
-        gap: 28px;
+        gap: calc(var(--grid) * 2);
     }
 
     .course-header .course-actions {
@@ -905,7 +917,7 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    margin: 28px 0 14px;
+    margin: calc(var(--grid) * 2) 0 var(--grid);
 }
 
 /* grows to fill the row and wraps its own chips onto extra lines as needed,
@@ -925,7 +937,7 @@ body {
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    padding: 8px 12px;
+    padding: calc(var(--grid) / 2) 12px;
     font-size: 13px;
     font-weight: 500;
     border-radius: 999px;
@@ -998,7 +1010,7 @@ body {
 }
 
 .sort-seg a {
-    padding: 6px 12px;
+    padding: calc(var(--grid) / 2) 12px;
     font-size: 12px;
     font-weight: 500;
     background: var(--bg-raised);
@@ -1026,7 +1038,7 @@ body {
     grid-template-columns: 56px 58px 1fr auto;
     gap: 18px;
     align-items: center;
-    padding: 14px 0;
+    padding: var(--grid) 0;
     border-bottom: 1px solid var(--rule);
     color: var(--ink);
 }
@@ -1080,7 +1092,7 @@ body {
     font-family: var(--font-display);
     font-size: 16px;
     font-weight: 500;
-    line-height: 28px;
+    line-height: calc(var(--grid) * 2);
 }
 
 .doc-row .doc-meta {
@@ -1233,16 +1245,16 @@ body {
 /* ============ moderation ============ */
 
 .page-head {
-    margin-bottom: 28px;
+    margin-bottom: calc(var(--grid) * 2);
 }
 
 .page-head h1 {
     font-family: var(--font-display);
     font-size: 34px;
-    line-height: 42px;
+    line-height: calc(var(--grid) * 3);
     font-weight: 400;
     letter-spacing: -0.015em;
-    margin: 0 0 14px;
+    margin: 0 0 var(--grid);
 }
 
 .page-head p {
@@ -1259,18 +1271,18 @@ body {
 .prose h2 {
     font-family: var(--font-display);
     font-size: 21px;
-    line-height: 28px;
+    line-height: calc(var(--grid) * 2);
     font-weight: 400;
-    margin: 28px 0 14px;
+    margin: calc(var(--grid) * 2) 0 var(--grid);
 }
 
 .prose p {
     color: var(--ink-soft);
-    margin: 0 0 14px;
+    margin: 0 0 var(--grid);
 }
 
 .prose ul {
-    margin: 0 0 14px;
+    margin: 0 0 var(--grid);
     padding-left: 20px;
     color: var(--ink-soft);
 }
@@ -1292,13 +1304,13 @@ body {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink-faint);
-    padding: 10px 14px;
+    padding: var(--grid) 14px;
     border-bottom: 1px solid var(--rule-strong);
     white-space: nowrap;
 }
 
 .mod-table td {
-    padding: 12px 14px;
+    padding: var(--grid) 14px;
     border-bottom: 1px solid var(--rule);
     vertical-align: top;
 }
@@ -1321,7 +1333,7 @@ body {
 .mod-table .mod-table-empty {
     text-align: center;
     color: var(--ink-faint);
-    padding: 48px 14px;
+    padding: calc(var(--grid) * 3) 14px;
 }
 
 .mod-table .pill {
@@ -1361,9 +1373,9 @@ body {
     border: 1px solid var(--rule);
     border-left: 4px solid var(--rule-strong);
     border-radius: var(--radius);
-    padding: 16px 18px;
+    padding: var(--grid) 18px;
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-bottom: calc(var(--grid) * 2);
 }
 
 .notice svg {
@@ -1396,7 +1408,7 @@ textarea {
     background: var(--bg-raised);
     border: 1px solid var(--rule);
     border-radius: var(--radius-sm);
-    padding: 8px 12px;
+    padding: calc(var(--grid) / 2) 12px;
 }
 
 .form-control:focus,
@@ -1438,7 +1450,7 @@ textarea:focus {
     align-items: center;
     justify-content: center;
     gap: 16px;
-    margin-top: 24px;
+    margin-top: calc(var(--grid) * 2);
     font-size: 13px;
     color: var(--ink-faint);
 }
@@ -1446,8 +1458,8 @@ textarea:focus {
 .meta-list {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 6px 16px;
-    margin: 14px 0;
+    gap: var(--grid) 16px;
+    margin: var(--grid) 0;
     font-size: 13px;
 }
 
@@ -1472,7 +1484,7 @@ textarea:focus {
 }
 
 .mod-tree-node {
-    padding: 14px 0;
+    padding: var(--grid) 0;
 }
 
 .mod-tree-row {
@@ -1501,7 +1513,7 @@ textarea:focus {
     margin-left: 18px;
     padding-left: 18px;
     border-left: 1px solid var(--rule);
-    margin-top: 14px;
+    margin-top: var(--grid);
 }
 
 /* ============ course page: small screens ============ */

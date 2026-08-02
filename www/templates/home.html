@@ -10,7 +10,7 @@
             </div>
         {% else %}
             <section class="home-hero">
-                <div class="hero-eyebrow" style="margin-bottom: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div class="hero-eyebrow" style="margin-bottom: var(--grid); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                     <span>{% now "l j F" %} · semaine {% now "W" %}</span>
                     <span style="width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint);"></span>
                     <span style="color: var(--brand-blue);">bloque-notes ULB — entre étudiant·es, depuis 2012</span>
@@ -25,7 +25,7 @@
                         {% endif %}
                     {% endwith %}
                 </h1>
-                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 28px;">
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: calc(var(--grid) * 2);">
                     <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
                         Déposer un doc
@@ -67,7 +67,7 @@
             {% endif %}
 
             {% if following_course %}
-                <section style="margin: 42px 0 56px;">
+                <section style="margin: calc(var(--grid) * 3) 0 calc(var(--grid) * 4);">
                     <div class="section-head">
                         <div>
                             <div class="eyebrow">Tes cours</div>
@@ -100,8 +100,8 @@
             {% endif %}
 
             {% if recent_courses %}
-                <section style="margin-bottom: 42px;">
-                    <div class="eyebrow" style="margin-bottom: 14px;">Vus récemment</div>
+                <section style="margin-bottom: calc(var(--grid) * 3);">
+                    <div class="eyebrow" style="margin-bottom: var(--grid);">Vus récemment</div>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                         {% for course in recent_courses %}
                             <a class="pill pill-mono" style="padding: 6px 12px;" href="{{ course.get_absolute_url }}">
@@ -153,7 +153,7 @@
                         <div class="card staff-pick-card">
                             <div class="eyebrow" style="color: inherit;">✦ Staff pick de la semaine</div>
                             <div class="staff-pick-title">{{ staff_pick.name }}</div>
-                            <div style="font-size: 13px; margin-bottom: 16px; opacity: 0.85;">
+                            <div style="font-size: 13px; margin-bottom: var(--grid); opacity: 0.85;">
                                 par {{ staff_pick.user.name }} &middot; {{ staff_pick.views }} vues
                             </div>
                             <a class="btn btn-sm" style="background: var(--ink); color: #fff;"
