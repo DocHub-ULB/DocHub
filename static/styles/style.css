@@ -531,22 +531,23 @@ body {
 /* ============ home: hero ============ */
 
 .home-hero {
-    padding: 0 0 20px;
+    padding: 0 0 28px;
     position: relative;
 }
 
 .home-hero h1 {
     font-family: var(--font-display);
     font-size: 64px;
-    line-height: 1.15;
+    line-height: 84px;
     font-weight: 400;
     letter-spacing: -0.02em;
-    margin: 0 0 16px;
+    margin: 0 0 14px;
 }
 
 @media (max-width: 700px) {
     .home-hero h1 {
         font-size: 40px;
+        line-height: 56px;
     }
 }
 
@@ -574,7 +575,7 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     gap: 16px;
 }
 
@@ -582,6 +583,7 @@ body {
     margin: 0;
     font-family: var(--font-display);
     font-size: 34px;
+    line-height: 42px;
     font-weight: 400;
     letter-spacing: -0.015em;
 }
@@ -730,12 +732,12 @@ body {
 }
 
 .tip-card {
-    padding: 16px;
+    padding: 14px 16px;
     border: 1px dashed var(--rule-strong);
     border-radius: var(--radius);
     font-size: 13px;
     color: var(--ink-soft);
-    line-height: 1.5;
+    line-height: 28px;
     position: relative;
     overflow: hidden;
 }
@@ -774,6 +776,7 @@ body {
 @media (max-width: 900px) {
     .home-columns {
         grid-template-columns: 1fr;
+        gap: 42px;
     }
 
     .sidebar {
@@ -789,7 +792,7 @@ body {
     gap: 6px;
     font-size: 13px;
     color: var(--ink-faint);
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 .breadcrumb a:hover {
@@ -809,7 +812,7 @@ body {
     grid-template-columns: 1fr auto;
     gap: 32px;
     align-items: start;
-    padding-bottom: 32px;
+    padding-bottom: 28px;
     border-bottom: 1px solid var(--rule);
     position: relative;
     overflow: hidden;
@@ -819,7 +822,7 @@ body {
     font-family: var(--font-mono);
     font-size: 12.5px;
     color: var(--ink-faint);
-    margin-bottom: 10px;
+    margin-bottom: 14px;
 }
 
 .course-header h1 {
@@ -827,8 +830,8 @@ body {
     font-size: 52px;
     font-weight: 400;
     letter-spacing: -0.02em;
-    line-height: 1.02;
-    margin: 0 0 18px;
+    line-height: 56px;
+    margin: 0 0 14px;
 }
 
 .course-header h1 em {
@@ -886,6 +889,7 @@ body {
 @media (max-width: 760px) {
     .course-header {
         grid-template-columns: 1fr;
+        gap: 28px;
     }
 
     .course-header .course-actions {
@@ -901,7 +905,7 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    margin: 32px 0 20px;
+    margin: 28px 0 14px;
 }
 
 /* grows to fill the row and wraps its own chips onto extra lines as needed,
@@ -1076,8 +1080,7 @@ body {
     font-family: var(--font-display);
     font-size: 16px;
     font-weight: 500;
-    line-height: 1.25;
-    margin-bottom: 4px;
+    line-height: 28px;
 }
 
 .doc-row .doc-meta {
@@ -1230,15 +1233,16 @@ body {
 /* ============ moderation ============ */
 
 .page-head {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .page-head h1 {
     font-family: var(--font-display);
     font-size: 34px;
+    line-height: 42px;
     font-weight: 400;
     letter-spacing: -0.015em;
-    margin: 0 0 8px;
+    margin: 0 0 14px;
 }
 
 .page-head p {
@@ -1255,12 +1259,12 @@ body {
 .prose h2 {
     font-family: var(--font-display);
     font-size: 21px;
+    line-height: 28px;
     font-weight: 400;
-    margin: 32px 0 10px;
+    margin: 28px 0 14px;
 }
 
 .prose p {
-    line-height: 1.6;
     color: var(--ink-soft);
     margin: 0 0 14px;
 }
@@ -1268,12 +1272,7 @@ body {
 .prose ul {
     margin: 0 0 14px;
     padding-left: 20px;
-    line-height: 1.6;
     color: var(--ink-soft);
-}
-
-.prose li {
-    margin-bottom: 4px;
 }
 
 .table-wrap {
@@ -1473,7 +1472,7 @@ textarea:focus {
 }
 
 .mod-tree-node {
-    padding: 6px 0;
+    padding: 14px 0;
 }
 
 .mod-tree-row {
@@ -1502,7 +1501,7 @@ textarea:focus {
     margin-left: 18px;
     padding-left: 18px;
     border-left: 1px solid var(--rule);
-    margin-top: 4px;
+    margin-top: 14px;
 }
 
 /* ============ course page: small screens ============ */

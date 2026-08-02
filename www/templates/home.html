@@ -25,7 +25,7 @@
                         {% endif %}
                     {% endwith %}
                 </h1>
-                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 22px;">
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 28px;">
                     <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
                         Déposer un doc
@@ -67,7 +67,7 @@
             {% endif %}
 
             {% if following_course %}
-                <section style="margin: 48px 0 56px;">
+                <section style="margin: 42px 0 56px;">
                     <div class="section-head">
                         <div>
                             <div class="eyebrow">Tes cours</div>
@@ -100,8 +100,8 @@
             {% endif %}
 
             {% if recent_courses %}
-                <section style="margin-bottom: 48px;">
-                    <div class="eyebrow" style="margin-bottom: 10px;">Vus récemment</div>
+                <section style="margin-bottom: 42px;">
+                    <div class="eyebrow" style="margin-bottom: 14px;">Vus récemment</div>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                         {% for course in recent_courses %}
                             <a class="pill pill-mono" style="padding: 6px 12px;" href="{{ course.get_absolute_url }}">
