@@ -1,8 +1,9 @@
+from collections import Counter
 from dataclasses import dataclass
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Case, Count, Q, Value, When
+from django.db.models import Case, Count, F, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -48,14 +49,46 @@ def show_course(request, slug: str):
         .annotate(
             downvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE))
         )
-        .order_by("-created")
+        .annotate(net_votes=F("upvotes") - F("downvotes"))
     )
+
+    total_count = documents.count()
+    staff_pick_count = documents.filter(staff_pick=True).count()
+
+    only_staff_picks = "staff_pick" in request.GET
+    if only_staff_picks:
+        documents = documents.filter(staff_pick=True)
+
+    sort = request.GET.get("sort")
+    if sort == "top":
+        documents = documents.order_by("-net_votes", "-created")
+    elif sort == "dl":
+        documents = documents.order_by("-downloads", "-created")
+    else:
+        sort = "recent"
+        documents = documents.order_by("-created")
+
+    primary_category = (
+        course.categories.filter(type=Category.CategoryType.FACULTY).first()
+        or course.categories.first()
+    )
+
+    course_name_first, _, course_name_rest = course.name.partition(" ")
 
     context = {
         "course": course,
-        "tags": {tag for doc in documents for tag in doc.tags.all()},
+        "course_name_first": course_name_first,
+        "course_name_rest": course_name_rest,
+        "tag_counts": Counter(
+            tag for doc in documents for tag in doc.tags.all()
+        ).most_common(),
         "documents": documents,
         "following": course.followed_by.filter(id=request.user.id).exists(),
+        "sort": sort,
+        "only_staff_picks": only_staff_picks,
+        "total_count": total_count,
+        "staff_pick_count": staff_pick_count,
+        "primary_category": primary_category,
     }
 
     if request.user.is_authenticated:

@@ -781,6 +781,338 @@ body {
     }
 }
 
+/* ============ course page ============ */
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+}
+
+.breadcrumb a:hover {
+    color: var(--ink);
+}
+
+.breadcrumb svg {
+    flex-shrink: 0;
+}
+
+.breadcrumb .current {
+    color: var(--ink);
+}
+
+.course-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+}
+
+.course-header .course-meta {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+}
+
+.course-header h1 {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    margin: 0 0 18px;
+}
+
+.course-header h1 em {
+    font-style: italic;
+}
+
+.course-header .course-description {
+    max-width: 640px;
+    color: var(--ink-soft);
+    margin: 0;
+}
+
+.course-header .course-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+}
+
+.course-header .course-actions .btn {
+    width: 100%;
+}
+
+.course-header .course-stats {
+    display: flex;
+    gap: 24px;
+    padding: 14px 4px;
+}
+
+.course-header .course-stats strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.course-header .course-stats span {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-faint);
+}
+
+.course-header .doodle {
+    position: absolute;
+    top: -6px;
+    right: 240px;
+    width: 90px;
+    height: 60px;
+    color: var(--brand-blue);
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+@media (max-width: 760px) {
+    .course-header {
+        grid-template-columns: 1fr;
+    }
+
+    .course-header .course-actions {
+        align-items: flex-start;
+    }
+
+    .course-header .doodle {
+        display: none;
+    }
+}
+
+.filter-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 32px 0 20px;
+}
+
+/* grows to fill the row and wraps its own chips onto extra lines as needed,
+   so filter-tools (search + sort) stays docked top-right instead of the
+   whole group dropping below once there are enough tags to fill one line */
+.filter-row .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.filter-row .filter-chips a,
+.filter-row .filter-chips label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--bg-raised);
+    color: var(--ink-soft);
+}
+
+.filter-row .filter-chips a:hover,
+.filter-row .filter-chips label:hover {
+    border-color: var(--rule-strong);
+}
+
+/* the checkbox stays functional (CourseFilter still reads .checked) but is
+   visually hidden — the label is styled as the pill instead */
+.filter-row .filter-chips input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.filter-row .filter-chips a.active,
+.filter-row .filter-chips label:has(input:checked) {
+    font-weight: 600;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.filter-row .filter-chips .count {
+    opacity: 0.6;
+    margin-left: 4px;
+}
+
+/* search + sort share a row with the tag chips on wide screens; below the
+   breakpoint the search box drops to its own full-width line since typing
+   into a squeezed inline box isn't usable on a phone. */
+.filter-row .filter-tools {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    flex: 0 0 auto;
+}
+
+.filter-row .search-bar {
+    width: 220px;
+}
+
+@media (max-width: 760px) {
+    .filter-row {
+        flex-wrap: wrap;
+    }
+
+    .filter-row .filter-tools {
+        flex-basis: 100%;
+    }
+
+    .filter-row .search-bar {
+        width: 100%;
+        order: 10;
+    }
+}
+
+.sort-seg {
+    display: flex;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.sort-seg a {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--bg-raised);
+    color: var(--ink-soft);
+    border-right: 1px solid var(--rule);
+}
+
+.sort-seg a:last-child {
+    border-right: 0;
+}
+
+.sort-seg a:hover {
+    background: var(--bg-sunk);
+}
+
+.sort-seg a.active {
+    background: var(--ink);
+    color: var(--bg-raised);
+}
+
+/* ============ course page: document rows ============ */
+
+.doc-row {
+    display: grid;
+    grid-template-columns: 56px 58px 1fr auto;
+    gap: 18px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+}
+
+.doc-row:hover {
+    background: var(--bg-sunk);
+}
+
+.doc-row .doc-vote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 0;
+    color: var(--ink-faint);
+}
+
+.doc-row .doc-vote-net {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.doc-row .doc-vote-net.doc-vote-up {
+    color: var(--positive);
+}
+
+.doc-row .doc-vote-net.doc-vote-down {
+    color: var(--negative);
+}
+
+.doc-row .pdf-thumb-pages {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: rgba(43, 35, 26, 0.65);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.doc-row .doc-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.25;
+    margin-bottom: 4px;
+}
+
+.doc-row .doc-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.doc-row .doc-meta strong {
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.doc-row .doc-meta svg {
+    vertical-align: -2px;
+    margin-right: 2px;
+}
+
+.doc-row .doc-tags {
+    display: flex;
+    gap: 4px;
+}
+
+.doc-row .doc-tags .pill {
+    font-size: 10px;
+}
+
+.doc-row .doc-actions {
+    display: flex;
+    gap: 6px;
+}
+
 /* ============ footer ============ */
 
 .site-footer {
@@ -893,6 +1225,41 @@ body {
 
 .footer-bottom a:hover {
     color: var(--ink);
+}
+
+/* ============ course page: small screens ============ */
+/* The 4-column doc-row grid (vote/thumb/info/actions) doesn't leave enough
+   room for the info column below ~640px — switch to a 2-line flex layout
+   instead: thumbnail + info on the first line, vote + actions on the second. */
+@media (max-width: 640px) {
+    .doc-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .doc-row .pdf-thumb {
+        order: 1;
+        width: 48px !important;
+        height: 62px !important;
+    }
+
+    .doc-row .doc-info {
+        order: 2;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .doc-row .doc-vote {
+        order: 3;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .doc-row .doc-actions {
+        order: 4;
+        margin-left: auto;
+    }
 }
 
 /* ============ topbar: small screens ============ */
