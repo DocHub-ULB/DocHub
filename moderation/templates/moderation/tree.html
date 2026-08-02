@@ -4,53 +4,49 @@
 
 {% block content %}
     {% partialdef tree_node %}
-        <li class="py-1">
-            <div class="d-flex flex-wrap align-items-baseline gap-1">
-                {% if not is_root %}
-                    <span class="border-top flex-shrink-0 align-self-center" style="width: 1rem;"></span>
-                {% endif %}
-                <strong><a href="{% url 'moderation_profile' node.user.netid %}">{{ node.user.netid }}</a></strong>
-                <span class="text-muted">{{ node.user.name }}</span>
-                <span class="text-muted small">({{ node.user.action_count }} action{{ node.user.action_count|pluralize }} de modération, {{ node.user.document_count }} document{{ node.user.document_count|pluralize }})</span>
+        <li class="mod-tree-node">
+            <div class="mod-tree-row">
+                <strong class="netid"><a href="{% url 'moderation_profile' node.user.netid %}">{{ node.user.netid }}</a></strong>
+                <span class="name">{{ node.user.name }}</span>
+                <span class="stats">({{ node.user.action_count }} action{{ node.user.action_count|pluralize }} de modération, {{ node.user.document_count }} document{{ node.user.document_count|pluralize }})</span>
                 {% if node.user.is_staff %}
-                    <span class="badge text-bg-danger ms-1">Admin</span>
+                    <span class="pill pill-danger">Admin</span>
                 {% endif %}
             </div>
             {% if node.children %}
-                <ul class="list-unstyled border-start ps-0 ms-2 mb-0">
+                <ul>
                     {% for child in node.children %}
-                        {% with node=child is_root=False %}{% partial tree_node %}{% endwith %}
+                        {% with node=child %}{% partial tree_node %}{% endwith %}
                     {% endfor %}
                 </ul>
             {% endif %}
         </li>
     {% endpartialdef tree_node %}
 
-    <div class="container-xl mt-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'moderation_about' %}">Modération</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Arbre</li>
-            </ol>
+    <div class="main">
+        <nav class="breadcrumb">
+            <a href="{% url 'moderation_about' %}">Modération</a>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 6 6 6-6 6"/>
+            </svg>
+            <span class="current">Arbre</span>
         </nav>
-        <h1 class="h3 mb-4">Arbre de modération</h1>
 
-        <p class="text-muted mb-4">
-            Cette page montre qui a promu·e qui en tant que modérateur·trice.
-            Chaque branche représente une chaîne de confiance.
-        </p>
+        <div class="page-head">
+            <h1><em class="lede">Arbre</em> de modération</h1>
+            <p>Cette page montre qui a promu qui en tant que modérateur·trice. Chaque branche représente une chaîne de confiance.</p>
+        </div>
 
         {% if tree %}
-            <div>
-                <ul class="list-unstyled ps-0 mb-0">
-                    {% for root in tree %}
-                        {% with node=root is_root=True %}{% partial tree_node %}{% endwith %}
-                    {% endfor %}
-                </ul>
-            </div>
+            <ul class="mod-tree">
+                {% for root in tree %}
+                    {% with node=root %}{% partial tree_node %}{% endwith %}
+                {% endfor %}
+            </ul>
         {% else %}
-            <div class="alert alert-light border text-center py-5 text-muted">
-                <p class="mb-0">Aucune promotion enregistrée.</p>
+            <div class="card" style="text-align: center; color: var(--ink-faint); padding: 48px 20px;">
+                Aucune promotion enregistrée.
             </div>
         {% endif %}
     </div>

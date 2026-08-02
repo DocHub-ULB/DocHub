@@ -3,22 +3,27 @@
 {% block title %}Transparence Modération{% endblock %}
 
 {% block content %}
-    <div class="container-xl mt-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'moderation_about' %}">Modération</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Journal</li>
-            </ol>
+    <div class="main">
+        <nav class="breadcrumb">
+            <a href="{% url 'moderation_about' %}">Modération</a>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 6 6 6-6 6"/>
+            </svg>
+            <span class="current">Journal</span>
         </nav>
-        <h1>Journal de modération</h1>
-        <p class="text-muted">Toutes les actions de modération sont enregistrées ici publiquement.
-            Tu peux voir qui a fait quoi et quand.</p>
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-muted small text-uppercase">
+
+        <div class="page-head">
+            <h1><em class="lede">Journal</em> de modération</h1>
+            <p>Toutes les actions de modération sont enregistrées ici publiquement. Tu peux voir qui a fait quoi et quand.</p>
+        </div>
+
+        <div class="card">
+            <div class="table-wrap">
+                <table class="mod-table">
+                    <thead>
                         <tr>
-                            <th class="ps-4">Date</th>
+                            <th>Date</th>
                             <th>Modérateur</th>
                             <th>Action</th>
                             <th>Cible</th>
@@ -27,18 +32,14 @@
                     <tbody>
                         {% for log in logs %}
                             <tr>
-                                <td class="ps-4 text-muted small" style="white-space: nowrap;">
-                                    {{ log.timestamp|date:"d/m/Y à H:i" }}
-                                </td>
+                                <td class="mod-table-date">{{ log.timestamp|date:"d/m/Y à H:i" }}</td>
                                 <td>
                                     <strong><a href="{% url 'moderation_profile' log.user.netid %}">{{ log.user.netid }}</a></strong>
                                 </td>
                                 <td>
-                                    <span class="badge bg-{{ log.action_color }} bg-opacity-10 text-{{ log.action_color }} border border-{{ log.action_color }}">
-                                        {{ log.action_text }}
-                                    </span>
+                                    <span class="pill pill-{{ log.action_color }}">{{ log.action_text }}</span>
                                     {% if log.details_text %}
-                                        <div class="mt-1 small text-muted fst-italic">{{ log.details_text }}</div>
+                                        <div style="margin-top: 4px; font-size: 12px; color: var(--ink-faint); font-style: italic;">{{ log.details_text }}</div>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -47,7 +48,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-5">
+                                <td colspan="4" class="mod-table-empty">
                                     Aucune action de modération n'a encore été effectuée.
                                 </td>
                             </tr>
@@ -58,30 +59,21 @@
         </div>
 
         {% if logs.has_other_pages %}
-            <nav aria-label="Pagination du registre">
-                <ul class="pagination justify-content-center">
-                    {% if logs.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ logs.previous_page_number }}">Précédent</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">Précédent</span></li>
-                    {% endif %}
+            <nav aria-label="Pagination du registre" class="mod-pagination">
+                {% if logs.has_previous %}
+                    <a class="btn btn-sm" href="?page={{ logs.previous_page_number }}">← Précédent</a>
+                {% else %}
+                    <span class="btn btn-sm btn-disabled">← Précédent</span>
+                {% endif %}
 
-                    <li class="page-item active" aria-current="page">
-                        <span class="page-link">Page {{ logs.number }} sur {{ logs.paginator.num_pages }}</span>
-                    </li>
+                <span>Page {{ logs.number }} sur {{ logs.paginator.num_pages }}</span>
 
-                    {% if logs.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ logs.next_page_number }}">Suivant</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">Suivant</span></li>
-                    {% endif %}
-                </ul>
+                {% if logs.has_next %}
+                    <a class="btn btn-sm" href="?page={{ logs.next_page_number }}">Suivant →</a>
+                {% else %}
+                    <span class="btn btn-sm btn-disabled">Suivant →</span>
+                {% endif %}
             </nav>
         {% endif %}
-
     </div>
 {% endblock content %}
