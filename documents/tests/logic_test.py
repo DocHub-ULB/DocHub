@@ -2,23 +2,11 @@ from io import BytesIO
 
 import pytest
 
-from catalog.models import Course
 from documents import logic
 from documents.models import Document
 from tags.models import Tag
-from users.models import User
 
 pytestmark = pytest.mark.django_db
-
-
-@pytest.fixture
-def user():
-    return User.objects.create_user(netid="test_user")
-
-
-@pytest.fixture
-def course():
-    return Course.objects.create(slug="test-t-100")
 
 
 def test_add_file_to_course(user, course):

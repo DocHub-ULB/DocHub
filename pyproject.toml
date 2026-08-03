@@ -61,6 +61,13 @@ dev = [
     "ruff>=0.13.1",
 ]
 
+# Heavy, opt-in browser tests. Not installed by CI (`uv sync --dev`).
+# To run locally:  uv sync --group playwright && uv run playwright install chromium
+#                  uv run pytest -m playwright
+playwright = [
+    "playwright>=1.40",
+]
+
 [tool.uv]
 exclude-newer = "7 days"
 exclude-newer-package = { django = false }
@@ -69,7 +76,7 @@ exclude-newer-package = { django = false }
 [tool.pytest.ini_options]
 norecursedirs = ".venv ve ve3 static media .git node_modules"
 DJANGO_SETTINGS_MODULE="www.test_settings"
-addopts = "--reuse-db"
+addopts = "--reuse-db -m 'not playwright'"
 filterwarnings = [
     "ignore:builtin type.*has no __module__ attribute:DeprecationWarning"
 ]
@@ -80,6 +87,7 @@ markers = """
     webtest: http queries against localhost
     celery: uses celery tasks
     postgresql: needs a postgresql database to run
+    playwright: heavy browser tests (deselected by default; run with '-m playwright')
 """
 
 [tool.ruff.lint]
