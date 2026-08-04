@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
         new_slugs = set()
         slug2name = {}
-        for _program_slug, courses in programs.items():
+        for courses in programs.values():
             for course in courses.values():
                 slug = normalize_slug(course["id"])
                 new_slugs.add(slug)

@@ -1,10 +1,8 @@
-import sys
 from unittest import mock
-
-from django.core.files import File
 
 import pytest
 from celery_test import create_doc
+from django.core.files import File
 
 from documents.models import Document, process_document
 from users.models import User
@@ -24,18 +22,12 @@ def test_repr(doc):
     doc.name = "Coucou"
     r = repr(doc)
 
-    if sys.version_info.major < 3:
-        r = r.decode("utf-8")
-
     assert r == "<Document: Coucou>"
 
 
 def test_repr_with_accents(doc):
     doc.name = "Lés accênts c'est cool"
     r = repr(doc)
-
-    if sys.version_info.major < 3:
-        r = r.decode("utf-8")
 
     assert r == "<Document: Lés accênts c'est cool>"
 

@@ -6,7 +6,6 @@ from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-
 from requests.exceptions import ConnectionError, SSLError
 
 from users.authBackend import (

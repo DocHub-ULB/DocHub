@@ -1,11 +1,9 @@
-from typing import Any
-
 import json
 import logging
+from typing import Any
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
-
 from slugify import slugify
 
 from catalog.models import Category
@@ -79,7 +77,7 @@ class Command(BaseCommand):
                 type=Category.CategoryType.UNIVERSITY,
             )
 
-            for name, _color in level0.items():
+            for name in level0:
                 Category.objects.create(
                     name=name,
                     slug=slugify0(name),
@@ -88,7 +86,7 @@ class Command(BaseCommand):
 
             # Level 1
             logger.info("Creating level 1")
-            for name, _color in level1.items():
+            for name in level1:
                 slug = (
                     name.removeprefix("Faculté de ")
                     .removeprefix("Faculté d'")

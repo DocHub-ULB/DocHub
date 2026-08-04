@@ -1,10 +1,9 @@
 import logging
 import subprocess
 
-from django.core.files import File
-
 import celery
 import pytest
+from django.core.files import File
 
 from documents import tasks
 from documents.models import Document

@@ -23,10 +23,9 @@ import os
 from pathlib import Path
 from unittest import mock
 
+import pytest
 from django.core.files import File
 from django.core.files.base import ContentFile
-
-import pytest
 
 # Skip cleanly if the optional playwright package is not installed (e.g. CI).
 sync_api = pytest.importorskip("playwright.sync_api")

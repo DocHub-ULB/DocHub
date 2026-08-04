@@ -1,6 +1,5 @@
-from django.db import connection
-
 import pytest
+from django.db import connection
 
 
 def needs_postgres(fn):

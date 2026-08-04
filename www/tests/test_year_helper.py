@@ -1,12 +1,12 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import time_machine
 
 from www import helpers
 
-Q1 = datetime(2012, 12, 21, 11, 11, 11, tzinfo=timezone.utc)
-Q2 = datetime(2013, 2, 12, 10, 10, 10, tzinfo=timezone.utc)
-Q2_2014 = datetime(2015, 3, 19, 15, 35, 22, tzinfo=timezone.utc)
+Q1 = datetime(2012, 12, 21, 11, 11, 11, tzinfo=UTC)
+Q2 = datetime(2013, 2, 12, 10, 10, 10, tzinfo=UTC)
+Q2_2014 = datetime(2015, 3, 19, 15, 35, 22, tzinfo=UTC)
 
 
 @time_machine.travel(Q1)

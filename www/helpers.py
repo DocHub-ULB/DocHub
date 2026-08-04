@@ -14,6 +14,6 @@ def current_year():
 
 def year_choices(backlog=5):
     year = current_year()
-    choices = [("%d-%d" % (year - i, year - i + 1),) * 2 for i in range(backlog)]
+    choices = [(f"{year - i}-{year - i + 1}",) * 2 for i in range(backlog)]
     choices.append(("Archives",) * 2)
     return choices

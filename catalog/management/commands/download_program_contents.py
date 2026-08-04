@@ -1,12 +1,10 @@
-from typing import Any
-
 import json
 import logging
+from typing import Any
 from urllib.parse import quote
 
-from django.core.management import BaseCommand
-
 import requests
+from django.core.management import BaseCommand
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn
 
 logger = logging.getLogger(__name__)

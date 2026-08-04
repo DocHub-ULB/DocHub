@@ -42,13 +42,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "black>=25.1.0",
     "coolname>=2.2.0",
     "django-debug-toolbar>=5.1.0",
     "django-extensions>=4.0",
     "honcho>=2.0.0",
     "ipython>=9.1.0",
-    "isort>=6.0.1",
     "pip-tools>=7.4.1",
     "pre-commit>=4.2.0",
     "django-stubs>=5.1.3",
@@ -78,7 +76,9 @@ norecursedirs = ".venv ve ve3 static media .git node_modules"
 DJANGO_SETTINGS_MODULE="www.test_settings"
 addopts = "--reuse-db -m 'not playwright'"
 filterwarnings = [
-    "ignore:builtin type.*has no __module__ attribute:DeprecationWarning"
+    "error::DeprecationWarning",
+    "error::PendingDeprecationWarning",
+    "ignore:builtin type.*has no __module__ attribute:DeprecationWarning",
 ]
 markers = """
     slow: marks tests as slow (deselect with '-m "not slow"')
@@ -90,12 +90,16 @@ markers = """
     playwright: heavy browser tests (deselected by default; run with '-m playwright')
 """
 
+[tool.ruff]
+target-version = "py313"
+
 [tool.ruff.lint]
 select = [
-    "F", "E", "W", "YTT", "B", "COM818",
+    "F", "E", "W", "I", "YTT", "B", "COM818",
     "C4", "DTZ", "T10", "EXE", "ISC",
     "ICN", "G", "PIE", "PYI", "PT",
-    "SIM", "TID", "PL", "RSE", "RUF"
+    "SIM", "TID", "PL", "RSE", "RUF",
+    "UP", "FURB", "LOG", "PERF", "FLY", "INT",
 ]
 # Not now: "N", "ANN", "S", "BLE", "A", "DJ", "EM",
 #          "INP", "TCH", "ERA", "PGH", "SLF",
@@ -108,15 +112,12 @@ ignore = [
     "SIM105", # Use `contextlib.suppress(Alarm)`
     "PLR2004", # Magic value used in comparison
     "PLR0913", # Too many arguments to function call
+    "PLR0917", # Too many positional arguments
     "PLR0911", # Too many return statements
     "PLC1901", # if x != "" is not the same as if x
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
     "SIM103", # Return the condition directly
 ]
-
-[tool.isort]
-profile = "black"
-skip = [".venv"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"] # imported but unused

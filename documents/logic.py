@@ -1,12 +1,9 @@
-from typing import Optional
-
 import mimetypes
 import uuid
 from collections.abc import Iterable
 
-from django.core.files import File
-
 import magic
+from django.core.files import File
 
 from catalog.models import Course
 from tags.models import Tag
@@ -35,7 +32,7 @@ def add_file_to_course(
     tags: list[str | Tag],
     user: User,
     import_source: str | None = None,
-) -> "Optional[Document]":
+) -> "Document | None":
     if not extension.startswith("."):
         mime = magic.from_buffer(file.read(4096), mime=True)
         guessed_extension = mimetypes.guess_extension(mime, strict=True)

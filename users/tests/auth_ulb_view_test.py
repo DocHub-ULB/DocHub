@@ -1,7 +1,6 @@
-from django.urls import reverse
-
 import pytest
 import responses
+from django.urls import reverse
 
 from users.models import CasFailure
 

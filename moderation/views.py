@@ -109,7 +109,7 @@ def process_representative_request(request, request_id):
         ModerationLog.track(
             user=request.user,
             content_object=rep_request,
-            values={"action_rejeter": ("", reason if reason else "Sans motif")},
+            values={"action_rejeter": ("", reason or "Sans motif")},
         )
 
         messages.warning(
