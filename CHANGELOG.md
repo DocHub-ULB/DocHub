@@ -4,6 +4,10 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.8.0
+
+ * Fix PDF preview that failed to load
+
 # 2026.6.0
 
  * Auto-recover from common CAS login errors (stale bookmark, refreshed callback) instead of showing an error page
