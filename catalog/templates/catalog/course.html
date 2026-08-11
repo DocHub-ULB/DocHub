@@ -5,7 +5,7 @@
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
 {% block content %}
-    <div class="main" data-controller="course-filter">
+    <div class="main baseline-grid" data-controller="course-filter">
         <nav class="breadcrumb">
             <a href="{% url 'index' %}">Accueil</a>
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
@@ -24,7 +24,10 @@
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m9 6 6 6-6 6"/>
             </svg>
-            <span class="current">{{ course.slug|upper }}</span>
+            <span class="current">
+                {{ course.slug|upper }} &middot; {{ course.get_period_display }}
+                {% if course.is_archive %}&middot; archivé{% endif %}
+            </span>
         </nav>
 
         <header class="course-header">
@@ -34,10 +37,6 @@
                       stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div>
-                <div class="course-meta">
-                    {{ course.slug|upper }} &middot; {{ course.get_period_display }}
-                    {% if course.is_archive %}&middot; archivé{% endif %}
-                </div>
                 <h1>
                     <em>{{ course_name_first }}</em>
                     {% if course_name_rest %}{{ course_name_rest }}{% endif %}

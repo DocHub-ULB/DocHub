@@ -1,33 +1,24 @@
-/* ============================================
-   DocHub — "Papier" design system
-   Notebook-paper aesthetic: historic DocHub blue as primary accent,
-   yellow highlighter as secondary accent, serif display type,
-   hand-drawn doodle texture. See design_handoff_dochub_refresh/README.md
-   for the full spec this file implements.
-
-   Bootstrap is still used by templates not yet migrated to this system,
-   so it's pulled in under its own cascade layer: unlayered rules (all of
-   ours, below) always win over layered rules regardless of selector
-   specificity, so we never have to fight Bootstrap for precedence.
-   ============================================ */
+/* DocHub paper design.
+   Bootstrap is in a layer. The rules in this file take priority. */
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css") layer(bootstrap);
 
 :root {
-    --bg: #f5f0e6;
-    --bg-raised: #fdfaf2;
-    --bg-sunk: #ece5d5;
-    --ink: #2b231a;
-    --ink-soft: #5b4e3d;
-    --ink-faint: #8a7c67;
-    --rule: #d9cfb8;
-    --rule-strong: #b5a787;
+    --bg: #f4f6fa;               /* cool off-white paper, faint blue tint */
+    --bg-raised: #ffffff;        /* clean white cards/topbar */
+    --bg-sunk: #e8ecf3;
+    --ink: #1b1e24;              /* cool near-black */
+    --ink-soft: #4c535d;
+    --ink-faint: #828b98;        /* cool grey */
+    --rule: #dde2ea;
+    --rule-strong: #c1c8d3;
+    --paper-dot: rgba(90, 115, 150, 0.12);   /* ambient paper texture, cool */
 
-    --brand-blue: #1D3356;
-    --brand-blue-soft: #a8b2c0;
-    --brand-blue-tint: #dfe4ec;
-    --accent: #1D3356;
-    --accent-soft: #dfe4ec;
+    --brand-blue: #0d6efd;       /* DocHub's recognisable royal blue */
+    --brand-blue-soft: #6ea8fe;
+    --brand-blue-tint: #cfe2ff;
+    --accent: #0d6efd;
+    --accent-soft: #cfe2ff;
     --accent-ink: #ffffff;
 
     --highlight: #ffd84d;
@@ -47,9 +38,7 @@
     --radius: 6px;
     --radius-lg: 10px;
 
-    /* base vertical rhythm unit — half the 28px ruled-line spacing on .main's
-       background, so line-heights/margins/paddings built from this land on
-       the notebook-paper lines instead of drifting across the page */
+    /* This is half of the 28px line grid. */
     --grid: 14px;
 
     --shadow: 0 1px 0 rgba(43, 35, 26, 0.06), 0 4px 14px -6px rgba(43, 35, 26, 0.12);
@@ -66,12 +55,57 @@ body {
     line-height: calc(var(--grid) * 2);
 }
 
-/* Bootstrap only strips underlines from specific components (.btn, .nav-link,
-   .dropdown-item, ...), not plain <a> tags. Reset within our own chrome/pages
-   instead of doing it globally, so unmigrated Bootstrap pages keep their
-   default link affordance until they're redesigned too. :where() carries zero
-   specificity, so this can never outrank a component's own color (e.g.
-   .btn-primary) the way a plain ".main a" selector would. */
+/* Add ?debug_layout=1 to the URL.
+   Magenta shows the 28px rules and nested boxes.
+   Cyan shows the 14px steps and direct children.
+   Lime shows text. Orange shows controls. */
+body.debug-layout::before {
+    content: "LAYOUT DEBUG · magenta 28px rule · cyan 14px half-step · lime type · orange controls";
+    position: fixed;
+    inset: auto 8px 8px auto;
+    z-index: 10000;
+    padding: 4px 8px;
+    color: #000;
+    background: #fff700;
+    border: 2px solid #ff00d4;
+    font: 700 11px/14px var(--font-mono);
+    pointer-events: none;
+}
+
+body.debug-layout .main {
+    background-color: #fff;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0 var(--paper-half-step-offset),
+        #00d9ff var(--paper-half-step-offset) calc(var(--paper-half-step-offset) + 1px),
+        transparent calc(var(--paper-half-step-offset) + 1px) var(--paper-rule-offset),
+        #ff00d4 var(--paper-rule-offset) calc(var(--paper-rule-offset) + 1px),
+        transparent calc(var(--paper-rule-offset) + 1px) calc(var(--grid) * 2)
+    );
+}
+
+body.debug-layout .main * {
+    outline: 1px solid rgba(255, 0, 212, 0.65);
+    outline-offset: -1px;
+}
+
+body.debug-layout .main > * {
+    outline: 2px solid #00d9ff;
+    outline-offset: -2px;
+}
+
+body.debug-layout .main :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, th, td, label) {
+    outline-color: #20e000;
+    background-color: rgba(80, 255, 0, 0.08);
+}
+
+body.debug-layout .main :where(.card, .btn, button, input, select, textarea) {
+    outline: 2px solid #ff6a00;
+    outline-offset: -2px;
+    background-color: rgba(255, 106, 0, 0.1);
+}
+
+/* Remove link styles only in the new design. :where() adds no specificity. */
 :where(.topbar, .site-footer, .main) a {
     text-decoration: none;
     color: inherit;
@@ -83,14 +117,13 @@ body {
     letter-spacing: -0.01em;
 }
 
-/* wraps the first word of a heading in the design's recurring
-   "italic serif, brand blue" treatment */
+/* Use this for the blue italic word in a heading. */
 .lede {
     font-style: italic;
     color: var(--brand-blue);
 }
 
-/* yellow highlighter marker-stroke behind text, not a background box */
+/* Draw a yellow marker line behind the text. */
 .marker {
     font-style: italic;
     padding: 0 6px;
@@ -110,8 +143,7 @@ body {
     color: var(--ink-faint);
 }
 
-/* lighter variant for the hero's date/tagline line — regular weight,
-   slightly larger, wider tracking, unlike the bolder section-head eyebrow */
+/* Use this lighter style for the hero date. */
 .hero-eyebrow {
     font-size: 12px;
     font-weight: 400;
@@ -126,16 +158,11 @@ body {
     max-width: 1280px;
     margin: 0 auto;
     width: 100%;
-    padding: calc(var(--grid) * 4) 32px calc(var(--grid) * 8);
+    padding: calc(var(--grid) / 2) 32px calc(var(--grid) * 8);
     position: relative;
-    background-image: linear-gradient(
-        transparent calc(var(--grid) * 2 - 1px),
-        rgba(181, 167, 135, 0.3) calc(var(--grid) * 2 - 1px),
-        rgba(181, 167, 135, 0.3) calc(var(--grid) * 2)
-    );
-    background-size: 100% calc(var(--grid) * 2);
-    background-position: 0 calc(var(--grid) * 4);
-    background-repeat: repeat-y;
+    /* Ambient dot texture — decorative only, nothing aligns to it. */
+    background-image: radial-gradient(var(--paper-dot) 1px, transparent 1.6px);
+    background-size: 22px 22px;
 }
 
 /* ============ topbar ============ */
@@ -282,7 +309,7 @@ body {
     }
 }
 
-/* search-as-you-type results panel (stimulus-autocomplete) */
+/* Show results while the user types. */
 .search-results {
     position: absolute;
     top: calc(100% + 6px);
@@ -396,10 +423,7 @@ body {
 
 /* ============ buttons ============ */
 
-/* min-height (not padding + line-height) sets the grid-aligned box height,
-   since an inline-flex row's height follows its tallest child — an icon
-   taller than the text's line-height would otherwise stretch the button
-   past its intended, grid-aligned size */
+/* min-height stops an icon from changing the button height. */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -528,7 +552,7 @@ body {
     position: relative;
 }
 
-/* washi-tape strip pinning the note down, per the handoff's post-it motif */
+/* Draw the tape above the note. */
 .sticky-note::before {
     content: "";
     position: absolute;
@@ -819,22 +843,31 @@ body {
     color: var(--ink);
 }
 
-.course-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 32px;
-    align-items: start;
-    padding-bottom: calc(var(--grid) * 2);
-    border-bottom: 1px solid var(--rule);
-    position: relative;
-    overflow: hidden;
+.baseline-grid > .breadcrumb {
+    flex-wrap: nowrap;
+    margin-bottom: calc(var(--grid) * 2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    font-size: 15px;
 }
 
-.course-header .course-meta {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    color: var(--ink-faint);
-    margin-bottom: var(--grid);
+.baseline-grid > .breadcrumb::-webkit-scrollbar {
+    display: none;
+}
+
+.baseline-grid > .breadcrumb > * {
+    flex-shrink: 0;
+}
+
+.course-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding-right: 252px;
+    padding-bottom: calc(var(--grid) * 2);
+    box-shadow: inset 0 -1px var(--rule);
+    position: relative;
+    overflow: visible;
 }
 
 .course-header h1 {
@@ -843,7 +876,8 @@ body {
     font-weight: 400;
     letter-spacing: -0.02em;
     line-height: calc(var(--grid) * 4);
-    margin: 0 0 var(--grid);
+    margin: 0 0 calc(var(--grid) * 2);
+    transform: translateY(1.5px);
 }
 
 .course-header h1 em {
@@ -861,6 +895,9 @@ body {
     flex-direction: column;
     gap: var(--grid);
     min-width: 220px;
+    position: absolute;
+    top: calc(var(--grid) * -4);
+    right: 0;
 }
 
 .course-header .course-actions .btn {
@@ -901,11 +938,13 @@ body {
 @media (max-width: 760px) {
     .course-header {
         grid-template-columns: 1fr;
+        padding-right: 0;
         gap: calc(var(--grid) * 2);
     }
 
     .course-header .course-actions {
         align-items: flex-start;
+        position: static;
     }
 
     .course-header .doodle {
@@ -916,18 +955,18 @@ body {
 .filter-row {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
+    column-gap: 16px;
+    row-gap: var(--grid);
     margin: calc(var(--grid) * 2) 0 var(--grid);
 }
 
-/* grows to fill the row and wraps its own chips onto extra lines as needed,
-   so filter-tools (search + sort) stays docked top-right instead of the
-   whole group dropping below once there are enough tags to fill one line */
+/* The chips can wrap. The tools stay at the top right. */
 .filter-row .filter-chips {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px;
+    column-gap: 4px;
+    row-gap: var(--grid);
     flex: 1 1 auto;
     min-width: 0;
 }
@@ -937,7 +976,8 @@ body {
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    padding: calc(var(--grid) / 2) 12px;
+    height: calc(var(--grid) * 3);
+    padding: 0 12px;
     font-size: 13px;
     font-weight: 500;
     border-radius: 999px;
@@ -951,8 +991,7 @@ body {
     border-color: var(--rule-strong);
 }
 
-/* the checkbox stays functional (CourseFilter still reads .checked) but is
-   visually hidden — the label is styled as the pill instead */
+/* Hide the checkbox. Keep the label as the visible control. */
 .filter-row .filter-chips input[type="checkbox"] {
     position: absolute;
     opacity: 0;
@@ -972,19 +1011,27 @@ body {
     margin-left: 4px;
 }
 
-/* search + sort share a row with the tag chips on wide screens; below the
-   breakpoint the search box drops to its own full-width line since typing
-   into a squeezed inline box isn't usable on a phone. */
+/* The search field moves to a new row on a small screen. */
 .filter-row .filter-tools {
     display: flex;
     align-items: center;
-    gap: 16px;
+    column-gap: 16px;
+    row-gap: var(--grid);
     flex-wrap: wrap;
     flex: 0 0 auto;
+    min-height: calc(var(--grid) * 3);
 }
 
 .filter-row .search-bar {
     width: 220px;
+    height: calc(var(--grid) * 3);
+}
+
+.filter-row .search-bar input {
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: calc(var(--grid) * 2);
 }
 
 @media (max-width: 760px) {
@@ -1004,13 +1051,16 @@ body {
 
 .sort-seg {
     display: flex;
+    height: calc(var(--grid) * 3);
     border: 1px solid var(--rule);
     border-radius: var(--radius);
     overflow: hidden;
 }
 
 .sort-seg a {
-    padding: calc(var(--grid) / 2) 12px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
     font-size: 12px;
     font-weight: 500;
     background: var(--bg-raised);
@@ -1036,10 +1086,12 @@ body {
 .doc-row {
     display: grid;
     grid-template-columns: 56px 58px 1fr auto;
-    gap: 18px;
+    column-gap: 18px;
+    row-gap: 0;
     align-items: center;
+    min-height: calc(var(--grid) * 8);
     padding: var(--grid) 0;
-    border-bottom: 1px solid var(--rule);
+    box-shadow: inset 0 -1px var(--rule);
     color: var(--ink);
 }
 
@@ -1084,24 +1136,29 @@ body {
     pointer-events: none;
 }
 
+/* These offsets put both font baselines on the paper rule. */
 .doc-row .doc-title {
     display: flex;
     align-items: center;
-    gap: 10px;
+    column-gap: 10px;
+    row-gap: 0;
     flex-wrap: wrap;
     font-family: var(--font-display);
     font-size: 16px;
     font-weight: 500;
     line-height: calc(var(--grid) * 2);
+    transform: translateY(-0.5px);
 }
 
 .doc-row .doc-meta {
     display: flex;
     align-items: center;
-    gap: 10px;
+    column-gap: 10px;
+    row-gap: 0;
     flex-wrap: wrap;
     font-size: 12px;
     color: var(--ink-faint);
+    transform: translateY(1px);
 }
 
 .doc-row .doc-meta strong {
@@ -1264,6 +1321,22 @@ body {
     max-width: 60ch;
 }
 
+.baseline-grid .page-head {
+    display: flow-root;
+    margin-bottom: calc(var(--grid) * 2);
+}
+
+/* Put the display font baseline on the paper rule. */
+.baseline-grid .page-head h1 {
+    line-height: calc(var(--grid) * 4);
+    margin-bottom: calc(var(--grid) * 2);
+    transform: translateY(7.5px);
+}
+
+.baseline-grid .page-head h1:last-child {
+    margin-bottom: 0;
+}
+
 .prose {
     max-width: 640px;
 }
@@ -1285,6 +1358,30 @@ body {
     margin: 0 0 var(--grid);
     padding-left: 20px;
     color: var(--ink-soft);
+}
+
+/* Put the display font baseline on the paper rule. */
+.baseline-grid .prose h2 {
+    margin: 0;
+    transform: translateY(-2px);
+}
+
+.baseline-grid .prose p {
+    margin-bottom: 0;
+}
+
+.baseline-grid .prose p:has(.btn) {
+    /* Add 14px after the 42px button. The total is 56px. */
+    margin-bottom: var(--grid);
+}
+
+.baseline-grid .prose ul {
+    margin-bottom: calc(var(--grid) * 2);
+}
+
+.baseline-grid .prose li::marker {
+    /* The Firefox bullet font adds 0.5px to a list row. Stop this change. */
+    line-height: 0;
 }
 
 .table-wrap {
@@ -1517,47 +1614,47 @@ textarea:focus {
 }
 
 /* ============ course page: small screens ============ */
-/* The 4-column doc-row grid (vote/thumb/info/actions) doesn't leave enough
-   room for the info column below ~640px — switch to a 2-line flex layout
-   instead: thumbnail + info on the first line, vote + actions on the second. */
 @media (max-width: 640px) {
+    /* Each text row and action row uses a 28px line. */
     .doc-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
+        grid-template-columns: 48px minmax(0, 1fr) auto;
+        column-gap: 10px;
+        align-items: start;
     }
 
     .doc-row .pdf-thumb {
-        order: 1;
+        grid-column: 1;
+        grid-row: 1;
         width: 48px !important;
-        height: 62px !important;
+        height: calc(var(--grid) * 4) !important;
     }
 
     .doc-row .doc-info {
-        order: 2;
-        flex: 1 1 auto;
+        grid-column: 2 / 4;
+        grid-row: 1;
         min-width: 0;
+        padding: var(--grid) 0;
     }
 
     .doc-row .doc-vote {
-        order: 3;
+        grid-column: 1 / 3;
+        grid-row: 2;
         flex-direction: row;
         gap: 8px;
+        min-height: calc(var(--grid) * 2);
+        padding: 0;
     }
 
     .doc-row .doc-actions {
-        order: 4;
-        margin-left: auto;
+        grid-column: 3;
+        grid-row: 2;
+        align-self: center;
     }
 }
 
 /* ============ topbar: small screens ============ */
-/* Kept last in the file (rather than near .topbar above) so it reliably wins
-   over the unconditional .topnav/.search-bar rules at equal specificity.
-   Below this width, logo + nav + search + upload + avatar no longer fit on
-   one row without overflowing off-screen — and the avatar/user-menu is the
-   only way to log out, so it must never be pushed out of view. Wrap the
-   search bar onto its own row and drop the secondary nav links to make room. */
+/* Keep this block after the default top bar rules.
+   Hide the less important links. Put search on a new row. */
 @media (max-width: 760px) {
     .topbar-inner {
         flex-wrap: wrap;
@@ -1575,3 +1672,168 @@ textarea:focus {
         max-width: none;
     }
 }
+
+/* ============ catalog finder ============ */
+
+/* Slim one-line note — sits above the list without pushing it down. */
+.finder-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    margin-bottom: var(--grid);
+    padding: calc(var(--grid) / 2) var(--grid);
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+.finder-note strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.finder-note a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.finder {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--grid);
+}
+
+.finder-col {
+    flex: 1 1 0;
+    min-width: 0;
+    align-self: stretch;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: calc(var(--grid) / 2);
+}
+
+/* Trail columns (context you've already walked) read quieter than the current one. */
+.finder-col:not(.finder-col-current):not(.finder-col-empty) {
+    background: var(--bg);
+}
+
+/* Reserve the remaining slots as invisible spacers so visible columns keep a
+   constant width across every depth — drilling fills a slot, it never reflows. */
+.finder-col-empty {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+.finder-col > h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: calc(var(--grid) / 2) calc(var(--grid) / 2) var(--grid);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: calc(var(--grid) * 2);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+
+.finder-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.finder-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: var(--grid) calc(var(--grid) / 2) calc(var(--grid) / 2);
+    padding-bottom: calc(var(--grid) / 2);
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+}
+
+.finder-group:first-child {
+    margin-top: calc(var(--grid) / 2);
+}
+
+.finder-group svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.finder-item > a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: calc(var(--grid) / 2);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    transition: background 120ms ease;
+}
+
+.finder-item > a:hover {
+    background: var(--accent-soft);
+}
+
+.finder-ico {
+    flex-shrink: 0;
+    display: inline-flex;
+    color: var(--ink-faint);
+}
+
+.finder-item > a:hover .finder-ico {
+    color: var(--accent);
+}
+
+.finder-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+.finder-code {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+}
+
+.finder-item > a:hover .finder-code {
+    color: var(--ink-soft);
+}
+
+/* Mobile: the trail collapses to the current column with a back-link. */
+.finder-back {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .finder-col:not(.finder-col-current) {
+        display: none;
+    }
+
+    .finder-back {
+        display: inline-flex;
+        align-items: center;
+        color: var(--ink-faint);
+    }
+
+    .finder-back:hover {
+        color: var(--accent);
+    }
+}
+
