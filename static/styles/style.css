@@ -266,7 +266,7 @@ body.debug-layout .main :where(.card, .btn, button, input, select, textarea) {
         color: var(--ink);
     }
 
-    svg {
+    > svg {
         position: absolute;
         left: 14px;
         top: 50%;
@@ -334,8 +334,8 @@ body.debug-layout .main :where(.card, .btn, button, input, select, textarea) {
 .search-result-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
+    gap: 10px;
+    padding: 6px 10px;
     border-radius: var(--radius-sm);
     color: var(--ink);
 }
@@ -344,24 +344,32 @@ body.debug-layout .main :where(.card, .btn, button, input, select, textarea) {
     background: var(--bg-sunk);
 }
 
-.search-result-row .search-result-icon {
+.search-result-row .pill {
     flex-shrink: 0;
-    color: var(--ink-faint);
-    display: flex;
 }
 
 .search-result-row .search-result-name {
-    display: block;
+    flex: 1;
+    min-width: 0;
     font-size: 13px;
-    color: var(--ink-faint);
+    color: var(--ink-soft);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+/* Compact strip shown above results (e.g. simplified-search notice). */
+.search-result-note {
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 4px;
+}
+
 .search-result-empty {
     text-align: center;
-    padding: 24px 12px;
+    padding: 16px 12px;
     color: var(--ink-faint);
 }
 

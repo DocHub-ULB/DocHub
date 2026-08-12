@@ -1,6 +1,6 @@
 {% if simplified %}
     <li>
-        <div class="search-result-empty">
+        <div class="search-result-note">
             Recherche simplifiée : PostgreSQL n'est pas disponible.
         </div>
     </li>
@@ -13,16 +13,11 @@
            class="search-result-row"
            style="{% if course.is_archive %}opacity: 0.7;{% endif %}"
         >
-            <span class="search-result-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/></svg>
+            <span class="pill pill-mono">
+                {{ course.slug|upper }}
+                {% if course.is_archive %}(archivé){% endif %}
             </span>
-            <span style="min-width: 0; flex: 1;">
-                <span class="pill pill-mono">
-                    {{ course.slug|upper }}
-                    {% if course.is_archive %}(archivé){% endif %}
-                </span>
-                <span class="search-result-name">{{ course.name }}</span>
-            </span>
+            <span class="search-result-name">{{ course.name }}</span>
         </a>
     </li>
 {% empty %}
