@@ -1,0 +1,40 @@
+{% load static %}
+{% comment %}
+Shell for logged-out pages: no navbar, minimal footer shared with the
+logged-out home page (index.html). Content pages extend this.
+{% endcomment %}
+<!doctype html>
+<html lang="fr">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}DocHub — notes & examens de l'ULB, entre étudiant·es{% endblock %}</title>
+        {% block opengraph %}
+            <meta property="og:title" content="DocHub"/>
+            <meta property="og:type" content="website"/>
+            <meta property="og:image" content="https://dochub.be/static/images/facebook_cover.png"/>
+            <meta property="og:url" content="https://dochub.be"/>
+            <meta property="og:description"
+                  content="DocHub te permet d'échanger tes notes, tes résumés, d'anciens examens et bien plus encore. "/>
+        {% endblock opengraph %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@400;500;600;700&display=swap"
+              rel="stylesheet">
+        <link href="{% static "styles/style.css" %}" rel="stylesheet">
+        <script defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
+        {% block head %}{% endblock %}
+    </head>
+
+    <body class="landing-page">
+        <main class="main">
+            <div class="landing-copy">
+                {% include "_landing_head.html" %}
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        {% include "_landing_foot.html" %}
+    </body>
+</html>

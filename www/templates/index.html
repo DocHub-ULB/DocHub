@@ -26,17 +26,7 @@
         <main class="main">
             <section class="landing-hero">
                 <div class="landing-hero-copy">
-                    <div class="landing-hero-head">
-                        <a class="logo" href="{% url 'index' %}">
-                            <span class="logo-mark" aria-hidden="true">
-                                <span class="pg"></span>
-                                <span class="fold"></span>
-                                <span class="dot"></span>
-                            </span>
-                            <span><em>Doc</em>Hub</span>
-                        </a>
-                        <span class="hero-eyebrow">partage de notes entre des milliers d'étudiant·es de l'ULB depuis 2012</span>
-                    </div>
+                    {% include "_landing_head.html" %}
                     <h1>Les <em class="lede">notes</em> et <em class="lede">examens</em> de tes cours à l'ULB, partagés entre étudiant·es</h1>
                     <p class="subhead">
                         Les notes, résumés et anciens examens que les étudiant·es de l'ULB partagent pour
@@ -81,13 +71,6 @@
             </section>
         </main>
 
-        <footer class="landing-foot">
-            Initiative étudiante open-source, hébergée par le
-            <a href="https://cercle-informatique.be/">Cercle Informatique</a> &amp;
-            <a href="https://urlab.be/">UrLab</a>. L'<a href="https://uv.ulb.ac.be/">Université Virtuelle</a>
-            reste la plateforme officielle de l'ULB.
-            &middot; <a href="https://github.com/DocHub-ULB/DocHub">Code sur GitHub</a>
-            &middot; AGPL v3 &middot; &copy; 2012–{% now "Y" %} Cercle Informatique ASBL
-        </footer>
+        {% include "_landing_foot.html" %}
     </body>
 </html>

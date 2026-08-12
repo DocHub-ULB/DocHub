@@ -47,6 +47,13 @@
 
 /* ============ base ============ */
 
+/* Always reserve the scrollbar gutter so short pages (login, error) and tall
+   ones (home) centre their content on the same axis — no horizontal shift when
+   the scrollbar comes and goes. */
+html {
+    scrollbar-gutter: stable;
+}
+
 body {
     background: var(--bg);
     color: var(--ink);
@@ -1982,6 +1989,13 @@ textarea:focus {
 
 .landing-hero-copy {
     max-width: 40rem;
+}
+
+/* Logged-out content pages (syslogin, noauth, error) reuse the home hero's
+   top spacing and copy width, without the campus photo. */
+.landing-copy {
+    max-width: 40rem;
+    padding-top: calc(var(--grid) * 4);
 }
 
 .landing-hero h1 {
