@@ -12,23 +12,21 @@
             <section class="home-hero">
                 <div class="hero-eyebrow" style="margin-bottom: var(--grid); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                     <span>{% now "l j F" %} · semaine {% now "W" %}</span>
-                    <span style="width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint);"></span>
-                    <span style="color: var(--brand-blue);">bloque-notes ULB — entre étudiant·es, depuis 2012</span>
                 </div>
                 <h1>
-                    Bonjour <em class="marker">{{ user.first_name }}</em><em class="lede">.</em><br>
+                    Bonjour <em class="marker">{{ user.first_name }}</em><br>
                     {% with n=recent_docs|length %}
                         {% if n == 1 %}
-                            <span style="color: var(--ink-soft);">1 nouveau doc</span> dans tes cours.
+                            <span style="color: var(--ink-soft);">1 nouveau document</span> dans tes cours.
                         {% else %}
-                            <span style="color: var(--ink-soft);">{{ n }} nouveaux docs</span> dans tes cours.
+                            <span style="color: var(--ink-soft);">{{ n }} nouveaux documents</span> dans tes cours.
                         {% endif %}
                     {% endwith %}
                 </h1>
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: calc(var(--grid) * 2);">
                     <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
-                        Déposer un doc
+                        Partage un document
                     </a>
                     <a class="btn" href="{% url "catalog:finder_root" %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 6L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-2z"/></svg>
@@ -70,12 +68,10 @@
                 <section style="margin: calc(var(--grid) * 3) 0 calc(var(--grid) * 4);">
                     <div class="section-head">
                         <div>
-                            <div class="eyebrow">Tes cours</div>
-                            <h2>Cours suivis</h2>
+                            <h2>Tes cours</h2>
+                            <div class="eyebrow">Cours suivis</div>
+
                         </div>
-                        <a href="{% url "catalog:finder_root" %}" style="font-size: 13px; color: var(--ink-soft);">
-                            Gérer mes cours
-                        </a>
                     </div>
                     <div class="course-grid">
                         {% for course in following_course %}
@@ -117,7 +113,6 @@
                     <div class="section-head">
                         <div>
                             <div class="eyebrow">Fil</div>
-                            <h2>Dans tes cours</h2>
                         </div>
                     </div>
                     {% for document in recent_docs %}

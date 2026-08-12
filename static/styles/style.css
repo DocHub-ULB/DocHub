@@ -567,8 +567,56 @@ body.debug-layout .main :where(.card, .btn, button, input, select, textarea) {
 /* ============ home: hero ============ */
 
 .home-hero {
-    padding: 0 0 calc(var(--grid) * 2);
+    padding: calc(var(--grid) * 1.5) 0 calc(var(--grid) * 2);
     position: relative;
+    isolation: isolate;
+}
+
+/* Faded campus photo behind the greeting — the ULB Solbosch NB building,
+   the front lawn every student knows. It's decorative: the photo washes into
+   the paper on every edge (light overlay on the left, masked top and bottom)
+   so the serif greeting stays crisp and readable on top of it. */
+.home-hero::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    /* Bleed to the content-frame edges (main has 32px side padding) and up
+       toward the topbar; fade out before the section below. */
+    inset: calc(var(--grid) * -1.5) -32px calc(var(--grid) * 2);
+    background-image:
+    linear-gradient(103deg,
+        var(--bg) 4%,
+        color-mix(in srgb, var(--bg) 80%, transparent) 42%,
+        color-mix(in srgb, var(--bg) 48%, transparent) 100%),
+    url("../images/campus-hero.webp");
+    background-size: 100% 100%, cover;
+    background-position: center, center 24%;
+    background-repeat: no-repeat;
+    filter: saturate(0.88);
+    /* Two mask gradients, intersected: fade top+bottom AND the right edge so
+       the photo dissolves into the paper on every side — no hard cut. */
+    -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0, #000 24%, #000 58%, transparent 100%),
+    linear-gradient(to right, #000 78%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+    linear-gradient(to bottom, transparent 0, #000 24%, #000 58%, transparent 100%),
+    linear-gradient(to right, #000 78%, transparent 100%);
+    mask-composite: intersect;
+}
+
+@media (max-width: 700px) {
+    /* On phones the greeting is short and the photo gets busy behind two lines
+       of large serif — pull it lighter and frame the belfry tower on the right. */
+    .home-hero::before {
+        background-position: center, 72% 22%;
+        background-image:
+        linear-gradient(160deg,
+            var(--bg) 10%,
+            color-mix(in srgb, var(--bg) 82%, transparent) 55%,
+            color-mix(in srgb, var(--bg) 62%, transparent) 100%),
+        url("../images/campus-hero.webp");
+    }
 }
 
 .home-hero h1 {
@@ -1835,5 +1883,172 @@ textarea:focus {
     .finder-back:hover {
         color: var(--accent);
     }
+}
+
+/* ============ logged-out landing ============ */
+
+/* Full-height column so the credit line sits at the bottom of the viewport. */
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.landing-page .main {
+    flex: 1 0 auto;
+    /* No tall bottom padding here — main grows to the footer, so the default
+       112px only creates overflow. The footer's own top padding is the gap. */
+    padding-bottom: 0;
+}
+
+.landing-foot {
+    flex-shrink: 0;
+}
+
+/* No header bar — the wordmark + tagline sit inline at the top of the hero. */
+.landing-hero-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: calc(var(--grid) * 5);
+}
+
+.landing-hero-head .hero-eyebrow {
+    margin: 0;
+    max-width: 22rem;
+    line-height: 1.4;
+}
+
+.btn-lg {
+    min-height: calc(var(--grid) * 3.5);
+    padding: 0 22px;
+    font-size: 15px;
+}
+
+.landing-hero {
+    position: relative;
+    padding: calc(var(--grid) * 4) 0 calc(var(--grid) * 3);
+}
+
+/* Same campus photo as the logged-in hero, washed into the paper so the copy
+   on the left stays readable and the image dissolves out toward the right. */
+.landing-hero::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: calc(var(--grid) * -1.5) -32px calc(var(--grid) * 2);
+    background-image:
+    linear-gradient(103deg,
+        var(--bg) 4%,
+        color-mix(in srgb, var(--bg) 80%, transparent) 42%,
+        color-mix(in srgb, var(--bg) 48%, transparent) 100%),
+    url("../images/campus-hero.webp");
+    background-size: 100% 100%, cover;
+    background-position: center, center 24%;
+    background-repeat: no-repeat;
+    filter: saturate(0.88);
+    -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0, #000 24%, #000 58%, transparent 100%),
+    linear-gradient(to right, #000 78%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+    linear-gradient(to bottom, transparent 0, #000 24%, #000 58%, transparent 100%),
+    linear-gradient(to right, #000 78%, transparent 100%);
+    mask-composite: intersect;
+}
+
+/* On phones the copy is wider relative to the frame — pull the photo lighter
+   and shift it right so the text stays on paper. */
+@media (max-width: 700px) {
+    .landing-hero::before {
+        background-position: center, 68% 22%;
+        background-image:
+        linear-gradient(160deg,
+            var(--bg) 12%,
+            color-mix(in srgb, var(--bg) 82%, transparent) 55%,
+            color-mix(in srgb, var(--bg) 60%, transparent) 100%),
+        url("../images/campus-hero.webp");
+    }
+}
+
+.landing-hero-copy {
+    max-width: 40rem;
+}
+
+.landing-hero h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: var(--grid) 0;
+    overflow-wrap: anywhere;
+    min-width: 0;
+}
+
+.landing-hero .subhead {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 34rem;
+    margin: 0 0 calc(var(--grid) * 1.5);
+}
+
+.landing-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+}
+
+.landing-fineprint {
+    margin: var(--grid) 0 0;
+    font-size: 13px;
+    color: var(--ink-faint);
+}
+
+.landing-fineprint a {
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* Three real numbers as a light proof row — its own line above the CTA. */
+.landing-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--grid) calc(var(--grid) * 3.5);
+    margin: 0 0 calc(var(--grid) * 2);
+}
+
+.landing-stat .num {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ink);
+}
+
+.landing-stat .lbl {
+    margin-top: 3px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+}
+
+.landing-foot {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: calc(var(--grid) * 2) 32px calc(var(--grid) * 3);
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.landing-foot a {
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
 }
 
