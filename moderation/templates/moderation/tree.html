@@ -10,7 +10,7 @@
                 <span class="name">{{ node.user.name }}</span>
                 <span class="stats">({{ node.user.action_count }} action{{ node.user.action_count|pluralize }} de modération, {{ node.user.document_count }} document{{ node.user.document_count|pluralize }})</span>
                 {% if node.user.is_staff %}
-                    <span class="pill pill-danger">Admin</span>
+                    <span class="pill is-danger">Admin</span>
                 {% endif %}
             </div>
             {% if node.children %}
@@ -45,7 +45,7 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <div class="card" style="text-align: center; color: var(--ink-faint); padding: 48px 20px;">
+            <div class="card empty-state">
                 Aucune promotion enregistrée.
             </div>
         {% endif %}

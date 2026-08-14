@@ -44,6 +44,18 @@ html { scrollbar-gutter: stable; }
 
 body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: calc(var(--grid) * 2); }
 
+.site-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-content {
+    flex: 1;
+    width: min(calc(100% - 24px), 1320px);
+    margin: 24px auto 0;
+}
+
 :where(.topbar, .site-footer, .main) a { text-decoration: none; color: inherit; }
 .lede { font-style: italic; color: var(--brand-blue); }
 .marker {

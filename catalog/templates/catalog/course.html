@@ -145,8 +145,8 @@
                                data-course-filter-target="query"
                                data-action="input->course-filter#filter">
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 12px; color: var(--ink-faint);">Trier&nbsp;:</span>
+                    <div class="filter-sort">
+                        <span class="filter-sort-label">Trier&nbsp;:</span>
                         <div class="sort-seg">
                             <a href="{% querystring sort=None %}"
                                class="{% if sort == "recent" %}active{% endif %}">Nouveau</a>
@@ -160,13 +160,12 @@
             </div>
         {% endif %}
 
-        <ul style="list-style: none; padding: 0; margin: 0;">
+        <ul class="doc-list">
             {% for document in documents %}
-                <li class="doc-row"
+                <li class="doc-row{% if document.hidden %} is-hidden{% endif %}"
                     data-course-filter-target="filterable"
                     data-filter-key="{{ document.name }}"
-                    data-tags="{{ document.tags.all|join:' ' }}"
-                    {% if document.hidden %}style="opacity: 0.5;"{% endif %}>
+                    data-tags="{{ document.tags.all|join:' ' }}">
                     <div class="doc-vote">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
@@ -183,7 +182,7 @@
                             <path d="m6 9 6 6 6-6"/>
                         </svg>
                     </div>
-                    <a href="{% url 'document_show' document.pk %}" class="pdf-thumb" style="width: 58px; height: 76px;"
+                    <a href="{% url 'document_show' document.pk %}" class="pdf-thumb"
                        {% if document.hidden %}
                            title="Ce document a été caché, il est uniquement visible pour son propriétaire et aux modérateurs"
                        {% endif %}>
@@ -194,7 +193,7 @@
                         {% endif %}
                         <span class="pdf-thumb-pages">{{ document.pages }}p</span>
                     </a>
-                    <a href="{% url 'document_show' document.pk %}" style="display: contents;">
+                    <a href="{% url 'document_show' document.pk %}" class="doc-link">
                         <div class="doc-info">
                             <div class="doc-title">
                                 {% if document.hidden %}🙈{% endif %}
@@ -262,25 +261,25 @@
                     </div>
                 </li>
             {% empty %}
-                <div class="card" style="margin-top: 16px;">
-                    <h3 style="margin-top: 0;">Rentrée 2023-2024&nbsp;: nouveaux cours&nbsp;!</h3>
+                <li class="card course-empty">
+                    <h3>Rentrée 2023-2024&nbsp;: nouveaux cours&nbsp;!</h3>
                     <p>
                         Le programme de cours de l'ULB a parfois beaucoup changé au cours des années.
                         DocHub s'est adapté en renommant des cours et en déplaçant les documents
                         mais il se pourrait que certains documents soient mal rangés.
                         Si tu ne trouves plus des documents des années précédentes,
-                        <a href="{% url 'catalog:finder' slugs='archives' %}" style="color: var(--brand-blue);">
+                        <a href="{% url 'catalog:finder' slugs='archives' %}">
                             regarde dans les archives
                         </a>&nbsp;!
                     </p>
                     <h3>Il n'y a encore rien dans ce cours…</h3>
-                    <p style="margin-bottom: 0;">
+                    <p>
                         Les documents que tu trouves sur DocHub ont été partagés par des étudiant&middot;es comme
                         toi et nous. N'hésite pas à partager tes notes, des questions d'examens ou même juste un
                         scan des questions du dernier TP. C'est grâce à des petits gestes comme ça que DocHub est
                         si complet&nbsp;!
                     </p>
-                </div>
+                </li>
             {% endfor %}
         </ul>
     </div>

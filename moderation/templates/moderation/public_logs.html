@@ -37,9 +37,9 @@
                                     <strong><a href="{% url 'moderation_profile' log.user.netid %}">{{ log.user.netid }}</a></strong>
                                 </td>
                                 <td>
-                                    <span class="pill pill-{{ log.action_color }}">{{ log.action_text }}</span>
+                                    <span class="pill is-{{ log.action_color }}">{{ log.action_text }}</span>
                                     {% if log.details_text %}
-                                        <div style="margin-top: 4px; font-size: 12px; color: var(--ink-faint); font-style: italic;">{{ log.details_text }}</div>
+                                        <div class="mod-log-details">{{ log.details_text }}</div>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -63,7 +63,7 @@
                 {% if logs.has_previous %}
                     <a class="btn btn-sm" href="?page={{ logs.previous_page_number }}">← Précédent</a>
                 {% else %}
-                    <span class="btn btn-sm btn-disabled">← Précédent</span>
+                    <span class="btn btn-sm is-disabled">← Précédent</span>
                 {% endif %}
 
                 <span>Page {{ logs.number }} sur {{ logs.paginator.num_pages }}</span>
@@ -71,7 +71,7 @@
                 {% if logs.has_next %}
                     <a class="btn btn-sm" href="?page={{ logs.next_page_number }}">Suivant →</a>
                 {% else %}
-                    <span class="btn btn-sm btn-disabled">Suivant →</span>
+                    <span class="btn btn-sm is-disabled">Suivant →</span>
                 {% endif %}
             </nav>
         {% endif %}

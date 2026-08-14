@@ -63,6 +63,8 @@
 .footer-credit { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
 .footer-credit a { color: var(--brand-blue); text-decoration: underline wavy; text-decoration-color: var(--highlight); text-underline-offset: 3px; }
 .footer-sticky-note { transform: rotate(-1.2deg); }
+.footer-sticky-note .eyebrow { margin-bottom: 6px; }
+.footer-sticky-copy { font-size: 14px; line-height: 1.4; }
 
 .footer-bottom {
     max-width: 1200px;

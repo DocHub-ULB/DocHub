@@ -17,10 +17,10 @@
             <h1><em class="lede">Gestion</em> des modérateur·trices</h1>
         </div>
 
-        <div class="prose" style="max-width: 720px;">
+        <div class="prose is-wide">
             {% if request.GET.error == 'reason' %}
-                <div class="notice notice-danger">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="color: var(--danger);">
+                <div class="notice is-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                     </svg>
                     <div>Veuillez fournir une raison d'au moins 10 caractères pour justifier le refus.</div>
@@ -41,12 +41,12 @@
             <h2>Demandes en attente</h2>
             <p>Des étudiant·es ont demandé à rejoindre l'équipe de modération. À toi de juger si leur candidature mérite d'être acceptée.</p>
 
-            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px;">
+            <div class="request-list">
                 {% for req in pending_requests %}
                     <div class="card">
-                        <div style="margin-bottom: 10px;">
+                        <div class="request-heading">
                             <strong>{{ req.user.fullname }}</strong>
-                            <span style="color: var(--ink-faint); margin-left: 4px;">{{ req.user.netid }}</span>
+                            <span class="request-netid">{{ req.user.netid }}</span>
                         </div>
 
                         <dl class="meta-list">
@@ -66,51 +66,42 @@
                             </dd>
                             {% if req.comment %}
                                 <dt>Commentaire</dt>
-                                <dd style="font-style: italic;">{{ req.comment }}</dd>
+                                <dd class="request-comment">{{ req.comment }}</dd>
                             {% endif %}
                         </dl>
 
-                        <form method="post" action="{% url 'process_representative_request' req.id %}">
-                            {% csrf_token %}
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <div class="request-actions">
+                            <form method="post" action="{% url 'process_representative_request' req.id %}">
+                                {% csrf_token %}
                                 <button type="submit" name="action" value="accept" class="btn btn-primary btn-sm">Accepter</button>
-                                <button
-                                    type="button"
-                                    class="btn btn-sm"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#reject-form-{{ req.id }}"
-                                    aria-expanded="false"
-                                    aria-controls="reject-form-{{ req.id }}"
-                                >
-                                    Refuser
-                                </button>
-                            </div>
-                            <div class="collapse" id="reject-form-{{ req.id }}" style="margin-top: 10px;">
-                                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                                    <input type="text" name="rejection_reason" class="form-control" style="max-width: 320px;"
-                                           placeholder="Motif de refus (10 caractères min.)" minlength="10">
-                                    <button type="submit" name="action" value="reject" class="btn btn-sm" style="color: var(--danger); border-color: var(--danger);">Confirmer</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                            <details class="reject-request">
+                                <summary class="btn btn-sm">Refuser</summary>
+                                <form method="post" action="{% url 'process_representative_request' req.id %}" class="reject-form">
+                                    {% csrf_token %}
+                                    <input type="text" name="rejection_reason" class="form-control reject-reason"
+                                           placeholder="Motif de refus (10 caractères min.)" minlength="10" required>
+                                    <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">Confirmer</button>
+                                </form>
+                            </details>
+                        </div>
                     </div>
                 {% empty %}
-                    <div class="card" style="color: var(--ink-faint);">
-                        <strong style="display: block; color: var(--ink); margin-bottom: 4px;">Aucune demande en attente</strong>
-                        <span style="font-size: 13px;">Les nouvelles candidatures apparaîtront ici.</span>
+                    <div class="card empty-state">
+                        <strong>Aucune demande en attente</strong>
+                        <small>Les nouvelles candidatures apparaîtront ici.</small>
                     </div>
                 {% endfor %}
             </div>
 
             <h2>Ajouter un·e modérateur·trice</h2>
             <p>Si tu connais le netid d'un·e étudiant·e de confiance, tu peux l'ajouter directement sans qu'une demande soit nécessaire.</p>
-            <form method="post" action="{% url 'moderator_add' %}" style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+            <form method="post" action="{% url 'moderator_add' %}" class="add-moderator-form">
                 {% csrf_token %}
                 <div>
                     <label for="netid" class="form-label">NetID de l'étudiant·e</label>
-                    <input type="text" class="form-control{% if request.GET.error == 'not_found' %} is-invalid{% endif %}"
-                           id="netid" name="netid" placeholder="Ex: blabevue" value="{{ request.GET.netid }}" required
-                           style="width: 260px;">
+                    <input type="text" class="form-control netid-field{% if request.GET.error == 'not_found' %} is-invalid{% endif %}"
+                           id="netid" name="netid" placeholder="Ex: blabevue" value="{{ request.GET.netid }}" required>
                     {% if request.GET.error == 'not_found' %}
                         <div class="invalid-feedback">Aucun·e étudiant·e avec le netid « {{ request.GET.netid }} » n'a été trouvé·e.</div>
                     {% endif %}

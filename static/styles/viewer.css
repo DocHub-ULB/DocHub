@@ -91,7 +91,11 @@
 .viewer-pager-input:focus { outline: none; border-color: var(--accent); }
 .viewer-pager-sep { color: var(--ink-faint); }
 
-.page-wrapper { scroll-margin-top: calc(var(--grid) * 5); }
+.page-wrapper {
+    margin-bottom: 1em;
+    border: 1px solid var(--rule);
+    scroll-margin-top: calc(var(--grid) * 5);
+}
 
 @media (prefers-reduced-motion: reduce) {
     .viewer-pinbar { transition: opacity 120ms linear; transform: translate(-50%, 0); }
@@ -190,22 +194,38 @@
     text-align: center;
 }
 
-.viewer-notice {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: var(--bg-raised);
-    border: 1px solid var(--rule);
-    border-left: 3px solid var(--accent);
-    border-radius: var(--radius);
-    padding: var(--grid) 16px;
-    color: var(--ink-soft);
-    line-height: calc(var(--grid) * 2);
+[data-controller~="viewer"] {
+    .error { display: none; }
+    &[data-viewer-error-value] .error { display: block; }
+
+    .loader {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        margin-top: 20vh;
+        text-align: center;
+
+        .loader-label { color: var(--ink-faint); }
+
+        progress {
+            width: 100%;
+            max-width: 400px;
+            height: 20px;
+            margin-top: 20px;
+            animation: viewer-breathing 2s ease-out infinite;
+        }
+    }
+
+    &[data-viewer-loaded-value] .loader { opacity: 0; transition: opacity 200ms ease-out; }
 }
 
-.viewer-notice.is-danger { border-left-color: var(--danger); }
-.viewer-notice svg { flex-shrink: 0; margin-top: 4px; color: var(--ink-faint); }
-.viewer-notice a { color: var(--brand-blue); font-weight: 500; }
+@keyframes viewer-breathing {
+    0%, 60%, 100% { transform: scale(0.9); }
+    25% { transform: scale(1); }
+}
 
 @media (max-width: 640px) {
     .viewer-bar-actions { width: 100%; }
@@ -215,4 +235,11 @@
 /* Give the PDF vertical space; only the slim pinbar stays fixed. */
 body:has(.viewer-bar) .topbar {
     position: static;
+}
+
+#reportDialog {
+    width: 90vw;
+    max-width: 800px;
+
+    &::backdrop { background: rgb(0 0 0 / 50%); }
 }

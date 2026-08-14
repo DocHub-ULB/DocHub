@@ -1,7 +1,8 @@
-/* Entry point. Remove the Bootstrap import/layer once legacy pages are redesigned. */
+/* Remove both compatibility imports once the legacy pages are redesigned. */
 @layer bootstrap, foundation, components, pages;
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css") layer(bootstrap);
+@import url("legacy.css") layer(bootstrap);
 
 @import url("foundation.css") layer(foundation);
 @import url("navigation.css") layer(components);

@@ -10,20 +10,20 @@
             </div>
         {% else %}
             <section class="home-hero">
-                <div class="hero-eyebrow" style="margin-bottom: var(--grid); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div class="hero-eyebrow">
                     <span>{% now "l j F" %} · semaine {% now "W" %}</span>
                 </div>
                 <h1>
                     Bonjour <em class="marker">{{ user.first_name }}</em><br>
                     {% with n=recent_docs|length %}
                         {% if n == 1 %}
-                            <span style="color: var(--ink-soft);">1 nouveau document</span> dans tes cours.
+                            <span>1 nouveau document</span> dans tes cours.
                         {% else %}
-                            <span style="color: var(--ink-soft);">{{ n }} nouveaux documents</span> dans tes cours.
+                            <span>{{ n }} nouveaux documents</span> dans tes cours.
                         {% endif %}
                     {% endwith %}
                 </h1>
-                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: calc(var(--grid) * 2);">
+                <div class="home-hero-actions">
                     <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
                         Partage un document
@@ -34,7 +34,7 @@
                     </a>
                 </div>
                 <div class="sticky-note hero-aside" aria-hidden="true">
-                    <div class="eyebrow" style="color: inherit; opacity: 0.7; margin-bottom: 4px; font-size: 9.5px;">
+                    <div class="eyebrow">
                         post-it du jour
                     </div>
                     «&nbsp;N'importe qui peut ajouter un pdf. Toi aussi&nbsp;!&nbsp;»
@@ -42,22 +42,22 @@
             </section>
 
             {% if request.user.is_moderator and not request.user.moderator_welcome_dismissed %}
-                <div class="alert alert-success d-flex justify-content-between align-items-start gap-3" role="alert">
-                    <div class="flex-grow-1">
+                <div class="notice is-success announcement" role="status">
+                    <div class="announcement-body">
                         <strong>🎉 Félicitations&nbsp;!</strong> Tu es maintenant modérateur·trice sur DocHub.
                         {% if request.user.promoted_by %}
                             {{ request.user.promoted_by.fullname }} t'a accordé ces droits.
                         {% endif %}
                         Tu peux désormais modifier, masquer et mieux organiser les documents.
-                        <a href="{% url "moderation_about" %}" class="alert-link">Découvre ce que permet la modération</a>.
+                        <a href="{% url "moderation_about" %}">Découvre ce que permet la modération</a>.
                     </div>
                     <form method="post" action="{% url 'moderator_banner_hide' %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn-close" aria-label="Fermer"></button>
+                        <button type="submit" class="dismiss-button" aria-label="Fermer"></button>
                     </form>
                 </div>
             {% elif not request.user.is_moderator and not request.user.is_staff %}
-                <div class="alert alert-info" role="alert">
+                <div class="notice announcement" role="status">
                     Tu es délégué·e d'année, délégué·e cours de ton cercle ou dans un bureau étudiant·e&nbsp;?
                     Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Demande
                         les droits</a> ou <a href="{% url "moderation_about" %}">découvre comment fonctionne la modération</a>.
@@ -65,7 +65,7 @@
             {% endif %}
 
             {% if following_course %}
-                <section style="margin: calc(var(--grid) * 3) 0 calc(var(--grid) * 4);">
+                <section class="followed-courses">
                     <div class="section-head">
                         <div>
                             <h2>Tes cours</h2>
@@ -96,11 +96,11 @@
             {% endif %}
 
             {% if recent_courses %}
-                <section style="margin-bottom: calc(var(--grid) * 3);">
-                    <div class="eyebrow" style="margin-bottom: var(--grid);">Vus récemment</div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <section class="recent-courses">
+                    <div class="eyebrow">Vus récemment</div>
+                    <div class="recent-course-list">
                         {% for course in recent_courses %}
-                            <a class="pill pill-mono" style="padding: 6px 12px;" href="{{ course.get_absolute_url }}">
+                            <a class="pill pill-mono" href="{{ course.get_absolute_url }}">
                                 {{ course.slug|upper }}
                             </a>
                         {% endfor %}
@@ -117,14 +117,14 @@
                     </div>
                     {% for document in recent_docs %}
                         <a class="activity-row" href="{% url 'document_show' document.pk %}">
-                            <div class="pdf-thumb" style="width: 44px; height: 56px;">
+                            <div class="pdf-thumb">
                                 {% if document.thumbnail %}
                                     <img src="{{ document.thumbnail.url }}" alt="">
                                 {% else %}
                                     <img src="{% static "images/default_page.webp" %}" alt="">
                                 {% endif %}
                             </div>
-                            <div style="min-width: 0;">
+                            <div class="activity-body">
                                 <div class="activity-title">
                                     {{ document.name|capfirst }}
                                     {% if document.staff_pick %}
@@ -132,27 +132,26 @@
                                     {% endif %}
                                 </div>
                                 <div class="activity-meta">
-                                    <span style="color: var(--ink-soft); font-weight: 500;">{{ document.user.name }}</span>
+                                    <strong>{{ document.user.name }}</strong>
                                     a déposé dans
-                                    <span style="font-family: var(--font-mono); color: var(--ink-soft);">{{ document.course.slug|upper }}</span>
+                                    <span class="activity-course">{{ document.course.slug|upper }}</span>
                                     &middot; {{ document.created|timesince }}
                                 </div>
                             </div>
                         </a>
                     {% empty %}
-                        <p style="color: var(--ink-faint);">Rien de neuf pour l'instant dans tes cours.</p>
+                        <p class="activity-empty">Rien de neuf pour l'instant dans tes cours.</p>
                     {% endfor %}
                 </section>
                 <aside class="sidebar">
                     {% if staff_pick %}
                         <div class="card staff-pick-card">
-                            <div class="eyebrow" style="color: inherit;">✦ Staff pick de la semaine</div>
+                            <div class="eyebrow">✦ Staff pick de la semaine</div>
                             <div class="staff-pick-title">{{ staff_pick.name }}</div>
-                            <div style="font-size: 13px; margin-bottom: var(--grid); opacity: 0.85;">
+                            <div class="staff-pick-meta">
                                 par {{ staff_pick.user.name }} &middot; {{ staff_pick.views }} vues
                             </div>
-                            <a class="btn btn-sm" style="background: var(--ink); color: #fff;"
-                               href="{% url 'document_show' staff_pick.pk %}">
+                            <a class="btn btn-sm" href="{% url 'document_show' staff_pick.pk %}">
                                 Voir le document →
                             </a>
                         </div>

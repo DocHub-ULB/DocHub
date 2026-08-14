@@ -10,8 +10,7 @@
     <li>
         <a title="{{ course.name }}"
            href="{% url 'catalog:course_show' course.slug %}"
-           class="search-result-row"
-           style="{% if course.is_archive %}opacity: 0.7;{% endif %}"
+           class="search-result-row{% if course.is_archive %} is-archived{% endif %}"
         >
             <span class="pill pill-mono">
                 {{ course.slug|upper }}
@@ -23,7 +22,7 @@
 {% empty %}
     <li>
         <div class="search-result-empty">
-            <div style="font-weight: 500; color: var(--ink);">Aucun cours trouvé</div>
+            <strong>Aucun cours trouvé</strong>
             <small>Essaie avec d'autres mots-clés.</small>
         </div>
     </li>

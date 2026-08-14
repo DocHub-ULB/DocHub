@@ -20,11 +20,11 @@
 
         <div class="page-head">
             <h1><em class="lede">Historique</em> de modération</h1>
-            <p style="margin-bottom: 2px;">
+            <p class="page-head-name">
                 <a href="{% url 'document_show' document.pk %}">{{ document.name }}</a>
                 — {{ document.course.slug|upper }} {{ document.course.name }}
             </p>
-            <p style="font-size: 12px;">
+            <p class="page-head-note">
                 Déposé par {{ document.user.netid }} · {{ document.date|date:"d/m/Y" }}
             </p>
         </div>
@@ -48,13 +48,13 @@
                                     <a href="{% url 'moderation_profile' log.user.netid %}">{{ log.user.netid }}</a>
                                 </td>
                                 <td>
-                                    <span class="pill pill-{{ log.action_color }}">{{ log.document_action_text }}</span>
+                                    <span class="pill is-{{ log.action_color }}">{{ log.document_action_text }}</span>
                                 </td>
-                                <td style="font-size: 13px; color: var(--ink-faint);">
+                                <td class="mod-log-change">
                                     {% if log.target_field == "reupload" %}
                                         {{ log.new_value }}
                                     {% elif log.target_field != "hidden" and log.target_field != "staff_pick" and log.old_value and log.new_value %}
-                                        <span style="text-decoration: line-through;">{{ log.old_value|truncatewords:15 }}</span>
+                                        <span class="mod-log-old">{{ log.old_value|truncatewords:15 }}</span>
                                         &rarr; {{ log.new_value|truncatewords:15 }}
                                     {% endif %}
                                 </td>

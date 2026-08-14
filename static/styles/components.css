@@ -22,6 +22,8 @@
 .btn-primary:hover { background: var(--ink-soft); color: var(--bg-raised); }
 .btn-accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .btn-accent:hover { background: color-mix(in srgb, var(--accent) 90%, black); color: var(--accent-ink); }
+.btn-danger { color: var(--danger); border-color: var(--danger); }
+.btn.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 .btn-sm { min-height: calc(var(--grid) * 2); padding: 0 10px; font-size: 13px; }
 
 .card {
@@ -29,6 +31,15 @@
     border: 1px solid var(--rule);
     border-radius: var(--radius);
     padding: var(--grid);
+}
+
+.empty-state {
+    padding: calc(var(--grid) * 3) 20px;
+    color: var(--ink-faint);
+    text-align: center;
+
+    strong { display: block; margin-bottom: 4px; color: var(--ink); }
+    small { font-size: 13px; }
 }
 
 .pill {
@@ -47,6 +58,69 @@
 
 .pill-mono { font-family: var(--font-mono); }
 .chip-accent { background: var(--highlight-soft); color: var(--highlight-ink); border: 1px solid var(--highlight); }
+.pill.is-success { color: var(--positive); background: color-mix(in srgb, var(--positive) 16%, var(--bg-raised)); }
+.pill.is-danger { color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, var(--bg-raised)); }
+.pill.is-warning { color: var(--negative); background: color-mix(in srgb, var(--negative) 14%, var(--bg-raised)); }
+.pill.is-info { color: var(--accent); background: var(--accent-soft); }
+
+.notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: var(--grid) 16px;
+    color: var(--ink-soft);
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    font-size: 14px;
+    line-height: calc(var(--grid) * 2);
+
+    > svg { flex-shrink: 0; margin-top: 3px; color: var(--ink-faint); }
+    a { color: var(--brand-blue); font-weight: 500; }
+    &.is-danger { border-left-color: var(--danger); }
+    &.is-danger > svg { color: var(--danger); }
+    &.is-success { border-left-color: var(--positive); }
+    &.is-success > svg { color: var(--positive); }
+}
+
+.announcement {
+    margin-bottom: var(--grid);
+
+    .announcement-body { flex: 1; }
+}
+
+.dismiss-button {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+
+    &::before { content: "×"; }
+}
+
+.form-label { display: block; margin-bottom: 6px; color: var(--ink-soft); font-size: 13px; font-weight: 500; }
+
+:is(.form-control, .form-select, textarea) {
+    padding: calc(var(--grid) / 2) 12px;
+    color: var(--ink);
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    font: 14px var(--font-body);
+
+    &:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+}
+
+.form-control.is-invalid { border-color: var(--danger); }
+.invalid-feedback { margin-top: 4px; color: var(--danger); font-size: 12px; }
+.form-check-input { accent-color: var(--accent); }
+.form-text { color: var(--ink-faint); font-size: 12px; }
 
 .pdf-thumb {
     border: 1px solid var(--rule);

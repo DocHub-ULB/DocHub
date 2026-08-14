@@ -153,6 +153,7 @@
 }
 
 .search-result-row:hover { background: var(--bg-sunk); }
+.search-result-row.is-archived { opacity: 0.7; }
 .search-result-row .pill { flex-shrink: 0; }
 
 .search-result-row .search-result-name {
@@ -174,7 +175,13 @@
     margin-bottom: 4px;
 }
 
-.search-result-empty { text-align: center; padding: 16px 12px; color: var(--ink-faint); }
+.search-result-empty {
+    padding: 16px 12px;
+    color: var(--ink-faint);
+    text-align: center;
+
+    strong { display: block; color: var(--ink); font-weight: 500; }
+}
 
 .avatar {
     width: 36px;

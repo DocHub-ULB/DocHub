@@ -1,0 +1,4 @@
+/* Temporary helpers used only by pages that still rely on Bootstrap. */
+a .hover-underline { text-decoration: underline; text-decoration-color: transparent; transition: text-decoration-color 150ms ease; }
+a:hover .hover-underline { text-decoration-color: currentColor; }
+a:hover .hover-translate { transform: translateX(-0.2em); transition: transform 150ms ease; }

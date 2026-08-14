@@ -18,23 +18,23 @@
             <span class="current">{{ profile_user.netid }}</span>
         </nav>
 
-        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-            <div class="page-head" style="margin-bottom: 0;">
+        <div class="profile-head">
+            <div class="page-head is-compact">
                 <h1><em class="lede">{{ profile_user.netid }}</em></h1>
-                <p style="margin-bottom: 2px;">{{ profile_user.name }}</p>
+                <p class="page-head-name">{{ profile_user.name }}</p>
                 {% if profile_user.promoted_by %}
-                    <p style="font-size: 12px;">Promu·e par <a href="{% url 'moderation_profile' profile_user.promoted_by.netid %}">{{ profile_user.promoted_by.netid }}</a></p>
+                    <p class="page-head-note">Promu·e par <a href="{% url 'moderation_profile' profile_user.promoted_by.netid %}">{{ profile_user.promoted_by.netid }}</a></p>
                 {% endif %}
             </div>
             {% if request.user.is_staff and profile_user.is_moderator %}
                 <form method="post" action="{% url 'moderator_remove' profile_user.id %}" data-turbo-confirm="Es-tu sûr de vouloir retirer les droits de {{ profile_user.netid }} ?">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-sm" style="color: var(--danger);">Retirer les droits</button>
+                    <button type="submit" class="btn btn-sm btn-danger">Retirer les droits</button>
                 </form>
             {% endif %}
         </div>
 
-        <div class="card" style="margin-top: 24px;">
+        <div class="card mod-card">
             <div class="table-wrap">
                 <table class="mod-table">
                     <thead>
@@ -49,9 +49,9 @@
                             <tr>
                                 <td class="mod-table-date">{{ log.timestamp|date:"d/m/Y à H:i" }}</td>
                                 <td>
-                                    <span class="pill pill-{{ log.action_color }}">{{ log.action_text }}</span>
+                                    <span class="pill is-{{ log.action_color }}">{{ log.action_text }}</span>
                                     {% if log.details_text %}
-                                        <div style="margin-top: 4px; font-size: 12px; color: var(--ink-faint); font-style: italic;">{{ log.details_text }}</div>
+                                        <div class="mod-log-details">{{ log.details_text }}</div>
                                     {% endif %}
                                 </td>
                                 <td>
