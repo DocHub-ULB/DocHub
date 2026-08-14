@@ -1,0 +1,72 @@
+:root {
+    --bg: #f4f6fa;               /* cool off-white paper, faint blue tint */
+    --bg-raised: #ffffff;        /* clean white cards/topbar */
+    --bg-sunk: #e8ecf3;
+    --ink: #1b1e24;              /* cool near-black */
+    --ink-soft: #4c535d;
+    --ink-faint: #828b98;        /* cool grey */
+    --rule: #dde2ea;
+    --rule-strong: #c1c8d3;
+    --paper-dot: rgba(90, 115, 150, 0.12);   /* ambient paper texture, cool */
+
+    --brand-blue: #0d6efd;       /* DocHub's recognisable royal blue */
+    --brand-blue-soft: #6ea8fe;
+    --brand-blue-tint: #cfe2ff;
+    --accent: #0d6efd;
+    --accent-soft: #cfe2ff;
+    --accent-ink: #ffffff;
+
+    --highlight: #ffd84d;
+    --highlight-soft: #fff2b8;
+    --highlight-ink: #5a4410;
+
+    --positive: #6f8c3a;
+    --negative: #c55c3a;
+    --danger: #b43a2a;
+
+    --font-display: "Instrument Serif", "Times New Roman", serif;
+    --font-body: "DM Sans", -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    --font-hand: "Caveat", cursive;
+
+    --radius-sm: 4px;
+    --radius: 6px;
+    --radius-lg: 10px;
+
+    /* Spacing unit; this is not a baseline grid. */
+    --grid: 14px;
+
+    --shadow: 0 1px 0 rgba(43, 35, 26, 0.06), 0 4px 14px -6px rgba(43, 35, 26, 0.12);
+    --shadow-card: 0 1px 0 rgba(43, 35, 26, 0.05), 0 8px 22px -10px rgba(43, 35, 26, 0.14);
+}
+
+html { scrollbar-gutter: stable; }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: calc(var(--grid) * 2); }
+
+:where(.topbar, .site-footer, .main) a { text-decoration: none; color: inherit; }
+.lede { font-style: italic; color: var(--brand-blue); }
+.marker {
+    font-style: italic;
+    padding: 0 6px;
+    background: linear-gradient(
+        transparent 60%,
+        var(--highlight) 60%,
+        var(--highlight) 92%,
+        transparent 92%
+    );
+}
+
+:is(.eyebrow, .hero-eyebrow) { color: var(--ink-faint); text-transform: uppercase; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; }
+.hero-eyebrow { font-size: 12px; letter-spacing: 0.14em; }
+
+.main {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    padding: calc(var(--grid) / 2) 32px calc(var(--grid) * 8);
+    position: relative;
+    background-image: radial-gradient(var(--paper-dot) 1px, transparent 1.6px);
+    background-size: 22px 22px;
+}

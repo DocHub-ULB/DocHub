@@ -1,0 +1,81 @@
+.footer-doodle {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 360px;
+    height: 200px;
+    color: var(--brand-blue);
+    opacity: 0.06;
+    pointer-events: none;
+}
+
+.site-footer {
+    margin-top: 80px;
+    border-top: 1px solid var(--rule);
+    background: var(--bg-raised);
+    padding: 56px 32px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 48px; }
+
+@media (max-width: 900px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+    .footer-grid { grid-template-columns: 1fr; }
+}
+
+.footer-grid h3 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
+}
+
+.footer-grid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-grid a { color: var(--ink-soft); font-size: 14px; }
+.footer-grid a:hover { color: var(--ink); }
+
+.footer-brand {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+}
+
+.footer-tagline { font-size: 13.5px; color: var(--ink-soft); max-width: 32ch; line-height: 1.5; margin: 0 0 10px; }
+.footer-credit { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
+.footer-credit a { color: var(--brand-blue); text-decoration: underline wavy; text-decoration-color: var(--highlight); text-underline-offset: 3px; }
+.footer-sticky-note { transform: rotate(-1.2deg); }
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    border-top: 1px dashed var(--rule);
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.footer-bottom a { color: var(--ink-faint); }
+.footer-bottom a:hover { color: var(--ink); }

@@ -4,12 +4,14 @@
 # Design — DocHub
 
 Locked design system for the DocHub visual refresh. This is the source of
-truth: `static/styles/style.css` `:root` implements it, and future work (the
+truth: `static/styles/foundation.css` `:root` implements it, and future work (the
 remaining screens, any contributor) should defer to it. Amend intentionally —
 the file is the rule, not a snapshot.
 
-Bootstrap 5.3 ships in a `layer(bootstrap)`; the rules in `style.css` win over
-it. Colours are plain hex on purpose — no build step, readable by newcomers.
+Bootstrap 5.3 ships in a low-priority `layer(bootstrap)` from the small
+`style.css` entry point. The redesign's foundation, component, and page layers
+win over it. Colours are plain hex on purpose — no build step, readable by
+newcomers.
 
 ## System
 - Genre · editorial voice (serif display) on a modern-minimal cool surface
@@ -18,7 +20,7 @@ it. Colours are plain hex on purpose — no build step, readable by newcomers.
 - Axes · light paper / high-contrast serif display / cyan-blue accent
 - Lineage · production DocHub was Bootstrap royal-blue on cool white with serif headings; this keeps that identity and adds the "made by students" character.
 
-## Tokens (`static/styles/style.css` `:root` is the source of truth)
+## Tokens (`static/styles/foundation.css` `:root` is the source of truth)
 ```css
 :root {
   /* Surface — cool, faint blue tint. Paper is light (L≈97%). */
@@ -92,7 +94,7 @@ it. Colours are plain hex on purpose — no build step, readable by newcomers.
 - Reduced-motion fallback · ≤150ms opacity crossfade.
 
 ## Provenance
-- Source · local file (`static/styles/style.css` + `design_handoff_dochub_refresh/`), user's own work
+- Source · local stylesheets (`static/styles/` + `design_handoff_dochub_refresh/`), user's own work
 - Extracted · 2026-08-11 via `hallmark study`
 - Confidence · tokens are exact (read from shipped CSS); fonts are exact (declared in `base.html`). Reconciled from the Papier handoff: blue reverted to production royal `#0d6efd`, neutrals cooled from warm cream, notebook grid replaced by dot texture.
 
@@ -102,10 +104,9 @@ it. Colours are plain hex on purpose — no build step, readable by newcomers.
 - Doodles stay low-contrast, `aria-hidden`, non-interactive — texture, not UI.
 - Document viewer keeps the **compact action bar above the PDF**, not a sidebar (long-PDF fix). The bar scrolls away normally; a slim **`.viewer-pinbar`** (title + download) then **slides down** as a fixed overlay so download stays reachable — the `sticky-bar` controller toggles it. It's a fixed overlay (no reserved space) precisely so nothing below reflows and slow scrolling never jumps. On the viewer the **topbar is deliberately non-sticky** (`body:has(.viewer-bar) .topbar`) so it scrolls away and the PDF keeps the vertical space.
 - Do **not** reintroduce a baseline-locked grid; `--grid` is a spacing unit only.
-- Cleanup debt: 11 inert `.baseline-grid` rules and a half-migrated `n`/`debug-layout` diagnostic remain in `style.css` — remove in a dedicated pass.
 
 ## Exports
-`static/styles/style.css` `:root` is the source of truth (plain hex, no build
+`static/styles/foundation.css` `:root` is the source of truth (plain hex, no build
 step — the project's intentional constraint). For Tailwind `@theme`, DTCG
 `tokens.json`, or shadcn/ui variables, ask *"extend design.md with <format>
 exports"*.

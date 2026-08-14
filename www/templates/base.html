@@ -151,8 +151,7 @@
         {% block head %}{% endblock %}
     </head>
 
-    {# Add ?debug_layout=1 to expose the CSS baseline/box diagnostics. #}
-    <body class="d-flex flex-column min-vh-100{% if debug and request.GET.debug_layout %} debug-layout{% endif %}">
+    <body class="d-flex flex-column min-vh-100">
         {% block navbar %}
             {% include "navbar.html" %}
         {% endblock navbar %}

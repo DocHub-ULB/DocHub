@@ -5,7 +5,7 @@
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
 {% block content %}
-    <div class="main baseline-grid" data-controller="course-filter">
+    <div class="main" data-controller="course-filter">
         <nav class="breadcrumb">
             <a href="{% url 'index' %}">Accueil</a>
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"

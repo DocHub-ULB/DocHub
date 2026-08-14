@@ -1,0 +1,165 @@
+.home-hero {
+    position: relative;
+    isolation: isolate;
+    padding: calc(var(--grid) * 1.5) 0 calc(var(--grid) * 2);
+
+    h1 {
+        margin: 0 0 var(--grid);
+        font: 400 64px/calc(var(--grid) * 6) var(--font-display);
+        letter-spacing: -0.02em;
+    }
+
+    .hero-aside {
+        position: absolute;
+        top: 22px;
+        right: 0;
+        width: 168px;
+        color: var(--highlight-ink);
+        font: 15px/1.3 var(--font-display);
+        transform: rotate(2.5deg);
+    }
+
+    @media (max-width: 1100px) {
+        .hero-aside { display: none; }
+    }
+
+    @media (max-width: 700px) {
+        h1 { font-size: 40px; line-height: calc(var(--grid) * 4); }
+
+        &::before {
+            background-image:
+            linear-gradient(
+                160deg,
+                var(--bg) 10%,
+                color-mix(in srgb, var(--bg) 82%, transparent) 55%,
+                color-mix(in srgb, var(--bg) 62%, transparent) 100%
+            ),
+            url("../images/campus-hero.webp");
+            background-position: center, 72% 22%;
+        }
+    }
+}
+
+.section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: var(--grid);
+
+    h2 { margin: 0; font: 400 34px/calc(var(--grid) * 3) var(--font-display); letter-spacing: -0.015em; }
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--grid);
+
+    @media (max-width: 1000px) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.course-card {
+    display: block;
+    color: var(--ink);
+
+    &:hover { border-color: var(--rule-strong); }
+    .course-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--grid); }
+    .course-card-name { margin-bottom: var(--grid); font: 500 17px/calc(var(--grid) * 2) var(--font-display); }
+    .course-card-meta { display: flex; align-items: center; justify-content: space-between; color: var(--ink-faint); font-size: 12px; }
+}
+
+.course-card-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: calc(var(--grid) * 9);
+    padding: var(--grid);
+    color: var(--ink-faint);
+    background: transparent;
+    border: 2px dashed var(--rule);
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+
+    &:hover { color: var(--ink-soft); border-color: var(--rule-strong); }
+}
+
+.activity-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: var(--grid) 4px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+
+    &:hover { background: var(--bg-sunk); }
+    .activity-title {
+        overflow: hidden;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: calc(var(--grid) * 2);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .activity-meta { margin-top: 0; color: var(--ink-faint); font-size: 12px; }
+}
+
+.staff-pick-badge {
+    margin-left: 8px;
+    padding: 1px 7px;
+    color: var(--brand-blue);
+    background: var(--accent-soft);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sidebar { position: sticky; top: 90px; display: flex; flex-direction: column; gap: calc(var(--grid) * 2); }
+
+.staff-pick-card {
+    color: var(--highlight-ink);
+    background: var(--highlight-soft);
+    border-color: var(--highlight);
+
+    .staff-pick-title { margin: var(--grid) 0; font: 500 22px/calc(var(--grid) * 2) var(--font-display); }
+}
+
+.tip-card {
+    position: relative;
+    overflow: hidden;
+    padding: var(--grid) 16px;
+    color: var(--ink-soft);
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius);
+    font-size: 13px;
+    line-height: calc(var(--grid) * 2);
+
+    .doodle {
+        position: absolute;
+        right: -10px;
+        bottom: -14px;
+        width: 70px;
+        height: 70px;
+        color: var(--brand-blue);
+        opacity: 0.08;
+        pointer-events: none;
+    }
+}
+
+.home-columns {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    align-items: start;
+    gap: 40px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        gap: calc(var(--grid) * 3);
+
+        .sidebar { position: static; }
+    }
+}
