@@ -1248,6 +1248,347 @@ body.debug-layout .main :where(.card, .btn, button, input, select, textarea) {
     gap: 6px;
 }
 
+/* ============ document viewer ============ */
+
+/* Compact action bar above the PDF (not a sidebar — long PDFs used to push
+   a sidebar out of view). Opaque card so the dot texture can't bleed through.
+   It scrolls away normally; the slim .viewer-pinbar below takes over. */
+.viewer-bar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px 20px;
+    flex-wrap: wrap;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: var(--grid) 18px;
+    margin-bottom: calc(var(--grid) * 1.5);
+}
+
+/* Rounded pill that floats down from the top once the full bar has scrolled
+   away, so download stays reachable. It's a fixed overlay — no reserved space,
+   so nothing below reflows and slow scrolling never jumps. Centred via
+   translateX(-50%); the vertical slide rides on the same transform. */
+.viewer-pinbar {
+    position: fixed;
+    top: var(--grid);
+    left: 50%;
+    z-index: 15;
+    max-width: calc(100% - var(--grid) * 2);
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    box-shadow: var(--shadow-card);
+    transform: translate(-50%, calc(-100% - var(--grid)));
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.viewer-pinbar.is-visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.viewer-pinbar-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--grid);
+    padding: 6px 6px 6px 20px;
+}
+
+/* Pill-shaped download to sit cleanly inside the rounded container. */
+.viewer-pinbar .btn {
+    border-radius: 999px;
+}
+
+.viewer-pinbar-title {
+    min-width: 0;
+    max-width: 340px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: calc(var(--grid) * 2);
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.viewer-pinbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Page indicator + jump control living inside the pinbar pill. */
+.viewer-pager {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--ink-soft);
+}
+
+.viewer-pager-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--grid) * 2);
+    height: calc(var(--grid) * 2);
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+
+.viewer-pager-step:hover {
+    background: var(--bg-sunk);
+    color: var(--ink);
+}
+
+.viewer-pager-input {
+    width: calc(var(--grid) * 2.5);
+    padding: 2px 4px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--ink);
+    font: inherit;
+    text-align: center;
+}
+
+.viewer-pager-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.viewer-pager-sep {
+    color: var(--ink-faint);
+}
+
+/* Keep a jumped-to page clear of the fixed pinbar pill overhead. */
+.page-wrapper {
+    scroll-margin-top: calc(var(--grid) * 5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .viewer-pinbar {
+        transition: opacity 120ms linear;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* On phones the title drops and the pill hugs the download button. */
+@media (max-width: 520px) {
+    .viewer-pinbar-inner {
+        padding: 6px;
+    }
+
+    .viewer-pinbar-title {
+        display: none;
+    }
+}
+
+.viewer-bar-info {
+    min-width: 0;
+}
+
+.viewer-title {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+
+.viewer-title .staff-pick-badge {
+    transform: translateY(-3px);
+}
+
+.viewer-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.viewer-meta strong {
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.viewer-meta .sep {
+    color: var(--rule-strong);
+}
+
+/* Inline view/download counts and tags live in the meta line. */
+.viewer-meta svg {
+    vertical-align: -2px;
+    margin-right: 3px;
+}
+
+.viewer-meta .viewer-meta-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: 4px;
+}
+
+/* One shared height so the vote control and every button line up. */
+.viewer-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.viewer-bar-actions .btn {
+    min-height: calc(var(--grid) * 3);
+}
+
+/* Icon-only buttons (edit, history, flag) — square, same height as the rest. */
+.viewer-bar-actions .btn-icon {
+    width: calc(var(--grid) * 3);
+    padding: 0;
+}
+
+/* Segmented up/down vote control. */
+.vote-widget {
+    display: inline-flex;
+    align-items: stretch;
+    min-height: calc(var(--grid) * 3);
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+}
+
+.vote-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 9px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.vote-btn svg {
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vote-btn:hover {
+    background: var(--bg-sunk);
+}
+
+.vote-btn.is-up:hover svg {
+    transform: translateY(-2px);
+}
+
+.vote-btn.is-down:hover svg {
+    transform: translateY(2px);
+}
+
+/* On cast, tint softly and colour the icon/count — matching the doc-row votes,
+   not a heavy solid fill (the vote hues are warm and off-palette on purpose). */
+.vote-btn.is-up.active {
+    color: var(--positive);
+    background: color-mix(in srgb, var(--positive) 14%, var(--bg-raised));
+}
+
+.vote-btn.is-up.active:hover {
+    background: color-mix(in srgb, var(--positive) 22%, var(--bg-raised));
+}
+
+.vote-btn.is-down.active {
+    color: var(--negative);
+    background: color-mix(in srgb, var(--negative) 14%, var(--bg-raised));
+}
+
+.vote-btn.is-down.active:hover {
+    background: color-mix(in srgb, var(--negative) 22%, var(--bg-raised));
+}
+
+/* The PDF render column. Renamed from .main so it doesn't clash with the page
+   shell; the Stimulus targets (renderer, loader) live inside it. */
+.pdf-stage {
+    position: relative;
+    min-height: 320px;
+    text-align: center;
+}
+
+/* Inline notice for unconvertible / error / processing states. */
+.viewer-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: var(--grid) 16px;
+    color: var(--ink-soft);
+    line-height: calc(var(--grid) * 2);
+}
+
+.viewer-notice.is-danger {
+    border-left-color: var(--danger);
+}
+
+.viewer-notice svg {
+    flex-shrink: 0;
+    margin-top: 4px;
+    color: var(--ink-faint);
+}
+
+.viewer-notice a {
+    color: var(--brand-blue);
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .viewer-bar-actions {
+        width: 100%;
+    }
+
+    .viewer-title {
+        font-size: 24px;
+    }
+}
+
+/* On the viewer, the topbar is NOT sticky — it scrolls away so the PDF gets the
+   vertical space, and only the slim pinbar stays pinned. */
+body:has(.viewer-bar) .topbar {
+    position: static;
+}
+
 /* ============ footer ============ */
 
 .site-footer {

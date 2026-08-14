@@ -26,6 +26,7 @@ JS libs only when necessary
 - Use `verbose_name` for user-facing model fields
 - Follow Django naming: models in PascalCase, fields/methods in snake_case
 - Use `blank=True, default=""` for optional text fields
+- When writing commit messages, use STE100 english
 
 ## Text Tone & User-Facing Content
 The application uses a **friendly, informal, student-to-student tone** in all user-facing text:

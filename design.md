@@ -100,7 +100,7 @@ it. Colours are plain hex on purpose — no build step, readable by newcomers.
 - Cards/rows on the dotted `.main` must stay **opaque** — dots must not bleed through them.
 - **Caveat is quarantined** to taglines/doodles. It must never label real UI.
 - Doodles stay low-contrast, `aria-hidden`, non-interactive — texture, not UI.
-- Document viewer keeps the **compact action bar above the PDF**, not a sidebar (long-PDF fix).
+- Document viewer keeps the **compact action bar above the PDF**, not a sidebar (long-PDF fix). The bar scrolls away normally; a slim **`.viewer-pinbar`** (title + download) then **slides down** as a fixed overlay so download stays reachable — the `sticky-bar` controller toggles it. It's a fixed overlay (no reserved space) precisely so nothing below reflows and slow scrolling never jumps. On the viewer the **topbar is deliberately non-sticky** (`body:has(.viewer-bar) .topbar`) so it scrolls away and the PDF keeps the vertical space.
 - Do **not** reintroduce a baseline-locked grid; `--grid` is a spacing unit only.
 - Cleanup debt: 11 inert `.baseline-grid` rules and a half-migrated `n`/`debug-layout` diagnostic remain in `style.css` — remove in a dedicated pass.
 
