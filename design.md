@@ -75,8 +75,8 @@ newcomers.
 - Headings are always roman. Italic survives only as emphasis inside a heading or as body emphasis.
 
 ## Components
-- Nav · N1b masthead — brand-left, centre search with ⌘K chip, actions-right ("Déposer" blue button + initials avatar). Sticky, white, hairline bottom rule.
-- Footer · Ft3 index columns + one Ft5 statement column (tilted yellow sticky-note CTA).
+- Nav · N1b masthead — brand-left, centre search with ⌘K chip, actions-right ("Déposer" blue button). Sticky, white, hairline bottom rule.
+- Footer · Ft3 index columns + one Ft5 statement column (tilted yellow sticky-note CTA), with account utilities (admin and sign-out) in the bottom rail.
 - Cards / list rows · `--bg-raised` or `--bg`, opaque, `--radius`, `--shadow-card`, `--rule` hairlines.
 - Votes · up/down arrows, `--positive` / `--negative` on cast.
 

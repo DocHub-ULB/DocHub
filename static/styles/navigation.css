@@ -1,3 +1,4 @@
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 */
 .topbar {
     position: sticky;
     top: 0;
@@ -9,7 +10,8 @@
         max-width: 1280px;
         margin: 0 auto;
         padding: 14px 32px;
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 540px) minmax(0, 1fr);
         align-items: center;
         gap: 20px;
     }
@@ -68,7 +70,7 @@
 }
 
 .search-bar {
-    flex: 1;
+    width: 100%;
     max-width: 540px;
     position: relative;
 
@@ -105,6 +107,14 @@
         border-radius: 4px;
         background: var(--bg);
     }
+}
+
+.topbar-actions {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
 }
 
 .topnav {
@@ -183,57 +193,14 @@
     strong { display: block; color: var(--ink); font-weight: 500; }
 }
 
-.avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: var(--accent-ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 13px;
-    border: 1px solid var(--rule);
-    cursor: pointer;
-}
-
-.user-menu {
-    position: relative;
-
-    summary { list-style: none; }
-    summary::-webkit-details-marker { display: none; }
-
-    .user-menu-panel {
-        position: absolute;
-        right: 0;
-        top: calc(100% + 8px);
-        min-width: 200px;
-        background: var(--bg-raised);
-        border: 1px solid var(--rule);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 6px;
-        display: flex;
-        flex-direction: column;
-        z-index: 30;
-
-        a, button {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 8px 10px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            color: var(--ink);
-        }
-
-        a:hover, button:hover { background: var(--bg-sunk); }
-    }
-}
-
 @media (max-width: 760px) {
-    .topbar-inner { flex-wrap: wrap; row-gap: 10px; padding: 12px 16px; }
+    .topbar .topbar-inner {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px 16px;
+        padding: 12px 16px;
+    }
+
+    .topbar-actions { grid-column: 2; grid-row: 1; }
     .topnav { display: none; }
-    .search-bar { order: 10; flex: 1 1 100%; max-width: none; }
+    .search-bar { grid-column: 1 / -1; grid-row: 2; max-width: none; }
 }

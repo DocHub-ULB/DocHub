@@ -22,29 +22,15 @@
             <ul data-autocomplete-target="results" class="search-results" hidden></ul>
         </div>
 
-        <nav class="topnav">
-            <a href="{% url "catalog:finder_root" %}">Catalogue</a>
-        </nav>
+        <div class="topbar-actions">
+            <nav class="topnav">
+                <a href="{% url "catalog:finder_root" %}">Catalogue</a>
+            </nav>
 
-        <a class="btn btn-accent btn-sm" href="{% url "catalog:finder_root" %}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
-            Déposer
-        </a>
-
-        <details class="user-menu" data-controller="disclosure">
-            <summary class="avatar" title="{{ user.name }}">{{ user.initials }}</summary>
-            <div class="user-menu-panel">
-                {% if request.user.is_staff or request.user.is_moderator %}
-                    <a href="{% url 'moderation_about' %}">Modération</a>
-                {% endif %}
-                {% if request.user.is_staff %}
-                    <a href="{% url 'admin:index' %}" data-turbo="false">Admin</a>
-                {% endif %}
-                <form method="post" action="{% url "logout" %}">
-                    {% csrf_token %}
-                    <button type="submit">Déconnexion</button>
-                </form>
-            </div>
-        </details>
+            <a class="btn btn-accent btn-sm" href="{% url "catalog:finder_root" %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
+                Déposer
+            </a>
+        </div>
     </div>
 </header>

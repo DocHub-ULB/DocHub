@@ -1,3 +1,4 @@
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 */
 .footer-doodle {
     position: absolute;
     top: -20px;
@@ -81,3 +82,32 @@
 
 .footer-bottom a { color: var(--ink-faint); }
 .footer-bottom a:hover { color: var(--ink); }
+
+.footer-logout { display: inline; }
+
+.footer-logout button {
+    appearance: none;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--ink-faint);
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.footer-logout button:hover { color: var(--ink); }
+
+.footer-logout button:active { color: var(--brand-blue); }
+
+.footer-logout button:disabled {
+    color: var(--ink-faint);
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.footer-logout button:focus-visible {
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
