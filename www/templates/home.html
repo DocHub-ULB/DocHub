@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-    <div class="main">
+    <div class="page">
         {% if not following_course and not recent_courses %}
             <div class="card">
                 {% include "welcome.html" %}
@@ -25,11 +25,11 @@
                 </h1>
                 <div class="home-hero-actions">
                     <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 9 6-6 6 6"/><path d="M4 21h16"/></svg>
                         Partage un document
                     </a>
                     <a class="btn" href="{% url "catalog:finder_root" %}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 6L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-2z"/></svg>
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 6L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-2z"/></svg>
                         Découvrir
                     </a>
                 </div>
@@ -79,7 +79,7 @@
                                 <div class="course-card-top">
                                     <span class="pill pill-mono">{{ course.slug|upper }}</span>
                                 </div>
-                                <div class="course-card-name">{{ course.name }}</div>
+                                <h3 class="course-card-name">{{ course.name }}</h3>
                                 <div class="course-card-meta">
                                     <span>{{ course.documents_count }} doc{{ course.documents_count|pluralize }}
                                         &middot; {{ course.followers_count }} étudiant{{ course.followers_count|pluralize }}</span>
@@ -88,7 +88,7 @@
                             </a>
                         {% endfor %}
                         <a class="course-card-add" href="{% url "catalog:finder_root" %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
                             Suivre un cours
                         </a>
                     </div>
@@ -97,7 +97,7 @@
 
             {% if recent_courses %}
                 <section class="recent-courses">
-                    <div class="eyebrow">Vus récemment</div>
+                    <h2 class="eyebrow">Vus récemment</h2>
                     <div class="recent-course-list">
                         {% for course in recent_courses %}
                             <a class="pill pill-mono" href="{{ course.get_absolute_url }}">
@@ -109,12 +109,8 @@
             {% endif %}
 
             <div class="home-columns">
-                <section>
-                    <div class="section-head">
-                        <div>
-                            <div class="eyebrow">Fil</div>
-                        </div>
-                    </div>
+                <section class="activity-feed">
+                    <h2 class="eyebrow">Fil</h2>
                     {% for document in recent_docs %}
                         <a class="activity-row" href="{% url 'document_show' document.pk %}">
                             <div class="pdf-thumb">
@@ -125,17 +121,17 @@
                                 {% endif %}
                             </div>
                             <div class="activity-body">
-                                <div class="activity-title">
+                                <h3 class="activity-title">
                                     {{ document.name|capfirst }}
                                     {% if document.staff_pick %}
                                         <span class="staff-pick-badge">★ staff pick</span>
                                     {% endif %}
-                                </div>
+                                </h3>
                                 <div class="activity-meta">
                                     <strong>{{ document.user.name }}</strong>
                                     a déposé dans
                                     <span class="activity-course">{{ document.course.slug|upper }}</span>
-                                    &middot; {{ document.created|timesince }}
+                                    &middot; <time datetime="{{ document.created|date:'c' }}">{{ document.created|timesince }}</time>
                                 </div>
                             </div>
                         </a>
@@ -147,7 +143,7 @@
                     {% if staff_pick %}
                         <div class="card staff-pick-card">
                             <div class="eyebrow">✦ Staff pick de la semaine</div>
-                            <div class="staff-pick-title">{{ staff_pick.name }}</div>
+                            <h3 class="staff-pick-title">{{ staff_pick.name }}</h3>
                             <div class="staff-pick-meta">
                                 par {{ staff_pick.user.name }} &middot; {{ staff_pick.views }} vues
                             </div>

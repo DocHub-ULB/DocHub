@@ -9,10 +9,9 @@
     --rule-strong: #c1c8d3;
     --paper-dot: rgba(90, 115, 150, 0.12);   /* ambient paper texture, cool */
 
-    --brand-blue: #0d6efd;       /* DocHub's recognisable royal blue */
-    --brand-blue-soft: #6ea8fe;
-    --brand-blue-tint: #cfe2ff;
-    --accent: #0d6efd;
+    /* DocHub's recognisable royal blue; components always use --accent. */
+    --brand-blue: #0d6efd;
+    --accent: var(--brand-blue);
     --accent-soft: #cfe2ff;
     --accent-ink: #ffffff;
 
@@ -24,17 +23,28 @@
     --negative: #c55c3a;
     --danger: #b43a2a;
 
+    /* Quiet backgrounds for success/warning/danger pills and buttons. */
+    --positive-tint: color-mix(in srgb, var(--positive) 14%, var(--bg-raised));
+    --negative-tint: color-mix(in srgb, var(--negative) 14%, var(--bg-raised));
+    --danger-tint: color-mix(in srgb, var(--danger) 14%, var(--bg-raised));
+
     --font-display: "Instrument Serif", "Times New Roman", serif;
     --font-body: "DM Sans", -apple-system, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
-    --font-hand: "Caveat", cursive;
 
     --radius-sm: 4px;
     --radius: 6px;
-    --radius-lg: 10px;
 
     /* Spacing unit; this is not a baseline grid. */
     --grid: 14px;
+
+    /*
+     * Breakpoints (max-width): use only these four.
+     *   640px  - phones
+     *   760px  - the topbar and multi-column widgets collapse
+     *   900px  - sidebars stack under the main column
+     *   1100px - wide-screen extras (hero aside, 4-column grids)
+     */
 
     --shadow: 0 1px 0 rgba(43, 35, 26, 0.06), 0 4px 14px -6px rgba(43, 35, 26, 0.12);
     --shadow-card: 0 1px 0 rgba(43, 35, 26, 0.05), 0 8px 22px -10px rgba(43, 35, 26, 0.14);
@@ -43,6 +53,9 @@
 html { scrollbar-gutter: stable; }
 
 body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: calc(var(--grid) * 2); }
+
+/* Every heading is display serif; pages only set size and line-height. */
+:is(h1, h2, h3) { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; }
 
 .site-body {
     display: flex;
@@ -56,8 +69,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
     margin: 24px auto 0;
 }
 
-:where(.topbar, .site-footer, .main) a { text-decoration: none; color: inherit; }
-.lede { font-style: italic; color: var(--brand-blue); }
+:where(.topbar, .site-footer, .page) a { text-decoration: none; color: inherit; }
+.lede { font-style: italic; color: var(--accent); }
 .marker {
     font-style: italic;
     padding: 0 6px;
@@ -69,11 +82,13 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
     );
 }
 
-:is(.eyebrow, .hero-eyebrow) { color: var(--ink-faint); text-transform: uppercase; }
+/* The explicit font-family lets headings (serif by default) be eyebrows too. */
+:is(.eyebrow, .hero-eyebrow) { color: var(--ink-faint); font-family: var(--font-body); text-transform: uppercase; }
 .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; }
 .hero-eyebrow { font-size: 12px; letter-spacing: 0.14em; }
 
-.main {
+/* Inner wrapper of <main>; redesigned pages put their content in it. */
+.page {
     max-width: 1280px;
     margin: 0 auto;
     width: 100%;

@@ -23,7 +23,7 @@
     </head>
 
     <body class="landing-page">
-        <main class="main">
+        <main class="page">
             <section class="landing-hero">
                 <div class="landing-hero-copy">
                     {% include "_landing_head.html" %}
@@ -33,24 +33,24 @@
                         s'entraider.<br> Fait par des étudiants, pour des étudiants.
                     </p>
 
-                    <div class="landing-stats">
+                    <dl class="landing-stats">
                         <div class="landing-stat">
-                            <div class="num">{{ documents|intcomma }}+</div>
-                            <div class="lbl">documents</div>
+                            <dt>documents</dt>
+                            <dd>{{ documents|intcomma }}+</dd>
                         </div>
                         <div class="landing-stat">
-                            <div class="num">{{ pages|intcomma }}+</div>
-                            <div class="lbl">pages</div>
+                            <dt>pages</dt>
+                            <dd>{{ pages|intcomma }}+</dd>
                         </div>
                         <div class="landing-stat">
-                            <div class="num">{{ users|intcomma }}+</div>
-                            <div class="lbl">étudiant·es</div>
+                            <dt>étudiant·es</dt>
+                            <dd>{{ users|intcomma }}+</dd>
                         </div>
-                    </div>
+                    </dl>
 
                     <div class="landing-cta">
                         <a class="btn btn-accent btn-lg" href="{% login_url %}" id="login_link">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round">
                                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>

@@ -101,7 +101,7 @@
     .viewer-pinbar { transition: opacity 120ms linear; transform: translate(-50%, 0); }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 640px) {
     .viewer-pinbar-inner { padding: 6px; }
     .viewer-pinbar-title { display: none; }
 }
@@ -114,11 +114,9 @@
     flex-wrap: wrap;
     gap: 6px 10px;
     margin: 0;
-    font-family: var(--font-display);
     font-size: 28px;
     font-weight: 500;
     line-height: 1.2;
-    letter-spacing: -0.01em;
     color: var(--ink);
     overflow-wrap: anywhere;
 }
@@ -179,14 +177,10 @@
 .vote-btn.is-down:hover svg { transform: translateY(2px); }
 
 /* Votes use quiet semantic tints instead of a heavy fill. */
-.vote-btn.is-up.active {
-    color: var(--positive);
-    background: color-mix(in srgb, var(--positive) 14%, var(--bg-raised));
-}
-
-.vote-btn.is-up.active:hover { background: color-mix(in srgb, var(--positive) 22%, var(--bg-raised)); }
-.vote-btn.is-down.active { color: var(--negative); background: color-mix(in srgb, var(--negative) 14%, var(--bg-raised)); }
-.vote-btn.is-down.active:hover { background: color-mix(in srgb, var(--negative) 22%, var(--bg-raised)); }
+.vote-btn.is-up.is-active { color: var(--positive); background: var(--positive-tint); }
+.vote-btn.is-up.is-active:hover { background: color-mix(in srgb, var(--positive) 22%, var(--bg-raised)); }
+.vote-btn.is-down.is-active { color: var(--negative); background: var(--negative-tint); }
+.vote-btn.is-down.is-active:hover { background: color-mix(in srgb, var(--negative) 22%, var(--bg-raised)); }
 
 .pdf-stage {
     position: relative;

@@ -23,18 +23,6 @@
 .btn-lg { min-height: calc(var(--grid) * 3.5); padding: 0 22px; font-size: 15px; }
 .landing-hero { position: relative; padding: calc(var(--grid) * 4) 0 calc(var(--grid) * 3); }
 
-@media (max-width: 700px) {
-    .landing-hero::before {
-        background-position: center, 68% 22%;
-        background-image:
-        linear-gradient(160deg,
-            var(--bg) 12%,
-            color-mix(in srgb, var(--bg) 82%, transparent) 55%,
-            color-mix(in srgb, var(--bg) 60%, transparent) 100%),
-        url("../images/campus-hero.webp");
-    }
-}
-
 .landing-hero-copy { max-width: 40rem; }
 
 /* Logged-out utility pages reuse the hero's copy width without its photo. */
@@ -44,11 +32,8 @@
 }
 
 .landing-hero h1 {
-    font-family: var(--font-display);
-    font-weight: 400;
     font-size: clamp(38px, 6vw, 62px);
     line-height: 1.08;
-    letter-spacing: -0.02em;
     margin: var(--grid) 0;
     overflow-wrap: anywhere;
     min-width: 0;
@@ -66,14 +51,17 @@
     margin: 0 0 calc(var(--grid) * 2);
 }
 
-.landing-stat .num { font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--ink); }
+/* The number (dd) renders above its label (dt). */
+.landing-stat { display: flex; flex-direction: column-reverse; }
+.landing-stat dd { margin: 0; font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--ink); }
 
-.landing-stat .lbl {
+.landing-stat dt {
     margin-top: 3px;
     font-family: var(--font-mono);
     font-size: 11px;
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     color: var(--ink-faint);
 }
 

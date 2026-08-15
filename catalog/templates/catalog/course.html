@@ -5,22 +5,22 @@
 {% block title %}{{ course.slug|upper }} {{ course.name }}{% endblock %}
 
 {% block content %}
-    <div class="main" data-controller="course-filter">
-        <nav class="breadcrumb">
+    <div class="page" data-controller="course-filter">
+        <nav class="breadcrumb" aria-label="Fil d'Ariane">
             <a href="{% url 'index' %}">Accueil</a>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m9 6 6 6-6 6"/>
             </svg>
             <a href="{% url "catalog:finder_root" %}">Catalogue</a>
             {% if primary_category %}
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m9 6 6 6-6 6"/>
                 </svg>
                 <span>{{ primary_category.better_name }}</span>
             {% endif %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m9 6 6 6-6 6"/>
             </svg>
@@ -64,7 +64,7 @@
                         <form method="POST" action="{% url 'catalog:leave_course' course.slug %}">
                             {% csrf_token %}
                             <button type="submit" class="btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
                                      stroke-linejoin="round">
                                     <path d="m5 12 5 5 9-11"/>
@@ -78,7 +78,7 @@
                         <form method="POST" action="{% url 'catalog:join_course' course.slug %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round">
                                     <path d="M12 5v14M5 12h14"/>
@@ -89,7 +89,7 @@
                     </turbo-frame>
                 {% endif %}
                 <a class="btn btn-accent" href="{% url 'document_put' course.slug %}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 3v14"/>
                         <path d="m6 9 6-6 6 6"/>
@@ -97,27 +97,27 @@
                     </svg>
                     Déposer dans ce cours
                 </a>
-                <div class="course-stats">
+                <dl class="course-stats">
                     <div>
-                        <strong>{{ total_count }}</strong>
-                        <span>doc{{ total_count|pluralize }}</span>
+                        <dt>doc{{ total_count|pluralize }}</dt>
+                        <dd>{{ total_count }}</dd>
                     </div>
                     <div>
-                        <strong>{{ course.followers_count }}</strong>
-                        <span>étudiant&middot;es</span>
+                        <dt>étudiant&middot;es</dt>
+                        <dd>{{ course.followers_count }}</dd>
                     </div>
-                </div>
+                </dl>
             </div>
         </header>
 
         {% if documents %}
             <div class="filter-row">
                 <div class="filter-chips">
-                    <a class="{% if not only_staff_picks %}active{% endif %}" href="{% querystring staff_pick=None %}">
+                    <a class="{% if not only_staff_picks %}is-active{% endif %}" href="{% querystring staff_pick=None %}">
                         Tout <span class="count">{{ total_count }}</span>
                     </a>
                     {% if staff_pick_count %}
-                        <a class="{% if only_staff_picks %}active{% endif %}" href="{% querystring staff_pick="" %}">
+                        <a class="{% if only_staff_picks %}is-active{% endif %}" href="{% querystring staff_pick="" %}">
                             ★ Staff picks <span class="count">{{ staff_pick_count }}</span>
                         </a>
                     {% endif %}
@@ -134,7 +134,7 @@
                 </div>
                 <div class="filter-tools">
                     <div class="search-bar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round">
                             <circle cx="11" cy="11" r="7"/>
@@ -149,11 +149,11 @@
                         <span class="filter-sort-label">Trier&nbsp;:</span>
                         <div class="sort-seg">
                             <a href="{% querystring sort=None %}"
-                               class="{% if sort == "recent" %}active{% endif %}">Nouveau</a>
+                               class="{% if sort == "recent" %}is-active{% endif %}">Nouveau</a>
                             <a href="{% querystring sort="top" %}"
-                               class="{% if sort == "top" %}active{% endif %}">Top</a>
+                               class="{% if sort == "top" %}is-active{% endif %}">Top</a>
                             <a href="{% querystring sort="dl" %}"
-                               class="{% if sort == "dl" %}active{% endif %}">DL</a>
+                               class="{% if sort == "dl" %}is-active{% endif %}">DL</a>
                         </div>
                     </div>
                 </div>
@@ -167,7 +167,7 @@
                     data-filter-key="{{ document.name }}"
                     data-tags="{{ document.tags.all|join:' ' }}">
                     <div class="doc-vote">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                              stroke-linejoin="round">
                             <path d="m6 15 6-6 6 6"/>
@@ -176,7 +176,7 @@
                               title="{{ document.upvotes }} pour &middot; {{ document.downvotes }} contre">
                             {% if document.net_votes > 0 %}+{% endif %}{{ document.net_votes }}
                         </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                              stroke-linejoin="round">
                             <path d="m6 9 6 6 6-6"/>
@@ -195,18 +195,18 @@
                     </a>
                     <a href="{% url 'document_show' document.pk %}" class="doc-link">
                         <div class="doc-info">
-                            <div class="doc-title">
+                            <h3 class="doc-title">
                                 {% if document.hidden %}🙈{% endif %}
                                 {{ document.name|capfirst }}
                                 {% if document.staff_pick %}
                                     <span class="staff-pick-badge">★ staff pick</span>
                                 {% endif %}
-                            </div>
+                            </h3>
                             <div class="doc-meta">
                                 <span>par <strong>{{ document.user.name }}</strong></span>
-                                <span>{{ document.date|date:"F Y" }}</span>
+                                <time datetime="{{ document.date|date:'Y-m' }}">{{ document.date|date:"F Y" }}</time>
                                 <span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
                                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                          stroke-linejoin="round">
                                         <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
@@ -215,7 +215,7 @@
                                     {{ document.views|intcomma }}
                                 </span>
                                 <span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
                                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                          stroke-linejoin="round">
                                         <path d="M12 3v12"/>
@@ -240,7 +240,7 @@
                         {% if request.user|has_write_perm_on:document %}
                             <a class="btn btn-sm" title="Modifier" href="{% url 'document_edit' document.pk %}"
                                data-turbo="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round">
                                     <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
@@ -250,7 +250,7 @@
                         <a class="btn btn-sm" title="Télécharger"
                            href="{% if document.pdf and document.pdf.name %}{% url 'document_pdf' document.pk %}{% else %}{% url 'document_original' document.pk %}{% endif %}"
                            data-turbo="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round">
                                 <path d="M12 3v14"/>

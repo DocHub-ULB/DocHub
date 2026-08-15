@@ -40,11 +40,8 @@
     align-items: center;
     gap: 8px;
     margin: calc(var(--grid) / 2) calc(var(--grid) / 2) var(--grid);
-    font-family: var(--font-display);
-    font-weight: 400;
     font-size: 20px;
     line-height: calc(var(--grid) * 2);
-    letter-spacing: -0.01em;
     color: var(--ink);
     overflow-wrap: anywhere;
 }
@@ -87,7 +84,7 @@
 
 .finder-back { display: none; }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
     .finder-col:not(.finder-col-current) { display: none; }
     .finder-back { display: inline-flex; align-items: center; color: var(--ink-faint); }
     .finder-back:hover { color: var(--accent); }

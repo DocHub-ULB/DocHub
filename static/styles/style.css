@@ -6,12 +6,12 @@
 
 @import url("foundation.css") layer(foundation);
 @import url("navigation.css") layer(components);
+@import url("footer.css") layer(components);
 @import url("components.css") layer(components);
 
 @import url("home.css") layer(pages);
 @import url("course.css") layer(pages);
 @import url("viewer.css") layer(pages);
-@import url("footer.css") layer(pages);
 @import url("moderation.css") layer(pages);
 @import url("finder.css") layer(pages);
 @import url("landing.css") layer(pages);

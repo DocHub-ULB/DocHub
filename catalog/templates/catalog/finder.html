@@ -4,10 +4,10 @@
 {% block title %}Catalogue des cours{% endblock %}
 
 {% block content %}
-    <div class="main">
-        <nav class="breadcrumb is-wrapping">
+    <div class="page">
+        <nav class="breadcrumb is-wrapping" aria-label="Fil d'Ariane">
             <a href="{% url 'index' %}">Accueil</a>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m9 6 6 6-6 6"/>
             </svg>
@@ -21,7 +21,7 @@
             </div>
         {% else %}
             <div class="card finder-note">
-                <strong>Nouveaux cours <span class="pill chip-accent">rentrée 2023–2024</span></strong>
+                <strong>Nouveaux cours <span class="pill pill-accent">rentrée 2023–2024</span></strong>
                 <span>Le programme a parfois changé&nbsp;: si tu ne trouves plus d'anciens documents,
                     <a href="{% url 'catalog:finder' slugs='archives' %}">regarde dans les archives</a>.</span>
             </div>
@@ -33,7 +33,7 @@
                     <h2>
                         {% if forloop.last and not forloop.first %}
                             <a class="finder-back" href="../" aria-label="Remonter d'un niveau">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round">
                                     <path d="M19 12H5"/>
@@ -48,7 +48,7 @@
                         {% for type in children_groups %}
                             {% if type.grouper != "OTHE" %}
                                 <li class="finder-group">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                          stroke-linejoin="round">
                                         <path d="M22 10 12 5 2 10l10 5 10-5Z"/>
@@ -61,7 +61,7 @@
                                 <li class="finder-item">
                                     <a href="{{ child.url }}">
                                         <span class="finder-ico">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                  stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="m9 6 6 6-6 6"/>
@@ -76,7 +76,7 @@
                             <li class="finder-item">
                                 <a href="{% url 'catalog:course_show' course.slug %}">
                                     <span class="finder-ico">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                              stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M4 20h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-7l-2-3H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1Z"/>
