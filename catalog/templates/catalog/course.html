@@ -8,22 +8,13 @@
     <div class="page" data-controller="course-filter">
         <nav class="breadcrumb" aria-label="Fil d'Ariane">
             <a href="{% url 'index' %}">Accueil</a>
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m9 6 6 6-6 6"/>
-            </svg>
+            {% include "icons/chevron-right.html" %}
             <a href="{% url "catalog:finder_root" %}">Catalogue</a>
             {% if primary_category %}
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m9 6 6 6-6 6"/>
-                </svg>
+                {% include "icons/chevron-right.html" %}
                 <span>{{ primary_category.better_name }}</span>
             {% endif %}
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m9 6 6 6-6 6"/>
-            </svg>
+            {% include "icons/chevron-right.html" %}
             <span class="current">
                 {{ course.slug|upper }} &middot; {{ course.get_period_display }}
                 {% if course.is_archive %}&middot; archivé{% endif %}
@@ -31,11 +22,7 @@
         </nav>
 
         <header class="course-header">
-            <svg class="doodle" aria-hidden="true" viewBox="0 0 90 60" fill="none">
-                <path d="M6 40 Q 20 10, 36 26 Q 50 40, 62 14" stroke="currentColor" stroke-width="2"/>
-                <path d="M54 12 L 63 13 L 60 22" stroke="currentColor" stroke-width="2" fill="none"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            {% include "icons/doodle-swoosh.html" %}
             <div>
                 <h1>
                     <em>{{ course_name_first }}</em>
@@ -64,11 +51,7 @@
                         <form method="POST" action="{% url 'catalog:leave_course' course.slug %}">
                             {% csrf_token %}
                             <button type="submit" class="btn">
-                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path d="m5 12 5 5 9-11"/>
-                                </svg>
+                                {% include "icons/check.html" %}
                                 Cours suivi
                             </button>
                         </form>
@@ -78,23 +61,14 @@
                         <form method="POST" action="{% url 'catalog:join_course' course.slug %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-primary">
-                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path d="M12 5v14M5 12h14"/>
-                                </svg>
+                                {% include "icons/plus.html" %}
                                 Suivre ce cours
                             </button>
                         </form>
                     </turbo-frame>
                 {% endif %}
                 <a class="btn btn-accent" href="{% url 'document_put' course.slug %}">
-                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 3v14"/>
-                        <path d="m6 9 6-6 6 6"/>
-                        <path d="M4 21h16"/>
-                    </svg>
+                    {% include "icons/upload.html" %}
                     Déposer dans ce cours
                 </a>
                 <dl class="course-stats">
@@ -134,12 +108,7 @@
                 </div>
                 <div class="filter-tools">
                     <div class="search-bar">
-                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="7"/>
-                            <path d="m20 20-3.5-3.5"/>
-                        </svg>
+                        {% include "icons/search.html" %}
                         <input type="search"
                                placeholder="Chercher par titre de document…"
                                data-course-filter-target="query"
@@ -167,20 +136,12 @@
                     data-filter-key="{{ document.name }}"
                     data-tags="{{ document.tags.all|join:' ' }}">
                     <div class="doc-vote">
-                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="m6 15 6-6 6 6"/>
-                        </svg>
+                        {% include "icons/chevron-up.html" with width=14 height=14 %}
                         <span class="doc-vote-net {% if document.net_votes > 0 %}doc-vote-up{% elif document.net_votes < 0 %}doc-vote-down{% endif %}"
                               title="{{ document.upvotes }} pour &middot; {{ document.downvotes }} contre">
                             {% if document.net_votes > 0 %}+{% endif %}{{ document.net_votes }}
                         </span>
-                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6"/>
-                        </svg>
+                        {% include "icons/chevron-down.html" with width=14 height=14 %}
                     </div>
                     <a href="{% url 'document_show' document.pk %}" class="pdf-thumb"
                        {% if document.hidden %}
@@ -206,22 +167,11 @@
                                 <span>par <strong>{{ document.user.name }}</strong></span>
                                 <time datetime="{{ document.date|date:'Y-m' }}">{{ document.date|date:"F Y" }}</time>
                                 <span>
-                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
-                                        <circle cx="12" cy="12" r="3"/>
-                                    </svg>
+                                    {% include "icons/eye.html" with width=12 height=12 %}
                                     {{ document.views|intcomma }}
                                 </span>
                                 <span>
-                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round">
-                                        <path d="M12 3v12"/>
-                                        <path d="m6 11 6 6 6-6"/>
-                                        <path d="M4 21h16"/>
-                                    </svg>
+                                    {% include "icons/download.html" with width=12 height=12 %}
                                     {{ document.downloads|intcomma }}
                                 </span>
                                 <span>{{ document.size|filesizeformat }}</span>
@@ -240,23 +190,13 @@
                         {% if request.user|has_write_perm_on:document %}
                             <a class="btn btn-sm" title="Modifier" href="{% url 'document_edit' document.pk %}"
                                data-turbo="false">
-                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                                </svg>
+                                {% include "icons/pencil.html" %}
                             </a>
                         {% endif %}
                         <a class="btn btn-sm" title="Télécharger"
                            href="{% if document.pdf and document.pdf.name %}{% url 'document_pdf' document.pk %}{% else %}{% url 'document_original' document.pk %}{% endif %}"
                            data-turbo="false">
-                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round">
-                                <path d="M12 3v14"/>
-                                <path d="m6 11 6 6 6-6"/>
-                                <path d="M4 21h16"/>
-                            </svg>
+                            {% include "icons/download.html" with width=15 height=15 %}
                         </a>
                     </div>
                 </li>
