@@ -19,7 +19,7 @@
                     <h1 class="viewer-title">
                         {{ document.name }}
                         {% if document.staff_pick %}
-                            <span class="staff-pick-badge" title="Staff pick">★ staff pick</span>
+                            <span class="staff-pick-badge" title="Staff pick">{% include "icons/sparkle.html" %} staff pick</span>
                         {% endif %}
                     </h1>
                     <div class="viewer-meta">

@@ -56,6 +56,7 @@
 
 .footer-tagline { font-size: 13.5px; color: var(--ink-soft); max-width: 32ch; line-height: 1.5; margin: 0 0 10px; }
 .footer-credit { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
+.footer-credit svg { vertical-align: -1px; }
 .footer-credit a { color: var(--accent); text-decoration: underline wavy; text-decoration-color: var(--highlight); text-underline-offset: 3px; }
 .footer-sticky-note { transform: rotate(-1.2deg); }
 .footer-sticky-note .eyebrow { margin-bottom: 6px; }

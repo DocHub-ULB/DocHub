@@ -72,13 +72,14 @@
 }
 
 .course-card {
-    display: block;
+    display: flex;
+    flex-direction: column;
     color: var(--ink);
 
     &:hover { border-color: var(--rule-strong); }
     .course-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--grid); }
     .course-card-name { margin: 0 0 var(--grid); font: 500 17px/calc(var(--grid) * 2) var(--font-display); }
-    .course-card-meta { display: flex; align-items: center; justify-content: space-between; color: var(--ink-faint); font-size: 12px; }
+    .course-card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: auto; color: var(--ink-faint); font-size: 12px; }
 }
 
 .course-card-add {
@@ -134,6 +135,9 @@
 .activity-empty { color: var(--ink-faint); }
 
 .staff-pick-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     margin-left: 8px;
     padding: 1px 7px;
     color: var(--accent);
@@ -152,7 +156,7 @@
     border-color: var(--highlight);
 
     .staff-pick-title { margin: var(--grid) 0; font: 500 22px/calc(var(--grid) * 2) var(--font-display); }
-    .eyebrow { color: inherit; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 5px; color: inherit; }
     .staff-pick-meta { margin-bottom: var(--grid); font-size: 13px; opacity: 0.85; }
     .btn { color: #fff; background: var(--ink); }
 }

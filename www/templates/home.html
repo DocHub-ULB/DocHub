@@ -43,8 +43,9 @@
 
             {% if request.user.is_moderator and not request.user.moderator_welcome_dismissed %}
                 <div class="notice is-success announcement" role="status">
+                    {% include "icons/check.html" %}
                     <div class="announcement-body">
-                        <strong>🎉 Félicitations&nbsp;!</strong> Tu es maintenant modérateur·trice sur DocHub.
+                        <strong>Félicitations&nbsp;!</strong> Tu es maintenant modérateur·trice sur DocHub.
                         {% if request.user.promoted_by %}
                             {{ request.user.promoted_by.fullname }} t'a accordé ces droits.
                         {% endif %}
@@ -124,7 +125,7 @@
                                 <h3 class="activity-title">
                                     {{ document.name|capfirst }}
                                     {% if document.staff_pick %}
-                                        <span class="staff-pick-badge">★ staff pick</span>
+                                        <span class="staff-pick-badge">{% include "icons/sparkle.html" %} staff pick</span>
                                     {% endif %}
                                 </h3>
                                 <div class="activity-meta">
@@ -142,19 +143,20 @@
                 <aside class="sidebar">
                     {% if staff_pick %}
                         <div class="card staff-pick-card">
-                            <div class="eyebrow">✦ Staff pick de la semaine</div>
+                            <div class="eyebrow">{% include "icons/sparkle.html" %} Staff pick de la semaine</div>
                             <h3 class="staff-pick-title">{{ staff_pick.name }}</h3>
                             <div class="staff-pick-meta">
                                 par {{ staff_pick.user.name }} &middot; {{ staff_pick.views }} vues
                             </div>
                             <a class="btn btn-sm" href="{% url 'document_show' staff_pick.pk %}">
-                                Voir le document →
+                                Voir le document
+                                {% include "icons/chevron-right.html" %}
                             </a>
                         </div>
                     {% endif %}
                     <div class="tip-card">
                         {% include "icons/doodle-swoosh.html" with view_box="0 0 70 70" %}
-                        💡 <strong>Astuce&nbsp;:</strong> tu peux voir un document directement dans ton navigateur,
+                        {% include "icons/lightbulb.html" %} <strong>Astuce&nbsp;:</strong> tu peux voir un document directement dans ton navigateur,
                         pas besoin de le télécharger.
                     </div>
                 </aside>
