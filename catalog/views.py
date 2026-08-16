@@ -131,22 +131,6 @@ def leave_course(request: HttpRequest, slug: str):
     return set_follow_course(request, slug, "leave")
 
 
-@login_required
-def my_courses(request):
-    # "suggestions": suggest(request.user),
-    DailyStat.track(Metric.MY_COURSES_VIEW)
-    return render(
-        request,
-        "catalog/my_courses.html",
-    )
-
-
-@login_required
-def unfollow_all_courses(request):
-    request.user.courses_set.clear()
-    return redirect("home")
-
-
 @dataclass
 class ChildCategory:
     category: Category
