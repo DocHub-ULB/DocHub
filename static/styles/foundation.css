@@ -93,7 +93,6 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
     margin: 0 auto;
     width: 100%;
     padding: calc(var(--grid) / 2) 32px calc(var(--grid) * 8);
-    position: relative;
     background-image: radial-gradient(var(--paper-dot) 1px, transparent 1.6px);
     background-size: 22px 22px;
 }
