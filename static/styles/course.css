@@ -247,8 +247,22 @@
 
 .course-empty {
     margin-top: 16px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
 
-    h3:first-child { margin-top: 0; }
-    a { color: var(--accent); }
-    p:last-child { margin-bottom: 0; }
+    p { max-width: 46em; margin: 8px auto 16px; color: var(--ink-soft); }
+}
+
+.empty-state-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--grid) * 3.5);
+    height: calc(var(--grid) * 3.5);
+    margin-bottom: var(--grid);
+    color: var(--ink-faint);
+    background: var(--bg-sunk);
+    border-radius: var(--radius);
+
+    svg { width: 22px; height: 22px; }
 }

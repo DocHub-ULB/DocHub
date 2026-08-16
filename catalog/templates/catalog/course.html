@@ -201,14 +201,19 @@
                     </div>
                 </li>
             {% empty %}
-                <li class="card course-empty">
-                    <h3>Il n'y a encore rien dans ce cours…</h3>
+                <li class="empty-state course-empty">
+                    <span class="empty-state-icon">{% include "icons/folder.html" %}</span>
+                    <strong>Il n'y a encore rien dans ce cours…</strong>
                     <p>
                         Les documents que tu trouves sur DocHub ont été partagés par des étudiant&middot;es comme
                         toi et nous. N'hésite pas à partager tes notes, des questions d'examens ou même juste un
                         scan des questions du dernier TP. C'est grâce à des petits gestes comme ça que DocHub est
                         si complet&nbsp;!
                     </p>
+                    <a class="btn btn-accent" href="{% url 'document_put' course.slug %}">
+                        {% include "icons/upload.html" %}
+                        Sois le premier à déposer
+                    </a>
                 </li>
             {% endfor %}
         </ul>
