@@ -249,28 +249,6 @@
     .btn { color: #fff; background: var(--ink); }
 }
 
-.tip-card {
-    position: relative;
-    overflow: hidden;
-    padding: var(--grid) 16px;
-    color: var(--ink-soft);
-    border: 2px dashed var(--rule);
-    border-radius: var(--radius);
-    font-size: 13px;
-    line-height: calc(var(--grid) * 2);
-
-    .doodle {
-        position: absolute;
-        right: -10px;
-        bottom: -14px;
-        width: 70px;
-        height: 70px;
-        color: var(--accent);
-        opacity: 0.08;
-        pointer-events: none;
-    }
-}
-
 .home-columns {
     display: grid;
     grid-template-columns: 1fr 340px;
