@@ -7,7 +7,7 @@ from django.views.decorators.http import require_GET
 
 from catalog.forms import SearchForm
 from catalog.models import CourseUserView
-from documents.models import Document
+from documents.models import Document, Vote
 from users.models import User
 
 
@@ -34,12 +34,31 @@ def index(request):
             .order_by("-created")
             .first()
         )
+
+        # Onboarding checklist state; the copy for each step lives in the
+        # template. Every flag flips once the user has performed the matching
+        # action, and the whole checklist disappears once all four are done.
+        is_following_any = following.exists()
+        onboarding = {
+            "viewed_course": bool(recent_courses),
+            "following": is_following_any,
+            "voted": Vote.objects.filter(user=request.user).exists(),
+            "uploaded": Document.objects.filter(user=request.user).exists(),
+        }
+        onboarding_done = all(onboarding.values())
+
         context = {
             "search": SearchForm(),
             "recent_docs": docs,
             "recent_courses": recent_courses,
             "following_course": following_course,
             "staff_pick": staff_pick,
+            "onboarding": onboarding,
+            "onboarding_done": onboarding_done,
+            # First week (or before following any course) gets the warm welcome
+            # greeting; after that, the classic "N new documents" tagline, which
+            # only makes sense once the user actually follows courses.
+            "show_welcome_greeting": request.user.is_first_week or not is_following_any,
         }
         return render(request, "home.html", context)
     else:

@@ -3,16 +3,36 @@
 {% load static %}
 
 {% block content %}
+    {% partialdef onboarding-mark %}
+        {# Corner badge for an onboarding step: green check once `done`, else `num`. #}
+        <span class="onboarding-step-status">
+            {% if done %}
+                <span class="onboarding-step-check">{% include "icons/check.html" %}</span>
+            {% else %}
+                <span class="onboarding-step-num">{{ num }}</span>
+            {% endif %}
+        </span>
+    {% endpartialdef onboarding-mark %}
+
     <div class="page">
-        {% if not following_course and not recent_courses %}
-            <div class="card">
-                {% include "welcome.html" %}
-            </div>
-        {% else %}
-            <section class="home-hero">
-                <div class="hero-eyebrow">
+        <section class="home-hero">
+            <div class="hero-eyebrow">
+                {% if show_welcome_greeting %}
+                    <span>Bienvenue sur DocHub</span>
+                {% else %}
                     <span>{% now "l j F" %} · semaine {% now "W" %}</span>
-                </div>
+                {% endif %}
+            </div>
+            {% if show_welcome_greeting %}
+                <h1>
+                    Salut{% if user.first_name %} <em class="marker">{{ user.first_name }}</em>{% endif %},
+                    on t'attendait&nbsp;!
+                </h1>
+                <p class="welcome-lede">
+                    DocHub, c'est le plus grand espace d'entraide de l'ULB&nbsp;: notes, syllabus,
+                    résumés et anciens examens que les étudiant·es partagent pour s'entraider.
+                </p>
+            {% else %}
                 <h1>
                     Bonjour <em class="marker">{{ user.first_name }}</em><br>
                     {% with n=recent_docs|length %}
@@ -23,92 +43,94 @@
                         {% endif %}
                     {% endwith %}
                 </h1>
-                <div class="home-hero-actions">
-                    <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
-                        {% include "icons/upload.html" %}
-                        Partage un document
-                    </a>
-                    <a class="btn" href="{% url "catalog:finder_root" %}">
-                        {% include "icons/sparkle.html" %}
-                        Découvrir
-                    </a>
+            {% endif %}
+            <div class="home-hero-actions">
+                <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
+                    {% include "icons/upload.html" %}
+                    Partage un document
+                </a>
+                <a class="btn" href="{% url "catalog:finder_root" %}">
+                    {% include "icons/sparkle.html" %}
+                    Découvrir
+                </a>
+            </div>
+            <div class="sticky-note hero-aside" aria-hidden="true">
+                <div class="eyebrow">
+                    post-it du jour
                 </div>
-                <div class="sticky-note hero-aside" aria-hidden="true">
-                    <div class="eyebrow">
-                        post-it du jour
+                «&nbsp;N'importe qui peut ajouter un pdf. Toi aussi&nbsp;!&nbsp;»
+            </div>
+        </section>
+
+        {% if request.user.is_moderator and not request.user.moderator_welcome_dismissed %}
+            <div class="notice is-success announcement" role="status">
+                {% include "icons/check.html" %}
+                <div class="announcement-body">
+                    <strong>Félicitations&nbsp;!</strong> Tu es maintenant modérateur·trice sur DocHub.
+                    {% if request.user.promoted_by %}
+                        {{ request.user.promoted_by.fullname }} t'a accordé ces droits.
+                    {% endif %}
+                    Tu peux désormais modifier, masquer et mieux organiser les documents.
+                    <a href="{% url "moderation_about" %}">Découvre ce que permet la modération</a>.
+                </div>
+                <form method="post" action="{% url 'moderator_banner_hide' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dismiss-button" aria-label="Fermer"></button>
+                </form>
+            </div>
+        {% elif not request.user.is_moderator and not request.user.is_staff %}
+            <div class="notice announcement" role="status">
+                Tu es délégué·e d'année, délégué·e cours de ton cercle ou dans un bureau étudiant·e&nbsp;?
+                Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Demande
+                    les droits</a> ou <a href="{% url "moderation_about" %}">découvre comment fonctionne la modération</a>.
+            </div>
+        {% endif %}
+
+        {% if following_course %}
+            <section class="followed-courses">
+                <div class="section-head">
+                    <div>
+                        <h2>Tes cours</h2>
+                        <div class="eyebrow">Cours suivis</div>
+
                     </div>
-                    «&nbsp;N'importe qui peut ajouter un pdf. Toi aussi&nbsp;!&nbsp;»
+                </div>
+                <div class="course-grid">
+                    {% for course in following_course %}
+                        <a class="card course-card" href="{{ course.get_absolute_url }}">
+                            <div class="course-card-top">
+                                <span class="pill pill-mono">{{ course.slug|upper }}</span>
+                            </div>
+                            <h3 class="course-card-name">{{ course.name }}</h3>
+                            <div class="course-card-meta">
+                                <span>{{ course.documents_count }} doc{{ course.documents_count|pluralize }}
+                                    &middot; {{ course.followers_count }} étudiant{{ course.followers_count|pluralize }}</span>
+                                <span>{{ course.get_period_display }}</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    <a class="course-card-add" href="{% url "catalog:finder_root" %}">
+                        {% include "icons/plus.html" %}
+                        Suivre un cours
+                    </a>
                 </div>
             </section>
+        {% endif %}
 
-            {% if request.user.is_moderator and not request.user.moderator_welcome_dismissed %}
-                <div class="notice is-success announcement" role="status">
-                    {% include "icons/check.html" %}
-                    <div class="announcement-body">
-                        <strong>Félicitations&nbsp;!</strong> Tu es maintenant modérateur·trice sur DocHub.
-                        {% if request.user.promoted_by %}
-                            {{ request.user.promoted_by.fullname }} t'a accordé ces droits.
-                        {% endif %}
-                        Tu peux désormais modifier, masquer et mieux organiser les documents.
-                        <a href="{% url "moderation_about" %}">Découvre ce que permet la modération</a>.
-                    </div>
-                    <form method="post" action="{% url 'moderator_banner_hide' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="dismiss-button" aria-label="Fermer"></button>
-                    </form>
-                </div>
-            {% elif not request.user.is_moderator and not request.user.is_staff %}
-                <div class="notice announcement" role="status">
-                    Tu es délégué·e d'année, délégué·e cours de ton cercle ou dans un bureau étudiant·e&nbsp;?
-                    Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Demande
-                        les droits</a> ou <a href="{% url "moderation_about" %}">découvre comment fonctionne la modération</a>.
-                </div>
-            {% endif %}
-
-            {% if following_course %}
-                <section class="followed-courses">
-                    <div class="section-head">
-                        <div>
-                            <h2>Tes cours</h2>
-                            <div class="eyebrow">Cours suivis</div>
-
-                        </div>
-                    </div>
-                    <div class="course-grid">
-                        {% for course in following_course %}
-                            <a class="card course-card" href="{{ course.get_absolute_url }}">
-                                <div class="course-card-top">
-                                    <span class="pill pill-mono">{{ course.slug|upper }}</span>
-                                </div>
-                                <h3 class="course-card-name">{{ course.name }}</h3>
-                                <div class="course-card-meta">
-                                    <span>{{ course.documents_count }} doc{{ course.documents_count|pluralize }}
-                                        &middot; {{ course.followers_count }} étudiant{{ course.followers_count|pluralize }}</span>
-                                    <span>{{ course.get_period_display }}</span>
-                                </div>
-                            </a>
-                        {% endfor %}
-                        <a class="course-card-add" href="{% url "catalog:finder_root" %}">
-                            {% include "icons/plus.html" %}
-                            Suivre un cours
+        {% if recent_courses %}
+            <section class="recent-courses">
+                <h2 class="eyebrow">Vus récemment</h2>
+                <div class="recent-course-list">
+                    {% for course in recent_courses %}
+                        <a class="pill pill-mono" href="{{ course.get_absolute_url }}">
+                            {{ course.slug|upper }}
                         </a>
-                    </div>
-                </section>
-            {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
 
-            {% if recent_courses %}
-                <section class="recent-courses">
-                    <h2 class="eyebrow">Vus récemment</h2>
-                    <div class="recent-course-list">
-                        {% for course in recent_courses %}
-                            <a class="pill pill-mono" href="{{ course.get_absolute_url }}">
-                                {{ course.slug|upper }}
-                            </a>
-                        {% endfor %}
-                    </div>
-                </section>
-            {% endif %}
-
+        {% if following_course %}
             <div class="home-columns">
                 <section class="activity-feed">
                     <h2 class="eyebrow">Fil</h2>
@@ -161,6 +183,51 @@
                     </div>
                 </aside>
             </div>
+        {% endif %}
+
+        {% if not onboarding_done %}
+            <section class="onboarding">
+                <h2 class="eyebrow">Pour bien démarrer</h2>
+                <ol class="onboarding-grid">
+                    <li class="onboarding-step card{% if onboarding.viewed_course %} is-done{% endif %}">
+                        {% with done=onboarding.viewed_course num=1 %}{% partial onboarding-mark %}{% endwith %}
+                        <span class="onboarding-step-icon">{% include "icons/search.html" %}</span>
+                        <h3>Trouve un cours</h3>
+                        <p>
+                            Cherche un cours dans la barre en haut ou
+                            <a href="{% url "catalog:finder_root" %}">parcours le catalogue</a>,
+                            jusqu'à trouver ton bonheur.
+                        </p>
+                    </li>
+                    <li class="onboarding-step card{% if onboarding.following %} is-done{% endif %}">
+                        {% with done=onboarding.following num=2 %}{% partial onboarding-mark %}{% endwith %}
+                        <span class="onboarding-step-icon">{% include "icons/heart.html" %}</span>
+                        <h3>Suis un cours</h3>
+                        <p>
+                            Ajoute un cours à tes favoris et ses nouveaux documents apparaîtront
+                            directement ici, sans rien chercher.
+                        </p>
+                    </li>
+                    <li class="onboarding-step card{% if onboarding.voted %} is-done{% endif %}">
+                        {% with done=onboarding.voted num=3 %}{% partial onboarding-mark %}{% endwith %}
+                        <span class="onboarding-step-icon">{% include "icons/thumbs-up.html" %}</span>
+                        <h3>Donne ton avis</h3>
+                        <p>
+                            Un document te sauve la vie ? Ou il n'est plus à jour ? Dis-le avec
+                            un vote, ça guide les autres étudiant·es.
+                        </p>
+                    </li>
+                    <li class="onboarding-step card{% if onboarding.uploaded %} is-done{% endif %}">
+                        {% with done=onboarding.uploaded num=4 %}{% partial onboarding-mark %}{% endwith %}
+                        <span class="onboarding-step-icon">{% include "icons/upload.html" %}</span>
+                        <h3>Partage un document</h3>
+                        <p>
+                            Tes notes, d'anciennes questions d'examen ou un simple scan de TP :
+                            c'est grâce à des gens comme toi que DocHub est si bien fourni.
+                        </p>
+                    </li>
+                </ol>
+            </section>
         {% endif %}
     </div>
 {% endblock content %}

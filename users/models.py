@@ -64,6 +64,10 @@ class User(AbstractBaseUser):
         return timezone.now() - self.created < timedelta(days=30)
 
     @property
+    def is_first_week(self):
+        return timezone.now() - self.created < timedelta(days=7)
+
+    @property
     def name(self):
         return f"{self.first_name} {self.last_name}"
 

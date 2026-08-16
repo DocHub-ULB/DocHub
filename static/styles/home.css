@@ -42,6 +42,86 @@
     }
 }
 
+/* Warm welcome greeting reuses the .home-hero shell; only the lede is extra. */
+.welcome-lede {
+    max-width: 34em;
+    margin: var(--grid) 0 0;
+    color: var(--ink-soft);
+    font-size: 17px;
+}
+
+/* Onboarding checklist — shown until the user has completed every step. */
+.onboarding { margin: calc(var(--grid) * 2) 0 calc(var(--grid) * 3); }
+.onboarding > .eyebrow { display: block; margin: 0 0 var(--grid); }
+
+.onboarding-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--grid);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 640px) { grid-template-columns: 1fr; }
+}
+
+.onboarding-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--grid) * 1.5) var(--grid);
+
+    h3 { margin: var(--grid) 0 6px; font-size: 20px; line-height: calc(var(--grid) * 2); }
+    p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+    a { color: var(--accent); font-weight: 500; }
+}
+
+.onboarding-step-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--grid) * 3);
+    height: calc(var(--grid) * 3);
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: var(--radius);
+
+    svg { width: 20px; height: 20px; }
+}
+
+.onboarding-step-status {
+    position: absolute;
+    top: var(--grid);
+    right: calc(var(--grid) * 1.25);
+}
+
+.onboarding-step-num { color: var(--rule-strong); font: 28px/1 var(--font-display); }
+
+.onboarding-step-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    color: #fff;
+    background: var(--positive);
+    border-radius: 999px;
+
+    svg { width: 14px; height: 14px; }
+}
+
+/* Completed steps keep their own icon; the green stays quiet — a soft icon
+   tile, a faint tint and the corner check are enough to read as "done". */
+.onboarding-step.is-done {
+    background: color-mix(in srgb, var(--positive) 6%, var(--bg-raised));
+    border-color: color-mix(in srgb, var(--positive) 22%, var(--rule));
+}
+.onboarding-step.is-done .onboarding-step-icon {
+    color: var(--positive);
+    background: var(--positive-tint);
+}
+
 .followed-courses { margin: calc(var(--grid) * 3) 0 calc(var(--grid) * 4); }
 
 .recent-courses {
