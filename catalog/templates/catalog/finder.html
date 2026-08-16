@@ -16,12 +16,6 @@
                 <strong>Archives</strong>
                 <span>Tu es dans les archives des années précédentes — le programme de l'ULB a parfois beaucoup changé.</span>
             </div>
-        {% else %}
-            <div class="card finder-note">
-                <strong>Nouveaux cours <span class="pill pill-accent">rentrée 2023–2024</span></strong>
-                <span>Le programme a parfois changé&nbsp;: si tu ne trouves plus d'anciens documents,
-                    <a href="{% url 'catalog:finder' slugs='archives' %}">regarde dans les archives</a>.</span>
-            </div>
         {% endif %}
 
         <div class="finder">
