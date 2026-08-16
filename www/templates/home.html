@@ -177,7 +177,11 @@
                 <aside class="sidebar">
                     {% if staff_pick %}
                         <div class="card staff-pick-card">
-                            <div class="eyebrow">{% include "icons/sparkle.html" %} Staff pick de la semaine</div>
+                            <div class="eyebrow">{% include "icons/sparkle.html" %} Staff pick</div>
+                            <p class="staff-pick-note">
+                                Un document mis en avant par l'équipe de modération.
+                                <a href="{% url 'moderation_about' %}">Comment ça marche&nbsp;?</a>
+                            </p>
                             <h3 class="staff-pick-title">{{ staff_pick.name }}</h3>
                             <div class="staff-pick-meta">
                                 par {{ staff_pick.user.name }} &middot; {{ staff_pick.views }} vues

@@ -246,6 +246,8 @@
     .staff-pick-title { margin: var(--grid) 0; font: 500 22px/calc(var(--grid) * 2) var(--font-display); }
     .eyebrow { display: inline-flex; align-items: center; gap: 5px; color: inherit; }
     .staff-pick-meta { margin-bottom: var(--grid); font-size: 13px; opacity: 0.85; }
+    .staff-pick-note { margin: 6px 0 0; font-size: 12px; line-height: 1.45; opacity: 0.75; }
+    .staff-pick-note a { color: inherit; text-decoration: underline; }
     .btn { color: #fff; background: var(--ink); }
 }
 
