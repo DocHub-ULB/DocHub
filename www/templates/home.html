@@ -164,7 +164,13 @@
                             </div>
                         </a>
                     {% empty %}
-                        <p class="activity-empty">Rien de neuf pour l'instant dans tes cours.</p>
+                        <div class="empty-state is-compact activity-empty">
+                            <strong>Rien de neuf pour l'instant</strong>
+                            <small>
+                                Les nouveaux documents de tes cours suivis apparaîtront ici.
+                                Tu peux aussi <a href="{% url "catalog:finder_root" %}">déposer le tien</a>.
+                            </small>
+                        </div>
                     {% endfor %}
                 </section>
                 <aside class="sidebar">

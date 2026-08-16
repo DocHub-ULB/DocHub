@@ -212,7 +212,14 @@
     }
 }
 
-.activity-empty { color: var(--ink-faint); }
+.activity-empty {
+    margin-top: var(--grid);
+    border: 2px dashed var(--rule);
+    border-radius: var(--radius);
+    text-align: left;
+
+    a { color: var(--accent); font-weight: 500; }
+}
 
 .staff-pick-badge {
     display: inline-flex;
@@ -246,7 +253,7 @@
     overflow: hidden;
     padding: var(--grid) 16px;
     color: var(--ink-soft);
-    border: 1px dashed var(--rule-strong);
+    border: 2px dashed var(--rule);
     border-radius: var(--radius);
     font-size: 13px;
     line-height: calc(var(--grid) * 2);
