@@ -79,10 +79,15 @@
 
     > svg { flex-shrink: 0; margin-top: 3px; color: var(--ink-faint); }
     a { color: var(--accent); font-weight: 500; }
-    &.is-danger { border-left-color: var(--danger); }
-    &.is-danger > svg { color: var(--danger); }
+    /* Variants also cover Django message tags (error/warning/info). */
+    &.is-danger, &.is-error { border-left-color: var(--danger); }
+    &.is-danger > svg, &.is-error > svg { color: var(--danger); }
     &.is-success { border-left-color: var(--positive); }
     &.is-success > svg { color: var(--positive); }
+    &.is-warning { border-left-color: var(--negative); }
+    &.is-warning > svg { color: var(--negative); }
+    &.is-info { border-left-color: var(--accent); }
+    &.is-info > svg { color: var(--accent); }
 
     .notice-title { display: block; margin-bottom: 6px; }
     .notice-copy { margin-bottom: 10px; }

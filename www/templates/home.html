@@ -80,9 +80,14 @@
             </div>
         {% elif not request.user.is_moderator and not request.user.is_staff %}
             <div class="notice announcement" role="status">
-                Tu es délégué·e d'année, délégué·e cours de ton cercle ou dans un bureau étudiant·e&nbsp;?
-                Tu peux avoir des droits de modération sur DocHub. <a href="{% url "representative_request" %}">Demande
-                    les droits</a> ou <a href="{% url "moderation_about" %}">découvre comment fonctionne la modération</a>.
+                {% include "icons/graduation-cap.html" %}
+                <div class="announcement-body">
+                    <strong>Tu peux modérer DocHub&nbsp;!</strong>
+                    Tu es délégué·e d'année, délégué·e cours de ton cercle ou dans un bureau
+                    étudiant·e&nbsp;? <a href="{% url "representative_request" %}">Demande les
+                        droits</a> ou <a href="{% url "moderation_about" %}">découvre comment fonctionne
+                            la modération</a>.
+                </div>
             </div>
         {% endif %}
 
