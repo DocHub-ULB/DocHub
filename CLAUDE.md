@@ -13,6 +13,10 @@ JS libs only when necessary
 - **Lint**: `uv run ruff check --fix`
 - **Format**: `uv run ruff format .`
 - **Type check**: `uv run mypy`
+- **Validate templates**: `DEBUG=1 uv run manage.py validate_templates` (compiles every
+  template through the Django engine — catches bad `{% url %}` names, missing partials and
+  invalid tag arguments that the curlylint/djhtml pre-commit linters don't. Needs `DEBUG=1`
+  because `django_extensions` is only installed when `DEBUG` is on.)
 - **Pre-commit**: `uv run pre-commit run --all-files`
 - **Database setup**: `make database` (creates test users and sample data)
 - **Run server**: `uv run manage.py runserver`
