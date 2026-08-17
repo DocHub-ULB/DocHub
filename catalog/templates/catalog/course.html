@@ -16,7 +16,7 @@
             {% endif %}
             {% include "icons/chevron-right.html" %}
             <span class="current">
-                {{ course.slug|upper }} &middot; {{ course.get_period_display }}
+                {{ course.slug|upper }}
                 {% if course.is_archive %}&middot; archivé{% endif %}
             </span>
         </nav>
