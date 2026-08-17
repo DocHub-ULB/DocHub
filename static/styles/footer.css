@@ -77,28 +77,3 @@
     a { color: var(--ink-faint); }
     a:hover { color: var(--ink); }
 }
-
-.footer-logout {
-    display: inline;
-
-    button {
-        appearance: none;
-        border: 0;
-        padding: 0;
-        background: transparent;
-        color: var(--ink-faint);
-        font: inherit;
-        cursor: pointer;
-        white-space: nowrap;
-
-        &:hover { color: var(--ink); }
-        &:active { color: var(--accent); }
-        &:disabled { color: var(--ink-faint); cursor: not-allowed; opacity: 0.55; }
-
-        &:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 3px;
-            border-radius: var(--radius-sm);
-        }
-    }
-}

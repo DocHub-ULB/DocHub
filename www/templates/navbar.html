@@ -31,6 +31,25 @@
                 {% include "icons/upload.html" %}
                 Déposer
             </a>
+
+            {% if request.user.is_authenticated %}
+                <details class="user-menu" data-controller="disclosure">
+                    <summary class="avatar" title="{{ user.name }}">{{ user.initials }}</summary>
+                    <div class="user-menu-panel">
+                        <a href="{% url 'stats' %}">Stats</a>
+                        {% if request.user.is_staff or request.user.is_moderator %}
+                            <a href="{% url 'moderation_about' %}">Modération</a>
+                        {% endif %}
+                        {% if request.user.is_staff %}
+                            <a href="{% url 'admin:index' %}" data-turbo="false">Admin</a>
+                        {% endif %}
+                        <form method="post" action="{% url "logout" %}">
+                            {% csrf_token %}
+                            <button type="submit">Déconnexion</button>
+                        </form>
+                    </div>
+                </details>
+            {% endif %}
         </div>
     </div>
 </header>

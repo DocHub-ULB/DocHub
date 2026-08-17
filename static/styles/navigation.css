@@ -172,6 +172,61 @@
     margin-bottom: 4px;
 }
 
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    border: 0;
+    cursor: pointer;
+}
+
+.user-menu {
+    position: relative;
+    margin-left: 8px;
+
+    summary { list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+
+    .user-menu-panel {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        min-width: 200px;
+        background: var(--bg-raised);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+        z-index: 30;
+
+        a, button {
+            appearance: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 10px;
+            border: 0;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            font: inherit;
+            font-size: 14px;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        a:hover, button:hover { background: var(--bg-sunk); }
+    }
+}
+
 @media (max-width: 760px) {
     .topbar .topbar-inner {
         grid-template-columns: minmax(0, 1fr) auto;

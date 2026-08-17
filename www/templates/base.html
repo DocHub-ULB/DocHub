@@ -97,23 +97,10 @@
                     <div>
                         &copy; 2012–{% now "Y" %} Cercle Informatique ASBL &middot; AGPL v3 &middot; open-source
                         <a href="https://github.com/UrLab/dochub">GitHub</a>
-                        {% if request.user.is_authenticated %}
-                            &middot; <a href="{% url 'stats' %}">Stats</a>
-                        {% endif %}
-                        {% if request.user.is_staff %}
-                            &middot; <a href="{% url 'admin:index' %}" data-turbo="false">Admin</a>
-                        {% endif %}
                         {% if GIT_DESCRIBE %}
                             &middot;
                             <a href="https://github.com/UrLab/dochub/blob/main/CHANGELOG.md"
                                title="Version déployée — voir le changelog">{{ GIT_DESCRIBE }}</a>
-                        {% endif %}
-                        {% if request.user.is_authenticated %}
-                            &middot;
-                            <form class="footer-logout" method="post" action="{% url "logout" %}">
-                                {% csrf_token %}
-                                <button type="submit">Déconnexion</button>
-                            </form>
                         {% endif %}
                     </div>
                 </div>
