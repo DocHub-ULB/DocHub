@@ -96,3 +96,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
     background-image: radial-gradient(var(--paper-dot) 1px, transparent 1.6px);
     background-size: 22px 22px;
 }
+
+/* Centered reading column for focused pages (e.g. the moderation section).
+   The page itself centers in the viewport; content fills the column so
+   headings, prose and tables share one width and left edge. */
+.page.is-narrow { max-width: 820px; }
+.page.is-narrow .prose { max-width: none; }
