@@ -9,7 +9,11 @@
 {% for course in course_list %}
     <li>
         <a title="{{ course.name }}"
-           href="{% url 'catalog:course_show' course.slug %}"
+           {% if target == "upload" %}
+               href="{% url 'document_put' course.slug %}"
+           {% else %}
+               href="{% url 'catalog:course_show' course.slug %}"
+           {% endif %}
            class="search-result-row{% if course.is_archive %} is-archived{% endif %}"
         >
             <span class="pill pill-mono">

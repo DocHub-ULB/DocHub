@@ -45,7 +45,7 @@
                 </h1>
             {% endif %}
             <div class="home-hero-actions">
-                <a class="btn btn-primary" href="{% url "catalog:finder_root" %}">
+                <a class="btn btn-primary" href="{% url "document_upload" %}">
                     {% include "icons/upload.html" %}
                     Partage un document
                 </a>
@@ -169,7 +169,7 @@
                             <strong>Rien de neuf pour l'instant</strong>
                             <small>
                                 Les nouveaux documents de tes cours suivis apparaîtront ici.
-                                Tu peux aussi <a href="{% url "catalog:finder_root" %}">déposer le tien</a>.
+                                Tu peux aussi <a href="{% url "document_upload" %}">déposer le tien</a>.
                             </small>
                         </div>
                     {% endfor %}

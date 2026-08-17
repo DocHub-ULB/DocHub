@@ -3,6 +3,7 @@ from django.urls import path
 import documents.views
 
 urlpatterns = [
+    path("upload/", documents.views.upload_picker, name="document_upload"),
     path("upload/<slug:slug>", documents.views.upload_file, name="document_put"),
     path(
         "submit-bulk/<slug:slug>",
