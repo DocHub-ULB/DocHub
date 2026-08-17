@@ -39,7 +39,7 @@ def _document_form_for_user(user, document, *args, **kwargs):
 def upload_picker(request):
     """Ask which course to upload into, since uploads are course-scoped.
 
-    Reached from the global "Déposer" call-to-actions, which have no course
+    Reached from the global "Partager" call-to-actions, which have no course
     context. Offers the course search (results link to the upload form) and
     the user's followed courses as one-click shortcuts.
     """

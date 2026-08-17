@@ -158,7 +158,7 @@
                                 </h3>
                                 <div class="activity-meta">
                                     <strong>{{ document.user.name }}</strong>
-                                    a déposé dans
+                                    a partagé dans
                                     <span class="activity-course">{{ document.course.slug|upper }}</span>
                                     &middot; <time datetime="{{ document.created|date:'c' }}">{{ document.created|timesince }}</time>
                                 </div>
@@ -169,7 +169,7 @@
                             <strong>Rien de neuf pour l'instant</strong>
                             <small>
                                 Les nouveaux documents de tes cours suivis apparaîtront ici.
-                                Tu peux aussi <a href="{% url "document_upload" %}">déposer le tien</a>.
+                                Tu peux aussi <a href="{% url "document_upload" %}">partager le tien</a>.
                             </small>
                         </div>
                     {% endfor %}

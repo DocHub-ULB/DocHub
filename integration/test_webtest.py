@@ -89,14 +89,14 @@ def test_follow_from_category(app, user, tree):
 
 
 def test_upload_picker_lists_followed_courses(app, user):
-    """The global "Déposer" flow lands on a picker that shortcuts followed
+    """The global "Partager" flow lands on a picker that shortcuts followed
     courses straight to their upload form (uploads are course-scoped)."""
     course = Course.objects.create(name="Algo SWAG", slug="swag-h-042")
     course.followed_by.add(user)
 
     picker = app.get(reverse("document_upload"), user=user.netid)
 
-    assert "Dans quel cours veux-tu déposer" in picker
+    assert "Dans quel cours veux-tu partager" in picker
     assert reverse("document_put", args=[course.slug]) in picker
 
 
