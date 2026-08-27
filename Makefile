@@ -12,7 +12,7 @@ database:
 	@echo "--- Starting database initialization ---"
 	
 	@echo "Creating root category (ULB)"
-	@echo "from catalog.models import Category; Category.objects.get_or_create(slug='ULB', defaults={'name': 'ULB'})" | $(PY) manage.py shell > /dev/null
+	@echo "from catalog.models import CatalogEdition, Category; e, _ = CatalogEdition.objects.get_or_create(status=CatalogEdition.Status.ACTIVE, defaults={'key': 'current'}); Category.objects.get_or_create(edition=e, slug='ULB', defaults={'name': 'ULB'})" | $(PY) manage.py shell > /dev/null
 
 	@echo "Creating user $(CURRENT_USER) with password 'test' (Super Admin & Staff)"
 	@echo "from users.models import User; u, _ = User.objects.get_or_create(netid='$(CURRENT_USER)', defaults={'first_name': 'Gaston', 'last_name': 'Lagaffe', 'email': '$(CURRENT_USER)@fake.ulb.ac.be'}); u.set_password('test'); u.is_staff=True; u.is_superuser=True; u.save()" | $(PY) manage.py shell > /dev/null
