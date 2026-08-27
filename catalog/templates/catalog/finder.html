@@ -27,7 +27,7 @@
                                 {% include "icons/arrow-left.html" %}
                             </a>
                         {% endif %}
-                        {{ column.category.name }}
+                        {{ column.title }}
                     </h2>
                     <ul class="finder-list">
                         {% regroup column.children by category.get_type_display as children_groups %}
@@ -67,5 +67,12 @@
                 <section class="finder-col finder-col-empty" aria-hidden="true"></section>
             {% endfor %}
         </div>
+
+        {% if archive_index_url %}
+            <div class="card finder-note">
+                <strong>Années précédentes</strong>
+                <span>Consulte les <a href="{{ archive_index_url }}">archives du catalogue</a>.</span>
+            </div>
+        {% endif %}
     </div>
 {% endblock content %}

@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from slugify import slugify
 
-from catalog.models import Category
+from catalog.models import CatalogEdition, Category
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +51,11 @@ class Command(BaseCommand):
         level1 = {k: v for k, v in faculties.items() if not is_level0(k)}
 
         with transaction.atomic():
+            edition, _ = CatalogEdition.objects.get_or_create(
+                status=CatalogEdition.Status.ACTIVE,
+                defaults={"key": "current"},
+            )
+
             if Category.objects.filter(slug="archives").first():
                 logger.info("We already have archives, deleting the non-archives")
                 Category.objects.filter(is_archive=False).delete()
@@ -75,6 +80,7 @@ class Command(BaseCommand):
                 name="Université Libre de Bruxelles",
                 slug="ULB",
                 type=Category.CategoryType.UNIVERSITY,
+                edition=edition,
             )
 
             for name in level0:
@@ -82,6 +88,7 @@ class Command(BaseCommand):
                     name=name,
                     slug=slugify0(name),
                     type=Category.CategoryType.UNIVERSITY,
+                    edition=edition,
                 )
 
             # Level 1
@@ -98,6 +105,7 @@ class Command(BaseCommand):
                     name=name,
                     slug=slugify(slug, stopwords=STOP),
                     type=Category.CategoryType.FACULTY,
+                    edition=edition,
                 )
                 c.parents.add(ULB)
 
@@ -127,6 +135,7 @@ class Command(BaseCommand):
                     name=program["name"],
                     slug=program["slug"],
                     type=program_type,
+                    edition=edition,
                 )
 
                 for faculty in program["faculty"]:

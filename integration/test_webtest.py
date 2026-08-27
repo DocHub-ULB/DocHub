@@ -3,7 +3,7 @@ import pytest
 from django.urls import reverse
 from webtest import Upload
 
-from catalog.models import Category, Course
+from catalog.models import CatalogEdition, Category, Course
 from documents.models import Document
 from tags.models import Tag
 from users.models import User
@@ -32,9 +32,17 @@ def tags():
 
 
 @pytest.fixture
-def tree():
-    root = Category.objects.create(name="ULB")
-    science = Category.objects.create(name="science")
+def edition():
+    return CatalogEdition.objects.create(
+        key="test",
+        status=CatalogEdition.Status.ACTIVE,
+    )
+
+
+@pytest.fixture
+def tree(edition):
+    root = Category.objects.create(name="ULB", edition=edition)
+    science = Category.objects.create(name="science", edition=edition)
     science.parents.add(root)
     swag = Course.objects.create(
         name="Optimization of algorithmical SWAG", slug="swag-h-042"
@@ -44,10 +52,11 @@ def tree():
     return root
 
 
-def test_name_in_page(app, user):
+def test_name_in_page(app, user, edition):
     Category.objects.create(
         name="ULB",
         slug="root",
+        edition=edition,
     )
 
     index = app.get("/", user=user.netid)

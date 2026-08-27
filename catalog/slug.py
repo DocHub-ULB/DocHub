@@ -35,7 +35,7 @@ class Slug:
 
     @classmethod
     def from_attached(cls, string: str) -> "Slug":
-        match = re.match(r"([A-Za-z]+)([A-Za-z])(\d+)", string)
+        match = re.fullmatch(r"([A-Za-z]+)([A-Za-z])(\d+)", string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFOF103'")
         domain, faculty, number = match.groups()
@@ -43,7 +43,7 @@ class Slug:
 
     @classmethod
     def from_catalog(cls, string: str) -> "Slug":
-        match = re.match(r"([A-Za-z]+)-([A-Za-z])(\d+)", string)
+        match = re.fullmatch(r"([A-Za-z]+)-([A-Za-z])(\d+)", string)
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'INFO-F103'")
         domain, faculty, number = match.groups()
@@ -51,7 +51,7 @@ class Slug:
 
     @classmethod
     def from_dochub(cls, string: str) -> "Slug":
-        match = re.match(r"([A-Za-z]+)-([A-Za-z])-(\d+)", string.upper())
+        match = re.fullmatch(r"([A-Za-z]+)-([A-Za-z])-(\d+)", string.upper())
         if match is None:
             raise ValueError("Invalid slug format. Must be like 'info-f-103'")
         domain, faculty, number = match.groups()
