@@ -88,6 +88,31 @@ def test_follow_from_category(app, user, tree):
     assert "Se désabonner" in course
 
 
+def test_upload_picker_lists_followed_courses(app, user):
+    """The global "Partager" flow lands on a picker that shortcuts followed
+    courses straight to their upload form (uploads are course-scoped)."""
+    course = Course.objects.create(name="Algo SWAG", slug="swag-h-042")
+    course.followed_by.add(user)
+
+    picker = app.get(reverse("document_upload"), user=user.netid)
+
+    assert "Dans quel cours veux-tu partager" in picker
+    assert reverse("document_put", args=[course.slug]) in picker
+
+
+def test_course_search_target_upload_links_to_upload(app, user):
+    """?target=upload makes course results point at the upload form instead of
+    the course page, so the picker's search deposits documents directly."""
+    course = Course.objects.create(name="Algo SWAG", slug="swag-h-042")
+
+    results = app.get("/search/courses/?target=upload&q=swag", user=user.netid)
+    assert reverse("document_put", args=[course.slug]) in results
+
+    # The plain navbar search stays pointed at the course page.
+    results = app.get("/search/courses/?q=swag", user=user.netid)
+    assert reverse("catalog:course_show", args=[course.slug]) in results
+
+
 # @mock.patch.object(Document, 'add_to_queue')
 @pytest.mark.skip(reason="HTML changed too much in recent version")
 def test_simple_upload(app, user, tree, tags):

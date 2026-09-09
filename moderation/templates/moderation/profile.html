@@ -3,37 +3,37 @@
 {% block title %}{{ profile_user.netid }} — Profil de modération{% endblock %}
 
 {% block content %}
-    <div class="container-xl mt-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'moderation_about' %}">Modération</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'public_logs' %}">Journal</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ profile_user.netid }}</li>
-            </ol>
+    <div class="page is-narrow">
+        <nav class="breadcrumb">
+            <a href="{% url 'moderation_about' %}">Modération</a>
+            {% include "icons/chevron-right.html" %}
+            <a href="{% url 'public_logs' %}">Journal</a>
+            {% include "icons/chevron-right.html" %}
+            <span class="current">{{ profile_user.netid }}</span>
         </nav>
 
-        <div class="d-flex align-items-start justify-content-between mb-4">
-            <div>
-                <h1 class="mb-0">{{ profile_user.netid }}</h1>
-                <p class="text-muted mb-1">{{ profile_user.name }}</p>
+        <div class="profile-head">
+            <div class="page-head is-compact">
+                <h1><em class="lede">{{ profile_user.netid }}</em></h1>
+                <p class="page-head-name">{{ profile_user.name }}</p>
                 {% if profile_user.promoted_by %}
-                    <p class="text-muted small mb-0">Promu·e par <a href="{% url 'moderation_profile' profile_user.promoted_by.netid %}">{{ profile_user.promoted_by.netid }}</a></p>
+                    <p class="page-head-note">Promu·e par <a href="{% url 'moderation_profile' profile_user.promoted_by.netid %}">{{ profile_user.promoted_by.netid }}</a></p>
                 {% endif %}
             </div>
             {% if request.user.is_staff and profile_user.is_moderator %}
                 <form method="post" action="{% url 'moderator_remove' profile_user.id %}" data-turbo-confirm="Es-tu sûr de vouloir retirer les droits de {{ profile_user.netid }} ?">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Retirer les droits</button>
+                    <button type="submit" class="btn btn-sm btn-danger">Retirer les droits</button>
                 </form>
             {% endif %}
         </div>
 
-        <div class="card shadow-sm border-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-muted small text-uppercase">
+        <div class="card mod-card">
+            <div class="table-wrap">
+                <table class="mod-table">
+                    <thead>
                         <tr>
-                            <th class="ps-4">Date</th>
+                            <th>Date</th>
                             <th>Action</th>
                             <th>Cible</th>
                         </tr>
@@ -41,15 +41,11 @@
                     <tbody>
                         {% for log in logs %}
                             <tr>
-                                <td class="ps-4 text-muted small" style="white-space: nowrap;">
-                                    {{ log.timestamp|date:"d/m/Y à H:i" }}
-                                </td>
+                                <td class="mod-table-date">{{ log.timestamp|date:"d/m/Y à H:i" }}</td>
                                 <td>
-                                    <span class="badge bg-{{ log.action_color }} bg-opacity-10 text-{{ log.action_color }} border border-{{ log.action_color }}">
-                                        {{ log.action_text }}
-                                    </span>
+                                    <span class="pill is-{{ log.action_color }}">{{ log.action_text }}</span>
                                     {% if log.details_text %}
-                                        <div class="mt-1 small text-muted fst-italic">{{ log.details_text }}</div>
+                                        <div class="mod-log-details">{{ log.details_text }}</div>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -58,7 +54,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="3" class="text-center text-muted py-5">
+                                <td colspan="3" class="empty-state">
                                     Aucune action de modération enregistrée.
                                 </td>
                             </tr>

@@ -13,6 +13,10 @@ JS libs only when necessary
 - **Lint**: `uv run ruff check --fix`
 - **Format**: `uv run ruff format .`
 - **Type check**: `uv run mypy`
+- **Validate templates**: `DEBUG=1 uv run manage.py validate_templates` (compiles every
+  template through the Django engine — catches bad `{% url %}` names, missing partials and
+  invalid tag arguments that the curlylint/djhtml pre-commit linters don't. Needs `DEBUG=1`
+  because `django_extensions` is only installed when `DEBUG` is on.)
 - **Pre-commit**: `uv run pre-commit run --all-files`
 - **Database setup**: `make database` (creates test users and sample data)
 - **Run server**: `uv run manage.py runserver`
@@ -20,12 +24,17 @@ JS libs only when necessary
 ## Code Style
 - Use **ruff format** for formatting and ruff's `I` rules for import ordering
 - Use **Django 6.0** patterns and **Python 3.13** features
+- Django 6.0 ships **native template partials** (`{% partialdef name %}…{% endpartialdef %}`
+  + `{% partial name %}`, no extra package). Prefer co-locating a small reusable
+  fragment as a partial over a separate `_partial.html` include. `{% partial %}`
+  reads the ambient context, so pass per-call values with `{% with a=… b=… %}`.
 - Type hints required (mypy enabled for main modules)
 - Use Django's TextChoices for model choices
 - Prefer `models.CASCADE` for foreign key deletions
 - Use `verbose_name` for user-facing model fields
 - Follow Django naming: models in PascalCase, fields/methods in snake_case
 - Use `blank=True, default=""` for optional text fields
+- When writing commit messages, use STE100 english
 
 ## Text Tone & User-Facing Content
 The application uses a **friendly, informal, student-to-student tone** in all user-facing text:

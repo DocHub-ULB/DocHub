@@ -36,6 +36,21 @@ def _document_form_for_user(user, document, *args, **kwargs):
 
 
 @login_required
+def upload_picker(request):
+    """Ask which course to upload into, since uploads are course-scoped.
+
+    Reached from the global "Partager" call-to-actions, which have no course
+    context. Offers the course search (results link to the upload form) and
+    the user's followed courses as one-click shortcuts.
+    """
+    return render(
+        request,
+        "documents/upload_picker.html",
+        {"following_courses": request.user.following_courses.order_by("name")},
+    )
+
+
+@login_required
 @slug_redirect
 def upload_file(request, slug):
     course = get_object_or_404(Course, slug=slug)

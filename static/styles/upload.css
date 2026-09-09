@@ -1,0 +1,66 @@
+.upload-picker {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-top: calc(var(--grid) * 4);
+}
+
+.upload-picker-head {
+    margin-bottom: calc(var(--grid) * 2);
+}
+
+.upload-picker-head h1 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: calc(var(--grid) / 2);
+}
+
+.upload-picker-head p {
+    color: var(--ink-soft);
+    max-width: 46ch;
+}
+
+/* The search widget is sized for the top bar; let it fill the picker column. */
+.upload-picker-search {
+    max-width: none;
+}
+
+.upload-picker-following {
+    margin-top: calc(var(--grid) * 2);
+}
+
+.upload-picker-following .eyebrow {
+    display: block;
+    margin-bottom: var(--grid);
+    color: var(--ink-faint);
+}
+
+.upload-picker-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.upload-picker-chips .pill {
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.upload-picker-chips .pill:hover {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.upload-picker-browse {
+    margin-top: calc(var(--grid) * 3);
+    color: var(--ink-faint);
+    font-size: 14px;
+}
+
+.upload-picker-browse a { color: var(--accent); }
+.upload-picker-browse a:hover { text-decoration: underline; }

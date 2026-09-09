@@ -22,4 +22,7 @@ class CourseSearchView(ListView):
         context = super().get_context_data(**kwargs)
         context["query"] = self.request.GET.get("q", "")
         context["simplified"] = connection.vendor != "postgresql"
+        # When the picker asks (?target=upload), point results at the upload
+        # form instead of the course page.
+        context["target"] = self.request.GET.get("target", "")
         return context

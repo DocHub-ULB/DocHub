@@ -98,7 +98,6 @@ class PeriodType(models.TextChoices):
     FIRST = "Q1", _("1er quadri")
     SECOND = "Q2", _("2ème quadri")
     BOTH = "Y", _("Toute l'année")
-    UNKNOWN = "?", _("Inconnu")
 
 
 class Course(models.Model):
@@ -109,7 +108,9 @@ class Course(models.Model):
     period = models.CharField(
         max_length=4,
         choices=PeriodType,
-        default=PeriodType.UNKNOWN,
+        null=True,
+        blank=True,
+        default=None,
     )
 
     followed_by = models.ManyToManyField("users.User", related_name="courses_set")

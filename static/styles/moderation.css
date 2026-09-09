@@ -1,0 +1,171 @@
+.page-head {
+    margin-bottom: calc(var(--grid) * 2);
+
+    &.is-compact { margin-bottom: 0; }
+
+    h1 {
+        margin: 0 0 var(--grid);
+        font-size: 34px;
+        line-height: calc(var(--grid) * 3);
+    }
+
+    p {
+        max-width: 60ch;
+        margin: 0;
+        color: var(--ink-faint);
+        font-size: 14px;
+    }
+
+    .page-head-name { margin-bottom: 2px; }
+    .page-head-note { font-size: 12px; }
+}
+
+.prose {
+    max-width: 640px;
+
+    &.is-wide { max-width: 720px; }
+
+    h2 {
+        margin: calc(var(--grid) * 2) 0 var(--grid);
+        font-size: 21px;
+        line-height: calc(var(--grid) * 2);
+    }
+
+    p { margin: 0 0 var(--grid); color: var(--ink-soft); }
+    ul { margin: 0 0 var(--grid); padding-left: 20px; color: var(--ink-soft); }
+    > .notice { margin-bottom: calc(var(--grid) * 2); }
+}
+
+.table-wrap { overflow-x: auto; }
+
+.mod-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+    th {
+        padding: var(--grid) 14px;
+        color: var(--ink-faint);
+        border-bottom: 1px solid var(--rule-strong);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-align: left;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: var(--grid) 14px;
+        border-bottom: 1px solid var(--rule);
+        vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    tr:hover td { background: var(--bg-sunk); }
+    .pill { white-space: nowrap; }
+
+    .mod-table-date {
+        color: var(--ink-faint);
+        font: 12px var(--font-mono);
+        white-space: nowrap;
+    }
+
+    /* Beats the plain td padding above; the look comes from .empty-state. */
+    td.empty-state { padding: calc(var(--grid) * 3) 14px; }
+}
+
+.mod-log-details { margin-top: 4px; color: var(--ink-faint); font-size: 12px; font-style: italic; }
+.mod-log-change { color: var(--ink-faint); font-size: 13px; }
+.mod-log-old { text-decoration: line-through; }
+
+.mod-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: calc(var(--grid) * 2);
+    color: var(--ink-faint);
+    font-size: 13px;
+}
+
+.profile-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.mod-card { margin-top: 24px; }
+
+.request-list { display: grid; gap: var(--grid); margin-bottom: 24px; }
+.request-heading { margin-bottom: 10px; }
+.request-netid { margin-left: 4px; color: var(--ink-faint); }
+.request-comment { font-style: italic; }
+.request-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; }
+
+.reject-request {
+    summary { list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    &[open] summary { margin-bottom: 10px; }
+
+    .reject-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .reject-reason { width: min(320px, 100%); }
+}
+
+.add-moderator-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.netid-field { width: 260px; }
+
+.meta-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--grid) 16px;
+    margin: var(--grid) 0;
+    font-size: 13px;
+
+    dt { color: var(--ink-faint); }
+    dd { margin: 0; color: var(--ink); }
+    .warn { color: var(--negative); }
+}
+
+.mod-tree,
+.mod-tree-node ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mod-tree-node {
+    padding: var(--grid) 0;
+
+    ul {
+        margin-top: var(--grid);
+        margin-left: 18px;
+        padding-left: 18px;
+        border-left: 1px solid var(--rule);
+    }
+}
+
+.mod-tree-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+
+    .netid { color: var(--accent); font-family: var(--font-mono); font-weight: 600; }
+    .name { color: var(--ink-soft); }
+    .stats { color: var(--ink-faint); font-size: 12px; }
+}

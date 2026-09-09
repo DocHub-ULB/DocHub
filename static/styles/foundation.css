@@ -1,0 +1,104 @@
+:root {
+    --bg: #f4f6fa;               /* cool off-white paper, faint blue tint */
+    --bg-raised: #ffffff;        /* clean white cards/topbar */
+    --bg-sunk: #e8ecf3;
+    --ink: #1b1e24;              /* cool near-black */
+    --ink-soft: #4c535d;
+    --ink-faint: #828b98;        /* cool grey */
+    --rule: #dde2ea;
+    --rule-strong: #c1c8d3;
+    --paper-dot: rgba(90, 115, 150, 0.12);   /* ambient paper texture, cool */
+
+    /* DocHub's recognisable royal blue; components always use --accent. */
+    --brand-blue: #0d6efd;
+    --accent: var(--brand-blue);
+    --accent-soft: #cfe2ff;
+    --accent-ink: #ffffff;
+
+    --highlight: #ffd84d;
+    --highlight-soft: #fff2b8;
+    --highlight-ink: #5a4410;
+
+    --positive: #6f8c3a;
+    --negative: #c55c3a;
+    --danger: #b43a2a;
+
+    /* Quiet backgrounds for success/warning/danger pills and buttons. */
+    --positive-tint: color-mix(in srgb, var(--positive) 14%, var(--bg-raised));
+    --negative-tint: color-mix(in srgb, var(--negative) 14%, var(--bg-raised));
+    --danger-tint: color-mix(in srgb, var(--danger) 14%, var(--bg-raised));
+
+    --font-display: "Instrument Serif", "Times New Roman", serif;
+    --font-body: "DM Sans", -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    --radius-sm: 4px;
+    --radius: 6px;
+
+    /* Spacing unit; this is not a baseline grid. */
+    --grid: 14px;
+
+    /*
+     * Breakpoints (max-width): use only these four.
+     *   640px  - phones
+     *   760px  - the topbar and multi-column widgets collapse
+     *   900px  - sidebars stack under the main column
+     *   1100px - wide-screen extras (hero aside, 4-column grids)
+     */
+
+    --shadow: 0 1px 0 rgba(43, 35, 26, 0.06), 0 4px 14px -6px rgba(43, 35, 26, 0.12);
+    --shadow-card: 0 1px 0 rgba(43, 35, 26, 0.05), 0 8px 22px -10px rgba(43, 35, 26, 0.14);
+}
+
+html { scrollbar-gutter: stable; }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: calc(var(--grid) * 2); }
+
+/* Every heading is display serif; pages only set size and line-height. */
+:is(h1, h2, h3) { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; }
+
+.site-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-content {
+    flex: 1;
+    width: min(calc(100% - 24px), 1320px);
+    margin: 24px auto 0;
+}
+
+:where(.topbar, .site-footer, .page) a { text-decoration: none; color: inherit; }
+.lede { font-style: italic; color: var(--accent); }
+.marker {
+    font-style: italic;
+    padding: 0 6px;
+    background: linear-gradient(
+        transparent 60%,
+        var(--highlight) 60%,
+        var(--highlight) 92%,
+        transparent 92%
+    );
+}
+
+/* The explicit font-family lets headings (serif by default) be eyebrows too. */
+:is(.eyebrow, .hero-eyebrow) { color: var(--ink-faint); font-family: var(--font-body); text-transform: uppercase; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; }
+.hero-eyebrow { font-size: 12px; letter-spacing: 0.14em; }
+
+/* Inner wrapper of <main>; redesigned pages put their content in it. */
+.page {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    padding: calc(var(--grid) / 2) 32px calc(var(--grid) * 8);
+    background-image: radial-gradient(var(--paper-dot) 1px, transparent 1.6px);
+    background-size: 22px 22px;
+}
+
+/* Centered reading column for focused pages (e.g. the moderation section).
+   The page itself centers in the viewport; content fills the column so
+   headings, prose and tables share one width and left edge. */
+.page.is-narrow { max-width: 820px; }
+.page.is-narrow .prose { max-width: none; }

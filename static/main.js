@@ -89,8 +89,10 @@ GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449
 
 class Viewer extends Controller {
     static targets = ["renderer", "loader"]
+    static outlets = ["pager"]
     static values = {src: String, loaded: Boolean, error: Boolean}
     pageSizeLogDebounce = false;
+    currentPage = 0;
 
     static options = {
         threshold: 0, // default
@@ -118,6 +120,8 @@ class Viewer extends Controller {
 
         console.log("PDF loaded with ", this.pdf.numPages, " pages");
         console.debug(this.pdf);
+
+        if (this.hasPagerOutlet) this.pagerOutlet.setTotal(this.pdf.numPages);
 
         this.pages = {};
 
@@ -148,6 +152,15 @@ class Viewer extends Controller {
         // and the DOM reflows each time
         wrappers.map((el) => this.observer.observe(el));
 
+        this.onScroll = this.onScroll.bind(this);
+        window.addEventListener("scroll", this.onScroll, {passive: true});
+        window.addEventListener("resize", this.onScroll);
+        this.updateCurrentPage();
+    }
+
+    disconnect() {
+        window.removeEventListener("scroll", this.onScroll);
+        window.removeEventListener("resize", this.onScroll);
     }
 
     intersectionCallback(event) {
@@ -165,6 +178,53 @@ class Viewer extends Controller {
                 this.removePage(wrapper);
             }
         })
+    }
+
+    // The current page is the one crossing a reference line just below the pinbar
+    // (not merely the topmost visible one — otherwise a sliver of the previous
+    // page left showing above would keep the count a page behind). Throttled to
+    // one computation per animation frame.
+    onScroll() {
+        if (this.scrollScheduled) return;
+        this.scrollScheduled = true;
+        requestAnimationFrame(() => {
+            this.scrollScheduled = false;
+            this.updateCurrentPage();
+        });
+    }
+
+    updateCurrentPage() {
+        // Reference line, in px below the viewport top, that decides the current
+        // page: kept below the fixed pinbar so a jumped-to page reads as current
+        // rather than the sliver of the previous one still showing above it.
+        let ref = 96;
+        let current = 0;
+        for (let wrapper of this.rendererTarget.children) {
+            let rect = wrapper.getBoundingClientRect();
+            if (rect.top <= ref && rect.bottom > ref) {
+                current = parseInt(wrapper.getAttribute("data-viewer-page-param"));
+                break;
+            }
+        }
+        if (!current || current === this.currentPage) return;
+        this.currentPage = current;
+        if (this.hasPagerOutlet) this.pagerOutlet.setCurrent(current);
+    }
+
+    // Called by the pager when the reader types a page number or steps through.
+    goToPage(pageNumber) {
+        if (!this.pdf) return;
+        let page = Math.min(Math.max(pageNumber, 1), this.pdf.numPages);
+        let wrapper = this.rendererTarget
+            .querySelector(`[data-viewer-page-param="${page}"]`);
+        if (wrapper) wrapper.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    // When the pager connects, hand it whatever we already know so it isn't stuck
+    // showing placeholders if the PDF finished loading first.
+    pagerOutletConnected(pager) {
+        if (this.pdf) pager.setTotal(this.pdf.numPages);
+        if (this.currentPage) pager.setCurrent(this.currentPage);
     }
 
     getPageSizes(i) {
@@ -320,6 +380,23 @@ class ModalTrigger extends Controller {
     }
 }
 
+class Disclosure extends Controller {
+    connect() {
+        this.onClickOutside = this.onClickOutside.bind(this);
+        document.addEventListener("click", this.onClickOutside);
+    }
+
+    disconnect() {
+        document.removeEventListener("click", this.onClickOutside);
+    }
+
+    onClickOutside(event) {
+        if (this.element.open && !this.element.contains(event.target)) {
+            this.element.open = false;
+        }
+    }
+}
+
 class Chart extends Controller {
     static values = {
         data: Array,
@@ -369,11 +446,87 @@ class Chart extends Controller {
     }
 }
 
+// Reveals a slim fixed toolbar (the pinbar) once the full viewer action bar has
+// scrolled out of view, so the download button stays reachable. The full bar
+// scrolls away in normal flow and the pinbar is a fixed overlay — no reserved
+// space, so nothing below ever reflows and slow scrolling never jumps.
+class StickyBar extends Controller {
+    static targets = ["bar", "pin"]
+
+    connect() {
+        this.topbar = document.querySelector(".topbar");
+        this.update = this.update.bind(this);
+        window.addEventListener("scroll", this.update, {passive: true});
+        window.addEventListener("resize", this.update);
+        this.update();
+    }
+
+    // The pinbar sits below the topbar only while it's sticky/fixed; on the
+    // viewer the topbar is static and scrolls away, so the offset is 0.
+    offset() {
+        if (!this.topbar) return 0;
+        let pos = getComputedStyle(this.topbar).position;
+        return pos === "sticky" || pos === "fixed" ? this.topbar.offsetHeight : 0;
+    }
+
+    update() {
+        if (!this.hasPinTarget) return;
+        let bottom = this.barTarget.getBoundingClientRect().bottom;
+        this.pinTarget.classList.toggle("is-visible", bottom <= this.offset());
+    }
+
+    disconnect() {
+        window.removeEventListener("scroll", this.update);
+        window.removeEventListener("resize", this.update);
+    }
+}
+
+// The page indicator in the viewer pinbar: shows "current / total" and lets the
+// reader jump to a page. It drives the viewer through the `viewer` outlet and is
+// driven back by it (setCurrent / setTotal) as the document scrolls.
+class Pager extends Controller {
+    static targets = ["input", "total"]
+    static outlets = ["viewer"]
+
+    setCurrent(page) {
+        // Don't fight the reader while they're typing into the field.
+        if (document.activeElement !== this.inputTarget) {
+            this.inputTarget.value = page;
+        }
+    }
+
+    setTotal(total) {
+        this.totalTarget.textContent = total;
+    }
+
+    goto(event) {
+        event.preventDefault();
+        let page = parseInt(this.inputTarget.value, 10);
+        if (!isNaN(page) && this.hasViewerOutlet) this.viewerOutlet.goToPage(page);
+        this.inputTarget.blur();
+    }
+
+    prev() {
+        this.step(-1);
+    }
+
+    next() {
+        this.step(1);
+    }
+
+    step(delta) {
+        let page = parseInt(this.inputTarget.value, 10) || 1;
+        if (this.hasViewerOutlet) this.viewerOutlet.goToPage(page + delta);
+    }
+}
+
 const application = Application.start()
 
 application.register("course-filter", CourseFilter);
+application.register("sticky-bar", StickyBar);
 application.register("search", Search);
 application.register("viewer", Viewer);
+application.register("pager", Pager);
 application.register("upload", Upload);
 application.register('autocomplete', Autocomplete);
 application.register('tom-select', TomSelect);
@@ -381,5 +534,6 @@ application.register('share', Share);
 application.register('modal', Modal);
 application.register('modal-trigger', ModalTrigger);
 application.register('chart', Chart);
+application.register('disclosure', Disclosure);
 
 application.debug = true;

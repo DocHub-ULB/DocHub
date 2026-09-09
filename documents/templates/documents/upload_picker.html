@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Partager un document{% endblock %}
+
+{% block content %}
+    <div class="page">
+        <div class="upload-picker">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
+                <a href="{% url 'index' %}">Accueil</a>
+                {% include "icons/chevron-right.html" %}
+                <span class="current">Partager</span>
+            </nav>
+
+            <header class="upload-picker-head">
+                <h1>Dans quel cours veux-tu partager ton doc&nbsp;?</h1>
+                <p>
+                    Cherche ton cours, puis ajoute ton document.
+                    C'est grâce à des gens comme toi que DocHub est si bien fourni&nbsp;!
+                </p>
+            </header>
+
+            <div class="search-bar upload-picker-search"
+                 data-controller="autocomplete"
+                 data-autocomplete-url-value="/search/courses/?target=upload"
+                 data-autocomplete-min-length-value="3"
+            >
+                {% include "icons/search.html" %}
+                <input type="search"
+                       placeholder="Cherche un cours…  ex: INFO-F-202, probabilités"
+                       aria-label="Recherche d'un cours"
+                       autofocus
+                       data-autocomplete-target="input">
+                <ul data-autocomplete-target="results" class="search-results" hidden></ul>
+            </div>
+
+            {% if following_courses %}
+                <section class="upload-picker-following">
+                    <h2 class="eyebrow">Tes cours suivis</h2>
+                    <ul class="upload-picker-chips">
+                        {% for course in following_courses %}
+                            <li>
+                                <a class="pill pill-mono" href="{% url 'document_put' course.slug %}">
+                                    {{ course.slug|upper }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+
+            <p class="upload-picker-browse">
+                Tu ne trouves pas ton cours&nbsp;?
+                <a href="{% url 'catalog:finder_root' %}">Parcours le catalogue complet.</a>
+            </p>
+        </div>
+    </div>
+{% endblock content %}

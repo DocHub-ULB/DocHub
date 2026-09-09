@@ -8,11 +8,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}DocHub - ULB{% endblock %}</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-              rel="stylesheet" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@400;500;600;700&display=swap"
+              rel="stylesheet">
+        <link href="{% static "styles/style.css" %}" rel="stylesheet" data-turbo-track="reload">
 
         <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.20+esm" defer></script>
-        <meta name="view-transition" content="same-origin">
         <script type="module" src="{% static "main.js" %}" defer data-turbo-track="reload"></script>
 
         <!--
@@ -21,193 +23,10 @@
         -->
         <script defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js" data-turbo-track="reload"></script>
 
-        <style>
-            nav {
-                view-transition-name: nav;
-            }
-
-            @keyframes fade-in {
-                from { opacity: 0; }
-            }
-
-            @keyframes fade-out {
-                to { opacity: 0; }
-            }
-
-            @keyframes slide-from-right {
-                from { transform: translateX(30px); }
-            }
-
-            @keyframes slide-to-left {
-                to { transform: translateX(-30px); }
-            }
-
-            @keyframes full-slide-from-right {
-                from { transform: translateX(100%); }
-            }
-
-            @keyframes full-slide-to-left {
-                to { transform: translateX(-100%); }
-            }
-
-            ::view-transition-old(root) {
-                animation: 300ms ease-out both full-slide-to-left;
-            }
-
-            ::view-transition-new(root) {
-                animation: 300ms ease-out both full-slide-from-right;
-            }
-
-            @media (min-width: 500px) {
-                ::view-transition-old(root) {
-                    animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-                               300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
-                }
-
-                ::view-transition-new(root) {
-                    animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
-                               300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
-                }
-            }
-
-            @media (prefers-reduced-motion) {
-                ::view-transition-group(*),
-                ::view-transition-old(*),
-                ::view-transition-new(*) {
-                    animation: none !important;
-                }
-            }
-
-
-
-            a .hover-underline {
-                text-decoration: underline;
-                text-decoration-color: transparent;
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
-            }
-
-            a:hover .hover-underline {
-                text-decoration-color: black;
-            }
-
-            .hover-scale {
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
-            }
-
-            .hover-scale:hover {
-                transform: scale(1.3);
-            }
-
-            .hover-scale-sm {
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
-            }
-
-            .hover-scale-sm:hover {
-                transform: scale(1.05);
-            }
-
-            a .hover-rotate {
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
-            }
-
-            button:hover .hover-rotate, a:hover .hover-rotate {
-                transform: rotate(-15deg);
-            }
-
-            button:hover .hover-rotate-opposite, a:hover .hover-rotate-opposite {
-                transform: rotate(15deg);
-            }
-
-            a .hover-spin {
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
-            }
-
-            a:hover .hover-spin {
-                transform: rotate(360deg);
-            }
-
-            a:hover .hover-translate {
-                transform: translate(-0.2em);
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
-            }
-
-            div[data-controller="viewer"] .error {
-                display: none;
-            }
-
-            div[data-controller="viewer"][data-viewer-error-value] .error {
-                display: block;
-            }
-
-            div[data-controller="viewer"] .loader {
-                text-align: center;
-                position: absolute;
-                width: 90%;
-                margin-top: 20vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-
-            div[data-controller="viewer"][data-viewer-loaded-value] .loader {
-                transition-property: opacity;
-                transition-duration: 0.2s;
-                transition-timing-function: ease-out;
-                opacity: 0;
-            }
-
-            .loader progress {
-                animation: breathing 2s ease-out infinite normal;
-                margin-top: 20px;
-                max-width: 400px;
-                width: 100%;
-                height: 20px;
-            }
-
-            @keyframes breathing {
-                0% {
-                    transform: scale(0.9);
-                }
-
-                25% {
-                    transform: scale(1);
-                }
-
-                60% {
-                    transform: scale(0.9);
-                }
-
-                100% {
-                    transform: scale(0.9);
-                }
-            }
-
-            .page-wrapper {
-                border: 1px solid #eee;
-                margin-bottom: 1em;
-            }
-
-            #reportDialog {
-                max-width: 800px;
-                width: 90vw;
-            }
-
-            #reportDialog::backdrop {
-                background-color: rgba(0, 0, 0, 0.5);
-            }
-
-        </style>
         {% block head %}{% endblock %}
     </head>
 
-    <body class="d-flex flex-column min-vh-100">
+    <body class="site-body">
         {% block navbar %}
             {% include "navbar.html" %}
         {% endblock navbar %}
@@ -215,12 +34,11 @@
         {% block fullpage %}
             {% block header %}
             {% endblock header %}
-            <main class="container-xl mt-4 flex-grow-1">
+            <main class="page-content">
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <div class="notice is-{{ message.tags }} announcement" role="alert">
                             {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -228,37 +46,63 @@
                 {% endblock content %}
             </main>
 
-            <footer class="mt-3 p-2 container-xl footer bg-light bg-gradient border-top d-md-flex gap-4 justify-content-center">
-                <div>
-                    Fait avec amour par des étudiants de l'ULB -
-                    <a href="mailto:contact@dochub.be">
-                        contact@dochub.be
-                    </a>
+            <footer class="site-footer">
+                {% include "icons/doodle-footer.html" %}
+                <div class="footer-grid">
+                    <div>
+                        <div class="footer-brand">
+                            <span class="logo-mark" aria-hidden="true">
+                                <span class="paper"></span>
+                                <span class="fold"></span>
+                                <span class="dot"></span>
+                            </span>
+                            <span><em class="lede">Doc</em>Hub</span>
+                        </div>
+                        <p class="footer-tagline">
+                            Fait par les étudiant·es de l'ULB, pour les étudiant·es de l'ULB.
+                            Sans pub, sans bullshit.
+                        </p>
+                        <div class="footer-credit">
+                            codé avec {% include "icons/heart.html" %} au <a href="https://urlab.be">UrLab</a> &amp;
+                            le <a href="https://cercle-informatique.be/">Cercle Informatique</a>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="eyebrow">Le site</h3>
+                        <ul>
+                            <li><a href="{% url 'index' %}">Accueil</a></li>
+                            <li><a href="{% url "catalog:finder_root" %}">Catalogue</a></li>
+                            <li><a href="{% url "document_upload" %}">Partager un doc</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="eyebrow">La communauté</h3>
+                        <ul>
+                            <li><a href="https://github.com/UrLab/dochub">Contribuer au code</a></li>
+                            <li><a href="https://github.com/UrLab/dochub/issues">Signaler un bug</a></li>
+                            <li><a href="{% url 'moderation_about' %}">Modération</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="card sticky-note footer-sticky-note">
+                            <div class="eyebrow">Astuce</div>
+                            <div class="footer-sticky-copy">
+                                Tu peux voir un document directement dans ton navigateur,
+                                <em class="lede">pas besoin de le télécharger.</em>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <a href="https://urlab.be" class="text-decoration-none me-2">
-                        <img src="{% static "images/urlab.png" %}" style="height: 1em;">
-                        UrLab
-                    </a>
-                    <a href="https://cercle-informatique.be/" class="text-decoration-none me-2">
-                        <img style="height: 1.0em;" src="{% static "images/ci.png" %}">
-                    </a>
-                    <span class="text-muted">|</span>
-                    <a href="https://github.com/UrLab/dochub" class="ms-2">GitHub</a>
-                    <span class="text-muted mx-1">&bull;</span>
-                    <a href="{% url 'moderation_about' %}">Modération</a>
-                    {% if request.user.is_authenticated %}
-                        <span class="text-muted mx-1">&bull;</span>
-                        <a href="{% url 'stats' %}">Stats</a>
-                    {% endif %}
-                    {% if GIT_DESCRIBE %}
-                        <span class="text-muted mx-1">&bull;</span>
-                        <a href="https://github.com/UrLab/dochub/blob/main/CHANGELOG.md"
-                           class="text-muted text-decoration-none"
-                           title="Version déployée — voir le changelog">
-                            <small>{{ GIT_DESCRIBE }}</small>
-                        </a>
-                    {% endif %}
+                <div class="footer-bottom">
+                    <div>
+                        &copy; 2012–{% now "Y" %} Cercle Informatique ASBL &middot; AGPL v3 &middot; open-source
+                        <a href="https://github.com/UrLab/dochub">GitHub</a>
+                        {% if GIT_DESCRIBE %}
+                            &middot;
+                            <a href="https://github.com/UrLab/dochub/blob/main/CHANGELOG.md"
+                               title="Version déployée — voir le changelog">{{ GIT_DESCRIBE }}</a>
+                        {% endif %}
+                    </div>
                 </div>
             </footer>
         {% endblock fullpage %}

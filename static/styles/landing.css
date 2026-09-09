@@ -1,0 +1,69 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.landing-page .main {
+    flex: 1 0 auto;
+    padding-bottom: 0;
+}
+
+.landing-foot { flex-shrink: 0; }
+
+.landing-hero-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: calc(var(--grid) * 5);
+}
+
+.landing-hero-head .hero-eyebrow { margin: 0; max-width: 22rem; line-height: 1.4; }
+.btn-lg { min-height: calc(var(--grid) * 3.5); padding: 0 22px; font-size: 15px; }
+.landing-hero { position: relative; padding: calc(var(--grid) * 4) 0 calc(var(--grid) * 3); }
+
+.landing-hero-copy { max-width: 40rem; }
+
+/* Logged-out utility pages reuse the hero's copy width without its photo. */
+.landing-copy {
+    max-width: 40rem;
+    padding-top: calc(var(--grid) * 4);
+}
+
+.landing-hero h1 {
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1.08;
+    margin: var(--grid) 0;
+    overflow-wrap: anywhere;
+    min-width: 0;
+}
+
+.landing-hero .subhead { font-size: 18px; line-height: 1.5; color: var(--ink-soft); max-width: 34rem; margin: 0 0 calc(var(--grid) * 1.5); }
+.landing-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+.landing-fineprint { margin: var(--grid) 0 0; font-size: 13px; color: var(--ink-faint); }
+.landing-fineprint a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+
+.landing-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--grid) calc(var(--grid) * 3.5);
+    margin: 0 0 calc(var(--grid) * 2);
+}
+
+/* The number (dd) renders above its label (dt). */
+.landing-stat { display: flex; flex-direction: column-reverse; }
+.landing-stat dd { margin: 0; font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--ink); }
+
+.landing-stat dt {
+    margin-top: 3px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+}
+
+.landing-foot { max-width: 1280px; margin: 0 auto; padding: calc(var(--grid) * 2) 32px calc(var(--grid) * 3); font-size: 12px; color: var(--ink-faint); }
+.landing-foot a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
