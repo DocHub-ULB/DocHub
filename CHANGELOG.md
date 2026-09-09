@@ -4,6 +4,15 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.9.0
+
+ * Big redesign: new logo, top bar, footer, home page, course pages, moderation pages, and the catalogue browser
+ * Add a dedicated welcome page for logged-out visitors
+ * Add a page picker in the document viewer so you can jump straight to any page
+ * Add a course picker so you can start sharing a document without digging through the catalogue first
+ * Rename "uploader/déposer" to "partager" across the site, for consistency
+ * Various smaller fixes and polish along the way (empty states, search dropdown, moderation banners, and more)
+
 # 2026.8.0
 
  * Fix PDF preview that failed to load
