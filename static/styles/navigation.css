@@ -34,38 +34,25 @@
 }
 
 .logo-mark {
-    position: relative;
-    width: 26px;
-    height: 30px;
-    flex-shrink: 0;
     display: inline-block;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background-color: var(--accent);
+    -webkit-mask: url("../images/logo.svg") no-repeat center / contain;
+    mask: url("../images/logo.svg") no-repeat center / contain;
+    transform-origin: 20% 65%;
+    transform: rotate(-16deg);
+    transition: transform 0.1s ease-out;
+}
 
-    .paper {
-        position: absolute;
-        inset: 0;
-        background: var(--accent);
-        border-radius: 2px 9px 2px 2px;
-    }
+.logo:hover .logo-mark {
+    transform: rotate(-16deg) scale(1.15);
+}
 
-    .fold {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 10px;
-        height: 10px;
-        background: var(--highlight);
-        clip-path: polygon(100% 0, 0 0, 100% 100%);
-    }
-
-    .dot {
-        position: absolute;
-        left: 50%;
-        bottom: 6px;
-        width: 5px;
-        height: 5px;
-        background: var(--highlight);
-        border-radius: 50%;
-        transform: translateX(-50%);
+@media (prefers-reduced-motion: reduce) {
+    .logo-mark {
+        transition: none;
     }
 }
 
