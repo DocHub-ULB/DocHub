@@ -1,0 +1,17 @@
+{
+  "academic_year": "2024-2025",
+  "programs": [
+    {
+      "slug": "BA-SCI",
+      "name": "Bachelier en sciences",
+      "faculties": [{"name": "Faculté des Sciences", "color": "#1f77b4"}]
+    }
+  ],
+  "memberships": [
+    {"program": "BA-SCI", "bloc": "1", "course_code": "MATH-S101", "title": "Mathématiques", "mandatory": true, "quadri": "q1", "lecturers": "Prof. Alpha"},
+    {"program": "BA-SCI", "bloc": "1", "course_code": "HIST-S102", "title": "Histoire des sciences", "mandatory": false, "quadri": "q2", "lecturers": "Prof. Beta"},
+    {"program": "BA-SCI", "bloc": "2", "course_code": "MATH-S201", "title": "Mathématiques avancées", "mandatory": true, "quadri": "q1", "lecturers": "Prof. Alpha"},
+    {"program": "BA-SCI", "bloc": "2", "course_code": "PHYS-S202", "title": "Physique", "mandatory": false, "quadri": "q12", "lecturers": "Prof. Gamma"}
+  ],
+  "warnings": []
+}
