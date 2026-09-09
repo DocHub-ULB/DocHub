@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Archives du catalogue{% endblock %}
+
+{% block content %}
+    <div class="page">
+        <nav class="breadcrumb is-wrapping" aria-label="Fil d'Ariane">
+            <a href="{% url 'index' %}">Accueil</a>
+            {% include "icons/chevron-right.html" %}
+            <a href="{% url 'catalog:finder_root' %}">Catalogue</a>
+        </nav>
+
+        <div class="card finder-note">
+            <strong>Archives</strong>
+            <span>Tu es dans les archives des années précédentes — le programme de l'ULB a parfois beaucoup changé.</span>
+        </div>
+
+        <div class="finder">
+            <section class="finder-col finder-col-current">
+                <h2>Archives</h2>
+                <ul class="finder-list">
+                    {% for archive in archives %}
+                        <li class="finder-item">
+                            <a href="{{ archive.url }}">
+                                <span class="finder-ico">
+                                    {% include "icons/chevron-right.html" with width=14 height=14 %}
+                                </span>
+                                <span class="finder-name">{{ archive.name }}</span>
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li class="finder-item"><span class="finder-name">Aucune archive disponible.</span></li>
+                    {% endfor %}
+                </ul>
+            </section>
+            <section class="finder-col finder-col-empty" aria-hidden="true"></section>
+            <section class="finder-col finder-col-empty" aria-hidden="true"></section>
+            <section class="finder-col finder-col-empty" aria-hidden="true"></section>
+        </div>
+    </div>
+{% endblock content %}

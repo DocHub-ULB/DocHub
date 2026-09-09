@@ -6,9 +6,36 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
+class CatalogEdition(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = "active", _("Active")
+        ARCHIVED = "archived", _("Archived")
+
+    key = models.CharField(max_length=32, unique=True)
+    academic_year = models.CharField(max_length=9, null=True, blank=True)
+    status = models.CharField(max_length=8, choices=Status.choices)
+
+    class Meta:
+        ordering = ["key"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["status"],
+                condition=models.Q(status="active"),
+                name="one_active_catalog_edition",
+            ),
+        ]
+
+    def __str__(self):
+        return self.key
+
+    @property
+    def title(self) -> str:
+        return self.academic_year or self.key
+
+
 class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(max_length=255, db_index=True, unique=True)
+    slug = models.SlugField(max_length=255, db_index=True)
     description = models.TextField(blank=True, default="")
     parents = models.ManyToManyField(
         "self",
@@ -18,6 +45,11 @@ class Category(models.Model):
     )
 
     is_archive = models.BooleanField(default=False)
+    edition = models.ForeignKey(
+        CatalogEdition,
+        on_delete=models.CASCADE,
+        related_name="categories",
+    )
 
     class CategoryType(models.TextChoices):
         BACHELOR = "BA", _("Bachelier")
@@ -39,6 +71,12 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "categories"
         ordering = ["id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["edition", "slug"],
+                name="unique_category_slug_per_edition",
+            ),
+        ]
 
     def __str__(self):
         return self.name

@@ -1,0 +1,26 @@
+{
+  "academic_year": "2025-2026",
+  "programs": [
+    {
+      "slug": "BA-SCI",
+      "name": "Bachelier en sciences",
+      "faculties": [{"name": "Faculté des Sciences", "color": "#1f77b4"}]
+    },
+    {
+      "slug": "BA-DROI",
+      "name": "Bachelier en droit",
+      "faculties": [{"name": "Faculté de Droit", "color": "#d62728"}]
+    }
+  ],
+  "memberships": [
+    {"program": "BA-SCI", "bloc": "1", "course_code": "MATH-S101", "title": "Mathématiques générales", "mandatory": true, "quadri": "q1", "lecturers": "Prof. Alpha"},
+    {"program": "BA-SCI", "bloc": "1", "course_code": "PHYS-S102", "title": "Physique générale", "mandatory": false, "quadri": "q2", "lecturers": "Prof. Gamma"},
+    {"program": "BA-SCI", "bloc": "2", "course_code": "MATH-S201", "title": "Mathématiques avancées", "mandatory": true, "quadri": "q1", "lecturers": "Prof. Alpha"},
+    {"program": "BA-SCI", "bloc": "2", "course_code": "CHIM-S202", "title": "Chimie", "mandatory": false, "quadri": "aa", "lecturers": "Prof. Delta"},
+    {"program": "BA-DROI", "bloc": "1", "course_code": "DROI-D101", "title": "Introduction au droit", "mandatory": true, "quadri": "q1", "lecturers": "Prof. Epsilon"},
+    {"program": "BA-DROI", "bloc": "1", "course_code": "ECON-D102", "title": "Économie politique", "mandatory": false, "quadri": "q2", "lecturers": "Prof. Zeta"},
+    {"program": "BA-DROI", "bloc": "2", "course_code": "DROI-D201", "title": "Droit civil", "mandatory": true, "quadri": "q12", "lecturers": "Prof. Epsilon"},
+    {"program": "BA-DROI", "bloc": "2", "course_code": "CRIM-D202", "title": "Criminologie", "mandatory": false, "quadri": "q2", "lecturers": "Prof. Eta"}
+  ],
+  "warnings": []
+}

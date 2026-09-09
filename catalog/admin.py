@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Course
+from .models import CatalogEdition, Category, Course
 
 
 class CategoryInline(admin.TabularInline):
@@ -23,3 +23,8 @@ class CourseAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("slug", "name")
+
+
+@admin.register(CatalogEdition)
+class CatalogEditionAdmin(admin.ModelAdmin):
+    list_display = ("key", "academic_year", "status")

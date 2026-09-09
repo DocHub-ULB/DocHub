@@ -2,7 +2,7 @@ PY = uv run
 
 CURRENT_USER = $(USER)
 
-.PHONY: init database clean
+.PHONY: init database catalog-rebuild catalog-refresh clean
 
 init: database
 
@@ -10,9 +10,6 @@ database:
 	$(PY) manage.py migrate -v 0
 	
 	@echo "--- Starting database initialization ---"
-	
-	@echo "Creating root category (ULB)"
-	@echo "from catalog.models import Category; Category.objects.get_or_create(slug='ULB', defaults={'name': 'ULB'})" | $(PY) manage.py shell > /dev/null
 
 	@echo "Creating user $(CURRENT_USER) with password 'test' (Super Admin & Staff)"
 	@echo "from users.models import User; u, _ = User.objects.get_or_create(netid='$(CURRENT_USER)', defaults={'first_name': 'Gaston', 'last_name': 'Lagaffe', 'email': '$(CURRENT_USER)@fake.ulb.ac.be'}); u.set_password('test'); u.is_staff=True; u.is_superuser=True; u.save()" | $(PY) manage.py shell > /dev/null
@@ -23,18 +20,9 @@ database:
 	@echo "Creating some tags"
 	@echo "from tags.models import Tag; [Tag.objects.get_or_create(name=x) for x in ('syllabus', 'officiel', 'examen', 'resume', 'synthese', 'notes')]" | $(PY) manage.py shell > /dev/null
 	
-	@echo "--- Uploading data from CSV files ---"
-	@if [ -f "csv/programs.json" ]; then \
-		$(PY) manage.py load_tree; \
-	else \
-		echo "Warning: csv/programs.json not found, skipping load_tree"; \
-	fi
-	
-	@if [ -f "csv/courses.json" ]; then \
-		$(PY) manage.py load_courses; \
-	else \
-		echo "Warning: csv/courses.json not found, skipping load_courses"; \
-	fi
+	@echo "Loading the fake catalog (archived 2024-2025, then active 2025-2026)"
+	$(PY) manage.py sync_catalog catalog/ingest/seed/seed_catalog_2024_2025.json --apply > /dev/null
+	$(PY) manage.py sync_catalog catalog/ingest/seed/seed_catalog_2025_2026.json --apply > /dev/null
 
 	@echo "Adding some fake documents"
 	$(PY) manage.py create_fake_doc
@@ -46,6 +34,12 @@ database:
 
 run:
 	$(PY) manage.py runserver
+
+catalog-rebuild:
+	./scripts/rebuild_local_catalog
+
+catalog-refresh:
+	./scripts/rebuild_local_catalog --refresh-snapshot
 
 clean:
 	@echo "Cleaning up the environment..."
