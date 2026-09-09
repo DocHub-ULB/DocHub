@@ -1,0 +1,4 @@
+{
+  "status": 200,
+  "json": "{\"blocs\":[{\"anac\":\"2025\",\"level\":\"P\",\"blocid\":\"a2025bp\",\"signature\":\"2025/BA-INFO/blocs 1-3\",\"progCourses\":[{\"id\":\"INFO-F101\",\"title\":\"Programmation\",\"mandatory\":true,\"bloc\":\"1\",\"quadri\":\"q1\",\"lecturers\":\"Gilles GEERAERTS (Coordonnateur)\"}]},{\"anac\":\"2026\",\"level\":\"P\",\"blocid\":\"a2026bp\",\"signature\":\"2026/BA-INFO/blocs 1-3\",\"progCourses\":[{\"id\":\"INFO-F101\",\"title\":\"Programmation\",\"mandatory\":true,\"bloc\":\"1\",\"quadri\":\"q1\",\"lecturers\":\"Gilles GEERAERTS (Coordonnateur)\"},{\"id\":\"HULB-0000\",\"title\":\"Cours externe à l'Université\",\"mandatory\":false,\"bloc\":\"3\",\"quadri\":\"aa\",\"lecturers\":\"\"}]}]}"
+}

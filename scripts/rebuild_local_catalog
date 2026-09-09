@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+readonly DATABASE_NAME="dochub"
+readonly EXPECTED_DB_URL="postgres:///dochub"
+readonly ACADEMIC_YEAR="${CATALOG_ACADEMIC_YEAR:-2026-2027}"
+readonly BACKUP="${CATALOG_DB_BACKUP:-${PROJECT_DIR}/dochub-pre-catalog-2026-2027-20260817.dump}"
+readonly SNAPSHOT="${CATALOG_SNAPSHOT:-${PROJECT_DIR}/catalog-2026-2027.json}"
+readonly ADMIN_NETID="${USER:?USER must be set to the local admin netid}"
+
+refresh_snapshot=false
+
+usage() {
+    cat <<'EOF'
+Usage: scripts/rebuild_local_catalog [--refresh-snapshot]
+
+Restore the local dochub PostgreSQL database, migrate it, create/update the
+$USER staff account with password "test", and apply the 2026-2027 catalog.
+
+By default the checked snapshot is replayed without network access. Pass
+--refresh-snapshot to scrape ULB and atomically replace the snapshot first.
+
+Optional environment variables:
+  DB_URL                 Must be postgres:///dochub (the default).
+  CATALOG_DB_BACKUP      PostgreSQL custom dump to restore.
+  CATALOG_SNAPSHOT       Snapshot to replay or refresh.
+  CATALOG_ACADEMIC_YEAR  Academic year to scrape (default: 2026-2027).
+EOF
+}
+
+case "${1:-}" in
+    "") ;;
+    --refresh-snapshot) refresh_snapshot=true ;;
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    *)
+        usage >&2
+        exit 2
+        ;;
+esac
+
+export DB_URL="${DB_URL:-${EXPECTED_DB_URL}}"
+if [[ "${DB_URL}" != "${EXPECTED_DB_URL}" ]]; then
+    echo "Refusing to replace a database other than ${EXPECTED_DB_URL}." >&2
+    echo "DB_URL is ${DB_URL}." >&2
+    exit 1
+fi
+
+if [[ ! -f "${BACKUP}" ]]; then
+    echo "Database backup not found: ${BACKUP}" >&2
+    exit 1
+fi
+if [[ "${refresh_snapshot}" == false && ! -f "${SNAPSHOT}" ]]; then
+    echo "Catalog snapshot not found: ${SNAPSHOT}" >&2
+    echo "Run again with --refresh-snapshot to create it from ULB." >&2
+    exit 1
+fi
+
+for command in dropdb createdb pg_restore uv; do
+    if ! command -v "${command}" >/dev/null; then
+        echo "Required command not found: ${command}" >&2
+        exit 1
+    fi
+done
+
+cd "${PROJECT_DIR}"
+
+echo "Restoring ${DATABASE_NAME} from ${BACKUP}..."
+dropdb --if-exists --force "${DATABASE_NAME}"
+createdb "${DATABASE_NAME}"
+pg_restore \
+    --dbname="${DATABASE_NAME}" \
+    --no-owner \
+    --no-privileges \
+    "${BACKUP}"
+
+echo "Applying migrations..."
+uv run manage.py migrate
+
+echo "Creating admin ${ADMIN_NETID} with password 'test'..."
+LOCAL_ADMIN_NETID="${ADMIN_NETID}" uv run manage.py shell -c '
+import os
+
+from users.models import User
+
+netid = os.environ["LOCAL_ADMIN_NETID"]
+user, _ = User.objects.get_or_create(
+    netid=netid,
+    defaults={
+        "email": f"{netid}@fake.ulb.ac.be",
+        "first_name": netid,
+        "last_name": "Local admin",
+    },
+)
+user.set_password("test")
+user.is_staff = True
+user.save()
+'
+
+if [[ "${refresh_snapshot}" == true ]]; then
+    echo "Refreshing ${SNAPSHOT} from ULB..."
+    uv run manage.py scrape_catalog \
+        --academic-year "${ACADEMIC_YEAR}" \
+        --output "${SNAPSHOT}"
+else
+    echo "Replaying ${SNAPSHOT}; no ULB requests will be made."
+fi
+
+echo "Previewing catalog changes..."
+uv run manage.py sync_catalog "${SNAPSHOT}"
+
+echo "Applying catalog changes..."
+uv run manage.py sync_catalog "${SNAPSHOT}" --apply
+
+echo "Verifying catalog edition roots..."
+uv run manage.py shell -c '
+from catalog.models import CatalogEdition, Category
+
+obsolete = list(
+    Category.objects.filter(slug__in=["archives", "archives-legacy"])
+    .order_by("slug")
+    .values_list("slug", flat=True)
+)
+if obsolete:
+    raise SystemExit(f"Obsolete catalog roots remain: {obsolete}")
+
+editions = list(CatalogEdition.objects.order_by("key"))
+for edition in editions:
+    roots = edition.categories.filter(slug="ULB")
+    if roots.count() != 1:
+        raise SystemExit(
+            f"Catalog edition {edition.key} has {roots.count()} ULB roots"
+        )
+    faculty_count = roots.get().children.filter(
+        edition=edition,
+        type=Category.CategoryType.FACULTY,
+    ).count()
+    print(f"{edition.key}: {edition.status}, {faculty_count} faculties")
+'
+
+echo
+echo "Local catalog rebuild complete."
+echo "Admin: ${ADMIN_NETID} / test"

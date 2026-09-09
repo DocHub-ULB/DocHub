@@ -27,4 +27,5 @@ docker/.*
 .env
 programs.json
 courses.json
+catalog-*.json
 .playwright-mcp/
