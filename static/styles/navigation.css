@@ -28,7 +28,7 @@
     color: var(--ink);
 
     em {
-        font-style: italic;
+        font-style: normal;
         color: var(--accent);
     }
 }
