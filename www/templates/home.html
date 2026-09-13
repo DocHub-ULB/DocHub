@@ -16,13 +16,6 @@
 
     <div class="page">
         <section class="home-hero">
-            <div class="hero-eyebrow">
-                {% if show_welcome_greeting %}
-                    <span>Bienvenue sur DocHub</span>
-                {% else %}
-                    <span>{% now "l j F" %} · semaine {% now "W" %}</span>
-                {% endif %}
-            </div>
             {% if show_welcome_greeting %}
                 <h1>
                     Salut{% if user.first_name %} <em class="marker">{{ user.first_name }}</em>{% endif %},

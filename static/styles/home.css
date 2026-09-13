@@ -11,8 +11,6 @@
         span { color: var(--ink-soft); }
     }
 
-    > .hero-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: var(--grid); }
-
     .home-hero-actions {
         display: flex;
         flex-wrap: wrap;
