@@ -10,6 +10,7 @@ from catalog.ingest import sync as catalog_sync
 from catalog.ingest.sync import (
     SnapshotError,
     apply_snapshot,
+    format_comparison,
     load_snapshot,
     validate_snapshot,
 )
@@ -167,6 +168,129 @@ def test_year_archive_exposes_only_the_ulb_tree():
     assert list(year_archive.children.all()) == [faculty]
     assert not partner.parents.filter(pk=year_archive.pk).exists()
     assert Category.objects.filter(slug="ULB").count() == 2
+
+
+@pytest.mark.parametrize(
+    ("slug", "name", "expected"),
+    [
+        ("BA-ES3SC", "Bachelier en enseignement section 3 : sciences", "BA"),
+        ("MA60-ES5CH", "Master en enseignement section 5 : Chimie", "TEAC"),
+        ("MA-ES4MA", "Master en enseignement section 4 : Mathématiques", "TEAC"),
+        ("MA-INFO", "Master en sciences informatiques", "MA"),
+        # Not a teaching degree despite the word: it is a specialization master.
+        (
+            "MS-PEDA",
+            (
+                "Master de spécialisation en pédagogie universitaire et de "
+                "l'enseignement supérieur"
+            ),
+            "MS",
+        ),
+        (
+            "CAPAES-PEDA",
+            "Certificat d'aptitude pédagogique approprié à l'enseignement supérieur",
+            "CERT",
+        ),
+    ],
+)
+def test_teaching_masters_get_their_own_type(slug, name, expected):
+    assert catalog_sync._program_type({"slug": slug, "name": name}) == expected
+
+
+def test_teaching_masters_are_grouped_apart_in_the_finder(client):
+    make_active_edition()
+    snapshot = make_snapshot()
+    faculty = [{"name": "Faculté des Sciences", "color": "#123456"}]
+    snapshot["programs"] += [
+        {
+            "slug": "MA60-ES5CH",
+            "name": "Master en enseignement section 5 : Chimie",
+            "faculties": faculty,
+        },
+        {
+            "slug": "MS-CHIM",
+            "name": "Master de spécialisation en chimie",
+            "faculties": faculty,
+        },
+    ]
+    snapshot["memberships"] += [
+        {
+            **snapshot["memberships"][0],
+            "program": "MA60-ES5CH",
+            "course_code": "CHIM-F100",
+            "title": "Chimie",
+        },
+        {
+            **snapshot["memberships"][0],
+            "program": "MS-CHIM",
+            "course_code": "CHIM-F200",
+            "title": "Chimie avancée",
+        },
+    ]
+
+    apply_snapshot(snapshot)
+
+    page = client.get(reverse("catalog:finder", args=["sciences/"])).content.decode()
+    # Teaching masters come last, after the specialization masters.
+    assert page.index("Masters de spécialisation") < page.index(
+        "Masters en enseignement"
+    )
+    # The plurals are spelled out, so no heading gains a stray trailing "s".
+    assert "Master en enseignements" not in page
+    assert "Master de spécialisations" not in page
+
+
+def test_program_without_courses_gets_no_category():
+    # ULB publishes a few programs with an empty course list; a category for one
+    # of them is a dead end in the finder, so it is skipped entirely.
+    make_active_edition()
+    snapshot = make_snapshot()
+    snapshot["programs"].append(
+        {
+            "slug": "MS-EMPTY",
+            "name": "Master de spécialisation sans cours",
+            "faculties": [{"name": "Faculté de Droit", "color": "#000000"}],
+        }
+    )
+
+    comparison = apply_snapshot(snapshot)
+
+    edition = CatalogEdition.objects.get(key="2026-2027")
+    assert not edition.categories.filter(slug="MS-EMPTY").exists()
+    # The faculty that only that program hung from goes away with it.
+    assert not edition.categories.filter(slug="droit").exists()
+    assert edition.categories.filter(slug="BA-TEST").exists()
+    assert comparison.skipped_programs == ["MS-EMPTY"]
+    assert "MS-EMPTY" in format_comparison(comparison)
+
+
+def test_partner_schools_are_roots_and_not_ulb_faculties():
+    make_active_edition()
+    snapshot = make_snapshot()
+    snapshot["programs"][0]["faculties"].extend(
+        [
+            {"name": "Bruface", "color": ""},
+            {"name": "Ecole Royale Militaire", "color": ""},
+            {"name": "Institut des Sciences et Industries du Vivant", "color": ""},
+            {"name": "Université de Namur", "color": ""},
+        ]
+    )
+
+    apply_snapshot(snapshot)
+
+    edition = CatalogEdition.objects.get(key="2026-2027")
+    root = edition.categories.get(slug="ULB")
+    assert set(
+        root.children.filter(type=Category.CategoryType.FACULTY).values_list(
+            "slug", flat=True
+        )
+    ) == {"sciences"}
+    for slug in ("bruface", "erm", "agroparistech", "unamur"):
+        partner = edition.categories.get(slug=slug)
+        assert partner.type == Category.CategoryType.UNIVERSITY
+        assert not partner.parents.exists()
+        # The program stays reachable from its ULB faculty and from every partner.
+        assert set(partner.children.values_list("slug", flat=True)) == {"BA-TEST"}
 
 
 def test_memberships_are_exact_and_mandatory_is_on_through_row():

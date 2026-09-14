@@ -30,12 +30,12 @@
                         {{ column.title }}
                     </h2>
                     <ul class="finder-list">
-                        {% regroup column.children by category.get_type_display as children_groups %}
+                        {% regroup column.children by category.type_heading as children_groups %}
                         {% for type in children_groups %}
-                            {% if type.grouper != "OTHE" %}
+                            {% if type.grouper %}
                                 <li class="finder-group">
                                     {% include "icons/graduation-cap.html" %}
-                                    {{ type.grouper }}{{ type.list|pluralize }}
+                                    {{ type.grouper }}
                                 </li>
                             {% endif %}
                             {% for child in type.list %}

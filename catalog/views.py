@@ -149,7 +149,8 @@ _CATEGORY_TYPE_ORDER = Case(
     When(type=Category.CategoryType.BACHELOR, then=Value(0)),
     When(type=Category.CategoryType.MASTER, then=Value(1)),
     When(type=Category.CategoryType.MASTER_SPECIALIZATION, then=Value(2)),
-    default=Value(3),
+    When(type=Category.CategoryType.TEACHING, then=Value(3)),
+    default=Value(4),
 )
 
 

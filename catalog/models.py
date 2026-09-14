@@ -1,8 +1,10 @@
 from datetime import timedelta
+from typing import ClassVar
 
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
 
@@ -54,6 +56,10 @@ class Category(models.Model):
     class CategoryType(models.TextChoices):
         BACHELOR = "BA", _("Bachelier")
         MASTER = "MA", _("Master")
+        # ULB replaced the agrégation (AESS) with the "master en enseignement"
+        # in 2023, so both live on: the new one in recent editions, the old one
+        # in the archived editions that were imported before the reform.
+        TEACHING = "TEAC", _("Master en enseignement")
         MASTER_SPECIALIZATION = "MS", _("Master de spécialisation")
         CERTIFICATE = "CERT", _("Certificat")
         AGGREGATION = "AGG", _("Agrégation")
@@ -78,8 +84,32 @@ class Category(models.Model):
             ),
         ]
 
+    # The finder groups a column under one heading per type. French plurals do
+    # not survive a trailing "s" ("Masters de spécialisation", not "Master de
+    # spécialisations"), so each type spells its own heading out.
+    TYPE_HEADINGS: ClassVar[dict[str, str | Promise]] = {
+        CategoryType.BACHELOR: _("Bacheliers"),
+        CategoryType.MASTER: _("Masters"),
+        CategoryType.TEACHING: _("Masters en enseignement"),
+        CategoryType.MASTER_SPECIALIZATION: _("Masters de spécialisation"),
+        CategoryType.CERTIFICATE: _("Certificats"),
+        CategoryType.AGGREGATION: _("Agrégations"),
+        CategoryType.UNIVERSITY: _("Universités"),
+        CategoryType.FACULTY: _("Facultés"),
+        CategoryType.BLOC: _("Blocs"),
+    }
+
     def __str__(self):
         return self.name
+
+    @property
+    def type_heading(self) -> str:
+        """Plural heading for this category's type, blank when it has none.
+
+        Legacy archives carry types that are no longer offered, and those
+        groups are shown without a heading rather than with a made-up one.
+        """
+        return str(self.TYPE_HEADINGS.get(self.type or "", ""))
 
     def better_name(self):
         name = self.name

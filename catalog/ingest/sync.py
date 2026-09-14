@@ -23,6 +23,19 @@ from catalog.models import CatalogEdition, Category, Course, CourseCategory
 
 STOPWORDS = {"d'", "de", "du", "et", "l'", "la", "le", "les"}
 
+# ULB lists the partner schools of co-organized programs next to its own
+# faculties. They are other institutions, so they become their own root instead
+# of a faculty hanging under ULB. The first two markers cover whole families of
+# partners; the others name one school each and are matched on a fragment
+# because ULB spells "École" with and without its accent.
+PARTNER_SCHOOL_MARKERS = (
+    "Université",
+    "Haute Ecole",
+    "Royale Militaire",  # École Royale Militaire
+    "Sciences et Industries du Vivant",  # AgroParisTech
+    "Bruface",  # the joint ULB-VUB engineering school
+)
+
 
 class SnapshotError(ValueError):
     """A snapshot is unsafe or does not match the documented shape."""
@@ -39,6 +52,7 @@ class CourseValue:
 class SyncComparison:
     academic_year: str
     program_count: int
+    skipped_programs: list[str]
     membership_count: int
     category_count: int
     categories_to_archive: int
@@ -171,7 +185,7 @@ def course_values(snapshot: dict[str, Any]) -> dict[str, CourseValue]:
 
 
 def _is_institution(name: str) -> bool:
-    return "Université" in name or "Haute Ecole" in name
+    return any(marker in name for marker in PARTNER_SCHOOL_MARKERS)
 
 
 def _institution_slug(name: str) -> str:
@@ -183,6 +197,8 @@ def _institution_slug(name: str) -> str:
         "Charlemagne": "hec",
         "Prigogine": "HELB",
         "Saint-Louis": "usaintlouis",
+        "Royale Militaire": "erm",
+        "Sciences et Industries du Vivant": "agroparistech",
     }
     for long_name, short_name in abbreviations.items():
         if long_name in name:
@@ -214,6 +230,12 @@ def _program_type(program: dict[str, Any]) -> str | None:
         return Category.CategoryType.BACHELOR
     if "spécialisation" in name or slug.startswith("MS"):
         return Category.CategoryType.MASTER_SPECIALIZATION
+    # Checked before the plain master, which these would otherwise match. The
+    # "master de spécialisation en pédagogie ... de l'enseignement supérieur"
+    # is not one of them, hence matching the start of the name and not just
+    # "enseignement".
+    if name.startswith("master en enseignement"):
+        return Category.CategoryType.TEACHING
     if "master" in name or slug.startswith("MA"):
         return Category.CategoryType.MASTER
     if "certificat" in name:
@@ -223,10 +245,34 @@ def _program_type(program: dict[str, Any]) -> str | None:
     return None
 
 
+def programs_with_courses(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return the programs that actually carry courses.
+
+    ULB keeps publishing a few programs with an empty course list, usually
+    because a partner university hosts the real programme (MS-RISAN) or because
+    the year has not been filled in yet (BA-ARPA). They would show up in the
+    finder as a program you can click into and find nothing, so they get no
+    category at all.
+    """
+    with_courses = {membership["program"] for membership in snapshot["memberships"]}
+    return [
+        program for program in snapshot["programs"] if program["slug"] in with_courses
+    ]
+
+
+def programs_without_courses(snapshot: dict[str, Any]) -> list[str]:
+    with_courses = {membership["program"] for membership in snapshot["memberships"]}
+    return sorted(
+        program["slug"]
+        for program in snapshot["programs"]
+        if program["slug"] not in with_courses
+    )
+
+
 def desired_category_slug_list(snapshot: dict[str, Any]) -> list[str]:
     slugs = ["ULB"]
     faculty_names: set[str] = set()
-    for program in snapshot["programs"]:
+    for program in programs_with_courses(snapshot):
         slugs.append(program["slug"])
         for faculty in program["faculties"]:
             faculty_names.add(faculty["name"])
@@ -310,6 +356,7 @@ def compare_snapshot(snapshot: dict[str, Any]) -> SyncComparison:
     return SyncComparison(
         academic_year=snapshot["academic_year"],
         program_count=len(snapshot["programs"]),
+        skipped_programs=programs_without_courses(snapshot),
         membership_count=len(snapshot["memberships"]),
         category_count=_expected_category_count(snapshot),
         categories_to_archive=categories_to_archive,
@@ -342,6 +389,11 @@ def format_comparison(comparison: SyncComparison) -> str:
             f"archive {len(comparison.archive_courses)}"
         ),
     ]
+    if comparison.skipped_programs:
+        lines.append(
+            f"Programs skipped for having no course ({len(comparison.skipped_programs)}): "
+            f"{', '.join(comparison.skipped_programs)}"
+        )
     if comparison.disappearing_by_document_count:
         grouped = ", ".join(
             f"{document_count} docs: {course_count} courses"
@@ -410,8 +462,9 @@ def _create_categories(
         type=Category.CategoryType.UNIVERSITY,
         edition=edition,
     )
+    programs = programs_with_courses(snapshot)
     faculty_data: dict[str, dict[str, str]] = {}
-    for program in snapshot["programs"]:
+    for program in programs:
         for faculty in program["faculties"]:
             faculty_data[faculty["name"]] = faculty
 
@@ -437,7 +490,7 @@ def _create_categories(
         faculty_categories[name] = category
 
     program_categories: dict[str, Category] = {}
-    for program in snapshot["programs"]:
+    for program in programs:
         category = Category.objects.create(
             name=program["name"],
             slug=program["slug"],
