@@ -4,6 +4,15 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Browse the catalogue of past academic years: each edition is kept as an archive you can explore. This makes it easier to import the 2026-27 catalog.
+ * Fix program names in the catalogue: options ("finalités") showed their parent program's name, so several programs looked identical
+ * Partner schools (École Royale Militaire, Bruface, AgroParisTech, ...) are now listed on their own instead of as ULB faculties
+ * Hide programs that have no course at all, instead of letting you click into an empty page
+ * Group the "masters en enseignement" under their own heading, and group elective courses of a bloc under "Cours au choix"
+ * Redesign the archive banner and the link to the archives in the catalogue
+ * Rework the logged-out course and document pages: they now say what is behind the login, show a preview of the page waiting for you, and count the documents, views and followers
+ * Reassure visitors before they log in: the connection goes through auth.ulb.be, DocHub never sees your password, and the site is free and ad-free
+
 # 2026.9.0
 
  * Big redesign: new logo, top bar, footer, home page, course pages, moderation pages, and the catalogue browser
