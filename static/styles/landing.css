@@ -39,10 +39,23 @@
     min-width: 0;
 }
 
-.landing-hero .subhead { font-size: 18px; line-height: 1.5; color: var(--ink-soft); max-width: 34rem; margin: 0 0 calc(var(--grid) * 1.5); }
+:is(.landing-hero, .landing-copy) .subhead { font-size: 18px; line-height: 1.5; color: var(--ink-soft); max-width: 34rem; margin: 0 0 calc(var(--grid) * 1.5); }
 .landing-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
 .landing-fineprint { margin: var(--grid) 0 0; font-size: 13px; color: var(--ink-faint); }
 .landing-fineprint a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+
+/*
+ * What a visitor gets to see of a course or a document before logging in. It
+ * borrows the hero's title and counters, so the page still feels like the one
+ * behind dochub.be, with this course or document in place of the whole site.
+ */
+.noauth-preview { margin-bottom: calc(var(--grid) * 2); }
+/* Says out loud what kind of page is behind the wall: a course, a document. */
+.noauth-kind { display: flex; flex-wrap: wrap; gap: 6px; }
+.noauth-preview h1 { margin: 0 0 calc(var(--grid) * 1.5); font-size: clamp(34px, 5.5vw, 52px); line-height: 1.1; overflow-wrap: anywhere; }
+.noauth-preview p { margin: 0 0 var(--grid); line-height: 1.5; color: var(--ink-soft); }
+.noauth-preview strong { color: var(--ink); font-weight: 600; }
+.noauth-preview > :last-child { margin-bottom: 0; }
 
 .landing-stats {
     display: flex;

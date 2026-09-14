@@ -5,21 +5,31 @@
 {% block opengraph %}
     <meta property="og:title" content="{{ course.name }} ({{ course.slug|upper }})" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="{{ course.name }} ({{ course.slug|upper }}) contient {{ documents.count }} documents {% if threads.count > 2 %} et {{ threads.count }} discussions.{% endif %} {% if followers_count > 1 %}{{ followers_count }} personnes sont abonnées à ce cours.{% endif %}" />
+    <meta property="og:description" content="{{ course.name }} ({{ course.slug|upper }}) contient {{ documents.count }} document{{ documents.count|pluralize }} partagé{{ documents.count|pluralize }} par les étudiant·es de l'ULB." />
 {% endblock opengraph %}
 
 {% block preview %}
-    <h1 class="text-center">{{ course.slug|upper }}</h1>
-    <p>
-        Le cours de <strong>{{ course.name }} ({{ course.slug|upper }})</strong> contient
-        {{ documents.count }} documents
-        {% if threads.count > 2 %}
-            et {{ threads.count }} discussions.
-        {% endif %}
+    <p class="noauth-kind">
+        <span class="pill is-info">Cours</span>
+        <span class="pill pill-mono">{{ course.slug|upper }}</span>
     </p>
-    <p>
-        {% if followers_count > 1 %}
-            {{ followers_count }} personnes sont abonnées à ce cours.
+    <h1>{{ course.name }}</h1>
+
+    {# The home page counts the whole site here; a course counts itself. #}
+    <dl class="landing-stats">
+        <div class="landing-stat">
+            <dt>document{{ documents.count|pluralize }}</dt>
+            <dd>{{ documents.count }}</dd>
+        </div>
+        {% if course.followers_count > 1 %}
+            <div class="landing-stat">
+                <dt>abonné·es</dt>
+                <dd>{{ course.followers_count }}</dd>
+            </div>
         {% endif %}
-    </p>
+    </dl>
 {% endblock preview %}
+
+{% block wall_line %}
+    Connecte-toi pour parcourir les notes, résumés et examens de ce cours.
+{% endblock wall_line %}

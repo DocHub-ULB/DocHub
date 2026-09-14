@@ -6,18 +6,36 @@
     <meta property="og:title" content="{{ document.name }}" />
     <meta property="article:tag" content="{{ document.tags.all|join:"," }}" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="{{ document.name }} est un {{ document.file_type }} de {{ document.pages }} pages et est taggé dans les catégories : {{ document.tags.all|join:"," }}" />
+    <meta property="og:description" content="{{ document.name }}, partagé dans le cours {{ document.course.name }} ({{ document.course.slug|upper }}){% if document.tags.all %}, taggé {{ document.tags.all|join:", " }}{% endif %}." />
 {% endblock opengraph %}
 
 {% block preview %}
-    <h1 class="text-center">{{ document.course.slug|upper }}</h1>
+    <p class="noauth-kind">
+        <span class="pill is-info">Document</span>
+        <span class="pill pill-mono">{{ document.course.slug|upper }}</span>
+    </p>
+    {# Quoted, so a title made of ordinary words still reads as a title. #}
+    <h1>&laquo;&nbsp;{{ document.name }}&nbsp;&raquo;</h1>
+    {# The code is already on the pill above, so the sentence only names the course. #}
+    <p>Partagé par un·e étudiant·e dans le cours <strong>{{ document.course.name }}</strong>.</p>
 
-    <p>
-        Un étudiant a partagé le document
-        <strong>"{{ document.name }}"</strong>
-        dans le cours "{{ document.course.name }}" ({{ document.course.slug|upper }}).
-    </p>
-    <p>
-        Ce document {{ document.file_type }} fait {{ document.pages }} pages.
-    </p>
+    {# The home page counts the whole site here; a document counts itself. #}
+    {% if document.pages or document.file_type %}
+        <dl class="landing-stats">
+            {% if document.pages %}
+                <div class="landing-stat">
+                    <dt>page{{ document.pages|pluralize }}</dt>
+                    <dd>{{ document.pages }}</dd>
+                </div>
+            {% endif %}
+            {% if document.file_type %}
+                <div class="landing-stat">
+                    <dt>format</dt>
+                    <dd>{{ document.file_type|cut:"."|upper }}</dd>
+                </div>
+            {% endif %}
+        </dl>
+    {% endif %}
 {% endblock preview %}
+
+{% block wall_line %}Connecte-toi pour lire ce document.{% endblock %}

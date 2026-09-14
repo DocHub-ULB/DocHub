@@ -1,25 +1,31 @@
 {% extends "base_public.html" %}
 {% load login_url %}
 
-{% block content %}
-    <div class="medium-8 small-12 columns small-centered">
-        {% block preview %}
-        {% endblock preview %}
-        <hr>
-        <p>
-            DocHub est un site de partage de documents et d’entraide étudiante à l’ULB.<br>
-            DocHub te permet de poser des questions aux autres étudiants, échanger tes notes, tes résumés, d'anciens examens et bien plus encore.
-        </p>
-        <p>
-            Dochub est réservé à la communauté étudiante de l'ULB,
-            il faut donc que tu te connectes
-            (pas besoin de créer un compte, il suffit d'employer ton compte ULB)
-        </p>
-        <p class="text-center">
-            <a href="{% login_url request.get_full_path %}" class="btn btn-success btn-lg">
-                Connexion avec l'ULB
-            </a>
-        </p>
+{% comment %}
+Login wall shown to a visitor who followed a link to a course or a document.
+The preview block says what is behind the wall; the rest is the same pitch and
+the same call to action as the logged-out home page.
+{% endcomment %}
 
+{% block content %}
+    <div class="noauth-preview">
+        {% block preview %}{% endblock %}
     </div>
+
+    <p class="subhead">
+        DocHub, ce sont les <em class="lede">notes</em> et les <em class="lede">anciens examens</em>
+        que les étudiant·es de l'ULB partagent pour s'entraider.
+        {% block wall_line %}Connecte-toi pour ouvrir cette page.{% endblock %}
+    </p>
+
+    <div class="landing-cta">
+        <a class="btn btn-accent btn-lg" href="{% login_url request.get_full_path %}">
+            {% include "icons/log-in.html" %}
+            Connexion avec ton compte ULB
+        </a>
+    </div>
+
+    <p class="landing-fineprint">
+        Pas besoin de créer un compte — ton compte&nbsp;ULB suffit.
+    </p>
 {% endblock content %}
