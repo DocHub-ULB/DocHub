@@ -266,10 +266,3 @@ LOGGING = {
         "level": "INFO",
     },
 }
-
-if DEBUG:
-    import logging
-
-    logger = logging.getLogger(__name__)
-    logger.warning("Warning: you are running Dochub with DEBUG=True...")
-    logger.warning("You should set DEBUG=False in production.")
