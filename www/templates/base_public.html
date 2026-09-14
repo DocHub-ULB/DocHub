@@ -29,9 +29,13 @@ logged-out home page (index.html). Content pages extend this.
 
     <body class="landing-page">
         <main class="page">
-            <div class="landing-copy">
-                {% include "_landing_head.html" %}
-                {% block content %}{% endblock %}
+            <div class="landing-shell">
+                <div class="landing-copy">
+                    {% include "_landing_head.html" %}
+                    {% block content %}{% endblock %}
+                </div>
+                {# Wide screens only; see .landing-shell in landing.css. #}
+                {% block aside %}{% endblock %}
             </div>
         </main>
 

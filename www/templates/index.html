@@ -56,7 +56,8 @@
                     </div>
 
                     <p class="landing-fineprint">
-                        Pas besoin de créer un compte — connecte-toi avec ton compte&nbsp;ULB.
+                        {% include "_login_trust.html" %}
+                        C'est gratuit et sans pub.
                         {% if debug %}
                             <br>Dev&nbsp;: tu peux aussi <a href="{% url 'syslogin' %}">syslogin</a>.
                         {% endif %}

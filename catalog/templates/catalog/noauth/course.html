@@ -22,8 +22,9 @@
             <dd>{{ documents.count }}</dd>
         </div>
         {% if course.followers_count > 1 %}
+            {# "étudiant·es" is what the course page itself calls this number. #}
             <div class="landing-stat">
-                <dt>abonné·es</dt>
+                <dt>étudiant·es</dt>
                 <dd>{{ course.followers_count }}</dd>
             </div>
         {% endif %}
@@ -33,3 +34,31 @@
 {% block wall_line %}
     Connecte-toi pour parcourir les notes, résumés et examens de ce cours.
 {% endblock wall_line %}
+
+{% block after_login %}le cours s'ouvre directement{% endblock %}
+
+{% comment %}
+A mock-up of the document list, to show what logging in opens. Like the one on
+the document page, it is drawn out of empty elements: no title, no thumbnail
+and no name of a sharer is served to someone who cannot open the course.
+{% endcomment %}
+{% block aside %}
+    <aside class="noauth-teaser">
+        {% comment %}
+        Named, so the grey bars are not taken for a page still loading, nor for
+        content to be paid for.
+        {% endcomment %}
+        <p class="eyebrow teaser-caption">À quoi ça ressemble une fois connecté·e</p>
+        <ul class="teaser-list" aria-hidden="true">
+            {% for _ in "12345" %}
+                <li class="teaser-row">
+                    <span class="teaser-thumb"></span>
+                    <span class="teaser-row-lines">
+                        <span class="teaser-line is-head"></span>
+                        <span class="teaser-line is-short"></span>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    </aside>
+{% endblock aside %}

@@ -31,6 +31,138 @@
     padding-top: calc(var(--grid) * 4);
 }
 
+/* A page that brings an aside puts it beside the copy, if the screen allows. */
+.landing-shell:has(> .noauth-teaser) {
+    display: grid;
+    grid-template-columns: minmax(0, 40rem) minmax(0, 24rem);
+    gap: calc(var(--grid) * 4);
+    align-items: start;
+}
+
+/*
+ * Mock-up of the viewer hiding behind the login: the bar of the real one, then
+ * a page of redacted lines fading out. Every line is an empty element, so no
+ * part of the document itself is served to a visitor who cannot open it.
+ */
+/* Starts level with the title, not with the logo above it. */
+.noauth-teaser { padding-top: calc(var(--grid) * 10); }
+.teaser-caption { margin: 0 0 var(--grid); }
+
+/* Same card, padding and shadow as the real .viewer-bar it stands in for. */
+.teaser-bar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: calc(var(--grid) * 1.5);
+    padding: var(--grid) 18px;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* Grows explicitly: its children are empty, so it has no width of its own. */
+.teaser-bar-info { flex: 1 1 auto; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+/* The page counter is the one part that tells the truth about the document. */
+.teaser-pager {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink-soft);
+}
+
+.teaser-pager svg { color: var(--ink-faint); }
+.teaser-pager-page { padding: 1px 7px; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; }
+
+/* Both mock-ups run past the bottom of the frame, the way the real ones do. */
+.teaser-stage, .teaser-list {
+    max-height: calc(var(--grid) * 34);
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+.teaser-stage { display: flex; flex-direction: column; gap: var(--grid); }
+
+.teaser-page {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 10px;
+    padding: calc(var(--grid) * 1.5);
+    height: calc(var(--grid) * 26);
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+}
+
+/* The course list: one row per document. */
+.teaser-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0 var(--grid);
+    list-style: none;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* One row per document: a page thumbnail, then its title and its details. */
+.teaser-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: var(--grid) 0;
+    box-shadow: inset 0 -1px var(--rule);
+}
+
+.teaser-row-lines { flex: 1 1 auto; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+.teaser-thumb {
+    position: relative;
+    flex-shrink: 0;
+    width: 44px;
+    height: 58px;
+    background: var(--bg-sunk);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+}
+
+/* Stands in for the "12p" badge the real thumbnails carry. */
+.teaser-thumb::after {
+    content: "";
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 16px;
+    height: 7px;
+    background: var(--rule-strong);
+    border-radius: 3px;
+}
+
+.teaser-line { height: 8px; border-radius: 999px; background: var(--rule); }
+.teaser-line.is-head { width: 46%; height: 13px; background: var(--rule-strong); }
+.teaser-line.is-short { width: 58%; }
+
+/* One paragraph of redacted text, drawn as lines and grown to fill the page. */
+.teaser-para {
+    flex: 1 1 auto;
+    background: repeating-linear-gradient(var(--rule) 0 8px, transparent 8px 20px);
+}
+
+@media (max-width: 1100px) {
+    /* No room beside the copy: drop the aside and its column with it. */
+    .landing-shell:has(> .noauth-teaser) { display: block; }
+    .noauth-teaser { display: none; }
+}
+
 .landing-hero h1 {
     font-size: clamp(38px, 6vw, 62px);
     line-height: 1.08;
@@ -41,7 +173,7 @@
 
 :is(.landing-hero, .landing-copy) .subhead { font-size: 18px; line-height: 1.5; color: var(--ink-soft); max-width: 34rem; margin: 0 0 calc(var(--grid) * 1.5); }
 .landing-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
-.landing-fineprint { margin: var(--grid) 0 0; font-size: 13px; color: var(--ink-faint); }
+.landing-fineprint { margin: var(--grid) 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-faint); }
 .landing-fineprint a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
 
 /*

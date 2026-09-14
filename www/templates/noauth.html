@@ -25,7 +25,15 @@ the same call to action as the logged-out home page.
         </a>
     </div>
 
+    {% comment %}
+    A visitor who has never seen DocHub is being asked for university
+    credentials, so say where the button goes and what it costs, next to the
+    button rather than in the footer.
+    {% endcomment %}
     <p class="landing-fineprint">
-        Pas besoin de créer un compte — ton compte&nbsp;ULB suffit.
+        {% include "_login_trust.html" %}
+        <br>
+        C'est gratuit et sans pub — après la connexion,
+        {% block after_login %}la page s'ouvre directement{% endblock %}.
     </p>
 {% endblock content %}

@@ -1,4 +1,5 @@
 {% extends "noauth.html" %}
+{% load humanize %}
 
 {% block title %}{{ document.name }} (dans {{ document.course.slug|upper }}) - DocHub{% endblock %}
 
@@ -34,8 +35,59 @@
                     <dd>{{ document.file_type|cut:"."|upper }}</dd>
                 </div>
             {% endif %}
+            {# Tells a newcomer both that the document is read and that the site is alive. #}
+            {% if document.views %}
+                <div class="landing-stat">
+                    <dt>vues</dt>
+                    <dd>{{ document.views|intcomma }}</dd>
+                </div>
+            {% endif %}
         </dl>
     {% endif %}
 {% endblock preview %}
 
 {% block wall_line %}Connecte-toi pour lire ce document.{% endblock %}
+
+{% block after_login %}le document s'ouvre directement{% endblock %}
+
+{% comment %}
+A mock-up of the viewer, to show what logging in opens. It is drawn out of
+empty elements on purpose: the document itself stays behind the login, so
+nothing of it is served here. Decorative, hence hidden from screen readers.
+{% endcomment %}
+{% block aside %}
+    <aside class="noauth-teaser">
+        {% comment %}
+        Named, so the grey bars are not taken for a page still loading, nor for
+        content to be paid for.
+        {% endcomment %}
+        <p class="eyebrow teaser-caption">À quoi ça ressemble une fois connecté·e</p>
+        <div class="teaser-mock" aria-hidden="true">
+            <div class="teaser-bar">
+                <div class="teaser-bar-info">
+                    <span class="teaser-line is-head"></span>
+                    <span class="teaser-line is-short"></span>
+                </div>
+                <div class="teaser-pager">
+                    {% include "icons/chevron-left.html" with width=14 height=14 %}
+                    <span class="teaser-pager-page">1</span>
+                    <span>/&nbsp;{{ document.pages|default:"–" }}</span>
+                    {% include "icons/chevron-right.html" with width=14 height=14 %}
+                </div>
+            </div>
+            <div class="teaser-stage">
+                <div class="teaser-page">
+                    <span class="teaser-line is-head"></span>
+                    <span class="teaser-para"></span>
+                    <span class="teaser-line is-short"></span>
+                    <span class="teaser-line is-head"></span>
+                    <span class="teaser-para"></span>
+                </div>
+                <div class="teaser-page">
+                    <span class="teaser-line is-head"></span>
+                    <span class="teaser-para"></span>
+                </div>
+            </div>
+        </div>
+    </aside>
+{% endblock aside %}
