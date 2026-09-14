@@ -9,7 +9,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from catalog.models import CatalogEdition, Category, Course, CourseUserView
+from catalog.models import (
+    CatalogEdition,
+    Category,
+    Course,
+    CourseCategory,
+    CourseUserView,
+)
 from catalog.slug import normalize_slug
 from documents.models import Vote
 from stats.models import DailyStat, Metric
@@ -138,10 +144,23 @@ class ChildCategory:
 
 
 @dataclass
+class CourseEntry:
+    course: Course
+    heading: str
+
+
+@dataclass
 class Column:
     category: Category
     children: list[ChildCategory]
+    courses: list[CourseEntry]
     title: str
+
+
+# ULB marks every course of a bloc as either required or elective. Only the
+# electives carry a heading: a bloc where everything is required then shows one
+# plain list, and a bloc that is entirely elective shows a single heading.
+OPTIONAL_COURSE_HEADING = "Cours au choix"
 
 
 # Diplomas first (bachelor, then master, then specialisation), everything else last.
@@ -244,6 +263,21 @@ def _resolve_category_path(root: Category, slug_list: list[str]) -> list[Categor
     return categories
 
 
+def _column_courses(category: Category) -> list[CourseEntry]:
+    memberships = (
+        CourseCategory.objects.filter(category=category)
+        .select_related("course")
+        .order_by("-mandatory", "course__slug")
+    )
+    return [
+        CourseEntry(
+            membership.course,
+            "" if membership.mandatory else OPTIONAL_COURSE_HEADING,
+        )
+        for membership in memberships
+    ]
+
+
 def _show_edition(
     request: HttpRequest, edition: CatalogEdition, slug_list: list[str]
 ) -> HttpResponse:
@@ -276,6 +310,7 @@ def _show_edition(
                     )
                     for child in children
                 ],
+                _column_courses(category),
                 edition.title if depth == 0 and is_archive else category.name,
             )
         )

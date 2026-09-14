@@ -240,6 +240,56 @@ def test_teaching_masters_are_grouped_apart_in_the_finder(client):
     assert "Master de spécialisations" not in page
 
 
+def test_optional_courses_are_grouped_under_their_own_heading(client):
+    # ULB flags each course of a bloc as required or elective, so a bloc mixing
+    # both must not present them as one undifferentiated list.
+    make_active_edition()
+    snapshot = make_snapshot()
+    snapshot["memberships"] += [
+        {
+            **snapshot["memberships"][0],
+            "course_code": "ENVI-F1001",
+            "title": "Sciences de la Terre",
+            "mandatory": False,
+        },
+        {
+            **snapshot["memberships"][0],
+            "course_code": "MATH-F112",
+            "title": "Mathématiques",
+        },
+    ]
+
+    apply_snapshot(snapshot)
+
+    mixed = client.get(
+        reverse("catalog:finder", args=["sciences/ba-test/ba-test-1"])
+    ).text
+    # The two required courses come first, unlabelled, then the elective one.
+    assert mixed.index("INFO-F100") < mixed.index("MATH-F112")
+    assert mixed.index("MATH-F112") < mixed.index("Cours au choix")
+    assert mixed.index("Cours au choix") < mixed.index("ENVI-F1001")
+
+    # Bloc 2 holds nothing but electives, so the heading stands alone.
+    optional_only = client.get(
+        reverse("catalog:finder", args=["sciences/ba-test/ba-test-2"])
+    ).text
+    assert optional_only.index("Cours au choix") < optional_only.index("INFO-F200")
+
+
+def test_fully_mandatory_bloc_gets_no_course_heading(client):
+    make_active_edition()
+    snapshot = make_snapshot()
+    snapshot["memberships"][1]["mandatory"] = True
+
+    apply_snapshot(snapshot)
+
+    page = client.get(
+        reverse("catalog:finder", args=["sciences/ba-test/ba-test-2"])
+    ).text
+    assert "INFO-F200" in page
+    assert "Cours au choix" not in page
+
+
 def test_program_without_courses_gets_no_category():
     # ULB publishes a few programs with an empty course list; a category for one
     # of them is a dead end in the finder, so it is skipped entirely.

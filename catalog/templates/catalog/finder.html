@@ -52,16 +52,22 @@
                                 </li>
                             {% endfor %}
                         {% endfor %}
-                        {% for course in column.category.course_set.all %}
-                            <li class="finder-item">
-                                <a href="{% url 'catalog:course_show' course.slug %}">
-                                    <span class="finder-ico">
-                                        {% include "icons/folder.html" %}
-                                    </span>
-                                    <span class="finder-name">{{ course.name }}</span>
-                                    <span class="finder-code">{{ course.slug|upper }}</span>
-                                </a>
-                            </li>
+                        {% regroup column.courses by heading as course_groups %}
+                        {% for group in course_groups %}
+                            {% if group.grouper %}
+                                <li class="finder-group">{{ group.grouper }}</li>
+                            {% endif %}
+                            {% for entry in group.list %}
+                                <li class="finder-item">
+                                    <a href="{% url 'catalog:course_show' entry.course.slug %}">
+                                        <span class="finder-ico">
+                                            {% include "icons/folder.html" %}
+                                        </span>
+                                        <span class="finder-name">{{ entry.course.name }}</span>
+                                        <span class="finder-code">{{ entry.course.slug|upper }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
                         {% endfor %}
                     </ul>
                 </section>
