@@ -74,7 +74,14 @@ def parse_program_page(html: bytes | str) -> tuple[int | None, list[dict[str, An
 
     programs: list[dict[str, Any]] = []
     for mnemonic in soup.find_all("span", class_="search-result__mnemonique"):
-        result_item = mnemonic.find_parent("div", class_="search-result__result-item")
+        # ULB renders the options ("finalités") of a program inside their parent's
+        # result item, so the option's own block is the narrowest scope to read
+        # from. Searching the whole result item would return the first title and
+        # faculty it contains, which are the parent program's.
+        option = mnemonic.find_parent("div", class_="search-result__resultat--fille")
+        result_item = option or mnemonic.find_parent(
+            "div", class_="search-result__result-item"
+        )
         slug = mnemonic.get_text(" ", strip=True)
         title = (
             result_item.find("strong", class_="search-result__structure-intitule")
@@ -109,7 +116,6 @@ def parse_program_page(html: bytes | str) -> tuple[int | None, list[dict[str, An
             "faculties": faculties,
         }
 
-        option = mnemonic.find_parent("div", class_="search-result__resultat--fille")
         if option is not None:
             parent_item = option.find_previous_sibling(
                 "div", class_="search-result__result-item"

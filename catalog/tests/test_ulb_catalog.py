@@ -110,6 +110,37 @@ def test_parse_program_parent_option():
     assert programs[1]["parent"] == "MA-PARENT"
 
 
+def test_options_keep_their_own_title_instead_of_their_parents():
+    # ULB nests options inside their parent's result item, so a lookup scoped to
+    # the result item gave every option the parent program's title.
+    count, programs = parse_program_page(
+        (FIXTURES / "ulb_program_page_options.html").read_bytes()
+    )
+    assert count == 479
+    # The double space after "Master :" is ULB's own, and is kept verbatim.
+    assert [(program["slug"], program["name"]) for program in programs] == [
+        ("MA-IRIF", "Master :  ingénieur civil en informatique"),
+        (
+            "M-IRIFI",
+            (
+                "Master :  ingénieur civil en informatique à finalité Data "
+                "Engineering and Artificial Intelligence (Erasmus Mundus)"
+            ),
+        ),
+        ("M-IRIFS", "Master :  ingénieur civil en informatique à finalité Spécialisée"),
+    ]
+    assert [program.get("parent") for program in programs] == [
+        None,
+        "MA-IRIF",
+        "MA-IRIF",
+    ]
+    assert all(
+        program["faculties"]
+        == [{"name": "École polytechnique de Bruxelles", "color": "#1a171b"}]
+        for program in programs
+    )
+
+
 def test_captured_ulb_responses_keep_their_expected_shape():
     count, programs = parse_program_page(
         (FIXTURES / "ulb_program_page.html").read_bytes()
