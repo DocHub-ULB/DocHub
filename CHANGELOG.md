@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.9.1
+
  * Browse the catalogue of past academic years: each edition is kept as an archive you can explore. This makes it easier to import the 2026-27 catalog.
  * Fix program names in the catalogue: options ("finalités") showed their parent program's name, so several programs looked identical
  * Partner schools (École Royale Militaire, Bruface, AgroParisTech, ...) are now listed on their own instead of as ULB faculties
