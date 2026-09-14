@@ -1,16 +1,24 @@
-.finder-note {
+/*
+ * The archive banner and the link to the archives share one look: a history
+ * icon, a title, and a line telling you what you get out of the archives.
+ */
+.finder-note, .finder-archives {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 10px;
-    margin-bottom: var(--grid);
+    /* Bootstrap's own .card lays its children out in a column; we want a row. */
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
     padding: calc(var(--grid) / 2) var(--grid);
     font-size: 13px;
     color: var(--ink-soft);
 }
 
-.finder-note strong { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--ink); }
-.finder-note a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+:is(.finder-note, .finder-archives) svg { flex-shrink: 0; color: var(--ink-faint); }
+:is(.finder-note, .finder-archives) strong { display: block; font-size: 14px; font-weight: 600; color: var(--ink); }
+/* The body line-height is sized for 15px text and is far too loose at 13px. */
+:is(.finder-note, .finder-archives) span { line-height: 1.5; }
+
+.finder-note { margin-bottom: var(--grid); }
 .finder { display: flex; align-items: flex-start; gap: var(--grid); }
 
 .finder-col {
@@ -84,8 +92,21 @@
 
 .finder-back { display: none; }
 
+/*
+ * Unlike the banner, the link hugs its own content: stretched to the full page
+ * width it read as an orphaned panel next to the narrow catalog columns.
+ */
+.finder-archives { display: inline-flex; margin-top: var(--grid); }
+.finder-archives:hover { border-color: var(--rule-strong); }
+.finder-archives span { max-width: 22rem; }
+
 @media (max-width: 760px) {
     .finder-col:not(.finder-col-current) { display: none; }
     .finder-back { display: inline-flex; align-items: center; color: var(--ink-faint); }
     .finder-back:hover { color: var(--accent); }
+}
+
+@media (max-width: 640px) {
+    /* Too narrow to hug anything; take the full width instead. */
+    .finder-archives { display: flex; }
 }

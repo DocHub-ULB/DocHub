@@ -458,9 +458,9 @@ def test_catalog_root_lists_ulb_faculties_and_archives(client):
     assert b"Sciences" in response.content
     assert reverse("catalog:finder", args=["sciences"]) in response.text
     assert b"Universit\xc3\xa9 partenaire" not in response.content
-    assert b"archives du catalogue" in response.content
-    assert 'class="card finder-note"' in response.text
-    assert response.text.index('class="card finder-note"') > response.text.index(
+    assert reverse("catalog:archive_index") in response.text
+    assert 'class="card finder-archives"' in response.text
+    assert response.text.index('class="card finder-archives"') > response.text.index(
         'class="finder"'
     )
 

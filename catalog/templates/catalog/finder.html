@@ -13,8 +13,11 @@
 
         {% if is_archive %}
             <div class="card finder-note">
-                <strong>Archives</strong>
-                <span>Tu es dans les archives des années précédentes — le programme de l'ULB a parfois beaucoup changé.</span>
+                {% include "icons/history.html" %}
+                <span>
+                    <strong>Archives</strong>
+                    Tu regardes le programme d'une année passée. Certains de ces cours ne sont plus donnés, mais leurs documents peuvent encore te servir.
+                </span>
             </div>
         {% endif %}
 
@@ -69,10 +72,14 @@
         </div>
 
         {% if archive_index_url %}
-            <div class="card finder-note">
-                <strong>Années précédentes</strong>
-                <span>Consulte les <a href="{{ archive_index_url }}">archives du catalogue</a>.</span>
-            </div>
+            <a class="card finder-archives" href="{{ archive_index_url }}">
+                {% include "icons/history.html" %}
+                <span>
+                    <strong>Années précédentes</strong>
+                    Les cours qui ne sont plus donnés gardent leurs documents : ils peuvent encore te servir.
+                </span>
+                {% include "icons/chevron-right.html" with width=14 height=14 %}
+            </a>
         {% endif %}
     </div>
 {% endblock content %}
