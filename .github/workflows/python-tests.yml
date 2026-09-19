@@ -54,7 +54,7 @@ jobs:
       run: sudo apt update
 
     - name: Install apt packages
-      run: sudo apt install -y graphicsmagick mupdf-tools ghostscript pipx python3-dev
+      run: sudo apt install -y mupdf-tools libmagic1 pipx
 
     - name: Install unoserver
       run: pipx install unoserver --system-site-packages

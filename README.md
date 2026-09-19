@@ -32,19 +32,34 @@ First, install uv and system dependencies:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Ubuntu
-sudo apt-get install libreoffice pipx python3-dev ruby libtiff5-dev libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk mupdf-tools redis-server
+sudo apt-get install libreoffice pipx mupdf-tools libmagic1 redis-server
 # unoserver needs access to LibreOffice's 'uno' library from system packages
 pipx install unoserver --system-site-packages
 sudo systemctl enable --now redis-server
 # Fedora
-sudo dnf install libreoffice pipx python-devel ruby mupdf redis
+sudo dnf install libreoffice pipx mupdf file-libs redis
 pipx install unoserver --system-site-packages
 sudo systemctl enable --now redis
 # Arch linux
-sudo pacman -S libreoffice python-pipx ruby python mupdf-tools redis
+sudo pacman -S libreoffice python-pipx python mupdf-tools file redis
 pipx install unoserver --system-site-packages
 sudo systemctl enable --now redis
+# macOS
+brew install --cask libreoffice
+brew install mupdf-tools pipx redis libmagic
+brew services start redis
+pipx install unoserver
 ```
+
+#### The unoserver server on macOS
+
+On macOS, run the LibreOffice server in Docker and let your local clients talk to it:
+
+```console
+docker run -d --name dochub-unoserver -p 2003:2003 --restart unless-stopped \
+    ghcr.io/dochub-ulb/unoserver:latest
+```
+
 
 To create a database and fill it with some fake data, run the following command.
 Observe the output, it will tell you the credentials you can then use to log in.
