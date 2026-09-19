@@ -64,7 +64,8 @@ class Command(BaseCommand):
                     doc.tags.set(choices)
 
                 for user in User.objects.order_by("?")[: random.randint(0, 4)]:
-                    t = random.choices(Vote.VoteType.values, [1, 5], k=1)[0]
-                    Vote.objects.create(user=user, document=doc, vote_type=t)
+                    Vote.objects.create(
+                        user=user, document=doc, vote_type=Vote.VoteType.UPVOTE
+                    )
 
         self.stdout.write("Done")

@@ -144,43 +144,30 @@
 
 .viewer-bar-actions .btn-icon { width: calc(var(--grid) * 3); padding: 0; }
 
-.vote-widget {
+.like-btn {
     display: inline-flex;
-    align-items: stretch;
+    align-items: center;
+    gap: 7px;
     min-height: calc(var(--grid) * 3);
-    gap: 2px;
-    padding: 3px;
+    padding: 0 14px;
     border: 1px solid var(--rule);
     border-radius: var(--radius);
     background: var(--bg-raised);
-}
-
-.vote-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 0 9px;
-    border: 0;
-    border-radius: var(--radius-sm);
-    background: transparent;
     color: var(--ink-soft);
     font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
-    transition: background 120ms ease, color 120ms ease;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 
-.vote-btn svg { transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); }
-.vote-btn:hover { background: var(--bg-sunk); }
-.vote-btn.is-up:hover svg { transform: translateY(-2px); }
-.vote-btn.is-down:hover svg { transform: translateY(2px); }
+.like-btn svg { transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); }
+.like-btn:hover { background: var(--bg-sunk); }
+.like-btn:hover svg { transform: scale(1.18); }
 
-/* Votes use quiet semantic tints instead of a heavy fill. */
-.vote-btn.is-up.is-active { color: var(--positive); background: var(--positive-tint); }
-.vote-btn.is-up.is-active:hover { background: color-mix(in srgb, var(--positive) 22%, var(--bg-raised)); }
-.vote-btn.is-down.is-active { color: var(--negative); background: var(--negative-tint); }
-.vote-btn.is-down.is-active:hover { background: color-mix(in srgb, var(--negative) 22%, var(--bg-raised)); }
+/* A liked document gets a quiet accent tint instead of a heavy fill. */
+.like-btn.is-active { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
+.like-btn.is-active:hover { background: color-mix(in srgb, var(--accent) 22%, var(--bg-raised)); }
 
 .pdf-stage {
     position: relative;
@@ -229,11 +216,4 @@
 /* Give the PDF vertical space; only the slim pinbar stays fixed. */
 body:has(.viewer-bar) .topbar {
     position: static;
-}
-
-#reportDialog {
-    width: 90vw;
-    max-width: 800px;
-
-    &::backdrop { background: rgb(0 0 0 / 50%); }
 }

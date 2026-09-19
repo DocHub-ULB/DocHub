@@ -173,7 +173,12 @@ def stats(request):
             metric_chart(Metric.COURSE_PAGE_VIEW),
         ],
         "Engagement": [
-            qs_chart("Votes", "votes", Vote.objects.all(), "when"),
+            qs_chart(
+                "Likes",
+                "likes",
+                Vote.objects.filter(vote_type=Vote.VoteType.UPVOTE),
+                "when",
+            ),
             metric_chart(Metric.DOCUMENT_VIEW),
             metric_chart(Metric.DOCUMENT_DOWNLOAD),
             metric_chart(Metric.COURSE_FOLLOW),

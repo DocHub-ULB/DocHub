@@ -160,7 +160,7 @@
 
 .doc-row {
     display: grid;
-    grid-template-columns: 56px 58px 1fr auto;
+    grid-template-columns: 58px 1fr auto;
     align-items: center;
     column-gap: 18px;
     min-height: calc(var(--grid) * 8);
@@ -172,22 +172,8 @@
     > .pdf-thumb { width: 58px; height: 76px; }
     .doc-link { display: contents; }
 
-    .doc-vote {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-        padding: 6px 0;
-        color: var(--ink-faint);
-    }
-
-    .doc-vote-net {
-        color: var(--ink-soft);
-        font: 600 13px var(--font-mono);
-
-        &.doc-vote-up { color: var(--positive); }
-        &.doc-vote-down { color: var(--negative); }
-    }
+    /* Sits among the other counters but stays the one that carries a score. */
+    .doc-likes { color: var(--ink-soft); font-weight: 500; }
 
     .pdf-thumb-pages {
         position: absolute;
@@ -240,7 +226,6 @@
 
         > .pdf-thumb { grid-area: 1 / 1; width: 48px; height: calc(var(--grid) * 4); }
         .doc-info { grid-area: 1 / 2 / auto / 4; min-width: 0; padding: var(--grid) 0; }
-        .doc-vote { grid-area: 2 / 1 / auto / 3; flex-direction: row; gap: 8px; min-height: calc(var(--grid) * 2); padding: 0; }
         .doc-actions { grid-area: 2 / 3; align-self: center; }
     }
 }

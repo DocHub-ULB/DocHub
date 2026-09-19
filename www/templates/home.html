@@ -204,20 +204,20 @@
                     </li>
                     <li class="onboarding-step card{% if onboarding.following %} is-done{% endif %}">
                         {% with done=onboarding.following num=2 %}{% partial onboarding-mark %}{% endwith %}
-                        <span class="onboarding-step-icon">{% include "icons/heart.html" %}</span>
+                        <span class="onboarding-step-icon">{% include "icons/plus.html" %}</span>
                         <h3>Suis un cours</h3>
                         <p>
                             Ajoute un cours à tes favoris et ses nouveaux documents apparaîtront
                             directement ici, sans rien chercher.
                         </p>
                     </li>
-                    <li class="onboarding-step card{% if onboarding.voted %} is-done{% endif %}">
-                        {% with done=onboarding.voted num=3 %}{% partial onboarding-mark %}{% endwith %}
-                        <span class="onboarding-step-icon">{% include "icons/thumbs-up.html" %}</span>
-                        <h3>Donne ton avis</h3>
+                    <li class="onboarding-step card{% if onboarding.liked %} is-done{% endif %}">
+                        {% with done=onboarding.liked num=3 %}{% partial onboarding-mark %}{% endwith %}
+                        <span class="onboarding-step-icon">{% include "icons/heart.html" %}</span>
+                        <h3>Dis merci</h3>
                         <p>
-                            Un document te sauve la vie ? Ou il n'est plus à jour ? Dis-le avec
-                            un vote, ça guide les autres étudiant·es.
+                            Un document t'a sauvé la vie ? Mets-lui un cœur : ça remercie
+                            la personne qui l'a partagé et ça guide les autres étudiant·es.
                         </p>
                     </li>
                     <li class="onboarding-step card{% if onboarding.uploaded %} is-done{% endif %}">

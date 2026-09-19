@@ -23,6 +23,8 @@
 .btn-accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .btn-accent:hover { background: color-mix(in srgb, var(--accent) 90%, black); color: var(--accent-ink); }
 .btn-danger { color: var(--danger); border-color: var(--danger); }
+.btn-quiet { color: var(--ink-faint); background: transparent; border-color: transparent; font-weight: 400; }
+.btn-quiet:hover { color: var(--ink); background: var(--bg-sunk); }
 .btn.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 .btn-sm { min-height: calc(var(--grid) * 2); padding: 0 10px; font-size: 13px; }
 
@@ -138,6 +140,92 @@
 .invalid-feedback { margin-top: 4px; color: var(--danger); font-size: 12px; }
 .form-check-input { accent-color: var(--accent); }
 .form-text { color: var(--ink-faint); font-size: 12px; }
+
+/* Native <dialog>; clicks on the backdrop are caught by the modal controller. */
+.dialog {
+    width: min(680px, calc(100% - 32px));
+    max-height: calc(100dvh - 48px);
+    padding: 0;
+    color: var(--ink);
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+}
+
+/* Only once open, so a closed dialog keeps the browser's display: none. The
+   flex column lets a long form scroll while its header and buttons stay put. */
+.dialog[open] { display: flex; }
+.dialog > form { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+.dialog::backdrop { background: rgba(43, 35, 26, 0.45); }
+
+.report-head {
+    flex-shrink: 0;
+    padding: var(--grid) 20px;
+    border-bottom: 1px solid var(--rule);
+
+    h2 { margin: 0 0 4px; font-size: 19px; }
+    p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: calc(var(--grid) * 1.5); }
+}
+
+.report-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--grid);
+    min-height: 0;
+    padding: var(--grid) 20px;
+    overflow-y: auto;
+}
+
+.report-options {
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    legend { margin-bottom: 8px; }
+}
+
+/* Each reason is a clickable card so the radio and its help text share a target. */
+.report-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease;
+
+    + .report-option { margin-top: 4px; }
+    &:hover { background: var(--bg-sunk); }
+    &:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+
+    input { flex-shrink: 0; margin-top: 3px; accent-color: var(--accent); }
+    strong { display: block; font-size: 14px; font-weight: 500; }
+    small { display: block; margin-top: 2px; color: var(--ink-faint); font-size: 12px; line-height: calc(var(--grid) * 1.25); }
+}
+
+.report-comment textarea { width: 100%; resize: vertical; }
+
+.report-foot {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: var(--grid) 20px;
+    background: var(--bg-sunk);
+    border-top: 1px solid var(--rule);
+}
+
+/* Outside the dialog the same form has to draw its own frame. */
+.report-page .report-form {
+    max-width: 680px;
+    margin-inline: auto;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+}
 
 .pdf-thumb {
     border: 1px solid var(--rule);

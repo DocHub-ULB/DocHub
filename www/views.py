@@ -42,7 +42,9 @@ def index(request):
         onboarding = {
             "viewed_course": bool(recent_courses),
             "following": is_following_any,
-            "voted": Vote.objects.filter(user=request.user).exists(),
+            "liked": Vote.objects.filter(
+                user=request.user, vote_type=Vote.VoteType.UPVOTE
+            ).exists(),
             "uploaded": Document.objects.filter(user=request.user).exists(),
         }
         onboarding_done = all(onboarding.values())

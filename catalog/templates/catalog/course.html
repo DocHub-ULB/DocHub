@@ -127,14 +127,6 @@
                     data-course-filter-target="filterable"
                     data-filter-key="{{ document.name }}"
                     data-tags="{{ document.tags.all|join:' ' }}">
-                    <div class="doc-vote">
-                        {% include "icons/chevron-up.html" with width=14 height=14 %}
-                        <span class="doc-vote-net {% if document.net_votes > 0 %}doc-vote-up{% elif document.net_votes < 0 %}doc-vote-down{% endif %}"
-                              title="{{ document.upvotes }} pour &middot; {{ document.downvotes }} contre">
-                            {% if document.net_votes > 0 %}+{% endif %}{{ document.net_votes }}
-                        </span>
-                        {% include "icons/chevron-down.html" with width=14 height=14 %}
-                    </div>
                     <a href="{% url 'document_show' document.pk %}" class="pdf-thumb"
                        {% if document.hidden %}
                            title="Ce document a été caché, il est uniquement visible pour son propriétaire et aux modérateurs"
@@ -158,6 +150,11 @@
                             <div class="doc-meta">
                                 <span>par <strong>{{ document.user.name }}</strong></span>
                                 <time datetime="{{ document.date|date:'Y-m' }}">{{ document.date|date:"F Y" }}</time>
+                                <span class="doc-likes"
+                                      title="{{ document.likes }} étudiant&middot;e{{ document.likes|pluralize }} {{ document.likes|pluralize:"a,ont" }} trouvé ce doc utile">
+                                    {% include "icons/heart-outline.html" with width=12 height=12 %}
+                                    {{ document.likes|intcomma }}
+                                </span>
                                 <span>
                                     {% include "icons/eye.html" with width=12 height=12 %}
                                     {{ document.views|intcomma }}

@@ -55,22 +55,19 @@
                 </div>
 
                 <div class="viewer-bar-actions">
-                    <turbo-frame id="vote">
-                        <form class="vote-widget"
-                              action="{% url 'document_vote' document.pk %}"
-                              method="POST">
+                    <turbo-frame id="like">
+                        <form action="{% url 'document_like' document.pk %}" method="POST">
                             {% csrf_token %}
-                            <button class="vote-btn is-up {% if user_vote.vote_type == 'up' %}is-active{% endif %}"
-                                    name="vote_type" value="up"
-                                    title="Utile" aria-label="Voter utile">
-                                {% include "icons/chevron-up.html" %}
-                                {{ document.votes.upvotes }}
-                            </button>
-                            <button class="vote-btn is-down {% if user_vote.vote_type == 'down' %}is-active{% endif %}"
-                                    name="vote_type" value="down"
-                                    title="Pas utile" aria-label="Voter pas utile">
-                                {% include "icons/chevron-down.html" %}
-                                {{ document.votes.downvotes }}
+                            <button class="like-btn {% if liked %}is-active{% endif %}"
+                                    title="{% if liked %}Tu as aimé ce doc{% else %}Ce doc m'a aidé{% endif %}"
+                                    aria-pressed="{% if liked %}true{% else %}false{% endif %}"
+                                    aria-label="Ce doc m'a aidé">
+                                {% if liked %}
+                                    {% include "icons/heart.html" %}
+                                {% else %}
+                                    {% include "icons/heart-outline.html" %}
+                                {% endif %}
+                                {{ document.likes }}
                             </button>
                         </form>
                     </turbo-frame>
@@ -100,12 +97,13 @@
                             {% include "icons/history.html" %}
                         </a>
                     {% endif %}
-                    <a href="{% url 'document_report' document.pk %}" title="Signaler"
-                       class="btn btn-icon"
+                    <a href="{% url 'document_report' document.pk %}"
+                       class="btn btn-quiet"
                        data-controller="modal-trigger"
                        data-modal-trigger-target-value="reportDialog"
                        data-action="click->modal-trigger#open">
                         {% include "icons/flag.html" %}
+                        Signaler
                     </a>
                 </div>
             </div>

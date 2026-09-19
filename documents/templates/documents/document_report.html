@@ -1,74 +1,77 @@
 {% extends "base.html" %}
 
-{% block title %}Signaler {{ document.name }}{% endblock %}
+{% block title %}Signaler un souci sur {{ document.name }}{% endblock %}
 
 {% block content %}
-    <div class="container-xl py-4">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                {% include "documents/document_report.html#report_card" %}
-            </div>
-        </div>
+    <div class="page is-narrow report-page">
+        {% include "documents/document_report.html#report_card" %}
     </div>
 {% endblock content %}
 
 {% partialdef report_modal %}
     <dialog id="reportDialog"
+            class="dialog"
             data-controller="modal"
-            data-action="click->modal#clickOutside"
-            class="rounded shadow-lg border-0 p-0">
-        {% include "documents/document_report.html#report_card" %}
+            data-action="click->modal#clickOutside">
+        {% include "documents/document_report.html#report_card" with in_modal=True %}
     </dialog>
 {% endpartialdef report_modal %}
 
 {% partialdef report_card %}
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">Signaler un problème</h5>
+    {% load documents_tags %}
+    <form class="report-form" action="{% url 'document_report' document.id %}" method="post">
+        {% csrf_token %}
+
+        <div class="report-head">
+            <h2>Un souci avec ce doc ?</h2>
+            <p>Dis-nous ce qui cloche, on s'en occupe. Personne n'est mis en cause.</p>
         </div>
 
-        <form action="{% url 'document_report' document.id %}" method="post">
-            {% csrf_token %}
-
-            {{ form.non_field_errors }}
-            <div class="card-body">
-                <div class="mb-3">
-                    {% load documents_tags %}
-                    {% for choice_value, choice_label in form.fields.problem_type.choices %}
-                        {% if choice_value %}
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="problem_type"
-                                       id="problem_{{ choice_value }}" value="{{ choice_value }}"
-                                       {% if form.problem_type.value == choice_value %}checked{% endif %}>
-                                <label class="form-check-label" for="problem_{{ choice_value }}">
-                                    <div class="fw-semibold">{{ choice_label }}</div>
-                                    <div class="text-muted small">
-                                        {{ choice_value|problem_type_description }}
-                                    </div>
-                                </label>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+        <div class="report-body">
+            {% if form.non_field_errors %}
+                <div class="notice is-danger">
+                    {% include "icons/alert-triangle.html" %}
+                    <div>{{ form.non_field_errors }}</div>
                 </div>
+            {% endif %}
 
-                <div class="mb-3">
-                    <label for="id_description" class="form-label">Commentaire (optionnel)
-                        <div class="form-text small">
-                            Tu peux ajouter des détails supplémentaires pour nous aider à comprendre le problème.
-                        </div>
-                    </label>
+            <fieldset class="report-options">
+                <legend class="form-label">Qu'est-ce qui ne va pas ?</legend>
+                {% for choice_value, choice_label in form.fields.problem_type.choices %}
+                    {% if choice_value %}
+                        <label class="report-option" for="problem_{{ choice_value }}">
+                            <input type="radio" name="problem_type"
+                                   id="problem_{{ choice_value }}" value="{{ choice_value }}"
+                                   {% if form.problem_type.value == choice_value %}checked{% endif %}>
+                            <span>
+                                <strong>{{ choice_label }}</strong>
+                                {% with description=choice_value|problem_type_description %}
+                                    {% if description %}<small>{{ description }}</small>{% endif %}
+                                {% endwith %}
+                            </span>
+                        </label>
+                    {% endif %}
+                {% endfor %}
+                {% if form.problem_type.errors %}
+                    <p class="invalid-feedback">{{ form.problem_type.errors|striptags }}</p>
+                {% endif %}
+            </fieldset>
 
-                    {{ form.description }}
-
-                </div>
+            <div class="report-comment">
+                <label class="form-label" for="{{ form.description.id_for_label }}">
+                    Un détail à ajouter ? (optionnel)
+                </label>
+                {{ form.description }}
             </div>
+        </div>
 
-            <div class="card-footer d-flex gap-2 justify-content-end">
-                <button type="button" data-action="click->modal#close" class="btn btn-outline-secondary">Annuler</button>
-                <button type="submit" class="btn btn-primary">
-                    Envoyer
-                </button>
-            </div>
-        </form>
-    </div>
+        <div class="report-foot">
+            {% if in_modal %}
+                <button type="button" class="btn" data-action="click->modal#close">Annuler</button>
+            {% else %}
+                <a class="btn" href="{{ document.get_absolute_url }}">Annuler</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+    </form>
 {% endpartialdef report_card %}

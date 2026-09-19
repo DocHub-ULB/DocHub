@@ -81,24 +81,6 @@ class Document(models.Model):
     def is_pdf(self) -> bool:
         return self.file_type in (".pdf", "application/pdf")
 
-    # TODO use typed dict
-    @property
-    def votes(self):
-        upvotes, downvotes = 0, 0
-        # We do the filtering in python as this method is called from REST with all the necessary
-        #   data already prefetched. Using self.vote_set.filter() would lead to another roundtrip
-        #   to the database for each document. Thats bad.
-        for vote in self.vote_set.all():
-            vote_type = vote.vote_type
-            if vote_type == Vote.VoteType.UPVOTE:
-                upvotes += 1
-            elif vote_type == Vote.VoteType.DOWNVOTE:
-                downvotes += 1
-            else:
-                raise NotImplementedError("Vote not of known type.")
-
-        return {"upvotes": upvotes, "downvotes": downvotes}
-
     def fullname(self) -> str:
         return self.__str__()
 
@@ -160,6 +142,13 @@ class Document(models.Model):
 
 
 class Vote(models.Model):
+    """A like on a document.
+
+    Documents could also be downvoted until 2026. Those old rows are kept as
+    history but nothing reads or writes them any more: telling us a document
+    is bad now goes through DocumentReport, which asks for a reason.
+    """
+
     class VoteType(models.TextChoices):
         UPVOTE = "up"
         DOWNVOTE = "down"
@@ -183,19 +172,16 @@ class DocumentReport(models.Model):
         WRONG_TITLE = "wrong_title", "Le titre ou la description est erroné"
         LOW_QUALITY = "low_quality", "Contenu de mauvaise qualité ou inutile"
         READABILITY = "readability", "Problème de lisibilité"
-        OUTDATED = "outdated", "Document obsolète"
+        OUTDATED = "outdated", "Le document n'est plus à jour"
         OTHER = "other", "Autre raison"
 
         @classmethod
         def get_description(cls, value: str) -> str:
             """Get the detailed description for a problem type."""
             descriptions = {
-                cls.WRONG_MODULE.value: "Ce document appartient à un autre cours",
-                cls.WRONG_TITLE.value: "Le contenu du document n'est pas correctement décrit",
-                cls.LOW_QUALITY.value: "Le contenu peut être non pertinent, contenir uniquement le plan du cours, avoir de nombreuses fautes ou être (presque) vide",
-                cls.READABILITY.value: "Le document est difficile à lire en raison d'une mauvaise écriture ou d'une photo de mauvaise qualité",
-                cls.OUTDATED.value: "Le document est dépassé ou ne correspond plus au contenu actuel du cours",
-                cls.OTHER.value: "Une autre raison non listée ci-dessus",
+                cls.LOW_QUALITY.value: "Presque vide, juste le plan du cours, ou plein de fautes",
+                cls.READABILITY.value: "Écriture illisible ou photo de mauvaise qualité",
+                cls.OUTDATED.value: "Ancien programme, ou le cours a changé depuis",
             }
             return descriptions.get(value, "")
 

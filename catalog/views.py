@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Case, Count, F, Q, Value, When
+from django.db.models import Case, Count, Q, Value, When
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -50,12 +50,8 @@ def show_course(request, slug: str):
         course.document_set.exclude(state="ERROR")
         .filter(display)
         .select_related("course", "user")
-        .prefetch_related("tags", "vote_set")
-        .annotate(upvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))
-        .annotate(
-            downvotes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.DOWNVOTE))
-        )
-        .annotate(net_votes=F("upvotes") - F("downvotes"))
+        .prefetch_related("tags")
+        .annotate(likes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE)))
     )
 
     total_count = documents.count()
@@ -67,7 +63,7 @@ def show_course(request, slug: str):
 
     sort = request.GET.get("sort")
     if sort == "top":
-        documents = documents.order_by("-net_votes", "-created")
+        documents = documents.order_by("-likes", "-created")
     elif sort == "dl":
         documents = documents.order_by("-downloads", "-created")
     else:

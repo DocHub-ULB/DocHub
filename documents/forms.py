@@ -78,16 +78,13 @@ class DocumentReportForm(forms.ModelForm):
     class Meta:
         model = DocumentReport
         fields = ("problem_type", "description")
+        # problem_type has no widget here: the template renders its choices as
+        # radio cards so each one can carry its description.
         widgets = {
-            "problem_type": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
-            ),
             "description": forms.Textarea(
                 attrs={
                     "class": "form-control",
-                    "rows": 2,
+                    "rows": 3,
                 }
             ),
         }

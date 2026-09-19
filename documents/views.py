@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import F
+from django.db.models import Count, F, Q
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -268,7 +268,12 @@ def document_reupload(request, pk):
 
 
 def document_show(request, pk):
-    document = get_object_or_404(Document, pk=pk)
+    document = get_object_or_404(
+        Document.objects.annotate(
+            likes=Count("vote", filter=Q(vote__vote_type=Vote.VoteType.UPVOTE))
+        ),
+        pk=pk,
+    )
 
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
@@ -280,7 +285,9 @@ def document_show(request, pk):
 
     context = {
         "document": document,
-        "user_vote": document.vote_set.filter(user=request.user).first(),
+        "liked": document.vote_set.filter(
+            user=request.user, vote_type=Vote.VoteType.UPVOTE
+        ).exists(),
         "form": DocumentReportForm(),
         "has_moderation_history": ModerationLog.objects.filter(
             content_type=ContentType.objects.get_for_model(Document),
@@ -293,15 +300,21 @@ def document_show(request, pk):
 
 @login_required
 @require_POST
-def document_vote(request, pk):
+def document_like(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
-    vote, _created = Vote.objects.get_or_create(document=document, user=request.user)
-    if vote.vote_type == request.POST.get("vote_type"):
-        vote.delete()
-    else:
-        vote.vote_type = request.POST.get("vote_type")
-        vote.save()
+    vote, created = Vote.objects.get_or_create(
+        document=document,
+        user=request.user,
+        defaults={"vote_type": Vote.VoteType.UPVOTE},
+    )
+    if not created:
+        if vote.vote_type == Vote.VoteType.UPVOTE:
+            vote.delete()
+        else:
+            # A leftover downvote: the user just said they like it instead.
+            vote.vote_type = Vote.VoteType.UPVOTE
+            vote.save()
 
     return redirect(document.get_absolute_url())
 

@@ -358,6 +358,14 @@ class Modal extends Controller {
     close() {
         this.element.close();
     }
+
+    // A click on a <dialog> backdrop is reported on the dialog itself, so
+    // anything landing outside the card means the backdrop was hit.
+    clickOutside(event) {
+        if (event.target === this.element) {
+            this.element.close();
+        }
+    }
 }
 
 class ModalTrigger extends Controller {

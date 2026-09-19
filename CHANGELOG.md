@@ -4,6 +4,10 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Replace the up and down votes on documents with a single like: give a heart to a document that helped you
+ * Say what is wrong with a document through the report form, which asks for a reason, instead of a silent downvote
+ * Show the number of likes next to the views and the downloads in the course list
+ * Make the report dialog shorter and friendlier: clearer reasons, and no wording that blames the person who shared the document
  * Use a more readable font for document titles in the course page list
  * Tell you where to look when a course is missing from the catalogue: the last column now ends with a link to the archives
 
