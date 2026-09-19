@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.9.2
+
  * Replace the up and down votes on documents with a single like: give a heart to a document that helped you
  * Say what is wrong with a document through the report form, which asks for a reason, instead of a silent downvote
  * Show the number of likes next to the views and the downloads in the course list
