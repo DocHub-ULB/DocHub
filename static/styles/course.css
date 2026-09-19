@@ -207,8 +207,8 @@
         align-items: center;
         column-gap: 10px;
         margin: 0;
-        font: 500 16px/calc(var(--grid) * 2) var(--font-display);
-        transform: translateY(-0.5px);
+        font: 500 15px/calc(var(--grid) * 2) var(--font-body);
+        letter-spacing: normal;
     }
 
     .doc-meta {

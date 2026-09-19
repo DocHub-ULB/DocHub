@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Use a more readable font for document titles in the course page list
+
 # 2026.9.1
 
  * Browse the catalogue of past academic years: each edition is kept as an archive you can explore. This makes it easier to import the 2026-27 catalog.
