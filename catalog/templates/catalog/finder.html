@@ -69,6 +69,16 @@
                                 </li>
                             {% endfor %}
                         {% endfor %}
+                        {% if forloop.last and not is_archive %}
+                            <li class="finder-item finder-hint">
+                                <a href="{% url 'catalog:archive_index' %}">
+                                    <span class="finder-ico">
+                                        {% include "icons/history.html" %}
+                                    </span>
+                                    <span class="finder-name">Tu ne trouves pas ton cours ? Jette un œil aux archives des années précédentes.</span>
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </section>
             {% endfor %}
@@ -76,16 +86,5 @@
                 <section class="finder-col finder-col-empty" aria-hidden="true"></section>
             {% endfor %}
         </div>
-
-        {% if archive_index_url %}
-            <a class="card finder-archives" href="{{ archive_index_url }}">
-                {% include "icons/history.html" %}
-                <span>
-                    <strong>Années précédentes</strong>
-                    Les cours qui ne sont plus donnés gardent leurs documents : ils peuvent encore te servir.
-                </span>
-                {% include "icons/chevron-right.html" with width=14 height=14 %}
-            </a>
-        {% endif %}
     </div>
 {% endblock content %}

@@ -5,6 +5,7 @@ This page tries to contain all use facing changes made on DocHub.
 # Unreleased
 
  * Use a more readable font for document titles in the course page list
+ * Tell you where to look when a course is missing from the catalogue: the last column now ends with a link to the archives
 
 # 2026.9.1
 

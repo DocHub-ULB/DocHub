@@ -315,10 +315,6 @@ def _show_edition(
             )
         )
 
-    archive_index_url = None
-    if not is_archive and not slug_list and _archived_editions().exists():
-        archive_index_url = reverse("catalog:archive_index")
-
     return render(
         request,
         "catalog/finder.html",
@@ -326,6 +322,5 @@ def _show_edition(
             "columns": columns,
             "extra_columns": range(max(0, 4 - len(columns))),
             "is_archive": is_archive,
-            "archive_index_url": archive_index_url,
         },
     )

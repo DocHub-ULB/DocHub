@@ -509,14 +509,14 @@ def test_catalog_root_lists_ulb_faculties_and_archives(client):
     assert reverse("catalog:finder", args=["sciences"]) in response.text
     assert b"Universit\xc3\xa9 partenaire" not in response.content
     assert reverse("catalog:archive_index") in response.text
-    assert 'class="card finder-archives"' in response.text
-    assert response.text.index('class="card finder-archives"') > response.text.index(
-        'class="finder"'
-    )
+    assert 'class="finder-item finder-hint"' in response.text
 
     faculty_response = client.get(reverse("catalog:finder", args=["sciences"]))
     assert faculty_response.status_code == 200
     assert b"Universit\xc3\xa9 Libre de Bruxelles" in faculty_response.content
+    # The hint closes the rightmost column, whatever the depth of the page.
+    assert 'class="finder-item finder-hint"' in faculty_response.text
+    assert faculty_response.text.count('class="finder-item finder-hint"') == 1
 
 
 def test_archive_lists_editions_then_each_editions_faculties(client):
