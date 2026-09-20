@@ -19,9 +19,7 @@ default (``addopts = -m 'not playwright'``) and needs the optional deps::
     uv run pytest -m playwright
 """
 
-import os
 from pathlib import Path
-from unittest import mock
 
 import pytest
 from django.core.files import File
@@ -39,60 +37,12 @@ SAMPLE_PDF = Path(__file__).resolve().parent / "files" / "3pages.pdf"
 BROKEN_PDF_BYTES = b"%PDF-1.7\nthis file is intentionally not a valid PDF\n%%EOF\n"
 
 
-@pytest.fixture(scope="module")
-def browser():
-    # Playwright's sync API runs an asyncio loop in this thread, which trips
-    # Django's async-safety guard on ORM calls. Our ORM/live_server calls are
-    # genuinely synchronous, so allow them for the (opt-in) lifetime of the loop.
-    with (
-        mock.patch.dict(os.environ, {"DJANGO_ALLOW_ASYNC_UNSAFE": "1"}),
-        sync_api.sync_playwright() as playwright,
-    ):
-        try:
-            instance = playwright.chromium.launch()
-        except sync_api.Error as exc:  # browser binary not installed
-            pytest.skip(
-                f"chromium not installed (run `playwright install chromium`): {exc}"
-            )
-        with instance:
-            yield instance
-
-
-def test_document_preview_renders(
-    live_server, browser, client, settings, tmp_path, document
-):
+def test_document_preview_renders(live_server, logged_in_page, document):
     """The document page renders its PDF pages in a real browser (end-to-end)."""
-    # Keep uploaded files out of the repo's media/ dir.
-    settings.MEDIA_ROOT = str(tmp_path)
-    # Tests run with DEBUG=False + manifest static storage, which needs a
-    # collectstatic run. Use the plain backend so {% static %} resolves to
-    # /static/<name>, which live_server serves straight from the finders.
-    settings.STORAGES = {
-        **settings.STORAGES,
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-
     with SAMPLE_PDF.open("rb") as fd:
         document.pdf.save("3pages.pdf", File(fd), save=True)
 
-    # Authenticate the browser by reusing a Django session cookie (the viewer and
-    # the /pdf endpoint are both login-required).
-    client.force_login(document.user)
-    session_cookie = client.cookies[settings.SESSION_COOKIE_NAME]
-
-    with browser.new_context() as context:
-        context.add_cookies(
-            [
-                {
-                    "name": settings.SESSION_COOKIE_NAME,
-                    "value": session_cookie.value,
-                    "url": live_server.url,
-                }
-            ]
-        )
-        page = context.new_page()
+    with logged_in_page(document.user) as page:
         page.goto(f"{live_server.url}/documents/{document.pk}")
 
         viewer = page.locator("[data-controller='viewer']")
@@ -129,38 +79,15 @@ def test_document_preview_renders(
         assert not viewer.locator(".error").is_visible()
 
 
-def test_broken_pdf_shows_error(
-    live_server, browser, client, settings, tmp_path, document
-):
+def test_broken_pdf_shows_error(live_server, logged_in_page, document):
     """A broken PDF shows the "Oups !" error state instead of rendering.
 
     Negative control for test_document_preview_renders: it proves the "rendered"
     assertions mean something, and if the viewer markup changes both break.
     """
-    settings.MEDIA_ROOT = str(tmp_path)
-    settings.STORAGES = {
-        **settings.STORAGES,
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-
     document.pdf.save("broken.pdf", ContentFile(BROKEN_PDF_BYTES), save=True)
 
-    client.force_login(document.user)
-    session_cookie = client.cookies[settings.SESSION_COOKIE_NAME]
-
-    with browser.new_context() as context:
-        context.add_cookies(
-            [
-                {
-                    "name": settings.SESSION_COOKIE_NAME,
-                    "value": session_cookie.value,
-                    "url": live_server.url,
-                }
-            ]
-        )
-        page = context.new_page()
+    with logged_in_page(document.user) as page:
         page.goto(f"{live_server.url}/documents/{document.pk}")
 
         viewer = page.locator("[data-controller='viewer']")

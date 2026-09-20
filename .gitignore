@@ -29,3 +29,4 @@ programs.json
 courses.json
 catalog-*.json
 .playwright-mcp/
+screenshots/

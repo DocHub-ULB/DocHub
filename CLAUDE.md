@@ -17,6 +17,9 @@ JS libs only when necessary
   template through the Django engine — catches bad `{% url %}` names, missing partials and
   invalid tag arguments that the curlylint/djhtml pre-commit linters don't. Needs `DEBUG=1`
   because `django_extensions` is only installed when `DEBUG` is on.)
+- **Onboarding screenshots**: `uv run pytest -m playwright www/tests/onboarding_screenshots_playwright_test.py`
+  then look in `screenshots/onboarding/` (walks a newcomer through the four home page
+  onboarding steps in a real browser and screenshots each state, for a visual check)
 - **Pre-commit**: `uv run pre-commit run --all-files`
 - **Database setup**: `make database` (creates test users and sample data)
 - **Run server**: `uv run manage.py runserver`
