@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Count only logged-in visits in the stats: the catalogue browser and the course search counted logged-out visitors and crawlers, which inflated their numbers
+
 # 2026.9.2
 
  * Replace the up and down votes on documents with a single like: give a heart to a document that helped you

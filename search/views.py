@@ -14,7 +14,7 @@ class CourseSearchView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q", "")
-        if query:
+        if query and self.request.user.is_authenticated:
             DailyStat.track(Metric.SEARCH_QUERY)
         return search.logic.search_course(query)
 

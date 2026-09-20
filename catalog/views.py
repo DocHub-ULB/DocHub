@@ -283,9 +283,10 @@ def _show_edition(
     if slug_list != canonical:
         return redirect(_edition_finder_url(edition, canonical), permanent=True)
 
-    DailyStat.track(Metric.FINDER_VIEW)
-    if len(resolved) >= 2:
-        DailyStat.track(Metric.FINDER_VIEW_DEEP)
+    if request.user.is_authenticated:
+        DailyStat.track(Metric.FINDER_VIEW)
+        if len(resolved) >= 2:
+            DailyStat.track(Metric.FINDER_VIEW_DEEP)
 
     is_archive = edition.status == CatalogEdition.Status.ARCHIVED
     columns: list[Column] = []
