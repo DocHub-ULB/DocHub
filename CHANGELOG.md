@@ -5,6 +5,8 @@ This page tries to contain all use facing changes made on DocHub.
 # Unreleased
 
  * Count only logged-in visits in the stats: the catalogue browser and the course search counted logged-out visitors and crawlers, which inflated their numbers
+ * Point to the archives from the top of the catalogue: a hand-written note links down to the archives at the bottom of the list, where the word "archives" is circled
+ * Link to the catalogue archives and the stats from the footer, instead of "Partager un doc" and "Contribuer au code"
 
 # 2026.9.2
 

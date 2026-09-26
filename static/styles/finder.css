@@ -18,6 +18,33 @@
 .finder-note strong { display: block; font-size: 14px; font-weight: 600; color: var(--ink); }
 /* The body line-height is sized for 15px text and is far too loose at 13px. */
 .finder-note span { line-height: 1.5; }
+/*
+ * Breadcrumb on the left, and on the right a hand-written note with a drawn
+ * arrow that tells you the archives link is at the bottom of the list.
+ */
+.finder-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0 var(--grid);
+}
+
+.finder-scribble {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    margin: -6px 0 calc(var(--grid) / 2);
+    font-family: var(--font-hand);
+    font-size: 18px;
+    line-height: 1.15;
+    color: var(--accent);
+    transform: rotate(-2deg);
+}
+
+.finder-scribble:hover span { text-decoration: underline; }
+.finder-scribble svg { flex-shrink: 0; margin: 2px 0 0 6px; }
+
 .finder { display: flex; align-items: flex-start; gap: var(--grid); }
 
 .finder-col {
@@ -95,11 +122,33 @@
  * Closing row of the rightmost column: where to look when the course you
  * expected is not in the list. A rule sets it apart from the courses above.
  */
-.finder-hint { margin-top: calc(var(--grid) / 2); border-top: 1px solid var(--rule); }
+/* The bottom padding leaves room for the arrow pointing at the circled word. */
+.finder-hint { margin-top: calc(var(--grid) / 2); padding-bottom: 28px; border-top: 1px solid var(--rule); }
 .finder-hint > a { align-items: flex-start; }
 .finder-hint .finder-ico { margin-top: 2px; }
 .finder-hint .finder-name { font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
 .finder-hint > a:hover .finder-name { color: var(--ink); }
+
+/*
+ * A hand-drawn loop around a word, stretched to fit whatever its width. Side
+ * margins make room for the loop so it does not run over the next words.
+ */
+.finder-circled { position: relative; margin: 0 4px; white-space: nowrap; }
+.finder-circled > svg {
+    position: absolute;
+    inset: -3px -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 6px);
+    color: var(--accent);
+    pointer-events: none;
+}
+
+/* Arrow coming from below the hint and pointing at the loop. */
+.finder-circled > .finder-circled-arrow {
+    inset: calc(100% - 1px) auto auto 60%;
+    width: 34px;
+    height: 40px;
+}
 
 @media (max-width: 760px) {
     .finder-col:not(.finder-col-current) { display: none; }

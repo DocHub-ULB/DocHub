@@ -5,11 +5,22 @@
 
 {% block content %}
     <div class="page">
-        <nav class="breadcrumb is-wrapping" aria-label="Fil d'Ariane">
-            <a href="{% url 'index' %}">Accueil</a>
-            {% include "icons/chevron-right.html" %}
-            <a href="{% url 'catalog:finder_root' %}">Catalogue</a>
-        </nav>
+        <div class="finder-top">
+            <nav class="breadcrumb is-wrapping" aria-label="Fil d'Ariane">
+                <a href="{% url 'index' %}">Accueil</a>
+                {% include "icons/chevron-right.html" %}
+                <a href="{% url 'catalog:finder_root' %}">Catalogue</a>
+            </nav>
+            {% if not is_archive %}
+                <a class="finder-scribble" href="#archives">
+                    <span>Tu cherches les archives ?<br>Elles sont tout en bas de la liste</span>
+                    <svg width="44" height="56" viewBox="0 0 44 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M2 9C12 6 23 3 31 7c8 5 7 15 2 24-3 6-7 12-11 16" />
+                        <path d="M21.6 39.2c.2 2.6.3 5.2.4 7.8 2.6-.1 5.3 0 8 .3" />
+                    </svg>
+                </a>
+            {% endif %}
+        </div>
 
         {% if is_archive %}
             <div class="card finder-note">
@@ -70,12 +81,12 @@
                             {% endfor %}
                         {% endfor %}
                         {% if forloop.last and not is_archive %}
-                            <li class="finder-item finder-hint">
+                            <li class="finder-item finder-hint" id="archives">
                                 <a href="{% url 'catalog:archive_index' %}">
                                     <span class="finder-ico">
                                         {% include "icons/history.html" %}
                                     </span>
-                                    <span class="finder-name">Tu ne trouves pas ton cours ? Jette un œil aux archives des années précédentes.</span>
+                                    <span class="finder-name">Tu ne trouves pas ton cours ? Jette un œil aux <span class="finder-circled">archives<svg viewBox="0 0 100 40" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M58 4C36 1 8 5 4 18c-3 12 22 19 50 18 26-1 43-8 42-19C95 7 72 2 44 5" vector-effect="non-scaling-stroke" /></svg><svg class="finder-circled-arrow" width="34" height="40" viewBox="0 0 34 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M30 38C28 26 18 14 5 4" /><path d="M6.5 10.8C5.8 8.5 5.4 6 5 4c2.5-.2 4.8-.2 7-.3" /></svg></span> des années précédentes.</span>
                                 </a>
                             </li>
                         {% endif %}

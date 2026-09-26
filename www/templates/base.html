@@ -68,13 +68,13 @@
                         <ul>
                             <li><a href="{% url 'index' %}">Accueil</a></li>
                             <li><a href="{% url "catalog:finder_root" %}">Catalogue</a></li>
-                            <li><a href="{% url "document_upload" %}">Partager un doc</a></li>
+                            <li><a href="{% url "catalog:archive_index" %}">Archives du catalogue</a></li>
                         </ul>
                     </div>
                     <div>
                         <h3 class="eyebrow">La communauté</h3>
                         <ul>
-                            <li><a href="https://github.com/UrLab/dochub">Contribuer au code</a></li>
+                            <li><a href="{% url 'stats' %}">Stats</a></li>
                             <li><a href="https://github.com/UrLab/dochub/issues">Signaler un bug</a></li>
                             <li><a href="{% url 'moderation_about' %}">Modération</a></li>
                         </ul>

@@ -31,6 +31,7 @@
     --font-display: "Instrument Serif", "Times New Roman", serif;
     --font-body: "DM Sans", -apple-system, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    --font-hand: "Caveat", cursive;
 
     --radius-sm: 4px;
     --radius: 6px;
