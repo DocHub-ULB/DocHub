@@ -66,7 +66,9 @@ def test_reprocess_done(mock_add_to_queue, doc):
 @mock.patch.object(Document, "add_to_queue")
 def test_reprocess(mock_add_to_queue, doc):
     doc.state = Document.DocumentState.ERROR
+    doc.md5 = "8be98044ac25f3050b121aceac618823"
     doc.reprocess()
+    assert doc.md5 == "8be98044ac25f3050b121aceac618823"
 
     assert mock_add_to_queue.called == 1
 

@@ -1,3 +1,9 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from documents.models import Document
+
+
 class MissingBinary(EnvironmentError):
     def __repr__(self):
         message = self.args[0] if self.args else ""
@@ -27,4 +33,6 @@ class SkipException(Exception):
 
 
 class ExisingChecksum(SkipException):
-    pass
+    def __init__(self, message: str, *, document: "Document | None" = None) -> None:
+        super().__init__(message)
+        self.document = document

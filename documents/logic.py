@@ -1,3 +1,4 @@
+import hashlib
 import mimetypes
 import uuid
 from collections.abc import Iterable
@@ -6,8 +7,43 @@ import magic
 from django.core.files import File
 
 from catalog.models import Course
+from documents.exceptions import ExisingChecksum
 from tags.models import Tag
 from users.models import User
+
+
+def calculate_checksum(file: File) -> str:
+    hasher = hashlib.md5()
+    file.seek(0)
+    try:
+        for chunk in file.chunks():
+            hasher.update(chunk)
+        return hasher.hexdigest()
+    finally:
+        file.seek(0)
+
+
+def check_document_is_unique(
+    file: File, document_id_to_ignore: int | None = None
+) -> str:
+    checksum = calculate_checksum(file)
+    duplicates = Document.objects.filter(md5=checksum, hidden=False)
+    if document_id_to_ignore is not None:
+        duplicates = duplicates.exclude(pk=document_id_to_ignore)
+    duplicate = duplicates.first()
+    if duplicate is not None:
+        raise ExisingChecksum(
+            "Ce document est déjà sur DocHub.",
+            document=duplicate,
+        )
+    return checksum
+
+
+def delete_hidden_duplicates(document: "Document") -> None:
+    if document.md5:
+        Document.objects.filter(md5=document.md5, hidden=True).exclude(
+            pk=document.pk
+        ).delete()
 
 
 def clean_filename(name: str) -> str:
@@ -32,32 +68,25 @@ def add_file_to_course(
     tags: list[str | Tag],
     user: User,
     import_source: str | None = None,
-) -> "Document | None":
+    description: str = "",
+) -> "Document":
     if not extension.startswith("."):
         mime = magic.from_buffer(file.read(4096), mime=True)
         guessed_extension = mimetypes.guess_extension(mime, strict=True)
         if guessed_extension:
             extension = guessed_extension
         file.seek(0)
-    if import_source is not None:
-        document, created = Document.objects.get_or_create(
-            user=user,
-            name=name,
-            course=course,
-            import_source=import_source,
-            file_type=extension.lower(),
-            defaults={"state": Document.DocumentState.PREPARING},
-        )
-        if not created:
-            return None
-    else:
-        document = Document.objects.create(
-            user=user,
-            name=name,
-            course=course,
-            state=Document.DocumentState.PREPARING,
-            file_type=extension.lower(),
-        )
+    checksum = check_document_is_unique(file)
+    document = Document.objects.create(
+        user=user,
+        name=name,
+        course=course,
+        import_source=import_source,
+        state=Document.DocumentState.PREPARING,
+        md5=checksum,
+        description=description,
+        file_type=extension.lower(),
+    )
 
     cleaned_tags: Iterable[Tag]
     if len(tags) > 0:
@@ -71,6 +100,7 @@ def add_file_to_course(
     document.state = Document.DocumentState.READY_TO_QUEUE
 
     document.save()
+    delete_hidden_duplicates(document)
 
     return document
 

@@ -1,5 +1,4 @@
 import contextlib
-import hashlib
 import logging
 import os
 import re
@@ -14,11 +13,11 @@ from django.conf import settings
 from django.core.files.base import ContentFile, File
 from pypdf import PdfReader
 
+from documents.logic import calculate_checksum
 from documents.models import Document, DocumentError
 
 from .exceptions import (
     DocumentProcessingError,
-    ExisingChecksum,
     MissingBinary,
     SkipException,
 )
@@ -82,52 +81,11 @@ def process_document(self, document_id: int) -> int:
         document.save()
         process_pdf.delay(document_id)
     elif document.is_unconvertible():
-        process_unconvertible.delay(document_id)
+        finish_file.delay(document_id)
     else:
         process_office.delay(document_id)
 
     return document_id
-
-
-@doctask
-def checksum(self, document_id: int) -> int:
-    document = Document.objects.get(pk=document_id)
-
-    contents = document.original.read()
-    hashed = hashlib.md5(contents).hexdigest()
-    duplicata = Document.objects.filter(md5=hashed).exclude(md5="").first()
-
-    if duplicata and duplicata.hidden:
-        # If there exists a document with the same checksum
-        # But the existing document is hidden, we delete the old
-        # document and accept the new one
-        duplicata.delete()
-    elif duplicata:
-        # Else, we reject the upload
-        document.delete()
-
-        # and break the task chain in celery
-        self.request.callbacks = None
-
-        # TODO Warn the user
-        # action.send(
-        #     document.user,
-        #     verb="a uploadé un doublon de",
-        #     action_object=duplicata,
-        #     target=document.course,
-        #     public=False
-        # )
-        raise ExisingChecksum(
-            f"Document {document_id} had the same checksum as {duplicata.id}"
-        )
-
-    document.md5 = hashed
-    document.save()
-
-    return document_id
-
-
-checksum.throws = (ExisingChecksum,)
 
 
 @short_doctask
@@ -254,6 +212,7 @@ def repair(self, document_id: int) -> int:
 
     if pdf_is_original:
         document.original = document.pdf
+        document.md5 = calculate_checksum(document.original)
 
     document.state = Document.DocumentState.REPAIRED
     document.save()
@@ -261,19 +220,14 @@ def repair(self, document_id: int) -> int:
     return document_id
 
 
-process_pdf = chain(
-    checksum.s(), mesure_pdf_length.s(), process_thumbnail.s(), finish_file.s()
-)
+process_pdf = chain(mesure_pdf_length.s(), process_thumbnail.s(), finish_file.s())
 
 process_office = chain(
-    checksum.s(),
     convert_office_to_pdf.s(),
     mesure_pdf_length.s(),
     process_thumbnail.s(),
     finish_file.s(),
 )
-
-process_unconvertible = chain(checksum.s(), finish_file.s())
 
 
 @contextlib.contextmanager

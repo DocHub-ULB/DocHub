@@ -15,6 +15,7 @@ from django.views.decorators.http import require_POST
 from catalog.models import Course
 from catalog.views import slug_redirect
 from documents import logic
+from documents.exceptions import ExisingChecksum
 from documents.forms import (
     BulkFilesForm,
     DocumentForm,
@@ -22,6 +23,7 @@ from documents.forms import (
     MultipleUploadFileForm,
     ReUploadForm,
     UploadFileForm,
+    duplicate_file_error,
 )
 from documents.models import BulkDocuments, Document, Vote
 from moderation.models import ModerationLog
@@ -72,23 +74,24 @@ def upload_file(request, slug):
             if form.cleaned_data["name"]:
                 name = form.cleaned_data["name"]
 
-            document = logic.add_file_to_course(
-                file=file,
-                name=name,
-                extension=extension,
-                course=course,
-                tags=form.cleaned_data["tags"],
-                user=request.user,
-            )
+            try:
+                document = logic.add_file_to_course(
+                    file=file,
+                    name=name,
+                    extension=extension,
+                    course=course,
+                    tags=form.cleaned_data["tags"],
+                    user=request.user,
+                    description=form.cleaned_data["description"],
+                )
+            except ExisingChecksum as exc:
+                form.add_error("file", duplicate_file_error(exc))
+            else:
+                document.add_to_queue()
 
-            document.description = form.cleaned_data["description"]
-            document.save()
-
-            document.add_to_queue()
-
-            return HttpResponseRedirect(
-                reverse("catalog:course_show", args=[course.slug])
-            )
+                return HttpResponseRedirect(
+                    reverse("catalog:course_show", args=[course.slug])
+                )
 
     else:
         form = UploadFileForm()
@@ -105,6 +108,7 @@ def upload_file(request, slug):
             "bulk_form": bulk_form,
             "course": course,
         },
+        status=422 if request.method == "POST" else 200,
     )
 
 
@@ -230,7 +234,7 @@ def document_reupload(request, pk):
 
         DailyStat.track(Metric.DOCUMENT_REUPLOAD)
 
-        form = ReUploadForm(request.POST, request.FILES)
+        form = ReUploadForm(request.POST, request.FILES, instance=document)
 
         if form.is_valid():
             file = request.FILES["file"]
@@ -241,10 +245,11 @@ def document_reupload(request, pk):
 
             document.original.save(str(uuid.uuid4()) + extension, file)
 
-            document.state = Document.DocumentState.PREPARING
+            document.md5 = form.checksum
+            document.file_type = extension.lower()
             document.save()
-
-            document.reprocess(force=True)
+            logic.delete_hidden_duplicates(document)
+            document.add_to_queue()
 
             if request.user != document.user:
                 ModerationLog.track(
@@ -258,12 +263,13 @@ def document_reupload(request, pk):
             )
 
     else:
-        form = ReUploadForm()
+        form = ReUploadForm(instance=document)
 
     return render(
         request,
         "documents/document_reupload.html",
         {"form": form, "document": document},
+        status=422 if request.method == "POST" else 200,
     )
 
 
