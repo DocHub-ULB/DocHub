@@ -319,3 +319,86 @@
         background-position: center, 70% 22%;
     }
 }
+
+/* tom-select multi-select. We do not load its own CSS: these rules are all
+   it needs, drawn like our other form controls. */
+.ts-hidden-accessible {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.ts-wrapper {
+    position: relative;
+
+    &.form-select { padding: 0; background: none; border: 0; }
+}
+
+.ts-control {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    min-height: calc(var(--grid) * 2.5);
+    padding: 5px 12px;
+    overflow: hidden;
+    color: var(--ink);
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    font: 14px var(--font-body);
+    cursor: text;
+
+    > input {
+        flex: 1 1 auto;
+        min-width: 7rem;
+        margin: 0;
+        padding: 0;
+        color: var(--ink);
+        background: none;
+        border: 0;
+        outline: none;
+        font: inherit;
+    }
+
+    > input::placeholder { color: var(--ink-faint); }
+
+    > .item {
+        padding: 2px 10px;
+        color: var(--accent);
+        background: var(--accent-soft);
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+}
+
+.ts-wrapper.focus .ts-control { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.ts-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    margin-top: 4px;
+    color: var(--ink);
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    font-size: 14px;
+
+    .ts-dropdown-content { max-height: 200px; overflow: hidden auto; }
+    :is(.option, .no-results) { padding: 6px 12px; }
+    .option { cursor: pointer; }
+    .active { color: var(--ink); background: var(--bg-sunk); }
+}

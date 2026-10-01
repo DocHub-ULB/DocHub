@@ -2,141 +2,122 @@
 
 {% block title %}Ajouter un document à {{ course.slug|upper }}{% endblock %}
 
-{% block head %}
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.min.css"
-          rel="stylesheet" crossorigin="anonymous">
-
-    <style>
-        input[type=file]::file-selector-button {
-            display: none;
-        }
-
-        div[data-upload-target=inputwrapper][active] {
-            background: white !important;
-        }
-
-        .upload--hide {
-            display: none;
-        }
-    </style>
-{% endblock head %}
-
 {% block content %}
-    {% if READ_ONLY %}
-        <br>
-        <div data-alert class="alert-box warning radius">
-            DocHub est en maintenance, tu ne peux pas partager de documents pour l'instant.
-            Cela devrait être résolu dans quelques heures, reviens bientôt ! :)
-            <a href="#" class="close">&times;</a>
-        </div>
-    {% endif %}
-    <a href="{% url "catalog:course_show" course %}"
-       class="text-reset text-decoration-none d-flex align-items-center gap-1">
-        {% include "icons/bi-arrow-left.html" %}
-        <span class="hover-underline">{{ course.slug|upper }} {{ course.name }}</span>
-    </a>
-    {% if course.is_archive %}
-        <div class="alert alert-primary">
-            Ce cours ne fait plus partie du programme de l'ULB, il est gardé uniquement pour des raisons
-            historiques. <br/>
-            Tu peux continuer à y partager des documents, mais si possible, essaie plutôt de les y mettre
-            dans le cours qui est actuellement enseigné.
-        </div>
-    {% endif %}
-    <form
-        action="{% url 'document_put' course.slug %}"
-        method="post" enctype="multipart/form-data"
-        id="document-upload"
-        data-controller="upload"
-        class="mt-2"
-    >
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <p>Tu peux ajouter à peu près n'importe quel type de document. DocHub accepte les pdf, jpg, png,
-            doc(x), ppt(x), odt, et bien plus encore.
-        </p>
-        <p>
-            {% include "icons/bi-check-circle.html" %}
-            {% include "icons/bi-file-earmark-pdf.html" %}
-            {% include "icons/bi-file-earmark-word.html" %}
-            {% include "icons/bi-file-earmark-richtext.html" %}
-            {% include "icons/bi-file-earmark-slides.html" %}
-            {% include "icons/bi-file-earmark-image.html" %}
-            {% include "icons/bi-file-earmark-plus.html" %}
+    <div class="page">
+        <div class="upload-page">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
+                <a href="{% url 'index' %}">Accueil</a>
+                {% include "icons/chevron-right.html" %}
+                <a href="{% url "catalog:course_show" course %}">{{ course.slug|upper }}</a>
+                {% include "icons/chevron-right.html" %}
+                <span class="current">Partager</span>
+            </nav>
 
-        </p>
-        <p>
-            <small class="text-muted ">
-                N'oublie pas que ce qui est partagé sur DocHub est soumis au droit d’auteur,
-                et que tu dois donc avoir l'autorisation de son auteur·rice pour l'ajouter ici.
-            </small>
-        </p>
+            <header class="upload-head">
+                <a class="upload-course" href="{% url "catalog:course_show" course %}">
+                    <span class="pill pill-mono">{{ course.slug|upper }}</span>
+                    {{ course.name }}
+                </a>
+                <h1><em>Partage</em> ton document</h1>
+                <p>C'est grâce à des gens comme toi que DocHub est si bien fourni&nbsp;!</p>
+            </header>
 
-
-        {% with field=form.file %}
-            {% if field.errors %}
-                <div class="notice is-warning upload-error" role="alert">
+            {% if READ_ONLY %}
+                <div class="notice is-warning upload-notice" role="alert">
                     {% include "icons/info-circle.html" %}
                     <div>
-                        {% for error in field.errors %}
-                            {{ error }}<br/>
-                        {% endfor %}
+                        DocHub est en maintenance, tu ne peux pas partager de documents pour l'instant.
+                        Cela devrait être résolu dans quelques heures, reviens bientôt&nbsp;!
                     </div>
                 </div>
             {% endif %}
-            <div
-                data-action="dragenter->upload#enter dragleave->upload#leave"
-                class="d-flex mb-2 rounded border d-block bg-light position-relative"
-                data-upload-target="inputwrapper"
-            >
-                <input
-                    type="file" name="file" required id="id_file"
-                    data-upload-target="input"
-                    data-action="change->upload#input"
-                    style="min-height: 150px; opacity: 0; z-index: 100; width: 100%;"
 
-                />
-                <div
-                    class="position-absolute top-0 start-0 d-flex flex-column align-items-center justify-content-center text-muted p-2"
-                    style="width: 100%; height: 100%;">
-                    {% include "icons/bi-cloud-arrow-up.html" %}
-                    <span class="text-center">Drag & drop ou clic pour ajouter un document</span>
+            {% if course.is_archive %}
+                <div class="notice is-info upload-notice">
+                    {% include "icons/info-circle.html" %}
                     <div>
-                        <span data-upload-target="originalname"></span>
-                        <span data-upload-target="size"></span>
+                        Ce cours ne fait plus partie du programme de l'ULB, il est gardé uniquement pour des
+                        raisons historiques. Tu peux continuer à y partager des documents, mais si possible,
+                        mets-les plutôt dans le cours qui est actuellement enseigné.
                     </div>
                 </div>
-            </div>
+            {% endif %}
 
-        {% endwith %}
+            <form
+                action="{% url 'document_put' course.slug %}"
+                method="post" enctype="multipart/form-data"
+                id="document-upload"
+                data-controller="upload"
+            >
+                {% csrf_token %}
+                {{ form.non_field_errors }}
 
-        <div class="upload--hide"
-             data-upload-target="form"
-        >
+                {% with field=form.file %}
+                    {% if field.errors %}
+                        <div class="notice is-warning upload-error" role="alert">
+                            {% include "icons/info-circle.html" %}
+                            <div>
+                                {% for error in field.errors %}
+                                    {{ error }}<br/>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endwith %}
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Titre du document</label>
-                <input type="text" id="name" name="name" class="form-control" data-upload-target="name">
-                <div class="form-text">
-                    Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
-
+                {# The file input covers the whole zone, so the browser handles the drop itself. #}
+                <div class="upload-dropzone"
+                     data-upload-target="inputwrapper"
+                     data-action="dragenter->upload#enter dragleave->upload#leave">
+                    {% include "icons/doodle-cloud.html" %}
+                    <input type="file" name="file" required id="id_file"
+                           aria-label="Choisis un document à partager"
+                           data-upload-target="input"
+                           data-action="change->upload#input">
+                    <span class="upload-dropzone-badge">
+                        {% include "icons/upload.html" %}
+                        {% include "icons/file-text.html" %}
+                    </span>
+                    <div class="upload-dropzone-empty">
+                        <strong>Glisse ton document ici</strong>
+                        <span>…ou clique pour le choisir. PDF, Word, PowerPoint, images, et bien plus encore.</span>
+                    </div>
+                    <div class="upload-dropzone-file">
+                        <strong data-upload-target="originalname"></strong>
+                        <span><span data-upload-target="size"></span> · clique pour changer de fichier</span>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="id_tags" class="form-label">Tags</label>
-                {{ form.tags }}
-                <div class="form-text">
-                    Sélectionne si possible les tags qui correspondent à ton document.
-                </div>
-            </div>
 
-            <button type="submit" class="btn btn-success d-flex align-items-center gap-1">
-                {% include "icons/bi-plus.html" %}
-                Ajouter ce document à {{ course.slug|upper }}
-            </button>
+                <p class="upload-copyright">
+                    N'oublie pas que ce qui est partagé sur DocHub est soumis au droit d’auteur,
+                    et que tu dois donc avoir l'autorisation de son auteur·rice pour l'ajouter ici.
+                </p>
+
+                <div class="upload-fields" data-upload-target="form" hidden>
+                    <div>
+                        <label for="name" class="form-label">Titre du document</label>
+                        <input type="text" id="name" name="name" class="form-control"
+                               value="{{ form.name.value|default:"" }}"
+                               data-upload-target="name">
+                        <p class="form-text">
+                            Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="id_tags" class="form-label">Tags</label>
+                        {{ form.tags }}
+                        <p class="form-text">Sélectionne si possible les tags qui correspondent à ton document.</p>
+                    </div>
+
+                    <div class="upload-actions">
+                        <button type="submit" class="btn btn-accent" {% if READ_ONLY %}disabled{% endif %}>
+                            {% include "icons/upload.html" %}
+                            Partager dans {{ course.slug|upper }}
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-
-
-    </form>
-
+    </div>
 {% endblock content %}

@@ -273,7 +273,6 @@ class Upload extends Controller {
     static targets = ["input", "inputwrapper", "name", "originalname", "size", "form"]
 
     input(event) {
-        console.log("File upload", event);
         let files = this.inputTarget.files;
         if (files.length > 0) {
             this.inputTarget.setAttribute("filled", "")
@@ -282,10 +281,10 @@ class Upload extends Controller {
             this.originalnameTarget.textContent = file.name
             this.sizeTarget.textContent = humanFileSize(file.size);
 
-            this.formTarget.classList.remove("upload--hide")
+            this.formTarget.hidden = false
         } else {
             this.inputTarget.removeAttribute("filled")
-            this.formTarget.classList.add("upload--hide")
+            this.formTarget.hidden = true
         }
         this.leave(null);
     }

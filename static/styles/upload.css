@@ -68,3 +68,160 @@
 .upload-error {
     margin-bottom: var(--grid);
 }
+
+/* Upload form for one course. */
+.upload-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-top: calc(var(--grid) * 2);
+}
+
+.upload-head {
+    margin-bottom: calc(var(--grid) * 2);
+
+    h1 {
+        margin-bottom: calc(var(--grid) / 2);
+        font-size: 44px;
+        line-height: calc(var(--grid) * 4);
+    }
+
+    em { color: var(--accent); }
+    p { color: var(--ink-soft); }
+}
+
+/* Which course the document goes to, above the title. */
+.upload-course {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: calc(var(--grid) / 2);
+    color: var(--ink-soft);
+    font-size: 14px;
+
+    .pill { font-size: 12px; }
+    &:hover { color: var(--ink); }
+    &:hover .pill { background: var(--accent-soft); color: var(--accent); }
+}
+
+.upload-notice { margin-bottom: var(--grid); }
+
+.upload-dropzone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: calc(var(--grid) * 3) 24px;
+    text-align: center;
+    background: var(--bg-raised);
+    border: 2px dashed var(--rule-strong);
+    border-radius: 14px;
+    transition: background 150ms ease, border-color 150ms ease;
+
+    /* Invisible, but it still takes the clicks, the drops and the keyboard focus. */
+    input[type=file] {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    strong { font: 400 22px var(--font-display); color: var(--ink); overflow-wrap: anywhere; }
+    :is(.upload-dropzone-empty, .upload-dropzone-file) > span { color: var(--ink-faint); font-size: 14px; }
+
+    .doodle {
+        position: absolute;
+        top: 20px;
+        left: 24px;
+        width: 90px;
+        height: 60px;
+        color: var(--brand-blue);
+        opacity: 0.14;
+        transform: rotate(-8deg);
+        pointer-events: none;
+    }
+}
+
+.upload-dropzone:hover,
+.upload-dropzone[active] {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+.upload-dropzone:has(input:focus-visible) {
+    outline: 3px solid var(--accent-soft);
+    outline-offset: 2px;
+    border-color: var(--accent);
+}
+
+.upload-dropzone-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    background: var(--highlight-soft);
+    color: var(--highlight-ink);
+
+    svg { width: 24px; height: 24px; }
+    [data-icon=file-text] { display: none; }
+}
+
+.upload-dropzone-empty,
+.upload-dropzone-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.upload-dropzone-file { display: none; }
+
+.upload-dropzone:has(input[filled]) {
+    border-style: solid;
+    border-color: var(--accent);
+
+    .upload-dropzone-badge { background: var(--accent-soft); color: var(--accent); }
+    .upload-dropzone-badge [data-icon=upload] { display: none; }
+    .upload-dropzone-badge [data-icon=file-text] { display: block; }
+    .upload-dropzone-empty { display: none; }
+    .upload-dropzone-file { display: flex; }
+}
+
+.upload-copyright {
+    margin: var(--grid) 0 calc(var(--grid) * 2);
+    color: var(--ink-faint);
+    font-size: 13px;
+    line-height: calc(var(--grid) * 1.5);
+}
+
+.upload-fields {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid) * 1.5);
+    padding: calc(var(--grid) * 1.5) 24px;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+
+    &[hidden] { display: none; }
+    .form-control { width: 100%; }
+    .form-text { margin: 4px 0 0; line-height: calc(var(--grid) * 1.25); }
+}
+
+.upload-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+    .upload-head h1 { font-size: 34px; line-height: calc(var(--grid) * 3); }
+    .upload-dropzone .doodle { display: none; }
+    .upload-fields { padding-inline: 16px; }
+    .upload-actions .btn { width: 100%; }
+}
