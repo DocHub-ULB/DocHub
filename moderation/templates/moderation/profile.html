@@ -21,7 +21,7 @@
                 {% endif %}
             </div>
             {% if request.user.is_staff and profile_user.is_moderator %}
-                <form method="post" action="{% url 'moderator_remove' profile_user.id %}" data-turbo-confirm="Es-tu sûr de vouloir retirer les droits de {{ profile_user.netid }} ?">
+                <form method="post" action="{% url 'moderator_remove' profile_user.id %}" data-turbo-confirm="Veux-tu vraiment retirer les droits de {{ profile_user.netid }} ?">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-danger">Retirer les droits</button>
                 </form>

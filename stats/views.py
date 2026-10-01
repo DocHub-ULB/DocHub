@@ -209,7 +209,7 @@ def stats(request):
             metric_chart(Metric.DOCUMENT_HISTORY_VIEW),
         ],
         "Comptes": [
-            qs_chart("Nouveaux utilisateurs", "users", User.objects.all(), "created"),
+            qs_chart("Nouveaux comptes", "users", User.objects.all(), "created"),
             qs_chart(
                 "Erreurs de login ULB",
                 "cas_failures",

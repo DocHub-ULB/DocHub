@@ -4,7 +4,7 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
- * Use gender-neutral wording across the moderation pages, the home page and the welcome page ("modérateur·trice", "étudiant·es", ...)
+ * Use gender-neutral wording across the moderation pages, the course page, the home page and the welcome page ("modérateur·trice", "étudiant·es", ...)
 
 # 2026.9.3
 

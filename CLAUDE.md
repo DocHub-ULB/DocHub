@@ -49,6 +49,9 @@ The application uses a **friendly, informal, student-to-student tone** in all us
 - **Community-oriented** - emphasize peer-to-peer sharing and mutual help
 - **Positive framing** - even for empty states or errors, maintain warmth
 - **Simple, clear language** - avoid technical jargon where possible
+- **Gender-neutral wording** - use the "point médian" (e.g. "étudiant·e·s", "tou·te·s").
+  If a sentence has too many of them, rephrase it with neutral words instead
+  (e.g. "les personnes inscrites" rather than "les étudiant·e·s inscrit·e·s")
 
 Examples:
 - "DocHub te permet" not "DocHub vous permet"

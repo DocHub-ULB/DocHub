@@ -30,7 +30,7 @@ class Metric(models.TextChoices):
     )
     MODERATION_ABOUT_VIEW = (
         "moderation_about_view",
-        "Vues de la page modération (utilisateurs)",
+        "Vues de la page modération (étudiant·es)",
     )
     MODERATION_ABOUT_VIEW_MOD = (
         "moderation_about_view_mod",

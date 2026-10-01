@@ -52,9 +52,7 @@ def admin_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
         if request.user.is_staff:
             return view_func(request, *args, **kwargs)
-        raise PermissionDenied(
-            "Seul un administrateur système peut effectuer cette action."
-        )
+        raise PermissionDenied("Cette action est réservée aux admins système.")
 
     return _wrapped_view
 
@@ -195,7 +193,7 @@ def moderator_remove(request, user_id):
 
     if target_user.is_staff:
         messages.warning(
-            request, "Impossible de retirer les droits d'un Administrateur Système ici."
+            request, "Impossible de retirer les droits d'un·e admin système ici."
         )
     elif target_user == request.user:
         messages.warning(request, "Tu ne peux pas retirer tes propres droits ici.")
