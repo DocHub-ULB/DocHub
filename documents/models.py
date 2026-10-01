@@ -104,7 +104,6 @@ class Document(models.Model):
             raise Exception("Document is not in error state it is " + self.state)
 
         self.state = Document.DocumentState.READY_TO_QUEUE
-        self.md5 = ""
         self.add_to_queue()
 
     def add_to_queue(self) -> None:

@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 
 from catalog.models import Course
 from documents import logic
+from documents.exceptions import ExisingChecksum
 from users.models import User
 
 TAGS = {
@@ -73,7 +74,11 @@ class Command(BaseCommand):
         paths = glob.glob(os.path.join(path, "*.*"))
 
         for doc_path in paths:
-            import_document_from_path(doc_path, course, user)
+            try:
+                import_document_from_path(doc_path, course, user)
+            except ExisingChecksum:
+                self.stdout.write(f"Skipping duplicate: {doc_path}")
+                continue
             self.stdout.write(".", ending="")
             self.stdout.flush()
 

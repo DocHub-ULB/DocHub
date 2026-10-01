@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import django_webtest
 import pytest
 from django.urls import reverse
@@ -136,3 +138,42 @@ def test_simple_upload(app, user, tree, tags):
     course = response.follow()
 
     assert Document.objects.count() == 1
+
+
+def test_duplicate_upload_shows_error_and_document_link(app, user, settings, tmp_path):
+    settings.MEDIA_ROOT = tmp_path
+    settings.STORAGES = {
+        **settings.STORAGES,
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    }
+    course = Course.objects.create(name="Algo SWAG", slug="info-f101")
+    upload_url = reverse("document_put", args=[course.slug])
+
+    with patch("documents.models.process_document.delay") as queue:
+        page = app.get(upload_url, user=user.netid)
+        form = next(
+            form for form in page.forms.values() if form.id == "document-upload"
+        )
+        form["name"] = "Mes notes de cours"
+        form["file"] = Upload("documents/tests/files/3pages.pdf")
+        response = form.submit(status=302)
+        response.follow(status=200)
+        document = Document.objects.get(course=course)
+
+        page = app.get(upload_url, user=user.netid)
+        form = next(
+            form for form in page.forms.values() if form.id == "document-upload"
+        )
+        form["name"] = "Une autre copie"
+        form["file"] = Upload("documents/tests/files/3pages.pdf")
+        response = form.submit(status=422)
+
+    error = response.html.select_one("#document-upload .error")
+    assert error is not None
+    assert "Ce document est déjà sur DocHub !" in error.get_text()
+    assert "Pas besoin de le partager à nouveau." in error.get_text()
+    link = error.find("a", href=document.get_absolute_url())
+    assert link is not None
+    assert link.get_text() == "Mes notes de cours"
+    assert Document.objects.count() == 1
+    queue.assert_called_once_with(document.pk)
