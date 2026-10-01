@@ -60,7 +60,6 @@
 }
 
 .pill-mono { font-family: var(--font-mono); }
-.pill-accent { background: var(--highlight-soft); color: var(--highlight-ink); border: 1px solid var(--highlight); }
 .pill.is-success { color: var(--positive); background: var(--positive-tint); }
 .pill.is-danger { color: var(--danger); background: var(--danger-tint); }
 .pill.is-warning { color: var(--negative); background: var(--negative-tint); }

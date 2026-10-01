@@ -92,19 +92,6 @@ class Document(models.Model):
     def is_unconvertible(self) -> bool:
         return self.file_type in UNCONVERTIBLE_TYPES
 
-    def is_ready(self) -> bool:
-        return self.state in (
-            Document.DocumentState.DONE,
-            Document.DocumentState.REPAIRED,
-        )
-
-    def is_processing(self):
-        return self.state in (
-            Document.DocumentState.PREPARING,
-            Document.DocumentState.IN_QUEUE,
-            Document.DocumentState.PROCESSING,
-        )
-
     @property
     def safe_name(self) -> str:
         return unicodedata.normalize("NFKD", self.name)
