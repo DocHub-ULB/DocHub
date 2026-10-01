@@ -83,7 +83,7 @@ def test_duplicate_upload_is_rejected_before_saving(
     assert response.status_code == 422
     assert "déjà sur DocHub" in response.context["form"].errors["file"][0]
     page = BeautifulSoup(response.content, "html.parser")
-    link = page.select_one(f'.error a[href="{existing.get_absolute_url()}"]')
+    link = page.select_one(f'.upload-error a[href="{existing.get_absolute_url()}"]')
     assert link is not None
     assert link.get_text() == existing.name
     assert Document.objects.count() == 1
@@ -124,7 +124,7 @@ def test_duplicate_reupload_preserves_existing_file(client, user, create_documen
 
     assert response.status_code == 422
     page = BeautifulSoup(response.content, "html.parser")
-    link = page.select_one(f'.error a[href="{existing.get_absolute_url()}"]')
+    link = page.select_one(f'.upload-error a[href="{existing.get_absolute_url()}"]')
     assert link is not None
     assert link.get_text() == existing.name
     document.refresh_from_db()

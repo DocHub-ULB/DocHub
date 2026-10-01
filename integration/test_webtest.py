@@ -168,7 +168,7 @@ def test_duplicate_upload_shows_error_and_document_link(app, user, settings, tmp
         form["file"] = Upload("documents/tests/files/3pages.pdf")
         response = form.submit(status=422)
 
-    error = response.html.select_one("#document-upload .error")
+    error = response.html.select_one("#document-upload .upload-error")
     assert error is not None
     assert "Ce document est déjà sur DocHub !" in error.get_text()
     assert "Pas besoin de le partager à nouveau." in error.get_text()
