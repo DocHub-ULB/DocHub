@@ -75,9 +75,6 @@ class User(AbstractBaseUser):
     def following_courses(self):
         return self.courses_set.all()
 
-    def is_following(self, course):
-        return self.courses_set.filter(slug=course.slug).exists()
-
     def has_module_perms(self, *args, **kwargs):
         return True  # TODO : is this a good idea ?
 

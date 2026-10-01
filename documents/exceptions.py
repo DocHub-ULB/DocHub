@@ -22,16 +22,6 @@ class DocumentProcessingError(Exception):
     __str__ = __repr__
 
 
-class UploadError(DocumentProcessingError):
-    def __repr__(self):
-        return f"UploadError('Document {self.document.id} was not properly uploaded by django.')"
-
-
-class DownloadError(DocumentProcessingError):
-    def __repr__(self):
-        return f"UploadError('Downloading doc {self.document.id} from {self.document.original} failed')"
-
-
 class SkipException(Exception):
     pass
 

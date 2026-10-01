@@ -70,19 +70,6 @@ class CourseFilter extends Controller {
     }
 }
 
-class Search extends Controller {
-    static targets = ["input", "output", "submit"]
-
-    initialize() {
-        this.search = _.debounce(this.search, 200, {trailing: true})
-    }
-
-    search(event) {
-        this.outputTarget.value = this.inputTarget.value
-        this.submitTarget.click();
-    }
-}
-
 import {getDocument, GlobalWorkerOptions} from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/build/pdf.min.mjs';
 GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.449/build/pdf.worker.mjs"
 
@@ -323,37 +310,6 @@ class TomSelect extends Controller {
     }
 }
 
-class Share extends Controller {
-    static values = {
-        shareUrl: String
-    }
-
-    connect() {
-        if ("share" in navigator) {
-            this.element.classList.remove("d-none")
-        }
-    }
-
-    async share() {
-        const url = new URL(this.shareUrlValue, window.location);
-        console.log("Sharing", url.href)
-        try {
-            await navigator.share({
-                url: url.href,
-            })
-        } catch (error) {
-            if (error.toString().includes('AbortError')) {
-                // Yes, checking the string representation of the error is hideous,
-                // but I don't know how to do better and AbortError is undefined
-                console.info("Share aborted by user")
-            } else {
-                throw error;
-            }
-        }
-    }
-
-}
-
 class Modal extends Controller {
     close() {
         this.element.close();
@@ -532,13 +488,11 @@ const application = Application.start()
 
 application.register("course-filter", CourseFilter);
 application.register("sticky-bar", StickyBar);
-application.register("search", Search);
 application.register("viewer", Viewer);
 application.register("pager", Pager);
 application.register("upload", Upload);
 application.register('autocomplete', Autocomplete);
 application.register('tom-select', TomSelect);
-application.register('share', Share);
 application.register('modal', Modal);
 application.register('modal-trigger', ModalTrigger);
 application.register('chart', Chart);
