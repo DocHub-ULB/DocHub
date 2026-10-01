@@ -129,7 +129,7 @@
                     data-tags="{{ document.tags.all|join:' ' }}">
                     <a href="{% url 'document_show' document.pk %}" class="pdf-thumb"
                        {% if document.hidden %}
-                           title="Ce document a été caché, il est uniquement visible pour son propriétaire et aux modérateurs"
+                           title="Ce document a été caché, il est uniquement visible pour son ou sa propriétaire et aux modérateur·trices"
                        {% endif %}>
                         {% if document.thumbnail %}
                             <img src="{{ document.thumbnail.url }}" alt="">

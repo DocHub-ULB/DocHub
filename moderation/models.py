@@ -19,10 +19,10 @@ class RepresentativeRequest(models.Model):
         OTHER = "other", "Autre"
 
     class Role(models.TextChoices):
-        COURSE = "course", "Délégué cours du cercle"
+        COURSE = "course", "Délégué·e cours du cercle"
         BUREAU = "bureau", "Membre du bureau étudiant"
-        DELEGATE = "delegate", "Délégué d'année"
-        MOTIVATED = "motivated", "Étudiant motivé"
+        DELEGATE = "delegate", "Délégué·e d'année"
+        MOTIVATED = "motivated", "Étudiant·e motivé·e"
         OTHER = "other", "Autre"
 
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
@@ -79,7 +79,7 @@ class ModerationLog(models.Model):
         """Translates the semantic action into a readable French sentence."""
         if self.target_field == "is_moderator":
             return (
-                "a promu modérateur"
+                "a promu modérateur·trice"
                 if str(self.new_value) == "True"
                 else "a retiré les droits de"
             )

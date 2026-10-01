@@ -4,6 +4,8 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Use gender-neutral wording across the moderation pages, the home page and the welcome page ("modérateur·trice", "étudiant·es", ...)
+
 # 2026.9.3
 
  * Count only logged-in visits in the stats: the catalogue browser and the course search counted logged-out visitors and crawlers, which inflated their numbers

@@ -174,7 +174,9 @@ def moderator_add(request):
                     request, f"{target_user.netid} est maintenant modérateur·trice !"
                 )
             else:
-                messages.info(request, "Cet utilisateur a déjà des droits.")
+                messages.info(
+                    request, f"{target_user.netid} a déjà les droits de modération."
+                )
         except User.DoesNotExist:
             url = (
                 reverse("manage_moderators") + f"?error=not_found&netid={netid_to_add}"
@@ -217,7 +219,7 @@ def representative_request(request):
     """Handle student requests to become a moderator."""
     if is_moderator(request.user):
         raise PermissionDenied(
-            "Tu es déjà modérateur (ou admin), tu n'as pas besoin de faire de demande."
+            "Tu es déjà modérateur·trice (ou admin), tu n'as pas besoin de faire de demande."
         )
 
     if RepresentativeRequest.objects.filter(
