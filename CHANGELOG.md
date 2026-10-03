@@ -4,7 +4,13 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.10.0
+
  * Use gender-neutral wording across the moderation pages, the course page, the home page and the welcome page ("modérateur·trice", "étudiant·es", ...)
+ * Tell you right away when you upload a document that is already on DocHub, with a link to it, instead of rejecting it silently in the background
+ * Redesign the upload page: a large drop zone that shows the name and size of the file you picked
+ * Show upload errors in a clear notice box instead of small text that was easy to miss
+ * Redesign the document edit page
 
 # 2026.9.3
 
