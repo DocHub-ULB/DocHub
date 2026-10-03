@@ -69,42 +69,6 @@
     margin-bottom: var(--grid);
 }
 
-/* Upload form for one course. */
-.upload-page {
-    max-width: 720px;
-    margin: 0 auto;
-    padding-top: calc(var(--grid) * 2);
-}
-
-.upload-head {
-    margin-bottom: calc(var(--grid) * 2);
-
-    h1 {
-        margin-bottom: calc(var(--grid) / 2);
-        font-size: 44px;
-        line-height: calc(var(--grid) * 4);
-    }
-
-    em { color: var(--accent); }
-    p { color: var(--ink-soft); }
-}
-
-/* Which course the document goes to, above the title. */
-.upload-course {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: calc(var(--grid) / 2);
-    color: var(--ink-soft);
-    font-size: 14px;
-
-    .pill { font-size: 12px; }
-    &:hover { color: var(--ink); }
-    &:hover .pill { background: var(--accent-soft); color: var(--accent); }
-}
-
-.upload-notice { margin-bottom: var(--grid); }
-
 .upload-dropzone {
     position: relative;
     display: flex;
@@ -199,29 +163,6 @@
     line-height: calc(var(--grid) * 1.5);
 }
 
-.upload-fields {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--grid) * 1.5);
-    padding: calc(var(--grid) * 1.5) 24px;
-    background: var(--bg-raised);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-card);
-
-    &[hidden] { display: none; }
-    .form-control { width: 100%; }
-    .form-text { margin: 4px 0 0; line-height: calc(var(--grid) * 1.25); }
-}
-
-.upload-actions {
-    display: flex;
-    justify-content: flex-end;
-}
-
 @media (max-width: 640px) {
-    .upload-head h1 { font-size: 34px; line-height: calc(var(--grid) * 3); }
     .upload-dropzone .doodle { display: none; }
-    .upload-fields { padding-inline: 16px; }
-    .upload-actions .btn { width: 100%; }
 }

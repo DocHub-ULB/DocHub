@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="page">
-        <div class="upload-page">
+        <div class="form-page">
             <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="{% url 'index' %}">Accueil</a>
                 {% include "icons/chevron-right.html" %}
@@ -13,8 +13,8 @@
                 <span class="current">Partager</span>
             </nav>
 
-            <header class="upload-head">
-                <a class="upload-course" href="{% url "catalog:course_show" course %}">
+            <header class="form-page-head">
+                <a class="form-page-course" href="{% url "catalog:course_show" course %}">
                     <span class="pill pill-mono">{{ course.slug|upper }}</span>
                     {{ course.name }}
                 </a>
@@ -23,7 +23,7 @@
             </header>
 
             {% if READ_ONLY %}
-                <div class="notice is-warning upload-notice" role="alert">
+                <div class="notice is-warning form-page-notice" role="alert">
                     {% include "icons/info-circle.html" %}
                     <div>
                         DocHub est en maintenance, tu ne peux pas partager de documents pour l'instant.
@@ -33,7 +33,7 @@
             {% endif %}
 
             {% if course.is_archive %}
-                <div class="notice is-info upload-notice">
+                <div class="notice is-info form-page-notice">
                     {% include "icons/info-circle.html" %}
                     <div>
                         Ce cours ne fait plus partie du programme de l'ULB, il est gardé uniquement pour des
@@ -93,7 +93,7 @@
                     et que tu dois donc avoir l'autorisation de son auteur·rice pour l'ajouter ici.
                 </p>
 
-                <div class="upload-fields" data-upload-target="form" hidden>
+                <div class="form-card" data-upload-target="form" hidden>
                     <div>
                         <label for="name" class="form-label">Titre du document</label>
                         <input type="text" id="name" name="name" class="form-control"
@@ -110,7 +110,7 @@
                         <p class="form-text">Sélectionne si possible les tags qui correspondent à ton document.</p>
                     </div>
 
-                    <div class="upload-actions">
+                    <div class="form-actions">
                         <button type="submit" class="btn btn-accent" {% if READ_ONLY %}disabled{% endif %}>
                             {% include "icons/upload.html" %}
                             Partager dans {{ course.slug|upper }}

@@ -2,86 +2,94 @@
 {% load permissions %}
 {% block title %}Éditer {{ doc.name }}{% endblock %}
 
-{% block head %}
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.min.css"
-          rel="stylesheet" crossorigin="anonymous">
-{% endblock head %}
-
 {% block content %}
-    <form action="{% url 'document_edit' doc.id %}" method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
+    <div class="page">
+        <div class="form-page">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
+                <a href="{% url 'index' %}">Accueil</a>
+                {% include "icons/chevron-right.html" %}
+                <a href="{% url "catalog:course_show" doc.course %}">{{ doc.course.slug|upper }}</a>
+                {% include "icons/chevron-right.html" %}
+                <span class="current">Modifier</span>
+            </nav>
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Titre du document</label>
-            {{ form.name }}
-            <div class="form-text">
-                Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
-            </div>
-        </div>
+            <header class="form-page-head">
+                <a class="form-page-course" href="{% url "catalog:course_show" doc.course %}">
+                    <span class="pill pill-mono">{{ doc.course.slug|upper }}</span>
+                    {{ doc.course.name }}
+                </a>
+                <h1><em>Modifie</em> le document</h1>
+                <p class="form-page-subject">«&nbsp;{{ doc.name }}&nbsp;»</p>
+            </header>
 
-        <div class="mb-3">
-            <label for="id_tags" class="form-label">Tags</label>
-            {{ form.tags }}
-            <div class="form-text">
-                Sélectionne si possible les tags qui correspondent à ton document.
-            </div>
-        </div>
+            {% if request.user != doc.user and request.user|has_moderation_perm_on:doc %}
+                <div class="notice is-warning form-page-notice">
+                    {% include "icons/alert-triangle.html" %}
+                    <div>
+                        Tu modifies ici un document qui ne t'appartient pas. En tant que modérateur·trice,
+                        tu peux corriger, masquer ou mettre en avant des documents pour garder DocHub propre
+                        et utile. Ces actions sont enregistrées publiquement dans le
+                        <a href="{% url 'public_logs' %}">journal de modération</a>.
+                    </div>
+                </div>
+            {% endif %}
 
-        {% if request.user|has_moderation_perm_on:doc %}
-            <div class="card ">
-                <h5 class="card-header">Modération</h5>
-                <div class="card-body">
-                    <p class="card-text">
-                        <div class="form-check form-switch">
-                            {{ form.staff_pick }}
-                            <label class="form-check-label" for="id_staff_pick">
-                                Staff pick
-                            </label>
-                            <div class="form-text">
-                                En tant que modérateur·trice, tu peux marquer ce document comme staff pick.<br/>
-                                Cela signifie que l'équipe de modération de DocHub considère ce document comme
-                                étant d'une grande qualité et méritant d'être mis en avant.<br/>
-                                Il apparaîtra dans la liste des documents avec cette icône :
-                                {% include "icons/bi-patch-check-fill.html" %}
-                            </div>
-                        </div>
-                        <div class="mb-3">
+            <form action="{% url 'document_edit' doc.id %}" method="post" class="form-card">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
 
-                        </div>
+                <div>
+                    <label for="id_name" class="form-label">Titre du document</label>
+                    {{ form.name }}
+                    <p class="form-text">
+                        Essaye de rendre le titre clair pour que d'autres puissent trouver ton document.
                     </p>
                 </div>
-            </div>
 
-        {% endif %}
+                <div>
+                    <label for="id_tags" class="form-label">Tags</label>
+                    {{ form.tags }}
+                    <p class="form-text">Sélectionne si possible les tags qui correspondent à ton document.</p>
+                </div>
 
-        <!--
-        <div>
-            <label for="added" class="form-label">Ajouté par</label>
+                {% if request.user|has_moderation_perm_on:doc %}
+                    <fieldset class="form-section">
+                        <legend class="eyebrow">Modération</legend>
+                        <label class="form-option" for="id_staff_pick">
+                            {{ form.staff_pick }}
+                            <span>
+                                <strong>Staff pick</strong>
+                                <small>
+                                    L'équipe de modération considère ce document comme étant d'une grande qualité
+                                    et le met en avant. Il apparaîtra dans la liste des documents avec ce badge :
+                                    <span class="staff-pick-badge">★ staff pick</span>
+                                </small>
+                            </span>
+                        </label>
+                    </fieldset>
+                {% endif %}
 
-            <input type="input" class="form-control" id="added" value="{{ doc.user }}" disabled>
+                {# Save comes first, so the Enter key saves. CSS moves hide/unhide to the left. #}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-accent" name="update" value="1">
+                        {% include "icons/check.html" %}
+                        Enregistrer
+                    </button>
+                    <a class="btn btn-quiet" href="{% url 'document_show' doc.id %}">Annuler</a>
+                    {% if doc.hidden %}
+                        <button type="submit" class="btn form-actions-start" name="unhide" value="1"
+                                data-turbo-confirm="Es-tu sûr·e de vouloir rendre ce document visible ?">
+                            {% include "icons/eye.html" %}
+                            Rendre visible
+                        </button>
+                    {% else %}
+                        <button type="submit" class="btn btn-danger form-actions-start" name="hide" value="1"
+                                data-turbo-confirm="Es-tu sûr·e de vouloir cacher ce document ?">
+                            Cacher le document
+                        </button>
+                    {% endif %}
+                </div>
+            </form>
         </div>
-        -->
-        {% if request.user != doc.user and request.user|has_moderation_perm_on:doc %}
-            <p class="text-muted mt-3 mb-2">
-                ⚠️ Tu modifies ici un document qui ne t'appartient pas. En tant que modérateur·trice,
-                tu peux corriger, masquer ou mettre en avant des documents pour garder DocHub propre et utile,
-                et ces actions sont enregistrées publiquement dans le
-                <a href="{% url 'public_logs' %}">journal de modération</a>.
-            </p>
-        {% endif %}
-        <div class="mt-3">
-            <input type="submit" class="btn btn-success" name="update" value="Mettre à jour"/>
-            {% if doc.hidden %}
-                <input type="submit" class="btn btn-link text-primary"
-                       name="unhide" value="Rendre visible le document"
-                       data-turbo-confirm="Est-tu certain de vouloir rendre visible ce document ?"/>
-            {% else %}
-                <input type="submit" class="btn btn-link text-danger"
-                       name="hide" value="Cacher le document"
-                       data-turbo-confirm="Est-tu certain de vouloir cacher ce document ?"/>
-            {% endif %}
-        </div>
-    </form>
-
+    </div>
 {% endblock content %}

@@ -185,8 +185,8 @@
     legend { margin-bottom: 8px; }
 }
 
-/* Each reason is a clickable card so the radio and its help text share a target. */
-.report-option {
+/* Each choice is a clickable card so the input and its help text share a target. */
+:is(.report-option, .form-option) {
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -196,7 +196,7 @@
     cursor: pointer;
     transition: background 120ms ease, border-color 120ms ease;
 
-    + .report-option { margin-top: 4px; }
+    + :is(.report-option, .form-option) { margin-top: 4px; }
     &:hover { background: var(--bg-sunk); }
     &:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
 
@@ -320,6 +320,95 @@
     }
 }
 
+/* Focused form pages (upload, edit): a narrow column, a head and a card. */
+.form-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-top: calc(var(--grid) * 2);
+}
+
+.form-page-head {
+    margin-bottom: calc(var(--grid) * 2);
+
+    h1 {
+        margin-bottom: calc(var(--grid) / 2);
+        font-size: 44px;
+        line-height: calc(var(--grid) * 4);
+        overflow-wrap: anywhere;
+    }
+
+    em { color: var(--accent); }
+    p { color: var(--ink-soft); }
+}
+
+/* What the form is about (e.g. the document being edited), under the title. */
+.form-page-head .form-page-subject {
+    color: var(--ink);
+    font: 400 24px var(--font-display);
+    line-height: calc(var(--grid) * 2);
+    overflow-wrap: anywhere;
+}
+
+/* The course the form is about, above the title. */
+.form-page-course {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: calc(var(--grid) / 2);
+    color: var(--ink-soft);
+    font-size: 14px;
+
+    .pill { font-size: 12px; }
+    &:hover { color: var(--ink); }
+    &:hover .pill { background: var(--accent-soft); color: var(--accent); }
+}
+
+.form-page-notice { margin-bottom: var(--grid); }
+
+.form-card {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid) * 1.5);
+    padding: calc(var(--grid) * 1.5) 24px;
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+
+    &[hidden] { display: none; }
+    .form-control { width: 100%; }
+    .form-text { margin: 4px 0 0; line-height: calc(var(--grid) * 1.25); }
+}
+
+/* A group of fields inside a form card, under a small title. */
+.form-section {
+    margin: 0;
+    padding: calc(var(--grid) * 1.5) 0 0;
+    border: 0;
+    border-top: 1px solid var(--rule);
+
+    legend { float: left; width: 100%; margin-bottom: var(--grid); }
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+
+    /* The main button is first in the HTML, so the Enter key triggers it,
+       but it shows last. A side action (e.g. hide) shows on the left. */
+    .btn-quiet { order: -1; }
+    .form-actions-start { order: -2; margin-right: auto; }
+}
+
+@media (max-width: 640px) {
+    .form-page-head h1 { font-size: 34px; line-height: calc(var(--grid) * 3); }
+    .form-card { padding-inline: 16px; }
+    .form-actions .btn { width: 100%; }
+    .form-actions :is(.btn-quiet, .form-actions-start) { order: 0; margin-right: 0; }
+}
+
 /* tom-select multi-select. We do not load its own CSS: these rules are all
    it needs, drawn like our other form controls. */
 .ts-hidden-accessible {
@@ -369,6 +458,9 @@
     }
 
     > input::placeholder { color: var(--ink-faint); }
+    /* Once a tag is chosen, its pill says enough. */
+    .has-items > & > input::placeholder { color: transparent; }
+    .input-hidden > & > input { position: absolute; left: -10000px; opacity: 0; }
 
     > .item {
         padding: 2px 10px;
