@@ -68,7 +68,7 @@ playwright = [
 
 [tool.uv]
 exclude-newer = "7 days"
-exclude-newer-package = { django = false }
+exclude-newer-package = { django = false, brotli = false, certifi = false, pypdf = false, setuptools = false }
 
 
 [tool.pytest.ini_options]
