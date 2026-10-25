@@ -4,6 +4,10 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.10.1
+
+ * Upgrade dependencies to fix security issues in image and PDF processing (Pillow, pypdf) and in certificates (certifi)
+
 # 2026.10.0
 
  * Use gender-neutral wording across the moderation pages, the course page, the home page and the welcome page ("modérateur·trice", "étudiant·es", ...)
