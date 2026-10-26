@@ -1,13 +1,34 @@
 from django.urls import path
 
+import documents.bulk_views
 import documents.views
 
 urlpatterns = [
     path("upload/", documents.views.upload_picker, name="document_upload"),
+    path(
+        "upload/bulk/",
+        documents.bulk_views.bulk_upload,
+        name="document_bulk_upload",
+    ),
+    path(
+        "upload/bulk/pick",
+        documents.bulk_views.bulk_upload_pick,
+        name="document_bulk_upload_pick",
+    ),
+    path(
+        "upload/bulk/check",
+        documents.bulk_views.bulk_upload_check,
+        name="document_bulk_upload_check",
+    ),
+    path(
+        "upload/bulk/file/<slug:slug>",
+        documents.bulk_views.bulk_upload_file,
+        name="document_bulk_upload_file",
+    ),
     path("upload/<slug:slug>", documents.views.upload_file, name="document_put"),
     path(
         "submit-bulk/<slug:slug>",
-        documents.views.submit_bulk,
+        documents.bulk_views.submit_bulk_url,
         name="document_submit_bulk",
     ),
     path("<int:pk>/edit", documents.views.document_edit, name="document_edit"),

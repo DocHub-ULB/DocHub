@@ -107,7 +107,8 @@ def test_upload_picker_lists_followed_courses(app, user):
 
     picker = app.get(reverse("document_upload"), user=user.netid)
 
-    assert "Dans quel cours veux-tu partager" in picker
+    assert "tes docs" in picker
+    assert reverse("document_bulk_upload") in picker
     assert reverse("document_put", args=[course.slug]) in picker
 
 

@@ -20,7 +20,7 @@ def test_importer(mock_add_to_queue):
 
     tmpdir = tempfile.mkdtemp()
     src = os.path.join(settings.BASE_DIR, "documents/tests/files/3pages.pdf")
-    dst = os.path.join(tmpdir, "off,ref,invalid_tag:My_Doc.pdf")
+    dst = os.path.join(tmpdir, "#off #référence My_Doc.pdf")
     os.symlink(src, dst)
 
     call_command(
@@ -57,3 +57,23 @@ def test_importer_with_no_tags(mock_add_to_queue):
     assert doc.tags.count() == 1
     assert doc.course.slug == "test-t-100"
     assert doc.user.netid == "test_user"
+
+
+@mock.patch.object(Document, "add_to_queue")
+def test_importer_removes_course_code(mock_add_to_queue):
+    User.objects.create_user(netid="test_user")
+    Course.objects.create(slug="test-t100")
+
+    tmpdir = tempfile.mkdtemp()
+    src = os.path.join(settings.BASE_DIR, "documents/tests/files/3pages.pdf")
+    dst = os.path.join(tmpdir, "TEST-T100_2018_Juin #exa.pdf")
+    os.symlink(src, dst)
+
+    call_command(
+        "import_documents", username="test_user", course_slug="test-t100", path=tmpdir
+    )
+
+    doc = Document.objects.last()
+
+    assert doc.name == "2018 Juin"
+    assert list(doc.tags.values_list("name", flat=True)) == ["examen"]
