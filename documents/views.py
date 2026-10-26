@@ -17,10 +17,8 @@ from catalog.views import slug_redirect
 from documents import logic
 from documents.exceptions import ExisingChecksum
 from documents.forms import (
-    BulkFilesForm,
     DocumentForm,
     DocumentReportForm,
-    MultipleUploadFileForm,
     ReUploadForm,
     UploadFileForm,
     duplicate_file_error,
@@ -92,16 +90,11 @@ def upload_file(request, slug):
     else:
         form = UploadFileForm()
 
-    multiform = MultipleUploadFileForm()
-    bulk_form = BulkFilesForm()
-
     return render(
         request,
         "documents/document_upload.html",
         {
             "form": form,
-            "multiform": multiform,
-            "bulk_form": bulk_form,
             "course": course,
         },
         status=422 if request.method == "POST" else 200,

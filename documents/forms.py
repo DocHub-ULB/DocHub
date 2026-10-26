@@ -64,21 +64,6 @@ class UploadFileForm(DocumentForm):
     )
 
 
-class BulkFilesForm(forms.Form):
-    url = forms.URLField(
-        widget=forms.URLInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "https://...",
-                "id": "url",
-            }
-        ),
-        error_messages={
-            "invalid": "Le lien fourni n'est pas valide. Entre une URL complète (ex: https://...)."
-        },
-    )
-
-
 class ReUploadForm(forms.ModelForm):
     file = forms.FileField(validators=[validate_uploaded_file])
 
@@ -93,10 +78,6 @@ class ReUploadForm(forms.ModelForm):
         except ExisingChecksum as exc:
             raise duplicate_file_error(exc) from exc
         return file
-
-
-class MultipleUploadFileForm(UploadFileForm):
-    pass
 
 
 class BulkUploadCheckForm(forms.Form):

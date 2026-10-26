@@ -26,11 +26,6 @@ urlpatterns = [
         name="document_bulk_upload_file",
     ),
     path("upload/<slug:slug>", documents.views.upload_file, name="document_put"),
-    path(
-        "submit-bulk/<slug:slug>",
-        documents.bulk_views.submit_bulk_url,
-        name="document_submit_bulk",
-    ),
     path("<int:pk>/edit", documents.views.document_edit, name="document_edit"),
     path(
         "<int:pk>/reupload", documents.views.document_reupload, name="document_reupload"
