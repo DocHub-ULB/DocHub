@@ -2,7 +2,7 @@ import json
 import os
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
@@ -11,14 +11,7 @@ from catalog.models import Course
 from documents import logic
 from documents.bulk import plan_bulk_upload
 from documents.exceptions import ExisingChecksum
-from documents.forms import (
-    BulkFilesForm,
-    BulkUploadCheckForm,
-    BulkUploadFileForm,
-    MultipleUploadFileForm,
-    UploadFileForm,
-)
-from documents.models import BulkDocuments
+from documents.forms import BulkUploadCheckForm, BulkUploadFileForm
 from stats.models import DailyStat, Metric
 
 
@@ -113,67 +106,3 @@ def bulk_upload_file(request, slug):
 
     document.add_to_queue()
     return HttpResponse(status=201)
-
-
-@login_required
-def submit_bulk_url(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-
-    if request.method == "POST":
-        form = BulkFilesForm(request.POST)
-
-        if form.is_valid():
-            url = form.cleaned_data["url"]
-
-            # Verify Duplicate Submission URL
-            if BulkDocuments.objects.filter(
-                url=url, course=course, processed=False
-            ).exists():
-                form.add_error(
-                    "url",
-                    "Ce lien a déjà été soumis pour ce cours et est en attente de traitement.",
-                )
-                return render(
-                    request,
-                    "documents/document_upload.html",
-                    {
-                        "course": course,
-                        "form": UploadFileForm(),
-                        "multiform": MultipleUploadFileForm(),
-                        "bulk_form": form,
-                    },
-                    # status=422  mandatory for Turbo: forces the display of validation errors (Turbo ignores 200 codes)
-                    status=422,
-                )
-
-            # Succes submit URL
-            BulkDocuments.objects.create(url=url, course=course, user=request.user)
-            success_url = (
-                reverse("document_submit_bulk", args=[course.slug]) + "?success=true"
-            )
-            return HttpResponseRedirect(success_url)
-
-        else:
-            # Bad URL submit
-            return render(
-                request,
-                "documents/document_upload.html",
-                {
-                    "course": course,
-                    "form": UploadFileForm(),
-                    "multiform": MultipleUploadFileForm(),
-                    "bulk_form": form,
-                },
-                status=422,
-            )
-
-    if "success" in request.GET:
-        return render(
-            request,
-            "documents/document_bulk.html",
-            {
-                "course": course,
-            },
-        )
-
-    return HttpResponseRedirect(reverse("document_put", args=[course.slug]))
