@@ -65,9 +65,6 @@ def short_doctask(*args, **kwargs):
 
 @doctask
 def process_document(self, document_id: int) -> int:
-    if settings.READ_ONLY:
-        raise Exception("Documents are read-only.")
-
     document = Document.objects.get(pk=document_id)
 
     if document.state == Document.DocumentState.IN_QUEUE:

@@ -1,7 +1,6 @@
 import os
 import uuid
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -56,9 +55,6 @@ def upload_file(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
     if request.method == "POST":
-        if settings.READ_ONLY:
-            return HttpResponse("Upload is disabled for a few hours", status=401)
-
         DailyStat.track(Metric.UPLOAD_SUBMIT)
 
         form = UploadFileForm(request.POST, request.FILES)
@@ -109,9 +105,6 @@ def document_edit(request, pk):
         return HttpResponse("You may not edit this document.", status=403)
 
     if request.method == "POST":
-        if settings.READ_ONLY:
-            return HttpResponse("Upload is disabled for a few hours", status=401)
-
         DailyStat.track(Metric.DOCUMENT_EDIT)
 
         if "hide" in request.POST:
@@ -218,9 +211,6 @@ def document_reupload(request, pk):
         )
 
     if request.method == "POST":
-        if settings.READ_ONLY:
-            return HttpResponse("Upload is disabled for a few hours", status=401)
-
         DailyStat.track(Metric.DOCUMENT_REUPLOAD)
 
         form = ReUploadForm(request.POST, request.FILES, instance=document)

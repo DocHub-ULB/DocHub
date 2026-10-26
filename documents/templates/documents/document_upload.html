@@ -28,16 +28,6 @@
                 </aside>
             </header>
 
-            {% if READ_ONLY %}
-                <div class="notice is-warning form-page-notice" role="alert">
-                    {% include "icons/info-circle.html" %}
-                    <div>
-                        DocHub est en maintenance, tu ne peux pas partager de documents pour l'instant.
-                        Cela devrait être résolu dans quelques heures, reviens bientôt&nbsp;!
-                    </div>
-                </div>
-            {% endif %}
-
             {% if course.is_archive %}
                 <div class="notice is-info form-page-notice">
                     {% include "icons/info-circle.html" %}
@@ -117,7 +107,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-accent" {% if READ_ONLY %}disabled{% endif %}>
+                        <button type="submit" class="btn btn-accent">
                             {% include "icons/upload.html" %}
                             Partager dans {{ course.slug|upper }}
                         </button>

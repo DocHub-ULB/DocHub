@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib import admin
 from django.db.models import Count
 from django.db.models.query import QuerySet
@@ -8,9 +7,6 @@ from .models import BulkDocuments, Document, DocumentError, DocumentReport, Vote
 
 @admin.action(description="Reprocess selected documents")
 def reprocess(modeladmin, request, queryset: "QuerySet[Document]"):
-    if settings.READ_ONLY:
-        raise Exception("Documents are read-only.")
-
     for doc in queryset:
         doc.reprocess(force=True)
 
@@ -23,9 +19,6 @@ def autotag(modeladmin, request, queryset: "QuerySet[Document]"):
 
 @admin.action(description="Repair selected documents")
 def repair(modeladmin, request, queryset: "QuerySet[Document]"):
-    if settings.READ_ONLY:
-        raise Exception("Documents are read-only.")
-
     for doc in queryset:
         doc.repair()
 
