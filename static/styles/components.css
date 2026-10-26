@@ -494,3 +494,16 @@
     .option { cursor: pointer; }
     .active { color: var(--ink); background: var(--bg-sunk); }
 }
+
+/* A word circled by hand, with doodle-circle and doodle-arrow inside it.
+   The arrow starts below the word, each page places it with inset. */
+.circled { position: relative; margin: 0 4px; white-space: nowrap; }
+.circled > svg {
+    position: absolute;
+    inset: -3px -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 6px);
+    color: var(--accent);
+    pointer-events: none;
+}
+.circled > .doodle-arrow { width: 34px; height: 40px; }

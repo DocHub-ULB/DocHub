@@ -88,7 +88,6 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "www.context_processors.read_only",
                 "www.context_processors.sentry",
                 "www.context_processors.version",
             ],
@@ -234,7 +233,6 @@ else:
     WHITENOISE_ROOT = BASE_DIR / "static" / "root"
 
 
-READ_ONLY: bool = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
 
 # Add an escape hatch if we really need to customise something

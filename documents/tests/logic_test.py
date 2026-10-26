@@ -3,6 +3,7 @@ from io import BytesIO
 import pytest
 from django.core.files import File
 
+from catalog.models import Course
 from documents import logic
 from documents.exceptions import ExisingChecksum
 from documents.models import Document
@@ -96,3 +97,73 @@ def test_known_pdf_checksum():
         file = File(stream)
         assert logic.calculate_checksum(file) == "8be98044ac25f3050b121aceac618823"
         assert file.tell() == 0
+
+
+@pytest.mark.parametrize(
+    ("name", "tags"),
+    [
+        ("INFO-F101 2024 Janvier", {"examen"}),
+        ("INFO-F203 2020 Juin partiel", {"examen"}),
+        ("MATH-F315 2008 Juin exercices", {"examen", "tp"}),
+        ("Résumé chapitre 1", {"résumé"}),
+        ("Cours 3", set()),
+    ],
+)
+def test_tag_names_from_name(name, tags):
+    assert logic.tag_names_from_name(name) == tags
+
+
+@pytest.mark.parametrize(
+    ("name", "tags", "rest"),
+    [
+        ("#exa #cor Examen", ["examen", "corrigé"], "Examen"),
+        ("#exa#cor Examen", ["examen", "corrigé"], "Examen"),
+        ("Examen #EXAMEN#corrigé", ["examen", "corrigé"], "Examen"),
+        ("Examen_#cor_juin", ["corrigé"], "Examen juin"),
+        ("#cor #sol Examen", ["corrigé"], "Examen"),
+        ("#résumé Chapitre 1", ["résumé"], "Chapitre 1"),
+        # A "#" that is not a tag stays in the name.
+        ("TP #3 #tp", ["tp"], "TP #3"),
+        ("Examen #2019", [], "Examen #2019"),
+        ("Examen", [], "Examen"),
+    ],
+)
+def test_split_tags(name, tags, rest):
+    assert logic.split_tags(name) == (tags, rest)
+
+
+@pytest.mark.parametrize(
+    ("file_name", "title"),
+    [
+        ("INFO-F101_2018_Juin.pdf", "2018 Juin"),
+        ("info-f-101 Résumé.docx", "Résumé"),
+        ("INFOF101_notes.pdf", "notes"),
+        # Another course code tells something, we keep it.
+        ("MATH-F112_2023_Juin.pdf", "MATH-F112 2023 Juin"),
+        ("INFO-F101.pdf", "Info-f101"),
+        ("Examen_juin.pdf", "Examen juin"),
+        ("#exa #cor INFO-F101_2018_Juin.pdf", "2018 Juin"),
+        ("INFO-F101_2018_Juin_#exa.pdf", "2018 Juin"),
+        ("#exa.pdf", "#exa"),
+    ],
+)
+def test_document_title(file_name, title):
+    course = Course(slug="info-f101")
+    assert logic.document_title(file_name, course) == title
+
+
+@pytest.mark.parametrize(
+    ("text", "result"),
+    [
+        ("INFO-F105_2018_Juin", ("info-f105", "2018_Juin")),
+        ("info-f-105", ("info-f105", "")),
+        ("infof-105 Algo", ("info-f105", "Algo")),
+        ("INFOF105", ("info-f105", "")),
+        ("info f105 (LDP1)", ("info-f105", "(LDP1)")),
+        # A typo is not a code.
+        ("Info-F10l_Algo", ("", "Info-F10l_Algo")),
+        ("Examen juin", ("", "Examen juin")),
+    ],
+)
+def test_split_course_code(text, result):
+    assert logic.split_course_code(text) == result

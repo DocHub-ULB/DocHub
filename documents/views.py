@@ -1,7 +1,6 @@
 import os
 import uuid
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -17,15 +16,13 @@ from catalog.views import slug_redirect
 from documents import logic
 from documents.exceptions import ExisingChecksum
 from documents.forms import (
-    BulkFilesForm,
     DocumentForm,
     DocumentReportForm,
-    MultipleUploadFileForm,
     ReUploadForm,
     UploadFileForm,
     duplicate_file_error,
 )
-from documents.models import BulkDocuments, Document, Vote
+from documents.models import Document, Vote
 from moderation.models import ModerationLog
 from stats.models import DailyStat, Metric
 
@@ -58,9 +55,6 @@ def upload_file(request, slug):
     course = get_object_or_404(Course, slug=slug)
 
     if request.method == "POST":
-        if settings.READ_ONLY:
-            return HttpResponse("Upload is disabled for a few hours", status=401)
-
         DailyStat.track(Metric.UPLOAD_SUBMIT)
 
         form = UploadFileForm(request.POST, request.FILES)
@@ -68,16 +62,12 @@ def upload_file(request, slug):
         if form.is_valid():
             file = request.FILES["file"]
 
-            name, extension = os.path.splitext(file.name)
-            name = logic.clean_filename(name)
-
-            if form.cleaned_data["name"]:
-                name = form.cleaned_data["name"]
+            extension = os.path.splitext(file.name)[1]
 
             try:
                 document = logic.add_file_to_course(
                     file=file,
-                    name=name,
+                    name=form.cleaned_data["name"],
                     extension=extension,
                     course=course,
                     tags=form.cleaned_data["tags"],
@@ -96,16 +86,11 @@ def upload_file(request, slug):
     else:
         form = UploadFileForm()
 
-    multiform = MultipleUploadFileForm()
-    bulk_form = BulkFilesForm()
-
     return render(
         request,
         "documents/document_upload.html",
         {
             "form": form,
-            "multiform": multiform,
-            "bulk_form": bulk_form,
             "course": course,
         },
         status=422 if request.method == "POST" else 200,
@@ -120,9 +105,6 @@ def document_edit(request, pk):
         return HttpResponse("You may not edit this document.", status=403)
 
     if request.method == "POST":
-        if settings.READ_ONLY:
-            return HttpResponse("Upload is disabled for a few hours", status=401)
-
         DailyStat.track(Metric.DOCUMENT_EDIT)
 
         if "hide" in request.POST:
@@ -229,9 +211,6 @@ def document_reupload(request, pk):
         )
 
     if request.method == "POST":
-        if settings.READ_ONLY:
-            return HttpResponse("Upload is disabled for a few hours", status=401)
-
         DailyStat.track(Metric.DOCUMENT_REUPLOAD)
 
         form = ReUploadForm(request.POST, request.FILES, instance=document)
@@ -372,70 +351,6 @@ def document_pdf_file(request, pk):
     document.save(update_fields=["views"])
     DailyStat.track(Metric.DOCUMENT_DOWNLOAD)
     return response
-
-
-@login_required
-def submit_bulk(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-
-    if request.method == "POST":
-        form = BulkFilesForm(request.POST)
-
-        if form.is_valid():
-            url = form.cleaned_data["url"]
-
-            # Verify Duplicate Submission URL
-            if BulkDocuments.objects.filter(
-                url=url, course=course, processed=False
-            ).exists():
-                form.add_error(
-                    "url",
-                    "Ce lien a déjà été soumis pour ce cours et est en attente de traitement.",
-                )
-                return render(
-                    request,
-                    "documents/document_upload.html",
-                    {
-                        "course": course,
-                        "form": UploadFileForm(),
-                        "multiform": MultipleUploadFileForm(),
-                        "bulk_form": form,
-                    },
-                    # status=422  mandatory for Turbo: forces the display of validation errors (Turbo ignores 200 codes)
-                    status=422,
-                )
-
-            # Succes submit URL
-            BulkDocuments.objects.create(url=url, course=course, user=request.user)
-            success_url = (
-                reverse("document_submit_bulk", args=[course.slug]) + "?success=true"
-            )
-            return HttpResponseRedirect(success_url)
-
-        else:
-            # Bad URL submit
-            return render(
-                request,
-                "documents/document_upload.html",
-                {
-                    "course": course,
-                    "form": UploadFileForm(),
-                    "multiform": MultipleUploadFileForm(),
-                    "bulk_form": form,
-                },
-                status=422,
-            )
-
-    if "success" in request.GET:
-        return render(
-            request,
-            "documents/document_bulk.html",
-            {
-                "course": course,
-            },
-        )
-
-    return HttpResponseRedirect(reverse("document_put", args=[course.slug]))
 
 
 @login_required
