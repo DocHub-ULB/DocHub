@@ -483,6 +483,76 @@ class Pager extends Controller {
     }
 }
 
+// The browser keeps the picked files, and sends them one by one.
+// The server renders each step, and tells which files to send.
+class BulkUpload extends Controller {
+    static targets = ["form", "entries", "wizard", "sendTemplate", "send", "progress"]
+    static values = {leaveMessage: String}
+
+    // Step 2: send the paths and sizes of the files. The server answers with step 3.
+    // We keep the files here: the frame forgets the file input.
+    pick(event) {
+        const files = [...event.target.files];
+        this.files = new Map(files.map((file) => [file.webkitRelativePath, file]));
+        this.entriesTarget.value = JSON.stringify(
+            files.map((file) => ({path: file.webkitRelativePath, size: file.size})));
+        this.formTarget.requestSubmit();
+    }
+
+    // The server sends step 4 inside an HTML <template>: its contents stay inert,
+    // so the browser does not display them and Stimulus cannot find their targets.
+    // .content is that stored fragment; cloneNode(true) copies its whole subtree.
+    // Inserting the copy into the live frame activates step 4 without another request.
+    begin() {
+        this.wizardTarget.replaceChildren(this.sendTemplateTarget.content.cloneNode(true));
+        this.sent = 0;
+        this.start();
+    }
+
+    // Also the retry button: it starts again after the last file sent.
+    async start() {
+        const step = this.sendTarget;
+        const queue = JSON.parse(step.dataset.queue);
+        step.dataset.status = "sending";
+        for (; this.sent < queue.length; this.sent++) {
+            // Stop if the user went to another page.
+            if (!step.isConnected) return;
+            if (!await this.send(queue[this.sent])) {
+                step.dataset.status = "stopped";
+                return;
+            }
+            this.progressTarget.value = this.sent + 1;
+        }
+        step.dataset.status = "done";
+    }
+
+    // The server answers 201 when it adds the document, 409 when it is already on DocHub.
+    // Any other answer (server error, no connection) stops the upload.
+    async send({path, url}) {
+        const body = new FormData();
+        body.append("csrfmiddlewaretoken", this.formTarget.elements.csrfmiddlewaretoken.value);
+        body.append("file", this.files.get(path));
+        try {
+            const response = await fetch(url, {method: "POST", body});
+            return [201, 409].includes(response.status);
+        } catch {
+            return false;
+        }
+    }
+
+    get sending() {
+        return this.hasSendTarget && this.sendTarget.dataset.status === "sending";
+    }
+
+    warnBeforeUnload(event) {
+        if (this.sending) event.preventDefault();
+    }
+
+    confirmVisit(event) {
+        if (this.sending && !confirm(this.leaveMessageValue)) event.preventDefault();
+    }
+}
+
 const application = Application.start()
 
 application.register("course-filter", CourseFilter);
@@ -490,6 +560,7 @@ application.register("sticky-bar", StickyBar);
 application.register("viewer", Viewer);
 application.register("pager", Pager);
 application.register("upload", Upload);
+application.register("bulk-upload", BulkUpload);
 application.register('autocomplete', Autocomplete);
 application.register('tom-select', TomSelect);
 application.register('modal', Modal);

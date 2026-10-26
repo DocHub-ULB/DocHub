@@ -13,13 +13,19 @@
                 <span class="current">Partager</span>
             </nav>
 
-            <header class="form-page-head">
+            <header class="form-page-head upload-head">
                 <a class="form-page-course" href="{% url "catalog:course_show" course %}">
                     <span class="pill pill-mono">{{ course.slug|upper }}</span>
                     {{ course.name }}
                 </a>
                 <h1><em>Partage</em> ton document</h1>
                 <p>C'est grâce à des gens comme toi que DocHub est si bien fourni&nbsp;!</p>
+
+                <aside class="sticky-note upload-aside">
+                    <div class="eyebrow">Astuce</div>
+                    Tu as des docs pour plusieurs cours&nbsp;?
+                    <a href="{% url 'document_bulk_upload' %}">Partage tout un dossier d'un coup.</a>
+                </aside>
             </header>
 
             {% if READ_ONLY %}

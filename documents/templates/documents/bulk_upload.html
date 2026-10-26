@@ -1,0 +1,514 @@
+{% extends "base.html" %}
+
+{% block title %}Partager un dossier{% endblock %}
+
+{# Enter with a full page load so browser Back fires beforeunload during an upload. #}
+{# The preview replaces the picker in a Turbo frame, without adding history entries. #}
+{% block head %}
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
+{% endblock head %}
+
+{% block content %}
+    <div class="page">
+        <div class="form-page bulk-page">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
+                <a href="{% url 'index' %}">Accueil</a>
+                {% include "icons/chevron-right.html" %}
+                <a href="{% url 'document_upload' %}">Partager</a>
+                {% include "icons/chevron-right.html" %}
+                <span class="current">Un dossier entier</span>
+            </nav>
+
+            <header class="form-page-head">
+                <h1><em>Partage</em> un dossier entier</h1>
+                <p>Tu as plein de documents pour plusieurs cours&nbsp;? Envoie-les tous d'un coup.</p>
+            </header>
+
+            {# The server renders the preview and its prepared progress screen together. #}
+            {# The controller keeps the picked files, and sends them one by one in step 4. #}
+            <div
+                id="bulk-upload"
+                data-controller="bulk-upload"
+                data-bulk-upload-leave-message-value="Des fichiers sont encore en cours d'envoi. Si tu quittes la page, l'envoi s'arrête. Quitter quand même ?"
+                data-action="beforeunload@window->bulk-upload#warnBeforeUnload turbo:before-visit@document->bulk-upload#confirmVisit"
+            >
+                {# Sends only the paths and sizes of the files to prepare the preview. #}
+                <form method="post" action="{% url 'document_bulk_upload_check' %}"
+                      data-turbo-frame="bulk-wizard" data-bulk-upload-target="form">
+                    {% csrf_token %}
+                    <input type="hidden" name="entries" data-bulk-upload-target="entries">
+                </form>
+
+                {% partialdef wizard inline %}
+                    <turbo-frame id="bulk-wizard" data-bulk-upload-target="wizard">
+                        {% partial steps %}
+
+                        {% if step == 1 %}
+                            {% partial prepare %}
+                        {% elif step == 2 %}
+                            {% partial pick %}
+                        {% else %}
+                            {% partial plan %}
+                            {% if plan.ready_files %}
+                                {# Django renders step 4 now; the HTML <template> keeps it invisible and inert. #}
+                                {# bulk-upload#begin copies it into the live frame when Send is clicked. #}
+                                <template data-bulk-upload-target="sendTemplate">
+                                    {% with step=4 %}
+                                        {% partial steps %}
+                                        {% partial send %}
+                                    {% endwith %}
+                                </template>
+                            {% endif %}
+                        {% endif %}
+                    </turbo-frame>
+                {% endpartialdef wizard %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% partialdef steps %}
+    <ol class="bulk-steps">
+        <li class="{% if step == 1 %}is-current{% else %}is-done{% endif %}" {% if step == 1 %}aria-current="step"{% endif %}>
+            <span class="bulk-step-number">1</span> <span class="bulk-step-label">Prépare tes fichiers</span>
+        </li>
+        <li class="{% if step == 2 %}is-current{% elif step > 2 %}is-done{% endif %}" {% if step == 2 %}aria-current="step"{% endif %}>
+            <span class="bulk-step-number">2</span> <span class="bulk-step-label">Choisis ton dossier</span>
+        </li>
+        <li class="{% if step == 3 %}is-current{% elif step > 3 %}is-done{% endif %}" {% if step == 3 %}aria-current="step"{% endif %}>
+            <span class="bulk-step-number">3</span> <span class="bulk-step-label">Vérifie</span>
+        </li>
+        <li class="{% if step == 4 %}is-current{% endif %}" {% if step == 4 %}aria-current="step"{% endif %}>
+            <span class="bulk-step-number">4</span> <span class="bulk-step-label">Envoie</span>
+        </li>
+    </ol>
+{% endpartialdef steps %}
+
+{# Step 1. #}
+{% partialdef prepare %}
+    <div class="bulk-start">
+        <div class="bulk-intro">
+            <p>
+                Avant de commencer, range tes fichiers dans un dossier sur ton ordinateur,
+                avec <strong>un sous-dossier par cours</strong>.
+            </p>
+            <p>
+                Le nom de chaque sous-dossier doit commencer par le <strong>mnémonique</strong>
+                du cours, par exemple <strong>INFO-F101</strong> (tu le trouves sur la page du cours
+                sur DocHub). Tu peux ajouter ce que tu veux après.
+            </p>
+            <p>
+                Le nom de chaque fichier devient le titre du document&nbsp;: un nom clair aide
+                les autres à trouver ce qu'il leur faut.
+            </p>
+
+            <div class="bulk-actions">
+                {# Keep a native history entry so Back can show the unload warning. #}
+                <a href="{% url 'document_bulk_upload_pick' %}" class="btn btn-accent" data-turbo="false">
+                    Mes fichiers sont prêts
+                    {% include "icons/chevron-right.html" %}
+                </a>
+            </div>
+        </div>
+
+        {# An example folder, drawn like a file explorer window. #}
+        <figure class="bulk-window">
+            <div class="bulk-window-bar" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="bulk-window-tree">
+                <li>
+                    <span class="bulk-window-item is-folder">
+                        {% include "icons/folder.html" %}
+                        <span class="circled">Pour DocHub{% include "icons/doodle-circle.html" %}{% include "icons/doodle-arrow.html" %}<span class="bulk-window-note">C'est ce dossier que tu sélectionneras</span></span>
+                    </span>
+                    <ul>
+                        <li>
+                            <span class="bulk-window-item is-folder">
+                                {% include "icons/folder.html" %} <strong>INFO-F101 Programmation</strong>
+                            </span>
+                            <ul>
+                                <li><span class="bulk-window-item">{% include "icons/file-text.html" %} TP1.pdf</span></li>
+                                <li><span class="bulk-window-item">{% include "icons/file-text.html" %} Résumé.docx</span></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="bulk-window-item is-folder">
+                                {% include "icons/folder.html" %} <strong>MATH-F112</strong>
+                            </span>
+                            <ul>
+                                <li><span class="bulk-window-item">{% include "icons/file-text.html" %} Examen_juin_2025.pdf</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </figure>
+    </div>
+
+    {# The rules of documents/bulk.py and documents/logic.py, in plain words. #}
+    {# Keep the list of tags in line with TAG_CODES, in documents/logic.py. #}
+    <details class="bulk-box bulk-tips">
+        <summary>{% include "icons/chevron-right.html" %} Trucs et astuces</summary>
+
+        <h3>Les dossiers</h3>
+        <ul>
+            <li>
+                Tu peux écrire le mnémonique comme tu veux&nbsp;: <code>INFO-F101</code>,
+                <code>info-f-101</code>, <code>INFOF101</code> ou <code>info f101</code>.
+            </li>
+            <li>
+                Tu peux faire des sous-dossiers dans un dossier de cours (par exemple
+                <code>INFO-F101/TP</code>)&nbsp;: leurs fichiers vont aussi dans ce cours.
+            </li>
+            <li>
+                Tu n'as des documents que pour un seul cours&nbsp;? Choisis directement le dossier
+                de ce cours.
+            </li>
+            <li>
+                Les fichiers qui ne sont dans aucun dossier de cours sont laissés de côté.
+            </li>
+        </ul>
+
+        <h3>Les titres</h3>
+        <ul>
+            <li>Le titre, c'est le nom du fichier, sans son extension (<code>.pdf</code>, <code>.docx</code>…).</li>
+            <li>Les <code>_</code> deviennent des espaces, et un nom tout en majuscules garde seulement sa première majuscule.</li>
+            <li>
+                Le mnémonique du cours au début du nom est enlevé, puisque le document est déjà
+                dans ce cours&nbsp;:
+                <span class="bulk-tips-example">
+                    {% with name="INFO-F101_Examen_juin_2025.pdf" title="Examen juin 2025" %}{% partial renamed_file %}{% endwith %}
+                </span>
+            </li>
+        </ul>
+
+        <h3>Les tags</h3>
+        <p>
+            Pour choisir les tags toi-même, ajoute-les au nom du fichier avec un <code>#</code> devant,
+            où tu veux&nbsp;:
+        </p>
+        <ul class="bulk-tips-examples">
+            <li class="bulk-tips-example">
+                {% with name="#exa #cor Examen juin 2025.pdf" title="Examen juin 2025" %}{% partial renamed_file %}{% endwith %}
+                <span class="pill">#examen</span>
+                <span class="pill">#corrigé</span>
+            </li>
+            <li class="bulk-tips-example">
+                {% with name="Examen juin 2025 #examen#corrigé.pdf" title="Examen juin 2025" %}{% partial renamed_file %}{% endwith %}
+                <span class="pill">#examen</span>
+                <span class="pill">#corrigé</span>
+            </li>
+        </ul>
+        <p>Tu peux écrire le nom complet du tag ou son code court&nbsp;:</p>
+        <table class="bulk-tips-tags">
+            <thead>
+                <tr><th scope="col">Tag</th><th scope="col">Codes courts</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="pill">#examen</span></td><td><code>#exa</code></td></tr>
+                <tr><td><span class="pill">#corrigé</span></td><td><code>#cor</code>, <code>#corr</code>, <code>#sol</code></td></tr>
+                <tr><td><span class="pill">#tp</span></td><td><code>#tp</code></td></tr>
+                <tr><td><span class="pill">#résumé</span></td><td><code>#res</code></td></tr>
+                <tr><td><span class="pill">#slides</span></td><td><code>#sli</code></td></tr>
+                <tr><td><span class="pill">#formulaire</span></td><td><code>#for</code></td></tr>
+                <tr><td><span class="pill">#laboratoire</span></td><td><code>#lab</code></td></tr>
+                <tr><td><span class="pill">#syllabus</span></td><td><code>#syl</code></td></tr>
+                <tr><td><span class="pill">#officiel</span></td><td><code>#off</code></td></tr>
+                <tr><td><span class="pill">#référence</span></td><td><code>#ref</code></td></tr>
+                <tr><td><span class="pill">#loi</span></td><td><code>#law</code></td></tr>
+            </tbody>
+        </table>
+        <p>
+            Sans <code>#</code>, on devine les tags à partir de certains mots dans le nom du fichier&nbsp;:
+            <code>Examen juin 2025 corrigé.pdf</code> reçoit les tags
+            <span class="pill">#examen</span> et <span class="pill">#corrigé</span>.
+        </p>
+
+        <h3>Ce qu'on n'envoie pas</h3>
+        <ul>
+            <li>Les fichiers compressés (<code>.zip</code>, <code>.rar</code>…)&nbsp;: décompresse-les d'abord.</li>
+            <li>Les fichiers qui sont déjà sur DocHub, même avec un autre nom.</li>
+        </ul>
+
+        <p class="form-text">
+            Pas de panique&nbsp;: à l'étape suivante, on te montre le titre et les tags de chaque
+            fichier avant de les envoyer. Et tu pourras toujours les changer après l'envoi, sur la page
+            du document.
+        </p>
+    </details>
+{% endpartialdef prepare %}
+
+{# Step 2. #}
+{% partialdef pick %}
+    {% if errors %}
+        <div class="notice is-warning bulk-pick-notice" role="alert">
+            {% include "icons/info-circle.html" %}
+            <div>
+                {% for error in errors %}{{ error }}{% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="bulk-pick">
+        <div class="upload-dropzone bulk-dropzone">
+            {% include "icons/doodle-cloud.html" %}
+            <input type="file" webkitdirectory multiple
+                   aria-label="Choisis un dossier à partager"
+                   data-action="change->bulk-upload#pick">
+            <span class="upload-dropzone-badge">
+                {% include "icons/folder.html" %}
+            </span>
+            <div class="upload-dropzone-empty">
+                <strong>Choisis ton dossier</strong>
+                <span>Clique ici, ou glisse ton dossier dans ce cadre.</span>
+            </div>
+        </div>
+
+        <p class="form-text">
+            Ton navigateur va te demander de confirmer, mais rien n'est envoyé tout de suite&nbsp;:
+            on te montre d'abord où va chaque fichier, avec son titre et ses tags.
+        </p>
+
+        <p class="upload-copyright">
+            N'oublie pas que ce qui est partagé sur DocHub est soumis au droit d’auteur,
+            et que tu dois donc avoir l'autorisation de son auteur·rice pour l'ajouter ici.
+        </p>
+
+        <a href="{% url 'document_bulk_upload' %}" class="bulk-back" data-turbo="false">
+            {% include "icons/chevron-left.html" %}
+            Revoir comment préparer tes fichiers
+        </a>
+    </div>
+{% endpartialdef pick %}
+
+{# Step 3. #}
+{% partialdef plan %}
+    {% with count=plan.ready_files|length %}
+        <div class="bulk-plan-layout">
+            {# The decision first, above the lists: what we found, and the send button. #}
+            <section class="bulk-box bulk-summary{% if count %} is-waiting{% endif %}" aria-labelledby="bulk-summary-title">
+                <div class="bulk-summary-text">
+                    <h2 id="bulk-summary-title">
+                        {% if count %}
+                            {% include "icons/check.html" %} Vérifie, puis envoie
+                        {% else %}
+                            {% include "icons/folder.html" %} Ton dossier
+                        {% endif %}
+                    </h2>
+
+                    {% partial summary %}
+
+                    {% if count %}
+                        <p class="bulk-send-hint">
+                            Rien n'est envoyé tant que tu n'as pas cliqué sur le bouton.
+                            Les fichiers déjà sur DocHub seront ignorés.
+                        </p>
+                    {% else %}
+                        <p class="form-text">
+                            Vérifie que le nom de chaque sous-dossier commence par le mnémonique d'un cours
+                            (par exemple INFO-F101), puis choisis à nouveau ton dossier.
+                        </p>
+                    {% endif %}
+                </div>
+
+                <div class="bulk-summary-actions">
+                    {% if count %}
+                        <button type="button" data-action="bulk-upload#begin" class="btn btn-accent bulk-send">
+                            {% include "icons/upload.html" %}
+                            Envoyer {% if count > 1 %}les {{ count }} fichiers{% else %}le fichier{% endif %}
+                        </button>
+                    {% endif %}
+                    <a href="{% url 'document_bulk_upload_pick' %}" class="btn">Choisir un autre dossier</a>
+                </div>
+            </section>
+
+            <div class="bulk-lists">
+                {# What will be sent, by course. #}
+                {% if plan.ready_folders %}
+                    <section class="bulk-box bulk-send-list" aria-labelledby="bulk-send-title">
+                        <h2 id="bulk-send-title">{% include "icons/upload.html" %} Les fichiers qui seront envoyés sur DocHub</h2>
+                        <p class="bulk-box-intro">Clique sur un cours pour voir ses fichiers.</p>
+                        {% for folder in plan.archived_folders %}
+                            <p class="bulk-archived">
+                                {% include "icons/history.html" %}
+                                <span>
+                                    <strong>{{ folder.course.slug|upper }}</strong> est un cours archivé.
+                                    Si possible, mets plutôt ces documents dans le cours actuel.
+                                </span>
+                            </p>
+                        {% endfor %}
+                        <div class="bulk-folders">
+                            {% for folder in plan.ready_folders %}
+                                <details class="bulk-folder">
+                                    <summary title="Dossier «&nbsp;{{ folder.name }}&nbsp;»">
+                                        <span class="pill pill-mono">{{ folder.course.slug|upper }}</span>
+                                        <span class="bulk-folder-name">{{ folder.course.name }}</span>
+                                        {% if folder.course.is_archive %}
+                                            <span class="pill is-warning">Cours archivé</span>
+                                        {% endif %}
+                                        {% with total=folder.ready_files|length %}
+                                            <span class="bulk-folder-meta">{{ total }} fichier{{ total|pluralize }}</span>
+                                        {% endwith %}
+                                    </summary>
+                                    <ul class="bulk-files">
+                                        {% for file in folder.ready_files %}
+                                            {% partial file %}
+                                        {% endfor %}
+                                    </ul>
+                                </details>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endif %}
+
+                {# What we leave aside. It never blocks the other files. #}
+                {% if plan.unknown_folders or plan.loose_files or plan.compressed_files or plan.empty_files %}
+                    <section class="bulk-box bulk-aside-list" aria-labelledby="bulk-aside-title">
+                        <h2 id="bulk-aside-title">{% include "icons/info-circle.html" %} Ce qu'on laissera de côté</h2>
+                        <p class="bulk-box-intro">
+                            Pas d'inquiétude&nbsp;: ça n'empêche pas l'envoi des autres fichiers.
+                        </p>
+                        <ul class="bulk-notes">
+                            {% for folder in plan.unknown_folders %}
+                                {% with ignored=folder.files|length %}
+                                    <li>
+                                        {% include "icons/folder.html" %}
+                                        <div>
+                                            <strong>{{ folder.name }}</strong>&nbsp;: aucun cours ne correspond à ce nom{% if folder.suggestion %}, tu voulais peut-être dire <strong>{{ folder.suggestion|upper }}</strong>&nbsp;?{% else %}.{% endif %}
+                                            {{ ignored }} fichier{{ ignored|pluralize }} pas envoyé{{ ignored|pluralize }}.
+                                        </div>
+                                    </li>
+                                {% endwith %}
+                            {% endfor %}
+                            {% with files=plan.loose_files %}
+                                {% if files %}
+                                    <li>
+                                        {% include "icons/file-text.html" %}
+                                        <div>
+                                            {% if files|length == 1 %}Ce fichier n'est{% else %}Ces fichiers ne sont{% endif %}
+                                            dans aucun dossier de cours&nbsp;: {% partial file_names %}.
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endwith %}
+                            {% with files=plan.compressed_files %}
+                                {% if files %}
+                                    <li>
+                                        {% include "icons/file-text.html" %}
+                                        <div>
+                                            {% if files|length == 1 %}Ce fichier est compressé, décompresse-le{% else %}Ces fichiers sont compressés, décompresse-les{% endif %}
+                                            d'abord&nbsp;: {% partial file_names %}.
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endwith %}
+                            {% with files=plan.empty_files %}
+                                {% if files %}
+                                    <li>
+                                        {% include "icons/file-text.html" %}
+                                        <div>
+                                            {% if files|length == 1 %}Ce fichier est vide{% else %}Ces fichiers sont vides{% endif %}&nbsp;:
+                                            {% partial file_names %}.
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endwith %}
+                        </ul>
+                        {% if plan.unknown_folders %}
+                            <p class="form-text">
+                                Pour envoyer aussi ces dossiers, renomme-les avec le mnémonique du cours
+                                (par exemple INFO-F101), puis choisis à nouveau ton dossier.
+                            </p>
+                        {% endif %}
+                    </section>
+                {% endif %}
+            </div>
+        </div>
+    {% endwith %}
+{% endpartialdef plan %}
+
+{# Step 4: only the summary. The controller sends the files of data-queue one by one, #}
+{# and changes data-status. Each [data-show-when] shows only for the status that it names. #}
+{% partialdef send %}
+    {% with count=plan.ready_files|length %}
+        <div class="bulk-box bulk-summary bulk-send-step" aria-labelledby="bulk-summary-title"
+             data-status="sending" data-queue="{{ queue }}" data-bulk-upload-target="send">
+            <h2 id="bulk-summary-title">
+                <span data-show-when="sending">Envoi en cours…</span>
+                <span data-show-when="stopped">Ton dossier</span>
+                <span data-show-when="done">C'est envoyé, merci&nbsp;!</span>
+            </h2>
+            {# Same check as a done step of the home page onboarding. #}
+            <span class="bulk-done-check" data-show-when="done">{% include "icons/check.html" %}</span>
+
+            {% partial summary %}
+
+            <progress data-bulk-upload-target="progress" value="0" max="{{ count }}"
+                      aria-label="Progression de l'envoi" data-show-when="sending stopped"></progress>
+
+            <p class="bulk-done-text" role="status" data-show-when="done">
+                Les nouveaux documents seront visibles dans quelques minutes, le temps qu'on les prépare.
+            </p>
+
+            <div class="notice is-warning" role="alert" data-show-when="stopped">
+                {% include "icons/info-circle.html" %}
+                <div>
+                    <p class="notice-copy">
+                        L'envoi s'est arrêté, ce n'est sans doute pas de ta faute.
+                        Ta connexion a peut-être coupé, ou le problème vient de notre côté.
+                        Réessaie, ou <a href="" data-turbo-frame="_top">recharge la page</a> et choisis à nouveau ton dossier&nbsp;:
+                        les fichiers déjà envoyés seront ignorés.
+                    </p>
+                    <button type="button" class="btn" data-action="bulk-upload#start">Réessayer</button>
+                </div>
+            </div>
+        </div>
+    {% endwith %}
+{% endpartialdef send %}
+
+{# The folder and what we can send from it, in steps 3 and 4. #}
+{% partialdef summary %}
+    <p class="bulk-summary-folder">{% include "icons/folder.html" %} {{ folder_name }}</p>
+
+    <p class="bulk-summary-count">
+        {% if count %}
+            <strong>{{ count }} fichier{{ count|pluralize }}</strong>
+            {% if step == 4 %}
+                <span data-show-when="sending stopped">en cours d'envoi</span>
+                <span data-show-when="done">envoyé{{ count|pluralize }}</span>
+            {% else %}
+                prêt{{ count|pluralize }} à être envoyé{{ count|pluralize }}
+            {% endif %}
+            pour {{ plan.ready_course_count }} cours ({{ plan.ready_size|filesizeformat }}).
+        {% else %}
+            Il n'y a rien à envoyer dans ce dossier.
+        {% endif %}
+    </p>
+{% endpartialdef summary %}
+
+{# One file of the plan. #}
+{% partialdef file %}
+    <li class="bulk-file">
+        <span class="bulk-file-original">{{ file.name }}</span>
+        <span class="bulk-file-arrow" aria-label="devient">→</span>
+        <span class="bulk-file-title">{{ file.title }}</span>
+        {# Same tags as on the course page. #}
+        <span class="bulk-file-tags">
+            {% for tag in file.tags %}
+                <span class="pill">#{{ tag }}</span>
+            {% endfor %}
+        </span>
+    </li>
+{% endpartialdef file %}
+
+{# A file name, and the title of the document it gives, for the tips of step 1. #}
+{% partialdef renamed_file %}
+    <code>{{ name }}</code>
+    <span class="bulk-file-arrow" aria-label="devient">→</span>
+    <span class="bulk-tips-document">{% include "icons/file-text.html" %} {{ title }}</span>
+{% endpartialdef renamed_file %}
+
+{# The names of some files, for the list of what we leave aside. #}
+{% partialdef file_names %}{% for file in files %}<strong>{{ file.name }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}{% endpartialdef %}

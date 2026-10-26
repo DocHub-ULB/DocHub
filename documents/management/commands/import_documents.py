@@ -9,22 +9,6 @@ from documents import logic
 from documents.exceptions import ExisingChecksum
 from users.models import User
 
-TAGS = {
-    "off": "officiel",
-    "ref": "référence",
-    "sli": "slides",
-    "res": "résumé",
-    "exa": "examen",
-    "tp": "tp",
-    "syl": "syllabus",
-    "cor": "corrigé",
-    "corr": "corrigé",
-    "for": "formulaire",
-    "sol": "corrigé",
-    "lab": "laboratoire",
-    "law": "loi",
-}
-
 
 class Command(BaseCommand):
     help = "Import documents in a course"
@@ -85,31 +69,16 @@ class Command(BaseCommand):
 
 def import_document_from_path(doc_path, course, user):
     filename = os.path.split(doc_path)[1]
-    tags, filename = extract_tags(filename)
-    name, extension = os.path.splitext(filename)
-
-    name = logic.clean_filename(name)
+    extension = os.path.splitext(filename)[1]
 
     with open(doc_path, "rb") as fd:
         document = logic.add_file_to_course(
             file=File(fd),
-            name=name,
+            name=logic.document_title(filename, course),
             extension=extension,
             course=course,
-            tags=tags,
+            tags=logic.document_tags(filename),
             user=user,
         )
 
     document.add_to_queue()
-
-
-def extract_tags(filename):
-    if ":" not in filename:
-        return [], filename
-
-    tags, name = filename.split(":", 1)
-    tags = tags.split(",")
-    tags = [TAGS.get(x.lower()) for x in tags]
-    tags = [tag for tag in tags if tag]
-
-    return tags, name

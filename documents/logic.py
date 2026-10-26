@@ -1,5 +1,7 @@
 import hashlib
 import mimetypes
+import os
+import re
 import uuid
 from collections.abc import Iterable
 
@@ -51,6 +53,94 @@ def clean_filename(name: str) -> str:
         name = name.capitalize()
 
     return name.replace("_", " ")
+
+
+# A course code at the start of a text, written in any of the ways people use:
+# "INFO-F105", "info-f-105", "INFOF105", "infof-105", "info f105"...
+# The code must end there: "INFO-F10l" (a typo) is not a code.
+COURSE_CODE = re.compile(
+    r"\s*([a-z]{1,4})[-_ ]?([a-z])[-_ ]?(\d{2,5})(?![a-z0-9])[-_ ]*", re.IGNORECASE
+)
+
+
+def split_course_code(text: str) -> tuple[str, str]:
+    """Split "INFO-F105_2018_Juin" into ("info-f105", "2018_Juin").
+
+    Without a course code at the start, gives ("", text).
+    """
+    match = COURSE_CODE.match(text)
+    if match is None:
+        return "", text
+    domain, faculty, number = match.groups()
+    return f"{domain}-{faculty}{number}".lower(), text[match.end() :]
+
+
+# The tags a user can write in a file name, with a "#" before them:
+# "#exa #cor Examen juin.pdf" or "Examen juin #examen#corrigé.pdf".
+# A tag is its short code or its full name.
+# Keep in line with the help of documents/templates/documents/bulk_upload.html.
+TAG_CODES = {
+    "off": "officiel",
+    "ref": "référence",
+    "sli": "slides",
+    "res": "résumé",
+    "exa": "examen",
+    "tp": "tp",
+    "syl": "syllabus",
+    "cor": "corrigé",
+    "corr": "corrigé",
+    "sol": "corrigé",
+    "for": "formulaire",
+    "lab": "laboratoire",
+    "law": "loi",
+}
+TAG_NAMES = TAG_CODES | {name: name for name in TAG_CODES.values()}
+
+# A "#" and the letters or digits after it. The separators around it go with
+# it, so that "Examen_#cor_juin" becomes "Examen juin".
+HASHTAG = re.compile(r"[-_ ]*#([^\W_]+)[-_ ]*")
+
+
+def split_tags(name: str) -> tuple[list[str], str]:
+    """Split "#exa#cor Examen" into (["examen", "corrigé"], "Examen").
+
+    We keep in the name a "#" that is not a tag: "TP #3" has no tags.
+    """
+    tags = []
+
+    def remove_tag(match: re.Match[str]) -> str:
+        tag = TAG_NAMES.get(match.group(1).lower())
+        if tag is None:
+            return match.group(0)
+        tags.append(tag)
+        return " "
+
+    name = HASHTAG.sub(remove_tag, name).strip()
+    return list(dict.fromkeys(tags)), name
+
+
+def document_tags(file_name: str) -> list[str]:
+    """The tags written in a file name, see TAG_CODES.
+
+    Without tags, gives no tags: add_file_to_course then guesses them from the title.
+    """
+    return split_tags(file_name)[0]
+
+
+def document_title(file_name: str, course: Course) -> str:
+    """The title of a document, from its file name.
+
+    We remove the tags written in the name, see TAG_CODES.
+    We also remove the code of the course: the document is already in that
+    course, so "INFO-F105_2018_Juin.pdf" becomes "2018 Juin".
+    """
+    name = os.path.splitext(file_name)[0]
+    # A name with only tags keeps them: "#exa.pdf" becomes "#exa".
+    title = clean_filename(split_tags(name)[1] or name)
+    code, rest = split_course_code(title)
+    if rest and code == course.slug:
+        title = rest
+    return title[:255]
 
 
 def cast_tag(tag: str | Tag) -> Tag:
@@ -106,6 +196,11 @@ def add_file_to_course(
 
 
 def tags_from_name(name: str) -> set[Tag]:
+    return {Tag.objects.get_or_create(name=tag)[0] for tag in tag_names_from_name(name)}
+
+
+def tag_names_from_name(name: str) -> set[str]:
+    """Guess the tags of a document from its name, without touching the database."""
     translate = {"é": "e", "è": "e", "ê": "e", "-": " ", "_": " ", "û": "u", "ô": "o"}
     name = name.lower()
     for k, v in translate.items():
@@ -114,7 +209,17 @@ def tags_from_name(name: str) -> set[Tag]:
     tags = set()
 
     mapping = {
-        ("aout", "sept", "juin", "mai", "exam", "questions", "oral"): "examen",
+        (
+            "janv",
+            "aout",
+            "sept",
+            "juin",
+            "mai",
+            "exam",
+            "partiel",
+            "questions",
+            "oral",
+        ): "examen",
         ("corr", "reponse", "rponse"): "corrigé",
         (
             "tp",
@@ -151,8 +256,7 @@ def tags_from_name(name: str) -> set[Tag]:
             if key in name:
                 tags.add(val)
 
-    tag_objs = {Tag.objects.get_or_create(name=tag)[0] for tag in tags}
-    return tag_objs
+    return tags
 
 
 from documents.models import Document  # NOQA

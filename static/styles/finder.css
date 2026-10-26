@@ -129,26 +129,8 @@
 .finder-hint .finder-name { font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
 .finder-hint > a:hover .finder-name { color: var(--ink); }
 
-/*
- * A hand-drawn loop around a word, stretched to fit whatever its width. Side
- * margins make room for the loop so it does not run over the next words.
- */
-.finder-circled { position: relative; margin: 0 4px; white-space: nowrap; }
-.finder-circled > svg {
-    position: absolute;
-    inset: -3px -6px;
-    width: calc(100% + 12px);
-    height: calc(100% + 6px);
-    color: var(--accent);
-    pointer-events: none;
-}
-
 /* Arrow coming from below the hint and pointing at the loop. */
-.finder-circled > .finder-circled-arrow {
-    inset: calc(100% - 1px) auto auto 60%;
-    width: 34px;
-    height: 40px;
-}
+.finder-name .doodle-arrow { inset: calc(100% - 1px) auto auto 60%; }
 
 @media (max-width: 760px) {
     .finder-col:not(.finder-col-current) { display: none; }
