@@ -1,0 +1,6 @@
+# AI agents and other API clients are welcome: see /llms.txt for the API.
+User-agent: *
+Disallow: /admin/
+Disallow: /moderation/
+
+Sitemap: https://dochub.be/sitemap.xml

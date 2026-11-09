@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, F, Q
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -28,6 +28,20 @@ from documents.forms import (
 from documents.models import BulkDocuments, Document, Vote
 from moderation.models import ModerationLog
 from stats.models import DailyStat, Metric
+from users.middleware import allow_token_writes, too_many_requests
+from users.models import DailyUsage
+from www.helpers import login_required_json, wants_json
+
+
+def _daily_cap_reached(request, kind: DailyUsage.Kind) -> HttpResponse | None:
+    """Counts one download or upload, or returns an error once the cap is reached."""
+    if DailyUsage.consume(request.user, kind):
+        return None
+    return too_many_requests(
+        request,
+        f"Tu as atteint la limite de {settings.DAILY_CAPS[kind]} "
+        f"{kind.label.lower()} pour aujourd'hui. Reviens demain !",
+    )
 
 
 def _document_form_for_user(user, document, *args, **kwargs):
@@ -52,6 +66,7 @@ def upload_picker(request):
     )
 
 
+@allow_token_writes
 @login_required
 @slug_redirect
 def upload_file(request, slug):
@@ -61,11 +76,14 @@ def upload_file(request, slug):
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
 
-        DailyStat.track(Metric.UPLOAD_SUBMIT)
+        DailyStat.track(request, Metric.UPLOAD_SUBMIT)
 
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
+            if error := _daily_cap_reached(request, DailyUsage.Kind.UPLOAD):
+                return error
+
             file = request.FILES["file"]
 
             name, extension = os.path.splitext(file.name)
@@ -89,9 +107,14 @@ def upload_file(request, slug):
             else:
                 document.add_to_queue()
 
+                if wants_json(request):
+                    return JsonResponse(document.as_json(), status=201)
                 return HttpResponseRedirect(
                     reverse("catalog:course_show", args=[course.slug])
                 )
+
+        if wants_json(request):
+            return JsonResponse({"errors": form.errors}, status=422)
 
     else:
         form = UploadFileForm()
@@ -123,7 +146,7 @@ def document_edit(request, pk):
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
 
-        DailyStat.track(Metric.DOCUMENT_EDIT)
+        DailyStat.track(request, Metric.DOCUMENT_EDIT)
 
         if "hide" in request.POST:
             if request.user != doc.user:
@@ -232,7 +255,7 @@ def document_reupload(request, pk):
         if settings.READ_ONLY:
             return HttpResponse("Upload is disabled for a few hours", status=401)
 
-        DailyStat.track(Metric.DOCUMENT_REUPLOAD)
+        DailyStat.track(request, Metric.DOCUMENT_REUPLOAD)
 
         form = ReUploadForm(request.POST, request.FILES, instance=document)
 
@@ -281,13 +304,18 @@ def document_show(request, pk):
         pk=pk,
     )
 
+    if wants_json(request):
+        if not request.user.is_authenticated:
+            return login_required_json()
+        return JsonResponse(document.as_json())
+
     if not request.user.is_authenticated:
         return render(request, "documents/noauth/viewer.html", {"document": document})
 
     if document.state == Document.DocumentState.DONE:
         document.views = F("views") + 1
         document.save(update_fields=["views"])
-        DailyStat.track(Metric.DOCUMENT_VIEW)
+        DailyStat.track(request, Metric.DOCUMENT_VIEW)
 
     context = {
         "document": document,
@@ -333,6 +361,9 @@ def document_original_file(request, pk):
     if not document.original or not document.original.name:
         raise Http404("Le fichier original n'existe pas pour ce document")
 
+    if error := _daily_cap_reached(request, DailyUsage.Kind.DOWNLOAD):
+        return error
+
     body = document.original.read()
 
     response = HttpResponse(body, content_type="application/octet-stream")
@@ -346,7 +377,7 @@ def document_original_file(request, pk):
 
     document.downloads = F("downloads") + 1
     document.save(update_fields=["downloads"])
-    DailyStat.track(Metric.DOCUMENT_DOWNLOAD)
+    DailyStat.track(request, Metric.DOCUMENT_DOWNLOAD)
     return response
 
 
@@ -359,6 +390,9 @@ def document_pdf_file(request, pk):
     if not document.pdf or not document.pdf.name:
         raise Http404("Le fichier PDF n'existe pas pour ce document")
 
+    if error := _daily_cap_reached(request, DailyUsage.Kind.DOWNLOAD):
+        return error
+
     body = document.pdf.read()
 
     response = HttpResponse(body, content_type="application/pdf")
@@ -370,8 +404,23 @@ def document_pdf_file(request, pk):
 
     document.downloads = F("views") + 1
     document.save(update_fields=["views"])
-    DailyStat.track(Metric.DOCUMENT_DOWNLOAD)
+    DailyStat.track(request, Metric.DOCUMENT_DOWNLOAD)
     return response
+
+
+@login_required
+def document_text(request, pk):
+    """The text of the document, which AI agents read much better than a PDF."""
+    document = get_object_or_404(Document, pk=pk)
+
+    if not document.is_ready or not document.pdf:
+        raise Http404("Le texte de ce document n'est pas (encore) disponible")
+
+    if error := _daily_cap_reached(request, DailyUsage.Kind.DOWNLOAD):
+        return error
+
+    DailyStat.track(request, Metric.DOCUMENT_TEXT)
+    return HttpResponse(document.get_text(), content_type="text/plain; charset=utf-8")
 
 
 @login_required

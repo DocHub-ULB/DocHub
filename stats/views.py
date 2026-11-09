@@ -107,9 +107,11 @@ def _labels(start: date, end: date, granularity: str) -> list[str]:
     return [b.isoformat() for b in _buckets(start, end, granularity)]
 
 
-def _stat_series(name: str, start: date, end: date, granularity: str) -> list[int]:
+def _stat_series(
+    name: str, start: date, end: date, granularity: str, api: bool
+) -> list[int]:
     """Sum DailyStat rows for `name` into the bucket grid."""
-    qs = DailyStat.objects.filter(name=name, date__gte=start, date__lte=end)
+    qs = DailyStat.objects.filter(name=name, api=api, date__gte=start, date__lte=end)
     if granularity == "daily":
         rows = qs.values("date").annotate(total=Sum("value"))
         by_bucket = {row["date"]: row["total"] for row in rows}
@@ -127,7 +129,7 @@ def _stat_series(name: str, start: date, end: date, granularity: str) -> list[in
 
 @login_required
 def stats(request):
-    DailyStat.track(Metric.STATS_VIEW)
+    DailyStat.track(request, Metric.STATS_VIEW)
     option = _range_option(request.GET.get("range", "")) or _range_option(DEFAULT_RANGE)
 
     today = timezone.localdate()
@@ -148,7 +150,8 @@ def stats(request):
         return {
             "title": metric.label,
             "key": metric.value,
-            "data": _stat_series(metric, start, end, granularity),
+            "data": _stat_series(metric, start, end, granularity, api=False),
+            "api_data": _stat_series(metric, start, end, granularity, api=True),
         }
 
     sections = {
@@ -181,6 +184,7 @@ def stats(request):
             ),
             metric_chart(Metric.DOCUMENT_VIEW),
             metric_chart(Metric.DOCUMENT_DOWNLOAD),
+            metric_chart(Metric.DOCUMENT_TEXT),
             metric_chart(Metric.COURSE_FOLLOW),
             metric_chart(Metric.COURSE_UNFOLLOW),
             metric_chart(Metric.MY_COURSES_VIEW),
@@ -226,6 +230,9 @@ def stats(request):
     for charts in sections.values():
         for chart in charts:
             chart["data_json"] = json.dumps(chart["data"])
+            # Only metric charts have an API line, and only if it is used
+            if any(chart.get("api_data", [])):
+                chart["api_data_json"] = json.dumps(chart["api_data"])
 
     return render(
         request,

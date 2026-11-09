@@ -23,4 +23,5 @@ urlpatterns = [
         name="document_original",
     ),
     path("<int:pk>/pdf", documents.views.document_pdf_file, name="document_pdf"),
+    path("<int:pk>/text", documents.views.document_text, name="document_text"),
 ]

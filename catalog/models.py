@@ -190,6 +190,15 @@ class Course(models.Model):
     def get_absolute_url(self):
         return reverse("catalog:course_show", args=(self.slug,))
 
+    def as_json(self) -> dict:
+        """What the API gives with ?format=json, see www/templates/llms.txt"""
+        return {
+            "slug": self.slug,
+            "name": self.name,
+            "description": self.description,
+            "url": self.get_absolute_url(),
+        }
+
     def __str__(self):
         return self.slug
 

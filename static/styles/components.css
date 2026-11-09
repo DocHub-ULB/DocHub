@@ -494,3 +494,48 @@
     .option { cursor: pointer; }
     .active { color: var(--ink); background: var(--bg-sunk); }
 }
+
+/* Create a token in one line: its name, then the button (API tokens page). */
+.token-form {
+    display: flex;
+    gap: 8px;
+
+    .form-control { flex: 1; min-width: 0; }
+}
+
+/* How much of a daily limit is used (API tokens page). */
+.usage-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--grid);
+
+    .form-text { margin: 0; }
+}
+
+.usage-bar {
+    .usage-bar-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        color: var(--ink-soft);
+        font-size: 14px;
+    }
+
+    progress {
+        display: block;
+        width: 100%;
+        height: 8px;
+        overflow: hidden;
+        background: var(--bg-sunk);
+        border: 0;
+        border-radius: 4px;
+        appearance: none;
+    }
+
+    /* Each browser names the parts of a progress bar differently */
+    progress::-webkit-progress-bar { background: var(--bg-sunk); }
+    progress::-webkit-progress-value { background: var(--accent); }
+    progress::-moz-progress-bar { background: var(--accent); }
+    progress.is-full::-webkit-progress-value { background: var(--danger); }
+    progress.is-full::-moz-progress-bar { background: var(--danger); }
+}

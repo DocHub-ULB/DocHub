@@ -31,7 +31,8 @@
                                     data-stats-key="{{ chart.key }}"
                                     data-chart-label-value="{{ chart.title }}"
                                     data-chart-labels-id-value="chart-labels"
-                                    data-chart-data-value="{{ chart.data_json }}"></canvas>
+                                    data-chart-data-value="{{ chart.data_json }}"
+                                    {% if chart.api_data_json %}data-chart-api-data-value="{{ chart.api_data_json }}"{% endif %}></canvas>
                         </div>
                     </div>
                 </div>

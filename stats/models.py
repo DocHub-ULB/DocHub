@@ -5,6 +5,7 @@ from django.utils import timezone
 class Metric(models.TextChoices):
     DOCUMENT_VIEW = "document_view", "Vues de documents"
     DOCUMENT_DOWNLOAD = "document_download", "Téléchargements"
+    DOCUMENT_TEXT = "document_text", "Lectures du texte de documents"
     SEARCH_QUERY = "search_query", "Recherches"
     COURSE_PAGE_VIEW = "course_page_view", "Vues de cours"
     LOGIN_SUCCESS = "login_success", "Connexions"
@@ -45,15 +46,19 @@ class Metric(models.TextChoices):
 
 
 class DailyStat(models.Model):
-    """Aggregate counter — one row per (date, metric name)."""
+    """Aggregate counter — one row per (date, metric name, API or not)."""
 
     date = models.DateField()
     name = models.CharField(max_length=64, choices=Metric)
+    # Done with an API token (often an AI agent) rather than in a browser
+    api = models.BooleanField(default=False, verbose_name="Via l'API")
     value = models.PositiveIntegerField(default=0)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["date", "name"], name="unique_dailystat"),
+            models.UniqueConstraint(
+                fields=["date", "name", "api"], name="unique_dailystat_api"
+            ),
         ]
         indexes = [
             models.Index(fields=["name", "date"]),
@@ -63,14 +68,16 @@ class DailyStat(models.Model):
         return f"{self.date} {self.name}={self.value}"
 
     @classmethod
-    def track(cls, metric: Metric) -> None:
+    def track(cls, request, metric: Metric) -> None:
         """Atomically bump today's counter for `metric` by 1.
 
+        Requests made with an API token are counted apart, see `api`.
         Uses ON CONFLICT DO UPDATE — one statement, true atomicity. Works on
         Postgres and SQLite.
         """
+        api = getattr(request, "access_token", None) is not None
         with connection.cursor() as cursor:
-            cursor.execute(_UPSERT_SQL, [timezone.localdate(), metric])
+            cursor.execute(_UPSERT_SQL, [timezone.localdate(), metric, api])
 
 
 # quote_name() is the Django-blessed way to interpolate an identifier into raw
@@ -78,6 +85,6 @@ class DailyStat(models.Model):
 # constant SQL string + parameters.
 _TABLE = connection.ops.quote_name(DailyStat._meta.db_table)
 _UPSERT_SQL = (
-    f"INSERT INTO {_TABLE} (date, name, value) VALUES (%s, %s, 1) "
-    f"ON CONFLICT (date, name) DO UPDATE SET value = {_TABLE}.value + 1"
+    f"INSERT INTO {_TABLE} (date, name, api, value) VALUES (%s, %s, %s, 1) "
+    f"ON CONFLICT (date, name, api) DO UPDATE SET value = {_TABLE}.value + 1"
 )
