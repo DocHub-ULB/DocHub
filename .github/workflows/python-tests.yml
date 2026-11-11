@@ -113,3 +113,35 @@ jobs:
 
     - name: Check local dev initialization scripts
       run: make database
+
+  deploy:
+    needs: [pre-commit, build]
+    runs-on: ubuntu-latest
+    permissions: {}
+    if: >-
+      github.event_name == 'push'
+      && startsWith(github.ref, 'refs/tags/20')
+    steps:
+      - name: Deploy ${{ github.ref_name }}
+        env:
+          WEBHOOK_SECRET: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          PAYLOAD="{\"ref\":\"refs/tags/$TAG\"}"
+          SIGNATURE="sha256=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" | cut -d' ' -f2)"
+
+          HTTP_CODE=$(curl -s --max-time 120 \
+            -o /tmp/deploy-output.txt \
+            -w "%{http_code}" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: $SIGNATURE" \
+            -d "$PAYLOAD" \
+            "https://dochub.be/webhook/dochub-deploy")
+
+          cat /tmp/deploy-output.txt
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Webhook returned HTTP $HTTP_CODE"
+            exit 1
+          fi
