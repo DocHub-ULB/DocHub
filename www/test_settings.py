@@ -1,5 +1,4 @@
 import os
-import tempfile
 
 # We want DocHub to run in DEBUG=True by default so a user cloning the repo
 # can run the app without any configuration and still have some DEBUG info.
@@ -25,5 +24,3 @@ CELERY_ALWAYS_EAGER = True  # Skip the Celery daemon
 # Required if we don't want to build the collected static files upfront
 # (which is not possible desirable to do before each test run)
 WHITENOISE_MANIFEST_STRICT = False
-
-UPLOAD_DIR = tempfile.mkdtemp()

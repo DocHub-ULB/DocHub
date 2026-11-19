@@ -57,7 +57,6 @@ INSTALLED_APPS = [
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-DOCUMENT_STORAGE = "django.core.files.storage.FileSystemStorage"
 BASE_URL = env("BASE_URL", default="https://dochub.be/")
 
 MIDDLEWARE = [
@@ -213,12 +212,6 @@ if DEBUG:
         MIDDLEWARE.extend(["debug_toolbar.middleware.DebugToolbarMiddleware"])
         INSTALLED_APPS.extend(["debug_toolbar"])
 else:
-    INSTALLED_APPS.extend(
-        [
-            "gunicorn",
-        ]
-    )
-
     if SENTRY_DSN is not None:
         import sentry_sdk
 
