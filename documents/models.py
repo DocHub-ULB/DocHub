@@ -81,9 +81,6 @@ class Document(models.Model):
     def is_pdf(self) -> bool:
         return self.file_type in (".pdf", "application/pdf")
 
-    def fullname(self) -> str:
-        return self.__str__()
-
     def repair(self) -> None:
         repair.delay(self.pk)
 
