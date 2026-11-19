@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 class UlbCasBackend:
     CAS_ENDPOINT = "https://auth.ulb.be/"
-    LOGIN_METHOD = "ulb-cas"
     XML_NAMESPACES = {
         "cas": "http://www.yale.edu/tp/cas",
     }
@@ -55,14 +54,12 @@ class UlbCasBackend:
                     email=user_dict["email"],
                     first_name=user_dict["first_name"],
                     last_name=user_dict["last_name"],
-                    register_method=self.LOGIN_METHOD,
                 )
 
         # Sync all fields from CAS on every login
         user.netid = user_dict["netid"]
         user.first_name = user_dict["first_name"]
         user.last_name = user_dict["last_name"]
-        user.last_login_method = self.LOGIN_METHOD
 
         # Only update email if no other user already has it
         conflict = (

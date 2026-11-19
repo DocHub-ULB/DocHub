@@ -1,4 +1,3 @@
-import re
 from datetime import timedelta
 
 from django.contrib.auth.models import AbstractBaseUser, UserManager
@@ -7,8 +6,6 @@ from django.utils import timezone
 
 
 class CustomUserManager(UserManager):
-    PATTERN = re.compile(r"[\W_]+")
-
     def _create_user(self, netid, email, password, **extra_fields):
         """
         Creates and saves a User with the given username, email and password.
@@ -41,14 +38,9 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=512)
     last_name = models.CharField(max_length=512)
     email = models.CharField(max_length=512, unique=True)
-    welcome = models.BooleanField(default=True)
     comment = models.TextField(blank=True, default="")
 
-    register_method = models.CharField(max_length=32)
-    last_login_method = models.CharField(max_length=32)
-
     is_staff = models.BooleanField(default=False)
-    is_academic = models.BooleanField(default=False)
     is_moderator = models.BooleanField(default=False)
     moderator_welcome_dismissed = models.BooleanField(default=False)
     promoted_by = models.ForeignKey(
