@@ -1,4 +1,3 @@
-import _ from 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/+esm';
 
 import {Controller, Application} from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
 import {Autocomplete} from 'https://cdn.jsdelivr.net/npm/stimulus-autocomplete@3.1.0/+esm';
@@ -64,7 +63,7 @@ class CourseFilter extends Controller {
             let normalizedTitle = normalize(key)
 
             let containsText = normalizedTitle.includes(normalizedFilterTerm);
-            let containsTags = _.difference(selectedTags, tags).length === 0;
+            let containsTags = selectedTags.every((tag) => tags.includes(tag));
             el.classList.toggle("d-none", !containsText || !containsTags)
         })
     }
