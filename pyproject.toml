@@ -1,12 +1,12 @@
 [project]
 name = "dochub"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.13.3",
     "celery>=5.5.1",
     "crispy-bootstrap5>=2025.4",
-    "django>=3",
+    "django>=6.1",
     "django-crispy-forms>=2.3",
     "django-environ>=0.12.0",
     "furl>=2.1.4",
@@ -75,9 +75,6 @@ markers = """
     postgresql: needs a postgresql database to run
     playwright: heavy browser tests (deselected by default; run with '-m playwright')
 """
-
-[tool.ruff]
-target-version = "py313"
 
 [tool.ruff.lint]
 select = [
