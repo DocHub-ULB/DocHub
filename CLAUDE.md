@@ -26,8 +26,8 @@ JS libs only when necessary
 
 ## Code Style
 - Use **ruff format** for formatting and ruff's `I` rules for import ordering
-- Use **Django 6.0** patterns and **Python 3.13** features
-- Django 6.0 ships **native template partials** (`{% partialdef name %}…{% endpartialdef %}`
+- Use **Django 6.1** patterns and **Python 3.13** features
+- Django 6.0+ ships **native template partials** (`{% partialdef name %}…{% endpartialdef %}`
   + `{% partial name %}`, no extra package). Prefer co-locating a small reusable
   fragment as a partial over a separate `_partial.html` include. `{% partial %}`
   reads the ambient context, so pass per-call values with `{% with a=… b=… %}`.
