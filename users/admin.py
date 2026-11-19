@@ -10,14 +10,12 @@ class UserAdmin(admin.ModelAdmin):
         "name",
         "email",
         "is_staff",
-        "is_academic",
         "is_moderator",
         "last_login",
         "created",
     )
     list_filter = (
         "is_staff",
-        "is_academic",
         "is_moderator",
         "last_login",
         "created",
@@ -48,7 +46,6 @@ class UserAdmin(admin.ModelAdmin):
                 "classes": ("collapse",),
                 "fields": (
                     "is_staff",
-                    "is_academic",
                     "is_moderator",
                 ),
             },
@@ -57,10 +54,7 @@ class UserAdmin(admin.ModelAdmin):
             "Other",
             {
                 "classes": ("collapse",),
-                "fields": (
-                    "welcome",
-                    "comment",
-                ),
+                "fields": ("comment",),
             },
         ),
     )

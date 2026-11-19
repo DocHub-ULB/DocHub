@@ -22,14 +22,6 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def panel_hide(request):
-    request.user.welcome = False
-    request.user.save()
-
-    return HttpResponseRedirect(reverse("index"))
-
-
-@login_required
 @require_POST
 def moderator_banner_hide(request):
     request.user.moderator_welcome_dismissed = True
