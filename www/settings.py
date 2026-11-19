@@ -6,7 +6,6 @@ import environ
 
 # First checks if the secrets are not stored in tmpfs by Docker
 # https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
-from sentry_sdk.utils import get_default_release
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +87,6 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "www.context_processors.sentry",
                 "www.context_processors.version",
             ],
         },
@@ -154,7 +152,6 @@ BROKER_URL = env("REDIS_BROKER", default="redis://localhost:6379/0")
 CACHES = {"default": env.cache_url("CACHE_URL", default="dummycache://")}
 
 SENTRY_DSN = env("SENTRY_DSN", default=None)
-SENTRY_RELEASE = get_default_release()
 
 
 def _git_describe() -> str | None:
