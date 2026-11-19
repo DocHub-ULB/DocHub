@@ -19,7 +19,6 @@ class Metric(models.TextChoices):
     )
     UPLOAD_SUBMIT = "upload_submit", "Soumissions d'upload"
     DOCUMENT_REUPLOAD = "document_reupload", "Réuploads de documents"
-    MY_COURSES_VIEW = "my_courses_view", 'Vues de "Mes cours"'
     MODERATION_PROFILE_VIEW = (
         "moderation_profile_view",
         "Vues de profils de modérateur·trices",
