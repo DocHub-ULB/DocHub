@@ -193,9 +193,6 @@ class Course(models.Model):
     def __str__(self):
         return self.slug
 
-    def fullname(self):
-        return f"{self.name} ({self.slug.lower()})"
-
     @property
     def followers_count(self) -> int:
         return self.followed_by.count()
