@@ -4,7 +4,8 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.contrib.auth.views import redirect_to_login
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -21,6 +22,7 @@ from users.authBackend import (
     UlbCasBackend,
 )
 from users.models import AccessToken, CasFailure, DailyUsage
+from www.helpers import login_required_json, wants_json
 
 logger = logging.getLogger(__name__)
 
@@ -42,9 +44,13 @@ def moderator_banner_hide(request):
     return HttpResponseRedirect(reverse("index"))
 
 
-@login_required
 def api_tokens(request):
     """Lets users create tokens for the API and see their usage."""
+    if not request.user.is_authenticated:
+        if wants_json(request):
+            return login_required_json()
+        return redirect_to_login(request.get_full_path())
+
     if request.method == "POST":
         name = request.POST.get("name", "").strip()[:100] or "Mon token"
         _token, key = AccessToken.create_for(request.user, name)
@@ -56,6 +62,28 @@ def api_tokens(request):
     # Daily caps count per local day, so they reset at midnight
     tomorrow = timezone.localtime() + timedelta(days=1)
     reset_at = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    if wants_json(request):
+        # None when the request comes from a browser session, not a token
+        current = request.access_token
+        if current:
+            # The middleware counted this request in the database only
+            current.refresh_from_db()
+        return JsonResponse(
+            {
+                "current_token": current.as_json() if current else None,
+                "tokens": [
+                    token.as_json() for token in request.user.access_tokens.all()
+                ],
+                "usage": {
+                    kind: {"used": getattr(usage, kind), "limit": cap}
+                    for kind, cap in settings.DAILY_CAPS.items()
+                },
+                "usage_resets_at": reset_at.isoformat(),
+                "requests_per_minute": settings.RATE_LIMIT_PER_MINUTE,
+            }
+        )
+
     return render(
         request,
         "users/api_tokens.html",

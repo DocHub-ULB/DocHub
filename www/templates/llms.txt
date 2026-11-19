@@ -84,3 +84,7 @@ are shared:
 
 Over a limit, you get HTTP 429. Please wait instead of retrying in a loop.
 The user can see their usage at https://dochub.be/users/tokens/.
+
+`/users/tokens/?format=json` gives the same usage as JSON: what is `used` of
+each daily `limit`, when they reset (`usage_resets_at`), and the tokens of the
+user. `current_token` is the token that sent the request.

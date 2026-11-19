@@ -172,6 +172,32 @@ def test_create_then_delete_a_token(client, user):
     assert not AccessToken.objects.exists()
 
 
+def test_tokens_and_usage_as_json(client, auth, user):
+    other = AccessToken.create_for(user, "Script")[0]
+    DailyUsage.consume(user, DailyUsage.Kind.DOWNLOAD)
+
+    data = client.get(reverse("api_tokens"), {"format": "json"}, **auth).json()
+    assert data["current_token"]["name"] == "Claude"
+    # This request is already counted
+    assert data["current_token"]["request_count"] == 1
+    assert {token["id"] for token in data["tokens"]} == {
+        data["current_token"]["id"],
+        other.pk,
+    }
+    assert data["usage"]["downloads"] == {"used": 1, "limit": 200}
+
+    # From the browser, no token sent the request
+    client.force_login(user)
+    data = client.get(reverse("api_tokens"), {"format": "json"}).json()
+    assert data["current_token"] is None
+
+
+def test_tokens_as_json_needs_a_login(client):
+    response = client.get(reverse("api_tokens"), {"format": "json"})
+    assert response.status_code == 401
+    assert client.get(reverse("api_tokens")).status_code == 302
+
+
 def test_llms_txt(client):
     response = client.get("/llms.txt")
     assert response.status_code == 200

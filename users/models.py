@@ -192,6 +192,15 @@ class AccessToken(models.Model):
         token = cls.objects.create(user=user, name=name, key_hash=cls.hash_key(key))
         return token, key
 
+    def as_json(self) -> dict:
+        return {
+            "id": self.pk,
+            "name": self.name,
+            "created": self.created.isoformat(),
+            "last_used": self.last_used.isoformat() if self.last_used else None,
+            "request_count": self.request_count,
+        }
+
 
 class DailyUsage(models.Model):
     """How many documents a user downloaded and uploaded on a given day.
