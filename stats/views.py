@@ -115,9 +115,11 @@ def _stat_series(name: str, start: date, end: date, granularity: str) -> list[in
         by_bucket = {row["date"]: row["total"] for row in rows}
     else:
         trunc = TruncMonth("date") if granularity == "monthly" else TruncWeek("date")
-        rows = qs.annotate(bucket=trunc).values("bucket").annotate(total=Sum("value"))
+        bucket_rows = (
+            qs.annotate(bucket=trunc).values("bucket").annotate(total=Sum("value"))
+        )
         by_bucket = {}
-        for row in rows:
+        for row in bucket_rows:
             bucket = row["bucket"]
             if hasattr(bucket, "date"):
                 bucket = bucket.date()
