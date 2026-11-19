@@ -183,7 +183,6 @@ def stats(request):
             metric_chart(Metric.DOCUMENT_DOWNLOAD),
             metric_chart(Metric.COURSE_FOLLOW),
             metric_chart(Metric.COURSE_UNFOLLOW),
-            metric_chart(Metric.MY_COURSES_VIEW),
         ],
         "Modération — actions": [
             qs_chart(
