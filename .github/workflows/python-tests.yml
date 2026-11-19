@@ -15,12 +15,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/checkout@v6.1.0
         with:
           persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+        uses: astral-sh/setup-uv@v8.0.0
         with:
           enable-cache: false
 
@@ -29,7 +29,7 @@ jobs:
       # pre-commit ourselves and cache the hook environments here instead.
       - name: Cache pre-commit environments
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        uses: actions/cache@v6.1.0
         with:
           lookup-only: ${{ startsWith(github.ref, 'refs/tags/') }}
           path: ~/.cache/pre-commit
@@ -37,6 +37,24 @@ jobs:
 
       - name: pre-commit
         run: uv run pre-commit run --all-files --show-diff-on-failure
+
+  # Verify workflow coverage and the provenance of locked action revisions.
+  lockfile:
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Install actions-lock
+        run: gh extension install github/gh-actions-lock --pin v0.4.1
+
+      - name: Verify action lockfile
+        run: gh actions-lock --verify
 
   build:
     runs-on: ubuntu-latest
@@ -65,17 +83,17 @@ jobs:
 
 
     steps:
-    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+    - uses: actions/checkout@v6.1.0
       with:
         persist-credentials: false
 
     - name: Install uv
-      uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+      uses: astral-sh/setup-uv@v8.0.0
       with:
         enable-cache: false
 
     - name: "Set up Python"
-      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+      uses: actions/setup-python@v6.3.0
       with:
         python-version-file: ".python-version"
 
@@ -115,7 +133,7 @@ jobs:
       run: make database
 
   deploy:
-    needs: [pre-commit, build]
+    needs: [pre-commit, lockfile, build]
     runs-on: ubuntu-latest
     permissions: {}
     if: >-
