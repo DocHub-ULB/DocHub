@@ -66,6 +66,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "users.middleware.AccessTokenMiddleware",
+    "users.middleware.RateLimitMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -236,6 +238,15 @@ else:
 
 READ_ONLY: bool = False
 REJECTED_FILE_FORMATS = (".zip", ".tar", ".gz", ".rar")
+
+# Limits for everyone: people in their browser and API clients alike,
+# so an API client gains nothing by going through the regular pages.
+# Rate limiting counts requests in the cache: it does nothing with the dummy cache.
+RATE_LIMIT_PER_MINUTE = env.int("RATE_LIMIT_PER_MINUTE", default=120)
+DAILY_CAPS = {
+    "downloads": env.int("DAILY_DOWNLOAD_CAP", default=200),
+    "uploads": env.int("DAILY_UPLOAD_CAP", default=100),
+}
 
 # Add an escape hatch if we really need to customise something
 # special at the end in production or elsewhere

@@ -1,4 +1,5 @@
 # TODO: is this dead code ?
+from django.http import JsonResponse
 from django.utils import timezone
 
 
@@ -17,3 +18,15 @@ def year_choices(backlog=5):
     choices = [(f"{year - i}-{year - i + 1}",) * 2 for i in range(backlog)]
     choices.append(("Archives",) * 2)
     return choices
+
+
+def wants_json(request) -> bool:
+    """API clients add ?format=json to a page to get its data as JSON."""
+    return request.GET.get("format") == "json"
+
+
+def login_required_json() -> JsonResponse:
+    """Anonymous visitors only see what the public pages show, so no JSON."""
+    return JsonResponse(
+        {"error": "Connecte-toi ou utilise un token, voir /llms.txt"}, status=401
+    )

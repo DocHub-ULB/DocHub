@@ -1,0 +1,90 @@
+# DocHub API
+
+> DocHub is where students of the ULB (Université libre de Bruxelles) share
+> course documents with each other: notes, summaries, past exams, exercises.
+> Everything is in French. AI agents, scripts and apps are welcome to use it on
+> behalf of a student.
+
+## Get access
+
+The catalog and the course search are public. Everything else (courses,
+documents, uploads) needs a ULB account. Ask your user to create a token at
+https://dochub.be/users/tokens/ and send it with every request:
+
+    Authorization: Bearer dh_...
+
+A token can read everything its user can, and upload documents. It cannot
+edit, delete, like or report anything.
+
+## Get data as JSON
+
+Add `?format=json` to these pages:
+
+- `/catalog/` and `/catalog/<faculty>/<program>/.../`: the course catalog. You
+  get the sub-categories (with their `url`) and the courses of the category.
+- `/search/courses/?q=<text>&format=json&page=1`: search courses by name or by
+  code (e.g. `INFO-F101`).
+- `/catalog/course/<slug>`: a course and its documents. The slug of a course
+  is its ULB code in lowercase, e.g. `info-f101` for INFO-F101. Use the `slug`
+  the other pages give you: other spellings redirect to it, but only for GET.
+- `/documents/<id>`: one document.
+
+A document has a `status`:
+
+- `processing`: we are still converting it. Its `text_url` and `pdf_url` are
+  `null` for now: check again in a few minutes.
+- `ready`: you can read it. `text_url` and `pdf_url` are `null` if the file
+  has no PDF version (e.g. a zip): only `original_url` is there.
+- `error`: we could not convert it, and this will not change. Stop checking.
+
+Errors come as JSON too, as `{"error": "..."}`, when you add `?format=json`.
+
+## Read documents
+
+- `/documents/<id>/text`: the text of the document, page by page, as plain
+  text. It is small and fast to read.
+- `/documents/<id>/pdf`: the document as PDF.
+- `/documents/<id>/original`: the file as it was uploaded.
+
+The text comes from the PDF as it is, with no OCR. Start with it for documents
+that are mostly text, but read the PDF when:
+
+- pages are marked `no text, probably a scan or an image`: scans, photos of
+  handwritten notes or pictures,
+- the document is slides, or has diagrams, charts or tables,
+- the document has math formulas: they often come out garbled in the text,
+- the text looks mixed up, for example with columns in the wrong order.
+
+Every request to the text, the PDF or the original counts as one document read
+in the daily limits below, so pick the right one first.
+
+## Upload a document
+
+Send a `multipart/form-data` POST to
+`/documents/upload/<course slug>?format=json` (the exact slug, e.g.
+`info-f101`: we do not redirect a POST) with:
+
+- `file`: the file (required)
+- `name`: a title (optional, we use the file name otherwise)
+- `description`: a few words about it (optional)
+
+You get the new document back as JSON (HTTP 201), or the errors (HTTP 422).
+The new document is `processing`: check `/documents/<id>?format=json` until it
+is `ready` or `error`.
+A file that is already on DocHub is refused.
+
+## Limits
+
+They are the same for a student in a browser and for their tokens, and they
+are shared:
+
+- {{ RATE_LIMIT_PER_MINUTE }} requests per minute,
+- {{ DAILY_CAPS.downloads }} documents read or downloaded per day (text, PDF or original),
+- {{ DAILY_CAPS.uploads }} documents uploaded per day.
+
+Over a limit, you get HTTP 429. Please wait instead of retrying in a loop.
+The user can see their usage at https://dochub.be/users/tokens/.
+
+`/users/tokens/?format=json` gives the same usage as JSON: what is `used` of
+each daily `limit`, when they reset (`usage_resets_at`), and the tokens of the
+user. `current_token` is the token that sent the request.

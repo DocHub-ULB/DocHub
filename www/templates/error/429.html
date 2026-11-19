@@ -1,0 +1,17 @@
+{% extends "error/error.html" %}
+
+{% block title %}Pas si vite !{% endblock %}
+
+{% block heading %}
+    Pas si vite !
+{% endblock heading %}
+
+{% block expl %}
+    {{ message }}
+    Ces limites protègent DocHub pour tout le monde. Si elles te bloquent pour une bonne raison, écris-nous à
+    <a href="mailto:contact@dochub.be">contact@dochub.be</a>, on trouvera une solution ensemble.
+{% endblock expl %}
+
+{% block errcode %}
+    HTTP_429
+{% endblock errcode %}

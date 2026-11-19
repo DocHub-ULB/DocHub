@@ -363,6 +363,7 @@ class Disclosure extends Controller {
 class Chart extends Controller {
     static values = {
         data: Array,
+        apiData: Array, // Same metric, done with an API token. Empty if unused.
         label: String,
         labelsId: String,
     }
@@ -371,21 +372,33 @@ class Chart extends Controller {
         const ChartJS = (await import('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/auto/+esm')).default;
 
         const labels = JSON.parse(document.getElementById(this.labelsIdValue).textContent);
+        const hasApi = this.apiDataValue.length > 0;
+        const datasets = [{
+            label: hasApi ? "Navigateur" : this.labelValue,
+            data: this.dataValue,
+            borderColor: "#0d6efd",
+            backgroundColor: "rgba(13, 110, 253, 0.1)",
+            fill: true,
+            tension: 0,
+            pointRadius: 0,
+            borderWidth: 1.5,
+        }];
+        if (hasApi) {
+            datasets.push({
+                label: "API",
+                data: this.apiDataValue,
+                borderColor: "#fd7e14",
+                tension: 0,
+                pointRadius: 0,
+                borderWidth: 1.5,
+            });
+        }
 
         this.chart = new ChartJS(this.element, {
             type: "line",
             data: {
                 labels,
-                datasets: [{
-                    label: this.labelValue,
-                    data: this.dataValue,
-                    borderColor: "#0d6efd",
-                    backgroundColor: "rgba(13, 110, 253, 0.1)",
-                    fill: true,
-                    tension: 0,
-                    pointRadius: 0,
-                    borderWidth: 1.5,
-                }],
+                datasets,
             },
             options: {
                 responsive: true,
@@ -393,7 +406,7 @@ class Chart extends Controller {
                 aspectRatio: 2.5,
                 animation: false,
                 interaction: {mode: "index", intersect: false},
-                plugins: {legend: {display: false}},
+                plugins: {legend: {display: hasApi}},
                 scales: {
                     y: {beginAtZero: true, ticks: {precision: 0}},
                     x: {ticks: {maxTicksLimit: 8, maxRotation: 0}},

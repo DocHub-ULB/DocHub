@@ -4,7 +4,14 @@ from functools import wraps
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Case, Count, Q, Value, When
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -19,6 +26,7 @@ from catalog.models import (
 from catalog.slug import normalize_slug
 from documents.models import Vote
 from stats.models import DailyStat, Metric
+from www.helpers import login_required_json, wants_json
 
 
 def slug_redirect(view):
@@ -29,10 +37,24 @@ def slug_redirect(view):
         except ValueError:
             raise Http404("This is not a valid course slug.") from None
         if normalized != slug:
-            return redirect(request.path.replace(slug, normalized))
+            url = request.path.replace(slug, normalized)
+            if request.method not in ("GET", "HEAD"):
+                # A redirect would make the client send a GET without the
+                # form (that is how 301/302 work), so we say it instead
+                message = f"Ce n'est pas l'adresse exacte du cours, utilise {url}"
+                if wants_json(request):
+                    return JsonResponse({"error": message}, status=400)
+                return HttpResponseBadRequest(message)
+            return redirect(_with_query(request, url))
         return view(request, slug, *args, **kwargs)
 
     return wrapper
+
+
+def _with_query(request: HttpRequest, url: str) -> str:
+    """Keeps the query (e.g. ?format=json) when we redirect to another URL."""
+    query = request.META.get("QUERY_STRING", "")
+    return f"{url}?{query}" if query else url
 
 
 @slug_redirect
@@ -70,6 +92,16 @@ def show_course(request, slug: str):
         sort = "recent"
         documents = documents.order_by("-created")
 
+    if wants_json(request):
+        if not request.user.is_authenticated:
+            return login_required_json()
+        return JsonResponse(
+            {
+                **course.as_json(),
+                "documents": [document.as_json() for document in documents],
+            }
+        )
+
     primary_category = (
         course.categories.filter(type=Category.CategoryType.FACULTY).first()
         or course.categories.first()
@@ -96,7 +128,7 @@ def show_course(request, slug: str):
     if request.user.is_authenticated:
         template = "catalog/course.html"
         CourseUserView.visit(request.user, course)
-        DailyStat.track(Metric.COURSE_PAGE_VIEW)
+        DailyStat.track(request, Metric.COURSE_PAGE_VIEW)
     else:
         template = "catalog/noauth/course.html"
 
@@ -110,10 +142,10 @@ def set_follow_course(request, slug: str, action: str) -> HttpResponse:
     course = get_object_or_404(Course, slug=slug)
     if action == "follow":
         course.followed_by.add(request.user)
-        DailyStat.track(Metric.COURSE_FOLLOW)
+        DailyStat.track(request, Metric.COURSE_FOLLOW)
     else:
         course.followed_by.remove(request.user)
-        DailyStat.track(Metric.COURSE_UNFOLLOW)
+        DailyStat.track(request, Metric.COURSE_UNFOLLOW)
     course.save()
     nextpage = request.GET.get("next", reverse("catalog:course_show", args=[slug]))
     return HttpResponseRedirect(nextpage)
@@ -281,12 +313,15 @@ def _show_edition(
     resolved = _resolve_category_path(root, slug_list)
     canonical = [category.slug.lower() for category in resolved]
     if slug_list != canonical:
-        return redirect(_edition_finder_url(edition, canonical), permanent=True)
+        return redirect(
+            _with_query(request, _edition_finder_url(edition, canonical)),
+            permanent=True,
+        )
 
     if request.user.is_authenticated:
-        DailyStat.track(Metric.FINDER_VIEW)
+        DailyStat.track(request, Metric.FINDER_VIEW)
         if len(resolved) >= 2:
-            DailyStat.track(Metric.FINDER_VIEW_DEEP)
+            DailyStat.track(request, Metric.FINDER_VIEW_DEEP)
 
     is_archive = edition.status == CatalogEdition.Status.ARCHIVED
     columns: list[Column] = []
@@ -310,6 +345,23 @@ def _show_edition(
                 _column_courses(category),
                 edition.title if depth == 0 and is_archive else category.name,
             )
+        )
+
+    if wants_json(request):
+        # Only the category we are in: its sub-categories and its courses
+        current = columns[-1]
+        return JsonResponse(
+            {
+                "name": current.title,
+                "categories": [
+                    {"name": child.category.name, "url": child.url}
+                    for child in current.children
+                ],
+                "courses": [
+                    {**entry.course.as_json(), "elective": bool(entry.heading)}
+                    for entry in current.courses
+                ],
+            }
         )
 
     return render(

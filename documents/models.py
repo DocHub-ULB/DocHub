@@ -1,5 +1,6 @@
 import unicodedata
 
+import pymupdf
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_delete
@@ -17,6 +18,9 @@ UNCONVERTIBLE_TYPES = [
     ".one",
     ".mp4",
 ]
+
+# Below this many characters, we consider that a page has no real text
+MIN_PAGE_TEXT_LENGTH = 10
 
 
 class Document(models.Model):
@@ -89,6 +93,43 @@ class Document(models.Model):
             raise Exception("Documents are read-only.")
         repair.delay(self.pk)
 
+    @property
+    def is_ready(self) -> bool:
+        """Processed, so its PDF (if it has one) can be read."""
+        return self.state in (
+            Document.DocumentState.DONE,
+            Document.DocumentState.REPAIRED,
+        )
+
+    def get_text(self) -> str:
+        """The text of the PDF, page by page, for AI agents and the like.
+
+        Extracted the first time someone asks for it, then kept in DocumentText.
+        """
+        try:
+            return self.extracted_text.text
+        except DocumentText.DoesNotExist:
+            with self.pdf.open() as fd:
+                pdf = pymupdf.open(stream=fd.read(), filetype="pdf")
+            pages = []
+            for number in range(pdf.page_count):
+                page_text = pdf[number].get_text()
+                # Almost no text: a scan, a photo or a slide with only a picture.
+                # Tell the reader (often an AI agent) to read that page in the PDF.
+                if len(page_text.strip()) < MIN_PAGE_TEXT_LENGTH:
+                    pages.append(
+                        f"--- Page {number + 1}: no text, probably a scan or "
+                        "an image. Read this page in the PDF. ---"
+                    )
+                else:
+                    pages.append(f"--- Page {number + 1} ---\n\n{page_text}")
+            # PostgreSQL does not accept NUL characters in text
+            text = "\n\n".join(pages).replace("\x00", "")
+            DocumentText.objects.update_or_create(
+                document=self, defaults={"text": text}
+            )
+            return text
+
     def is_unconvertible(self) -> bool:
         return self.file_type in UNCONVERTIBLE_TYPES
 
@@ -112,6 +153,8 @@ class Document(models.Model):
 
         self.state = Document.DocumentState.IN_QUEUE
         self.save()
+        # The PDF will change, so its text too
+        DocumentText.objects.filter(document=self).delete()
         try:
             process_document.delay(self.id)
         except Exception as e:
@@ -120,11 +163,61 @@ class Document(models.Model):
             raise e
 
     def get_absolute_url(self) -> str:
-        return reverse("document_show", args=(self.id,))
+        return reverse("document_show", args=(self.pk,))
+
+    def as_json(self) -> dict:
+        # Some files (e.g. zip) have no PDF at all, even once ready
+        has_pdf = self.is_ready and bool(self.pdf)
+        return {
+            "id": self.pk,
+            "name": self.name,
+            "description": self.description,
+            "course": self.course.slug if self.course else None,
+            "tags": [tag.name for tag in self.tags.all()],
+            "file_type": self.file_type,
+            "pages": self.pages,
+            "created": self.created.isoformat(),
+            "views": self.views,
+            "downloads": self.downloads,
+            "likes": getattr(self, "likes", None),
+            "status": self.api_status,
+            "url": self.get_absolute_url(),
+            # None when there is nothing to read (yet), see llms.txt
+            "text_url": reverse("document_text", args=(self.pk,)) if has_pdf else None,
+            "pdf_url": reverse("document_pdf", args=(self.pk,)) if has_pdf else None,
+            "original_url": (
+                reverse("document_original", args=(self.pk,)) if self.original else None
+            ),
+        }
+
+    @property
+    def api_status(self) -> str:
+        """The state for API clients: "processing", "ready" or "error" (final)."""
+        if self.is_ready:
+            return "ready"
+        if self.state == Document.DocumentState.ERROR:
+            return "error"
+        return "processing"
 
     def tag_from_name(self) -> None:
         tags = logic.tags_from_name(self.name)
         self.tags.add(*tags)
+
+
+class DocumentText(models.Model):
+    """The text of the PDF of a document, see Document.get_text().
+
+    In its own table, so loading documents (e.g. the list of a course) does
+    not load their text too: it can be long.
+    """
+
+    document = models.OneToOneField(
+        Document,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name="extracted_text",
+    )
+    text = models.TextField(blank=True, default="", verbose_name="Texte")
 
 
 class Vote(models.Model):

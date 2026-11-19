@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Accès API{% endblock %}
+
+{% block content %}
+    {% partialdef usage_bar %}
+        <div class="usage-bar">
+            <div class="usage-bar-label">
+                <span>{{ label }}</span>
+                <span>{{ used }} / {{ cap }}</span>
+            </div>
+            <progress class="{% if used >= cap %}is-full{% endif %}" max="{{ cap }}" value="{{ used }}" aria-label="{{ label }}">{{ used }} / {{ cap }}</progress>
+        </div>
+    {% endpartialdef usage_bar %}
+
+    <div class="page is-narrow">
+        <div class="page-head">
+            <h1><em class="lede">Accès</em> API</h1>
+        </div>
+
+        <div class="prose">
+            <p>
+                Tu veux utiliser DocHub depuis un agent IA (Claude, ChatGPT…), un script ou ta propre appli&nbsp;?
+                Crée un token&nbsp;: avec lui, ils pourront chercher tes cours, lire les documents et en partager pour toi.
+                Le mode d'emploi est sur <a href="{% url 'llms_txt' %}">dochub.be/llms.txt</a>.
+            </p>
+
+            <h2>Tes tokens</h2>
+
+            {% if new_key %}
+                <div class="notice is-success">
+                    {% include "icons/check.html" %}
+                    <div>
+                        <strong class="notice-title">Ton token est prêt&nbsp;!</strong>
+                        <p class="notice-copy">Copie-le maintenant, tu ne pourras plus le revoir ensuite&nbsp;:</p>
+                        <p class="notice-quote"><code>{{ new_key }}</code></p>
+                        <p class="notice-foot">
+                            Garde-le pour toi&nbsp;: avec lui, on peut utiliser DocHub en ton nom.
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="post" class="token-form">
+                {% csrf_token %}
+                <input class="form-control" name="name" maxlength="100" aria-label="Nom du token" placeholder="Nom du token, ex: Claude sur mon ordi">
+                <button type="submit" class="btn btn-accent">
+                    {% include "icons/plus.html" %}
+                    Créer un token
+                </button>
+            </form>
+
+            <div class="card mod-card">
+                <div class="table-wrap">
+                    <table class="mod-table is-middle">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Créé le</th>
+                                <th>Dernière utilisation</th>
+                                <th>Requêtes</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for token in tokens %}
+                                <tr>
+                                    <td><strong>{{ token.name }}</strong></td>
+                                    <td class="mod-table-date">{{ token.created|date:"d/m/Y" }}</td>
+                                    <td class="mod-table-date">{{ token.last_used|date:"d/m/Y à H:i"|default:"Jamais" }}</td>
+                                    <td>{{ token.request_count }}</td>
+                                    <td class="mod-table-action">
+                                        <form method="post" action="{% url 'api_token_delete' token.pk %}" data-turbo-confirm="Supprimer le token « {{ token.name }} » ? Ce qui l'utilise n'aura plus accès à DocHub.">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        Pas encore de token. Crée-en un ci-dessus quand tu veux&nbsp;!
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h2>Ton utilisation aujourd'hui</h2>
+            <p>
+                Tes tokens et toi partagez les mêmes limites, pour que DocHub reste rapide pour tout le monde.
+            </p>
+
+            <div class="card usage-card">
+                {% with label="Documents ouverts ou téléchargés" used=usage.downloads cap=caps.downloads %}
+                    {% partial usage_bar %}
+                {% endwith %}
+                {% with label="Documents partagés" used=usage.uploads cap=caps.uploads %}
+                    {% partial usage_bar %}
+                {% endwith %}
+                <div>
+                    <p class="form-text">Les compteurs repartent de zéro à minuit, dans {{ reset_at|timeuntil }}.</p>
+                    <p class="form-text">Et pas plus de {{ rate_limit }} pages par minute, pour éviter les embouteillages.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

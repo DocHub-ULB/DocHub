@@ -126,7 +126,7 @@ def process_representative_request(request, request_id):
 @moderator_required
 def manage_moderators(request):
     """Display moderator requests and direct promotion controls."""
-    DailyStat.track(Metric.MODERATION_MANAGE_VIEW)
+    DailyStat.track(request, Metric.MODERATION_MANAGE_VIEW)
     pending_requests = (
         RepresentativeRequest.objects.filter(processed=False)
         .select_related("user")
@@ -258,7 +258,7 @@ def representative_request(request):
 def public_logs(request):
     """Public ledger of moderation actions for accountability (accessible to all logged users)."""
 
-    DailyStat.track(Metric.MODERATION_LOG_VIEW)
+    DailyStat.track(request, Metric.MODERATION_LOG_VIEW)
 
     # Fetch all relevant moderation logs
     log_list = (
@@ -282,7 +282,7 @@ def public_logs(request):
 @login_required
 def moderation_tree(request):
     """Public page showing who promoted whom as moderator."""
-    DailyStat.track(Metric.MODERATION_TREE_VIEW)
+    DailyStat.track(request, Metric.MODERATION_TREE_VIEW)
     moderators = (
         User.objects.filter(Q(is_staff=True) | Q(is_moderator=True))
         .select_related("promoted_by")
@@ -321,7 +321,7 @@ def moderation_profile(request, netid):
     ):
         raise PermissionDenied("Ce profil n'a pas d'activité de modération publique.")
 
-    DailyStat.track(Metric.MODERATION_PROFILE_VIEW)
+    DailyStat.track(request, Metric.MODERATION_PROFILE_VIEW)
 
     logs = (
         ModerationLog.objects.filter(user=profile_user)
@@ -340,16 +340,16 @@ def moderation_profile(request, netid):
 def moderation_about(request):
     """Public page explaining the moderation system."""
     if is_moderator(request.user):
-        DailyStat.track(Metric.MODERATION_ABOUT_VIEW_MOD)
+        DailyStat.track(request, Metric.MODERATION_ABOUT_VIEW_MOD)
     else:
-        DailyStat.track(Metric.MODERATION_ABOUT_VIEW)
+        DailyStat.track(request, Metric.MODERATION_ABOUT_VIEW)
     return render(request, "moderation/about.html")
 
 
 @login_required
 def document_history(request, pk):
     """Moderation history for a single document — all actions by all moderators."""
-    DailyStat.track(Metric.DOCUMENT_HISTORY_VIEW)
+    DailyStat.track(request, Metric.DOCUMENT_HISTORY_VIEW)
     document = get_object_or_404(Document, pk=pk)
     content_type = ContentType.objects.get_for_model(Document)
     logs = (

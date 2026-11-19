@@ -33,6 +33,7 @@
                     <summary class="avatar" title="{{ user.name }}">{{ user.initials }}</summary>
                     <div class="user-menu-panel">
                         <a href="{% url 'stats' %}">Stats</a>
+                        <a href="{% url 'api_tokens' %}">Accès API</a>
                         {% if request.user.is_staff or request.user.is_moderator %}
                             <a href="{% url 'moderation_about' %}">Modération</a>
                         {% endif %}
