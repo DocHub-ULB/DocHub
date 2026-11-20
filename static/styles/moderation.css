@@ -31,6 +31,8 @@
         line-height: calc(var(--grid) * 2);
     }
 
+    h3 { margin: var(--grid) 0 calc(var(--grid) / 2); color: var(--ink); font: 500 15px var(--font-body); }
+
     p { margin: 0 0 var(--grid); color: var(--ink-soft); }
     ul { margin: 0 0 var(--grid); padding-left: 20px; color: var(--ink-soft); }
     > .notice { margin-bottom: calc(var(--grid) * 2); }

@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 import users.views
 import www.views
@@ -27,6 +28,7 @@ urlpatterns = [
     path("login", users.views.login_view, name="login"),
     path("auth-ulb", users.views.auth_ulb, name="auth-ulb"),
     path("logout", LogoutView.as_view(next_page="/"), name="logout"),
+    path("rgpd", TemplateView.as_view(template_name="rgpd.html"), name="rgpd"),
     path(
         "sitemap.xml",
         sitemap,

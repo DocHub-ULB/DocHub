@@ -4,6 +4,9 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+ * Add a short page that tells you which data DocHub keeps and how to ask us to see, correct or delete it, with a link in the footer
+ * Stop sending your name, your email and your IP address to our bug tracker
+
 # 2026.10.1
 
  * Upgrade dependencies to fix security issues in image and PDF processing (Pillow, pypdf) and in certificates (certifi)
