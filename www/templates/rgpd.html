@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Tes données sur DocHub{% endblock %}
+
+{% block content %}
+    <div class="page is-narrow">
+        <div class="page-head">
+            <h1>Tes <em class="lede">données</em> sur DocHub</h1>
+        </div>
+
+        <div class="prose">
+            <p>
+                La version courte : on garde le minimum pour faire tourner DocHub,
+                on ne vend rien, on ne fait pas de pub et on ne te piste pas.
+            </p>
+
+            <h2 id="responsable">Qui s'en occupe ?</h2>
+            <p>
+                Le Cercle Informatique de l'ULB (ASBL), avec l'aide d'UrLab.
+                DocHub est fait par des étudiant·es bénévoles.
+            </p>
+
+            <h2 id="donnees">Ce qu'on garde</h2>
+            <ul>
+                <li>
+                    Ton netid, ton prénom, ton nom et ton adresse ULB.
+                    L'ULB nous les envoie quand tu te connectes, et on ne voit jamais ton mot de passe.
+                </li>
+                <li>
+                    Ce que tu fais sur DocHub : les documents que tu partages, tes likes,
+                    tes signalements et les cours que tu consultes (pour te les remontrer sur ton accueil).
+                </li>
+                <li>
+                    Si tu demandes les droits de modération : ta faculté, ton rôle et ton message.
+                </li>
+            </ul>
+
+            <h2 id="visible">Ce que les autres voient</h2>
+            <h3>Les personnes connectées à DocHub</h3>
+            <ul>
+                <li>Ton prénom et ton nom, à côté des documents que tu partages.</li>
+                <li>
+                    Si tu es modérateur·trice : ton netid et ton nom dans
+                    l'<a href="{% url 'moderation_tree' %}">arbre de modération</a>, et chacune de tes actions dans le
+                    <a href="{% url 'public_logs' %}">journal de modération</a>,
+                    pour que la modération reste transparente.
+                </li>
+            </ul>
+            <p>
+                Tes signalements, eux, ne sont vus que par l'équipe de modération.
+            </p>
+
+            <h3>Tout le monde, même sans être connecté</h3>
+            <p>
+                Le titre, le cours et les tags des documents, avec le nombre de pages et de vues.
+                Ces pages peuvent apparaître dans les moteurs de recherche.
+                Ton nom n'y est jamais affiché : on écrit juste « partagé par un·e étudiant·e ».
+                Pour ouvrir un document, il faut se connecter.
+            </p>
+
+            <h2 id="partage">Avec qui on partage</h2>
+            <p>
+                Personne, sauf Sentry, qui reçoit les rapports d'erreurs pour nous aider à repérer les bugs
+                (sans ton nom ni ton adresse). On compte les visites avec Plausible, qu'on héberge nous-mêmes,
+                sans cookie et sans savoir qui tu es. Le seul cookie de DocHub sert à te garder connecté·e.
+            </p>
+
+            <h2 id="droits">Tes droits</h2>
+            <p>
+                Tu peux demander à voir tes données, à les corriger ou à les supprimer :
+                écris-nous à <a href="mailto:contact@dochub.be">contact@dochub.be</a>, on s'en occupe.
+            </p>
+        </div>
+    </div>
+{% endblock content %}

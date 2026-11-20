@@ -214,7 +214,7 @@ else:
         sentry_sdk.init(
             dsn=SENTRY_DSN,
             traces_sample_rate=1.0,
-            send_default_pii=True,
+            send_default_pii=False,
         )
 
     SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
