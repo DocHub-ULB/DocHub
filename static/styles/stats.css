@@ -1,0 +1,39 @@
+.stats-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+
+    h1 { margin: 0; }
+}
+
+.stats-range {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+
+    .form-label { margin: 0; }
+    .form-select { width: auto; padding-block: 4px; }
+    small { color: var(--ink-soft); }
+}
+
+.stats-section-title { margin: 1.5rem 0 1rem; font-size: 1.5rem; }
+
+/* One chart per row on phones, two on tablets, three on wide screens. */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .stats-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.stats-card {
+    padding: 1rem;
+
+    h3 { color: var(--ink-soft); font-size: 1rem; }
+}

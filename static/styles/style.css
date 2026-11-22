@@ -15,4 +15,5 @@
 @import url("moderation.css") layer(pages);
 @import url("finder.css") layer(pages);
 @import url("upload.css") layer(pages);
+@import url("stats.css") layer(pages);
 @import url("landing.css") layer(pages);
