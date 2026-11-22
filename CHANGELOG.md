@@ -4,6 +4,9 @@ This page tries to contain all use facing changes made on DocHub.
 
 # Unreleased
 
+# 2026.11.0
+
+ * Add a bulk upload page to share a whole folder: pick a folder with one subfolder per course, check where each file goes, then send them all. You can set tags in the file names with a "#", for example "#exa #cor Examen juin.pdf"
  * Add a short page that tells you which data DocHub keeps and how to ask us to see, correct or delete it, with a link in the footer
  * Stop sending your name, your email and your IP address to our bug tracker
 
