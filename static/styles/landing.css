@@ -1,10 +1,12 @@
+/* The footer sits at the bottom of the screen, and the page only scrolls when its content needs it. */
 .landing-page {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    /* dvh, not vh: on phones 100vh is taller than the screen while the address bar shows. */
+    min-height: 100dvh;
 }
 
-.landing-page .main {
+.landing-page > .page {
     flex: 1 0 auto;
     padding-bottom: 0;
 }
