@@ -3,34 +3,40 @@
 {% block title %}Connexion admin — DocHub{% endblock %}
 
 {% block content %}
-    <div class="alert alert-danger" role="alert">
-        <strong>Attention</strong> : Cette page ne devrait être utilisée que par les admins. <br>
-        Ne rentre <strong>pas</strong> ton mot de passe ULB ici.<br><br>
-        Si tu es un·e étudiant·e, connecte toi avec <a href="{% url 'index' %}">le gros bouton</a>
+    <div class="notice is-danger form-page-notice" role="alert">
+        {% include "icons/alert-triangle.html" %}
+        <div>
+            <strong>Attention</strong> : Cette page ne devrait être utilisée que par les admins. <br>
+            Ne rentre <strong>pas</strong> ton mot de passe ULB ici.<br><br>
+            Si tu es un·e étudiant·e, connecte toi avec <a href="{% url 'index' %}">le gros bouton</a>
+        </div>
     </div>
 
-    <form method="post" action="{% url 'syslogin' %}">
+    <form method="post" action="{% url 'syslogin' %}" class="form-card">
 
         {% csrf_token %}
 
         {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-                Nom d'utilisateur et/ou mot de passe incorrect. Ré-essaie !
+            <div class="notice is-danger" role="alert">
+                {% include "icons/alert-triangle.html" %}
+                <div>Nom d'utilisateur et/ou mot de passe incorrect. Ré-essaie !</div>
             </div>
         {% endif %}
-        <div class="mb-3">
+        <div>
             <label for="username" class="form-label">Nom d'utilisateur</label>
             <input type="text" class="form-control" name="username" id="username" autocomplete="username"
                    autocapitalize="none" required>
 
         </div>
-        <div class="mb-3">
+        <div>
             <label for="password" class="form-label">Mot de passe</label>
             <input type="password" class="form-control" id="password" name="password" autocomplete="current-password"
                    required>
         </div>
         <input type="hidden" name="next" value="{{ next }}">
-        <button type="submit" class="btn btn-primary">Connexion</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Connexion</button>
+        </div>
     </form>
 
 {% endblock content %}
