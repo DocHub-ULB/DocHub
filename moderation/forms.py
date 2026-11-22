@@ -12,10 +12,19 @@ class RepresentativeRequestForm(forms.ModelForm):
         labels = {
             "faculty": "Quelle est ta faculté ?",
             "role": "Quel est ton rôle ?",
+            "comment": "Un mot à ajouter ? (optionnel)",
         }
 
         widgets = {
-            "comment": Textarea(attrs={"rows": 3, "placeholder": "Optionnel"}),
+            "faculty": forms.Select(attrs={"class": "form-select"}),
+            "role": forms.Select(attrs={"class": "form-select"}),
+            "comment": Textarea(
+                attrs={
+                    "rows": 3,
+                    "placeholder": "Ex : je suis délégué·e des BA2 en info.",
+                    "class": "form-control",
+                }
+            ),
         }
 
 

@@ -23,9 +23,8 @@
     --negative: #c55c3a;
     --danger: #b43a2a;
 
-    /* Quiet backgrounds for success/warning/danger pills and buttons. */
+    /* Quiet backgrounds for success and danger pills and notices. Warnings use --highlight-soft. */
     --positive-tint: color-mix(in srgb, var(--positive) 14%, var(--bg-raised));
-    --negative-tint: color-mix(in srgb, var(--negative) 14%, var(--bg-raised));
     --danger-tint: color-mix(in srgb, var(--danger) 14%, var(--bg-raised));
 
     --font-display: "Instrument Serif", "Times New Roman", serif;
@@ -50,6 +49,39 @@
     --shadow: 0 1px 0 rgba(43, 35, 26, 0.06), 0 4px 14px -6px rgba(43, 35, 26, 0.12);
     --shadow-card: 0 1px 0 rgba(43, 35, 26, 0.05), 0 8px 22px -10px rgba(43, 35, 26, 0.14);
 }
+
+/* Base reset: box sizing, default margins and form fonts. */
+*, ::before, ::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; -webkit-text-size-adjust: 100%; }
+
+:is(h1, h2, h3, h4, h5, h6) { margin: 0 0 0.5rem; font-weight: 500; line-height: 1.2; }
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+p, ul, ol, dl, pre, figure { margin: 0 0 1rem; }
+ul, ol { padding-left: 2rem; }
+:is(ul, ol) :is(ul, ol) { margin-bottom: 0; }
+dt { font-weight: 700; }
+dd { margin: 0 0 0.5rem; }
+b, strong { font-weight: bolder; }
+small { font-size: 0.875em; }
+
+a { color: var(--accent); }
+code, pre { font-family: var(--font-mono); font-size: 0.875em; }
+pre { overflow: auto; }
+img, svg { vertical-align: middle; }
+table { border-collapse: collapse; caption-side: bottom; }
+th { text-align: inherit; }
+
+label { display: inline-block; }
+input, button, select, textarea { margin: 0; font-family: inherit; font-size: inherit; line-height: inherit; }
+button { border-radius: 0; }
+button:not(:disabled), [role="button"] { cursor: pointer; }
+textarea { resize: vertical; }
+fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+legend { float: left; width: 100%; margin-bottom: 0.5rem; padding: 0; font-size: 1.5rem; line-height: inherit; }
+legend + * { clear: left; }
 
 html { scrollbar-gutter: stable; }
 

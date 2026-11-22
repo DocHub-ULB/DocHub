@@ -1,38 +1,33 @@
 {% extends "base_public.html" %}
 
 {% block content %}
-    <div class="row">
-        <div class="large-8 small-12 columns small-centered">
-            <h1>
-                {% block heading %}
-                    Erreur
-                {% endblock heading %}
-            </h1>
-            <p>
-                {% block expl %}
-                    Une erreur est apparue
-                {% endblock expl %}
-            </p>
+    <h1>
+        {% block heading %}
+            Erreur
+        {% endblock heading %}
+    </h1>
+    <p>
+        {% block expl %}
+            Une erreur est apparue
+        {% endblock expl %}
+    </p>
 
-            <a href="/" class="button tiny">Retour</a><br><br>
+    <p><a href="/" class="btn">Retour</a></p>
 
-            <p>
-                L'erreur persiste ? Fais un screenshot de cette page et envoie là à
-                <a href="mailto:contact@dochub.be">
-                    contact@dochub.be</a>, on se fera un plaisir de t'aider !
-            </p>
+    <p>
+        L'erreur persiste ? Fais un screenshot de cette page et envoie là à
+        <a href="mailto:contact@dochub.be">
+            contact@dochub.be</a>, on se fera un plaisir de t'aider !
+    </p>
 
-            <small style="color: grey;">
-                Code d'erreur: {% block errcode %}ERR_UNKNOWN{% endblock %}
-                <br>
-                Date: {% now "c" %}
-            </small>
+    <small style="color: grey;">
+        Code d'erreur: {% block errcode %}ERR_UNKNOWN{% endblock %}
+        <br>
+        Date: {% now "c" %}
+    </small>
 
 <pre style="color: grey; font-size: .8em; white-space: pre-wrap;">
 Contexte: {% block debug %}
 {% endblock debug %}
 </pre>
-
-        </div>
-    </div>
 {% endblock content %}

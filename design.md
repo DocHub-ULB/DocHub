@@ -8,10 +8,9 @@ truth: `static/styles/foundation.css` `:root` implements it, and future work (th
 remaining screens, any contributor) should defer to it. Amend intentionally —
 the file is the rule, not a snapshot.
 
-Bootstrap 5.3 ships in a low-priority `layer(bootstrap)` from the small
-`style.css` entry point. The redesign's foundation, component, and page layers
-win over it. Colours are plain hex on purpose — no build step, readable by
-newcomers.
+The small `style.css` entry point loads three cascade layers: foundation
+(tokens and a base reset), components, then pages. There is no CSS framework.
+Colours are plain hex on purpose — no build step, readable by newcomers.
 
 ## System
 - Genre · editorial voice (serif display) on a modern-minimal cool surface

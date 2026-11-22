@@ -3,11 +3,18 @@
 {% block title %}Remplacer le fichier de {{ document.name }}{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="large-7 columns">
-            <h1>Remplacer le fichier</h1>
-            <h3>{{ document.name }}</h3>
-            <form action="" method="post" enctype="multipart/form-data" class="dropzone">
+    <div class="page">
+        <div class="form-page">
+            <header class="form-page-head">
+                <a class="form-page-course" href="{% url "catalog:course_show" document.course %}">
+                    <span class="pill pill-mono">{{ document.course.slug|upper }}</span>
+                    {{ document.course.name }}
+                </a>
+                <h1><em>Remplace</em> le fichier</h1>
+                <p class="form-page-subject">«&nbsp;{{ document.name }}&nbsp;»</p>
+            </header>
+
+            <form action="" method="post" enctype="multipart/form-data" class="form-card">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
 
@@ -22,26 +29,17 @@
                             </div>
                         </div>
                     {% endif %}
-                    <div class="panel callout drop-panel">
-                        <br>
-                        <div class="row">
-                            <div class="small-6 columns">
-                                {{ field }}
-                            </div>
-                            <div  class="small-6 columns">
-                            </div>
-                        </div>
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="form-label">Nouveau fichier</label>
+                        {{ field }}
                     </div>
                 {% endwith %}
 
-                <p class="text-right"><input type="submit" class="button success radius" value="Remplacer le fichier" /></p>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-accent">Remplacer le fichier</button>
+                    <a class="btn btn-quiet" href="{% url 'document_show' document.id %}">Annuler</a>
+                </div>
             </form>
         </div>
     </div>
 {% endblock content %}
-
-{% block script %}
-    <script>
-        $(document).ready(function() { $(".chosen-select").select2(); });
-    </script>
-{% endblock script %}

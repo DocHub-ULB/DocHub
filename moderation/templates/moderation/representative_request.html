@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+
 {% block title %}Demande d'accès{% endblock %}
 
 {% block content %}
@@ -44,13 +44,23 @@
                 on verra ce qu'on peut faire 😉
             </p>
 
-            <form method="post">
+            <form method="post" class="form-card">
                 {% csrf_token %}
-                {{ form|crispy }}
-                <button type="submit" class="btn btn-primary">
-                    {% include "icons/bi-unlock-fill.html" %}
-                    Demander les droits d'administration
-                </button>
+                {% for field in form %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="invalid-feedback" id="{{ field.auto_id }}_error">{{ field.errors|striptags }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-accent">
+                        {% include "icons/bi-unlock-fill.html" %}
+                        Demander les droits de modération
+                    </button>
+                </div>
             </form>
         </div>
     </div>

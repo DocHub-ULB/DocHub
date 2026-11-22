@@ -124,7 +124,7 @@ class ModerationLog(models.Model):
 
     @property
     def action_color(self):
-        """Assigns a Bootstrap color based on the action type."""
+        """The pill variant (.pill.is-*) for the action type."""
         if self.target_field == "is_moderator":
             return "success" if str(self.new_value) == "True" else "danger"
         elif self.target_field == "action_accepter":

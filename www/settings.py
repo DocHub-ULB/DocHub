@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     "django.contrib.humanize",
-    "crispy_forms",
-    "crispy_bootstrap5",
     "django.contrib.postgres",
     "www",
     "documents",
@@ -52,8 +50,6 @@ INSTALLED_APPS = [
     "stats",
 ]
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 BASE_URL = env("BASE_URL", default="https://dochub.be/")
 

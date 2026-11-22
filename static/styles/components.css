@@ -12,10 +12,16 @@
     border: 1px solid var(--rule);
     background: var(--bg-raised);
     color: var(--ink);
+    line-height: 1.5;
+    text-decoration: none;
+    vertical-align: middle;
     cursor: pointer;
+    user-select: none;
     transition: background 120ms ease;
     white-space: nowrap;
 }
+
+.btn:disabled { opacity: 0.65; pointer-events: none; }
 
 .btn:hover { background: var(--bg-sunk); color: var(--ink); }
 .btn-primary { background: var(--ink); color: var(--bg-raised); border-color: var(--ink); }
@@ -28,7 +34,13 @@
 .btn.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 .btn-sm { min-height: calc(var(--grid) * 2); padding: 0 10px; font-size: 13px; }
 
+/* A column by default; a page can turn it into a row. */
 .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow-wrap: break-word;
     background: var(--bg-raised);
     border: 1px solid var(--rule);
     border-radius: var(--radius);
@@ -62,9 +74,11 @@
 .pill-mono { font-family: var(--font-mono); }
 .pill.is-success { color: var(--positive); background: var(--positive-tint); }
 .pill.is-danger { color: var(--danger); background: var(--danger-tint); }
-.pill.is-warning { color: var(--negative); background: var(--negative-tint); }
+.pill.is-warning { color: var(--highlight-ink); background: var(--highlight-soft); }
 .pill.is-info { color: var(--accent); background: var(--accent-soft); }
 
+/* A plain notice is a white card. A variant tints the card with its
+   colour: --tone for the icon and border, --tint for the background. */
 .notice {
     display: flex;
     align-items: flex-start;
@@ -73,22 +87,33 @@
     color: var(--ink-soft);
     background: var(--bg-raised);
     border: 1px solid var(--rule);
-    border-left: 3px solid var(--accent);
     border-radius: var(--radius);
     font-size: 14px;
     line-height: calc(var(--grid) * 2);
 
     > svg { flex-shrink: 0; margin-top: 3px; color: var(--ink-faint); }
     a { color: var(--accent); font-weight: 500; }
+
     /* Variants also cover Django message tags (error/warning/info). */
-    &.is-danger, &.is-error { border-left-color: var(--danger); }
-    &.is-danger > svg, &.is-error > svg { color: var(--danger); }
-    &.is-success { border-left-color: var(--positive); }
-    &.is-success > svg { color: var(--positive); }
-    &.is-warning { border-left-color: var(--negative); }
-    &.is-warning > svg { color: var(--negative); }
-    &.is-info { border-left-color: var(--accent); }
-    &.is-info > svg { color: var(--accent); }
+    &:is(.is-danger, .is-error, .is-warning, .is-success, .is-info) {
+        color: var(--ink);
+        background: var(--tint);
+        border-color: color-mix(in srgb, var(--tone) 20%, transparent);
+
+        > svg { color: var(--tone); }
+        .notice-quote { background: color-mix(in srgb, var(--bg-raised) 70%, transparent); }
+        .notice-foot { color: var(--ink-soft); }
+    }
+
+    &:is(.is-danger, .is-error) { --tone: var(--danger); --tint: var(--danger-tint); }
+    &.is-success { --tone: var(--positive); --tint: var(--positive-tint); }
+    /* Yellow, so that a warning does not look like an error. */
+    &.is-warning {
+        --tone: var(--highlight-ink);
+        --tint: var(--highlight-soft);
+        border-color: color-mix(in srgb, var(--highlight) 70%, transparent);
+    }
+    &.is-info { --tone: var(--accent); --tint: color-mix(in srgb, var(--accent) 7%, var(--bg-raised)); }
 
     .notice-title { display: block; margin-bottom: 6px; }
     .notice-copy { margin-bottom: 10px; }
@@ -124,6 +149,8 @@
 
 .form-label { display: block; margin-bottom: 6px; color: var(--ink-soft); font-size: 13px; font-weight: 500; }
 
+:is(.form-control, .form-select) { display: block; width: 100%; }
+
 :is(.form-control, .form-select, textarea) {
     padding: calc(var(--grid) / 2) 12px;
     color: var(--ink);
@@ -135,10 +162,11 @@
     &:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
 }
 
-.form-control.is-invalid { border-color: var(--danger); }
+/* Django sets aria-invalid on a field that has errors. */
+:is(.form-control, .form-select):is(.is-invalid, [aria-invalid="true"]) { border-color: var(--danger); }
 .invalid-feedback { margin-top: 4px; color: var(--danger); font-size: 12px; }
 .form-check-input { accent-color: var(--accent); }
-.form-text { color: var(--ink-faint); font-size: 12px; }
+.form-text { margin-top: 0.25rem; color: var(--ink-faint); font-size: 12px; }
 
 /* Native <dialog>; clicks on the backdrop are caught by the modal controller. */
 .dialog {
@@ -376,7 +404,6 @@
     box-shadow: var(--shadow-card);
 
     &[hidden] { display: none; }
-    .form-control { width: 100%; }
     .form-text { margin: 4px 0 0; line-height: calc(var(--grid) * 1.25); }
 }
 
