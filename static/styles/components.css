@@ -149,7 +149,8 @@
     &:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
 }
 
-.form-control.is-invalid { border-color: var(--danger); }
+/* Django sets aria-invalid on a field that has errors. */
+:is(.form-control, .form-select):is(.is-invalid, [aria-invalid="true"]) { border-color: var(--danger); }
 .invalid-feedback { margin-top: 4px; color: var(--danger); font-size: 12px; }
 .form-check-input { accent-color: var(--accent); }
 .form-text { margin-top: 0.25rem; color: var(--ink-faint); font-size: 12px; }
