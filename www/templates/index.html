@@ -19,6 +19,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@400;500;600;700&display=swap"
               rel="stylesheet">
         <link href="{% static "styles/style.css" %}" rel="stylesheet">
+        {# The hero photo is a CSS background: without this, the browser only finds it after it loads all the CSS. #}
+        <link rel="preload" href="{% static "images/campus-hero.webp" %}" as="image" fetchpriority="high">
         <script defer data-domain="dochub.be" src="https://stats.dochub.be/js/plausible.js"></script>
     </head>
 

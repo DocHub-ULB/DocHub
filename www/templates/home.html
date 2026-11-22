@@ -2,6 +2,11 @@
 
 {% load static %}
 
+{% block head %}
+    {# The hero photo is a CSS background: without this, the browser only finds it after it loads all the CSS. #}
+    <link rel="preload" href="{% static "images/campus-hero.webp" %}" as="image" fetchpriority="high">
+{% endblock head %}
+
 {% block content %}
     {% partialdef onboarding-mark %}
         {# Corner badge for an onboarding step: green check once `done`, else `num`. #}
