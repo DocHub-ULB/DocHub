@@ -4,7 +4,7 @@
  */
 .finder-note {
     display: flex;
-    /* Bootstrap's own .card lays its children out in a column; we want a row. */
+    /* .card lays its children out in a column; we want a row. */
     flex-direction: row;
     align-items: center;
     gap: 12px;

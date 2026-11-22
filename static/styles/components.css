@@ -12,10 +12,16 @@
     border: 1px solid var(--rule);
     background: var(--bg-raised);
     color: var(--ink);
+    line-height: 1.5;
+    text-decoration: none;
+    vertical-align: middle;
     cursor: pointer;
+    user-select: none;
     transition: background 120ms ease;
     white-space: nowrap;
 }
+
+.btn:disabled { opacity: 0.65; pointer-events: none; }
 
 .btn:hover { background: var(--bg-sunk); color: var(--ink); }
 .btn-primary { background: var(--ink); color: var(--bg-raised); border-color: var(--ink); }
@@ -28,7 +34,13 @@
 .btn.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 .btn-sm { min-height: calc(var(--grid) * 2); padding: 0 10px; font-size: 13px; }
 
+/* A column by default; a page can turn it into a row. */
 .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow-wrap: break-word;
     background: var(--bg-raised);
     border: 1px solid var(--rule);
     border-radius: var(--radius);
@@ -124,6 +136,8 @@
 
 .form-label { display: block; margin-bottom: 6px; color: var(--ink-soft); font-size: 13px; font-weight: 500; }
 
+:is(.form-control, .form-select) { display: block; width: 100%; }
+
 :is(.form-control, .form-select, textarea) {
     padding: calc(var(--grid) / 2) 12px;
     color: var(--ink);
@@ -138,7 +152,7 @@
 .form-control.is-invalid { border-color: var(--danger); }
 .invalid-feedback { margin-top: 4px; color: var(--danger); font-size: 12px; }
 .form-check-input { accent-color: var(--accent); }
-.form-text { color: var(--ink-faint); font-size: 12px; }
+.form-text { margin-top: 0.25rem; color: var(--ink-faint); font-size: 12px; }
 
 /* Native <dialog>; clicks on the backdrop are caught by the modal controller. */
 .dialog {
@@ -376,7 +390,6 @@
     box-shadow: var(--shadow-card);
 
     &[hidden] { display: none; }
-    .form-control { width: 100%; }
     .form-text { margin: 4px 0 0; line-height: calc(var(--grid) * 1.25); }
 }
 
