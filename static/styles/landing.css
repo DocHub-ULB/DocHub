@@ -214,3 +214,10 @@
 
 .landing-foot { max-width: 1280px; margin: 0 auto; padding: calc(var(--grid) * 2) 32px calc(var(--grid) * 3); font-size: 12px; color: var(--ink-faint); }
 .landing-foot a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+.landing-foot p { margin: 0; }
+.landing-foot p + p { margin-top: 4px; }
+
+/* Second line: each item stays in one piece, and a narrow screen wraps between items. */
+.landing-foot-links { display: flex; flex-wrap: wrap; gap: 0 8px; }
+.landing-foot-links span { white-space: nowrap; }
+.landing-foot-links span + span::before { content: "·"; margin-right: 8px; }
