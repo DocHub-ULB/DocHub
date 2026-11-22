@@ -77,6 +77,8 @@
 .pill.is-warning { color: var(--negative); background: var(--negative-tint); }
 .pill.is-info { color: var(--accent); background: var(--accent-soft); }
 
+/* A plain notice is a white card. A variant tints the card with its
+   colour: --tone for the icon and border, --tint for the background. */
 .notice {
     display: flex;
     align-items: flex-start;
@@ -85,22 +87,33 @@
     color: var(--ink-soft);
     background: var(--bg-raised);
     border: 1px solid var(--rule);
-    border-left: 3px solid var(--accent);
     border-radius: var(--radius);
     font-size: 14px;
     line-height: calc(var(--grid) * 2);
 
     > svg { flex-shrink: 0; margin-top: 3px; color: var(--ink-faint); }
     a { color: var(--accent); font-weight: 500; }
+
     /* Variants also cover Django message tags (error/warning/info). */
-    &.is-danger, &.is-error { border-left-color: var(--danger); }
-    &.is-danger > svg, &.is-error > svg { color: var(--danger); }
-    &.is-success { border-left-color: var(--positive); }
-    &.is-success > svg { color: var(--positive); }
-    &.is-warning { border-left-color: var(--negative); }
-    &.is-warning > svg { color: var(--negative); }
-    &.is-info { border-left-color: var(--accent); }
-    &.is-info > svg { color: var(--accent); }
+    &:is(.is-danger, .is-error, .is-warning, .is-success, .is-info) {
+        color: var(--ink);
+        background: var(--tint);
+        border-color: color-mix(in srgb, var(--tone) 20%, transparent);
+
+        > svg { color: var(--tone); }
+        .notice-quote { background: color-mix(in srgb, var(--bg-raised) 70%, transparent); }
+        .notice-foot { color: var(--ink-soft); }
+    }
+
+    &:is(.is-danger, .is-error) { --tone: var(--danger); --tint: var(--danger-tint); }
+    &.is-success { --tone: var(--positive); --tint: var(--positive-tint); }
+    /* Yellow, so that a warning does not look like an error. */
+    &.is-warning {
+        --tone: var(--highlight-ink);
+        --tint: var(--highlight-soft);
+        border-color: color-mix(in srgb, var(--highlight) 70%, transparent);
+    }
+    &.is-info { --tone: var(--accent); --tint: color-mix(in srgb, var(--accent) 7%, var(--bg-raised)); }
 
     .notice-title { display: block; margin-bottom: 6px; }
     .notice-copy { margin-bottom: 10px; }
