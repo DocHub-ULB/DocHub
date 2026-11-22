@@ -74,7 +74,7 @@
 .pill-mono { font-family: var(--font-mono); }
 .pill.is-success { color: var(--positive); background: var(--positive-tint); }
 .pill.is-danger { color: var(--danger); background: var(--danger-tint); }
-.pill.is-warning { color: var(--negative); background: var(--negative-tint); }
+.pill.is-warning { color: var(--highlight-ink); background: var(--highlight-soft); }
 .pill.is-info { color: var(--accent); background: var(--accent-soft); }
 
 /* A plain notice is a white card. A variant tints the card with its

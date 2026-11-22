@@ -23,9 +23,8 @@
     --negative: #c55c3a;
     --danger: #b43a2a;
 
-    /* Quiet backgrounds for success/warning/danger pills and buttons. */
+    /* Quiet backgrounds for success and danger pills and notices. Warnings use --highlight-soft. */
     --positive-tint: color-mix(in srgb, var(--positive) 14%, var(--bg-raised));
-    --negative-tint: color-mix(in srgb, var(--negative) 14%, var(--bg-raised));
     --danger-tint: color-mix(in srgb, var(--danger) 14%, var(--bg-raised));
 
     --font-display: "Instrument Serif", "Times New Roman", serif;
